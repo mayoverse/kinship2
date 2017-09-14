@@ -1,0 +1,751 @@
+\section{Plots}
+The plotting function for pedigrees has 5 tasks
+\begin{enumerate}
+  \item Gather information and check the data.  
+    An important step is the call to align.pedigree.
+  \item Set up the plot region and size the symbols.  
+    The program wants to plot circles and squares,
+    so needs to understand the geometry of the paper, pedigree size, and text 
+    size to get the right shape and size symbols.
+  \item Set up the plot and add the symbols for each subject
+  \item Add connecting lines between spouses, and children with parents
+  \item Create an invisible return value containing the locations.
+\end{enumerate}
+Another task, not yet completely understood, is how we might break a plot 
+across multiple pages.
+
+<<plot.pedigree>>=
+plot.pedigree <- function(x, id = x$id, status = x$status, 
+			  affected = x$affected, 
+			  cex = 1, col = 1,
+			  symbolsize = 1, branch = 0.6, 
+			  packed = TRUE, align = c(1.5,2), width = 8, 
+			  density=c(-1, 35,65,20), mar=c(4.1, 1, 4.1, 1),
+			  angle=c(90,65,40,0), keep.par=FALSE,
+                          subregion, pconnect=.5, ...)
+{
+    Call <- match.call()
+    n <- length(x$id)	
+    <<pedplot-data>>
+    <<pedplot-sizing>>
+    <<pedplot-symbols>>
+    <<pedplot-lines>>
+    <<pedplot-finish>>
+    }
+@ 
+
+\subsection{Setup}
+The dull part is first: check all of the input data for
+correctness.  
+The [[sex]] variable is taken from the pedigree so we need not check
+that. 
+The identifier for each subject is by default the [[id]] variable from
+the pedigree, but users often want to add some extra text.
+The status variable can be used to put a line through the symbol
+of those who are deceased, it is an optional part of the pedigree.
+<<pedplot-data>>=
+if(is.null(status))
+  status <- rep(0, n)
+else {
+    if(!all(status == 0 | status == 1))
+      stop("Invalid status code")
+    if(length(status) != n)
+      stop("Wrong length for status")
+}
+if(!missing(id)) {
+    if(length(id) != n)
+      stop("Wrong length for id")
+}
+@ 
+The ``affected status'' is a 0/1 matrix of any marker data that the
+user might want to add.  It may be attached to the pedigree or added
+here.  It can be a vector of length [[n]] or a matrix with [[n]] rows.
+If it is not present, the default is to print open symbols without
+shading or color, which corresponds to a code of 0, while a 1 means to
+shade the symbol.  
+
+If the argment is a matrix, then the shading and/or density value for
+ith column is taken from the ith element of the angle/density arguments.
+
+(Update by JPS 5/2011) Update to allow missing values (NA) in the ``affected''
+indicators.  Missingness of affection status will have a ``?'' in 
+the midpoint of the portion of the plot symbol rather than blank or shaded.
+The ``?'' is in line with standards discussed in 
+Bennet et a. J of Gent Couns., 2008.
+
+For purposes within the plot method, NA values in ``affected'' are coded 
+to -1.
+
+<<pedplot-data>>=
+if(is.null(affected)){
+  affected <- matrix(0,nrow=n)
+}
+else {
+    if (is.matrix(affected)){
+        if (nrow(affected) != n) stop("Wrong number of rows in affected")
+        if (is.logical(affected)) affected <- 1* affected
+        if (ncol(affected) > length(angle) || ncol(affected) > length(density))
+            stop("More columns in the affected matrix than angle/density values")
+        } 
+    else {
+        if (length(affected) != n)
+    	stop("Wrong length for affected")
+
+        if (is.logical(affected)) affected <- as.numeric(affected)
+        if (is.factor(affected))  affected <- as.numeric(affected) -1
+        }
+    if(max(affected, na.rm=TRUE) > min(affected, na.rm=TRUE)) {
+      affected <- matrix(affected - min(affected, na.rm=TRUE),nrow=n)
+     ## affected[is.na(affected)] <- -1
+    } else {
+      affected <- matrix(affected,nrow=n)
+    }
+    ## JPS 4/28/17 bug fix b/c some cases NAs are not set to -1
+    affected[is.na(affected)] <- -1
+    if (!all(affected==0 | affected==1 | affected == -1))
+    	stop("Invalid code for affected status")
+}
+
+if (length(col) ==1) col <- rep(col, n)
+else if (length(col) != n) stop("Col argument must be of length 1 or n")
+@
+
+\subsection{Sizing}
+Now we need to set the sizes. 
+From align.pedigree we will get the maximum width and depth. 
+There is one plotted row for each row of the returned matrices.
+The number of columns of the matrices is the max width of the pedigree,
+so there are unused positions in shorter rows, these can be identifed
+by having an nid value of 0.
+Horizontal locations for each point go from 0 to xmax, subjects are at
+least 1 unit apart; a large number will be exactly one unit part.
+These locations will be at the top center of each plotted symbol.
+<<pedplot-sizing>>=
+<<pedplot-subregion>>
+plist <- align.pedigree(x, packed = packed, width = width, align = align)
+if (!missing(subregion)) plist <- subregion2(plist, subregion)
+xrange <- range(plist$pos[plist$nid >0])
+maxlev <- nrow(plist$pos)
+@ 
+
+We would like to to make the boxes about 2.5 characters wide, which matches
+most labels, but no more than 0.9 units wide or .5 units high.  
+We also want to vertical room for the labels. Which should have at least
+1/2 of stemp2 space above and stemp2 space below.  
+The stemp3 variable is the height of labels: users may use multi-line ones.
+Our constraints then are
+\begin{itemize}
+  \item (box height + label height)*maxlev $\le$ height: the boxes and labels have
+    to fit vertically
+  \item (box height) * (maxlev + (maxlev-1)/2) $\le$ height: at least 1/2 a box of
+    space between each row of boxes
+  \item (box width) $\le$ stemp1 in inches 
+  \item (box width) $\le$ 0.8 unit in user coordinates, otherwise they appear 
+    to touch
+  \item User coordinates go from min(xrange)- 1/2 box width to 
+    max(xrange) + 1/2 box width.
+  \item the box is square (in inches)
+\end{itemize}
+
+The first 3 of these are easy.  The fourth comes into play only for very packed
+pedigrees. Assume that the box were the maximum size of .8 units, i.e., minimal
+spacing between them. Then xmin -.45 to xmax + .45 covers the plot region,
+the scaling between user coordinates and inches is (.8 + xmax-xmin) user =
+figure region inches, and the box is .8*(figure width)/(.8 + xmax-xmin).
+The transformation from user units to inches horizontally depends on the box
+size, since I need to allow for 1/2 a box on the left and right.  
+Vertically the range from 1 to nrow spans the tops of the symbols, which 
+will be the figure region height less (the height of the
+text for the last row + 1 box); remember that the coordinates point to the
+top center of the box.
+We want row 1 to plot at the top, which is done by appropriate setting
+of the usr parameter.
+<<pedplot-sizing>>=
+frame()
+oldpar <- par(mar=mar, xpd=TRUE)
+psize <- par('pin')  # plot region in inches
+stemp1 <- strwidth("ABC", units='inches', cex=cex)* 2.5/3
+stemp2 <- strheight('1g', units='inches', cex=cex)
+stemp3 <- max(strheight(id, units='inches', cex=cex))
+
+ht1 <- psize[2]/maxlev - (stemp3 + 1.5*stemp2)
+if (ht1 <=0) stop("Labels leave no room for the graph, reduce cex")
+ht2 <- psize[2]/(maxlev + (maxlev-1)/2)
+wd2 <- .8*psize[1]/(.8 + diff(xrange))
+
+boxsize <- symbolsize* min(ht1, ht2, stemp1, wd2) # box size in inches
+hscale <- (psize[1]- boxsize)/diff(xrange)  #horizontal scale from user-> inch
+vscale <- (psize[2]-(stemp3 + stemp2/2 + boxsize))/ max(1, maxlev-1)
+boxw  <- boxsize/hscale  # box width in user units
+boxh  <- boxsize/vscale   # box height in user units
+labh  <- stemp2/vscale   # height of a text string
+legh  <- min(1/4, boxh  *1.5)  # how tall are the 'legs' up from a child
+par(usr=c(xrange[1]- boxw/2, xrange[2]+ boxw/2, 
+          maxlev+ boxh+ stemp3 + stemp2/2 , 1))
+@ 
+
+\subsection{Drawing the tree}
+Now we draw and label the boxes.  Definition of the drawbox function is
+deferred until later.
+<<pedplot-symbols>>=
+<<pedplot-drawbox>>
+
+sex <- as.numeric(x$sex)
+for (i in 1:maxlev) {
+    for (j in seq_len(plist$n[i])) {
+        k <- plist$nid[i,j]
+        drawbox(plist$pos[i,j], i, sex[k], affected[k,],
+                status[k], col[k], polylist, density, angle,
+                boxw, boxh)
+        text(plist$pos[i,j], i + boxh + labh*.7, id[k], cex=cex, 
+	   adj=c(.5,1), ...)
+        }
+}
+@ 
+
+Now draw in the connections one by one. First those between spouses.
+<<pedplot-lines>>= 
+maxcol <- ncol(plist$nid)  #all have the same size
+for(i in 1:maxlev) {
+    tempy <- i + boxh/2
+    if(any(plist$spouse[i,  ]>0)) {
+        temp <- (1:maxcol)[plist$spouse[i,  ]>0]
+        segments(plist$pos[i, temp] + boxw/2, rep(tempy, length(temp)), 
+    	     plist$pos[i, temp + 1] - boxw/2, rep(tempy, length(temp)))
+
+        temp <- (1:maxcol)[plist$spouse[i,  ] ==2]
+        if (length(temp)) { #double line for double marriage
+            tempy <- tempy + boxh/10
+            segments(plist$pos[i, temp] + boxw/2, rep(tempy, length(temp)), 
+    	       plist$pos[i, temp + 1] - boxw/2, rep(tempy, length(temp)))
+            }
+    }
+}
+@ 
+Now connect the children to the parents.  First there are lines up from each
+child, which would be trivial except for twins, triplets, etc.  Then we 
+draw the horizontal bar across siblings and finally the connector from
+the parent.  For twins, the ``vertical'' lines are angled towards a 
+common point, the variable is called [[target]] below.
+The horizontal part is easier if we do things family by
+family.  The [[plist$twins]] variable is 1/2/3 for a twin on my right,
+0 otherwise.
+
+<<pedplot-lines>>=
+for(i in 2:maxlev) {
+    zed <- unique(plist$fam[i,  ])
+    zed <- zed[zed > 0]  #list of family ids
+    
+    for(fam in zed) {
+        xx <- plist$pos[i - 1, fam + 0:1]
+        parentx <- mean(xx)   #midpoint of parents
+
+
+        # Draw the uplines
+        who <- (plist$fam[i,] == fam) #The kids of interest
+        if (is.null(plist$twins)) target <- plist$pos[i,who]
+        else {
+            twin.to.left <-(c(0, plist$twins[i,who])[1:sum(who)])
+            temp <- cumsum(twin.to.left ==0) #increment if no twin to the left
+            # 5 sibs, middle 3 are triplets gives 1,2,2,2,3
+            # twin, twin, singleton gives 1,1,2,2,3
+            tcount <- table(temp)
+            target <- rep(tapply(plist$pos[i,who], temp, mean), tcount)
+            }
+        yy <- rep(i, sum(who))
+        segments(plist$pos[i,who], yy, target, yy-legh)
+                  
+        ## draw midpoint MZ twin line
+        if (any(plist$twins[i,who] ==1)) {
+          who2 <- which(plist$twins[i,who] ==1)
+          temp1 <- (plist$pos[i, who][who2] + target[who2])/2
+          temp2 <- (plist$pos[i, who][who2+1] + target[who2])/2
+            yy <- rep(i, length(who2)) - legh/2
+            segments(temp1, yy, temp2, yy)
+            }
+
+        # Add a question mark for those of unknown zygosity
+        if (any(plist$twins[i,who] ==3)) {
+          who2 <- which(plist$twins[i,who] ==3)
+          temp1 <- (plist$pos[i, who][who2] + target[who2])/2
+          temp2 <- (plist$pos[i, who][who2+1] + target[who2])/2
+            yy <- rep(i, length(who2)) - legh/2
+            text((temp1+temp2)/2, yy, '?')
+            }
+        
+        # Add the horizontal line 
+        segments(min(target), i-legh, max(target), i-legh)
+
+        # Draw line to parents.  The original rule corresponded to
+        #  pconnect a large number, forcing the bottom of each parent-child
+        #  line to be at the center of the bar uniting the children.
+        if (diff(range(target)) < 2*pconnect) x1 <- mean(range(target))
+        else x1 <- pmax(min(target)+ pconnect, pmin(max(target)-pconnect, 
+                                                    parentx))
+        y1 <- i-legh
+        if(branch == 0)
+            segments(x1, y1, parentx, (i-1) + boxh/2)
+        else {
+            y2 <- (i-1) + boxh/2
+            x2 <- parentx
+            ydelta <- ((y2 - y1) * branch)/2
+            segments(c(x1, x1, x2), c(y1, y1 + ydelta, y2 - ydelta), 
+                     c(x1, x2, x2), c(y1 + ydelta, y2 - ydelta, y2))
+            }
+        }
+    }
+@
+
+The last set of lines are dotted arcs that connect mulitiple instances of
+a subject on the same line.  These instances may or may not be on the
+same line.
+The arrcconect function draws a quadratic arc between locations $(x_1, y_1)$
+and $(x_2, y_2$) whose height is 1/2 unit above a straight line connection.
+<<pedplot-lines>>=
+arcconnect <- function(x, y) {
+    xx <- seq(x[1], x[2], length = 15)
+    yy <- seq(y[1], y[2], length = 15) + (seq(-7, 7))^2/98 - .5
+    lines(xx, yy, lty = 2)
+    }
+
+uid <- unique(plist$nid)
+## JPS 4/27/17: unique above only applies to rows
+## unique added to for loop iterator
+for (id in unique(uid[uid>0])) {
+    indx <- which(plist$nid == id)
+    if (length(indx) >1) {   #subject is a multiple
+        tx <- plist$pos[indx]
+        ty <- ((row(plist$pos))[indx])[order(tx)]
+        tx <- sort(tx)
+        for (j in 1:(length(indx) -1))
+            arcconnect(tx[j + 0:1], ty[j+  0:1])
+        }
+    }
+@ 
+
+\subsection{Final output}
+Remind the user of subjects who did not get
+plotted; these are ususally subjects who are married in but without
+children.  Unless the pedigree contains spousal information the
+routine does not know who is the spouse.
+Then restore the plot parameters.  This would only not be done if someone
+wants to further annotate the plot.
+Last, we give a list of the plot positions for each subject.  Someone
+who is plotted twice will have their first position listed.
+<<pedplot-finish>>=
+ckall <- x$id[is.na(match(x$id,x$id[plist$nid]))]
+if(length(ckall>0)) cat('Did not plot the following people:',ckall,'\n')
+    
+if(!keep.par) par(oldpar)
+
+tmp <- match(1:length(x$id), plist$nid)
+invisible(list(plist=plist, x=plist$pos[tmp], y= row(plist$pos)[tmp],
+               boxw=boxw, boxh=boxh, call=Call))        
+@ 
+\subsection{Symbols}
+There are four sumbols corresponding to the four sex codes: square = male,
+circle = female, diamond= unknown, and triangle = terminated.  
+They are shaded according to the value(s) of affected status for each
+subject, where 0=unfilled and 1=filled, and filling uses the standard
+arguments of the [[polygon]] function.
+The nuisance is when the affected status is a matrix, in which case the
+symbol will be divided up into sections, clockwise starting at the 
+lower left. 
+I asked Beth about this (original author) and there was no particular
+reason to start at 6 o'clock, but it's now established as history.
+
+The first part of the code is to create the collection of polygons that
+will make up the symbol.  These are then used again and again.
+The collection is kept as a list with the four elements square, circle,
+diamond and triangle.  
+Each of these is in turn a list with ncol(affected) element, and each
+of those in turn a list of x and y coordinates.
+There are 3 cases: the affected matrix has
+only one column, partitioning a circle for multiple columns, and 
+partitioning the other cases for multiple columns.
+
+<<pedplot-drawbox>>=
+<<pedplot-circfun>>
+<<pedplot-polyfun>>
+if (ncol(affected)==1) {
+    polylist <- list(
+        square = list(list(x=c(-1, -1, 1,1)/2,  y=c(0, 1, 1, 0))),
+        circle = list(list(x=.5* cos(seq(0, 2*pi, length=50)),
+                           y=.5* sin(seq(0, 2*pi, length=50)) + .5)),
+        diamond = list(list(x=c(0, -.5, 0, .5), y=c(0, .5, 1, .5))),
+        triangle= list(list(x=c(0, -.56, .56),  y=c(0, 1, 1))))
+    }
+else {
+    nc <- ncol(affected)
+    square <- polyfun(nc, list(x=c(-.5, -.5, .5, .5), y=c(-.5, .5, .5, -.5),
+                                theta= -c(3,5,7,9)* pi/4))
+    circle <- circfun(nc)
+    diamond <-  polyfun(nc, list(x=c(0, -.5, 0, .5), y=c(-.5, 0, .5,0),
+                                theta= -(1:4) *pi/2))
+    triangle <- polyfun(nc, list(x=c(-.56, .0, .56), y=c(-.5, .5, -.5),
+                                 theta=c(-2, -4, -6) *pi/3))
+    polylist <- list(square=square, circle=circle, diamond=diamond, 
+                     triangle=triangle)
+    }
+@ 
+
+The circle function is quite simple.  The number of segments is arbitrary,
+50 seems to be enough to make the eye happy.  We draw the ray from 0 to
+the edge, then a portion of the arc.  The polygon function will connect
+back to the center.
+<<pedplot-circfun>>=
+circfun <- function(nslice, n=50) {
+    nseg <- ceiling(n/nslice)  #segments of arc per slice
+    
+    theta <- -pi/2 - seq(0, 2*pi, length=nslice +1)
+    out <- vector('list', nslice)
+    for (i in 1:nslice) {
+        theta2 <- seq(theta[i], theta[i+1], length=nseg)
+        out[[i]]<- list(x=c(0, cos(theta2)/2),
+                        y=c(0, sin(theta2)/2) + .5)
+        }
+    out
+    }
+@ 
+
+Now for the interesting one --- dividing a polygon into ``pie slices''.
+In computing this we can't use the usual $y= a + bx$ formula for a line,
+because it doesn't work for vertical ones (like the sides of the square).
+Instead we use the alternate formulation in terms of a dummy variable 
+$z$.
+\begin{eqnarray*}
+  x &=& a + bz \\
+  y &=& c + dz \\
+\end{eqnarray*}
+Furthermore, we choose the constants $a$, $b$, $c$, and $d$ so that 
+the side of our polygon correspond to $0 \le z \le 1$.
+The intersection of a particular ray at angle theta with a 
+particular side will satisfy
+\begin{eqnarray}
+  theta &=& y/x = \frac{a + bz}{c+dz} \nonumber \\
+  z &=& \frac{a\theta -c}{b - d\theta} \label{eq:z} \\
+\end{eqnarray}
+
+Equation \ref{eq:z} will lead to a division by zero if the ray from the
+origin does not intersect a side, e.g., a vertical divider will be parallel
+to the sides of a square symbol.  The only solutions we want have
+$0 \le z \le 1$ and are in the `forward' part of the ray.  This latter  %'`
+is true if the inner product $x \cos(\theta) + y \sin(\theta) >0$.
+Exactly one of the polygon sides will satisfy both conditions.
+
+<<pedplot-polyfun>>=
+polyfun <- function(nslice, object) {
+    # make the indirect segments view
+    zmat <- matrix(0,ncol=4, nrow=length(object$x))
+    zmat[,1] <- object$x
+    zmat[,2] <- c(object$x[-1], object$x[1]) - object$x
+    zmat[,3] <- object$y
+    zmat[,4] <- c(object$y[-1], object$y[1]) - object$y
+
+    # Find the cutpoint for each angle
+    #   Yes we could vectorize the loop, but nslice is never bigger than
+    # about 10 (and usually <5), so why be obscure?
+    ns1 <- nslice+1
+    theta <- -pi/2 - seq(0, 2*pi, length=ns1)
+    x <- y <- double(ns1)
+    for (i in 1:ns1) {
+        z <- (tan(theta[i])*zmat[,1] - zmat[,3])/
+            (zmat[,4] - tan(theta[i])*zmat[,2])
+        tx <- zmat[,1] + z*zmat[,2]
+        ty <- zmat[,3] + z*zmat[,4]
+        inner <- tx*cos(theta[i]) + ty*sin(theta[i])
+        indx <- which(is.finite(z) & z>=0 &  z<=1 & inner >0)
+        x[i] <- tx[indx]
+        y[i] <- ty[indx]
+        }
+@ 
+
+Now I have the $x,y$ coordinates where each radial slice (the cuts you
+would make when slicing a pie) intersects the polygon.  
+Add the original vertices of the polygon to the list, sort by angle, and
+create the output.  The radial lines are labeled 1,2, \ldots, nslice +1
+(the original cut from the center to 6 o'clock is repeated at the end),   %'
+and the inserted vertices with a zero.
+<<pedplot-polyfun>>= 
+    nvertex <- length(object$x)
+    temp <- data.frame(indx = c(1:ns1, rep(0, nvertex)),
+                       theta= c(theta, object$theta),
+                       x= c(x, object$x),
+                       y= c(y, object$y))
+    temp <- temp[order(-temp$theta),]
+    out <- vector('list', nslice)
+    for (i in 1:nslice) {
+        rows <- which(temp$indx==i):which(temp$indx==(i+1))
+        out[[i]] <- list(x=c(0, temp$x[rows]), y= c(0, temp$y[rows]) +.5)
+        }
+    out
+    }   
+@ 
+
+Finally we get to the drawbox function itself, which is fairly simple.
+Updates by JPS in 5/2011 to allow missing, and to fix up shadings and borders.
+For affected=0, don't fill.
+For affected=1, fill with density-lines and angles.
+For affected=-1 (missing), fill with ``?'' in the midpoint of the polygon,
+with a size adjusted by how many columns in affected.
+For all shapes drawn, make the border the color for the person.
+
+<<pedplot-drawbox>>=
+
+  drawbox<- function(x, y, sex, affected, status, col, polylist,
+            density, angle, boxw, boxh) {
+        for (i in 1:length(affected)) {
+            if (affected[i]==0) {
+                polygon(x + (polylist[[sex]])[[i]]$x *boxw,
+                        y + (polylist[[sex]])[[i]]$y *boxh,
+                        col=NA, border=col)
+                }
+            
+            if(affected[i]==1) {
+              ## else {
+              polygon(x + (polylist[[sex]])[[i]]$x * boxw,
+                      y + (polylist[[sex]])[[i]]$y * boxh,
+                      col=col, border=col, density=density[i], angle=angle[i])            
+            }
+            if(affected[i] == -1) {
+              polygon(x + (polylist[[sex]])[[i]]$x * boxw,
+                      y + (polylist[[sex]])[[i]]$y * boxh,
+                      col=NA, border=col)
+              
+              midx <- x + mean(range(polylist[[sex]][[i]]$x*boxw))
+              midy <- y + mean(range(polylist[[sex]][[i]]$y*boxh))
+             
+              points(midx, midy, pch="?", cex=min(1, cex*2/length(affected)))
+            }
+            
+          }
+        if (status==1) segments(x- .6*boxw, y+1.1*boxh, 
+                                x+ .6*boxw, y- .1*boxh,)
+        ## Do a black slash per Beth, old line was
+        ##        x+ .6*boxw, y- .1*boxh, col=col)
+      }
+
+@ 
+
+\subsection{Subsetting}
+This section is still experimental and might change.  
+
+Sometimes a pedigree is too large to fit comfortably on one page.
+The [[subregion]] argument allows one to plot only a portion of the
+pedigree based on the plot region.  Along with other tools to
+select portions of the pedigree based on relatedness, such as all
+the descendents of a particular marriage, it gives a tool for
+addressing this.  This breaks our original goal of completely
+automatic plots, but users keep asking for more.
+
+The argument is [[subregion=c(min x, max x, min depth, max depth)]],
+and works by editing away portions of the [[plist]] object
+returned by align.pedigree. 
+First decide what lines to keep. 
+Then take subjects away from each line, 
+update spouses and twins,
+and fix up parentage for the line below.
+
+JPS 5/23/2011 note:
+Found the subregion option to re-scale the y-axis very well, but 
+not the x-axis.
+
+<<pedplot-subregion>>=
+subregion2 <- function(plist, subreg) {
+    if (subreg[3] <1 || subreg[4] > length(plist$n)) 
+        stop("Invalid depth indices in subreg")
+    lkeep <- subreg[3]:subreg[4]
+    for (i in lkeep) {
+        if (!any(plist$pos[i,]>=subreg[1] & plist$pos[i,] <= subreg[2]))
+            stop(paste("No subjects retained on level", i))
+        }
+    
+    nid2 <- plist$nid[lkeep,]
+    n2   <- plist$n[lkeep]
+    pos2 <- plist$pos[lkeep,]
+    spouse2 <- plist$spouse[lkeep,]
+    fam2 <- plist$fam[lkeep,]
+    if (!is.null(plist$twins)) twin2 <- plist$twins[lkeep,]
+    
+    for (i in 1:nrow(nid2)) {
+        keep <- which(pos2[i,] >=subreg[1] & pos2[i,] <= subreg[2])
+        nkeep <- length(keep)
+        n2[i] <- nkeep
+        nid2[i, 1:nkeep] <- nid2[i, keep]
+        pos2[i, 1:nkeep] <- pos2[i, keep]
+        spouse2[i,1:nkeep] <- spouse2[i,keep]
+        fam2[i, 1:nkeep] <- fam2[i, keep]
+        if (!is.null(plist$twins)) twin2[i, 1:nkeep] <- twin2[i, keep]
+
+        if (i < nrow(nid2)) {  #look ahead
+            tfam <- match(fam2[i+1,], keep, nomatch=0)
+            fam2[i+1,] <- tfam
+            if (any(spouse2[i,tfam] ==0)) 
+                stop("A subregion cannot separate parents")
+            }
+        }
+    
+    n <- max(n2)
+    out <- list(n= n2[1:n], nid=nid2[,1:n, drop=F], pos=pos2[,1:n, drop=F],
+                spouse= spouse2[,1:n, drop=F], fam=fam2[,1:n, drop=F])
+    if (!is.null(plist$twins)) out$twins <- twin2[, 1:n, drop=F]
+    out
+    }
+@ 
+
+
+\subsection{Legends}
+
+We define a function to draw a legend for the affected matrix. We do so
+by making use of the pie() function, which will draw a circle that will look
+like a woman (circle) in the pedigree who has all affected indicators ==1.  
+We do not show what the ``?'' means, and we do not cover what colors are 
+indicated by the coloring applied to subjects.
+
+We allow the legend to be added to the current pedigree plot by default,
+and it also works to draw a legend on a separate page.  The {\em new} argument
+controls this option. When new=TRUE, the default, the plot is added to the 
+current plot (assumed a pedigree plot), and placed in one of the corners
+of the plot given by {\em location}, which has options "bottomright", 
+"topright", "topleft", and "bottomleft", with ``bottomright'' the default.
+
+If new=FALSE, the pie graph is plotted from (-1,1) for both x and y, centered 
+at 0,0 with radius 1. With angle.init=90 and twopi = 2*pi, we control the 
+start to be at the top and the sections are plotted counter-clockwise, respectively, which are some of the settings from the original pie() function.  
+
+When we adapted the pie() function to plot in different, non-(0,0) locations
+on the pedigree, we had these major issues:
+
+1) The Y-axis actually goes from min(y) at the top and max(y) at the bottom.
+2) To get the polygon in pie() to not be oblong, we made sure to use asp=1, 
+which re-sets the x- and/or y-axis again.  Therefore, we have to manage the 
+placing of the pie in reference to those updated scalings using par(``usr'').
+3) We have to choose a center that is not 0,0, and have to add the center
+x,y coordinates to some of the default settings of pie().
+
+We carry forward from the plot.pedigree the same density and angle defaults
+for shading sections of each subject's symbol with polygon.  
+
+
+<<pedigree.legend>>=
+
+pedigree.legend <- function (ped, labels = dimnames(ped$affected)[[2]],
+    edges = 200, radius=NULL, location="bottomright", new=TRUE,
+    density=c(-1, 35,65,20),  angle = c(90, 65, 40, 0), ...) 
+{
+   
+    naff <- max(ncol(ped$affected),1)
+
+    x <- rep(1,naff)
+    
+    # Defaults for plotting on separate page:
+    ## start at the top, always counter-clockwise, black/white
+    init.angle <- 90
+    twopi <- 2 * pi
+    col <- 1
+
+    default.labels <- paste("affected-", 1:naff, sep='')
+    if (is.null(labels)) labels <- default.labels
+    
+    ## assign labels to those w/ zero-length label
+    whichNoLab <- which(nchar(labels) < 1)
+    if(length(whichNoLab))
+      labels[whichNoLab] <- paste("affected-", whichNoLab, sep='')
+
+    
+    x <- c(0, cumsum(x)/sum(x))
+    dx <- diff(x)
+    nx <- length(dx)
+    ## settings for plotting on a new page
+    if(!new) {
+      plot.new()
+      
+      pin <- par("pin")
+      # radius, xylim, center, line-lengths set to defaults of pie()
+      radius <- 1
+      xlim <- ylim <- c(-1, 1)
+      center <- c(0,0)
+      llen <- 0.05
+      
+      if (pin[1L] > pin[2L]) 
+        xlim <- (pin[1L]/pin[2L]) * xlim
+      else ylim <- (pin[2L]/pin[1L]) * ylim
+      
+      plot.window(xlim, ylim, "", asp = 1)
+      
+    } else {
+      ## Settings to add to pedigree plot
+      ## y-axis is flipped, so adjust angle and rotation
+      init.angle <- -1*init.angle
+      twopi <- -1*twopi
+
+      ## track usr xy limits. With asp=1, it re-scales to have aspect ratio 1:1
+      usr.orig <- par("usr")
+      plot.window(xlim=usr.orig[1:2], ylim=usr.orig[3:4], "", asp=1)
+      usr.asp1 <- par("usr")
+     
+      ## also decide on good center/radius if not given
+      if(is.null(radius))
+        radius <- .5
+      
+      ## set line lengths
+      llen <- radius*.15
+      
+      ## get center of pie chart for coded
+      pctusr <- .10*abs(diff(usr.asp1[3:4]))
+      center = switch(location,
+        "bottomright" = c(max(usr.asp1[1:2])-pctusr,max(usr.asp1[3:4])-pctusr),
+        "topright" = c(max(usr.asp1[1:2])-pctusr, min(usr.asp1[3:4]) + pctusr),
+        "bottomleft" =c(min(usr.asp1[1:2]) + pctusr, max(usr.asp1[3:4])-pctusr),
+        "topleft" = c(min(usr.asp1[1:2]) + pctusr, min(usr.asp1[3:4]) + pctusr))
+     
+    }
+    
+    col <- rep(col, length.out = nx)
+    border <- rep(1, length.out = nx)
+    lty <- rep(1, length.out = nx)
+    angle <- rep(angle, length.out = nx)
+    density <- rep(density, length.out = nx)
+  
+    t2xy <- function(t) {
+        t2p <- twopi * t + init.angle * pi/180
+        list(x = radius * cos(t2p), y = radius * sin(t2p))
+    }
+    for (i in 1L:nx) {
+        n <- max(2, floor(edges * dx[i]))
+        P <- t2xy(seq.int(x[i], x[i + 1], length.out = n))
+        P$x <- P$x + center[1]
+        P$y <- P$y + center[2]
+        
+        polygon(c(P$x, center[1]), c(P$y, center[2]), density = density[i],
+                angle = angle[i], border = border[i], col = col[i],
+                lty = lty[i])
+
+        P <- t2xy(mean(x[i + 0:1]))
+        if(new) {
+          ## not centered at 0,0, so added center to x,y
+          P$x <- P$x + center[1]
+          P$y <- center[2] + ifelse(new, P$y, -1*P$y)
+        }
+        
+        lab <- as.character(labels[i])
+        if (!is.na(lab) && nzchar(lab)) {
+          ## put lines
+          lines(x=c(P$x, P$x + ifelse(P$x<center[1], -1*llen, llen)),
+                y=c(P$y, P$y + ifelse(P$y<center[2], -1*llen, llen)))
+
+          ##  put text just beyond line-length away from pie
+          text(x=P$x + ifelse(P$x < center[1], -1.2*llen, 1.2*llen),
+               y=P$y + ifelse(P$y < center[2], -1.2*llen, 1.2*llen),
+               labels[i], xpd = TRUE, 
+               adj = ifelse(P$x < center[1], 1, 0), ...)
+        }
+    }
+    
+    invisible(NULL)
+}
+@ 
+
+
+
+
