@@ -10,10 +10,8 @@
 }
 \usage{data(minnbreast)}
 \format{
-  minnbreast: A data frame with 29114 observations, one line per subject,
-  on the following 14 variables.      
-  minnbreast2: Further data on oral contraceptive use and related
-  risk factors in 6150 female subjects. 
+  minnbreast: A data frame with 28081 observations, one line per subject,
+  on the following 14 variables. 
   \describe{
     \item{\code{id}}{subject identifier}
     \item{\code{proband}}{if 1, this subject is one of the original 426 probands}
@@ -34,33 +32,14 @@
       in a marriage-like relationship, separated or divorced,  widowed,
       never married, refused to answer the questionaiire}
     \item{\code{everpreg}}{ever pregnant: never pregnant at the time of
-    baseline survey, ever pregnant at the time of baseline survey}
+      baseline survey, ever pregnant at the time of baseline survey}
     \item{\code{parity}}{number of births}
+    \item{\code{nbreast}}{number of breast biopsies}
     \item{sex}{M or F}
     \item{bcpc}{part of one of the families in the breast/prostate
-    cancer substudy: 0=no, 1=yes.  Note that subjects who were recruited
-    to the overall study after the date of the BP substudy are coded as zero.}
+      cancer substudy: 0=no, 1=yes.  Note that subjects who were recruited
+      to the overall study after the date of the BP substudy are coded as zero.}
   }
-  \describe{
-    \item{\code{id}}{subject identifier}
-    \item{\code{startage}}{starting age for follow-up}
-    \item{\code{endage}}{age at last follow-up or incident breast
-      cancer}
-    \item{\code{cancer}}{1=incident breast cancer, 0=censored}
-    \item{\code{oralc}}{current oral contraceptive use: none, <=4 years,
-      > 4 years}
-    \item{\code{degree}}{familial relationship to the proband: first
-      degree, second degree, or marry-in}
-    \item{\code{par.brth}}{a combination of parity and childbearing age:
-      nullparous (no children), 2 children with the first by age 20, 1-2
-      children after age 20, 3+ children with the first by age 20, or 3+
-      children after age 20.}
-    \item{\code{agemen}}{age at first menarche}
-    \item{\code{meno}}{age of menopause: currently pre-menopausal,
-      before age 45, age 45-50, after age 50}
-    \item{\code{ooph}}{oophorectomy: 0=no, 1=yes}
-    \item{\code{packyr}}{pack years of smoking: never smoker, 20 or
-      less, more than 20}}
 }
 
 \details{
@@ -87,11 +66,6 @@
   In ___ a second phase of the study was instituted.  The pedigrees were
   further extended to the numbers found in this data set, and further
   data gathered by questionairre.
-
-  The second data set contains time dependent covariates and so is coded
-  in a (start, stop) style.  It is also more refined with respect to
-  marry-ins to the study, whose \emph{observed} breast cancer risk does
-  not start until they join the family.
 }
 \source{Authors of the study}
 
