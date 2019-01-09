@@ -1,5 +1,6 @@
 ## Author: Jason Sinnwell
 ## Date: 5/23/2017
+## Updated: 1/7/2019
 
 ## id, dadid, momid, sex, missid all as would be passed to pedigree within a single family
 ## returned data.frame to be used with(df, pedigree(id, dadid, momid, sex))
