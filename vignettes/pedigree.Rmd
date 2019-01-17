@@ -80,6 +80,31 @@ plot(ped2basic)
 # plot(ped1basic)
 ```
 
+Fixing Pedigree Issues
+=======================
+
+Add example and write-up for fixParents. Could do this in multiple code chunks, but the basic example is this:
+  
+```{r, fixped}
+datped2 <- sample.ped[sample.ped$ped %in% 2,]
+
+## make 203, who is listed as a father, a female
+datped2[datped2$id %in% 203, "sex"] <- 2
+
+## remove subject 209 who is a married-in father
+datped2 <- datped2[-which(datped2$id %in% 209),]
+
+## this gets an error for 203 not being male.
+ped2 <- with(datped2, pedigree(id, father, mother, sex))
+## this fixes 203 and adds 209 back in.
+## remove this note:: need to load in the function from fixParents.R, which is not yet incorporated in the kinship2 package installed from CRAN
+fixped2 <- with(datped2, fixParents(id, father, mother, sex))
+## we see how it worked
+fixped2
+ped2 <- with(fixped2, pedigree(id, dadid, momid, sex))
+plot(ped2)
+
+```
 
 Kinship
 ==============
@@ -211,6 +236,9 @@ ped2 <- pedigree(df2$id, df2$father, df2$mother,
                  status=df2$censor,
                  relation=relate2)
 ```
+
+Note: Could add more details here about how to add more people to show inbreeding of founders.
+
 
 Pedigree Plot Details
 ===========================
@@ -361,15 +389,15 @@ ped2.trim.more$relation
 Shrinking
 ==============
 
-A new function in kinship2 is *pedigree.shrink()*, which shrinks a pedigree
+An additional function in kinship2 is *pedigree.shrink()*, which shrinks a pedigree
 to a specified bit size while maintaining the maximal amount of 
 information for genetic linkage and association studies.  Using an indicator 
 for availability and affected status, it removes subjects in this order:
-+ unavailable with no available descendants
-+ available and are not parents
-+ available who have missing affected status
-+ available who are unaffected
-+ available who are affected
+  + unavailable with no available descendants
+  + available and are not parents
+  + available who have missing affected status
+  + available who are unaffected
+  + available who are affected
 
 We show how to shrink pedigree 1 to bit size $30$, which happens 
 to be the bit size after removing only the unavailable subjects.  We show how 
@@ -386,7 +414,8 @@ ped1.B30 <- shrink1.B30$pedObj
 plot(ped1.B30, col=shrink1.B30$avail + 1)
 
 
-``` 
+```
+
 Now shrink pedigree 1 to bit size $25$, which requires removing 
 subjects who are informative.  If there is a tie between multiple subjects 
 about who to remove, the method randomly chooses one of them. With this 
@@ -446,6 +475,7 @@ df2
 kin2[df2$avail==1,df2$avail==1]
 
 ``` 
+
 
 R Session Information
 ===========================
