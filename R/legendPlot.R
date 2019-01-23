@@ -110,7 +110,4 @@
 #' With color
 #' @examples
 #' legendPlot(ped1, col=ped1$affected[,2]+1,  affected.label=c("cancer","available"))
-#' 
-#' More informative example with 2 affected status, consent-to-study, and vital status
-#' @examples 
 #' legendPlot(ped1, col=ped1$affected[,2]+1, col.label=c("no dna", "dna"), affected.label=c("cancer","available"))
