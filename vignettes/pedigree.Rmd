@@ -78,18 +78,18 @@ plot(ped2basic)
 Fixing Pedigree Issues
 =======================
 
-One potential pedigree issue is that an incorrect sex value may be assigned,
-such as a female accidentally listed as a father (male). In order to fix this,
-we first subset ~datped2~, locate the *id* column, and match it to a specific id
-(in this case, $203$). Within id $203$, then locate in the *sex* column.
-Assign this subset to the value *2* (female) to change the original/incorrect
+To "break" the pedigree, we can manipulate the sex value to not match the
+parent value (in this example, we change $203$ from a male to a female, even
+though $203$ is a father). To do this, we first subset ~datped2~, locate the *id* column, 
+and match it to a specific id (in this case, $203$). Within id $203$, then locate in the *sex* column.
+Assign this subset to the incorrect value of *2* (female) to change the original/correct
 value of *1* (male).
 
-Another issue to resolve is to delete subjects who are not relevant to the
-pedigree, such as a married-in father. To do this, we subset ~datped2~ and 
-use the *-which()* function to locate and delete the specified subject 
-(in this case, $209$). Reassign this code to ~datped22~ to drop the specified
-subject entirely.
+To further break the pedigree, we can delete subjects who seem irrelevant to the
+pedigree (in this example, we delete $209$ because he is a married-in father). 
+To do this, we subset ~datped2~ and use the *-which()* function to locate and delete
+the specified subject (in this case, $209$). Reassign this code to ~datped22~ to drop 
+the specified subject entirely.
 
 ```{r, datped2}
 datped2 <- sample.ped[sample.ped$ped %in% 2,]
@@ -100,7 +100,8 @@ datped2 <- datped2[-which(datped2$id %in% 209),]
 An error occurs when the *pedigree()* function notices that id $203$ is not 
 coded to be male (*1*) but is a father. To correct this, we simply employ the
 *fixParents()* function to adjust the *sex* value to match either *mother/momid*
-or *father/dadid*.
+or *father/dadid*. *fixParents()* will also add back in any deleted subjects,
+further fixing the pedigree.
 
 ```{r, fixped}
 ped2 <- with(datped2, pedigree(id, father, mother, sex))
