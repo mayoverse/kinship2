@@ -319,6 +319,23 @@ ped1reord <- pedigree(df1reord$id, df1reord$father, df1reord$mother,
 plot(ped1reord, col=df1reord$avail+1)
 ``` 
   
+## Legend Plot
+
+The *legendPlot()* function creates a dynamic legend based on the arguments
+passed through it. 
+
+```{r, legendplot}
+ped1 <- pedAll['1']
+#plot(ped1)
+source("../R/legendPlot.R")
+## legendPlot <- function(ped, id=ped$id, affected=ped$affected, affected.label=NULL, col=1, col.label=NULL, symbol.cex=.75, ...)
+## no color
+legendPlot(ped1,  affected.label=c("cancer","available"))
+## with color
+legendPlot(ped1, col=ped1$affected[,2]+1,  affected.label=c("cancer","available"))
+legendPlot(ped1, col=ped1$affected[,2]+1, col.label=c("no dna", "dna"), affected.label=c("cancer","available"))
+```  
+  
 Pedigree Utility Functions
 =================================
 
