@@ -22,10 +22,10 @@
 #'
 #'
 #' @examples
-#' legendPlot <- function(ped, id=ped$id, affected=ped$affected, affected.label=NULL, col=1, col.label=NULL, symbol.cex=.75, ...) {
-#'  
-#'  sAF <- options()$stringsAsFactors
-#'  options(stringsAsFactors=FALSE)
+legendPlot <- function(ped, id=ped$id, affected=ped$affected, affected.label=NULL, col=1, col.label=NULL, symbol.cex=.75, ...) {
+  
+  sAF <- options()$stringsAsFactors
+  options(stringsAsFactors=FALSE)
   
  ##Pedigree plot with dynamic legend of all affecteds on the bottom
   if(length(id) != nrow(ped)) {
@@ -94,7 +94,7 @@
   options(stringsAsFactors=sAF)
   
   
- }
+}
  
 #' @examples 
 #' library(kinship2)
