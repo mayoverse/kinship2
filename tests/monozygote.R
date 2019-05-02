@@ -56,3 +56,15 @@ truth <- matrix(c(5,6, 0,
                 byrow=T, ncol=3)
 
 all.equal(kmat[truth[,1:2]], truth[,3])
+
+
+data(minnbreast)
+mn67 <- minnbreast[minnbreast$famid %in% c(6,7),]
+pl67 <- with(mn67, pedigree(id, fatherid, motherid, sex=sex, affected=proband, famid=famid))
+
+#plot(pl67[1])
+rel6 <- rbind(c(86, 87, 2,6), c(103, 104, 3,6), c(122, 123, 1, 7))
+colnames(rel6) <- c("id1","id2","code","famid")
+pl67 <- with(mn67, pedigree(id, fatherid, motherid, sex=sex, affected=proband, famid=famid, relation=rel6))
+#plot(pl67[1])
+kinship(pl67[2]

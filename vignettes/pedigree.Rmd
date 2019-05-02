@@ -140,7 +140,7 @@ kin2
 ``` 
 
 For family 2, see that the row and column names match the id in 
-the figure below, and see that each person's coefficient with 
+the figure below, and see that each kinship coefficient with 
 themselves is $0.50$, siblings are $0.25$ (e.g. $204-205$), and pedigree 
 marry-ins 
 only share alleles IBD with their children with coefficient $0.25$ 
@@ -163,10 +163,28 @@ kinAll[40:43,40:43]
 kinAll[42:46, 42:46]
 ```
 
+## Kinship for twins in pedigreeList object
+
+Specifying twin relationships in a pedigreeList object is complicated by the fact that the user must specify the family id to which the ~id1~ and ~id2~ belong. We show below the relation matrix
+requires the family id to be in the last column, with the column names as done below, to make the plotting and kinship matrices to show up with the monozygotic twins correctly. We show how to
+specify monozygosity for subjects 206 and 207 in sample pedigree 2, and subjects 125 and 126 in pedigree 1. We check it by looking at the kinship matrix for these pairs, which are correctly at $0.5$.
+
+```{r, kinAll}
+reltwins <- rbind(c(206, 207, 1, 2), c(125, 126, 1, 1))
+colnames(reltwins)=c("id1","id2","code","famid")
+pedAll <- with(sample.ped, pedigree(id=id, dadid=father, momid=mother,
+  sex=sex, famid=ped, relation=reltwins))
+kinAll <- kinship(pedAll)
+kinAll[21:31,21:31]
+kinAll[42:50,42:50]
+```
+
 Note that subject $113$ is not in pedigree 1 because they 
 are a marry-in without children in the pedigree. Subject $113$ is in their own 
 pedigree of size 1 in the $kinAll$ matrix at index $41$. We later show how 
 to handle such marry-ins for plotting.
+
+
 
 Optional Pedigree Features
 ===============================

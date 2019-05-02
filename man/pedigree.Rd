@@ -41,11 +41,13 @@ and of arbitrary case.
 Status (0="censored", 1="dead")
 }
 \item{relation}{
-A matrix with 3 columns (id1, id2, code) specifying special relationship
+A matrix with 3 required columns (id1, id2, code) specifying special relationship
 between pairs of individuals. Codes: 1=Monozygotic
 twin,  2=Dizygotic twin, 3=Twin of unknown zygosity, 4=Spouse.
 (The last is necessary in order to place a marriage with no children
-into the plot.) Note for tuples of >= 3 with a mixture of zygosities,
+into the plot.) If famid is given in the call to create pedigrees, then
+famid needs to be in the last column of the relation matrix. Note for
+tuples of >= 3 with a mixture of zygosities,
 the plotting is limited to showing pairwise zygosity of adjacent subjects,
 so it is only necessary to specify the pairwise zygosity, in the order
 the subjects are given or appear on the plot.

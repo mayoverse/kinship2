@@ -16,11 +16,11 @@ legendPlot(ped1, col=ped1$affected[,2]+1, col.label=c("no dna", "dna"), affected
 ## availability could be something like "consented", or having DNA available, so use consent from the availability status
 consented <- ped1$affected[,2]
 
-affected1 <- cbind(ped1$affected[,1], (ped1$id %in% c(108, 104, 131, 132, 140)))
-aff.label1 <- c("Cancer","TII-Diab")
+affected1 <- cbind(ped1$affected[,1], (ped1$id %in% c(108, 104, 131, 132, 140)), ped1$id %in% c(115:120))
+aff.label1 <- c("Cancer1","TII-Diab", "Cancer2")
 
 ## add vital status 0=alive, 1=died  (puts a slash through the plot symbol
 ped1$status <- ped1$id %in% c(105:108, 135:138, 115, 132)
-
+ped1$affected <- affected1
 legendPlot(ped1, col=consented+1, col.label=c("no consent","consent"), affected=affected1, status=vital1, affected.label=aff.label1)
 

@@ -1,6 +1,6 @@
 Package: kinship2
-Version: 1.8.0
-Date: 2019-1-9
+Version: 1.8.1
+Date: 2019-5-2
 Title: Pedigree Functions
 Authors@R: c(
 	person("Jason", "Sinnwell", email="sinnwell.jason@mayo.edu", role=c("aut","cre")),
@@ -9,7 +9,7 @@ Authors@R: c(
 	person("Elizabeth", "Atkinson", role="ctb"),
 	person("Carly", "Mester", role='ctb'))
 Depends: 
-	 R (>= 3.2.0),
+	 R (>= 3.4.0),
 	 Matrix,
 	 quadprog
 Imports: 
