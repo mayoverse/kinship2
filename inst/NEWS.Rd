@@ -1,5 +1,15 @@
 \name{NEWS}
 \title{NEWS file for the kinship2 package}
+\section{Changes in version 1.8.0}{
+  \itemize{
+    \item legendPlot: added function to make a plot with a legend at
+    the bottom, which is a separate sibship, whose parents are plotted
+    over by the pedigree of interest.
+    \item update documentation (Rd and vignette) on specifying
+    relation matrix in pedigreeList objects.
+    \item vignette now written in Rmd, will convert to html
+  }
+} 
 \section{Changes in version 1.7.2}{
   \itemize{
     \item fixParents: added new function to add parents when they don't
