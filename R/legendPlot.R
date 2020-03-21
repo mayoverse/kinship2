@@ -63,7 +63,7 @@ legendPlot <- function(x, id=x$id, affected=x$affected, affected.label=NULL, col
     }
   }
    
-#  colorLabels <- names(col.label[ucols])
+  ##  match labels by names
   colorLabels <- names(col.label[match(ucols, col.label)])
   if(!is.null(affected)) {
     if(is.null(affected.label)) {
@@ -74,7 +74,8 @@ legendPlot <- function(x, id=x$id, affected=x$affected, affected.label=NULL, col
     }
   }
  
- ##Legend Configuration
+  ## Legend Configuration, a nuclear family with a sibship of 
+  ## all colors/affection statuses. Parents will be plotted  over
   if(!(ncol(affected)<2 & length(col.label) < 2)) {
     legdf <- rbind.data.frame(
       c(1,0,0,1,""), #father, required
@@ -97,9 +98,8 @@ legendPlot <- function(x, id=x$id, affected=x$affected, affected.label=NULL, col
     legped <- with(legdf, pedigree(as.numeric(id),as.numeric(dadid),as.numeric(momid),
                                    as.numeric(sex), affected=legaff))
     
-
+    ## plot the legend nuclear family on the bottom
     par(mar=c(0,2,2,2), oma=c(0,1,0,1))
-   
     plot(legped, id=legdf$idlabel, col=legend.col,
             density=rep(-1,ncol(legaff)), angle=rep(90,ncol(legaff)),
             symbolsize=symbolsize, cex=cex, packed=TRUE,  mar=c(0,2,2,2), ...)

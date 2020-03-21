@@ -1,7 +1,6 @@
-#' Legend Pedigree Plot
+#' Create a pedigree object, or pedigreeList object
 #'
-#' Pedigree plot with ready-made legend along the bottom of the page to represent colors 
-#' and affection statuses
+#' Create a pedigree or pedigreeList object
 #' 
 #' @param id Identification variable for individual
 #' @param dadid Identification variable for father. Founders' parents should be coded

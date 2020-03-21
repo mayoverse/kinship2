@@ -1,4 +1,16 @@
 # Automatically generated from all.nw using noweb
+#' Plot a pedigree object
+#' 
+#' Plot a pedigree object
+#' @param id
+#' 
+#' #' @seealso \code{\link{pedigree}}, \code{\link{legendPlot}}
+#' @name plot.pedigree
+NULL
+#> NULL
+
+#' @rdname plot.pedigree
+#' @export
 plot.pedigree <- function(x, id = x$id, status = x$status, 
                           affected = x$affected, 
                           cex = 1, col = 1,
