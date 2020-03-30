@@ -20,8 +20,10 @@
 #' 
 #' @param col.label Named vector, with elements matching the unique color codes, the names are the labels used in the legend.
 #' 
-#' @param symbolsize Size of symbols. Default is 1.0
+#' @param symbolsize Size of symbols (circle/square/triangle). Default is 1.0
 #'
+#' @param cex Character expansion size for labels and ids. Default is 1.0
+
 #' @examples 
 #' require(kinship2)
 #' data(sample.ped)

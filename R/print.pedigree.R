@@ -6,6 +6,7 @@ print.pedigree <- function(x, ...) {
     cat("Bit size=", bitSize(x)$bitSize, "\n")
     }
 
+
 print.pedigreeList <- function(x, ...) {
     cat("Pedigree list with", length(x$id), "total subjects in",
         length(unique(x$famid)), "families\n")
