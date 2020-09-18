@@ -1,4 +1,26 @@
-# Automatically generated from all.nw using noweb
+## Automatically generated from all.nw using noweb
+#' Align pedigree
+#' 
+#' Align a pegiree for plotting with coordinates set for each subject
+#'
+#'@param ped pedigree object with id, dadid, momid, sex
+#'@param packed align with packed option
+#'@param width width, in number of subjects for the pedigree, default=10
+#'@param align logical, if TRUE, align same generations
+#'@param hints hints for which ...
+#'
+#' @details
+#'
+#'@return 
+#'@author Terry Therneau
+#' @seealso \code{\link{pedigree}}
+#' @name align.pedigree
+NULL
+#> NULL
+
+#' @rdname align.pedigree
+#' @export
+
 align.pedigree <- function(ped, packed=TRUE, width=10,
                            align=TRUE, hints=ped$hints) {
     if (class(ped)== 'pedigreeList') {
