@@ -4,14 +4,14 @@
 #' uninformative subjects. The algorithm is useful for getting a pedigree condensed to 
 #' a minimally informative size for algorithms or testing that are limited by size 
 #' of the pedigree.
-#' @param x Pedigree object created by the pedigree function 
+#' @param x Pedigree object created by the pedigree function,  
 #' @param avail vector of binary availability status (0/1), i.e. having data, or sample available
-#' @param affected vector of binary affected status (0/1/NA), algorithm not yet extended to the full 
-#' affected matrix, which is used in the pedigree class
-#' @seed integer for random seed to control which patient gets selected as removed
+#' @param affected vector of binary affected status (0/1/NA). If NULL, uses first column of the pedigree object affected matrix.
 #' @param maxBits Optional, the bit size for which to shrink the pedigree
 #' @details 
-#' Iteratively remove subjects from the pedigree. First remove uninformative 
+#' Iteratively remove subjects from the pedigree. The random removal of members
+#' was previously controlled by a seed argument, but we remove this, forcing users
+#' to control randomness outside the function. First remove uninformative 
 #' subjects, i.e., unavailable (not genotyped) with no available descendants.  
 #' Next, available terminal subjects with unknown phenotype if both parents 
 #' available. Last, iteratively shrinks pedigrees by preferentially removing 
@@ -34,16 +34,9 @@ NULL
 
 #' @rdname pedigree.shrink
 #' @export
-pedigree.shrink <- function(ped, avail, affected=NULL, seed=NULL, maxBits = 16) {
+pedigree.shrink <- function(ped, avail, affected=NULL, maxBits = 16) {
   if(inherits(ped, "pedigree"))
-    stop("Must be a pegigree object.\n")
-  
-  ##set the seed for random selections
-
-  if(is.null(seed))  {
-    seed <- sample(2^20, size=1)
-  }
-  set.seed(seed)
+    stop("Must be a pegigree object.\n")  
   
   if(any(is.na(avail)))
     stop("NA values not allowed in avail vector.")

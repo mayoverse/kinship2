@@ -2,6 +2,13 @@
 \title{NEWS file for the kinship2 package}
 \section{Changes in version 1.8.0}{
   \itemize{
+    \item Make all functions extracted into R/, no longer from noweb files
+    \item All documentation from pedigree.shrink.Rnw moved into Rd and R
+    files
+  }
+}
+\section{Changes in version 1.8.0}{
+  \itemize{
     \item legendPlot: added function to make a plot with a legend at
     the bottom, which is a separate sibship, whose parents are plotted
     over by the pedigree of interest.

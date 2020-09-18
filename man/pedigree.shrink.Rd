@@ -1,28 +1,4 @@
 % $Author: sinnwell $ 
-% $Date: 2010/08/25 20:03:43 $ 
-% $Header: /people/biostat3/sinnwell/genet/rpack/PedShrink/RCS/pedigree.shrink.Rd,v 1.6 2010/08/25 20:03:43 sinnwell Exp sinnwell $ 
-% $Locker: sinnwell $ 
-% $Log: pedigree.shrink.Rd,v $
-% Revision 1.6  2010/08/25 20:03:43  sinnwell
-% clear up availability description, and fix example
-%
-% Revision 1.5  2010/07/28 21:45:15  sinnwell
-% update examples
-%
-% Revision 1.4  2010/07/16 21:02:31  sinnwell
-% add avail, fix items in ped
-%
-% Revision 1.3  2009/11/19 18:47:30  sinnwell
-% args update
-%
-% Revision 1.2  2009/11/18 14:30:15  sinnwell
-% fix example run-on line
-%
-% Revision 1.1  2009/11/13 22:04:56  sinnwell
-% Initial revision
-
-% 
-
 \name{pedigree.shrink}
 \alias{pedigree.shrink}
 \alias{print.pedigree.shrink}
@@ -31,8 +7,10 @@
 uninformative subjects.
 }
 \description{
-Iteratively remove subjects from the pedigree.  
-First remove uninformative subjects, i.e., unavailable (not genotyped)
+Iteratively remove subjects from the pedigree. The 'seed' argument
+previously controlled the randomness of removing subjects, but we now
+allow this to be controlled by the user outside the function. 
+First step is to remove uninformative subjects, i.e., unavailable (not genotyped)
 with no available descendants.  Next, available terminal subjects with
 unknown phenotype if both parents available.
 Last, iteratively shrinks pedigrees by preferentially removing:  
@@ -41,7 +19,7 @@ Last, iteratively shrinks pedigrees by preferentially removing:
   3. Affected subjects.
 }
 \usage{
-pedigree.shrink(ped, avail, affected=NULL, seed=NULL, maxBits=16)
+pedigree.shrink(ped, avail, affected=NULL, maxBits=16)
 }
 \arguments{
 \item{ped}{
@@ -53,10 +31,6 @@ pedigree.shrink(ped, avail, affected=NULL, seed=NULL, maxBits=16)
 \item{affected}{
   Vector of affected status, 0/1 or TRUE/FALSE. If not given, use the
   first column of the affected matrix of the pedigree object.
-}
-\item{seed}{
-An integer or a saved copy of .Random.seed.  This allows simulations
-to be reproduced by using the same initial seed.
 }
 \item{maxBits}{
 Target bit size.  Pedigree will be trimmed until bit size is <= maxBits.

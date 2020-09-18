@@ -1,32 +1,16 @@
-% $Author: sinnwell $ 
-% $Date: 2009/11/19 14:43:14 $ 
-% $Header: /people/biostat3/sinnwell/genet/rpack/PedShrink/RCS/pedTrim.Rd,v 1.3 2009/11/19 14:43:14 sinnwell Exp $ 
-% $Locker:  $ 
-% $Log: pedTrim.Rd,v $
-% Revision 1.3  2009/11/19 14:43:14  sinnwell
-% *** empty log message ***
-%
-% Revision 1.2  2009/11/19 14:31:38  sinnwell
-% *** empty log message ***
-%
-% Revision 1.1  2008/07/16 19:59:29  sinnwell
-% Initial revision
-%
-% 
-%
 \name{findUnavailable}
 \alias{findUnavailable}
 \alias{pedigree.trim}
 \alias{excludeUnavailFounders}
 \alias{excludeStrayMarryin}
 \title{
-  Find unavailable subjects in a pedigree
+  Find or trim unavailable subjects in a pedigree
 }
 \description{
   Find the ID of subjects in a pedigree iteratively, as anyone who is
   not available and does not have an available descendant by
   successively removing unavailable terminal nodes. pedigree.trim
-  carries out the remove of the subjects identified by findUnavailable.
+  carries out the removal of the subjects identified by findUnavailable.
 }
 \usage{
 findUnavailable(ped, avail)
@@ -37,7 +21,7 @@ pedigree.trim(removeID, ped)
 A pedigree object with an id, findex, mindex, sex, plus other optional items
 }
 \item{avail}{
-  Vector of availability status (e.g., genotyped) 0/1 or TRUE/FALSE
+  Logical vector of availability status (e.g., genotyped) 0/1 or TRUE/FALSE
 }
 \item{removeID}{
 vector of subject ids of persons to trim from a pedigree
@@ -53,12 +37,15 @@ vector of subject ids of persons to trim from a pedigree
 }
 \details{
   Originally written as pedTrim by Steve Iturria, modified by Dan Schaid
-  2007. findUnavailable also calls excludeStrayMarryin to find stray
+  2007, and now split into the two separate functions: \code{findUnavailable()},
+  and \code{pedigree.trim()} to do the tasks separately.  \code{findUnavailable()}
+  calls \code{excludeStrayMarryin} to find stray
   available marry-ins who are isolated after trimming their unavailable
   offspring, and excludeUnavailFounders.
   If the subject ids are character, make sure none of the characters
   in the ids is a colon (":"), which is a special character used to
   concatenate and split subjects within the utlity.
+  
 }
 \seealso{
 \code{\link{pedigree.shrink}},
