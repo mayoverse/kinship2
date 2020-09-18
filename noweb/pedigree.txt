@@ -82,7 +82,7 @@
         survival routines and remains an integer.
 
         We will describe the code in a set of blocks.
-#' @examples        
+#'      
 #'        <<pedigree>>=
 #'          pedigree <- function(id, dadid, momid, sex, affected, status, relation,
 #'                               famid, missid) {
@@ -100,7 +100,7 @@
           \subsection{Data checks}
         The code starts out with some checks on the input data.  
         Is it all the same length, are the codes legal, etc.
-#' @examples         
+       
 #'        <<pedigree-error>>=
 #'          n <- length(id)
 #'        if (length(momid) != n) stop("Mismatched lengths, id and momid")
@@ -108,7 +108,7 @@
 #'        if (length(sex  ) != n) stop("Mismatched lengths, id and sex")
         
         # Don't allow missing id values
-#' @examples
+
 #'        if (any(is.na(id))) stop("Missing value for the id variable")
 #'        if (!is.numeric(id)) {
 #'          id <- as.character(id)
@@ -117,7 +117,6 @@
 #'        }
         
         # Allow for character/numeric/factor in the sex variable
-#' @examples
 #'        if(is.factor(sex))
 #'          sex <- as.character(sex)
 #'        codes <- c("male","female", "unknown", "terminated")
@@ -127,7 +126,6 @@
         # assume either 0/1/2/4 =  female/male/unknown/term, or 1/2/3/4
         #  if only 1/2 assume no unknowns
         
-#' @examples
 #'        if(min(sex) == 0)
 #'          sex <- sex + 1
 #'        sex <- ifelse(sex < 1 | sex > 4, 3, sex)
@@ -138,7 +136,7 @@
 #'        sex <- factor(sex, 1:4, labels = codes)
 #'        @ 
           
-          Create the variables descibing a missing father and/or mother,
+        Create the variables descibing a missing father and/or mother,
         which is what we expect both for people at the top of the
         pedigree and for marry-ins, \emph{before} adding in the family
         id information.  
@@ -146,7 +144,7 @@
         If there are multiple families in the pedigree, make a working set of
         identifiers that are of the form `family/subject'.
         Family identifiers can be factor, character, or numeric.
-#' @examples
+
 #'        <<pedigree-error>>=
 #'          if (missing(missid)) {
 #'            if (is.numeric(id)) missid <- 0
@@ -164,7 +162,6 @@
 #'          }
 #'        
           #Make a temporary new id from the family and subject pair
-#' @examples
 #'          oldid <-id
 #'          id <- paste(as.character(famid), as.character(id), sep='/')
 #'         dadid <- paste(as.character(famid), as.character(dadid), sep='/')
@@ -178,11 +175,10 @@
 #'        }
 #'        @ 
 #'          
-          Next check that any mother or father identifiers are found in the identifier
+          Errors3-parents: Next check that any mother or father identifiers are found in the identifier
         list, and are of the right sex.
         Subjects who don't have a mother or father are founders.  For those people %'
-        both of the parents should be missing.
-#' @examples  
+        both of the parents should be missing.  
 #'        <<pedigree-parent>>=
 #'          findex <- match(dadid, id, nomatch = 0)
 #'        if(any(sex[findex] != "male")) {
@@ -241,7 +237,7 @@
         Now, paste the parts together into a basic pedigree.
         The fields for father and mother are not the identifiers of
         the parents, but their row number in the structure.
-#' @examples
+
 #'        <<pedigree-create>>=
 #'          if (missing(famid))
 #'            temp <- list(id = id, findex=findex, mindex=mindex, sex=sex)
@@ -249,7 +245,7 @@
 #'                         sex=sex)
 #'        @ 
 #'
-#' @examples               
+               
 #'                <<pedigree-extra>>=
 #'                  if (!missing(affected)) {
 #'                    if (is.matrix(affected)){
@@ -325,7 +321,6 @@
 #'                    stop("Invalid relationship code")
 #'                  
                   # Is everyone in this relationship in the pedigree?
-#' @examples
 #'                  if (!missing(famid)) {
 #'                    temp1 <- match(paste(as.character(famid), as.character(id1), sep='/'), 
 #'                                   id, nomatch=0)
@@ -345,7 +340,7 @@
 #'                  }
 #'
                   # Check, are the twins really twins?
-#' @examples
+
 #'                  ncode <- as.numeric(code)
 #'                  if (any(ncode<3)) {
 #'                    twins <- (ncode<3)
@@ -355,7 +350,6 @@
 #'                      stop("Twins found with different fathers")
 #'                  }
                   # Check, are the monozygote twins the same gender?
-#' @examples
 #'                  if (any(code=="MZ twin")) {
 #'                    mztwins <- (code=="MZ twin")
 #'                    if (any(sex[temp1[mztwins]] != sex[temp2[mztwins]]))
@@ -363,7 +357,6 @@
 #'                  }
 #'                  
                   ##Use id index as indx1 and indx2
-#' @examples
 #'                  if (!missing(famid)) {
 #'                    temp$relation <- data.frame(famid=famid, indx1=temp1, indx2=temp2, code=code)
 #'                    
@@ -405,7 +398,7 @@
                 since they must are integer indices to rows they must be
                 recreated after selection.  Ditto for the relationship matrix.  
                 \end{enumerate}
-#' @examples
+
 #'                <<pedigree-subscript>>=
 #'                  "[.pedigreeList" <- function(x, ..., drop=F) {
 #'                    if (length(list(...)) != 1) stop ("Only 1 subscript allowed")
@@ -425,7 +418,7 @@
 #'                    x$mindex <- match(x$mindex[keep], kept.rows, nomatch=0)
 #'                    
                     #optional components
-#' @examples
+
 #'                    if (!is.null(x$status)) x$status <- x$status[keep]
 #'                    if (!is.null(x$affected)) {
 #'                      if (is.matrix(x$affected)) x$affected <- x$affected[keep,,drop=FALSE]
@@ -436,11 +429,11 @@
 #'                      if (any(keep)) {
 #'                        x$relation <- x$relation[keep,,drop=FALSE]
                         ##Update twin id indexes
-#' @examples
+
 #'                       x$relation$indx1 <- match(x$relation$indx1, kept.rows, nomatch=0)
 #'                        x$relation$indx2 <- match(x$relation$indx2, kept.rows, nomatch=0)
                         ##If only one family chosen, remove famid
-#' @examples
+
 #'                        if (length(indx)==1) {x$relation$famid <- NULL}
 #'                      }
 #'                      else x$relation <- NULL  # No relations matrix elements for this family
@@ -457,7 +450,7 @@
                 they cause plotting trouble later.
                 Relations are worth keeping only if both parties in the relation were
                 selected.
-#' @examples                  
+                  
 #'                <<pedigree-subscript>>=
 #'                  "[.pedigree" <- function(x, ..., drop=F) {
 #'                    if (length(list(...)) != 1) stop ("Only 1 subscript allowed")
@@ -519,8 +512,7 @@
                 Can be used with as.data.frame(ped) or data.frame(ped). Specify in Namespace
                 file that it is an S3 method.
                 
-                
-#' @examples       
+                     
 #'                <<as.data.frame.pedigree>>=
 #'                  
 #'                  as.data.frame.pedigree <- function(x, ...) {
@@ -541,8 +533,7 @@
 #'                  
                   This function is useful for checking the pedigree object with the
                 $findex$ and $mindex$ vector instead of them replaced with the ids of 
-                the parents.  This is not currently included in the package.
-#' @examples            
+                the parents.  This is not currently included in the package.         
 #'                <<ped2df>>=
 #'                  
 #'                  ped2df <- function(ped) {
@@ -563,7 +554,7 @@
                 It usually doesn't make sense to print a pedigree, since the id is just   %'
                 a repeat of the input data and the family connections are pointers.
                 Thus we create a simple summary.
-#' @examples            
+           
 #'               <<print.pedigree>>=
 #'                  print.pedigree <- function(x, ...) {
 #'                    cat("Pedigree object with", length(x$id), "subjects")

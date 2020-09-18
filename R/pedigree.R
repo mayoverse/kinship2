@@ -1,4 +1,4 @@
-#' Create a pedigree object, or pedigreeList object
+#' Create a pedigree or pedigreeList object
 #'
 #' Create a pedigree or pedigreeList object
 #' 
@@ -54,6 +54,10 @@ NULL
 pedigree <- function(id, dadid, momid, sex, affected, status, relation,
                      famid, missid) {
     n <- length(id)
+    ## Code transferred from noweb to markdown vignette.
+    ## Sections from the noweb/vignettes are noted here with
+    ## Doc: Error and Data Checks
+    ## Doc: Errors1
     if (length(momid) != n) stop("Mismatched lengths, id and momid")
     if (length(dadid) != n) stop("Mismatched lengths, id and momid")
     if (length(sex  ) != n) stop("Mismatched lengths, id and sex")
@@ -83,6 +87,8 @@ pedigree <- function(id, dadid, momid, sex, affected, status, relation,
         else if(mean(sex == 3) > 0.25)
                 warning("More than 25% of the gender values are 'unknown'")
     sex <- factor(sex, 1:4, labels = codes)
+
+    ## Doc:  Errors2    
     if (missing(missid)) {
         if (is.numeric(id)) missid <- 0
         else missid <- ""
@@ -145,7 +151,7 @@ pedigree <- function(id, dadid, momid, sex, affected, status, relation,
         stop(paste("Subjects must have both a father and mother, or have neither",
                    paste(who[msg.n], collapse= " ")))
     }
-
+    
     if (!missing(famid)) {
         if (any(famid[mindex] != famid[mindex>0])) {
             who <- (id[mindex>0])[famid[mindex] != famid[mindex>0]]
@@ -160,6 +166,7 @@ pedigree <- function(id, dadid, momid, sex, affected, status, relation,
                        paste(who[msg.n], collapse=" ")))
             }
         }
+    ## Doc: Creation of Pedigrees
     if (missing(famid))
         temp <- list(id = id, findex=findex, mindex=mindex, sex=sex)
     else temp<- list(famid=famid, id=oldid, findex=findex, mindex=mindex, 
@@ -276,14 +283,18 @@ pedigree <- function(id, dadid, momid, sex, affected, status, relation,
         if (!missing(famid)) {
             temp$relation <- data.frame(famid=famid, indx1=temp1, indx2=temp2, code=code)
             
-          }
-        else temp$relation <- data.frame(indx1=temp1, indx2=temp2, code=code)
         }
+        else temp$relation <- data.frame(indx1=temp1, indx2=temp2, code=code)
+    }
+    ## Doc: Finish
     if (missing(famid)) class(temp) <- 'pedigree'
     else class(temp) <- 'pedigreeList'
     temp
-    }
-"[.pedigreeList" <- function(x, ..., drop=F) {
+}
+
+## Doc: Subscripting a pedigree
+
+"[.pedigreeList" <- function(x, ..., drop=FALSE) {
     if (length(list(...)) != 1) stop ("Only 1 subscript allowed")
     ufam <- unique(x$famid)
     if (is.factor(..1) || is.character(..1)) indx <- ufam[match(..1, ufam)]
@@ -323,7 +334,8 @@ pedigree <- function(id, dadid, momid, sex, affected, status, relation,
     else class(x) <- 'pedigreeList'
     x
     }
-"[.pedigree" <- function(x, ..., drop=F) {
+
+"[.pedigree" <- function(x, ..., drop=FALSE) {
     if (length(list(...)) != 1) stop ("Only 1 subscript allowed")
     if (is.character(..1) || is.factor(..1)) i <- match(..1, x$id)
     else i <- (1:length(x$id))[..1]
@@ -368,4 +380,4 @@ pedigree <- function(id, dadid, momid, sex, affected, status, relation,
         stop("A subpedigree cannot choose only one parent of a subject")
     class(z) <- 'pedigree'
     z
-    }
+}
