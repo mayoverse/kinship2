@@ -1,4 +1,10 @@
-\section{Pedigree alignment}
+----------------
+title: align pedigree plots
+author: TM Therneau
+------------------------
+    
+Pedigree alignment
+==========================
 An \emph{aligned} pedigree is an object that contains a pedigree along
 with a set of information that allows for pretty plotting.
 This information consists of two parts: 
@@ -12,7 +18,8 @@ done.
 All the routines in this section completely ignore the [[id]] component
 of a pedigree; everyone is indexed solely by their row number in the object.
 
-\subsection{Hints}
+Hints
+============
 
 The first part of the work has to do with a [[hints]] list for each
 pedigree.  It consists of 3 parts:
@@ -43,13 +50,13 @@ family.  For subjects not part of either of these the value can be
 arbitrary.  
 The second is a 3 column matrix of spouse pairs, each row indicates the
 left-hand member of the pair, the right-hand member, and which of the two
-is the anchor, i.e., directly connected to thier parent.
+is the anchor, i.e., directly connected to thier parent.  
 Double and triple marriages can start to get interesting.
 
+## Autohint
 
-The [[autohint]] routine is used to create an initial hints list.
-It is a part of the general intention to make the routine do
-``pretty good'' drawings automatically.                 
+The [[autohint]] routine is used to create an initial hints list. It is a part of
+the general intention to make the routine do pretty good'' drawings automatically.
 The basic algorithm is trial and error. 
 \begin{itemize}
   \item Start with the simplest possible hints (user input is accepted)
@@ -58,7 +65,7 @@ The basic algorithm is trial and error.
   \item Any fix on the top level mixes up everything below, so we do the
     fixes one level at a time.
 \end{itemize}
-The routine makes no attempt to reorder founders.  It just isn't smart enough%'
+The routine makes no attempt to reorder founders.  It just is nott smart enough
 to figure that out.
 
 The first thing to be done is to check on twins.  They are a nuisance, since
@@ -73,49 +80,19 @@ We use the minimum row number of the members of the set as the id.
 that there are no ties (who knows what a user may have used for starting 
 values.)  
 
-A recent addition (JPS, 5/2013) is to carry forward packaged and align to 
+A recent addition is to carry forward packaged and align to 
 kindepth and align.pedigree.
 
 <<autohint>>=
-autohint <- function(ped, hints, packed=TRUE, align=FALSE) {
-    if (!is.null(ped$hints)) return(ped$hints)  #nothing to do
-    n <- length(ped$id)
-    depth <- kindepth(ped, align=TRUE)
 
-    if (is.null(ped$relation)) relation <- NULL
-    else  relation <- cbind(as.matrix(ped$relation[,1:2]), 
-                            as.numeric(ped$relation[,3]))
-    if (!is.null(relation) && any(relation[,3] <4)) {
-	temp <- (relation[,3] < 4)
-	twinlist <- unique(c(relation[temp,1:2]))  #list of twin id's 
-	twinrel  <- relation[temp,,drop=F]
-	
-	twinset <- rep(0,n)
-	twinord <- rep(1,n)
-	for (i in 2:length(twinlist)) {
-	    # Now, for any pair of twins on a line of twinrel, give both
-	    #  of them the minimum of the two ids
-	    # For a set of triplets, it might take two iterations for the
-	    #  smallest of the 3 numbers to "march" across the threesome.
-	    #  For quads, up to 3 iterations, for quints, up to 4, ....
-	    newid <- pmin(twinrel[,1], twinrel[,2])
-	    twinset[twinrel[,1]] <- newid
-	    twinset[twinrel[,2]] <- newid
-	    twinord[twinrel[,2]] <- pmax(twinord[twinrel[,2]], 
-					 twinord[twinrel[,1]]+1)
-	    }	
-	}
-    else {
-	twinset <- rep(0,n)
-	twinrel <- NULL
-	}
-    <<autohint-shift>>
+   <<autohint-shift>>
     <<autohint-init>>
     <<autohint-fixup>>
     list(order=horder, spouse=sptemp)    
     }
 @ 
 
+### Shift in autohint
 Next is an internal function that  rearranges someone to be
 the leftmost or rightmost of his/her siblings.  The only
 real complication is twins -- if one of them moves the other has to move too.  
@@ -124,91 +101,16 @@ Algorithm: if the person to be moved is part of a twinset,
 first move all the twins to the left end (or right
 as the case may be), then move all the monozygotes to the
 left, then move the subject himself to the left.
-<<autohint-shift>>=
-shift <- function(id, sibs, goleft, hint, twinrel, twinset) {
-    if (twinset[id]> 0)  { 
-        shift.amt <- 1 + diff(range(hint[sibs]))  # enough to avoid overlap
-        twins <- sibs[twinset[sibs]==twinset[id]]
-        if (goleft) 
-    	 hint[twins] <- hint[twins] - shift.amt
-        else hint[twins] <- hint[twins] + shift.amt
-    	    
-        mono  <- any(twinrel[c(match(id, twinrel[,1], nomatch=0),
-    			   match(id, twinrel[,2], nomatch=0)),3]==1)
-        if (mono) {
-    	#
-    	# ok, we have to worry about keeping the monozygotics
-    	#  together within the set of twins.
-    	# first, decide who they are, by finding those monozygotic
-            #  with me, then those monozygotic with the results of that
-            #  iteration, then ....  If I were the leftmost, this could
-            #  take (#twins -1) iterations to get us all
-            #
-    	monoset <- id
-    	rel2 <- twinrel[twinrel[,3]==1, 1:2, drop=F]
-    	for (i in 2:length(twins)) {
-    	    newid1 <- rel2[match(monoset, rel2[,1], nomatch=0),2]
-    	    newid2 <- rel2[match(monoset, rel2[,2], nomatch=0),1]
-    	    monoset <- unique(c(monoset, newid1, newid2))
-    	    }
-    	if (goleft) 
-    	       hint[monoset]<- hint[monoset] - shift.amt
-    	else   hint[monoset]<- hint[monoset] + shift.amt
-    	}
-        }
 
-    #finally, move the subject himself
-    if (goleft) hint[id] <- min(hint[sibs]) -1   
-    else	hint[id] <- max(hint[sibs]) +1
-
-    hint[sibs] <- rank(hint[sibs])  # aesthetics -- no negative hints
-    hint
-    }
-@ 
-
+### init-autohint
 Now, get an ordering of the pedigree to use as the starting point.  
-The numbers start at 1 on each level.
-We don't need the final ``prettify" step, hence align=F.
-If there is a hints structure entered, we retain it's non-zero entries,
-otherwise people are put into the order of the data set. 
-We allow the hints input to be only an order vector
-Twins are
-then further reordered.
-<<autohint-init>>=  
-if (!missing(hints)) {
-    if (is.vector(hints)) hints <- list(order=hints)
-    if (is.matrix(hints)) hints <- list(spouse=hints)
-    if (is.null(hints$order)) horder <- integer(n)
-    else horder <- hints$order
-    }
-else horder <- integer(n)
+The numbers start at 1 on each level. We do not need the final ~prettify~ step,
+hence align=F. If there is a hints structure entered, we retain its non-zero entries,
+otherwise people are put into the order of the data set.  We allow the hints
+input to be only an order vector. Twins are then further reordered.
 
-for (i in unique(depth)) {
-    who <- (depth==i & horder==0)  
-    if (any(who)) horder[who] <- 1:sum(who) #screwy input - overwrite it
-    }
+## Fixup-autohint
 
-if (any(twinset>0)) {
-    # First, make any set of twins a cluster: 6.01, 6.02, ...
-    #  By using fractions, I don't have to worry about other sib's values
-    for (i in unique(twinset)) {
-        if (i==0) next
-        who <- (twinset==i)
-        horder[who] <- mean(horder[who]) + twinord[who]/100
-        }
-
-    # Then reset to integers
-    for (i in unique(ped$depth)) {
-        who <- (ped$depth==i)
-        horder[who] <- rank(horder[who])  #there should be no ties
-        }
-    }
-
-if (!missing(hints)) sptemp <- hints$spouse
-else sptemp <- NULL
-plist <- align.pedigree(ped, packed=packed, align=align, 
-                        hints=list(order=horder, spouse=sptemp))
-@ 
 The result coming back from align.pedigree is a set of vectors and
 matrices:
 \begin{description}
@@ -269,111 +171,9 @@ function, which returns a matrix with columns 1 and 2 being a pair
 of duplicates, and 3 a direction.
 Note that in the following code [[idlist]] refers to the row numbers of
 each subject in the pedigree, not to their label [[ped$id]].
-<<autohint-fixup>>=
-<<autohint-find>>
-<<autohint-duporder>>
-maxlev <- nrow(plist$nid)
-for (lev in 1:maxlev) {
-    idlist <- plist$nid[lev,1:plist$n[lev]] #subjects on this level
-    dpairs <- duporder(idlist, plist, lev, ped)  #duplicates to be dealt with
-    if (nrow(dpairs)==0) next;  
-    for (i in 1:nrow(dpairs)) {
-        anchor <- spouse <- rep(0,2)
-        for (j in 1:2) {
-            direction <- c(FALSE, TRUE)[j]
-            mypos <- dpairs[i,j]
-            if (plist$fam[lev, mypos] >0) {
-                # Am connected to parents at this location
-                anchor[j] <- 1  #familial anchor
-                sibs <- idlist[findsibs(mypos, plist, lev)]
-                if (length(sibs) >1) 
-                    horder <- shift(idlist[mypos], sibs, direction, 
-                                    horder, twinrel, twinset)
-                }
-            else {
-                #spouse at this location connected to parents ?
-                spouse[j] <- findspouse(mypos, plist, lev, ped)
-                if (plist$fam[lev,spouse[j]] >0) { # Yes they are
-                    anchor[j] <- 2  #spousal anchor
-                    sibs <- idlist[findsibs(spouse[j], plist, lev)]
-                    if (length(sibs) > 1) 
-                        horder <- shift(idlist[spouse[j]], sibs, direction, 
-                                    horder, twinrel, twinset)
-                    }
-                }
-            }
-@ 
 
-At this point the most common situation will be what is shown in 
-figure \ref{fig:auto1}.  The variable [[anchor]] is (2,1) showing that the
-left hand copy of subject 9 is connected to an anchored spouse and the
-right hand copy is himself anchored.  The proper addition to the
-spouselist is [[(4, 9, dpairs)]], where the last is the hint from the
-dpairs routine as to which of the parents is the one to follow further when
-drawing the entire pedigree.  (When drawing a pedigree and there is a
-child who can be reached from multiple founders, we only want to find
-the child once.) 
 
-The double marry-in found in figure \ref{fig:auto2}, subject 11, leads
-to value of (2,2) for the [[anchor]] variable.  The proper addition to
-the [[sptemp]] matrix in this case will be two rows, (5, 11, 1) indicating
-that 5 should be plotted left of 11 for the 5-11 marriage, with the first
-partner as the anchor, and a second row (11, 9, 2).
-This will cause the common spouse to be plotted in the middle.
-
-Multiple marriages can lead to unanchored subjects.  
-In the left hand portion of figure \ref{fig:auto3} we have two
-double marriages, one on the left and one on the right with 
-anchor values of (0,2) and (2,0), respectively.  
-We add two marriages to the return list to ensure that both print
-in the correct left-right order; the 14-4 one is correct by default
-but it's easier to output a line than check sex orders.  %'
-
-\begin{figure}
-  \myfig{autohint3}
-  \caption{Pedigrees with multiple marriages}
-  \label{fig:auto3}
-  \end{figure}
-
-The left panel of figure \ref{fig:auto3} shows a case where
-subject 11 marries into the pedigree but also has a second spouse.
-The [[anchor]] variable for
-this case will be (2, 0); the first instance of 11 has a spouse tied
-into the tree above, the second instance has no upward connections.
-In the top row, subject 6 has values of (0, 0) since neither 
-connection has an upward parent.  
-In the right hand panel subject 2 has an anchor variable of (0,1).
-
-<<autohint-fixup>>=
-        # add the marriage(s)
-        id1 <- idlist[dpairs[i,1]]  # i,1 and i,2 point to the same person
-        id2 <- idlist[spouse[1]]
-        id3 <- idlist[spouse[2]]
-
-        temp <- switch(paste(anchor, collapse=''),
-                       "21" = c(id2, id1, dpairs[i,3]),   #the most common case
-                       "22" = rbind(c(id2, id1, 1), c(id1, id3, 2)),
-                       "02" = c(id2, id1, 0), 
-                       "20" = c(id2, id1, 0), 
-                       "00" = rbind(c(id1, id3, 0), c(id2, id1, 0)),
-                       "01" = c(id2, id1, 2),
-                       "10" = c(id1, id2, 1),
-                       NULL)
-
-        if (is.null(temp)) { 
-            warning("Unexpected result in autohint, please contact developer")
-            return(list(order=1:n))  #punt
-          }         
-        else sptemp <- rbind(sptemp, temp)
-        }
-    #
-    # Recompute, since this shifts things on levels below
-    #
-    plist <- align.pedigree(ped, packed=packed, align=align, 
-                            hints=list(order=horder, spouse=sptemp))   
-    }
-@ 
-
+### duporder - autohint
 For the case shown in figure \ref{fig:align1} the [[duporder]] function
 will return a single row array with values (2, 6, 1), the first two
 being the positions of the duplicated subject.  
@@ -417,52 +217,8 @@ goal for this is to spread apart families of cousins; in the
 example to not have the children of 28/31 plotted under the 21/22
 grandparents, and those for 29/32 under the 25/26 grandparents. 
 The logic for this column is very ad hoc: put children near the edges.
-<<autohint-duporder>>=
-duporder <- function(idlist, plist, lev, ped) {
-    temp <- table(idlist)
-    if (all(temp==1)) return (matrix(0L, nrow=0, ncol=3))
-    
-    # make an intial list of all pairs's positions
-    # if someone appears 4 times they get 3 rows
-    npair <- sum(temp-1)
-    dmat <- matrix(0L, nrow=npair, ncol=3)
-    dmat[,3] <- 2; dmat[1:(npair/2),3] <- 1
-    i <- 0
-    for (id in unique(idlist[duplicated(idlist)])) {
-        j <- which(idlist==id)
-        for (k in 2:length(j)) {
-            i <- i+1
-            dmat[i,1:2] <- j[k + -1:0]
-            }
-        }
-    if (nrow(dmat)==1) return(dmat)  #no need to sort it
-    
-    # families touch?
-    famtouch <- logical(npair)
-    for (i in 1:npair) {
-        if (plist$fam[lev,dmat[i,1]] >0) 
-             sib1 <- max(findsibs(dmat[i,1], plist, lev))
-        else {
-            spouse <- findspouse(dmat[i,1], plist, lev, ped)
-            ##If spouse is marry-in then move on without looking for sibs
-                if (plist$fam[lev,spouse]==0) {famtouch[i] <- F; next}
-            sib1 <- max(findsibs(spouse, plist, lev)) 
-            }
-        
-        if (plist$fam[lev, dmat[i,2]] >0)
-            sib2 <- min(findsibs(dmat[i,2], plist, lev))
-        else {
-            spouse <- findspouse(dmat[i,2], plist, lev, ped)
-            ##If spouse is marry-in then move on without looking for sibs
-                if (plist$fam[lev,spouse]==0) {famtouch[i] <- F; next}
-            sib2 <- min(findsibs(spouse, plist, lev))
-            }
-        famtouch[i] <- (sib2-sib1 ==1)
-        }
-    dmat[order(famtouch, dmat[,1]- dmat[,2]),, drop=FALSE ]
-    }
-@ 
 
+## Find-spouse and find-sibs
 Finally, here are two helper routines.
 Finding my spouse can be interesting -- suppose we have a listing with
 Shirley, Fred, Carl, me on the line with the first three marked as
@@ -473,33 +229,49 @@ the person in that block who is opposite sex, and check that they
 are connected.
 The routine is called with a left-right position in the alignment
 arrays and returns a position.
-<<autohint-find>>=
-findspouse <- function(mypos, plist, lev, ped) {
-    lpos <- mypos
-    while (lpos >1 && plist$spouse[lev, lpos-1]) lpos <- lpos-1
-    rpos <- mypos
-    while(plist$spouse[lev, rpos]) rpos <- rpos +1
-    if (rpos==lpos) stop("autohint bug 3")
-    
-    opposite <-ped$sex[plist$nid[lev,lpos:rpos]] != ped$sex[plist$nid[lev,mypos]]
-    if (!any(opposite)) stop("autohint bug 4")  # no spouse
-    spouse <- min((lpos:rpos)[opposite])  #can happen with a triple marriage
-    spouse
-    }
-@ 
 
-The findsibs function starts with a position and returns a position as well.
-<<autohint-find>>=
-findsibs <- function(mypos, plist, lev) {
-    family <- plist$fam[lev, mypos]
-    if (family==0) stop("autohint bug 6")
-    which(plist$fam[lev,] == family)
-    }
-@ 
+The findsibs function starts with a position and returns a position as well, and is much simpler than findspouse.
 
 
-\subsection{Align.pedigree}
-\label{sect:alignped}
+## Fixup2
+At this point the most common situation will be what is shown in 
+figure.  The variable [[anchor]] is (2,1) showing that the
+left hand copy of subject 9 is connected to an anchored spouse and the
+right hand copy is himself anchored.  The proper addition to the
+spouselist is [[(4, 9, dpairs)]], where the last is the hint from the
+dpairs routine as to which of the parents is the one to follow further when
+drawing the entire pedigree.  (When drawing a pedigree and there is a
+child who can be reached from multiple founders, we only want to find
+the child once.) 
+
+The double marry-in found in figure \ref{fig:auto2}, subject 11, leads
+to value of (2,2) for the [[anchor]] variable.  The proper addition to
+the [[sptemp]] matrix in this case will be two rows, (5, 11, 1) indicating
+that 5 should be plotted left of 11 for the 5-11 marriage, with the first
+partner as the anchor, and a second row (11, 9, 2).
+This will cause the common spouse to be plotted in the middle.
+
+Multiple marriages can lead to unanchored subjects.  
+In the left hand portion of figure \ref{fig:auto3} we have two
+double marriages, one on the left and one on the right with 
+anchor values of (0,2) and (2,0), respectively.  
+We add two marriages to the return list to ensure that both print
+in the correct left-right order; the 14-4 one is correct by default
+but it is easier to output a line than check sex orders.  
+
+The left panel of figure \ref{fig:auto3} shows a case where
+subject 11 marries into the pedigree but also has a second spouse.
+The [[anchor]] variable for
+this case will be (2, 0); the first instance of 11 has a spouse tied
+into the tree above, the second instance has no upward connections.
+In the top row, subject 6 has values of (0, 0) since neither 
+connection has an upward parent.  
+In the right hand panel subject 2 has an anchor variable of (0,1).
+
+
+Align.pedigree
+================
+
 The top level routine for alignment has 5 arguments
 \begin{description}
     \item[ped] a pedigree or pedigreeList object. In the case of
@@ -516,6 +288,7 @@ The top level routine for alignment has 5 arguments
     \item a hints object.  This is normally blank and autohint
       is invoked. 
 \end{description}
+
 The result coming back from align.pedigree is a set of vectors and
 matrices:
 \begin{description}
@@ -527,6 +300,8 @@ matrices:
     right is my spouse (1), a double marriage (2), or neither (0).
   \item[fam] matrix, link upward to my parents, or 0 if no link.
 \end{description}
+
+
 <<align.pedigree>>=
 align.pedigree <- function(ped, packed=TRUE, width=10,
                            align=TRUE, hints=ped$hints) {
@@ -556,40 +331,37 @@ align.pedigree <- function(ped, packed=TRUE, width=10,
     }
 @ 
 
+## Setup -align
 
-Start with some setup.  
-Throughout this routine the row number is used as a subject
-id (ignoring the actual id label).
+Start with some setup. Throughout this routine the row number is used as a
+subject id (ignoring the actual id label).
 \begin{itemize}
-  \item Check that everyone has either two
-    parents or none (a singleton will just confuse us).
+  \item Check that everyone has either two parents or none (a singleton confuses us).
   \item Verify that the hints are correct.
-  \item The relation data frame, if present, has a factor in it.  Turn
-    that into numeric.
-\item Create the [[spouselist]] array.  This has 4 columns
+  \item The relation data frame, if present, has a factor, convert to numeric.
+  \item Create the [[spouselist]] array.  This has 4 columns
   \begin{enumerate}
     \item Husband index (4= 4th person in the pedigree structure)
     \item Wife index
     \item Plot order: 1= husband left, 2=wife left
     \item Anchor: 1=left member, 2=right member, 0= not yet determined
-      \end{enumerate}
+  \end{enumerate}
   As the routine proceeds a spousal pair can be encountered
   multiple times; we take them out of this list when the ``connected''
   member is added to the pedigree so that no marriage gets added
   twice.  
-\item To detect duplicates on the spouselist we need to create a
+  \item To detect duplicates on the spouselist we need to create a
   unique (but temporary) spouse-pair id using a simple hash.
 \end{itemize}
 
 When importing data from autohint, that routine's spouse matrix %'
-has column 1 =
-subject plotted on the left, 2 = subject plotted on the right.
+has column 1 = subject plotted on the left, 2 = subject plotted on the right.
 The [[spouselist]] array has column 1=husband, 2=wife.  
 Hence the clumsy looking ifelse below.  The autohint format is more
 congenial to users, who might modify the output, the spouselist format
 easier for the code.
 
-
+## Setup-align
 <<align-setup>>=
 n <- length(ped$id)
 dad <- ped$findex; mom <- ped$mindex  #save typing
@@ -631,6 +403,7 @@ hash <- spouselist[,1]*n + spouselist[,2]
 spouselist <- spouselist[!duplicated(hash),, drop=F]
 @
 
+## align-founders
 The [[alignped]] routine does the alignment using 3 co-routines:
 \begin{description}
   \item[alignped1] called with a single subject, returns the subtree
@@ -667,8 +440,8 @@ if (length(founders)>1) {
     }
 @ 
 
-Now finish up.  
-There are 4 tasks to doS
+### Align-finish
+Now finish up.   There are 4 tasks to do:
 \begin{enumerate}
   \item For convenience the lower level routines kept the spouse
     and nid arrays as a single object -- unpack them
@@ -679,34 +452,7 @@ There are 4 tasks to doS
   \item Add twins data to the output.
   \item Do final alignment
 \end{enumerate}
-
-<<align-finish>>=
-#
-# Unhash out the spouse and nid arrays
-#
-nid    <- matrix(as.integer(floor(rval$nid)), nrow=nrow(rval$nid))
-spouse <- 1L*(rval$nid != nid)
-maxdepth <- nrow(nid)
-
-# For each spouse pair, find out if it should be connected with
-#  a double line.  This is the case if they have a common ancestor
-ancestor <- function(me, momid, dadid) {
-    alist <- me
-    repeat {
-        newlist <- c(alist, momid[alist], dadid[alist])
-        newlist <- sort(unique(newlist[newlist>0]))
-        if (length(newlist)==length(alist)) break
-        alist <- newlist
-        }
-    alist[alist!=me]
-    }
-for (i in (1:length(spouse))[spouse>0]) {
-    a1 <- ancestor(nid[i], mom, dad)
-    a2 <- ancestor(nid[i+maxdepth],mom, dad)  #matrices are in column order
-    if (any(duplicated(c(a1, a2)))) spouse[i] <- 2
-    }
-@ 
-
+### Finish align(2)
 The twins array is of the same shape as the spouse and nid arrays:
 one row per level giving data for the subjects plotted on that row.
 In this case they are
@@ -716,38 +462,254 @@ In this case they are
   \item 2= the sib to my right is a dizygote,
   \item 3= the sib to my right is a twin, unknown zyogosity.
 \end{itemize}
-<<align-finish>>=
-if (!is.null(relation) && any(relation[,3] < 4)) {
-    twins <- 0* nid
-    who  <- (relation[,3] <4)
-    ltwin <- relation[who,1]
-    rtwin <- relation[who,2]
-    ttype <- relation[who,3]
-    
-    # find where each of them is plotted (any twin only appears
-    #   once with a family id, i.e., under their parents)
-    ntemp <- ifelse(rval$fam>0, nid,0) # matix of connected-to-parent ids
-    ltemp <- (1:length(ntemp))[match(ltwin, ntemp, nomatch=0)]
-    rtemp <- (1:length(ntemp))[match(rtwin, ntemp, nomatch=0)]
-    twins[pmin(ltemp, rtemp)] <- ttype
-    }
-else twins <- NULL
-@
- 
+
+### Finish align(3)
 At this point the pedigree has been arranged, with the positions
 in each row going from 1 to (number of subjects in the row).
 (For a packed pedigree, which is the usual case).
-Having everything pushed to the left margin isn't very
+Having everything pushed to the left margin is not very
 pretty, now we fix that.
-Note that alignped4 wants a T/F spouse matrix: it doesn't care
+Note that alignped4 wants a T/F spouse matrix: it does not care
   about your degree of relationship to the spouse.
-<<align-finish>>=
-if ((is.numeric(align) || align) && max(level) >1) 
-    pos <- alignped4(rval, spouse>0, level, width, align)
-else pos <- rval$pos
 
-if (is.null(twins))
-     list(n=rval$n, nid=nid, pos=pos, fam=rval$fam, spouse=spouse)
-else list(n=rval$n, nid=nid, pos=pos, fam=rval$fam, spouse=spouse, 
-              twins=twins)
+alignped1
+====================
+
+This is the first of the three co-routines.
+It is called with a single subject, and returns the subtree founded
+on said subject, as though it were the only tree.  
+We only go down the pedigree, not up.
+Input arguments are
+\begin{description}
+  \item[nid] the numeric id of the subject in question
+  \item[dad] points to the row of the father, 0=no father in pedigree
+  \item[mom] points to the row of the mother
+  \item[level] the plotting depth of each subject
+  \item[horder] orders the kids within a sibship
+  \item[packed] if true, everything is slid to the left
+  \item[spouselist] a matrix of spouses
+    \begin{itemize}
+      \item col 1= pedigree index of the husband
+      \item col 2= pedigree index of the wife
+      \item col 3= 1:plot husband to the left, 2= wife to the left
+      \item col 4= 1:left member is rooted here, 2=right member, 0=either
+    \end{itemize}
+\end{description}
+
+The return argument is a set of matrices as described in 
+section \ref{sect:alignped}, along with the spouselist matrix.
+The latter has marriages removed as they are processed.
+
+## alignped1-part1
+
+In this routine the [[nid]] array consists of the final nid array + 1/2 of the
+final spouse array.
+The basic algorithm is simple.  
+\begin{enumerate}
+  \item Find all of the spouses for which [[x]] is the anchor subject.  If
+    there are none then return the trivial tree consisting of [[x]] alone.
+  \item For each marriage in the set, call [[alignped2]] on the children
+    and add this to the result.
+\end{enumerate}
+Note that the [[spouselist]] matrix will only contain spouse pairs that
+are not yet processed.
+The logic for anchoring is slightly tricky.  First, if row 4 of
+the spouselist matrix is 0, we anchor at the first opportunity, i.e. now..
+Also note that if spouselist[,3]==spouselist[,4] it is
+the husband who is the anchor (just write out the possibilities).
+
+
+## alignped-part2
+
+Create the set of 3 return structures, which will be matrices with
+(1+nspouse) columns.
+If there are children then other routines will widen the result.
+
+## alignped1 -part3
+
+Now we have a list of spouses that should be dealt with and 
+the the correponding columns of the spouselist matrix.  
+Create the two complimentary lists lspouse and rspouse to denote
+those plotted on the left and on the right. For someone with lots of spouses
+we try to split them evenly. If the number of spouses is odd, then men should
+have more on the right than on the left, women more on the right.
+Any hints in the spouselist matrix override. We put the undecided marriages
+closest to [[x]], then add predetermined ones to the left and
+right. The majority of marriages will be undetermined singletons, for which
+nleft will be 1 for female (put my husband to the left) and 0 for male.
+In one bug found by plotting canine data, lspouse could initially be empty but 
+length(rspouse)> 1. This caused nleft>length(indx). A fix was to not let
+indx to be indexed beyond its length, fix by JPS 5/2013.
+
+### alignped1 -part4
+
+The spouses are in the pedigree, now look below. For each spouse get the
+list of children. If there are any we call alignped2 to generate their tree and
+then mark the connection to their parent. If multiple marriages have children
+we need to join the trees.
+### alignped1 -part5
+
+To finish up we need to splice together the tree made up
+from all the kids, which only has data from lev+1 down,
+with the data here.  
+There are 3 cases.  The first and easiest is when no
+children were found.
+The second, and most common, is when the tree below is
+wider than the tree here, in which case we add the
+data from this level onto theirs.
+The third is when below is narrower, for instance an
+only child.
+
+alignped2
+=====================
+
+This routine takes a collection of siblings, grows the tree for
+each, and appends them side by side into a single tree.
+The input arguments are the same as those to
+[[alignped1]] with the exception that [[x]] will be a vector.
+This routine does nothing to the spouselist matrix, but needs
+to pass it down the tree and back since one of the routines
+called by [[alignped2]] might change the matrix.
+
+The code below has one non-obvious special case.  Suppose
+that two sibs marry.  
+When the first sib is processed by [[alignped1]] then both
+partners (and any children) will be added to the rval
+structure below.  When the second sib is processed they
+will come back as a 1 element tree (the marriage will no longer
+be on the spouselist), which should \emph{not} be added
+onto rval. The rule thus is to not add any 1 element tree whose
+value (which must be x[i]) is already in the rval structure for this level.
+(Where did Curtis O. \emph{find} these families?)
+
+
+alignped3
+================
+
+The third co-routine merges two pedigree trees which are side by
+side into a single object.
+The primary special case is when the rightmost person in the left
+tree is the same as the leftmost person in the right tree; we 
+need not plot two copies of the same person side by side.
+(When initializing the output structures donot  worry about this - there
+is no harm if they are a column bigger than finally needed.)
+Beyond that the work is simple bookkeeping.
+
+<<alignped3>>= 
+alignped3 <- function(x1, x2, packed, space=1) {
+    maxcol <- max(x1$n + x2$n)
+    maxlev <- length(x1$n)
+    n1 <- max(x1$n)   # These are always >1
+    n  <- x1$n + x2$n
+
+    nid <- matrix(0, maxlev, maxcol)
+    nid[,1:n1] <- x1$nid
+    
+    pos <- matrix(0.0, maxlev, maxcol)
+    pos[,1:n1] <- x1$pos
+
+    fam <- matrix(0, maxlev, maxcol)
+    fam[,1:n1] <- x1$fam
+    fam2 <- x2$fam
+    if (!packed) {
+        <<align3-slide>>
+        }
+    <<align3-merge>>
+
+    if (max(n) < maxcol) {
+	maxcol <- max(n)
+	nid <- nid[,1:maxcol]
+	pos <- pos[,1:maxcol]
+	fam <- fam[,1:maxcol]
+	}
+
+    list(n=n, nid=nid, pos=pos, fam=fam)
+    }
 @ 
+
+## alignped3 -slide
+
+For the unpacked case, which is the traditional way to draw a pedigree
+when we can assume the paper is infinitely wide, all parents are centered
+over their children.  
+In this case we think if the two trees to be merged as solid blocks.
+On input they both have a left margin of 0.
+Compute how far over we have to slide the right tree.
+
+## alignped3 - merge
+Now merge the two trees. 
+Start at the top level and work down.
+\begin{enumerate}
+  \item If n2=0, there is nothing to do
+  \item Decide if there is a subject overlap, and if so 
+    \begin{itemize}
+      \item Set the proper parent id. 
+        Only one of the two copies will be attached and the other
+        will have fam=0, so max(fam, fam2) preserves the correct one.
+      \item If not packed, set the position.  Choose the one connected
+        to a parent, or midway for a double marriage.
+    \end{itemize}
+  \item If packed=TRUE determine the amount of slide for this row. It
+    will be [[space]] over from the last element in the left pedigree,
+    less overlap.
+  \item Move everything over
+  \item Fix all the children of this level, right hand pedigree, to
+    point to the correct parental position.
+\end{enumerate}
+
+
+alignped4
+=================
+The alignped4 routine is the final step of alignment.  It attempts to line
+up children under parents and put spouses and siblings `close' to each other,%'` 
+to the extent possible within the constraints of page width.  This routine
+used to be the most intricate and complex of the set, until I realized that
+the task could be cast as constrained quadradic optimization.
+The current code does necessary setup and then calls the [[quadprog]]
+function.  
+At one point I investigated using one of the simpler least-squares routines
+where $\beta$ is constrained to be non-negative. 
+However a problem can only be translated into that form if the number
+of constraints is less than the number of parameters, which is not
+true in this problem.
+
+There are two important parameters for the function.  One is the user specified
+maximum width.  The smallest possible width is the maximum number of subjects
+on a line, if the user suggestion is too low it is increased to that 1+ that
+amount (to give just a little wiggle room). The other is a vector of 2 alignment
+parameters $a$ and $b$. For each set of siblings ${x}$ with parents at $p_1$
+and $p_2$ the alignment penalty is
+$$
+   (1/k^a)\sum{i=1}{k} (x_i - (p_1 + p_2)^2
+$$
+where $k$ is the number of siblings in the set.
+Using the fact that $\sum(x_i-c)^2 = \sum(x_i-\mu)^2 + k(c-\mu)^2$,
+when $a=1$ then moving a sibship with $k$ sibs one unit to the left or
+right of optimal will incur the same cost as moving one with only 1 or
+two sibs out of place.  If $a=0$ then large sibships are harder to move
+than small ones, with the default value $a=1.5$ they are slightly easier 
+to move than small ones.  The rationale for the default is as long as the
+parents are somewhere between the first and last siblings the result looks
+fairly good, so we are more flexible with the spacing of a large family.
+By tethering all the sibs to a single spot they tend are kept close to 
+each other.
+The alignment penalty for spouses is $b(x_1 - x_2)^2$, which tends to keep 
+them together.  The size of $b$ controls the relative importance of sib-parent
+and spouse-spouse closeness.
+
+## alignped4 - part1
+       
+We start by adding in these penalties.  The total number of parameters
+in the alignment problem (what we hand to quadprog) is the set 
+of [[sum(n)]] positions.  A work array myid keeps track of the parameter
+number for each position so that it is easy to find.
+There is one extra penalty added at the end.  Because the penalty amount
+would be the same if all the final positions were shifted by a constant,
+the penalty matrix will not be positive definite; solve.QP does not like  
+this.  We add a tiny amount of leftward pull to the widest line. 
+
+## alignped4: part2
+Next come the constraints.  If there are $k$ subjects on a line there will
+be $k+1$ constraints for that line.  The first point must be $\ge 0$, each
+subesquent one must be at least 1 unit to the right, and the final point
+must be $\le$ the max width.

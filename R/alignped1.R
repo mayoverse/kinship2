@@ -28,6 +28,7 @@ alignped1 <- function(x, dad, mom, level, horder, packed, spouselist){
         sprows <- (which(sprows))[keep]
         }
     nspouse <- length(spouse)  # Almost always 0, 1 or 2
+    ## Doc: alignped1 part2
     nid <- fam <- matrix(0L, maxlev, nspouse+1)
     pos <- matrix(0.0, maxlev, nspouse +1)
     n[lev] <- nspouse +1       
@@ -37,6 +38,7 @@ alignped1 <- function(x, dad, mom, level, horder, packed, spouselist){
         nid[lev,1] <- x
         return(list(nid=nid, pos=pos, fam=fam, n=n, spouselist=spouselist))
         }
+    ## Doc: alignped1 -part3
     lspouse <- spouse[spouselist[sprows,3] == 3-sex] # 1-2 or 2-1
     rspouse <- spouse[spouselist[sprows,3] == sex]   # 1-1 or 2-2
     if (any(spouselist[sprows,3] ==0)) {
@@ -56,6 +58,7 @@ alignped1 <- function(x, dad, mom, level, horder, packed, spouselist){
     nid[lev, 1:nspouse] <- nid[lev, 1:nspouse] + .5  #marriages    
 
     spouselist <- spouselist[-sprows,, drop=FALSE]
+    ## Doc: alignped1 - part4
     nokids <- TRUE   #haven't found any kids yet
     spouse <- c(lspouse, rspouse)  #reorder
     for (i in 1:nspouse) {
@@ -102,6 +105,7 @@ alignped1 <- function(x, dad, mom, level, horder, packed, spouselist){
                 }
             }
         }
+    ## Doc: alignped1 -part5
     if (nokids) {
         return(list(nid=nid, pos=pos, fam=fam, n=n, spouselist=spouselist))
         }
@@ -125,4 +129,4 @@ alignped1 <- function(x, dad, mom, level, horder, packed, spouselist){
         }
     rval$spouselist <- spouselist
     rval
-    }
+}

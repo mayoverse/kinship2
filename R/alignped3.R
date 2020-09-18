@@ -15,6 +15,7 @@ alignped3 <- function(x1, x2, packed, space=1) {
     fam[,1:n1] <- x1$fam
     fam2 <- x2$fam
     if (!packed) {
+        ## Doc: alignped3: slide
         slide <- 0
         for (i in 1:maxlev) {
             n1 <- x1$n[i]
@@ -24,9 +25,10 @@ alignped3 <- function(x1, x2, packed, space=1) {
                         temp <- pos[i, n1] - x2$pos[i,1]
                 else    temp <- space + pos[i, n1] - x2$pos[i,1]
                 if (temp > slide) slide <- temp
-                }
             }
         }
+    }
+    ## Doc: alignped3-merge
     for (i in 1:maxlev) {
         n1 <- x1$n[i]
         n2 <- x2$n[i]
@@ -41,9 +43,9 @@ alignped3 <- function(x1, x2, packed, space=1) {
                         if (fam[i,n1]>0) 
                             pos[i,n1] <- (x2$pos[i,1] + pos[i,n1] + slide)/2
                         else pos[i,n1] <- x2$pos[i,1]+ slide
-                        }
-                n[i] <- n[i] -1
                 }
+                n[i] <- n[i] -1
+            }
             else overlap <- 0
             
             if (packed) slide <- if (n1==0) 0 else pos[i,n1] + space - overlap
@@ -57,16 +59,16 @@ alignped3 <- function(x1, x2, packed, space=1) {
                     # adjust the pointers of any children (look ahead)
                 temp <- fam2[i+1,]
                 fam2[i+1,] <- ifelse(temp==0, 0, temp + n1 -overlap)
-                    }
             }
         }
-
+    }
+    ## Doc: rest of alignped3
     if (max(n) < maxcol) {
         maxcol <- max(n)
         nid <- nid[,1:maxcol]
         pos <- pos[,1:maxcol]
         fam <- fam[,1:maxcol]
-        }
+    }
 
     list(n=n, nid=nid, pos=pos, fam=fam)
-    }
+}

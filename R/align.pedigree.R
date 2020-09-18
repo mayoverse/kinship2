@@ -42,7 +42,7 @@ align.pedigree <- function(ped, packed=TRUE, width=10,
     } else {
       hints <- check.hint(hints, ped$sex)
     }
-    
+    ## Doc: Setup-align
     n <- length(ped$id)
     dad <- ped$findex; mom <- ped$mindex  #save typing
     if (any(dad==0 & mom>0) || any(dad>0 & mom==0))
@@ -81,6 +81,8 @@ align.pedigree <- function(ped, packed=TRUE, width=10,
 
     hash <- spouselist[,1]*n + spouselist[,2]
     spouselist <- spouselist[!duplicated(hash),, drop=F]
+    
+    ## Doc: Founders -align
     noparents <- (dad[spouselist[,1]]==0 & dad[spouselist[,2]]==0)
      ##Take duplicated mothers and fathers, then founder mothers
     dupmom <- spouselist[noparents,2][duplicated(spouselist[noparents,2])] #Founding mothers with multiple marriages
@@ -100,9 +102,9 @@ align.pedigree <- function(ped, packed=TRUE, width=10,
             rval <- alignped3(rval, rval2, packed)
             }
         }
-    #
+    ## Doc: finish-align (1)
     # Unhash out the spouse and nid arrays
-    #
+    # 
     nid    <- matrix(as.integer(floor(rval$nid)), nrow=nrow(rval$nid))
     spouse <- 1L*(rval$nid != nid)
     maxdepth <- nrow(nid)
@@ -124,6 +126,7 @@ align.pedigree <- function(ped, packed=TRUE, width=10,
         a2 <- ancestor(nid[i+maxdepth],mom, dad)  #matrices are in column order
         if (any(duplicated(c(a1, a2)))) spouse[i] <- 2
         }
+    ## Doc: finish align(2)
     if (!is.null(relation) && any(relation[,3] < 4)) {
         twins <- 0* nid
         who  <- (relation[,3] <4)
@@ -139,6 +142,7 @@ align.pedigree <- function(ped, packed=TRUE, width=10,
         twins[pmin(ltemp, rtemp)] <- ttype
         }
     else twins <- NULL
+    ## Doc: finish align(3)
     if ((is.numeric(align) || align) && max(level) >1) 
         pos <- alignped4(rval, spouse>0, level, width, align)
     else pos <- rval$pos
@@ -147,4 +151,4 @@ align.pedigree <- function(ped, packed=TRUE, width=10,
          list(n=rval$n, nid=nid, pos=pos, fam=rval$fam, spouse=spouse)
     else list(n=rval$n, nid=nid, pos=pos, fam=rval$fam, spouse=spouse, 
                   twins=twins)
-    }
+}

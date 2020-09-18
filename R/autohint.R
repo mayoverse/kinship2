@@ -1,5 +1,8 @@
 # Automatically generated from all.nw using noweb
 autohint <- function(ped, hints, packed=TRUE, align=FALSE) {
+    ## full documentation now in vignette: align_code_details.Rmd
+    ## REferences to those sections appear here as:
+    ## Doc: AutoHint
     if (!is.null(ped$hints)) return(ped$hints)  #nothing to do
     n <- length(ped$id)
     depth <- kindepth(ped, align=TRUE)
@@ -31,6 +34,7 @@ autohint <- function(ped, hints, packed=TRUE, align=FALSE) {
         twinset <- rep(0,n)
         twinrel <- NULL
         }
+    ## Doc: Shift
     shift <- function(id, sibs, goleft, hint, twinrel, twinset) {
         if (twinset[id]> 0)  { 
             shift.amt <- 1 + diff(range(hint[sibs]))  # enough to avoid overlap
@@ -70,6 +74,7 @@ autohint <- function(ped, hints, packed=TRUE, align=FALSE) {
         hint[sibs] <- rank(hint[sibs])  # aesthetics -- no negative hints
         hint
         }
+    ## Doc: init-autohint
     if (!missing(hints)) {
         if (is.vector(hints)) hints <- list(order=hints)
         if (is.matrix(hints)) hints <- list(spouse=hints)
@@ -103,6 +108,8 @@ autohint <- function(ped, hints, packed=TRUE, align=FALSE) {
     else sptemp <- NULL
     plist <- align.pedigree(ped, packed=packed, align=align, 
                             hints=list(order=horder, spouse=sptemp))
+    ## end doc init
+    ## Doc: fixup, and findspouse/findsibs
     findspouse <- function(mypos, plist, lev, ped) {
         lpos <- mypos
         while (lpos >1 && plist$spouse[lev, lpos-1]) lpos <- lpos-1
@@ -120,6 +127,7 @@ autohint <- function(ped, hints, packed=TRUE, align=FALSE) {
         if (family==0) stop("autohint bug 6")
         which(plist$fam[lev,] == family)
         }
+    ## Doc: duporder
     duporder <- function(idlist, plist, lev, ped) {
         temp <- table(idlist)
         if (all(temp==1)) return (matrix(0L, nrow=0, ncol=3))
@@ -162,7 +170,8 @@ autohint <- function(ped, hints, packed=TRUE, align=FALSE) {
             famtouch[i] <- (sib2-sib1 ==1)
             }
         dmat[order(famtouch, dmat[,1]- dmat[,2]),, drop=FALSE ]
-        }
+    } ## duporder()
+    ## Doc: fixup-2
     maxlev <- nrow(plist$nid)
     for (lev in 1:maxlev) {
         idlist <- plist$nid[lev,1:plist$n[lev]] #subjects on this level
@@ -194,6 +203,7 @@ autohint <- function(ped, hints, packed=TRUE, align=FALSE) {
                     }
                 }
             # add the marriage(s)
+            ## Doc: Fixup2
             id1 <- idlist[dpairs[i,1]]  # i,1 and i,2 point to the same person
             id2 <- idlist[spouse[1]]
             id3 <- idlist[spouse[2]]
