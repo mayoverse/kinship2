@@ -1,6 +1,6 @@
 Package: kinship2
-Version: 1.8.6
-Date: 2020-3-12
+Version: 1.9.0
+Date: 2020-9-18
 Title: Pedigree Functions
 Authors@R: c(
 	person("Jason", "Sinnwell", email="sinnwell.jason@mayo.edu", role=c("aut","cre")),

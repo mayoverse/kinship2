@@ -20,11 +20,17 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
                           angle=c(90,65,40,0), keep.par=FALSE,
                           subregion, pconnect=.5, ...)
 {
+    ## As of 2020-09, documention in no-web directory is moved to here and a vignette.
+    ## Relevant sections in the vignette are marked in this code with
+       ## Doc: followed by the section title
+    
     Call <- match.call()
     n <- length(x$id)
     if(n < 3) {
         stop("Cannot plot pedigree with fewer than 3 subjects")
     }
+    ## Doc: This portion is documented as the setup-data
+    
     if(is.null(status))
       status <- rep(0, n)
     else {
@@ -37,6 +43,18 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
         if(length(id) != n)
           stop("Wrong length for id")
     }
+    ## Doc: still part of setup/data
+    ## affected is a 0/1 matrix of any marker data.  It may be attached to the pedigree or added
+    ## here.  It can be a vector of length [[n]] or a matrix with [[n]] rows.
+    ## If not present, the default is to plot open symbols without shading or color  
+
+    ## If affected is a matrix, then the shading and/or density value for ith column is
+    ## taken from the ith element of the angle/density arguments.
+
+    ## For purposes within the plot method, NA values in ``affected'' are
+    ## coded to -1, and plotted as a question mark (?) in the plot symbol
+    ## region for that affected status
+
     if(is.null(affected)){
       affected <- matrix(0,nrow=n)
     }
@@ -68,6 +86,7 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
 
     if (length(col) ==1) col <- rep(col, n)
     else if (length(col) != n) stop("Col argument must be of length 1 or n")
+    ## Doc: Subregions and subsetting
     subregion2 <- function(plist, subreg) {
         if (subreg[3] <1 || subreg[4] > length(plist$n)) 
             stop("Invalid depth indices in subreg")
@@ -107,7 +126,8 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
                     spouse= spouse2[,1:n, drop=F], fam=fam2[,1:n, drop=F])
         if (!is.null(plist$twins)) out$twins <- twin2[, 1:n, drop=F]
         out
-        }
+    }  # end subregion2()
+    ## Doc: Sizing
     plist <- align.pedigree(x, packed = packed, width = width, align = align)
     if (!missing(subregion)) plist <- subregion2(plist, subregion)
     xrange <- range(plist$pos[plist$nid >0])
@@ -133,6 +153,9 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
     legh  <- min(1/4, boxh  *1.5)  # how tall are the 'legs' up from a child
     par(usr=c(xrange[1]- boxw/2, xrange[2]+ boxw/2, 
               maxlev+ boxh+ stemp3 + stemp2/2 , 1))
+    ## Doc: end of sizing
+    ## Doc: Sizing
+    ## Doc:  subsection: drawbox
     circfun <- function(nslice, n=50) {
         nseg <- ceiling(n/nslice)  #segments of arc per slice
         
@@ -144,7 +167,8 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
                             y=c(0, sin(theta2)/2) + .5)
             }
         out
-        }
+    } ## end circfun()
+    ## Doc: polyfun
     polyfun <- function(nslice, object) {
         # make the indirect segments view
         zmat <- matrix(0,ncol=4, nrow=length(object$x))
@@ -181,7 +205,8 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
             out[[i]] <- list(x=c(0, temp$x[rows]), y= c(0, temp$y[rows]) +.5)
             }
         out
-        }   
+    } ## end polyfun()
+    
     if (ncol(affected)==1) {
         polylist <- list(
             square = list(list(x=c(-1, -1, 1,1)/2,  y=c(0, 1, 1, 0))),
@@ -189,8 +214,7 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
                                y=.5* sin(seq(0, 2*pi, length=50)) + .5)),
             diamond = list(list(x=c(0, -.5, 0, .5), y=c(0, .5, 1, .5))),
             triangle= list(list(x=c(0, -.56, .56),  y=c(0, 1, 1))))
-        }
-    else {
+    } else {
         nc <- ncol(affected)
         square <- polyfun(nc, list(x=c(-.5, -.5, .5, .5), y=c(-.5, .5, .5, -.5),
                                     theta= -c(3,5,7,9)* pi/4))
@@ -201,16 +225,16 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
                                      theta=c(-2, -4, -6) *pi/3))
         polylist <- list(square=square, circle=circle, diamond=diamond, 
                          triangle=triangle)
-        }
+    } ## else
 
-      drawbox<- function(x, y, sex, affected, status, col, polylist,
-                density, angle, boxw, boxh) {
-            for (i in 1:length(affected)) {
-                if (affected[i]==0) {
-                    polygon(x + (polylist[[sex]])[[i]]$x *boxw,
-                            y + (polylist[[sex]])[[i]]$y *boxh,
-                            col=NA, border=col)
-                    }
+    drawbox<- function(x, y, sex, affected, status, col, polylist,
+                       density, angle, boxw, boxh) {
+        for (i in 1:length(affected)) {
+            if (affected[i]==0) {
+                polygon(x + (polylist[[sex]])[[i]]$x *boxw,
+                        y + (polylist[[sex]])[[i]]$y *boxh,
+                        col=NA, border=col)
+            }
                 
                 if(affected[i]==1) {
                   ## else {
@@ -234,9 +258,9 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
                                     x+ .6*boxw, y- .1*boxh,)
             ## Do a black slash per Beth, old line was
             ##        x+ .6*boxw, y- .1*boxh, col=col)
-          }
+    } ## drawbox
 
-
+    ## Doc: symbols
     sex <- as.numeric(x$sex)
     for (i in 1:maxlev) {
         for (j in seq_len(plist$n[i])) {
@@ -248,6 +272,7 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
                adj=c(.5,1), ...)
             }
     }
+    ## Doc: lines between spouses
     maxcol <- ncol(plist$nid)  #all have the same size
     for(i in 1:maxlev) {
         tempy <- i + boxh/2
@@ -264,6 +289,7 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
                 }
         }
     }
+    ## Doc: Lines from offspring to parents
     for(i in 2:maxlev) {
         zed <- unique(plist$fam[i,  ])
         zed <- zed[zed > 0]  #list of family ids
@@ -325,12 +351,14 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
                          c(x1, x2, x2), c(y1 + ydelta, y2 - ydelta, y2))
                 }
             }
-        }
+        } ## end of parent-child lines
+    
+    ## Doc: 4 arcs for multiple instances of subj
     arcconnect <- function(x, y) {
         xx <- seq(x[1], x[2], length = 15)
         yy <- seq(y[1], y[2], length = 15) + (seq(-7, 7))^2/98 - .5
         lines(xx, yy, lty = 2)
-        }
+    }
 
     uid <- unique(plist$nid)
     ## JPS 4/27/17: unique above only applies to rows
@@ -345,6 +373,7 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
                 arcconnect(tx[j + 0:1], ty[j+  0:1])
             }
         }
+    ## Doc: finish/Final
     ckall <- x$id[is.na(match(x$id,x$id[plist$nid]))]
     if(length(ckall>0)) cat('Did not plot the following people:',ckall,'\n')
         
@@ -353,4 +382,4 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
     tmp <- match(1:length(x$id), plist$nid)
     invisible(list(plist=plist, x=plist$pos[tmp], y= row(plist$pos)[tmp],
                    boxw=boxw, boxh=boxh, call=Call))        
-    }
+}
