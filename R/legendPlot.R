@@ -64,9 +64,13 @@ legendPlot <- function(x, id=x$id, affected=x$affected, affected.label=NULL, col
       legend.col=1
     }
   }
-   
-  ##  match labels by names
-  colorLabels <- names(col.label[match(ucols, col.label)])
+  ## if colors are strings, match by names, otherwise, match by index
+  ## not sure if colors are hex codes...
+  if(is.numeric(ucols)) {
+      colorLabels <- col.label[ucols]
+  } else {
+      colorLabels <- col.label[match(ucols, names(col.label))]
+  }  
   if(!is.null(affected)) {
     if(is.null(affected.label)) {
       affected.label <- colnames(affected)

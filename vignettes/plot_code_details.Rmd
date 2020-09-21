@@ -1,8 +1,20 @@
 
-----------
-title: Pedigree Plot Code Development
+---
+title: Pedigree Plot Code Details
 author: TM Therneau, JP Sinnwell
--------
+date: '`r format(Sys.time(),"%d %B, %Y")`'
+output:
+  rmarkdown::html_vignette:
+    toc: yes
+    toc_depth: 2
+header-includes: \usepackage{tabularx}
+vignette: |
+  %\VignetteIndexEntry{Pedigree plot details}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+
 
 
 Introduction

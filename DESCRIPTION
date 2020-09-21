@@ -1,6 +1,6 @@
 Package: kinship2
 Version: 1.9.0
-Date: 2020-9-18
+Date: 2020-9-21
 Title: Pedigree Functions
 Authors@R: c(
 	person("Jason", "Sinnwell", email="sinnwell.jason@mayo.edu", role=c("aut","cre")),
@@ -26,3 +26,4 @@ Description: Routines to handle family data with a pedigree object. The initial 
 License: GPL (>= 2)
 URL: https://cran.r-project.org/package=kinship2
 RoxygenNote: 7.0.2
+VignetteBuilder: knitr

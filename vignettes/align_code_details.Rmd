@@ -1,7 +1,18 @@
-----------------
-title: align pedigree plots
+---
+title: Pedigree plot alignment code details
 author: TM Therneau
-------------------------
+date: '`r format(Sys.time(),"%d %B, %Y")`'
+output:
+  rmarkdown::html_vignette:
+    toc: yes
+    toc_depth: 2
+header-includes: \usepackage{tabularx}
+vignette: |
+  %\VignetteIndexEntry{Pedigree alignment details}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
     
 Pedigree alignment
 ==========================
@@ -83,14 +94,7 @@ values.)
 A recent addition is to carry forward packaged and align to 
 kindepth and align.pedigree.
 
-<<autohint>>=
 
-   <<autohint-shift>>
-    <<autohint-init>>
-    <<autohint-fixup>>
-    list(order=horder, spouse=sptemp)    
-    }
-@ 
 
 ### Shift in autohint
 Next is an internal function that  rearranges someone to be
@@ -165,13 +169,10 @@ The basic logic is
     \end{itemize}
 \end{enumerate}
 This logic works 9 times out of 10, at least for human pedigrees.
-We'll look at more complex cases below when looking at the [[duporder]]   %'
-(order the duplicates)
-function, which returns a matrix with columns 1 and 2 being a pair
-of duplicates, and 3 a direction.
-Note that in the following code [[idlist]] refers to the row numbers of
+We'll look at more complex cases below when looking at the [[duporder]] (order the duplicates)
+function, which returns a matrix with columns 1 and 2 being a pair of duplicates, and 3 a
+direction. Note that in the following code [[idlist]] refers to the row numbers of
 each subject in the pedigree, not to their label [[ped$id]].
-
 
 ### duporder - autohint
 For the case shown in figure \ref{fig:align1} the [[duporder]] function
@@ -231,7 +232,6 @@ The routine is called with a left-right position in the alignment
 arrays and returns a position.
 
 The findsibs function starts with a position and returns a position as well, and is much simpler than findspouse.
-
 
 ## Fixup2
 At this point the most common situation will be what is shown in 
@@ -302,36 +302,8 @@ matrices:
 \end{description}
 
 
-<<align.pedigree>>=
-align.pedigree <- function(ped, packed=TRUE, width=10,
-                           align=TRUE, hints=ped$hints) {
-    if (class(ped)== 'pedigreeList') {
-        nped <- length(unique(ped$famid))
-        alignment <- vector('list', nped)
-        for (i in 1:nped) {
-            temp <- align.pedigree(ped[i], packed, width, align)
-            alignment[[i]] <- temp$alignment
-            }
-        ped$alignment <- alignment
-        class(ped) <- 'pedigreeListAligned'
-        return(ped)
-        }
-    
-    if (is.null(hints)) {
-      hints <- try({autohint(ped)}, silent=TRUE)
-      ## sometimes appears dim(ped) is empty (ped is NULL), so try fix here: (JPS 6/6/17
-      if(class(hints)=="try-error") hints <- list(order=seq_len(max(1, dim(ped)))) ## 1:dim(ped))
-    } else {
-      hints <- check.hint(hints, ped$sex)
-    }
-    
-    <<align-setup>>
-    <<align-founders>>
-    <<align-finish>>
-    }
-@ 
 
-## Setup -align
+## Setup1 -align.pedigree
 
 Start with some setup. Throughout this routine the row number is used as a
 subject id (ignoring the actual id label).
@@ -354,56 +326,15 @@ subject id (ignoring the actual id label).
   unique (but temporary) spouse-pair id using a simple hash.
 \end{itemize}
 
-When importing data from autohint, that routine's spouse matrix %'
-has column 1 = subject plotted on the left, 2 = subject plotted on the right.
-The [[spouselist]] array has column 1=husband, 2=wife.  
-Hence the clumsy looking ifelse below.  The autohint format is more
-congenial to users, who might modify the output, the spouselist format
-easier for the code.
+When importing data from autohint, that routine's spouse matrix has column
+1 = subject plotted on the left, 2 = subject plotted on the right.
+The [[spouselist]] array has column 1=husband, 2=wife. Hence the clumsy
+looking ifelse below.  The autohint format is more congenial to users, who
+might modify the output, the spouselist format easier for the code.
 
-## Setup-align
-<<align-setup>>=
-n <- length(ped$id)
-dad <- ped$findex; mom <- ped$mindex  #save typing
-if (any(dad==0 & mom>0) || any(dad>0 & mom==0))
-        stop("Everyone must have 0 parents or 2 parents, not just one")
-level <- 1 + kindepth(ped, align=TRUE)
-
-horder <- hints$order   # relative order of siblings within a family
-
-if (is.null(ped$relation)) relation <- NULL
-else  relation <- cbind(as.matrix(ped$relation[,1:2]), 
-                        as.numeric(ped$relation[,3]))
-
-if (!is.null(hints$spouse)) { # start with the hints list
-    tsex <- ped$sex[hints$spouse[,1]]  #sex of the left member
-    spouselist <- cbind(0,0,  1+ (tsex!='male'), 
-                        hints$spouse[,3])
-    spouselist[,1] <- ifelse(tsex=='male', hints$spouse[,1], hints$spouse[,2])
-    spouselist[,2] <- ifelse(tsex=='male', hints$spouse[,2], hints$spouse[,1])
-    }
-else spouselist <- matrix(0L, nrow=0, ncol=4)
-
-if (!is.null(relation) && any(relation[,3]==4)) {
-    # Add spouses from the relationship matrix
-    trel <- relation[relation[,3]==4,,drop=F]
-    tsex <- ped$sex[trel[,1]]
-    trel[tsex!='male',1:2] <- trel[tsex!='male',2:1]
-    spouselist <- rbind(spouselist, cbind(trel[,1],
-                                          trel[,2],
-                                          0,0))
-    }
-if (any(dad>0 & mom>0) ) {
-    # add parents
-    who <- which(dad>0 & mom>0)
-    spouselist <- rbind(spouselist, cbind(dad[who], mom[who], 0, 0))
-    }
-
-hash <- spouselist[,1]*n + spouselist[,2]
-spouselist <- spouselist[!duplicated(hash),, drop=F]
-@
 
 ## align-founders
+
 The [[alignped]] routine does the alignment using 3 co-routines:
 \begin{description}
   \item[alignped1] called with a single subject, returns the subtree
@@ -418,29 +349,8 @@ Call [[alignped1]] sequentially with each founder pair and merge the
 results.  
 A founder pair is a married pair, neither of which has a father.
 
-<<align-founders>>=
-noparents <- (dad[spouselist[,1]]==0 & dad[spouselist[,2]]==0)
- ##Take duplicated mothers and fathers, then founder mothers
-dupmom <- spouselist[noparents,2][duplicated(spouselist[noparents,2])] #Founding mothers with multiple marriages
-dupdad <- spouselist[noparents,1][duplicated(spouselist[noparents,1])] #Founding fathers with multiple marriages
-foundmom <- spouselist[noparents&!(spouselist[,1] %in% c(dupmom,dupdad)),2] # founding mothers
-founders <-  unique(c(dupmom, dupdad, foundmom))    
-founders <-  founders[order(horder[founders])]  #use the hints to order them
-rval <- alignped1(founders[1], dad, mom, level, horder, 
-    	              packed=packed, spouselist=spouselist)
 
-if (length(founders)>1) {
-    spouselist <- rval$spouselist
-    for (i in 2:length(founders)) {
-        rval2 <- alignped1(founders[i], dad, mom,
-                           level, horder, packed, spouselist)
-        spouselist <- rval2$spouselist
-        rval <- alignped3(rval, rval2, packed)
-        }
-    }
-@ 
-
-### Align-finish
+## Align-finish
 Now finish up.   There are 4 tasks to do:
 \begin{enumerate}
   \item For convenience the lower level routines kept the spouse
@@ -452,6 +362,7 @@ Now finish up.   There are 4 tasks to do:
   \item Add twins data to the output.
   \item Do final alignment
 \end{enumerate}
+
 ### Finish align(2)
 The twins array is of the same shape as the spouse and nid arrays:
 one row per level giving data for the subjects plotted on that row.
@@ -464,6 +375,7 @@ In this case they are
 \end{itemize}
 
 ### Finish align(3)
+
 At this point the pedigree has been arranged, with the positions
 in each row going from 1 to (number of subjects in the row).
 (For a packed pedigree, which is the usual case).
@@ -518,7 +430,6 @@ the spouselist matrix is 0, we anchor at the first opportunity, i.e. now..
 Also note that if spouselist[,3]==spouselist[,4] it is
 the husband who is the anchor (just write out the possibilities).
 
-
 ## alignped-part2
 
 Create the set of 3 return structures, which will be matrices with
@@ -571,74 +482,36 @@ This routine does nothing to the spouselist matrix, but needs
 to pass it down the tree and back since one of the routines
 called by [[alignped2]] might change the matrix.
 
-The code below has one non-obvious special case.  Suppose
-that two sibs marry.  
-When the first sib is processed by [[alignped1]] then both
-partners (and any children) will be added to the rval
-structure below.  When the second sib is processed they
-will come back as a 1 element tree (the marriage will no longer
-be on the spouselist), which should \emph{not} be added
-onto rval. The rule thus is to not add any 1 element tree whose
-value (which must be x[i]) is already in the rval structure for this level.
-(Where did Curtis O. \emph{find} these families?)
-
+The code below has one non-obvious special case.  Suppose that two sibs marry.  
+When the first sib is processed by [[alignped1]] then both partners (and any
+children) will be added to the rval structure below.  When the second sib is
+processed they will come back as a 1 element tree (the marriage will no longer
+be on the spouselist), which should \emph{not} be added onto rval. The rule
+thus is to not add any 1 element tree whose value (which must be x[i]) is already
+in the rval structure for this level. (Where did Curt Olswold. find these families?)
 
 alignped3
 ================
 
-The third co-routine merges two pedigree trees which are side by
-side into a single object.
-The primary special case is when the rightmost person in the left
-tree is the same as the leftmost person in the right tree; we 
-need not plot two copies of the same person side by side.
-(When initializing the output structures donot  worry about this - there
-is no harm if they are a column bigger than finally needed.)
-Beyond that the work is simple bookkeeping.
+The third alignment co-routine merges two pedigree trees which are side by side into a
+single object. The primary special case is when the rightmost person in the left
+tree is the same as the leftmost person in the right tree; we  need not plot two
+copies of the same person side by side. (When initializing the output structures
+do not  worry about this - there is no harm if they are a column bigger than
+finally needed.) Beyond that the work is simple bookkeeping.
 
-<<alignped3>>= 
-alignped3 <- function(x1, x2, packed, space=1) {
-    maxcol <- max(x1$n + x2$n)
-    maxlev <- length(x1$n)
-    n1 <- max(x1$n)   # These are always >1
-    n  <- x1$n + x2$n
-
-    nid <- matrix(0, maxlev, maxcol)
-    nid[,1:n1] <- x1$nid
-    
-    pos <- matrix(0.0, maxlev, maxcol)
-    pos[,1:n1] <- x1$pos
-
-    fam <- matrix(0, maxlev, maxcol)
-    fam[,1:n1] <- x1$fam
-    fam2 <- x2$fam
-    if (!packed) {
-        <<align3-slide>>
-        }
-    <<align3-merge>>
-
-    if (max(n) < maxcol) {
-	maxcol <- max(n)
-	nid <- nid[,1:maxcol]
-	pos <- pos[,1:maxcol]
-	fam <- fam[,1:maxcol]
-	}
-
-    list(n=n, nid=nid, pos=pos, fam=fam)
-    }
-@ 
 
 ## alignped3 -slide
 
-For the unpacked case, which is the traditional way to draw a pedigree
-when we can assume the paper is infinitely wide, all parents are centered
-over their children.  
-In this case we think if the two trees to be merged as solid blocks.
-On input they both have a left margin of 0.
-Compute how far over we have to slide the right tree.
+For the unpacked case, which is the traditional way to draw a pedigree when
+we can assume the paper is infinitely wide, all parents are centered over their
+children. In this case we think if the two trees to be merged as solid blocks.
+On input they both have a left margin of 0. Compute how far over we have to
+slide the right tree.
 
 ## alignped3 - merge
-Now merge the two trees. 
-Start at the top level and work down.
+
+Now merge the two trees.  Start at the top level and work down.
 \begin{enumerate}
   \item If n2=0, there is nothing to do
   \item Decide if there is a subject overlap, and if so 
@@ -657,11 +530,11 @@ Start at the top level and work down.
     point to the correct parental position.
 \end{enumerate}
 
-
 alignped4
 =================
+
 The alignped4 routine is the final step of alignment.  It attempts to line
-up children under parents and put spouses and siblings `close' to each other,%'` 
+up children under parents and put spouses and siblings `close' to each other,
 to the extent possible within the constraints of page width.  This routine
 used to be the most intricate and complex of the set, until I realized that
 the task could be cast as constrained quadradic optimization.
@@ -697,8 +570,8 @@ The alignment penalty for spouses is $b(x_1 - x_2)^2$, which tends to keep
 them together.  The size of $b$ controls the relative importance of sib-parent
 and spouse-spouse closeness.
 
-## alignped4 - part1
-       
+## alignped4 - sub-part1
+
 We start by adding in these penalties.  The total number of parameters
 in the alignment problem (what we hand to quadprog) is the set 
 of [[sum(n)]] positions.  A work array myid keeps track of the parameter
@@ -708,7 +581,7 @@ would be the same if all the final positions were shifted by a constant,
 the penalty matrix will not be positive definite; solve.QP does not like  
 this.  We add a tiny amount of leftward pull to the widest line. 
 
-## alignped4: part2
+## alignped4: sub-part2
 Next come the constraints.  If there are $k$ subjects on a line there will
 be $k+1$ constraints for that line.  The first point must be $\ge 0$, each
 subesquent one must be at least 1 unit to the right, and the final point

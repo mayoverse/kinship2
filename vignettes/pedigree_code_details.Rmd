@@ -1,6 +1,17 @@
---------------
-title: The pedigree functions in R}
+---
+title: The pedigree functions in R
 author: Terry Therneau, Elizabeth Atkinson
+date: '`r format(Sys.time(),"%d %B, %Y")`'
+output:
+  rmarkdown::html_vignette:
+    toc: yes
+    toc_depth: 2
+header-includes: \usepackage{tabularx}
+vignette: |
+  %\VignetteIndexEntry{Pedigree function code details}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
 
 Introduction
 ===============
@@ -19,7 +30,7 @@ to others.  Through their constant feedback, application to more
 complex pedigrees, and ongoing requests for one more feature, the routine has 
 become what it is today.  This routine is still not 
 suitable for really large pedigrees, nor for heavily inbred ones such as in
-animal studies, and will likely not evolve in that way.  The authors' fondest%'
+animal studies, and will likely not evolve in that way.  The authors fondest
 hope is that others will pick up the project.
         
 Pedigree Constructor
