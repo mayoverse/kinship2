@@ -21,8 +21,7 @@ options(width = 100)
 Introduction
 ===============
 
-This document is a brief tutorial for the kinship2 package, with examples 
-of creating pedigree objects and kinship matrices, and other pedigree 
+This document is a brief tutorial for the [kinship2 package](https://www.karger.com/Article/Pdf/363105), with examples of creating pedigree objects and kinship matrices, and other pedigree 
 utilities.  If the kinship2 package is not loaded, we load it now.
 
 ```{r, load, echo=TRUE}
@@ -131,8 +130,8 @@ getting the same allele twice.
 \subsection*{Kinship for pedigree object}
 We use {\em kinship} to calculate the kinship matrix for $ped2basic$. The 
 result is a special symmetrix matrix class from the
-$Matrix$ R package\cite{BatesMaechler},  which is stored efficiently to avoid
-repeating elements.
+[Matrix R package](https://cran.r-project.org/web/packages/Matrix/),
+which is stored efficiently to avoid repeating elements.
 
 ```{r, calckinship}
 kin2 <- kinship(ped2basic)
@@ -264,7 +263,7 @@ Pedigree Plot Details
 
 The plot method does an admirable job plotting pedigrees within the
 standard R plotting paradigm.  It attempts to adhere to many standards
-in pedigree plotting, as presented in Bennet et al. 2008.
+in pedigree plotting, as presented by [Bennet et al. 2008](https://pubmed.ncbi.nlm.nih.gov/18792771/).
 
 We show in the following figure, the plot of the updated pedigree 2.
 The plot shapes for each subject are divided into two equal parts and
@@ -484,33 +483,3 @@ kin2[df2$avail==1,df2$avail==1]
 
 
 
-R Session Information
-===========================
-
-```{r, sessInfo}
-sessionInfo()
-```
-
-\begin{thebibliography}{}
-
-\bibitem{BatesMaechler}
-Bates D and Maechler M. (2011). {\bf Matrix: Sparse and Dense Matrix
-Classes and Methods.} R package version 0.999375-50.
-{\em http://CRAN.R-project.org/package=Matrix}
-
-  
-\bibitem{Bennet2008}
-Bennet RL, Steinhaus French K, Resta RG, Lochner Doyle D. (2008). 
-{\bf Standardized Human Pedigree Nomenclature: Update and Assessment of 
-    the Recommendations of the National Society of Genetic Counselors.} 
-{\em J. Gene. Counsel.,} 17, 1424-433.
-
-\bibitem{Sinnwell2011}
-Sinnwell JP, Therneau TM, Atkinson EJ, Schaid DJ, Matsumoto ME, 
-McDonnell SK (2011). {\bf kinship2: An enhancement to the kinship R package 
-with additional pedigree utilities}. Submitted.
-
-\end{thebibliography}
-  
-  
-\end{document}
