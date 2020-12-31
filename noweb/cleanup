@@ -1,0 +1,3 @@
+#!/bin/sh
+(cd noweb; make clean)
+## previously in top level of kinship2, used to manage noweb file cleanup via make commands

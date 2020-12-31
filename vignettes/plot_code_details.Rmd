@@ -9,7 +9,7 @@ output:
     toc_depth: 2
 header-includes: \usepackage{tabularx}
 vignette: |
-  %\VignetteIndexEntry{Pedigree plot details}
+  %\VignetteIndexEntry{Pedigree Plot Code Details}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---

@@ -157,8 +157,7 @@ pedigree.shrink <- function(ped, avail, affected=NULL, maxBits = 16) {
               avail=avail,
               pedSizeOriginal = nOriginal,
               pedSizeIntermed = nIntermed,
-              pedSizeFinal  = nFinal,
-              seed = seed)
+              pedSizeFinal  = nFinal)
   
   class(obj) <- "pedigree.shrink"
   

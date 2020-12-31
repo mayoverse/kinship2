@@ -8,9 +8,9 @@ Plot a pedigree legend
 Plot a pedigree legend that describes the affected indiactors for a subject
 }
 \usage{
-pedigree.legend(ped, labels = dimnames(ped$affected)[[2]],
-    edges = 200, radius=NULL, location="bottomright", new=TRUE,
-    density = c(-1, 35, 55, 25),  angle = c(90, 65, 40, 0), ...) 
+pedigree.legend(ped, labels = dimnames(ped$affected)[[2]], edges = 200,
+                radius = NULL, location = "bottomright", new = TRUE
+                density = c(-1, 35, 65, 20), angle = c(90, 65,40, 0), ...)
 }
 \arguments{
 \item{ped}{

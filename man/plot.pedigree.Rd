@@ -7,12 +7,14 @@
 plot objects created with the pedigree function
 }
 \usage{
-\method{plot}{pedigree}(x, id = x$id, status = x$status, affected =
-                 x$affected, cex = 1, col = 1, symbolsize = 1, branch =
-                 0.6, packed = TRUE, align = c(1.5,2), width = 8,
-                 density = c(-1, 35, 55, 25), mar = c(4.1, 1, 4.1, 1),
-                 angle = c(90, 65, 40, 0), keep.par = FALSE, subregion,
-                 pconnect= .5, ...)
+\method{plot}{pedigree}(x, id = x$id, status = x$status, 
+                        affected = x$affected, 
+                        cex = 1, col = 1,
+                        symbolsize = 1, branch = 0.6, 
+                        packed = TRUE, align = c(1.5,2), width = 8, 
+                        density=c(-1, 35,65,20), #mar=c(3.1, 1, 3.1, 1),
+                        angle=c(90,65,40,0), keep.par=FALSE,
+                        subregion, pconnect=.5, ...)
 }
 \arguments{
 \item{x}{

@@ -1,5 +1,5 @@
 ---
-title: Pedigree plot alignment code details
+title: Pedigree plot alignment details
 author: TM Therneau
 date: '`r format(Sys.time(),"%d %B, %Y")`'
 output:
@@ -8,7 +8,7 @@ output:
     toc_depth: 2
 header-includes: \usepackage{tabularx}
 vignette: |
-  %\VignetteIndexEntry{Pedigree alignment details}
+  %\VignetteIndexEntry{Pedigree plot alignment details}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---

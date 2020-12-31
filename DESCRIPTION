@@ -1,6 +1,6 @@
 Package: kinship2
-Version: 1.9.0
-Date: 2020-9-21
+Version: 1.9.1
+Date: 2020-12-31
 Title: Pedigree Functions
 Authors@R: c(
 	person("Jason", "Sinnwell", email="sinnwell.jason@mayo.edu", role=c("aut","cre")),
@@ -9,13 +9,14 @@ Authors@R: c(
 	person("Elizabeth", "Atkinson", role="ctb"),
 	person("Carly", "Mester", role='ctb'))
 Depends: 
-	 R (>= 3.4.0),
+	 R (>= 3.5.0),
 	 Matrix,
 	 quadprog
 Imports: 
 	 graphics,
 	 stats,
-	 methods
+	 methods,
+	 knitr
 Description: Routines to handle family data with a pedigree object. The initial purpose
 	     was to create correlation structures that describe family relationships such 
 	     as kinship and identity-by-descent, which can be used to model family data 

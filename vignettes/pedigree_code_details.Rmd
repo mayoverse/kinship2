@@ -1,5 +1,5 @@
 ---
-title: The pedigree functions in R
+title: Pedigree function code details
 author: Terry Therneau, Elizabeth Atkinson
 date: '`r format(Sys.time(),"%d %B, %Y")`'
 output:

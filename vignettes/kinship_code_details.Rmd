@@ -8,7 +8,7 @@ output:
     toc_depth: 2
 header-includes: \usepackage{tabularx}
 vignette: |
-  %\VignetteIndexEntry{Kinship code details}
+  %\VignetteIndexEntry{Kinship Matrix Code Details}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---

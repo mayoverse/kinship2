@@ -1,6 +1,7 @@
 
 ## if all you have is maternal information, fill in for dads
 ## from user on 2/1/19
+require(kinship2)
 materdf <- data.frame(id=1:5, momid=c(0,1,1,2,2), sex=2)
 
 materdf$dadid <- materdf$momid * 100

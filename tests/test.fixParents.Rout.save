@@ -1,0 +1,111 @@
+
+R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
+Copyright (C) 2019 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+R> 
+R> ## if all you have is maternal information, fill in for dads
+R> ## from user on 2/1/19
+R> require(kinship2)
+Loading required package: kinship2
+Loading required package: Matrix
+Loading required package: quadprog
+R> materdf <- data.frame(id=1:5, momid=c(0,1,1,2,2), sex=2)
+R> 
+R> materdf$dadid <- materdf$momid * 100
+R> materdf
+  id momid sex dadid
+1  1     0   2     0
+2  2     1   2   100
+3  3     1   2   100
+4  4     2   2   200
+5  5     2   2   200
+R> 
+R> peddf <- with(materdf, fixParents(id, dadid, momid, sex))
+R> peddf
+   id momid dadid sex
+1   1     0     0   2
+2   2     1   100   2
+3   3     1   100   2
+4   4     2   200   2
+5   5     2   200   2
+6 100     0     0   1
+7 200     0     0   1
+R> testped <- with(peddf, pedigree(id, dadid, momid, sex))
+R> as.data.frame(testped)
+   id dadid momid    sex
+1   1     0     0 female
+2   2   100     1 female
+3   3   100     1 female
+4   4   200     2 female
+5   5   200     2 female
+6 100     0     0   male
+7 200     0     0   male
+R> 
+R> 
+R> ## chars
+R> test1char <- data.frame(id=paste("fam", 101:111, sep=""),
++                 sex=c("male","female")[c(1,2,1,2,1, 1,2, 2,1,2, 1)],
++           father=c(0,0,"fam101","fam101","fam101", 0,0,"fam106","fam106","fam106", "fam109"),
++           mother=c(0,0,"fam102","fam102","fam102", 0,0,"fam107","fam107","fam107", "fam112"))
+R> test1newmom <- with(test1char, fixParents(id, father, mother, sex, missid="0"))
+R> newped <- with(test1newmom, pedigree(id, dadid, momid, sex, missid="0"))
+R> as.data.frame(newped)
+       id  dadid  momid    sex
+1  fam101      0      0   male
+2  fam102      0      0 female
+3  fam103 fam101 fam102   male
+4  fam104 fam101 fam102 female
+5  fam105 fam101 fam102   male
+6  fam106      0      0   male
+7  fam107      0      0 female
+8  fam108 fam106 fam107 female
+9  fam109 fam106 fam107   male
+10 fam110 fam106 fam107 female
+11 fam111 fam109 fam112   male
+12 fam112      0      0 female
+R> 
+R> 
+R> data(sample.ped)
+R> datped2 <- sample.ped[sample.ped$ped %in% 2,]
+R> datped2[datped2$id %in% 203, "sex"] <- 2
+R> datped2 <- datped2[-which(datped2$id %in% 209),]
+R> ## this gets an error
+R> ##ped2 <- with(datped2, pedigree(id, father, mother, sex))
+R> fixped2 <- with(datped2, fixParents(id, father, mother, sex))
+R> fixped2
+    id momid dadid sex
+1  201     0     0   1
+2  202     0     0   2
+3  203     0     0   1
+4  204   202   201   2
+5  205   202   201   1
+6  206   202   201   2
+7  207   202   201   2
+8  208   202   201   2
+9  210   204   203   1
+10 211   204   203   1
+11 212   208   209   2
+12 213   208   209   1
+13 214   208   209   1
+14 209     0     0   1
+R> ped2 <- with(fixped2, pedigree(id, dadid, momid, sex))
+R> 
+R> 
+> proc.time()
+   user  system elapsed 
+  1.107   0.147   1.354 
