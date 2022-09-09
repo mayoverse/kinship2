@@ -149,7 +149,8 @@ kinship.pedigreeList <- function(id, chrtype="autosome", ...) {
         temp <- try(kinship(tped, chrtype=chrtype, ...), silent=TRUE)
         if (class(temp)=="try-error") 
             stop(paste("In family", famlist[i], ":", temp))
-        else matlist[[i]] <- as(forceSymmetric(temp), "dsCMatrix")
+        else matlist[[i]] <- as(forceSymmetric(temp), "CsparseMatrix")
+                 ## deprecated in Matrix: as(forceSymmetric(temp), "dsCMatrix")
         idlist[[i]] <- tped$id
     }
 
