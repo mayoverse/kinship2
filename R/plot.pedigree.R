@@ -146,13 +146,13 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
 
     boxsize <- symbolsize* min(ht1, ht2, stemp1, wd2) # box size in inches
     hscale <- (psize[1]- boxsize)/diff(xrange)  #horizontal scale from user-> inch
-    vscale <- (psize[2]-(stemp3 + stemp2/2 + boxsize))/ max(1, maxlev-1)
+    vscale <- (psize[2]-(stemp3 + stemp2 + boxsize))/ max(1, maxlev-1)
     boxw  <- boxsize/hscale  # box width in user units
     boxh  <- boxsize/vscale   # box height in user units
     labh  <- stemp2/vscale   # height of a text string
     legh  <- min(1/4, boxh  *1.5)  # how tall are the 'legs' up from a child
-    par(usr=c(xrange[1]- boxw/2, xrange[2]+ boxw/2, 
-              maxlev+ boxh+ stemp3 + stemp2/2 , 1))
+    par(usr=c(xrange[1]- boxw/2, xrange[2]+ boxw/2,
+              maxlev+ boxh+ stemp3/vscale + stemp2/vscale , 1))
     ## Doc: end of sizing
     ## Doc: Sizing
     ## Doc:  subsection: drawbox
