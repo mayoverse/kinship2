@@ -4,8 +4,8 @@ pedigree.trim <- function(removeID, ped){
 ## trim subjects from a pedigree who match the removeID 
 ## trim relation matrix as well
 
-if(class(ped)[1] != "pedigree")
-  stop("Must be a pegigree object.\n")
+  if(!("pedigree" %in% class(ped)))
+    stop("Must be a pegigree object.\n")
 
   rmidx <- match(removeID, ped$id)
   if(length(rmidx)>0) {

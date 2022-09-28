@@ -1,12 +1,13 @@
 
-R version 2.15.0 (2012-03-30)
-Copyright (C) 2012 The R Foundation for Statistical Computing
-ISBN 3-900051-07-0
-Platform: x86_64-unknown-linux-gnu (64-bit)
+R Under development (unstable) (2022-09-11 r82834) -- "Unsuffered Consequences"
+Copyright (C) 2022 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
 Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
 
 R is a collaborative project with many contributors.
 Type 'contributors()' for more information and
@@ -16,22 +17,23 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> library(kinship2)
+[Previously saved workspace restored]
+
+R> library(kinship2)
 Loading required package: Matrix
-Loading required package: lattice
 Loading required package: quadprog
-> aeq <- function(x,y) all.equal(as.vector(x), as.vector(y))
-> #
-> # A pedigree that can cause problems, due to a double marriage
-> #
-> id <- 1:20
-> mom<- c(0,0,0,2,2,2,0,2,0, 0,2,2,0,2,0,2, 7,7, 11,14)
-> dad<- c(0,0,0,1,1,1,0,1,0, 0,3,3,0,3,0,3, 8,8, 10,13)
-> 
-> temp<- makefamid(id, mom, dad)
-> aeq(temp, pmin(temp,1))
+R> aeq <- function(x,y) all.equal(as.vector(x), as.vector(y))
+R> #
+R> # A pedigree that can cause problems, due to a double marriage
+R> #
+R> id <- 1:20
+R> mom<- c(0,0,0,2,2,2,0,2,0, 0,2,2,0,2,0,2, 7,7, 11,14)
+R> dad<- c(0,0,0,1,1,1,0,1,0, 0,3,3,0,3,0,3, 8,8, 10,13)
+R> 
+R> temp<- makefamid(id, mom, dad)
+R> aeq(temp, pmin(temp,1))
 [1] TRUE
-> 
+R> 
 > proc.time()
    user  system elapsed 
-  2.594   0.109   2.781 
+  2.181   0.136   2.392 

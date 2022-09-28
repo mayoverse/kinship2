@@ -2,7 +2,7 @@
 
 align.pedigree <- function(ped, packed=TRUE, width=10, align=TRUE, hints=ped$hints) {
     
-    if (class(ped)== 'pedigreeList') {
+    if ('pedigreeList' %in% class(ped)) {
         nped <- length(unique(ped$famid))
         alignment <- vector('list', nped)
         for (i in 1:nped) {
@@ -17,7 +17,7 @@ align.pedigree <- function(ped, packed=TRUE, width=10, align=TRUE, hints=ped$hin
     if (is.null(hints)) {
       hints <- try({autohint(ped)}, silent=TRUE)
       ## sometimes appears dim(ped) is empty (ped is NULL), so try fix here: (JPS 6/6/17
-      if(class(hints)=="try-error") hints <- list(order=seq_len(max(1, dim(ped)))) ## 1:dim(ped))
+      if("try-error" %in% class(hints)) hints <- list(order=seq_len(max(1, dim(ped)))) ## 1:dim(ped))
     } else {
       hints <- check.hint(hints, ped$sex)
     }

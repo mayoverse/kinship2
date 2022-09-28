@@ -8,7 +8,7 @@
 # full argument list.  In the former case we can simply skip a step
 
 kindepth <- function(id, dad.id, mom.id, align=FALSE) {
-    if (class(id)=='pedigree' || class(id)=='pedigreeList') {
+    if ("pedigree" %in% class(id) || "pedigreeList" %in% class(id)) {
         didx <- id$findex
         midx <- id$mindex
         n <- length(didx)

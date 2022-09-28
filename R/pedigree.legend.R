@@ -5,7 +5,6 @@
 #' @param ped Pedigree data frame with ped (pedigree id), id (id of individual),
 #'   father (id of father), mother (id of mother), sex, affected (affection status), 
 #'   and avail (DNA availability).
-#' 
 #' @param labels names for the affected indicators
 #' @param edges Number of edges for each polygon. Higher numbers give better
 #' resolution for the circle

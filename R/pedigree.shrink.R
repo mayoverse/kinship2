@@ -36,7 +36,7 @@ NULL
 #' @rdname pedigree.shrink
 #' @export
 pedigree.shrink <- function(ped, avail, affected=NULL, maxBits = 16) {
-  if(inherits(ped, "pedigree"))
+  if(!inherits(ped, "pedigree"))
     stop("Must be a pegigree object.\n")  
   
   if(any(is.na(avail)))

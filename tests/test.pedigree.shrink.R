@@ -43,30 +43,14 @@ pedAll <- pedigree(sample.ped$id, sample.ped$father, sample.ped$mother,
 
 ped1 <- pedAll['1']
 
-color1 <- sample.ped$avail[1:41] + 1
-
-if(0) {
-  pdf("sampleped1.pdf")
-   plot(ped1, col=color1)
-   plot(ped1, col=color1, pconnect=1.5)
-  dev.off()
-}
-
-
 ped2 <- pedAll['2']
 
 ped2$sex[c(13,12)] <- c("unknown", "terminated")
 
-col2 <- ped2$affected[,2] + 1  ## red for availability, 
 
 ## set 2nd col of affected to NA
 ped2$affected[c(7,9),2] <- NA
 
-## show diamond and triangle for different sex codes.
-## also show 2 shadings of affected, with ? as NA in affected matrix.
-if(0) {
-plot(ped2, col=col2)
-}
 
 set.seed(10)
 shrink1.avail.B32 <- pedigree.shrink(ped=ped1, avail=ped1$affected[,2], maxBits=32)

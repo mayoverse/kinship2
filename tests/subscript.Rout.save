@@ -1,12 +1,13 @@
 
-R version 2.15.0 (2012-03-30)
-Copyright (C) 2012 The R Foundation for Statistical Computing
-ISBN 3-900051-07-0
-Platform: x86_64-unknown-linux-gnu (64-bit)
+R Under development (unstable) (2022-09-11 r82834) -- "Unsuffered Consequences"
+Copyright (C) 2022 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
 Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
 
 R is a collaborative project with many contributors.
 Type 'contributors()' for more information and
@@ -16,40 +17,41 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-> #
-> # Test out subscripting
-> #
-> require(kinship2)
+[Previously saved workspace restored]
+
+R> #
+R> # Test out subscripting
+R> #
+R> require(kinship2)
 Loading required package: kinship2
 Loading required package: Matrix
-Loading required package: lattice
 Loading required package: quadprog
-> data(minnbreast)
-> 
-> minnped <- with(minnbreast, pedigree(id, fatherid, motherid, sex,
+R> data(minnbreast)
+R> 
+R> minnped <- with(minnbreast, pedigree(id, fatherid, motherid, sex,
 +                                      affected=cancer, famid=famid))
-> ped8 <- minnped['8']  # a modest sized family
-> 
-> # Subjects 150, 152, 154, 158 are children, and 143, 162, 149 are 
-> #  parents and a child
-> droplist <- c(150, 152, 154, 158, 143, 162, 149)
-> 
-> keep1 <- !(ped8$id %in% droplist)  #logical
-> keep2 <- which(keep1)              #numeric
-> keep3 <- as.character(ped8$id[keep1]) #character
-> keep4 <- factor(keep3)
-> 
-> test1 <- ped8[keep1]
-> test2 <- ped8[keep2]
-> test3 <- ped8[keep3]
-> test4 <- ped8[keep4]
-> all.equal(test1, test2)
+R> ped8 <- minnped['8']  # a modest sized family
+R> 
+R> # Subjects 150, 152, 154, 158 are children, and 143, 162, 149 are 
+R> #  parents and a child
+R> droplist <- c(150, 152, 154, 158, 143, 162, 149)
+R> 
+R> keep1 <- !(ped8$id %in% droplist)  #logical
+R> keep2 <- which(keep1)              #numeric
+R> keep3 <- as.character(ped8$id[keep1]) #character
+R> keep4 <- factor(keep3)
+R> 
+R> test1 <- ped8[keep1]
+R> test2 <- ped8[keep2]
+R> test3 <- ped8[keep3]
+R> test4 <- ped8[keep4]
+R> all.equal(test1, test2)
 [1] TRUE
-> all.equal(test1, test3)
+R> all.equal(test1, test3)
 [1] TRUE
-> all.equal(test1, test4)
+R> all.equal(test1, test4)
 [1] TRUE
-> 
+R> 
 > proc.time()
    user  system elapsed 
-  3.399   0.131   3.597 
+  2.444   0.142   2.664 

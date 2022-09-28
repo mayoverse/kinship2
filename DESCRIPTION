@@ -1,6 +1,6 @@
 Package: kinship2
-Version: 1.9.2
-Date: 2022-09-09
+Version: 1.9.3
+Date: 2022-09-27
 Title: Pedigree Functions
 Authors@R: c(
 	person("Jason", "Sinnwell", email="sinnwell.jason@mayo.edu", role=c("aut","cre")),
@@ -9,7 +9,7 @@ Authors@R: c(
 	person("Elizabeth", "Atkinson", role="ctb"),
 	person("Carly", "Mester", role='ctb'))
 Depends: 
-	 R (>= 3.5.0),
+	 R (>= 3.6.0),
 	 Matrix,
 	 quadprog
 Imports: 
@@ -26,5 +26,5 @@ Description: Routines to handle family data with a pedigree object. The initial 
 	     with various criteria, and kinship for the X chromosome.
 License: GPL (>= 2)
 URL: https://cran.r-project.org/package=kinship2
-RoxygenNote: 7.0.2
+RoxygenNote: 7.2.1
 VignetteBuilder: knitr
