@@ -1,5 +1,5 @@
 ---
-title: Pedigree function code details
+title: Pedigree_constructor_details
 author: Terry Therneau, Elizabeth Atkinson
 date: '`r format(Sys.time(),"%d %B, %Y")`'
 output:
@@ -8,7 +8,7 @@ output:
     toc_depth: 2
 header-includes: \usepackage{tabularx}
 vignette: |
-  %\VignetteIndexEntry{Pedigree function code details}
+  %\VignetteIndexEntry{Pedigree_constructor_details}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---

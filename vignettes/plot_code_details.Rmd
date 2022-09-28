@@ -1,6 +1,6 @@
 
 ---
-title: Pedigree Plot Code Details
+title: Pedigree_Plot_Details
 author: TM Therneau, JP Sinnwell
 date: '`r format(Sys.time(),"%d %B, %Y")`'
 output:
@@ -9,7 +9,7 @@ output:
     toc_depth: 2
 header-includes: \usepackage{tabularx}
 vignette: |
-  %\VignetteIndexEntry{Pedigree Plot Code Details}
+  %\VignetteIndexEntry{Pedigree_Plot_Details}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---

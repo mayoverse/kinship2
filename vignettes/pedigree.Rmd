@@ -1,5 +1,5 @@
 ---
-title: "Pedigree Examples"
+title: "Pedigree_Examples"
 author: "Jason Sinnwell"
 date: '`r format(Sys.time(),"%d %B, %Y")`'
 output:
@@ -8,7 +8,7 @@ output:
     toc_depth: 2
 header-includes: \usepackage{tabularx}
 vignette: |
-  %\VignetteIndexEntry{Pedigree Examples}
+  %\VignetteIndexEntry{Pedigree_Examples}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---
@@ -157,7 +157,7 @@ pedAll <- pedigree(id=sample.ped$id,
                 sex=sample.ped$sex, famid=sample.ped$ped)
 kinAll <- kinship(pedAll)
 kinAll[1:14,1:14]
-kinAll[40:43,40:43]
+kinAll[40:43, 40:43]
 kinAll[42:46, 42:46]
 ```
 
