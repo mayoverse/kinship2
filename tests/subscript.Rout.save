@@ -17,41 +17,39 @@ Type 'demo()' for some demos, 'help()' for on-line help, or
 'help.start()' for an HTML browser interface to help.
 Type 'q()' to quit R.
 
-[Previously saved workspace restored]
-
-R> #
-R> # Test out subscripting
-R> #
-R> require(kinship2)
+> #
+> # Test out subscripting
+> #
+> require(kinship2)
 Loading required package: kinship2
 Loading required package: Matrix
 Loading required package: quadprog
-R> data(minnbreast)
-R> 
-R> minnped <- with(minnbreast, pedigree(id, fatherid, motherid, sex,
+> data(minnbreast)
+> 
+> minnped <- with(minnbreast, pedigree(id, fatherid, motherid, sex,
 +                                      affected=cancer, famid=famid))
-R> ped8 <- minnped['8']  # a modest sized family
-R> 
-R> # Subjects 150, 152, 154, 158 are children, and 143, 162, 149 are 
-R> #  parents and a child
-R> droplist <- c(150, 152, 154, 158, 143, 162, 149)
-R> 
-R> keep1 <- !(ped8$id %in% droplist)  #logical
-R> keep2 <- which(keep1)              #numeric
-R> keep3 <- as.character(ped8$id[keep1]) #character
-R> keep4 <- factor(keep3)
-R> 
-R> test1 <- ped8[keep1]
-R> test2 <- ped8[keep2]
-R> test3 <- ped8[keep3]
-R> test4 <- ped8[keep4]
-R> all.equal(test1, test2)
+> ped8 <- minnped['8']  # a modest sized family
+> 
+> # Subjects 150, 152, 154, 158 are children, and 143, 162, 149 are 
+> #  parents and a child
+> droplist <- c(150, 152, 154, 158, 143, 162, 149)
+> 
+> keep1 <- !(ped8$id %in% droplist)  #logical
+> keep2 <- which(keep1)              #numeric
+> keep3 <- as.character(ped8$id[keep1]) #character
+> keep4 <- factor(keep3)
+> 
+> test1 <- ped8[keep1]
+> test2 <- ped8[keep2]
+> test3 <- ped8[keep3]
+> test4 <- ped8[keep4]
+> all.equal(test1, test2)
 [1] TRUE
-R> all.equal(test1, test3)
+> all.equal(test1, test3)
 [1] TRUE
-R> all.equal(test1, test4)
+> all.equal(test1, test4)
 [1] TRUE
-R> 
+> 
 > proc.time()
    user  system elapsed 
-  2.444   0.142   2.664 
+  2.449   0.160   2.682 
