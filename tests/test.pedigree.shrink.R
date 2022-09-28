@@ -88,13 +88,12 @@ ped1df$momidchar <- gsub("^1","A-", as.character(ped1df$momid))
 #ped1df$momidchar <- ifelse(ped1df$momidchar=="0", NA, ped1df$momidchar)
 ped1char <- with(ped1df, pedigree(idchar, dadidchar, momidchar, sex, affected,missid=c("0")))
 
-options(stringsAsFactors=TRUE)
-set.seed(10)
+set.seed(100)
 shrink1.p1char.B32 <- pedigree.shrink(ped=ped1char, avail=ped1char$affected[,2], maxBits=32)
 shrink1.p1char.B32$idTrimmed
 shrink1.avail.B32$idTrimmed
 
-set.seed(10)
+set.seed(100)
 shrink1.p1char.B25 <- pedigree.shrink(ped=ped1char, avail=ped1char$affected[,2], maxBits=25)
 shrink1.p1char.B25$idTrimmed
 shrink1.avail.B25$idTrimmed
