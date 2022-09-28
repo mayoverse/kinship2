@@ -1,21 +1,4 @@
-# Automatically generated from all.nw using noweb
-#' Print method for a pedigree.shrink object
-#' 
-#' Print the high-level details of a pedigree.shrink S3-class object
-#'
-#' @param x pedigree.shrink object 
-#' @param ... optional parameters for print methods
-#'
-#' @details
-#'
-#' @return 
-#' @author Jason Sinnwell, Daniel Schaid
-#' @seealso \code{\link{pedigree.shrink}}
-#' @name print.pedigree.shrink
-NULL
-#> NULL
-
-#' @rdname print.pedigree.shrink
+#' @rdname pedigree.shrink
 #' @export
 
 print.pedigree.shrink <- function(x, ...){

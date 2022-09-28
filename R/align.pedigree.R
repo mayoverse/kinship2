@@ -1,28 +1,7 @@
 ## Automatically generated from all.nw using noweb
-#' Align pedigree
-#' 
-#' Align a pegiree for plotting with coordinates set for each subject
-#'
-#'@param ped pedigree object with id, dadid, momid, sex
-#'@param packed align with packed option
-#'@param width width, in number of subjects for the pedigree, default=10
-#'@param align logical, if TRUE, align same generations
-#'@param hints hints for which ...
-#'
-#' @details
-#'
-#'@return 
-#'@author Terry Therneau
-#' @seealso \code{\link{pedigree}}
-#' @name align.pedigree
-NULL
-#> NULL
 
-#' @rdname align.pedigree
-#' @export
-
-align.pedigree <- function(ped, packed=TRUE, width=10,
-                           align=TRUE, hints=ped$hints) {
+align.pedigree <- function(ped, packed=TRUE, width=10, align=TRUE, hints=ped$hints) {
+    
     if (class(ped)== 'pedigreeList') {
         nped <- length(unique(ped$famid))
         alignment <- vector('list', nped)
@@ -85,8 +64,10 @@ align.pedigree <- function(ped, packed=TRUE, width=10,
     ## Doc: Founders -align
     noparents <- (dad[spouselist[,1]]==0 & dad[spouselist[,2]]==0)
      ##Take duplicated mothers and fathers, then founder mothers
-    dupmom <- spouselist[noparents,2][duplicated(spouselist[noparents,2])] #Founding mothers with multiple marriages
-    dupdad <- spouselist[noparents,1][duplicated(spouselist[noparents,1])] #Founding fathers with multiple marriages
+    dupmom <- spouselist[noparents,2][duplicated(spouselist[noparents,2])]
+       ##^Founding mothers with multiple marriages
+    dupdad <- spouselist[noparents,1][duplicated(spouselist[noparents,1])]
+       ##^Founding fathers with multiple marriages
     foundmom <- spouselist[noparents&!(spouselist[,1] %in% c(dupmom,dupdad)),2] # founding mothers
     founders <-  unique(c(dupmom, dupdad, foundmom))    
     founders <-  founders[order(horder[founders])]  #use the hints to order them

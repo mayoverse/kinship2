@@ -27,7 +27,7 @@
 #'
 #' @section Data:
 #'
-#' \code{\link{example.ped}}: Pedigree example data sets with two pedigrees
+#' \code{\link{sample.ped}}: Pedigree example data sets with two pedigrees
 #' 
 #' \code{\link{minnbreast}}: Larger cohort of pedigrees from MN breast cancer study
 #'
@@ -38,16 +38,6 @@
 #' @name kinship2
 #'
 NULL
-
-#' @importFrom utils head
-#' @seealso \code{\link[utils]{head}}
-#' @export
-utils::head
-
-#' @importFrom utils tail
-#' @seealso \code{\link[utils]{tail}}
-#' @export
-utils::tail
 
 #### commands to build the package using devtools
 # devtools::check_man()

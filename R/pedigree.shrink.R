@@ -4,10 +4,12 @@
 #' uninformative subjects. The algorithm is useful for getting a pedigree condensed to 
 #' a minimally informative size for algorithms or testing that are limited by size 
 #' of the pedigree.
-#' @param x Pedigree object created by the pedigree function,  
+#' @param ped Pedigree object created by the pedigree function,  
 #' @param avail vector of binary availability status (0/1), i.e. having data, or sample available
 #' @param affected vector of binary affected status (0/1/NA). If NULL, uses first column of the pedigree object affected matrix.
 #' @param maxBits Optional, the bit size for which to shrink the pedigree
+#' @param x pedigree.shrink object used in method functions
+#' @param ... optional arguments passed to internal functions
 #' @details 
 #' Iteratively remove subjects from the pedigree. The random removal of members
 #' was previously controlled by a seed argument, but we remove this, forcing users
@@ -20,7 +22,6 @@
 #' 2. Subjects with unaffected affected status
 #' 3. Affected subjects.
 #' @examples 
-#' require(kinship2)
 #' data(sample.ped)
 #' pedAll <- pedigree(sample.ped$id, sample.ped$father, sample.ped$mother, sample.ped$sex, affected=cbind(sample.ped$affected, sample.ped$avail), famid=sample.ped$ped)
 #' ped1 <- pedAll['1']

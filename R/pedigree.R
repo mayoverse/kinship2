@@ -28,7 +28,10 @@
 #' subscripts. Individuals need to have a unique id \emph{within} family.
 #' @param missid The founders are those with no father or mother in the pedigree. The dadid
 #' and momid values for these subjects will either be NA or the value of this variable. The 
-#' default for missid is 0 if the id variable is numeric, and "" (empty string) otherwise.}
+#' default for missid is 0 if the id variable is numeric, and "" (empty string) otherwise.
+#' @param x pedigree object in print and subset methods
+#' @param ... optional arguments passed to internal functions
+#' @param drop logical, used in subset function for dropping dimensionanlity
 #' @return An object of class \code{pedigree} or \code{pedigreeList} Containing the following items:
 #'  famid id findex mindex sex  affected status relation
 #'  @examples
@@ -37,14 +40,13 @@
 #'    pedigree(id, fatherid, motherid, sex, affected=proband, famid=famid))
 #'    bped.id8 <- bpeds['8']
 #'    print(bped.id8)
-#'    plot(bped.id8)
 #'    ## show this pedigree with mixed zygosity quadruplets
 #'    rel8 <- data.frame(id1=c(137,138,139), id2=c(138,139,140), code=c(1,2,2))
 #'    bped.id8 <- with(minnbreast[minnbreast$famid==8,],
 #'         pedigree(id, fatherid, motherid, sex, affected=proband, relation=rel8))
-#'    plot(bped.id8)
+#'    print(bped.id8)
 #' @author Terry Therneau
-#' @seealso \code{\link{kinship}}, \code{\link{plot.pedigree}, \code\link{autohint}}
+#' @seealso \code{\link{kinship}}, \code{\link{plot.pedigree}}, \code{\link{autohint}}
 #' @name pedigree
 NULL
 #> NULL
@@ -293,7 +295,8 @@ pedigree <- function(id, dadid, momid, sex, affected, status, relation,
 }
 
 ## Doc: Subscripting a pedigree
-
+#' @rdname pedigree
+#' @export
 "[.pedigreeList" <- function(x, ..., drop=FALSE) {
     if (length(list(...)) != 1) stop ("Only 1 subscript allowed")
     ufam <- unique(x$famid)
@@ -335,6 +338,8 @@ pedigree <- function(id, dadid, momid, sex, affected, status, relation,
     x
     }
 
+#' @rdname pedigree
+#' @export
 "[.pedigree" <- function(x, ..., drop=FALSE) {
     if (length(list(...)) != 1) stop ("Only 1 subscript allowed")
     if (is.character(..1) || is.factor(..1)) i <- match(..1, x$id)

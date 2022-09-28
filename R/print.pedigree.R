@@ -1,21 +1,4 @@
-# Automatically generated from all.nw using noweb
-#' Print method for a pedigree object
-#' 
-#' Print the high-level details of a pedigree S3-class object
-#'
-#'@param obj pedigree object with id, dadid, momid, sex
-#'@param ... optional parameters for print methods
-#'
-#' @details
-#'
-#'@return 
-#'@author Terry Therneau
-#' @seealso \code{\link{pedigree}}
-#' @name print.pedigree
-NULL
-#> NULL
-
-#' @rdname print.pedigree
+#' @rdname pedigree
 #' @export
 
 print.pedigree <- function(x, ...) {
@@ -25,7 +8,8 @@ print.pedigree <- function(x, ...) {
     cat("Bit size=", bitSize(x)$bitSize, "\n")
     }
 
-
+#' @rdname pedigree
+#' @export
 print.pedigreeList <- function(x, ...) {
     cat("Pedigree list with", length(x$id), "total subjects in",
         length(unique(x$famid)), "families\n")

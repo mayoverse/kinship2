@@ -23,15 +23,15 @@
 #' @param symbolsize Size of symbols (circle/square/triangle). Default is 1.0
 #'
 #' @param cex Character expansion size for labels and ids. Default is 1.0
-
+#' @param ... Character expansion size for labels and ids. Default is 1.0
 #' @examples 
-#' require(kinship2)
+#' \dontrun{
 #' data(sample.ped)
 #' pedAll <- pedigree(sample.ped$id, sample.ped$father, sample.ped$mother, sample.ped$sex, affected=cbind(sample.ped$affected, sample.ped$avail), famid=sample.ped$ped)
-#' ped1 <- pedAll['1']
-#' legendPlot(ped1,  affected.label=c("cancer","available")
-#' 
-#' @author Jason Sinnwell, with code contributed by Sara Achenbach
+#' ped1 <- pedAll["1"]
+#' legendPlot(ped1,  affected.label=c("cancer","available"))
+#' }
+#' @author Jason Sinnwell, code contributed by Sara Achenbach
 #' @seealso \code{\link{pedigree}}, \code{\link{plot.pedigree}}
 #' @name legendPlot
 NULL
@@ -42,8 +42,6 @@ NULL
 legendPlot <- function(x, id=x$id, affected=x$affected, affected.label=NULL, col=1, col.label=NULL, symbolsize=.75, cex=.5, ...) {
 
   ## Need to deal with real char strings. Set stringsAsFactors back at end
-  sAF <- options()$stringsAsFactors
-  options(stringsAsFactors=FALSE)
     
   ## check colors
   if(any(col %in% 0 | is.na(col))) {
@@ -123,7 +121,5 @@ legendPlot <- function(x, id=x$id, affected=x$affected, affected.label=NULL, col
   plot(x, density=c(-1,-1,-1,-1),angle=c(90,90,90,90),
        col=col, id=id, symbolsize=symbolsize, cex=cex, packed=FALSE, 
        keep.par=TRUE,fig=c(0,1,1/50,1), new=TRUE, mar=c(3.5,1,1.5,1),new=TRUE, ...)
- 
-  options(stringsAsFactors=sAF)  
 }
  
