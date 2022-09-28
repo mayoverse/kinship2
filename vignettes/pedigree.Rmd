@@ -130,7 +130,7 @@ getting the same allele twice.
 \subsection*{Kinship for pedigree object}
 We use {\em kinship} to calculate the kinship matrix for $ped2basic$. The 
 result is a special symmetrix matrix class from the
-[Matrix R package](https://cran.r-project.org/web/packages/Matrix/),
+[Matrix R package](https://CRAN.R-project.org/package=Matrix/),
 which is stored efficiently to avoid repeating elements.
 
 ```{r, calckinship}
