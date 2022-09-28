@@ -336,7 +336,7 @@ pedigree <- function(id, dadid, momid, sex, affected, status, relation,
     if (length(indx)==1)  class(x) <- 'pedigree'  #only one family chosen
     else class(x) <- 'pedigreeList'
     x
-    }
+}
 
 #' @rdname pedigree
 #' @export
@@ -386,3 +386,24 @@ pedigree <- function(id, dadid, momid, sex, affected, status, relation,
     class(z) <- 'pedigree'
     z
 }
+
+
+#' @rdname pedigree
+#' @method print pedigree
+#' @export
+print.pedigree <- function(x, ...) {
+    cat("Pedigree object with", length(x$id), "subjects")
+    if (!is.null(x$famid)) cat(", family id=", x$famid[1], "\n")
+    else cat("\n")
+    cat("Bit size=", bitSize(x)$bitSize, "\n")
+}
+
+#' @rdname pedigree
+#' @method print pedigreeList
+#' @export
+print.pedigreeList <- function(x, ...) {
+    cat("Pedigree list with", length(x$id), "total subjects in",
+        length(unique(x$famid)), "families\n")
+}
+
+

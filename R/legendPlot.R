@@ -27,7 +27,10 @@
 #' @examples 
 #' \dontrun{
 #' data(sample.ped)
-#' pedAll <- pedigree(sample.ped$id, sample.ped$father, sample.ped$mother, sample.ped$sex, affected=cbind(sample.ped$affected, sample.ped$avail), famid=sample.ped$ped)
+#' pedAll <- pedigree(sample.ped$id, sample.ped$father,
+#'    sample.ped$mother, sample.ped$sex,
+#'    affected=cbind(sample.ped$affected, sample.ped$avail),
+#'    famid=sample.ped$ped)
 #' ped1 <- pedAll["1"]
 #' legendPlot(ped1,  affected.label=c("cancer","available"))
 #' }

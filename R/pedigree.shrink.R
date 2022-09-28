@@ -23,9 +23,11 @@
 #' 3. Affected subjects.
 #' @examples 
 #' data(sample.ped)
-#' pedAll <- pedigree(sample.ped$id, sample.ped$father, sample.ped$mother, sample.ped$sex, affected=cbind(sample.ped$affected, sample.ped$avail), famid=sample.ped$ped)
+#' pedAll <- pedigree(sample.ped$id, sample.ped$father, sample.ped$mother,
+#'   sample.ped$sex, affected=cbind(sample.ped$affected, sample.ped$avail),
+#'   famid=sample.ped$ped)
 #' ped1 <- pedAll['1']
-#' ped1trim <- pedigree.shrink(ped1, maxBits=12)
+#' pedigree.shrink(ped1, maxBits=12, avail=ped1$affected[,2])
 #' 
 #' @author Original by Dan Schaid, updated to kinship2 by Jason Sinnwell
 #' @seealso \code{\link{pedigree}}, \code{\link{plot.pedigree.shrink}}
@@ -165,3 +167,36 @@ pedigree.shrink <- function(ped, avail, affected=NULL, maxBits = 16) {
   return(obj)
 } 
 
+#' @rdname pedigree.shrink
+#' @method print pedigree.shrink
+#' @export
+print.pedigree.shrink <- function(x, ...){
+
+    cat("Pedigree Size:\n")
+
+    if(length(x$idTrimmed) > 2)
+    {
+        n <- c(x$pedSizeOriginal, x$pedSizeIntermed, x$pedSizeFinal)
+        b <- c(x$bitSize[1], x$bitSize[2], x$bitSize[length(x$bitSize)])
+        row.nms <- c("Original","Only Informative","Trimmed")
+    } else {
+        n <- c(x$pedSizeOriginal, x$pedSizeIntermed)
+        b <- c(x$bitSize[1], x$bitSize[2])
+        row.nms <- c("Original","Trimmed")
+    }
+    
+    df <- data.frame(N.subj = n, Bits = b)
+    rownames(df) <- row.nms
+    print(df, quote=FALSE)
+    
+    if(!is.null(x$idList$unavail)) 
+        cat("\n Unavailable subjects trimmed:\n", x$idList$unavail, "\n")
+    
+    if(!is.null(x$idList$noninform)) 
+        cat("\n Non-informative subjects trimmed:\n", x$idList$noninform, "\n")
+    
+    if(!is.null(x$idList$affect)) 
+        cat("\n Informative subjects trimmed:\n", x$idList$affect, "\n")
+    
+    invisible()
+}
