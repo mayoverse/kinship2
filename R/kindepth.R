@@ -86,6 +86,7 @@ kindepth <- function(id, dad.id, mom.id, align=FALSE) {
     ##  They all start with depth 0
     dads <- didx[midx>0 & didx>0]   # the father side of all spouse pairs
     moms <- midx[midx>0 & didx>0]
+  if(0) {
     founder <- (midx==0 & didx==0)
     if (any(founder[dads])) {
         drow <- which(founder[dads])  # which pairs
@@ -101,7 +102,7 @@ kindepth <- function(id, dad.id, mom.id, align=FALSE) {
         dads <- dads[-mrow]
         moms <- moms[-mrow]
     }
-    
+  }  
     ## Get rid of duplicate pairs, which occur for any spouse with
     ##  multiple offspring
     dups <- duplicated(dads + moms*n)
