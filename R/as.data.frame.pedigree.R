@@ -4,17 +4,11 @@
 #'
 #' @param x pedigree object
 #' @param ... additional arguments passed to internal methods
-#' @return a data.frame with the data necessary to re-create the pedigree,
+#' @return A data.frame with the data necessary to re-create the pedigree,
 #' minus special relationships.
-#' #' @author Jason Sinnwell
+#' @author Jason Sinnwell
 #' @seealso \code{\link{pedigree}}
-#' @name as.data.frame.pedigree
-NULL
-#> NULL
-
-#' @rdname as.data.frame.pedigree
-#' @export
-
+#' @export as.data.frame.pedigree
 as.data.frame.pedigree <- function(x, ...) {
 
   dadid <- momid <- rep(0, length(x$id))

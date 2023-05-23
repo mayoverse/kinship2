@@ -1,44 +1,41 @@
 #' plot a legend for a pedigree
 #'
-#' circular legend for a pedigree as a key to the affection statuses
-#' 
-#' @param ped Pedigree data frame with ped (pedigree id), id (id of individual),
-#'   father (id of father), mother (id of mother), sex, affected (affection status), 
-#'   and avail (DNA availability).
+#' Circular legend for a pedigree as a key to the affection statuses.
+#'
+#' @param ped Pedigree data frame with ped (pedigree id), id (id of
+#' individual), father (id of father), mother (id of mother), sex, affected
+#' (affection status), and avail (DNA availability).
 #' @param labels names for the affected indicators
 #' @param edges Number of edges for each polygon. Higher numbers give better
 #' resolution for the circle
 #' @param radius radius (inches) of the circle
 #' @param location similar to how the location of a base-R legend is given,
-#' used only if new=TRUE.  A character string indicating which of the four corners
-#' to plot the legend, given by "bottomright", "bottomleft", "topleft", or "topright".
-#' @param new Logical. If TRUE, plot the legend on the current plot. Otherwise, plot
-#' on a separate plot.
-#' @param density Density of lines shaded in sections of the circle. These match the
-#' density settings for the plot.pedigree function.
-#' @param angle The angle at which lines are shaded in sections of the circle. These
-#' match the angles for the plot.pedigree function.
+#' used only if new=TRUE.  A character string indicating which of the four
+#' corners to plot the legend, given by "bottomright", "bottomleft", "topleft",
+#' or "topright".
+#' @param new Logical. If TRUE, plot the legend on the current plot. Otherwise,
+#' plot on a separate plot.
+#' @param density Density of lines shaded in sections of the circle. These
+#' match the density settings for the plot.pedigree function.
+#' @param angle The angle at which lines are shaded in sections of the circle.
+#' These match the angles for the plot.pedigree function.
 #' @param ... optional parameters for the plot function that apply to text
-#' 
-#' @examples 
-#' \dontrun{
-#' data(sample.ped)
-#' fam1 <- sample.ped[sample.ped$ped==1,]
-#' ped1 <- with(fam1, pedigree(id, father, mother, sex,
-#'              affected=cbind(avail,affected)))
-#' plot(ped1)
-#' pedigree.legend(ped1, location="bottomright", radius=.8)
-#' pedigree.legend(ped1, location="topleft", radius=.6, cex=1.2)
-#' pedigree.legend(ped1, new=FALSE)
-#' }
 #' @author Jason Sinnwell
 #' @seealso \code{\link{pedigree}}, \code{\link{plot.pedigree}}
-#' @name pedigree.legend
-NULL
-#> NULL
-
-#' @rdname pedigree.legend
-#' @export
+#' @examples
+#'
+#' \dontrun{
+#' data(sample.ped)
+#' fam1 <- sample.ped[sample.ped$ped == 1, ]
+#' ped1 <- with(fam1, pedigree(id, father, mother, sex, affected = cbind(avail,
+#'     affected)))
+#' plot(ped1)
+#' pedigree.legend(ped1, location = "bottomright", radius = 0.8)
+#' pedigree.legend(ped1, location = "topleft", radius = 0.6, cex = 1.2)
+#' pedigree.legend(ped1, new = FALSE)
+#' }
+#'
+#' @export pedigree.legend
 pedigree.legend <- function (ped, labels = dimnames(ped$affected)[[2]],
     edges = 200, radius=NULL, location="bottomright", new=TRUE,
     density=c(-1, 35,65,20),  angle = c(90, 65, 40, 0), ...) 

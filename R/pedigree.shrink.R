@@ -1,42 +1,39 @@
-#' Shrink pedigree object 
+#' Shrink pedigree object
 #'
-#' Shrink pedigree object to specified bit size with priority placed on trimming
-#' uninformative subjects. The algorithm is useful for getting a pedigree condensed to 
-#' a minimally informative size for algorithms or testing that are limited by size 
-#' of the pedigree.
-#' @param ped Pedigree object created by the pedigree function,  
-#' @param avail vector of binary availability status (0/1), i.e. having data, or sample available
-#' @param affected vector of binary affected status (0/1/NA). If NULL, uses first column of the pedigree object affected matrix.
+#' Shrink pedigree object to specified bit size with priority placed on
+#' trimming uninformative subjects. The algorithm is useful for getting a
+#' pedigree condensed to a minimally informative size for algorithms or testing
+#' that are limited by size of the pedigree.
+#'
+#' Iteratively remove subjects from the pedigree. The random removal of members
+#' was previously controlled by a seed argument, but we remove this, forcing
+#' users to control randomness outside the function. First remove uninformative
+#' subjects, i.e., unavailable (not genotyped) with no available descendants.
+#' Next, available terminal subjects with unknown phenotype if both parents
+#' available. Last, iteratively shrinks pedigrees by preferentially removing
+#' individuals (chosen at random if there are multiple of the same status): 1.
+#' Subjects with unknown affected status, 2. Subjects with unaffected affected
+#' status 3. Affected subjects.
+#'
+#' @aliases pedigree.shrink print.pedigree.shrink
+#' @param ped Pedigree object created by the pedigree function,
+#' @param avail vector of binary availability status (0/1), i.e. having data,
+#' or sample available
+#' @param affected vector of binary affected status (0/1/NA). If NULL, uses
+#' first column of the pedigree object affected matrix.
 #' @param maxBits Optional, the bit size for which to shrink the pedigree
 #' @param x pedigree.shrink object used in method functions
 #' @param ... optional arguments passed to internal functions
-#' @details 
-#' Iteratively remove subjects from the pedigree. The random removal of members
-#' was previously controlled by a seed argument, but we remove this, forcing users
-#' to control randomness outside the function. First remove uninformative 
-#' subjects, i.e., unavailable (not genotyped) with no available descendants.  
-#' Next, available terminal subjects with unknown phenotype if both parents 
-#' available. Last, iteratively shrinks pedigrees by preferentially removing 
-#' individuals (chosen at random if there are multiple of the same status): 
-#' 1. Subjects with unknown affected status, 
-#' 2. Subjects with unaffected affected status
-#' 3. Affected subjects.
-#' @examples 
-#' data(sample.ped)
-#' pedAll <- pedigree(sample.ped$id, sample.ped$father, sample.ped$mother,
-#'   sample.ped$sex, affected=cbind(sample.ped$affected, sample.ped$avail),
-#'   famid=sample.ped$ped)
-#' ped1 <- pedAll['1']
-#' pedigree.shrink(ped1, maxBits=12, avail=ped1$affected[,2])
-#' 
 #' @author Original by Dan Schaid, updated to kinship2 by Jason Sinnwell
 #' @seealso \code{\link{pedigree}}, \code{\link{plot.pedigree.shrink}}
-#' @name pedigree.shrink
-NULL
-#> NULL
-
-#' @rdname pedigree.shrink
-#' @export
+#' @examples
+#'
+#' data(sample.ped)
+#' pedAll <- pedigree(sample.ped$id, sample.ped$father, sample.ped$mother, sample.ped$sex, affected=cbind(sample.ped$affected, sample.ped$avail), famid=sample.ped$ped)
+#' ped1 <- pedAll['1']
+#' ped1trim <- pedigree.shrink(ped1, maxBits=12)
+#'
+#' @export pedigree.shrink
 pedigree.shrink <- function(ped, avail, affected=NULL, maxBits = 16) {
   if(!inherits(ped, "pedigree"))
     stop("Must be a pegigree object.\n")  

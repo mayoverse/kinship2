@@ -1,4 +1,18 @@
 # Automatically generated from all.nw using noweb
+
+#' Find subjects from a pedigree who are available and uninformative
+#'
+#' Identify subjects to remove from a pedigree who are available but
+#' non-informative.  This is the second step to remove subjects in
+#' pedigree.shrink if the pedigree does not meet the desired bit size.
+#'
+#' @param ped A pedigree object
+#' @param avail Vector of availability status (e.g. genotyped) 0/1 or
+#' TRUE/FALSE
+#' @return Vector of subject ids who can be removed by having lowest
+#' informativeness.
+#' @seealso \code{\link{pedigree.shrink}}
+#' @export findAvailNonInform
 findAvailNonInform <- function(ped, avail){
 
   ## trim persons who are available but not informative b/c not parent

@@ -1,12 +1,33 @@
 ## Extracted from checks.Rnw
 
 ## Kindepth: helper function used throughout computes the depth of
-# each subject in the pedigree.  
+# each subject in the pedigree.
 # For each subject this is defined as the maximal number of
-# generations of ancestors: how far to the farthest founder.  
-# This can be called with a pedigree object, or with the 
+# generations of ancestors: how far to the farthest founder.
+# This can be called with a pedigree object, or with the
 # full argument list.  In the former case we can simply skip a step
 
+
+#' Compute the depth of each subject in a pedigree
+#'
+#' Mark each person as to their depth in a pedigree; 0 for a founder, otherwise
+#' depth = 1 + max(father's depth, mother's depth)
+#'
+#' In the case of an inbred pedigree a perfect alignment obeying
+#' \code{extra=TRUE} may not exist.
+#'
+#' @param id Identification code for each individual
+#' @param dad.id Id code for the father
+#' @param mom.id Id code for the mother
+#' @param align If align=T, go one step further and try to make both parents of
+#' each child have the same depth.  (This is not always possible).  It helps
+#' the drawing program by lining up pedigrees that "join in the middle" via a
+#' marriage.
+#' @return an integer vector containing the depth for each subject
+#' @author Terry Therneau
+#' @seealso \code{\link{plot.pedigree}}
+#' @keywords genetics
+#' @export kindepth
 kindepth <- function(id, dad.id, mom.id, align=FALSE) {
     if ("pedigree" %in% class(id) || "pedigreeList" %in% class(id)) {
         didx <- id$findex

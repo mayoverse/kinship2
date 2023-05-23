@@ -6,7 +6,26 @@
 #  subfamilies.  Singleton subjects give a zero for family number.
 # This is needed to run "kinship" is a sensible fashion, one disjoint group
 #  at a time.
-# 
+
+#' Construct a family id from pedigree information
+#'
+#' Create a vector of length n, giving the family "tree" number of each
+#' subject.  If the pedigree is totally connected, then everyone will end up in
+#' tree 1, otherwise the tree numbers represent the disconnected subfamilies.
+#' Singleton subjects give a zero for family number.
+#'
+#' This command is depricated.  The kinship command now can be applied directly
+#' to pedigreeList objects.
+#'
+#' @param id Identifier for each subject in the set of pedigrees
+#' @param father.id Identifier for the father.  This will be 0 or "" for a
+#' founder.
+#' @param mother.id Identifer for the mother.
+#' @return An integer vector giving family groupings
+#' @author Terry Therneau
+#' @seealso \code{\link{makekinship}}
+#' @keywords genetics
+#' @export makefamid
 makefamid <- function(id, father.id, mother.id) {
     n <- length(id)
     mid  <- c(match(mother.id, id, nomatch=n+1), n+1)

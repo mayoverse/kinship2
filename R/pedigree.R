@@ -1,58 +1,56 @@
 #' Create a pedigree or pedigreeList object
 #'
 #' Create a pedigree or pedigreeList object
-#' 
+#'
+#'
+#' @aliases pedigree [.pedigreeList [.pedigree print.pedigree
+#' print.pedigreeList
 #' @param id Identification variable for individual
-#' @param dadid Identification variable for father. Founders' parents should be coded
-#' to NA, or another value specified by missid.
-#' @param momid Identification variable for mother. Founders' parents should be coded
-#' to NA, or another value specified by missid. 
-#' @param sex Gender of individual noted in `id'. Either character ("male","female",
-#' "unknown","terminated") or numeric (1="male", 2="female", 3="unknown", 4="terminated")
-#' data is allowed.  For character data the string may be truncated, and of arbitrary case.
-#' @param affected A variable indicating affection status.  A multi-column matrix
-#' can be used to give the status with respect to multiple traits. Logical, factor, and 
-#' integer types are converted to 0/1 representing unaffected and affected, respectively. 
-#' NAs are considered missing.
+#' @param dadid Identification variable for father. Founders' parents should be
+#' coded to NA, or another value specified by missid.
+#' @param momid Identification variable for mother. Founders' parents should be
+#' coded to NA, or another value specified by missid.
+#' @param sex Gender of individual noted in `id'. Either character
+#' ("male","female", "unknown","terminated") or numeric (1="male", 2="female",
+#' 3="unknown", 4="terminated") data is allowed.  For character data the string
+#' may be truncated, and of arbitrary case.
+#' @param affected A variable indicating affection status.  A multi-column
+#' matrix can be used to give the status with respect to multiple traits.
+#' Logical, factor, and integer types are converted to 0/1 representing
+#' unaffected and affected, respectively.  NAs are considered missing.
 #' @param status Censor/Vital status (0="censored", 1="dead")
-#' @param relation A matrix with 3 required columns (id1, id2, code) specifying special 
-#' relationship between pairs of individuals. Codes: 1=Monozygotic twin,  2=Dizygotic twin, 
-#' 3=Twin of unknown zygosity, 4=Spouse. (The last is necessary in order to place a marriage 
-#' with no children into the plot.) If famid is given in the call to create pedigrees, then
-#' famid needs to be in the last column of the relation matrix. Note for tuples of >= 3 with 
-#' a mixture of zygosities, the plotting is limited to showing pairwise zygosity of adjacent 
-#' subjects, so it is only necessary to specify the pairwise zygosity, in the order the subjects 
-#' are given or appear on the plot.
-#' @param famid An optional vector of family identifiers.  If it is present the result will 
-#' contain individual pedigrees for each family in the set, which can be extacted using 
-#' subscripts. Individuals need to have a unique id \emph{within} family.
-#' @param missid The founders are those with no father or mother in the pedigree. The dadid
-#' and momid values for these subjects will either be NA or the value of this variable. The 
-#' default for missid is 0 if the id variable is numeric, and "" (empty string) otherwise.
+#' @param relation A matrix with 3 required columns (id1, id2, code) specifying
+#' special relationship between pairs of individuals. Codes: 1=Monozygotic
+#' twin, 2=Dizygotic twin, 3=Twin of unknown zygosity, 4=Spouse. (The last is
+#' necessary in order to place a marriage with no children into the plot.) If
+#' famid is given in the call to create pedigrees, then famid needs to be in
+#' the last column of the relation matrix. Note for tuples of >= 3 with a
+#' mixture of zygosities, the plotting is limited to showing pairwise zygosity
+#' of adjacent subjects, so it is only necessary to specify the pairwise
+#' zygosity, in the order the subjects are given or appear on the plot.
+#' @param famid An optional vector of family identifiers.  If it is present the
+#' result will contain individual pedigrees for each family in the set, which
+#' can be extacted using subscripts. Individuals need to have a unique id
+#' \emph{within} family.
+#' @param missid The founders are those with no father or mother in the
+#' pedigree. The dadid and momid values for these subjects will either be NA or
+#' the value of this variable. The default for missid is 0 if the id variable
+#' is numeric, and "" (empty string) otherwise.
 #' @param x pedigree object in print and subset methods
 #' @param ... optional arguments passed to internal functions
 #' @param drop logical, used in subset function for dropping dimensionanlity
-#' @return An object of class \code{pedigree} or \code{pedigreeList} Containing the following items:
-#'  famid id findex mindex sex  affected status relation
-#'  @examples
-#'    data(minnbreast)
-#'    bpeds <- with(minnbreast,
-#'    pedigree(id, fatherid, motherid, sex, affected=proband, famid=famid))
-#'    bped.id8 <- bpeds['8']
-#'    print(bped.id8)
-#'    ## show this pedigree with mixed zygosity quadruplets
-#'    rel8 <- data.frame(id1=c(137,138,139), id2=c(138,139,140), code=c(1,2,2))
-#'    bped.id8 <- with(minnbreast[minnbreast$famid==8,],
-#'         pedigree(id, fatherid, motherid, sex, affected=proband, relation=rel8))
-#'    print(bped.id8)
+#' @return An object of class \code{pedigree} or \code{pedigreeList} Containing
+#' the following items: famid id findex mindex sex affected status relation
+#' @examples data(minnbreast) bpeds <- with(minnbreast, pedigree(id, fatherid,
+#' motherid, sex, affected=proband, famid=famid)) bped.id8 <- bpeds['8']
+#' print(bped.id8) ## show this pedigree with mixed zygosity quadruplets rel8
+#' <- data.frame(id1=c(137,138,139), id2=c(138,139,140), code=c(1,2,2))
+#' bped.id8 <- with(minnbreast[minnbreast$famid==8,], pedigree(id, fatherid,
+#' motherid, sex, affected=proband, relation=rel8)) print(bped.id8)
 #' @author Terry Therneau
-#' @seealso \code{\link{kinship}}, \code{\link{plot.pedigree}}, \code{\link{autohint}}
-#' @name pedigree
-NULL
-#> NULL
-
-#' @rdname pedigree
-#' @export
+#' @seealso \code{\link{kinship}}, \code{\link{plot.pedigree}},
+#' \code{\link{autohint}}
+#' @export pedigree
 pedigree <- function(id, dadid, momid, sex, affected, status, relation,
                      famid, missid) {
     n <- length(id)

@@ -1,56 +1,46 @@
 #' Legend Pedigree Plot
 #'
-#' Pedigree plot with ready-made legend along the bottom of the page to represent colors 
-#' and affection statuses
-#' 
-#' @param x Pedigree data frame with ped (pedigree id), id (id of individual),
-#'   father (id of father), mother (id of mother), sex, affected (affection status), 
-#'   and avail (DNA availability).
-#' 
-#' @param id Optional, a character string to replace the correspinding id for persons in the pedigree
-#' 
-#' @param affected A variable indicating affection status. A multi-column matrix can be used to
-#'    give the status with respect to multiple traits. Logical, factor, and integer types
-#'    are converted to 0/1 representing unaffected and affected, respectively. NAs are
-#'    considered missing.
-#' 
-#' @param affected.label Set labels for affection statuses
-#' 
-#' @param col  Colors for the plot symbol for each individual
-#' 
-#' @param col.label Named vector, with elements matching the unique color codes, the names are the labels used in the legend.
-#' 
-#' @param symbolsize Size of symbols (circle/square/triangle). Default is 1.0
+#' Pedigree plot with ready-made legend along the bottom of the page to
+#' represent colors and affection statuses
 #'
+#'
+#' @param x Pedigree data frame with ped (pedigree id), id (id of individual),
+#' father (id of father), mother (id of mother), sex, affected (affection
+#' status), and avail (DNA availability).
+#' @param id Optional, a character string to replace the correspinding id for
+#' persons in the pedigree
+#' @param affected A variable indicating affection status. A multi-column
+#' matrix can be used to give the status with respect to multiple traits.
+#' Logical, factor, and integer types are converted to 0/1 representing
+#' unaffected and affected, respectively. NAs are considered missing.
+#' @param affected.label Set labels for affection statuses
+#' @param col Colors for the plot symbol for each individual
+#' @param col.label Named vector, with elements matching the unique color
+#' codes, the names are the labels used in the legend.
+#' @param symbolsize Size of symbols (circle/square/triangle). Default is 1.0
 #' @param cex Character expansion size for labels and ids. Default is 1.0
 #' @param ... Character expansion size for labels and ids. Default is 1.0
-#' @examples 
+#' @author Jason Sinnwell, code contributed by Sara Achenbach
+#' @seealso \code{\link{pedigree}}, \code{\link{plot.pedigree}}
+#' @examples
+#'
 #' \dontrun{
 #' data(sample.ped)
-#' pedAll <- pedigree(sample.ped$id, sample.ped$father,
-#'    sample.ped$mother, sample.ped$sex,
-#'    affected=cbind(sample.ped$affected, sample.ped$avail),
-#'    famid=sample.ped$ped)
+#' pedAll <- pedigree(sample.ped$id, sample.ped$father, sample.ped$mother, sample.ped$sex, affected=cbind(sample.ped$affected, sample.ped$avail), famid=sample.ped$ped)
 #' ped1 <- pedAll["1"]
 #' legendPlot(ped1,  affected.label=c("cancer","available"))
 #' }
-#' @author Jason Sinnwell, code contributed by Sara Achenbach
-#' @seealso \code{\link{pedigree}}, \code{\link{plot.pedigree}}
-#' @name legendPlot
-NULL
-#> NULL
-
-#' @rdname legendPlot
-#' @export
+#'
+#' @export legendPlot
 legendPlot <- function(x, id=x$id, affected=x$affected, affected.label=NULL, col=1, col.label=NULL, symbolsize=.75, cex=.5, ...) {
 
   ## Need to deal with real char strings. Set stringsAsFactors back at end
-    
+
   ## check colors
   if(any(col %in% 0 | is.na(col))) {
     warning("missing or zero-value colors exist, will show blank symbol")
   }
- 
+
   ##Pedigree plot with dynamic legend of all affecteds on the bottom
   if(length(id) != nrow(as.data.frame(x))) {
     warning("id not equal to number in pedigree; id set to ped$id\n")

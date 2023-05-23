@@ -1,4 +1,27 @@
 # Automatically generated from all.nw using noweb
+
+#' Find a single person to trim from a pedigree whose is available
+#'
+#' Finds one subject from among available non-parents with indicated affection
+#' status
+#'
+#' When used within pedigree.shrink, this function is called with the first
+#' affected indicator, if the affected item in the pedigree is a matrix of
+#' multiple affected indicators.
+#'
+#' @param ped A pedigree objects, with id (subject ID), findex (father index),
+#' mindex (mother index)
+#' @param avail Vector of availability status (e.g., genotyped) 0/1 or
+#' TRUE/FALSE
+#' @param affstatus Vector of affection status 0/1 or TRUE/FALSE.
+#' @return A list is returned with the following components
+#'
+#' \item{ped}{ Dataframe with trimmed subject removed } \item{idTrimmed}{
+#' Vector of IDs of trimmed individuals } \item{isTrimmed}{ logical value
+#' indicating whether pedigree has been trimmed } \item{bitSize}{ Bit size of
+#' the trimmed pedigree }
+#' @seealso \code{\link{pedigree.shrink}}
+#' @export findAvailAffected
 findAvailAffected <- function(ped, avail, affstatus)
   ## Try trimming one subject by affection status indicator
   ## If ties for bits removed, randomly select one of the subjects
