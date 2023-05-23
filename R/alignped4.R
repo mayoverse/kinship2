@@ -1,4 +1,5 @@
 # Automatically generated from all.nw using noweb
+#TODO add Docstring
 alignped4 <- function(rval, spouse, level, width, align) {
     
     ## Doc: alignped4 -part1, spacing across page

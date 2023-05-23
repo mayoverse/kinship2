@@ -1,5 +1,5 @@
 # Automatically generated from all.nw using noweb
-
+#TODO add documentation
 is.parent <- function(id, findex, mindex){
   # determine subjects who are parents
   # assume input of father/mother indices, not ids

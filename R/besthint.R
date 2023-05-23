@@ -1,4 +1,3 @@
-#
 # When computer time is cheap, use this routine to get a "best" pedigree.
 #  The autohint routine will rearrange sibling order, but not founder order.
 # This calls autohint with every possible founder order, and finds that
@@ -7,7 +6,7 @@
 #      + wt[2] * lengths of dotted arcs
 #      + wt[3] * lengths of parent-child bends
 # perfect: if anything meets this stress level, keep it
-# 
+#TODO add Docstring
 besthint <- function(ped, wt=c(1000, 10, 1), tolerance=0) {
     #
     # find founders married to founders

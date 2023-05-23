@@ -1,5 +1,5 @@
 # Automatically generated from all.nw using noweb
-
+#TODO add documentation
 ped2df <- function(ped) {
   df <- data.frame(id=ped$id, findex=ped$findex, mindex=ped$mindex, sex=ped$sex)
   if(!is.null(ped$affected))

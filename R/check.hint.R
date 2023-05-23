@@ -7,6 +7,7 @@
 #after the recent rewrite.
 #Users can introduce problems as well if they modify the hints.
 
+#TODO add Docstring
 check.hint <- function(hints, sex) {
     if (is.null(hints$order)) stop("Missing order component")
     if (!is.numeric(hints$order)) stop("Invalid order component")

@@ -1,7 +1,7 @@
 # Automatically generated from all.nw using noweb
 
 ## Documentation with comments in align_code_details vignette: alignped2 section
-
+#TODO add Docstring
 alignped2 <- function(x, dad, mom, level, horder, packed,
                       spouselist) {
     x <- x[order(horder[x])]  # Use the hints to order the sibs

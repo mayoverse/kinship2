@@ -1,4 +1,5 @@
 # Automatically generated from all.nw using noweb
+#TODO add Docstring
 alignped3 <- function(x1, x2, packed, space=1) {
     maxcol <- max(x1$n + x2$n)
     maxlev <- length(x1$n)

@@ -1,6 +1,6 @@
-#
 # An attempt at a founder score
-#
+
+#TODO add documentation
 fscore.pedigree <- function(ped) {
     n <- length(ped$depth)
     nid <- 1:n
