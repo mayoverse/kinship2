@@ -1,8 +1,8 @@
 #' Legend Pedigree Plot
 #'
+#' @description
 #' Pedigree plot with ready-made legend along the bottom of the page to
 #' represent colors and affection statuses
-#'
 #'
 #' @param x Pedigree data frame with ped (pedigree id), id (id of individual),
 #' father (id of father), mother (id of mother), sex, affected (affection
@@ -20,17 +20,21 @@
 #' @param symbolsize Size of symbols (circle/square/triangle). Default is 1.0
 #' @param cex Character expansion size for labels and ids. Default is 1.0
 #' @param ... Character expansion size for labels and ids. Default is 1.0
-#' @author Jason Sinnwell, code contributed by Sara Achenbach
-#' @seealso \code{\link{pedigree}}, \code{\link{plot.pedigree}}
+#'
+#' @return A pedigree plot with a legend
+#'
 #' @examples
 #'
 #' \dontrun{
 #' data(sample.ped)
-#' pedAll <- pedigree(sample.ped$id, sample.ped$father, sample.ped$mother, sample.ped$sex, affected=cbind(sample.ped$affected, sample.ped$avail), famid=sample.ped$ped)
+#' pedAll <- with(sample.ped, pedigree(id, father, mother, sex,
+#'                affected=cbind(affected, avail), famid=ped)
 #' ped1 <- pedAll["1"]
 #' legendPlot(ped1,  affected.label=c("cancer","available"))
 #' }
 #'
+#' @author Jason Sinnwell, code contributed by Sara Achenbach
+#' @seealso \code{\link{pedigree}}, \code{\link{plot.pedigree}}
 #' @export legendPlot
 legendPlot <- function(x, id=x$id, affected=x$affected, affected.label=NULL, col=1, col.label=NULL, symbolsize=.75, cex=.5, ...) {
 
@@ -70,8 +74,8 @@ legendPlot <- function(x, id=x$id, affected=x$affected, affected.label=NULL, col
       stop("affected.label not equal to the number of affected statuses.\n")
     }
   }
- 
-  ## Legend Configuration, a nuclear family with a sibship of 
+
+  ## Legend Configuration, a nuclear family with a sibship of
   ## all colors/affection statuses. Parents will be plotted  over
   if(!(ncol(affected)<2 & length(col.label) < 2)) {
     legdf <- rbind.data.frame(
@@ -94,25 +98,24 @@ legendPlot <- function(x, id=x$id, affected=x$affected, affected.label=NULL, col
     names(legdf) <- c("id","dadid","momid","sex", "idlabel")
     legped <- with(legdf, pedigree(as.numeric(id),as.numeric(dadid),as.numeric(momid),
                                    as.numeric(sex), affected=legaff))
-    
+
     ## plot the legend nuclear family on the bottom
     par(mar=c(0,2,2,2), oma=c(0,1,0,1))
     plot(legped, id=legdf$idlabel, col=legend.col,
             density=rep(-1,ncol(legaff)), angle=rep(90,ncol(legaff)),
             symbolsize=symbolsize, cex=cex, packed=TRUE,  mar=c(0,2,2,2), ...)
          # fig=c(0,1,0,1/15),new=FALSE,keep.par=TRUE, ...)
- 
- ##DELETE PARENTS FROM LEGEND KEY  (or write over)   
+
+ ##DELETE PARENTS FROM LEGEND KEY  (or write over)
     polygon(y=c(-1,-1,1.999,1.999), x=c(-1,8,8,-1), col='white', border=NA)
- ##End Legend Configuration  
-    
+ ##End Legend Configuration
+
  ##BREAKING UP AREA TO ADD TRAITS
     par(new=TRUE) # mar=c(4.5,1,1,1))
   }
 
  ##PLOTTING THE ACTUAL PEDIGREE FOR THIS FAMILY
   plot(x, density=c(-1,-1,-1,-1),angle=c(90,90,90,90),
-       col=col, id=id, symbolsize=symbolsize, cex=cex, packed=FALSE, 
+       col=col, id=id, symbolsize=symbolsize, cex=cex, packed=FALSE,
        keep.par=TRUE,fig=c(0,1,1/50,1), new=TRUE, mar=c(3.5,1,1.5,1),new=TRUE, ...)
 }
- 

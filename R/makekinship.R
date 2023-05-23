@@ -2,10 +2,12 @@
 
 #' Create a sparse kinship matrix
 #'
+#' @description
 #' Compute the overall kinship matrix for a collection of families, and store
 #' it efficiently.
 #'
-#' This command is depricated.  The kinship command now can be applied directly
+#' @details
+#' This command is deprecated.  The kinship command now can be applied directly
 #' to pedigreeList objects.
 #'
 #' @param famid a vector of family identifiers
@@ -14,9 +16,9 @@
 #' @param mother.id for each subject, the identifier of thier biological mother
 #' @param unrelated subjects with this family id are considered to be unrelated
 #' singletons, i.e., not related to each other or to anyone else.
+#'
 #' @return a sparse kinship matrix of class \code{bdsmatrix}
-#' @seealso \code{\link{kinship}}, \code{\link{makefamid}}
-#' @keywords genetics
+#'
 #' @examples
 #'
 #' # Data set from a large family study of breast cancer
@@ -43,10 +45,13 @@
 #' > kin2 <- kin1[femindex, femindex]
 #' #
 #' # Note that "femindex <- match(femid, dimnames(kin1)[[1]])" is wrong, since
-#' #  then kin1[femindex, femindex] might improperly reorder the rows/cols 
-#' #  (if families were not contiguous in cdata).  
+#' #  then kin1[femindex, femindex] might improperly reorder the rows/cols
+#' #  (if families were not contiguous in cdata).
 #' # However sort(match(femid, dimnames(kin1)[[1]])) would be okay.
 #' }
+#'
+#' @seealso \code{\link{kinship}}, \code{\link{makefamid}}
+#' @keywords genetics
 #' @export makekinship
 makekinship <- function(famid, id, father.id, mother.id, unrelated=0) {
     n <- length(famid)
@@ -65,19 +70,19 @@ makekinship <- function(famid, id, father.id, mother.id, unrelated=0) {
     idlist <- id            # will be overwritten, but this makes it the
                             #  correct data type and length
     counts <- table(famid)
-    cumcount <- cumsum(counts)    
+    cumcount <- cumsum(counts)
      if (any(famid==unrelated)) {
         # Assume that those with famid of 0 are unrelated uniques
         #   (usually the marry-ins)
         temp <- match(unrelated, names(counts))
-        nzero <- counts[temp]    
+        nzero <- counts[temp]
         counts <- counts[-temp]
         famlist <- famlist[famlist != unrelated]
         idlist[1:nzero] <- id[famid== unrelated]
         cumcount <- cumsum(counts) + nzero
         }
     else nzero <- 0
-    
+
     mlist <- vector('list', length(counts))
     for (i in 1:length(counts)) {
         who <- (famid == famlist[i])

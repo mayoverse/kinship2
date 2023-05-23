@@ -1,61 +1,44 @@
 ## Extracted from checks.Rnw
 
-# This routine checks out a family id, by trying to construct its own
-#  and comparing the results
-#
-# The input argument "newfam" is optional: if you've already created this
-#   vector for other reasons, then putting the arg in saves time.
-#
-# Output is a dataframe with columns:
-#   famid: the family id, as entered into the data set
-#   n    : number of subjects in the family
-#   unrelated: number of them that appear to be unrelated to anyone else 
-#          in the entire pedigree set.  This is usually marry-ins with no 
-#          children (in the pedigree), and if so are not a problem.
-#   split : number of unique "new" family ids.
-#            if this is 0, it means that no one in this "family" is related to
-#                   anyone else (not good)
-#            1 = everythings is fine
-#            2+= the family appears to be a set of disjoint trees.  Are you
-#                 missing some of the people?
-#   join : number of other families that had a unique famid, but are actually
-#            joined to this one.  0 is the hope.
-#
-#  If there are any joins, then an attribute "join" is attached.  It will be
-#   a matrix with famid as row labels, new-family-id as the columns, and
-#   the number of subjects as entries.
-
+#' Check family
+#'
+#' @description
 #' Error check for a family classification
 #'
+#' @details
 #' Given a family id vector, also compute the familial grouping from first
 #' principles using the parenting data, and compare the results.
 #'
 #' The \code{makefamid} function is used to create a de novo family id from the
 #' parentage data, and this is compared to the family id given in the data.
 #'
-#' @param famid a vector of family identifiers
-#' @param id a vector of unique subject identifiers
-#' @param father.id vector containing the id of the biological father
-#' @param mother.id vector containing the id of the biological mother
-#' @param newfam the result of a call to \code{makefamid}. If this has allready
+#' If there are any joins, then an attribute "join" is attached.
+#' It will be a matrix with famid as row labels, new-family-id as the columns,
+#' and the number of subjects as entries.
+#'
+#' @param famid A vector of family identifiers
+#' @param id A vector of unique subject identifiers
+#' @param father.id Vector containing the id of the biological father
+#' @param mother.id Vector containing the id of the biological mother
+#' @param newfam The result of a call to \code{makefamid}. If this has already
 #' been computed by the user, adding it as an argument shortens the running
 #' time somewhat.
+#'
 #' @return a data frame with one row for each unique family id in the
-#' \code{famid} argument. Components of the output are \item{famid}{ the family
-#' id, as entered into the data set } \item{n}{ number of subjects in the
-#' family } \item{unrelated}{ number of them that appear to be unrelated to
+#' \code{famid} argument. Components of the output are:
+#' \item{famid}{ The family id, as entered into the data set }
+#' \item{n}{ Number of subjects in the family }
+#' \item{unrelated}{ Number of them that appear to be unrelated to
 #' anyone else in the entire pedigree set.  This is usually marry-ins with no
-#' children (in the pedigree), and if so are not a problem. } \item{split}{
-#' number of unique "new" family ids. If this is 0, it means that no one in
-#' this "family" is related to anyone else (not good); 1 = everythings is fine;
-#' 2+= the family appears to be a set of disjoint trees.  Are you missing some
-#' of the people? } \item{join}{ number of other families that had a unique
-#' famid, but are actually joined to this one.  0 is the hope. If there are any
-#' joins, then an attribute "join" is attached.  It will be a matrix with famid
-#' as row labels, new-family-id as the columns, and the number of subjects as
-#' entries.  }
-#' @seealso \code{\link{makefamid}}, \code{\link{makekinship}}
-#' @keywords genetics
+#' children (in the pedigree), and if so are not a problem. }
+#' \item{split}{ Number of unique "new" family ids.
+#' 0 = no one in this "family" is related to anyone else (not good)
+#' 1 = everythings is fine
+#' 2+= the family appears to be a set of disjoint trees.
+#' Are you missing some of the people? }
+#' \item{join}{ Number of other families that had a unique
+#' famid, but are actually joined to this one.  0 is the hope. }
+#'
 #' @examples
 #'
 #' # use 2 sample peds
@@ -70,13 +53,15 @@
 #' ## check assigning them same ped id
 #' fcheck.combined <- with(sample.ped, familycheck(rep(1,nrow(sample.ped)), id, father, mother))
 #' fcheck.combined
-#' 
+#'
 #' #make person 120's father be her son.
 #' sample.ped[20,3] <- 131
 #' fcheck1.bad <- try({with(sample.ped, familycheck(ped, id, father, mother))}, silent=FALSE)
 #'
 #' ## fcheck1.bad is a try-error
 #'
+#' @seealso \code{\link{makefamid}}, \code{\link{makekinship}}
+#' @keywords genetics
 #' @export familycheck
 familycheck <- function(famid, id, father.id, mother.id, newfam) {
     if (is.numeric(famid) && any(is.na(famid)))

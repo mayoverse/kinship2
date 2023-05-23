@@ -1,7 +1,9 @@
-#' plot pedigrees
+#' Plot pedigrees
 #'
+#' @description
 #' plot objects created with the pedigree function
 #'
+#' @details
 #' Two important parameters control the looks of the result.  One is the user
 #' specified maximum width.  The smallest possible width is the maximum number
 #' of subjects on a line, if the user's suggestion %' is too low it is
@@ -59,41 +61,41 @@
 #' least \code{pconnect} people.  Setting this option to a large number will
 #' force the line to connect at the midpoint of the children.
 #' @param \dots Extra options that feed into the plot function.
-#' @return an invisible list containing \item{plist}{a list that contains all
-#' the position information for plotting the pedigree.  This will useful for
-#' further functions (yet unwritten) for manipulating the plot, but likely not
-#' to an ordinary user.} \item{x,y}{the x an and y plot coordinates of each
-#' subject in the plot. The coordinate is for the top of the plotted symbol.
+#'
+#' @return an invisible list containing
+#' \item{plist}{a list that contains all the position information for
+#' plotting the pedigree. This will useful for further functions (yet unwritten)
+#' for manipulating the plot, but likely not to an ordinary user.}
+#' \item{x,y}{the x an and y plot coordinates of each subject in the plot.
+#' The coordinate is for the top of the plotted symbol.
 #' These will be in the same order as the input pedigree.  If someone in the
 #' pedigree does not appear in the plot their coordinates will be NA.  If they
 #' appear multiple times one of the instances is chosen.  (Which one is a
 #' function of the order in which the pedigree was constructed.)}
-#' \item{boxh}{the height of the symbol, in user coordinates} \item{boxw}{the
-#' width of the symbol} \item{call}{a copy of the call that generated the plot}
-#' @section Side Effects: creates plot on current plotting device.
-#' @seealso \code{\link{pedigree}}
-#' @keywords hplot, genetics
-#' @examples
+#' \item{boxh}{the height of the symbol, in user coordinates}
+#' \item{boxw}{the width of the symbol}
+#' \item{call}{a copy of the call that generated the plot}
 #'
+#' @examples
 #' data(sample.ped)
 #'
-#' pedAll <- pedigree(sample.ped$id, sample.ped$father, sample.ped$mother, 
-#'        sample.ped$sex,  #affected=sample.ped$affected,
-#'        affected=cbind(sample.ped$affected, sample.ped$avail), 
-#'        famid=sample.ped$ped)
+#' pedAll <- with(sample.ped, pedigree(id, father, mother,
+#'        sex,  affected=cbind(affected, avail),
+#'        famid=ped)
 #'
 #' ped2 <- pedAll['2']
 #'
 #' print(ped2)
 #'
-#' ## plot(ped2)
-#'
+#' @section Side Effects: creates plot on current plotting device.
+#' @seealso \code{\link{pedigree}}
+#' @keywords hplot, genetics
 #' @export plot.pedigree
-plot.pedigree <- function(x, id = x$id, status = x$status, 
-                          affected = x$affected, 
+plot.pedigree <- function(x, id = x$id, status = x$status,
+                          affected = x$affected,
                           cex = 1, col = 1,
-                          symbolsize = 1, branch = 0.6, 
-                          packed = TRUE, align = c(1.5,2), width = 8, 
+                          symbolsize = 1, branch = 0.6,
+                          packed = TRUE, align = c(1.5,2), width = 8,
                           density=c(-1, 35,65,20), #mar=c(3.1, 1, 3.1, 1),
                           angle=c(90,65,40,0), keep.par=FALSE,
                           subregion, pconnect=.5, ...)
@@ -101,14 +103,14 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
     ## As of 2020-09, documention in no-web directory is moved to here and a vignette.
     ## Relevant sections in the vignette are marked in this code with
        ## Doc: followed by the section title
-    
+
     Call <- match.call()
     n <- length(x$id)
     if(n < 3) {
         stop("Cannot plot pedigree with fewer than 3 subjects")
     }
     ## Doc: This portion is documented as the setup-data
-    
+
     if(is.null(status))
       status <- rep(0, n)
     else {
@@ -142,7 +144,7 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
             if (is.logical(affected)) affected <- 1* affected
             if (ncol(affected) > length(angle) || ncol(affected) > length(density))
                 stop("More columns in the affected matrix than angle/density values")
-            } 
+            }
         else {
             if (length(affected) != n)
                 stop("Wrong length for affected")
@@ -173,14 +175,14 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
             if (!any(plist$pos[i,]>=subreg[1] & plist$pos[i,] <= subreg[2]))
                 stop(paste("No subjects retained on level", i))
             }
-        
+
         nid2 <- plist$nid[lkeep,]
         n2   <- plist$n[lkeep]
         pos2 <- plist$pos[lkeep,]
         spouse2 <- plist$spouse[lkeep,]
         fam2 <- plist$fam[lkeep,]
         if (!is.null(plist$twins)) twin2 <- plist$twins[lkeep,]
-        
+
         for (i in 1:nrow(nid2)) {
             keep <- which(pos2[i,] >=subreg[1] & pos2[i,] <= subreg[2])
             nkeep <- length(keep)
@@ -198,7 +200,7 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
                     stop("A subregion cannot separate parents")
                 }
             }
-        
+
         n <- max(n2)
         out <- list(n= n2[1:n], nid=nid2[,1:n, drop=F], pos=pos2[,1:n, drop=F],
                     spouse= spouse2[,1:n, drop=F], fam=fam2[,1:n, drop=F])
@@ -236,7 +238,7 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
     ## Doc:  subsection: drawbox
     circfun <- function(nslice, n=50) {
         nseg <- ceiling(n/nslice)  #segments of arc per slice
-        
+
         theta <- -pi/2 - seq(0, 2*pi, length=nslice +1)
         out <- vector('list', nslice)
         for (i in 1:nslice) {
@@ -284,7 +286,7 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
             }
         out
     } ## end polyfun()
-    
+
     if (ncol(affected)==1) {
         polylist <- list(
             square = list(list(x=c(-1, -1, 1,1)/2,  y=c(0, 1, 1, 0))),
@@ -313,26 +315,26 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
                         y + (polylist[[sex]])[[i]]$y *boxh,
                         col=NA, border=col)
             }
-                
+
                 if(affected[i]==1) {
                   ## else {
                   polygon(x + (polylist[[sex]])[[i]]$x * boxw,
                           y + (polylist[[sex]])[[i]]$y * boxh,
-                          col=col, border=col, density=density[i], angle=angle[i])            
+                          col=col, border=col, density=density[i], angle=angle[i])
                 }
                 if(affected[i] == -1) {
                   polygon(x + (polylist[[sex]])[[i]]$x * boxw,
                           y + (polylist[[sex]])[[i]]$y * boxh,
                           col=NA, border=col)
-                  
+
                   midx <- x + mean(range(polylist[[sex]][[i]]$x*boxw))
                   midy <- y + mean(range(polylist[[sex]][[i]]$y*boxh))
-                 
+
                   points(midx, midy, pch="?", cex=min(1, cex*2/length(affected)))
                 }
-                
+
               }
-            if (status==1) segments(x- .6*boxw, y+1.1*boxh, 
+            if (status==1) segments(x- .6*boxw, y+1.1*boxh,
                                     x+ .6*boxw, y- .1*boxh,)
             ## Do a black slash per Beth, old line was
             ##        x+ .6*boxw, y- .1*boxh, col=col)
@@ -346,7 +348,7 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
             drawbox(plist$pos[i,j], i, sex[k], affected[k,],
                     status[k], col[k], polylist, density, angle,
                     boxw, boxh)
-            text(plist$pos[i,j], i + boxh + labh*.7, id[k], cex=cex, 
+            text(plist$pos[i,j], i + boxh + labh*.7, id[k], cex=cex,
                adj=c(.5,1), ...)
             }
     }
@@ -356,13 +358,13 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
         tempy <- i + boxh/2
         if(any(plist$spouse[i,  ]>0)) {
             temp <- (1:maxcol)[plist$spouse[i,  ]>0]
-            segments(plist$pos[i, temp] + boxw/2, rep(tempy, length(temp)), 
+            segments(plist$pos[i, temp] + boxw/2, rep(tempy, length(temp)),
                      plist$pos[i, temp + 1] - boxw/2, rep(tempy, length(temp)))
 
             temp <- (1:maxcol)[plist$spouse[i,  ] ==2]
             if (length(temp)) { #double line for double marriage
                 tempy <- tempy + boxh/10
-                segments(plist$pos[i, temp] + boxw/2, rep(tempy, length(temp)), 
+                segments(plist$pos[i, temp] + boxw/2, rep(tempy, length(temp)),
                        plist$pos[i, temp + 1] - boxw/2, rep(tempy, length(temp)))
                 }
         }
@@ -371,7 +373,7 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
     for(i in 2:maxlev) {
         zed <- unique(plist$fam[i,  ])
         zed <- zed[zed > 0]  #list of family ids
-        
+
         for(fam in zed) {
             xx <- plist$pos[i - 1, fam + 0:1]
             parentx <- mean(xx)   #midpoint of parents
@@ -390,7 +392,7 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
                 }
             yy <- rep(i, sum(who))
             segments(plist$pos[i,who], yy, target, yy-legh)
-                      
+
             ## draw midpoint MZ twin line
             if (any(plist$twins[i,who] ==1)) {
               who2 <- which(plist$twins[i,who] ==1)
@@ -408,7 +410,7 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
                 yy <- rep(i, length(who2)) - legh/2
                 text((temp1+temp2)/2, yy, '?')
                 }
-            
+
             # Add the horizontal line 
             segments(min(target), i-legh, max(target), i-legh)
 
@@ -416,7 +418,7 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
             #  pconnect a large number, forcing the bottom of each parent-child
             #  line to be at the center of the bar uniting the children.
             if (diff(range(target)) < 2*pconnect) x1 <- mean(range(target))
-            else x1 <- pmax(min(target)+ pconnect, pmin(max(target)-pconnect, 
+            else x1 <- pmax(min(target)+ pconnect, pmin(max(target)-pconnect,
                                                         parentx))
             y1 <- i-legh
             if(branch == 0)
@@ -425,12 +427,12 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
                 y2 <- (i-1) + boxh/2
                 x2 <- parentx
                 ydelta <- ((y2 - y1) * branch)/2
-                segments(c(x1, x1, x2), c(y1, y1 + ydelta, y2 - ydelta), 
+                segments(c(x1, x1, x2), c(y1, y1 + ydelta, y2 - ydelta),
                          c(x1, x2, x2), c(y1 + ydelta, y2 - ydelta, y2))
                 }
             }
         } ## end of parent-child lines
-    
+
     ## Doc: 4 arcs for multiple instances of subj
     arcconnect <- function(x, y) {
         xx <- seq(x[1], x[2], length = 15)
@@ -454,10 +456,10 @@ plot.pedigree <- function(x, id = x$id, status = x$status,
     ## Doc: finish/Final
     ckall <- x$id[is.na(match(x$id,x$id[plist$nid]))]
     if(length(ckall>0)) cat('Did not plot the following people:',ckall,'\n')
-        
+
     if(!keep.par) par(oldpar)
 
     tmp <- match(1:length(x$id), plist$nid)
     invisible(list(plist=plist, x=plist$pos[tmp], y= row(plist$pos)[tmp],
-                   boxw=boxw, boxh=boxh, call=Call))        
+                   boxw=boxw, boxh=boxh, call=Call))
 }

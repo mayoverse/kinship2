@@ -1,21 +1,31 @@
-# An attempt at a founder score
-
 #TODO add documentation
+
+#' Founder score
+#'
+#' @description
+#' Attempt at a founder score
+#'
+#' @param ped
+#'
+#' @return
+#'
+#' @examples
+#' @seealso \code{\link{}}, \code{\link{}}
+#' @keywords
+#' @export fscore.pedigree
 fscore.pedigree <- function(ped) {
     n <- length(ped$depth)
     nid <- 1:n
     dad<- match(ped$dadid, ped$id, nomatch=0)
-    mom<- match(ped$momid, ped$id, nomatch=0) 
+    mom<- match(ped$momid, ped$id, nomatch=0)
     sex<- 1*(ped$sex=='female')
     level <- ped$depth +1
-	
 
 
     # Currently, the alignment routine requires that you have either
     #  0 parents or 2 parents, not 1.
     if (any(dad==0 & mom>0) || any(dad>0 & mom==0))
             stop("Everyone must have 0 parents or 2 parents, not just one")
-    
 
     pfun1 <- function(id, dad, mom, sex) { 
         # This function returns a list of all founders above a given id
@@ -23,7 +33,7 @@ fscore.pedigree <- function(ped) {
             if (sex[id]==1) return(id)  #I am a founder
             else return(NULL)
             }
-        else return(c(Recall(dad[id], dad, mom, sex), 
+        else return(c(Recall(dad[id], dad, mom, sex),
                       Recall(mom[id], dad, mom, sex)))
         }
 
@@ -41,13 +51,13 @@ fscore.pedigree <- function(ped) {
     temp1 <- ifelse(ped$sex=='male', (1:n)*n + temp1, 1:n + n*temp1)
     hash <- c(hash, temp1[sorder!=0]) #those with a spouse hint
     if (!is.null(ped$relation) && any(ped$relation[,3]==4)) {
-	who <- (ped$relation[,3]==4)  # add spouses from relationship list
-	indx <- ped$relation[who,1]   # id of the first spouse
-	temp1 <- ifelse(ped$sex[indx]=='male', n*indx + ped$relation[who,2],
-			                       indx + n*ped$relation[who,2])
-	hash <- c(temp1, hash) #being first is important -- it controls plot
-	                       # order per the documentation
-	}
+    who <- (ped$relation[,3]==4)  # add spouses from relationship list
+    indx <- ped$relation[who,1]   # id of the first spouse
+    temp1 <- ifelse(ped$sex[indx]=='male', n*indx + ped$relation[who,2],
+                                   indx + n*ped$relation[who,2])
+    hash <- c(temp1, hash) #being first is important -- it controls plot
+                           # order per the documentation
+    }
 
     hash <- unique(hash)              #eliminate duplicates
     hash <- hash -1                   #change to range of 0 to n-1 (for %%)
@@ -77,7 +87,7 @@ fscore.pedigree <- function(ped) {
             }
         temp <- matrix(unlist(lapply(flist, tfun, ord=ord)), nrow=4)
         temp.min <- apply(temp,2,min)
-        temp.which <- apply(temp== matrix(rep(temp.min,each=4), nrow=4), 2, 
+        temp.which <- apply(temp== matrix(rep(temp.min,each=4), nrow=4), 2,
                             function(x) min(c(which(x))))
         cbind(temp.min, temp.which)
         }
@@ -86,5 +96,3 @@ fscore.pedigree <- function(ped) {
     browser()
     npair
     }
-
-    

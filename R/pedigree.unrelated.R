@@ -2,9 +2,13 @@
 ## Authors: Dan Schaid, Shannon McDonnell
 ## Updated by Jason Sinnwell
 
+#' Get unrelated subjects
+#'
+#' @description
 #' Determine set of maximum number of unrelated available subjects from a
 #' pedigree
 #'
+#' @details
 #' Determine set of maximum number of unrelated available subjects from a
 #' pedigree, given vectors id, father, and mother for a pedigree structure, and
 #' status vector of T/F for whether each subject is available (e.g. has DNA)
@@ -20,10 +24,10 @@
 #' @param ped A pedigree objects with unique id, father index, mother index
 #' @param avail Vector of availability status (e.g., genotyped) 0/1 or
 #' TRUE/FALSE
-#' @return A vector of the ids of subjects that are unrelated.
-#' @seealso \code{\link{kinship}}, \code{\link{pedigree}}
-#' @examples
 #'
+#' @return A vector of the ids of subjects that are unrelated.
+
+#' @examples
 #' data(sample.ped)
 #' fam1 <- sample.ped[sample.ped$ped==1,]
 #'
@@ -61,6 +65,7 @@
 #' ##[1] "214" "203"
 #' id2
 #'
+#' @seealso \code{\link{kinship}}, \code{\link{pedigree}}
 #' @export pedigree.unrelated
 pedigree.unrelated <- function(ped, avail) {
 
@@ -86,41 +91,40 @@ pedigree.unrelated <- function(ped, avail) {
 
   id <- ped$id
   avail <- as.integer(avail)
-  
+
   kin <- kinship(ped)
-  
+
   ord <- order(id)
   id <- id[ord]
   avail <- as.logical(avail[ord])
   kin <- kin[ord,][,ord]
-  
+
   rord <- order(runif(nrow(kin)))
-  
+
   id <- id[rord]
   avail <- avail[rord]
   kin <- kin[rord,][,rord]
-  
+
   id.avail <- id[avail]
   kin.avail <- kin[avail,,drop=FALSE][,avail,drop=FALSE]
-  
+
   diag(kin.avail) <- 0
-  
+
   while(any(kin.avail > 0))  {
     nr <- nrow(kin.avail)
     indx <- 1:nrow(kin.avail)
     zero.count <- apply(kin.avail==0, 1, sum)
-    
+
     mx <- max(zero.count[zero.count < nr])
     mx.zero <- indx[zero.count == mx][1]
-    
+
     exclude <- indx[kin.avail[, mx.zero] > 0]
-    
+
     kin.avail <- kin.avail[- exclude, , drop=FALSE][, -exclude, drop=FALSE]
-    
+
   }
-  
+
   choice <- sort(dimnames(kin.avail)[[1]])
-  
+
   return(choice)
 }
-

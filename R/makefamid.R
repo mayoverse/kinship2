@@ -1,14 +1,11 @@
-# $Id: makefamid.s,v 1.7 2003/01/07 15:47:08 therneau Exp $
-#
-# Create a vector of length n, giving the family "tree" number of
-#  each subject.  If the pedigree is totally connected, then everyone will
-#  end up in tree 1, otherwise the tree numbers represent the disconnected
-#  subfamilies.  Singleton subjects give a zero for family number.
-# This is needed to run "kinship" is a sensible fashion, one disjoint group
-#  at a time.
+# $Id: makefamid.s,v 1.7 2003/01/07 15:47:08 therneau Exp
 
+#' Get family id
+#'
+#' @description
 #' Construct a family id from pedigree information
 #'
+#' @details
 #' Create a vector of length n, giving the family "tree" number of each
 #' subject.  If the pedigree is totally connected, then everyone will end up in
 #' tree 1, otherwise the tree numbers represent the disconnected subfamilies.
@@ -21,7 +18,9 @@
 #' @param father.id Identifier for the father.  This will be 0 or "" for a
 #' founder.
 #' @param mother.id Identifer for the mother.
+#'
 #' @return An integer vector giving family groupings
+#'
 #' @author Terry Therneau
 #' @seealso \code{\link{makekinship}}
 #' @keywords genetics
@@ -54,18 +53,18 @@ makefamid <- function(id, father.id, mother.id) {
     temp <- kindepth(id, father.id, mother.id)
     for (i in 1:n) {
         # set children = min(self, parents)
-        newid <- pmin(famid, famid[mid], famid[did]) 
+        newid <- pmin(famid, famid[mid], famid[did])
         # mom = min(mon, children)
         # dad = min(dad, children)
-        newid[mid2] <- pmin(newid[mid2], tapply(newid, mid, min))  
+        newid[mid2] <- pmin(newid[mid2], tapply(newid, mid, min))
         newid[n+1]  <- n+1  # preserve the "no parent" code
-        newid[did2] <- pmin(newid[did2], tapply(newid, did, min)) 
+        newid[did2] <- pmin(newid[did2], tapply(newid, did, min))
         newid[n+1]  <- n+1  # preserve the "no parent" code
 
         if (all(newid==famid)) break
         else if (i<n) famid <- newid
         }
-    
+
     if (all(newid==famid)) {
         # renumber the results : family 0 for uniques, else small integers
         famid <- famid[1:n]                            # toss the "n+1" obs
@@ -79,5 +78,3 @@ makefamid <- function(id, father.id, mother.id) {
         }
     else stop("Bug in routine: seem to have found an infinite loop")
     }
-
-
