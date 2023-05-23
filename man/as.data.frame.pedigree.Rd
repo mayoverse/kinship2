@@ -4,7 +4,7 @@
 \alias{as.data.frame.pedigree}
 \title{data.frame from a pedigree object}
 \usage{
-\method{as.data.frame.pedigree}(x, ...)
+as.data.frame.pedigree(x, ...)
 }
 \arguments{
 \item{x}{pedigree object}
