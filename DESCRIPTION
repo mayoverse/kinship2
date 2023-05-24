@@ -28,3 +28,6 @@ License: GPL (>= 2)
 URL: https://cran.r-project.org/package=kinship2
 RoxygenNote: 7.2.3
 VignetteBuilder: knitr
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
