@@ -1,59 +1,57 @@
 #' Fix details on the parents for children of the pedigree
-#' 
+#'
+#' @description
 #' Fix the sex of parents, add parents that are missing from the pedigree
 #'
-#'@param id Identification variable for individual
-#'
-#'@param dadid Identification variable for father. Founders parents should be coded 
-#'    to NA, or another value specified by missid.
-#'
-#'@param momid Identification variable for mother. Founders parents should be coded
-#'    to NA, or another value specified by missid.
-#'
-#'@param sex Gender of individual noted in `id`. Either character ("male","female","unknown","terminated")
-#'    or numeric (1="male", 2="female", 3="unknown", 4="terminated")
-#'    data is allowed.  For character data the string may be truncated,
-#'    and of arbitrary case.
-#'
-#'@param missid The founders are those with no father or mother in the pedigree.  The
-#'    \code{dadid} and \code{momid} values for these subjects will either be
-#'    NA or the value of this variable.  The default for \code{missid} is 0
-#'    if the \code{id} variable is numeric, and "" (the empty string)
-#'    otherwise.
 #' @details
-#' First look to add parents whose ids are given in momid/dadid. Second,
-#'    fix sex of parents. Last look to add second parent for children for whom
-#'    only one parent id is given.
+#' First look to add parents whose ids are given in momid/dadid. Second, fix
+#' sex of parents. Last look to add second parent for children for whom only
+#' one parent id is given.
 #'
-#'@return A data.frame with id, dadid, momid, sex as columns
-#'@author Jason Sinnwell
-#'@examples
+#' @param id Identification variable for individual
+#' @param dadid Identification variable for father. Founders parents should be
+#' coded to NA, or another value specified by missid.
+#' @param momid Identification variable for mother. Founders parents should be
+#' coded to NA, or another value specified by missid.
+#' @param sex Gender of individual noted in `id`. Either character
+#' ("male","female","unknown","terminated") or numeric (1="male", 2="female",
+#' 3="unknown", 4="terminated") data is allowed.  For character data the string
+#' may be truncated, and of arbitrary case.
+#' @param missid The founders are those with no father or mother in the
+#' pedigree.  The \code{dadid} and \code{momid} values for these subjects will
+#' either be NA or the value of this variable.  The default for \code{missid}
+#' is 0 if the \code{id} variable is numeric, and "" (the empty string)
+#' otherwise.
+#'
+#' @return A data.frame with id, dadid, momid, sex as columns
+#'
+#' @examples
+#'
 #' test1char <- data.frame(id=paste("fam", 101:111, sep=""),
-#'   sex=c("male","female")[c(1,2,1,2,1, 1,2, 2,1,2, 1)],
-#'   father=c(0,0,"fam101","fam101","fam101", 0,0,"fam106","fam106","fam106", "fam109"),
-#'   mother=c(0,0,"fam102","fam102","fam102", 0,0,"fam107","fam107","fam107", "fam112"))
-#' test1newmom <- with(test1char, fixParents(id, father, mother, sex, missid="0"))
+#'                        sex=c("male","female")[c(1,2,1,2,1, 1,2, 2,1,2, 1)],
+#'                        father=c(0,0,"fam101","fam101","fam101", 0,0,
+#'                                "fam106","fam106","fam106", "fam109"),
+#'                        mother=c(0,0,"fam102","fam102","fam102", 0,0,
+#'                                "fam107","fam107","fam107", "fam112"))
+#' test1newmom <- with(test1char, fixParents(id, father, mother,
+#'                                           sex, missid="0"))
 #' newped <- with(test1newmom, pedigree(id, dadid, momid, sex, missid="0"))
 #' as.data.frame(newped)
-#' 
+#'
+#' @author Jason Sinnwell
 #' @seealso \code{\link{pedigree}}
-#' @name fixParents
-NULL
-#> NULL
-
-#' @rdname fixParents
-#' @export
+#' @export fixParents
 fixParents <- function (id, dadid, momid, sex, missid = 0)  {
   ## fix sex of parents
   ## add parents that are missing
   n <- length(id)
-  if (length(momid) != n) 
+  if (length(momid) != n)
     stop("Mismatched lengths, id and momid")
-  if (length(dadid) != n) 
+  if (length(dadid) != n)
     stop("Mismatched lengths, id and momid")
-  if (length(sex) != n) 
+  if (length(sex) != n)
     stop("Mismatched lengths, id and sex")
-  if (is.factor(sex)) 
+  if (is.factor(sex))
     sex <- as.character(sex)
   codes <- c("male", "female", "unknown", "terminated")
   if (is.character(sex)) {
@@ -65,13 +63,13 @@ fixParents <- function (id, dadid, momid, sex, missid = 0)  {
     sex <- sex + 1
   }
   sex <- ifelse(sex < 1 | sex > 4, 3, sex)
-  if (all(sex > 2)) 
+  if (all(sex > 2))
     stop("Invalid values for 'sex'")
-  else if (mean(sex == 3) > 0.25) 
+  else if (mean(sex == 3) > 0.25)
     warning("More than 25% of the gender values are 'unknown'")
   ## #  sex <- factor(sex, 1:4, labels = codes)
   if (missing(missid)) {
-    if (is.numeric(id)) 
+    if (is.numeric(id))
       missid <- 0
     else missid <- ""
   }
@@ -87,10 +85,10 @@ fixParents <- function (id, dadid, momid, sex, missid = 0)  {
       stop("A blank or empty string is not allowed as the id variable")
   }
   else {
-    addids <- seq(max(id, na.rm = TRUE) + 1, max(id, na.rm = TRUE) + 
+    addids <- seq(max(id, na.rm = TRUE) + 1, max(id, na.rm = TRUE) +
                   length(id))
   }
-  
+
   nofather <- (is.na(dadid) | dadid == missid)
   nomother <- (is.na(momid) | momid == missid)
   if (any(duplicated(id))) {
@@ -146,7 +144,6 @@ fixParents <- function (id, dadid, momid, sex, missid = 0)  {
     dadid <- c(dadid, rep(0, length(nomom.idx)))
     momid <- c(momid, rep(0, length(nomom.idx)))
   }
-  return(data.frame(id = id, momid = momid, dadid = dadid, 
+  return(data.frame(id = id, momid = momid, dadid = dadid,
                     sex = sex))
 }
-

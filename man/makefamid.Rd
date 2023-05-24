@@ -26,4 +26,3 @@ makefamid(id, father.id, mother.id)
 \author{Terry Therneau}
 \seealso{\code{\link{makekinship}}}
 \keyword{ genetics }
-

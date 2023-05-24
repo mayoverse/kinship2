@@ -70,4 +70,3 @@ pedigree, besthint
 }
 \keyword{genetics}
 % docclass is function
-

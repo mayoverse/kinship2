@@ -1,4 +1,62 @@
 # Automatically generated from all.nw using noweb
+
+#' Align a pedigree
+#'
+#' @description
+#' Align a pedigree to print well
+#'
+#' @details
+#' A pedigree structure can contain a \code{hints} object which helps to
+#' reorder the pedigree (e.g. left-to-right order of children within family) so
+#' as to plot with minimal distortion. This routine is used to create an
+#' initial version of the hints.  They can then be modified if desired.
+#'
+#' This routine would not normally be called by a user.  It moves children
+#' within families, so that marriages are on the "edge" of a set children,
+#' closest to the spouse.  For pedigrees that have only a single connection
+#' between two families this simple-minded approach works surprisingly well.
+#' For more complex structures hand-tuning of the hints matrix may be required.
+#'
+#' The pedigree in the example below is one where rearranging the founders
+#' greatly decreases the number of extra connections. When autohint is called
+#' with a a vector of numbers as the second argument, the values for the
+#' founder females are used to order the founder families left to right across
+#' the plot.  The values within a sibship are used as the preliminary order of
+#' siblings within a family; this may be changed to move one of them to the
+#' edge so as to match up with a spouse. The actual values in the vector are
+#' not important, only their order.
+#'
+#' @param ped A pedigree structure
+#' @param hints Optional hints object. Only the order component is used.
+#' @param packed If TRUE, uniform distance between all individuals at a given
+#' level.
+#' @param align These parameters control the extra effort spent trying to align
+#' children underneath parents, but without making the pedigree too wide.  Set
+#' to FALSE to speed up plotting.
+#'
+#' @return A list containing components \code{order} and \code{spouse}
+#'
+#' @examples
+#'
+#' data(testped1)
+#' ped1 <- with(testped1, pedigree(id, father, mother, sex))
+#' plot(ped1, cex=.7, symbolsize=.7)
+#'
+#' # rearrange some founders
+#' temp <- 1:nrow(testped1)
+#' temp[76] <- .1
+#' temp[77] <- .2
+#' temp[74] <- .3
+#' temp[60] <- .4
+#' temp[30] <- temp[8] + .1
+#' temp[65] <- temp[4] + .1
+#' temp[14] <- temp[3] + .1
+#' ped1$hints <- autohint(ped1, temp)
+#' plot(ped1, cex=.7)
+#'
+#' @seealso pedigree, besthint
+#' @keywords genetics
+#' @export autohint
 autohint <- function(ped, hints, packed=TRUE, align=FALSE) {
     ## full documentation now in vignette: align_code_details.Rmd
     ## REferences to those sections appear here as:
@@ -8,13 +66,13 @@ autohint <- function(ped, hints, packed=TRUE, align=FALSE) {
     depth <- kindepth(ped, align=TRUE)
 
     if (is.null(ped$relation)) relation <- NULL
-    else  relation <- cbind(as.matrix(ped$relation[,1:2]), 
+    else  relation <- cbind(as.matrix(ped$relation[,1:2]),
                             as.numeric(ped$relation[,3]))
     if (!is.null(relation) && any(relation[,3] <4)) {
         temp <- (relation[,3] < 4)
-        twinlist <- unique(c(relation[temp,1:2]))  #list of twin id's 
-        twinrel  <- relation[temp,,drop=F]
-        
+        twinlist <- unique(c(relation[temp,1:2]))  #list of twin id's
+        twinrel  <- relation[temp, ,drop=F]
+
         twinset <- rep(0,n)
         twinord <- rep(1,n)
         for (i in 2:length(twinlist)) {
@@ -28,7 +86,7 @@ autohint <- function(ped, hints, packed=TRUE, align=FALSE) {
             twinset[twinrel[,2]] <- newid
             twinord[twinrel[,2]] <- pmax(twinord[twinrel[,2]], 
                                          twinord[twinrel[,1]]+1)
-            }        
+            }
         }
     else {
         twinset <- rep(0,n)
@@ -36,13 +94,13 @@ autohint <- function(ped, hints, packed=TRUE, align=FALSE) {
         }
     ## Doc: Shift
     shift <- function(id, sibs, goleft, hint, twinrel, twinset) {
-        if (twinset[id]> 0)  { 
+        if (twinset[id]> 0)  {
             shift.amt <- 1 + diff(range(hint[sibs]))  # enough to avoid overlap
             twins <- sibs[twinset[sibs]==twinset[id]]
             if (goleft) 
                  hint[twins] <- hint[twins] - shift.amt
             else hint[twins] <- hint[twins] + shift.amt
-                    
+
             mono  <- any(twinrel[c(match(id, twinrel[,1], nomatch=0),
                                    match(id, twinrel[,2], nomatch=0)),3]==1)
             if (mono) {
@@ -61,14 +119,14 @@ autohint <- function(ped, hints, packed=TRUE, align=FALSE) {
                     newid2 <- rel2[match(monoset, rel2[,2], nomatch=0),1]
                     monoset <- unique(c(monoset, newid1, newid2))
                     }
-                if (goleft) 
+                if (goleft)
                        hint[monoset]<- hint[monoset] - shift.amt
                 else   hint[monoset]<- hint[monoset] + shift.amt
                 }
             }
 
         #finally, move the subject himself
-        if (goleft) hint[id] <- min(hint[sibs]) -1   
+        if (goleft) hint[id] <- min(hint[sibs]) -1
         else        hint[id] <- max(hint[sibs]) +1
 
         hint[sibs] <- rank(hint[sibs])  # aesthetics -- no negative hints
@@ -84,7 +142,7 @@ autohint <- function(ped, hints, packed=TRUE, align=FALSE) {
     else horder <- integer(n)
 
     for (i in unique(depth)) {
-        who <- (depth==i & horder==0)  
+        who <- (depth==i & horder==0)
         if (any(who)) horder[who] <- 1:sum(who) #screwy input - overwrite it
         }
 
@@ -106,7 +164,7 @@ autohint <- function(ped, hints, packed=TRUE, align=FALSE) {
 
     if (!missing(hints)) sptemp <- hints$spouse
     else sptemp <- NULL
-    plist <- align.pedigree(ped, packed=packed, align=align, 
+    plist <- align.pedigree(ped, packed=packed, align=align,
                             hints=list(order=horder, spouse=sptemp))
     ## end doc init
     ## Doc: fixup, and findspouse/findsibs
@@ -116,7 +174,7 @@ autohint <- function(ped, hints, packed=TRUE, align=FALSE) {
         rpos <- mypos
         while(plist$spouse[lev, rpos]) rpos <- rpos +1
         if (rpos==lpos) stop("autohint bug 3")
-        
+
         opposite <-ped$sex[plist$nid[lev,lpos:rpos]] != ped$sex[plist$nid[lev,mypos]]
         if (!any(opposite)) stop("autohint bug 4")  # no spouse
         spouse <- min((lpos:rpos)[opposite])  #can happen with a triple marriage
@@ -131,7 +189,7 @@ autohint <- function(ped, hints, packed=TRUE, align=FALSE) {
     duporder <- function(idlist, plist, lev, ped) {
         temp <- table(idlist)
         if (all(temp==1)) return (matrix(0L, nrow=0, ncol=3))
-        
+
         # make an intial list of all pairs's positions
         # if someone appears 4 times they get 3 rows
         npair <- sum(temp-1)
@@ -146,7 +204,7 @@ autohint <- function(ped, hints, packed=TRUE, align=FALSE) {
                 }
             }
         if (nrow(dmat)==1) return(dmat)  #no need to sort it
-        
+
         # families touch?
         famtouch <- logical(npair)
         for (i in 1:npair) {
@@ -158,7 +216,7 @@ autohint <- function(ped, hints, packed=TRUE, align=FALSE) {
                     if (plist$fam[lev,spouse]==0) {famtouch[i] <- F; next}
                 sib1 <- max(findsibs(spouse, plist, lev)) 
                 }
-            
+
             if (plist$fam[lev, dmat[i,2]] >0)
                 sib2 <- min(findsibs(dmat[i,2], plist, lev))
             else {
@@ -169,14 +227,14 @@ autohint <- function(ped, hints, packed=TRUE, align=FALSE) {
                 }
             famtouch[i] <- (sib2-sib1 ==1)
             }
-        dmat[order(famtouch, dmat[,1]- dmat[,2]),, drop=FALSE ]
+        dmat[order(famtouch, dmat[,1]- dmat[,2]), , drop=FALSE]
     } ## duporder()
     ## Doc: fixup-2
     maxlev <- nrow(plist$nid)
     for (lev in 1:maxlev) {
         idlist <- plist$nid[lev,1:plist$n[lev]] #subjects on this level
         dpairs <- duporder(idlist, plist, lev, ped)  #duplicates to be dealt with
-        if (nrow(dpairs)==0) next;  
+        if (nrow(dpairs)==0) next;
         for (i in 1:nrow(dpairs)) {
             anchor <- spouse <- rep(0,2)
             for (j in 1:2) {
@@ -187,7 +245,7 @@ autohint <- function(ped, hints, packed=TRUE, align=FALSE) {
                     anchor[j] <- 1  #familial anchor
                     sibs <- idlist[findsibs(mypos, plist, lev)]
                     if (length(sibs) >1) 
-                        horder <- shift(idlist[mypos], sibs, direction, 
+                        horder <- shift(idlist[mypos], sibs, direction,
                                         horder, twinrel, twinset)
                     }
                 else {
@@ -197,7 +255,7 @@ autohint <- function(ped, hints, packed=TRUE, align=FALSE) {
                         anchor[j] <- 2  #spousal anchor
                         sibs <- idlist[findsibs(spouse[j], plist, lev)]
                         if (length(sibs) > 1) 
-                            horder <- shift(idlist[spouse[j]], sibs, direction, 
+                            horder <- shift(idlist[spouse[j]], sibs, direction,
                                         horder, twinrel, twinset)
                         }
                     }
@@ -211,8 +269,8 @@ autohint <- function(ped, hints, packed=TRUE, align=FALSE) {
             temp <- switch(paste(anchor, collapse=''),
                            "21" = c(id2, id1, dpairs[i,3]),   #the most common case
                            "22" = rbind(c(id2, id1, 1), c(id1, id3, 2)),
-                           "02" = c(id2, id1, 0), 
-                           "20" = c(id2, id1, 0), 
+                           "02" = c(id2, id1, 0),
+                           "20" = c(id2, id1, 0),
                            "00" = rbind(c(id1, id3, 0), c(id2, id1, 0)),
                            "01" = c(id2, id1, 2),
                            "10" = c(id1, id2, 1),
@@ -221,14 +279,14 @@ autohint <- function(ped, hints, packed=TRUE, align=FALSE) {
             if (is.null(temp)) { 
                 warning("Unexpected result in autohint, please contact developer")
                 return(list(order=1:n))  #punt
-              }         
+              }
             else sptemp <- rbind(sptemp, temp)
             }
         #
         # Recompute, since this shifts things on levels below
         #
-        plist <- align.pedigree(ped, packed=packed, align=align, 
-                                hints=list(order=horder, spouse=sptemp))   
+        plist <- align.pedigree(ped, packed=packed, align=align,
+                                hints=list(order=horder, spouse=sptemp))
         }
-    list(order=horder, spouse=sptemp)    
+    list(order=horder, spouse=sptemp)
     }

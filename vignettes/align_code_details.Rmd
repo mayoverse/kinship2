@@ -458,6 +458,7 @@ The spouses are in the pedigree, now look below. For each spouse get the
 list of children. If there are any we call alignped2 to generate their tree and
 then mark the connection to their parent. If multiple marriages have children
 we need to join the trees.
+
 ### alignped1 -part5
 
 To finish up we need to splice together the tree made up

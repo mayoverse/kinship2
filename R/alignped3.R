@@ -1,4 +1,47 @@
 # Automatically generated from all.nw using noweb
+
+#TODO add params and example and return
+
+#' Third routine alignement
+#'
+#' @description
+#' This is the third of the four co-routines.
+#'
+#' @details
+#' This co-routine merges two pedigree trees which are side by side into a
+#' single object. The primary special case is when the rightmost person in
+#' the left tree is the same as the leftmost person in the right tree; we
+#' need not plot two copies of the same person side by side.
+#' (When initializing the output structures do not worry about this,
+#' there is no harm if they are a column bigger than finally needed.)
+#' Beyond that the work is simple bookkeeping.
+#'
+#' \item{Slide}{ For the unpacked case, which is the traditional way to draw
+#' a pedigree when we can assume the paper is infinitely wide, all parents are
+#' centered over their children. In this case we think if the two trees to be
+#' merged as solid blocks. On input they both have a left margin of 0.
+#' Compute how far over we have to slide the right tree.}
+#' \item{Merge}{ Now merge the two trees. Start at the top level and work down.}
+#'
+#' @param x1
+#' @param x2
+#' @param packed
+#' @param space
+#'
+#' @return A list of element containing:
+#' \item{n}{}
+#' \item{nid}{}
+#' \item{pos}{}
+#' \item{fam}{}
+#'
+#' @examples
+#' data(sample.ped)
+#' ped <- with(sample.ped,pedigree(id, father, mother, sex, affected))
+#' align.pedigree(ped)
+#'
+#' @seealso \code{\link{plot.pedigree}}, \code{\link{autohint}}
+#' @keywords dplot
+#' @export alignped3
 alignped3 <- function(x1, x2, packed, space=1) {
     maxcol <- max(x1$n + x2$n)
     maxlev <- length(x1$n)
@@ -7,7 +50,6 @@ alignped3 <- function(x1, x2, packed, space=1) {
 
     nid <- matrix(0, maxlev, maxcol)
     nid[,1:n1] <- x1$nid
-    
     pos <- matrix(0.0, maxlev, maxcol)
     pos[,1:n1] <- x1$pos
 
@@ -47,14 +89,14 @@ alignped3 <- function(x1, x2, packed, space=1) {
                 n[i] <- n[i] -1
             }
             else overlap <- 0
-            
+
             if (packed) slide <- if (n1==0) 0 else pos[i,n1] + space - overlap
 
             zz <- seq(from=overlap+1, length=n2-overlap)
             nid[i, n1 + zz- overlap] <- x2$nid[i, zz]
             fam[i, n1 + zz -overlap] <- fam2[i,zz] 
             pos[i, n1 + zz -overlap] <- x2$pos[i,zz] + slide
-            
+
             if (i<maxlev) {
                     # adjust the pointers of any children (look ahead)
                 temp <- fam2[i+1,]

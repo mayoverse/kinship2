@@ -93,4 +93,3 @@ round(8*kinship(tped))
 }
 \keyword{genetics}
 % docclass is function
-

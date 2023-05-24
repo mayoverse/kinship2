@@ -69,4 +69,3 @@ a sparse kinship matrix of class \code{bdsmatrix}
 # However sort(match(femid, dimnames(kin1)[[1]])) would be okay.
 }}
 \keyword{genetics}
-
