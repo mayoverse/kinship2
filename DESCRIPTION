@@ -1,15 +1,15 @@
 Package: kinship2
-Version: 1.9.7
-Date: 2022-10-11
+Version: 1.9.91
+Date: 2023-5-24
 Title: Pedigree Functions
 Authors@R: c(
 	person("Jason", "Sinnwell", email="sinnwell.jason@mayo.edu", role=c("aut","cre")),
 	person("Terry", "Therneau", role="aut"),
 	person("Daniel", "Schaid", role="ctb"),
 	person("Elizabeth", "Atkinson", role="ctb"),
-	person("Carly", "Mester", role='ctb'))
+	person("Louis", "Le Nezet", role='ctb'))
 Depends: 
-	 R (>= 3.6.0),
+	 R (>= 4.0.3),
 	 Matrix,
 	 quadprog
 Imports: 
