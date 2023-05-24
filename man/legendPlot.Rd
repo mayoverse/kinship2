@@ -18,21 +18,23 @@ legendPlot(
 }
 \arguments{
 \item{x}{Pedigree data frame with ped (pedigree id), id (id of individual),
-father (id of father), mother (id of mother), sex, affected (affection status), 
-and avail (DNA availability).}
+father (id of father), mother (id of mother), sex, affected (affection
+status), and avail (DNA availability).}
 
-\item{id}{Optional, a character string to replace the correspinding id for persons in the pedigree}
+\item{id}{Optional, a character string to replace the correspinding id for
+persons in the pedigree}
 
-\item{affected}{A variable indicating affection status. A multi-column matrix can be used to
-give the status with respect to multiple traits. Logical, factor, and integer types
-are converted to 0/1 representing unaffected and affected, respectively. NAs are
-considered missing.}
+\item{affected}{A variable indicating affection status. A multi-column
+matrix can be used to give the status with respect to multiple traits.
+Logical, factor, and integer types are converted to 0/1 representing
+unaffected and affected, respectively. NAs are considered missing.}
 
 \item{affected.label}{Set labels for affection statuses}
 
 \item{col}{Colors for the plot symbol for each individual}
 
-\item{col.label}{Named vector, with elements matching the unique color codes, the names are the labels used in the legend.}
+\item{col.label}{Named vector, with elements matching the unique color
+codes, the names are the labels used in the legend.}
 
 \item{symbolsize}{Size of symbols (circle/square/triangle). Default is 1.0}
 
@@ -40,17 +42,23 @@ considered missing.}
 
 \item{...}{Character expansion size for labels and ids. Default is 1.0}
 }
+\value{
+A pedigree plot with a legend
+}
 \description{
-Pedigree plot with ready-made legend along the bottom of the page to represent colors 
-and affection statuses
+Pedigree plot with ready-made legend along the bottom of the page to
+represent colors and affection statuses
 }
 \examples{
+
 \dontrun{
 data(sample.ped)
-pedAll <- pedigree(sample.ped$id, sample.ped$father, sample.ped$mother, sample.ped$sex, affected=cbind(sample.ped$affected, sample.ped$avail), famid=sample.ped$ped)
+pedAll <- with(sample.ped, pedigree(id, father, mother, sex,
+               affected=cbind(affected, avail), famid=ped)
 ped1 <- pedAll["1"]
 legendPlot(ped1,  affected.label=c("cancer","available"))
 }
+
 }
 \seealso{
 \code{\link{pedigree}}, \code{\link{plot.pedigree}}
