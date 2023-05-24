@@ -4,22 +4,29 @@
 \alias{as.data.frame.pedigree}
 \title{data.frame from a pedigree object}
 \usage{
-as.data.frame.pedigree(x, ...)
+\method{as.data.frame}{pedigree}(x, ...)
 }
 \arguments{
-\item{x}{pedigree object}
-\item{...}{additional arguments passed to internal methods}
+\item{x}{Pedigree object}
+
+\item{...}{Additional arguments passed to internal methods}
 }
 \value{
 A data.frame with the data necessary to re-create the pedigree,
 minus special relationships.
 }
-\author{
-Jason Sinnwell
-}
 \description{
 Extract the internal data from a pedigree object into a data.frame
 }
+\examples{
+data(sample.ped)
+ped <- with(sample.ped,pedigree(id, father, mother, sex, affected))
+as.data.frame.pedigree(ped)
+
+}
 \seealso{
 \code{\link{pedigree}}
+}
+\author{
+Jason Sinnwell
 }

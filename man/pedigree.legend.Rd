@@ -2,7 +2,7 @@
 % Please edit documentation in R/pedigree.legend.R
 \name{pedigree.legend}
 \alias{pedigree.legend}
-\title{plot a legend for a pedigree}
+\title{Plot a legend for a pedigree}
 \usage{
 pedigree.legend(
   ped,
@@ -17,9 +17,9 @@ pedigree.legend(
 )
 }
 \arguments{
-\item{ped}{Pedigree data frame with ped (pedigree id), id (id of individual),
-father (id of father), mother (id of mother), sex, affected (affection status), 
-and avail (DNA availability).}
+\item{ped}{Pedigree data frame with ped (pedigree id), id (id of
+individual), father (id of father), mother (id of mother), sex, affected
+(affection status), and avail (DNA availability).}
 
 \item{labels}{names for the affected indicators}
 
@@ -29,24 +29,29 @@ resolution for the circle}
 \item{radius}{radius (inches) of the circle}
 
 \item{location}{similar to how the location of a base-R legend is given,
-used only if new=TRUE.  A character string indicating which of the four corners
-to plot the legend, given by "bottomright", "bottomleft", "topleft", or "topright".}
+used only if new=TRUE.  A character string indicating which of the four
+corners to plot the legend, given by "bottomright", "bottomleft", "topleft",
+or "topright".}
 
-\item{new}{Logical. If TRUE, plot the legend on the current plot. Otherwise, plot
-on a separate plot.}
+\item{new}{Logical. If TRUE, plot the legend on the current plot. Otherwise,
+plot on a separate plot.}
 
-\item{density}{Density of lines shaded in sections of the circle. These match the
-density settings for the plot.pedigree function.}
+\item{density}{Density of lines shaded in sections of the circle. These
+match the density settings for the plot.pedigree function.}
 
-\item{angle}{The angle at which lines are shaded in sections of the circle. These
-match the angles for the plot.pedigree function.}
+\item{angle}{The angle at which lines are shaded in sections of the circle.
+These match the angles for the plot.pedigree function.}
 
 \item{...}{optional parameters for the plot function that apply to text}
+}
+\value{
+Plot the pedigree legend to the current plot
 }
 \description{
 Circular legend for a pedigree as a key to the affection statuses.
 }
 \examples{
+
 \dontrun{
 data(sample.ped)
 fam1 <- sample.ped[sample.ped$ped == 1, ]
@@ -57,6 +62,7 @@ pedigree.legend(ped1, location = "bottomright", radius = 0.8)
 pedigree.legend(ped1, location = "topleft", radius = 0.6, cex = 1.2)
 pedigree.legend(ped1, new = FALSE)
 }
+
 }
 \seealso{
 \code{\link{pedigree}}, \code{\link{plot.pedigree}}
