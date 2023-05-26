@@ -1,6 +1,7 @@
 import(Matrix)
 import(quadprog)
 import(knitr)
+import(vdiffr)
 importFrom("graphics", "frame", "legend", "lines", "par", "plot",
            "plot.new", "plot.window", "points", "polygon", "segments",
            "strheight", "strwidth", "text")
