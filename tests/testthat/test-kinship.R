@@ -33,20 +33,23 @@ test_that("kinship works", {
     id2 = c(102, 103, 103, 105, 204),
     code = c(1, 1, 1, 2, 1)
   )
-  
+
   tped <- with(twindat, pedigree(id, dadid, momid, sex,
-                                 relation=relate))
-  
-  expect_doppelganger("Twin pedigree",
-                      plot(tped))
-  
+    relation = relate
+  ))
+
+  expect_doppelganger(
+    "Twin pedigree",
+    plot(tped)
+  )
+
   kmat <- kinship(tped)
-  
+
   ## should show kinship coeff of 0.5 for where MZ twins are
   ## ids: 102-103 and 203-204
-  expect_true(all(kmat[c("102","101","103"),c("102","101","103")]==0.5))
-  expect_true(all(kmat[c("203","204"),c("203","204")]==0.5))
-  
+  expect_true(all(kmat[c("102", "101", "103"), c("102", "101", "103")] == 0.5))
+  expect_true(all(kmat[c("203", "204"), c("203", "204")] == 0.5))
+
   # Renumber everyone as 1,2,....; makes the all.equal checks easier
   indx <- sort(unique(unlist(twindat[, 1:3])))
   twindat$id <- match(twindat$id, indx) - 1
@@ -60,7 +63,7 @@ test_that("kinship works", {
     relation = relate
   ))
   kmat <- kinship(tped)
-  
+
   truth <- matrix(
     c(
       5, 6, 0,
@@ -81,17 +84,19 @@ test_that("kinship works", {
 
 test_that("Kinship Claus Ekstrom 09/2012", {
   ## simple test case for kinship of MZ twins from Claus Ekstrom, 9/2012
-  mydata <- data.frame(id=1:4, dadid=c(NA, NA, 1, 1),
-                       momid=c(NA, NA, 2, 2), sex=c("male", "female", "male", "male"),
-                       famid=c(1,1,1,1))
-  relation <- data.frame(id1=c(3), id2=c(4), famid=c(1), code=c(1))
-  
-  ped <- pedigree(id=mydata$id, dadid=mydata$dadid, momid=mydata$momid, sex=mydata$sex, relation=relation)
-  
+  mydata <- data.frame(
+    id = 1:4, dadid = c(NA, NA, 1, 1),
+    momid = c(NA, NA, 2, 2), sex = c("male", "female", "male", "male"),
+    famid = c(1, 1, 1, 1)
+  )
+  relation <- data.frame(id1 = c(3), id2 = c(4), famid = c(1), code = c(1))
+
+  ped <- pedigree(id = mydata$id, dadid = mydata$dadid, momid = mydata$momid, sex = mydata$sex, relation = relation)
+
   expect_doppelganger("Twin pedigree 2", plot(ped))
-  
+
   kmat <- kinship(ped)
-  expect_true(all(kmat[3:4,3:4]==0.5))
+  expect_true(all(kmat[3:4, 3:4] == 0.5))
 })
 
 
