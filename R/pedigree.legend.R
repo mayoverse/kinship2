@@ -24,7 +24,7 @@
 #'
 #' @return Plot the pedigree legend to the current plot
 #' @examples
-#' \dontrun{
+#'
 #' data(sample.ped)
 #' fam1 <- sample.ped[sample.ped$ped == 1, ]
 #' ped1 <- with(fam1, pedigree(
@@ -35,7 +35,6 @@
 #' pedigree.legend(ped1, location = "bottomright", radius = 0.8)
 #' pedigree.legend(ped1, location = "topleft", radius = 0.6, cex = 1.2)
 #' pedigree.legend(ped1, new = FALSE)
-#' }
 #'
 #' @author Jason Sinnwell
 #' @seealso \code{\link{pedigree}}, \code{\link{plot.pedigree}}

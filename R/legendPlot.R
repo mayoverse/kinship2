@@ -24,14 +24,13 @@
 #' @return A pedigree plot with a legend
 #'
 #' @examples
-#' \dontrun{
+#' 
 #' data(sample.ped)
 #' pedAll <- with(sample.ped, pedigree(id, father, mother, sex,
 #'   affected = cbind(affected, avail), famid = ped
 #' ))
 #' ped1 <- pedAll["1"]
 #' legendPlot(ped1, affected.label = c("cancer", "available"))
-#' }
 #'
 #' @author Jason Sinnwell, code contributed by Sara Achenbach
 #' @seealso \code{\link{pedigree}}, \code{\link{plot.pedigree}}
