@@ -39,3 +39,33 @@ test_that("pedigree subscripting", {
   expect_equal(test1, test3)
   expect_equal(test1, test4)
 })
+
+test_that("pedigree other test", {
+  ped2mat <- matrix(c(
+    1, 1, 0, 0, 1,
+    1, 2, 0, 0, 2,
+    1, 3, 1, 2, 1,
+    1, 4, 1, 2, 2,
+    1, 5, 0, 0, 2,
+    1, 6, 0, 0, 1,
+    1, 7, 3, 5, 2,
+    1, 8, 6, 4, 1,
+    1, 9, 6, 4, 1,
+    1, 10, 8, 7, 2
+  ), ncol = 5, byrow = TRUE)
+
+  ped2df <- as.data.frame(ped2mat)
+  names(ped2df) <- c("fam", "id", "dad", "mom", "sex")
+  ## 1 2  3 4 5 6 7 8 9 10,11,12,13,14,15,16
+  ped2df$disease <- c(NA, NA, 1, 0, 0, 0, 0, 1, 1, 1)
+  ped2df$smoker <- c(0, NA, 0, 0, 1, 1, 1, 0, 0, 0)
+  ped2df$availstatus <- c(0, 0, 1, 1, 0, 1, 1, 1, 1, 1)
+  ped2df$vitalstatus <- c(1, 1, 1, 0, 1, 0, 0, 0, 0, 0)
+
+  ped2 <- with(ped2df, pedigree(id, dad, mom, sex,
+    status = vitalstatus,
+    affected = cbind(disease, smoker, availstatus),
+    relation = matrix(c(8, 9, 1), ncol = 3),
+  ))
+  expect_doppelganger("OtherPed with twin", ped2)
+})

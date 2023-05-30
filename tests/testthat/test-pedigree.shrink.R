@@ -18,7 +18,7 @@ test_that("Pedigree shrink works", {
   shrink.mn2 <- pedigree.shrink(mn2,
     avail = ifelse(is.na(mn2$affected[, 1]), 0, mn2$affected[, 1])
   )
-  
+
   expect_equal(shrink.mn2$idList$unavail,
                c(44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59,
                  60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75,
@@ -26,7 +26,7 @@ test_that("Pedigree shrink works", {
 
   mnf8 <- pedMN["8"]
   expect_doppelganger("pedigree shrink 2", plot(mnf8))
-  
+
   shrink.mnf8 <- pedigree.shrink(mnf8,
     avail = ifelse(is.na(mnf8$affected[, 1]), 0, mnf8$affected[, 1])
   )
@@ -40,7 +40,7 @@ test_that("Pedigree shrink works", {
 test_that("Pedigree shrink error if missing info", {
   ## use sample.ped from the package
   data(sample.ped)
-  
+
   pedAll <- pedigree(sample.ped$id, sample.ped$father, sample.ped$mother,
                      sample.ped$sex,
                      affected = cbind(sample.ped$affected, sample.ped$avail),
@@ -48,7 +48,7 @@ test_that("Pedigree shrink error if missing info", {
   )
   ped2 <- pedAll["2"]
   ped2$sex[c(13, 12)] <- c("unknown", "terminated")
-  
+
   ## set 2nd col of affected to NA
   ped2$affected[c(7, 9), 2] <- NA
   expect_error(pedigree.shrink(ped = ped2, avail = ped2$affected[, 2], maxBits = 32))
@@ -65,7 +65,7 @@ test_that("Pedigree shrink avail test", {
     famid = sample.ped$ped
   )
   ped1 <- pedAll["1"]
-  
+
   set.seed(10)
   shrink1.avail.B32 <- pedigree.shrink(ped = ped1, avail = ped1$affected[, 2], maxBits = 32)
 
@@ -112,4 +112,19 @@ test_that("Pedigree shrink with character", {
   expect_equal(shrink1.p1char.B25$idTrimmed,
                c("A-01", "A-02", "A-07", "A-08", "A-11", "A-13", "A-21", "A-22",
                  "A-23", "A-31", "A-32", "A-34", "A-39", "A-33", "A-41"))
+})
+
+test_that("pedigree.shrink.plot works", {
+  data(sample.ped)
+
+  fam2 <- sample.ped[sample.ped$ped == 2, ]
+  ped2 <- pedigree(fam2$id, fam2$father, fam2$mother, fam2$sex,
+                  fam2$affected, fam2$avail)
+
+  shrink2 <- pedigree.shrink(ped2, avail = fam2$avail)
+
+  expect_doppelganger("Shrinked ped 1",
+    plot.pedigree.shrink(shrink2, title = "Sample Pedigree 2"))
+  expect_doppelganger("Shrinked ped 2",
+    plot.pedigree.shrink(shrink2, bigped = TRUE, title = "Sample Pedigree 2"))
 })
