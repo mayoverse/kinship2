@@ -28,8 +28,8 @@
 #' data(sample.ped)
 #' fam1 <- sample.ped[sample.ped$ped == 1, ]
 #' ped1 <- with(fam1, pedigree(
-#'    id, father, mother, sex,
-#'    affected = cbind(avail, affected)
+#'   id, father, mother, sex,
+#'   affected = cbind(avail, affected)
 #' ))
 #' plot(ped1)
 #' pedigree.legend(ped1, location = "bottomright", radius = 0.8)
