@@ -8,5 +8,6 @@
 
 library(testthat)
 library(kinship2)
+library(vdiffr)
 
 test_check("kinship2")

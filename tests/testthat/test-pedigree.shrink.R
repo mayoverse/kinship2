@@ -132,3 +132,18 @@ test_that("Pedigree shrink with character", {
     )
   )
 })
+
+test_that("pedigree.shrink.plot works", {
+  data(sample.ped)
+
+  fam2 <- sample.ped[sample.ped$ped == 2, ]
+  ped2 <- pedigree(fam2$id, fam2$father, fam2$mother, fam2$sex,
+                  fam2$affected, fam2$avail)
+
+  shrink2 <- pedigree.shrink(ped2, avail = fam2$avail)
+
+  expect_doppelganger("Shrinked ped 1",
+    plot.pedigree.shrink(shrink2, title = "Sample Pedigree 2"))
+  expect_doppelganger("Shrinked ped 2",
+    plot.pedigree.shrink(shrink2, bigped = TRUE, title = "Sample Pedigree 2"))
+})

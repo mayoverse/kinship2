@@ -84,23 +84,22 @@ test_that("kinship works", {
 
 test_that("Kinship Claus Ekstrom 09/2012", {
   ## simple test case for kinship of MZ twins from Claus Ekstrom, 9/2012
-  mydata <- data.frame(
-    id = 1:4, dadid = c(NA, NA, 1, 1),
-    momid = c(NA, NA, 2, 2), sex = c("male", "female", "male", "male"),
-    famid = c(1, 1, 1, 1)
-  )
+  mydata <- data.frame(id = 1:4, dadid = c(NA, NA, 1, 1),
+                       momid = c(NA, NA, 2, 2),
+                       sex = c("male", "female", "male", "male"),
+                       famid = c(1, 1, 1, 1))
   relation <- data.frame(id1 = c(3), id2 = c(4), famid = c(1), code = c(1))
 
-  ped <- pedigree(id = mydata$id, dadid = mydata$dadid, momid = mydata$momid, sex = mydata$sex, relation = relation)
+  ped <- with(mydata, pedigree(
+    id = id, dadid = dadid,
+    momid = momid, sex = sex,
+    relation = relation))
 
   expect_doppelganger("Twin pedigree 2", plot(ped))
 
   kmat <- kinship(ped)
   expect_true(all(kmat[3:4, 3:4] == 0.5))
 })
-
-
-
 
 test_that("kinship works with X chromosoms", {
   ## test pedigree from bioinformatics manuscript
@@ -129,7 +128,8 @@ test_that("kinship works with X chromosoms", {
 
   ped2 <- with(ped2df, pedigree(id, dad, mom, sex,
     status = vitalstatus,
-    affected = cbind(disease, smoker, availstatus), relation = matrix(c(8, 9, 1), ncol = 3)
+    affected = cbind(disease, smoker, availstatus),
+    relation = matrix(c(8, 9, 1), ncol = 3)
   ))
 
   ## regular kinship matrix
@@ -185,11 +185,26 @@ test_that("Kinship with 2 different family", {
   expect_true(all(kinfam["2/1", 1:10] == 0))
 
   ## now add two more for ped2, and check again
-  peddf <- rbind(peddf, c(2, 2, 0, 0, 2, 1, 0, 1, 0), c(2, 3, 1, 2, 1, 1, 0, 1, 0))
+  peddf <- rbind(peddf,
+    c(2, 2, 0, 0, 2, 1, 0, 1, 0),
+    c(2, 3, 1, 2, 1, 1, 0, 1, 0)
+  )
   peds <- with(peddf, pedigree(id, dad, mom, sex,
     status = vitalstatus, fam = fam,
     affected = cbind(disease, smoker, availstatus)
   ))
   kin2fam <- kinship(peds)
   expect_true(all(kin2fam[11:13, 1:10] == 0))
+})
+
+# TODO check if matrix right format
+test_that("MakeKinship works", {
+  data(minnbreast)
+  kin1 <- with(minnbreast, makekinship(famid, id, fatherid, motherid))
+  expect_equal(dim(kin1), c(28081, 28081))
+  expect_equal(class(kin1)[1], "dsCMatrix")
+
+  kin2 <- with(minnbreast, makekinship(famid, id, fatherid, motherid,
+    unrelated = 28))
+  expect_equal(dim(kin2), c(28081, 28081))
 })
