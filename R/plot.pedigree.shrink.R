@@ -15,7 +15,7 @@
 #' to fit in plotting region.  If T, then packed=F is used in pedigree() along
 #' with smaller symbol sizes.
 #' @param title Optional plot title
-#' @param pos The position argument for the legend command, which allows
+#' @param location The position argument for the legend command, which allows
 #' coordinates (numerical vector in the form x, y) or, more conveniently,
 #' options such as "topright", "right", "left", "bottomleft", etc., which
 #' is useful for pedigrees that cover most of the plot region.
@@ -41,7 +41,7 @@
 #'
 #' @export plot.pedigree.shrink
 plot.pedigree.shrink <- function(x, bigped = FALSE, title = "",
-  pos = "topright", ...) {
+  location = "topright", ...) {
   ##  Plot pedigrees, coloring subjects according
   ##   to availability, shaded by affected status used in shrink
 
@@ -54,14 +54,14 @@ plot.pedigree.shrink <- function(x, bigped = FALSE, title = "",
     )
   }
 
-  if (is.character(pos)) {
+  if (is.character(location)) {
     ylegend <- NULL
-    xlegend <- pos
-  } else if (is.numeric(pos) && length(pos) == 2) {
-    xlegend <- pos[1]
-    ylegend <- pos[2]
+    xlegend <- location
+  } else if (is.numeric(location) && length(location) == 2) {
+    xlegend <- location[1]
+    ylegend <- location[2]
   } else {
-    stop("Invalid pos format: either string or numerical vetor of 2")
+    stop("Invalid location format: either string or numerical vetor of 2")
   }
 
   legend(

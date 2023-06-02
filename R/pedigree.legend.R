@@ -13,7 +13,7 @@
 #' @param location similar to how the location of a base-R legend is given,
 #' used only if new=TRUE.  A character string indicating which of the four
 #' corners to plot the legend, given by "bottomright", "bottomleft", "topleft",
-#' or "topright".
+#' or "topright" or a vector of coordinates (numerical vector in the form x, y).
 #' @param new Logical. If TRUE, plot the legend on the current plot. Otherwise,
 #' plot on a separate plot.
 #' @param density Density of lines shaded in sections of the circle. These
@@ -103,11 +103,22 @@ pedigree.legend <- function (ped, labels = dimnames(ped$affected)[[2]],
 
       ## get center of pie chart for coded
       pctusr <- .10*abs(diff(usr.asp1[3:4]))
-      center = switch(location,
-        "bottomright" = c(max(usr.asp1[1:2])-pctusr,max(usr.asp1[3:4])-pctusr),
-        "topright" = c(max(usr.asp1[1:2])-pctusr, min(usr.asp1[3:4]) + pctusr),
-        "bottomleft" =c(min(usr.asp1[1:2]) + pctusr, max(usr.asp1[3:4])-pctusr),
-        "topleft" = c(min(usr.asp1[1:2]) + pctusr, min(usr.asp1[3:4]) + pctusr))
+
+      if (is.character(location)) {
+        center <-  switch(location,
+        "bottomright" = c(max(usr.asp1[1:2]) -pctusr,
+            max(usr.asp1[3:4]) - pctusr),
+        "topright" = c(max(usr.asp1[1:2]) - pctusr,
+            min(usr.asp1[3:4]) + pctusr),
+        "bottomleft" = c(min(usr.asp1[1:2]) + pctusr,
+            max(usr.asp1[3:4]) - pctusr),
+        "topleft" = c(min(usr.asp1[1:2]) + pctusr,
+            min(usr.asp1[3:4]) + pctusr))
+      } else if (is.numeric(location) && length(location) == 2) {
+        center <- c(location[1], location[2])
+      } else {
+        stop("Invalid location format: either string or numerical vetor of 2")
+      }
 
     }
 
