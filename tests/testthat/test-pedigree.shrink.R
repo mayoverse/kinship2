@@ -82,17 +82,17 @@ test_that("Pedigree shrink avail test", {
 test_that("Pedigree shrink with character", {
   ## use sample.ped from the package
   data(sample.ped)
-  
+
   pedAll <- pedigree(sample.ped$id, sample.ped$father, sample.ped$mother,
                      sample.ped$sex,
                      affected = cbind(sample.ped$affected, sample.ped$avail),
                      famid = sample.ped$ped
   )
-  
+
   # Select first family
   ped1 <- pedAll["1"]
   ped1df <- as.data.frame(ped1)
-  
+
   # Change id to character
   ped1df$idchar <- gsub("^1", "A-", as.character(ped1df$id))
   ped1df$dadidchar <- gsub("^1", "A-", as.character(ped1df$dadid))
@@ -100,13 +100,13 @@ test_that("Pedigree shrink with character", {
   # ped1df$dadidchar <- ifelse(ped1df$dadidchar=="0", NA, ped1df$dadidchar)
   # ped1df$momidchar <- ifelse(ped1df$momidchar=="0", NA, ped1df$momidchar)
   ped1char <- with(ped1df, pedigree(idchar, dadidchar, momidchar, sex, affected, missid = c("0")))
-  
+
   set.seed(100)
   shrink1.p1char.B32 <- pedigree.shrink(ped = ped1char, avail = ped1char$affected[, 2], maxBits = 32)
   expect_equal(shrink1.p1char.B32$idTrimmed,
               c("A-01", "A-02", "A-07", "A-08", "A-11", "A-13", "A-21", "A-22",
                 "A-23", "A-31", "A-32", "A-34", "A-39"))
-  
+
   set.seed(100)
   shrink1.p1char.B25 <- pedigree.shrink(ped = ped1char, avail = ped1char$affected[, 2], maxBits = 25)
   expect_equal(shrink1.p1char.B25$idTrimmed,
@@ -124,7 +124,9 @@ test_that("pedigree.shrink.plot works", {
   shrink2 <- pedigree.shrink(ped2, avail = fam2$avail)
 
   expect_doppelganger("Shrinked ped 1",
-    plot.pedigree.shrink(shrink2, title = "Sample Pedigree 2"))
+    plot.pedigree.shrink(shrink2, title = "Sample Pedigree 2",
+      location = c(1, 1)))
   expect_doppelganger("Shrinked ped 2",
-    plot.pedigree.shrink(shrink2, bigped = TRUE, title = "Sample Pedigree 2"))
+    plot.pedigree.shrink(shrink2, bigped = TRUE, title = "Sample Pedigree 2",
+      location = "bottomright"))
 })
