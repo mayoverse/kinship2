@@ -10,6 +10,12 @@ test_that("pedigree.legend works", {
         radius = 0.8)
     }
     )
+  expect_doppelganger("Ped legend c(2,2)", {
+    plot(ped)
+    pedigree.legend(ped, location = c(2, 2),
+        radius = 0.8)
+    }
+    )
 })
 
 test_that("legendPlot works", {

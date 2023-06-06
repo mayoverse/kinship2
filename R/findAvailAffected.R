@@ -64,8 +64,7 @@ findAvailAffected <- function(ped, avail, affstatus)
 
   # trim by subject with min bits. This trims fewer subject than
   # using max(bits).
-
-  idTrim <- trimDat[bits == min(bits), 1]
+  idTrim <- trimDat[, 1][bits == min(bits)]
 
   ## break ties by random choice
   if (length(idTrim) > 1) {
