@@ -1,5 +1,13 @@
 \name{NEWS}
 \title{NEWS file for the kinship2 package}
+\section{Changes in version 3.0.0}{
+  \itemize{
+    \item plot.pedigree support ggplot generation, generated from datatable instead of ped,
+      tips columns can be specified for plotly, a mark inside the box can be added, add drawing progression
+    \item All documentation from pedigree.shrink.Rnw moved into Rd and R
+    files
+  }
+}
 \section{Changes in version 1.8.0}{
   \itemize{
     \item Make all functions extracted into R/, no longer from noweb files
