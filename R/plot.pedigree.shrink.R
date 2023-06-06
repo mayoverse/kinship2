@@ -28,16 +28,18 @@
 #'
 #' data(sample.ped)
 #'
-#' fam2 <- sample.ped[sample.ped$ped==2,]
-#' ped2 <- pedigree(fam2$id, fam2$father, fam2$mother, fam2$sex,
-#'                  fam2$affected, fam2$avail)
+#' fam2 <- sample.ped[sample.ped$ped == 2, ]
+#' ped2 <- pedigree(
+#'   fam2$id, fam2$father, fam2$mother, fam2$sex,
+#'   fam2$affected, fam2$avail
+#' )
 #'
-#' shrink2 <- pedigree.shrink(ped2,avail=fam2$avail)
+#' shrink2 <- pedigree.shrink(ped2, avail = fam2$avail)
 #' shrink2
 #'
 #' plot(ped2)
 #'
-#' plot.pedigree.shrink(shrink2, title="Sample Pedigree 2")
+#' plot.pedigree.shrink(shrink2, title = "Sample Pedigree 2")
 #'
 #' @export plot.pedigree.shrink
 plot.pedigree.shrink <- function(x, bigped = FALSE, title = "",

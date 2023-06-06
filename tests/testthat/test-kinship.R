@@ -35,10 +35,13 @@ test_that("kinship works", {
   )
 
   tped <- with(twindat, pedigree(id, dadid, momid, sex,
-                                 relation = relate))
+    relation = relate
+  ))
 
-  expect_doppelganger("Twin pedigree",
-                      plot(tped))
+  expect_doppelganger(
+    "Twin pedigree",
+    plot(tped)
+  )
 
   kmat <- kinship(tped)
 
