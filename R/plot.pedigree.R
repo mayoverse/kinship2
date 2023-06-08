@@ -1,3 +1,9 @@
+#### Libraries needed ####
+usethis::use_package("ggplot2")
+usethis::use_package("utils")
+usethis::use_package("grDevices")
+usethis::use_package("stats")
+
 #' Plot pedigrees
 #'
 #' @description
@@ -43,7 +49,6 @@
 #' @param border vector of color for the border of the box.
 #' @param ggplot_gen Boolean to indicate if a ggplot object should be created.
 #' @param cex controls text size.  Default=1.
-#' @param col color for each id.  Default assigns the same color to everyone.
 #' @param symbolsize controls symbolsize. Default=1.
 #' @param branch defines how much angle is used to connect various levels of
 #' nuclear families.
@@ -110,14 +115,13 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
                           ggplot_gen = FALSE,
                           cex = 1, symbolsize = 1, branch = 0.6,
                           packed = TRUE, align = c(1.5, 2), width = 6,
-                          psize = par("pin"), ped = NA,
+                          psize = par("pin"),
                           density = c(-1, 35, 65, 20), mar = c(4.1, 1, 4.1, 1),
                           angle = c(90, 65, 40, 0), keep_par = FALSE,
                           subregion, pconnect = .5, ...) {
   ## As of 2020-09, documention in no-web directory is moved to here and a
   ## vignette. Relevant sections in the vignette are marked in this code with
   ## Doc: followed by the section title
-
   call <- match.call()
   n <- length(df$id)
   if (n < 3) {
@@ -274,12 +278,10 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
     out
   } # end subregion2()
 
-  if (length(ped) < 4) {
-    if (is.na(ped)) {
-      ped <- with(df, pedigree(id, dadid, momid, sex))
-    } else {
-      stop("Argument 'ped' given not recognized")
-    }
+  if ("pedigree" %in% class(df)) {
+    ped <- df
+  } else {
+    ped <- with(df, pedigree(id, dadid, momid, sex))
   }
 
   ## Doc: Sizing
@@ -478,19 +480,19 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
 
   p <- ggplot2::ggplot() +
     ggplot2::scale_fill_manual(
-      values = setNames(colors_plot, colors_plot), name = "Availability",
-      labels = setNames(legend_labels, 1:4), drop = FALSE
+      values = stats::setNames(colors_plot, colors_plot), name = "Availability",
+      labels = stats::setNames(legend_labels, 1:4), drop = FALSE
     ) +
-    ggplot2::scale_color_manual(values = setNames(colors_plot, colors_plot),
+    ggplot2::scale_color_manual(values = stats::setNames(colors_plot, colors_plot),
         guide = FALSE)
 
   ## Doc: symbols
   sex <- as.numeric(ped$sex)
 
   message("Drawing the individuals", appendLF = TRUE)
-  prog_bar <- txtProgressBar(0, maxlev, char = "|", width = 50, style = 3)
+  prog_bar <- utils::txtProgressBar(0, maxlev, char = "|", width = 50, style = 3)
   for (i in 1:maxlev) {
-    setTxtProgressBar(prog_bar, i)
+    utils::setTxtProgressBar(prog_bar, i)
     for (j in seq_len(plist$n[i])) {
       k <- plist$nid[i, j]
       p <- drawbox(
@@ -526,7 +528,7 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
   message("\nDrawing connection spouse", appendLF = TRUE)
   i <- 4
   for (i in 1:maxlev) {
-    setTxtProgressBar(prog_bar, i)
+    utils::setTxtProgressBar(prog_bar, i)
     tempy <- i + boxh / 2
     if (any(plist$spouse[i, ] > 0)) {
       temp <- (1:maxcol)[plist$spouse[i, ] > 0]
@@ -573,7 +575,7 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
 
   message("\nDrawing connection childrens", appendLF = TRUE)
   for (i in 2:maxlev) {
-    setTxtProgressBar(prog_bar, i)
+    utils::setTxtProgressBar(prog_bar, i)
     zed <- unique(plist$fam[i, ])
     zed <- zed[zed > 0] # list of family ids
 
@@ -715,10 +717,10 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
   i <- 0
   if (imax > 0) {
     message("\nDrawing arcs for same Id", appendLF = TRUE)
-    prog_bar <- txtProgressBar(0, imax - 1, width = 50, style = 3, char = "|")
+    prog_bar <- utils::txtProgressBar(0, imax - 1, width = 50, style = 3, char = "|")
   }
   for (id in unique(uid[uid > 0])) {
-    setTxtProgressBar(prog_bar, i)
+    utils::setTxtProgressBar(prog_bar, i)
     indx <- which(plist$nid == id)
     if (length(indx) > 1) { # subject is a multiple
       tx <- plist$pos[indx]
@@ -748,12 +750,12 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
   if (ggplot_gen) {
     invisible(list(
       plist = plist, x = plist$pos[tmp], y = row(plist$pos)[tmp],
-      boxw = boxw, boxh = boxh, call = call, ggplot = p, plot = recordPlot()
+      boxw = boxw, boxh = boxh, call = call, ggplot = p, plot = grDevices::recordPlot()
     ))
   } else {
     invisible(list(
       plist = plist, x = plist$pos[tmp], y = row(plist$pos)[tmp],
-      boxw = boxw, boxh = boxh, call = call, plot = recordPlot()
+      boxw = boxw, boxh = boxh, call = call, plot = grDevices::recordPlot()
     ))
   }
 }
