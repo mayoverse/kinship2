@@ -24,7 +24,7 @@
 #' @return A pedigree plot with a legend
 #'
 #' @examples
-#' 
+#'
 #' data(sample.ped)
 #' pedAll <- with(sample.ped, pedigree(id, father, mother, sex,
 #'   affected = cbind(affected, avail), famid = ped
@@ -35,7 +35,9 @@
 #' @author Jason Sinnwell, code contributed by Sara Achenbach
 #' @seealso \code{\link{pedigree}}, \code{\link{plot.pedigree}}
 #' @export legendPlot
-legendPlot <- function(x, id = x$id, affected = x$affected, affected.label = NULL, col = 1, col.label = NULL, symbolsize = .75, cex = .5, ...) {
+legendPlot <- function(x, id = x$id, affected = x$affected,
+                      affected.label = NULL, col = 1, col.label = NULL,
+                      symbolsize = .75, cex = .5, ...) {
   ## Need to deal with real char strings. Set stringsAsFactors back at end
 
   ## check colors
@@ -103,11 +105,11 @@ legendPlot <- function(x, id = x$id, affected = x$affected, affected.label = NUL
     ## plot the legend nuclear family on the bottom
     par(mar = c(0, 2, 2, 2), oma = c(0, 1, 0, 1))
     plot(legped,
-      id = legdf$idlabel, col = legend.col,
+      id = legdf$idlabel, avail = legend.col,
       density = rep(-1, ncol(legaff)), angle = rep(90, ncol(legaff)),
       symbolsize = symbolsize, cex = cex, packed = TRUE, mar = c(0, 2, 2, 2), ...
     )
-    # fig=c(0,1,0,1/15),new=FALSE,keep.par=TRUE, ...)
+    # fig=c(0,1,0,1/15),new=FALSE,keep_par=TRUE, ...)
 
     ## DELETE PARENTS FROM LEGEND KEY  (or write over)
     polygon(y = c(-1, -1, 1.999, 1.999), x = c(-1, 8, 8, -1), col = "white", border = NA)
@@ -120,7 +122,7 @@ legendPlot <- function(x, id = x$id, affected = x$affected, affected.label = NUL
   ## PLOTTING THE ACTUAL PEDIGREE FOR THIS FAMILY
   plot(x,
     density = c(-1, -1, -1, -1), angle = c(90, 90, 90, 90),
-    col = col, id = id, symbolsize = symbolsize, cex = cex, packed = FALSE,
-    keep.par = TRUE, fig = c(0, 1, 1 / 50, 1), new = TRUE, mar = c(3.5, 1, 1.5, 1), new = TRUE, ...
+    id = id, symbolsize = symbolsize, cex = cex, packed = FALSE,
+    keep_par = TRUE, fig = c(0, 1, 1 / 50, 1), new = TRUE, mar = c(3.5, 1, 1.5, 1), new = TRUE, ...
   )
 }

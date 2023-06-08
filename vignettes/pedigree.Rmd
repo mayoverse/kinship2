@@ -311,7 +311,7 @@ id2 <- paste(df2$id, c(
   "Lucy", "Ken", "Barb", "Mike", "Matt",
   "Mindy", "Mark", "George"
 ), sep = "\n")
-plot(ped2, col = ifelse(df2$avail, 2, 1), id = id2, cex = .5)
+plot(ped2, avail = ifelse(df2$avail, 2, 1), id = id2, cex = .5)
 pedigree.legend(ped2, location = "topright", radius = .2)
 ``` 
 
@@ -334,7 +334,7 @@ ped1 <- pedigree(df1$id, df1$father, df1$mother,
   relation = relate1
 )
 print(ped1)
-plot(ped1, col = ifelse(df1$avail == 1, "red", "black"), cex = .7)
+plot(ped1, avail = ifelse(df1$avail == 1, "red", "black"), cex = .7)
 ``` 
 
 ## Align by Input Order
@@ -351,7 +351,7 @@ ped1reord <- pedigree(df1reord$id, df1reord$father, df1reord$mother,
   df1reord$sex,
   affected = df1reord$affected, relation = relate1
 )
-plot(ped1reord, col = df1reord$avail + 1, cex = .7)
+plot(ped1reord, avail = df1reord$avail + 1, cex = .7)
 ``` 
   
 ## Legend Plot
@@ -459,7 +459,7 @@ shrink1.B30 <- pedigree.shrink(
   avail = df1$avail, maxBits = 30
 )
 print(shrink1.B30)
-# plot.pedigree.shrink(shrink1.B30, col=shrink1.B30$avail + 1, cex=.6)
+# plot.pedigree.shrink(shrink1.B30, avail=shrink1.B30$avail + 1, cex=.6)
 ```
 
 Now shrink pedigree 1 to bit size $25$, which requires removing 
@@ -474,7 +474,7 @@ shrink1.B25 <- pedigree.shrink(
   maxBits = 25
 )
 shrink1.B25
-# plot.pedigree.shrink(shrink1.B25, col=shrink1.B25$avail+1, cex=.6)
+# plot.pedigree.shrink(shrink1.B25, avail=shrink1.B25$avail+1, cex=.6)
 ``` 
 
 Select Unrelateds

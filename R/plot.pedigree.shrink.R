@@ -48,11 +48,11 @@ plot.pedigree.shrink <- function(x, bigped = FALSE, title = "",
   ##   to availability, shaded by affected status used in shrink
 
   if (bigped == FALSE) {
-    tmp <- plot(x$pedObj, col = x$avail + 1, keep.par = TRUE)
+    tmp <- plot(x$pedObj, avail = x$avail + 1, keep_par = TRUE)
   } else {
     tmp <- plot.pedigree(x$pedObj,
       align = FALSE, packed = FALSE,
-      col = x$avail + 1, cex = 0.5, symbolsize = 0.5, keep.par = TRUE
+      avail = x$avail + 1, cex = 0.5, symbolsize = 0.5, keep_par = TRUE
     )
   }
 
