@@ -53,10 +53,10 @@ kindepth <- function(id, dad_id, mom_id, align = FALSE) {
   # labeled with depth 'i', and become the parents of the next iteration
   for (i in 1:n) {
     child <- match(midx, parents, nomatch = 0) +
-      match(didx, parents, nomatch = 0) #Index of parent's childs
+      match(didx, parents, nomatch = 0) # Index of parent's childs
 
     if (all(child == child_old)) {
-      stop(paste("Impossible pedigree: no progress made at iteration",i))
+      stop(paste("Impossible pedigree: no progress made at iteration", i))
     }
     if (all(child == 0)) {
       break
@@ -64,7 +64,7 @@ kindepth <- function(id, dad_id, mom_id, align = FALSE) {
     if (i == n) {
       stop("Impossible pedegree: someone is their own ancestor")
     }
-    parents <- which(child > 0) #Old child are parents of the next generation
+    parents <- which(child > 0) # Old child are parents of the next generation
     depth[parents] <- i
     child_old <- child
   }
@@ -186,15 +186,15 @@ kindepth <- function(id, dad_id, mom_id, align = FALSE) {
       }
 
       if (all(match(abad, agood, nomatch = 0) == 0)) {
-      ## shift it down
-      depth[abad] <- depth[abad] + (depth[good] - depth[bad])
+        ## shift it down
+        depth[abad] <- depth[abad] + (depth[good] - depth[bad])
 
-      ## Siblings may have had children: make sure all kids are
-      ##   below their parents.  It's easiest to run through the
-      ##   whole tree
-      for (i in 0:n) {
+        ## Siblings may have had children: make sure all kids are
+        ##   below their parents.  It's easiest to run through the
+        ##   whole tree
+        for (i in 0:n) {
           parents <- which(depth == i)
-          child <- match(midx, parents, nomatch = 0) + 
+          child <- match(midx, parents, nomatch = 0) +
             match(didx, parents, nomatch = 0)
           if (all(child == 0)) {
             break
