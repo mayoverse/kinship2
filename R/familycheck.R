@@ -44,19 +44,25 @@
 #' # use 2 sample peds
 #' data(sample.ped)
 #' pedAll <- with(sample.ped, pedigree(id, father, mother, sex,
-#'                     affected=cbind(affected, avail), famid=ped))
+#'   affected = cbind(affected, avail), famid = ped
+#' ))
 #'
 #' ## check them giving separate ped ids
 #' fcheck.sep <- with(sample.ped, familycheck(ped, id, father, mother))
 #' fcheck.sep
 #'
 #' ## check assigning them same ped id
-#' fcheck.combined <- with(sample.ped, familycheck(rep(1,nrow(sample.ped)), id, father, mother))
+#' fcheck.combined <- with(sample.ped, familycheck(rep(1, nrow(sample.ped)), id, father, mother))
 #' fcheck.combined
 #'
-#' #make person 120's father be her son.
-#' sample.ped[20,3] <- 131
-#' fcheck1.bad <- try({with(sample.ped, familycheck(ped, id, father, mother))}, silent=FALSE)
+#' # make person 120's father be her son.
+#' sample.ped[20, 3] <- 131
+#' fcheck1.bad <- try(
+#'   {
+#'     with(sample.ped, familycheck(ped, id, father, mother))
+#'   },
+#'   silent = FALSE
+#' )
 #'
 #' ## fcheck1.bad is a try-error
 #'
@@ -64,39 +70,44 @@
 #' @keywords genetics
 #' @export familycheck
 familycheck <- function(famid, id, father.id, mother.id, newfam) {
-    if (is.numeric(famid) && any(is.na(famid)))
-        stop ("Family id of missing not allowed")
-    nfam <- length(unique(famid))
+  if (is.numeric(famid) && any(is.na(famid))) {
+    stop("Family id of missing not allowed")
+  }
+  nfam <- length(unique(famid))
 
-    if (missing(newfam)) newfam <- makefamid(id, father.id, mother.id)
-    else if (length(newfam) != length(famid))
-        stop("Invalid length for newfam")
+  if (missing(newfam)) {
+    newfam <- makefamid(id, father.id, mother.id)
+  } else if (length(newfam) != length(famid)) {
+    stop("Invalid length for newfam")
+  }
 
-    xtab <- table(famid, newfam)
-    if (any(newfam==0)) {
-        unrelated <- xtab[,1]
-        xtab <- xtab[,-1, drop=FALSE] 
-        ## bug fix suggested by Amanda Blackford 6/2011
-      }
-    else unrelated <-  rep(0, nfam)
+  xtab <- table(famid, newfam)
+  if (any(newfam == 0)) {
+    unrelated <- xtab[, 1]
+    xtab <- xtab[, -1, drop = FALSE]
+    ## bug fix suggested by Amanda Blackford 6/2011
+  } else {
+    unrelated <- rep(0, nfam)
+  }
 
-    splits <- apply(xtab>0, 1, sum)
-    joins  <- apply(xtab>0, 2, sum)
+  splits <- apply(xtab > 0, 1, sum)
+  joins <- apply(xtab > 0, 2, sum)
 
-    temp <- apply((xtab>0) * outer(rep(1,nfam), joins-1), 1, sum)
+  temp <- apply((xtab > 0) * outer(rep(1, nfam), joins - 1), 1, sum)
 
-    out <- data.frame(famid = dimnames(xtab)[[1]],
-                      n = as.vector(table(famid)),
-                      unrelated = as.vector(unrelated),
-                      split = as.vector(splits),
-                      join = temp,
-                      row.names=1:nfam)
-    if (any(joins >1)) {
-      tab1 <- xtab[temp>0,]  #families with multiple outcomes
-      tab1 <- tab1[,apply(tab1>0,2,sum) >0] #only keep non-zero columns
-      dimnames(tab1) <- list(dimnames(tab1)[[1]], NULL)
-      attr(out, 'join') <- tab1
-    }   
-    out
+  out <- data.frame(
+    famid = dimnames(xtab)[[1]],
+    n = as.vector(table(famid)),
+    unrelated = as.vector(unrelated),
+    split = as.vector(splits),
+    join = temp,
+    row.names = 1:nfam
+  )
+  if (any(joins > 1)) {
+    tab1 <- xtab[temp > 0, ] # families with multiple outcomes
+    tab1 <- tab1[, apply(tab1 > 0, 2, sum) > 0] # only keep non-zero columns
+    dimnames(tab1) <- list(dimnames(tab1)[[1]], NULL)
+    attr(out, "join") <- tab1
+  }
+  out
 }
-
