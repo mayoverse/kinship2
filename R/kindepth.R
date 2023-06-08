@@ -13,8 +13,8 @@
 #' \code{extra=TRUE} may not exist.
 #'
 #' @param id Identification code for each individual
-#' @param dad.id Id code for the father
-#' @param mom.id Id code for the mother
+#' @param dad_id Id code for the father
+#' @param mom_id Id code for the mother
 #' @param align If align=T, go one step further and try to make both parents of
 #' each child have the same depth.  (This is not always possible).  It helps
 #' the drawing program by lining up pedigrees that "join in the middle" via a
@@ -26,21 +26,21 @@
 #' @seealso \code{\link{plot.pedigree}}
 #' @keywords genetics
 #' @export kindepth
-kindepth <- function(id, dad.id, mom.id, align = FALSE) {
+kindepth <- function(id, dad_id, mom_id, align = FALSE) {
   if ("pedigree" %in% class(id) || "pedigreeList" %in% class(id)) {
     didx <- id$findex
     midx <- id$mindex
     n <- length(didx)
   } else {
     n <- length(id)
-    if (missing(dad.id) || length(dad.id) != n) {
+    if (missing(dad_id) || length(dad_id) != n) {
       stop("Invalid father id")
     }
-    if (missing(mom.id) || length(mom.id) != n) {
+    if (missing(mom_id) || length(mom_id) != n) {
       stop("Invalid mother id")
     }
-    midx <- match(mom.id, id, nomatch = 0) # row number of my mom
-    didx <- match(dad.id, id, nomatch = 0) # row number of my dad
+    midx <- match(mom_id, id, nomatch = 0) # row number of my mom
+    didx <- match(dad_id, id, nomatch = 0) # row number of my dad
   }
   if (n == 1) {
     return(0)
@@ -48,19 +48,25 @@ kindepth <- function(id, dad.id, mom.id, align = FALSE) {
   parents <- which(midx == 0 & didx == 0) # founders
 
   depth <- rep(0, n)
+  child_old <- rep(0, n)
   # At each iteration below, all children of the current "parents" are
-  #    labeled with depth 'i', and become the parents of the next iteration
+  # labeled with depth 'i', and become the parents of the next iteration
   for (i in 1:n) {
     child <- match(midx, parents, nomatch = 0) +
-      match(didx, parents, nomatch = 0)
+      match(didx, parents, nomatch = 0) # Index of parent's childs
 
-    if (all(child == 0)) break
+    if (all(child == child_old)) {
+      stop(paste("Impossible pedigree: no progress made at iteration", i))
+    }
+    if (all(child == 0)) {
+      break
+    }
     if (i == n) {
       stop("Impossible pedegree: someone is their own ancestor")
     }
-
-    parents <- which(child > 0) # next generation of parents
+    parents <- which(child > 0) # Old child are parents of the next generation
     depth[parents] <- i
+    child_old <- child
   }
   if (!align) {
     return(depth)
@@ -68,16 +74,17 @@ kindepth <- function(id, dad.id, mom.id, align = FALSE) {
 
   ## align
   ## Assume that subjects A and B marry, we have some ancestry information for
-  ## both, and that A's ancestors go back 3 generations, B's for only two.  If we
-  ## add +1 to the depth of B and all her ancestors, then A and B will be the same
-  ## depth, and will plot on the same line.  Founders who marry in are also aligned.
-  ## However, if an inbred pedigree, may not be a simple fix of this sort.
+  ## both, and that A's ancestors go back 3 generations, B's for only two.
+  ## If we add +1 to the depth of B and all her ancestors, then A and B will be
+  ## the same depth, and will plot on the same line.  Founders who marry in are
+  ## also aligned. However, if an inbred pedigree, may not be a simple fix of
+  ## this sort.
 
   ## The algorithm is
-  ## 1 First deal with founders. If a founder marries in multiple times at multiple
-  ## deaths (animal pedigrees), given that subject the min(depth of spouses). These
-  ## subjects cause trouble for the general algorithm below: the result would depend on the
-  ## data order.
+  ## 1 First deal with founders. If a founder marries in multiple times at
+  ## multiple deaths (animal pedigrees), given that subject the
+  ## min(depth of spouses). These subjects cause trouble for the general
+  ## algorithm below: the result would depend on the data order.
   ## 2. Find any remaining mother-father pairs that are mismatched in depth.
   ##   Deal with them one at a time.
   ## 3.  The children's depth is max(father, mother) +1.  Call the
@@ -89,9 +96,9 @@ kindepth <- function(id, dad.id, mom.id, align = FALSE) {
   ## marriage in question, to get the highest marriages right.
   ## For the bad side, just get ancestors.
   ## 5. Avoid pedigree loops!  If the agood list contains anyone in abad,
-  ## then don't try to fix the alignment, otherwise: Push abad down, then run the
-  ## pushdown algorithm to repair any descendents --- you may have pulled down a
-  ## grandparent but not the sibs of that grandparent.
+  ## then don't try to fix the alignment, otherwise: Push abad down, then run
+  ## the pushdown algorithm to repair any descendents --- you may have pulled
+  ## down a grandparent but not the sibs of that grandparent.
 
   ## It may be possible to do better alignment when the pedigree has loops,
   ## but it is definitely beyond this program, perhaps in autohint one day.
@@ -140,7 +147,9 @@ kindepth <- function(id, dad.id, mom.id, align = FALSE) {
   done <- rep(FALSE, npair) # couples that are taken care of
   while (TRUE) {
     pairs.to.fix <- which((depth[dads] != depth[moms]) & !done)
-    if (length(pairs.to.fix) == 0) break
+    if (length(pairs.to.fix) == 0) {
+      break
+    }
     temp <- pmax(depth[dads], depth[moms])[pairs.to.fix]
     who <- min(pairs.to.fix[temp == min(temp)]) # the chosen couple
 
@@ -187,15 +196,19 @@ kindepth <- function(id, dad.id, mom.id, align = FALSE) {
           parents <- which(depth == i)
           child <- match(midx, parents, nomatch = 0) +
             match(didx, parents, nomatch = 0)
-          if (all(child == 0)) break
+          if (all(child == 0)) {
+            break
+          }
           depth[child > 0] <- pmax(i + 1, depth[child > 0])
         }
       }
     }
     ## Once a subject has been shifted, we don't allow them to instigate
-    ##  yet another shift, possibly on another level
+    ## yet another shift, possibly on another level
     done[dads == bad | moms == bad] <- TRUE
   } ## while(TRUE)
-  if (all(depth > 0)) stop("You found a bug in kindepth's alignment code!")
-  depth
+  if (all(depth > 0)) {
+    stop("You found a bug in kindepth's alignment code!")
+  }
+  return(depth)
 }
