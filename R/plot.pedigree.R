@@ -27,12 +27,21 @@
 #' which tends to keep them together.  The size of $b$ controls the relative
 #' importance of sib-parent and spouse-spouse closeness.
 #'
-#' @param x object created by the function pedigree.
+#' @param df dataframe to use for the pedigree.
 #' @param id id variable - used for labeling.
 #' @param status can be missing.  If it exists, 0=alive/missing and 1=death.
 #' @param affected vector, or matrix with up to 4 columns for affected
 #' indicators. Subject's symbol is divided into sections for each status,
 #' shaded if indicator is 1, not-shaded for 0, and symbol "?" if missing (NA)
+#' @param avail vector indicating the availability of the individual.
+#' If it exists, 0=unavailable and 1=available.
+#' @param mark vector indicating the text to plot in the center of the box.
+#' @param label vector indicating the text to plot bellow the box.
+#' @param tips_names vector of column names in dataframe to show when hovering
+#' with plotly.
+#' @param fill vector of color to fill the box.
+#' @param border vector of color for the border of the box.
+#' @param ggplot_gen Boolean to indicate if a ggplot object should be created.
 #' @param cex controls text size.  Default=1.
 #' @param col color for each id.  Default assigns the same color to everyone.
 #' @param symbolsize controls symbolsize. Default=1.
@@ -50,7 +59,7 @@
 #' @param mar margin parmeters, as in the \code{par} function
 #' @param angle defines angle used in the symbols.  Takes up to 4 different
 #' values.
-#' @param keep.par Default = F, allows user to keep the parameter settings the
+#' @param keep_par Default = F, allows user to keep the parameter settings the
 #' same as they were for plotting (useful for adding extras to the plot)
 #' @param subregion 4-element vector for (min x, max x, min depth, max depth),
 #' used to edit away portions of the plot coordinates returned by
@@ -93,24 +102,24 @@
 #' @seealso \code{\link{pedigree}}
 #' @keywords hplot, genetics
 #' @export plot.pedigree
-plot.pedigree <- function(dataTable, id = dataTable$id, status = dataTable$status,
-                        affected = dataTable$affected, avail = dataTable$avail + 1,
+plot.pedigree <- function(df, id = df$id, status = df$status,
+                        affected = df$affected, avail = df$avail + 1,
                         mark = NA, label = NA,
-                        tipsNames = NA,
+                        tips_names = NA,
                         fill = "white", border = "black",
-                        ggplotGen = FALSE,
+                        ggplot_gen = FALSE,
                         cex = 1, symbolsize = 1, branch = 0.6,
                         packed = TRUE, align = c(1.5, 2), width = 6,
                         psize = par("pin"), ped = NA,
                         density = c(-1, 35, 65, 20), mar = c(4.1, 1, 4.1, 1),
-                        angle = c(90, 65, 40, 0), keep.par = FALSE,
+                        angle = c(90, 65, 40, 0), keep_par = FALSE,
                         subregion, pconnect = .5, ...) {
-    ## As of 2020-09, documention in no-web directory is moved to here and a vignette.
-    ## Relevant sections in the vignette are marked in this code with
+    ## As of 2020-09, documention in no-web directory is moved to here and a
+    ## vignette. Relevant sections in the vignette are marked in this code with
     ## Doc: followed by the section title
 
-    Call <- match.call()
-    n <- length(dataTable$id)
+    call <- match.call()
+    n <- length(df$id)
     if (n < 3) {
         stop("Cannot plot pedigree with fewer than 3 subjects")
     }
@@ -133,12 +142,13 @@ plot.pedigree <- function(dataTable, id = dataTable$id, status = dataTable$statu
         }
     }
     ## Doc: still part of setup/data
-    ## affected is a 0/1 matrix of any marker data.  It may be attached to the pedigree or added
-    ## here.  It can be a vector of length [[n]] or a matrix with [[n]] rows.
-    ## If not present, the default is to plot open symbols without shading or color
+    ## affected is a 0/1 matrix of any marker data.  It may be attached to the
+    ## pedigree or added here.  It can be a vector of length [[n]] or a matrix
+    ## with [[n]] rows. If not present, the default is to plot open symbols
+    ## without shading or color
 
-    ## If affected is a matrix, then the shading and/or density value for ith column is
-    ## taken from the ith element of the angle/density arguments.
+    ## If affected is a matrix, then the shading and/or density value for ith
+    ## column is taken from the ith element of the angle/density arguments.
 
     ## For purposes within the plot method, NA values in ``affected'' are
     ## coded to -1, and plotted as a question mark (?) in the plot symbol
@@ -154,7 +164,8 @@ plot.pedigree <- function(dataTable, id = dataTable$id, status = dataTable$statu
             if (is.logical(affected)) {
                 affected <- 1 * affected
             }
-            if (ncol(affected) > length(angle) || ncol(affected) > length(density)) {
+            if (ncol(affected) > length(angle) ||
+                ncol(affected) > length(density)) {
                 stop("More columns in the affected matrix than angle/density values")
             }
         } else {
@@ -182,7 +193,8 @@ plot.pedigree <- function(dataTable, id = dataTable$id, status = dataTable$statu
         }
     }
 
-    allVarChecked <- lapply(mget(c("avail", "mark", "label", "fill", "border")), function(var) {
+    allVarChecked <- lapply(mget(c("avail", "mark", "label", "fill", "border")),
+                            function(var) {
         if (length(var) <= 1) {
             return(rep(var, n))
         } else if (length(var) != n) {
@@ -210,9 +222,11 @@ plot.pedigree <- function(dataTable, id = dataTable$id, status = dataTable$statu
             }
         }
         # Test if all column used for the tips are present in dataframe
-        if (!is.na(tipsNames)) {
-            if (any(!tipsNames %in% colnames(dataTable))) {
-                stop(paste("Column name :", tipsNames[!tipsNames %in% colnames(dataTable)], "not present in data"), )
+        if (!is.na(tips_names)) {
+            if (any(!tips_names %in% colnames(df))) {
+                stop(paste("Column name :",
+                           tips_names[!tips_names %in% colnames(df)],
+                           "not present in data"), )
             }
         }
 
@@ -244,16 +258,21 @@ plot.pedigree <- function(dataTable, id = dataTable$id, status = dataTable$statu
 
         n <- max(n2)
         out <- list(
-            n = n2[1:n], nid = nid2[, 1:n, drop = F], pos = pos2[, 1:n, drop = F],
-            spouse = spouse2[, 1:n, drop = F], fam = fam2[, 1:n, drop = F]
+            n = n2[1:n],
+            nid = nid2[, 1:n, drop = F],
+            pos = pos2[, 1:n, drop = F],
+            spouse = spouse2[, 1:n, drop = F],
+            fam = fam2[, 1:n, drop = F]
         )
-        if (!is.null(plist$twins)) out$twins <- twin2[, 1:n, drop = F]
+        if (!is.null(plist$twins)) {
+            out$twins <- twin2[, 1:n, drop = F]
+        }
         out
     } # end subregion2()
 
     if (length(ped) < 4) {
         if (is.na(ped)) {
-            ped <- with(dataTable, pedigree(id, dadid, momid, sex))
+            ped <- with(df, pedigree(id, dadid, momid, sex))
         } else {
             stop("Argument 'ped' given not recognized")
         }
@@ -283,7 +302,7 @@ plot.pedigree <- function(dataTable, id = dataTable$id, status = dataTable$statu
     wd2 <- .8 * psize[1] / (.8 + diff(xrange))
 
     boxsize <- symbolsize * min(ht1, ht2, stemp1, wd2) # box size in inches
-    hscale <- (psize[1] - boxsize) / diff(xrange) # horizontal scale from user-> inch
+    hscale <- (psize[1] - boxsize) / diff(xrange) # horizontal scale from user -> inch
     vscale <- (psize[2] - (stemp3 + stemp2 / 2 + boxsize)) / max(1, maxlev - 1)
     boxw <- boxsize / hscale # box width in user units
     boxh <- boxsize / vscale # box height in user units
@@ -412,16 +431,17 @@ plot.pedigree <- function(dataTable, id = dataTable$id, status = dataTable$statu
             )
 
             colText <- "black"
-            text(midx, midy, labels = plabel, cex = cex / length(affected), col = colText)
+            text(midx, midy, labels = plabel,
+                 cex = cex / length(affected), col = colText)
             # points(midx, midy, pch = plabel, cex = cex/length(affected),col = colText)
 
-            if (ggplotGen) {
+            if (ggplot_gen) {
                 pPlot <- pPlot + geom_polygon(aes(
                     x = x + (polylist[[sex]])[[i]]$x * boxw,
                     y = y + (polylist[[sex]])[[i]]$y * boxh, fill = fill,
                     color = border
                 ))
-                tips <- dataTooltips[dataTooltips$id == id, tipsNames]
+                tips <- dataTooltips[dataTooltips$id == id, tips_names]
                 tips <- tips[][c(!is.na(tips))]
                 tips <- paste(colnames(tips), ":", tips, collapse = "<br>")
 
@@ -436,10 +456,11 @@ plot.pedigree <- function(dataTable, id = dataTable$id, status = dataTable$statu
                 x - .6 * boxw, y + 1.1 * boxh,
                 x + .6 * boxw, y - .1 * boxh
             )
-            if (ggplotGen) {
-                pPlot <- pPlot + annotate("segment",
-                                          x = x - .6 * boxw, y = y + 1.1 * boxh,
-                                          xend = x + .6 * boxw, yend = y - .1 * boxh
+            if (ggplot_gen) {
+                pPlot <- pPlot + 
+                    annotate("segment",
+                             x = x - .6 * boxw, y = y + 1.1 * boxh,
+                             xend = x + .6 * boxw, yend = y - .1 * boxh
                 )
             }
         }
@@ -475,17 +496,21 @@ plot.pedigree <- function(dataTable, id = dataTable$id, status = dataTable$statu
                 plist$pos[i, j], i, sex[k], affected[k, ],
                 status[k], avail[k], mark[k], polylist,
                 fill[k], border[k],
-                density, angle, boxw, boxh, p, id[k], dataTable
+                density, angle, boxw, boxh, p, id[k], df
             )
             text(plist$pos[i, j], i + boxh + labh * .7, id[k],
                  cex = cex,
                  adj = c(.5, 1)
             )
-            if (ggplotGen) {
-                p <- p + annotate("text", x = plist$pos[i, j], y = i + boxh + labh * .7, label = id[k])
+            if (ggplot_gen) {
+                p <- p +
+                    annotate("text", label = id[k],
+                             x = plist$pos[i, j], y = i + boxh + labh * .7)
             }
             if (!is.na(label[k])) { # Label added if present under the individual
-                text(plist$pos[i, j], i + boxh + labh * .7 * 3, paste0("(", label[k], ")"),
+                text(plist$pos[i, j],
+                     i + boxh + labh * .7 * 3,
+                     paste0("(", label[k], ")"),
                      cex = cex * 0.75,
                      adj = c(.5, 1)
                 )
@@ -503,15 +528,20 @@ plot.pedigree <- function(dataTable, id = dataTable$id, status = dataTable$statu
         if (any(plist$spouse[i, ] > 0)) {
             temp <- (1:maxcol)[plist$spouse[i, ] > 0]
             segments(
-                x0 = plist$pos[i, temp] + boxw / 2, y0 = rep(tempy, length(temp)),
-                x1 = plist$pos[i, temp + 1] - boxw / 2, y1 = rep(tempy, length(temp))
+                x0 = plist$pos[i, temp] + boxw / 2,
+                y0 = rep(tempy, length(temp)),
+                x1 = plist$pos[i, temp + 1] - boxw / 2,
+                y1 = rep(tempy, length(temp))
             )
 
-            if (ggplotGen) {
+            if (ggplot_gen) {
                 for (i2 in 1:length(temp)) {
-                    p <- p + annotate("segment",
-                                      x = plist$pos[i, temp][i2] + boxw / 2, y = rep(tempy, length(temp))[i2],
-                                      xend = plist$pos[i, temp + 1][i2] - boxw / 2, yend = rep(tempy, length(temp))[i2]
+                    p <- p +
+                        annotate("segment",
+                                 x = plist$pos[i, temp][i2] + boxw / 2,
+                                 y = rep(tempy, length(temp))[i2],
+                                 xend = plist$pos[i, temp + 1][i2] - boxw / 2,
+                                 yend = rep(tempy, length(temp))[i2]
                     )
                 }
             }
@@ -522,11 +552,14 @@ plot.pedigree <- function(dataTable, id = dataTable$id, status = dataTable$statu
                     plist$pos[i, temp] + boxw / 2, rep(tempy, length(temp)),
                     plist$pos[i, temp + 1] - boxw / 2, rep(tempy, length(temp))
                 )
-                if (ggplotGen) {
+                if (ggplot_gen) {
                     for (i2 in 1:length(temp)) {
-                        p <- p + annotate("segment",
-                                          x = plist$pos[i, temp][i2] + boxw / 2, y = rep(tempy, length(temp))[i2],
-                                          xend = plist$pos[i, temp + 1][i2] - boxw / 2, yend = rep(tempy, length(temp))[i2]
+                        p <- p + 
+                            annotate("segment",
+                                     x = plist$pos[i, temp][i2] + boxw / 2,
+                                     y = rep(tempy, length(temp))[i2],
+                                     xend = plist$pos[i, temp + 1][i2] - boxw / 2,
+                                     yend = rep(tempy, length(temp))[i2]
                         )
                     }
                 }
@@ -559,7 +592,7 @@ plot.pedigree <- function(dataTable, id = dataTable$id, status = dataTable$statu
             }
             yy <- rep(i, sum(who))
             segments(plist$pos[i, who], yy, target, yy - legh)
-            if (ggplotGen) {
+            if (ggplot_gen) {
                 for (i2 in 1:length(yy)) {
                     p <- p + annotate("segment",
                                       x = plist$pos[i, who][i2], y = yy[i2],
@@ -575,7 +608,7 @@ plot.pedigree <- function(dataTable, id = dataTable$id, status = dataTable$statu
                 temp2 <- (plist$pos[i, who][who2 + 1] + target[who2]) / 2
                 yy <- rep(i, length(who2)) - legh / 2
                 segments(temp1, yy, temp2, yy)
-                if (ggplotGen) {
+                if (ggplot_gen) {
                     for (i2 in 1:length(yy)) {
                         p <- p + annotate("segment",
                                           x = temp1[i2], y = yy[i2],
@@ -592,11 +625,12 @@ plot.pedigree <- function(dataTable, id = dataTable$id, status = dataTable$statu
                 temp2 <- (plist$pos[i, who][who2 + 1] + target[who2]) / 2
                 yy <- rep(i, length(who2)) - legh / 2
                 text((temp1 + temp2) / 2, yy, "?")
-                if (ggplotGen) {
+                if (ggplot_gen) {
                     for (i2 in 1:length(yy)) {
-                        p <- p + annotate("text",
-                                          x = (temp1[i2] + temp2[i2]) / 2, y = yy[i2],
-                                          label = "?"
+                        p <- p +
+                            annotate("text",label = "?",
+                                     x = (temp1[i2] + temp2[i2]) / 2,
+                                     y = yy[i2]
                         )
                     }
                 }
@@ -604,7 +638,7 @@ plot.pedigree <- function(dataTable, id = dataTable$id, status = dataTable$statu
 
             # Add the horizontal line
             segments(min(target), i - legh, max(target), i - legh)
-            if (ggplotGen) {
+            if (ggplot_gen) {
                 p <- p + annotate("segment",
                                   x = min(target), y = i - legh,
                                   xend = max(target), yend = i - legh
@@ -625,7 +659,7 @@ plot.pedigree <- function(dataTable, id = dataTable$id, status = dataTable$statu
             y1 <- i - legh
             if (branch == 0) {
                 segments(x1, y1, parentx, (i - 1) + boxh / 2)
-                if (ggplotGen) {
+                if (ggplot_gen) {
                     p <- p + geom_segment(aes(
                         x = x1, y = y1,
                         xend = parentx, yend = (i - 1) + boxh / 2
@@ -639,7 +673,7 @@ plot.pedigree <- function(dataTable, id = dataTable$id, status = dataTable$statu
                     c(x1, x1, x2), c(y1, y1 + ydelta, y2 - ydelta),
                     c(x1, x2, x2), c(y1 + ydelta, y2 - ydelta, y2)
                 )
-                if (ggplotGen) {
+                if (ggplot_gen) {
                     for (i2 in 1:length(x1)) {
                         p <- p + annotate("segment",
                                           x = x1[i2], y = y1[i2],
@@ -664,7 +698,7 @@ plot.pedigree <- function(dataTable, id = dataTable$id, status = dataTable$statu
         xx <- seq(x[1], x[2], length = 15)
         yy <- seq(y[1], y[2], length = 15) + (seq(-7, 7))^2 / 98 - .5
         lines(xx, yy, lty = 2)
-        if (ggplotGen) {
+        if (ggplot_gen) {
             p <- p + annotate("line", xx, yy, linetype = "dashed")
         }
         return(p)
@@ -695,21 +729,26 @@ plot.pedigree <- function(dataTable, id = dataTable$id, status = dataTable$statu
     close(PB)
 
     ## Doc: finish/Final 
-    ckall <- paste(dataTable$id[is.na(match(dataTable$id, dataTable$id[plist$nid]))], collapse = ", ")
-    if (length(ckall > 0)) message("Did not plot the following people: ", ckall, "\n")
+    ckall <- paste(df$id[is.na(match(df$id, df$id[plist$nid]))],
+                   collapse = ", ")
+    if (length(ckall > 0)) {
+        message("Did not plot the following people: ", ckall, "\n")
+    }
 
-    if (!keep.par) par(oldpar)
+    if (!keep_par) {
+        par(oldpar)
+    }
 
-    tmp <- match(1:length(dataTable$id), plist$nid)
-    if (ggplotGen) {
+    tmp <- match(1:length(df$id), plist$nid)
+    if (ggplot_gen) {
         invisible(list(
             plist = plist, x = plist$pos[tmp], y = row(plist$pos)[tmp],
-            boxw = boxw, boxh = boxh, call = Call, ggplot = p, plot = recordPlot()
+            boxw = boxw, boxh = boxh, call = call,ggplot = p, plot = recordPlot()
         ))
     } else {
         invisible(list(
             plist = plist, x = plist$pos[tmp], y = row(plist$pos)[tmp],
-            boxw = boxw, boxh = boxh, call = Call, plot = recordPlot()
+            boxw = boxw, boxh = boxh, call = call, plot = recordPlot()
         ))
 }
 }
