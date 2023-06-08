@@ -131,7 +131,22 @@ alignped4 <- function(rval, spouse, level, width, align) {
 
   if (exists("solve.QP")) {
     pp <- t(pmat) %*% pmat + 1e-8 * diag(ncol(pmat))
-    fit <- solve.QP(pp, rep(0., n), t(cmat), dvec)
+    fit <- tryCatch(
+      {
+        solve.QP(pp, rep(0., n), t(cmat), dvec)
+      },
+      warning = function(w) {
+        message(Solve QP ended with a warning)
+        message()(w)
+        return(NA)
+      },
+      error = function(e) {
+        message(Solve QP ended with an error)
+        message(w)
+        return(NA)
+      }
+    )
+
   } else {
     stop("Need the quadprog package")
   }
@@ -139,6 +154,10 @@ alignped4 <- function(rval, spouse, level, width, align) {
   newpos <- rval$pos
   # fit <- lsei(pmat, rep(0, nrow(pmat)), G=cmat, H=dvec)
   # newpos[myid>0] <- fit$X[myid]
-  newpos[myid > 0] <- fit$solution[myid]
+  
+  if (length(fit) > 1) {
+    newpos[myid > 0] <- fit$solution[myid]
+  }
+
   newpos
 }
