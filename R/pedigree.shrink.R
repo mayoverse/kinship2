@@ -98,7 +98,7 @@ pedigree.shrink <- function(ped, avail, affected = NULL, maxBits = 16) {
       pedNew <- pedigree.trim(idTrimNonInform, pedTrimmed)
       avail <- avail[match(pedNew$id, pedTrimmed$id)]
       idTrimmed <- c(idTrimmed, idTrimNonInform)
-      idList$noninform = c(idList$noninform, idTrimNonInform)
+      idList$noninform <- c(idList$noninform, idTrimNonInform)
       pedTrimmed <- pedNew
     }
     nNew <- length(pedTrimmed$id)
@@ -142,7 +142,7 @@ pedigree.shrink <- function(ped, avail, affected = NULL, maxBits = 16) {
       bitSize <- save$bitSize
       bitVec <- c(bitVec, bitSize)
       idTrimmed <- c(idTrimmed, save$idTrimmed)
-      idList$affect = c(idList$affect, save$idTrimmed)
+      idList$affect <- c(idList$affect, save$idTrimmed)
     }
   }
   ## end while (isTrimmed) & (bitSize > maxBits)
