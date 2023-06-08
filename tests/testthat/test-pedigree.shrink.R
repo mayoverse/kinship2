@@ -114,13 +114,9 @@ test_that("Pedigree shrink with character", {
 
   set.seed(100)
   shrink1.p1char.B32 <- pedigree.shrink(ped = ped1char, avail = ped1char$affected[, 2], maxBits = 32)
-  expect_equal(
-    shrink1.p1char.B32$idTrimmed,
-    c(
-      "A-01", "A-02", "A-07", "A-08", "A-11", "A-13", "A-21", "A-22",
-      "A-23", "A-31", "A-32", "A-34", "A-39"
-    )
-  )
+  expect_equal(shrink1.p1char.B32$idTrimmed,
+              c("A-01", "A-02", "A-07", "A-08", "A-11", "A-13", "A-21", "A-22",
+                "A-23", "A-31", "A-32", "A-34", "A-39"))
 
   set.seed(100)
   shrink1.p1char.B25 <- pedigree.shrink(ped = ped1char, avail = ped1char$affected[, 2], maxBits = 25)
@@ -143,7 +139,9 @@ test_that("pedigree.shrink.plot works", {
   shrink2 <- pedigree.shrink(ped2, avail = fam2$avail)
 
   expect_doppelganger("Shrinked ped 1",
-    plot.pedigree.shrink(shrink2, title = "Sample Pedigree 2"))
+    plot.pedigree.shrink(shrink2, title = "Sample Pedigree 2",
+      location = c(1, 1)))
   expect_doppelganger("Shrinked ped 2",
-    plot.pedigree.shrink(shrink2, bigped = TRUE, title = "Sample Pedigree 2"))
+    plot.pedigree.shrink(shrink2, bigped = TRUE, title = "Sample Pedigree 2",
+      location = "bottomright"))
 })
