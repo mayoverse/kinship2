@@ -17,9 +17,10 @@ Imports:
     stats,
     methods,
     knitr,
-    magick,
-    dplyr,
-    hexSticker
+    usethis,
+    ggplot2,
+    utils,
+    grDevices
 Description: Routines to handle family data with a pedigree object. The initial purpose
 	     was to create correlation structures that describe family relationships such 
 	     as kinship and identity-by-descent, which can be used to model family data 
