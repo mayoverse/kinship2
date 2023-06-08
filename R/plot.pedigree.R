@@ -47,11 +47,11 @@
 #' @param symbolsize controls symbolsize. Default=1.
 #' @param branch defines how much angle is used to connect various levels of
 #' nuclear families.
-#' @param packed default=T.  If T, uniform distance between all individuals at
-#' a given level.
+#' @param packed default=TRUE.  If TRUE, uniform distance between all
+#' individuals at a given level.
 #' @param align these parameters control the extra effort spent trying to align
 #' children underneath parents, but without making the pedigree too wide.  Set
-#' to F to speed up plotting.
+#' to FALSE to speed up plotting.
 #' @param width default=8.  For a packed pedigree, the minimum width allowed in
 #' the realignment of pedigrees.
 #' @param density defines density used in the symbols.  Takes up to 4 different
@@ -59,8 +59,8 @@
 #' @param mar margin parmeters, as in the \code{par} function
 #' @param angle defines angle used in the symbols.  Takes up to 4 different
 #' values.
-#' @param keep_par Default = F, allows user to keep the parameter settings the
-#' same as they were for plotting (useful for adding extras to the plot)
+#' @param keep_par Default = FALSE, allows user to keep the parameter settings
+#' the same as they were for plotting (useful for adding extras to the plot)
 #' @param subregion 4-element vector for (min x, max x, min depth, max depth),
 #' used to edit away portions of the plot coordinates returned by
 #' align.pedigree
@@ -193,7 +193,7 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
     }
   }
 
-  allVarChecked <- lapply(
+  all_var_checked <- lapply(
     mget(c("avail", "mark", "label", "fill", "border")),
     function(var) {
       if (length(var) <= 1) {
@@ -206,11 +206,11 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
     }
   )
 
-  avail <- allVarChecked$avail
-  mark <- allVarChecked$mark
-  label <- allVarChecked$label
-  fill <- allVarChecked$fill
-  border <- allVarChecked$border
+  avail <- all_var_checked$avail
+  mark <- all_var_checked$mark
+  label <- all_var_checked$label
+  fill <- all_var_checked$fill
+  border <- all_var_checked$border
 
   ## Doc: Subregions and subsetting
   subregion2 <- function(plist, subreg) {
@@ -241,7 +241,7 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
     fam2 <- plist$fam[lkeep, ]
     if (!is.null(plist$twins)) twin2 <- plist$twins[lkeep, ]
 
-    for (i in 1:nrow(nid2)) {
+    for (i in seq_len(nrow(nid2))) {
       keep <- which(pos2[i, ] >= subreg[1] & pos2[i, ] <= subreg[2])
       nkeep <- length(keep)
       n2[i] <- nkeep
@@ -263,13 +263,13 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
     n <- max(n2)
     out <- list(
       n = n2[1:n],
-      nid = nid2[, 1:n, drop = F],
-      pos = pos2[, 1:n, drop = F],
-      spouse = spouse2[, 1:n, drop = F],
-      fam = fam2[, 1:n, drop = F]
+      nid = nid2[, 1:n, drop = FALSE],
+      pos = pos2[, 1:n, drop = FALSE],
+      spouse = spouse2[, 1:n, drop = FALSE],
+      fam = fam2[, 1:n, drop = FALSE]
     )
     if (!is.null(plist$twins)) {
-      out$twins <- twin2[, 1:n, drop = F]
+      out$twins <- twin2[, 1:n, drop = FALSE]
     }
     out
   } # end subregion2()
@@ -306,7 +306,7 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
   wd2 <- .8 * psize[1] / (.8 + diff(xrange))
 
   boxsize <- symbolsize * min(ht1, ht2, stemp1, wd2) # box size in inches
-  hscale <- (psize[1] - boxsize) / diff(xrange) # horizontal scale from user -> inch
+  hscale <- (psize[1] - boxsize) / diff(xrange) # horizontal scale in inches
   vscale <- (psize[2] - (stemp3 + stemp2 / 2 + boxsize)) / max(1, maxlev - 1)
   boxw <- boxsize / hscale # box width in user units
   boxh <- boxsize / vscale # box height in user units
@@ -416,8 +416,8 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
 
   drawbox <- function(x, y, sex, affected, status, avail, mark, polylist,
                       fill, border,
-                      density, angle, boxw, boxh, pPlot, id, dataTooltips) {
-    for (i in 1:length(affected)) {
+                      density, angle, boxw, boxh, p_plot, id, data_tooltips) {
+    for (i in seq_len(length(affected))) {
       plabel <- mark
       if (is.null(mark[i])) {
         plabel <- "?"
@@ -434,26 +434,25 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
         col = fill, border = border
       )
 
-      colText <- "black"
+      col_text <- "black"
       text(midx, midy,
         labels = plabel,
-        cex = cex / length(affected), col = colText
+        cex = cex / length(affected), col = col_text
       )
-      # points(midx, midy, pch = plabel, cex = cex/length(affected),col = colText)
 
       if (ggplot_gen) {
-        pPlot <- pPlot + geom_polygon(aes(
+        p_plot <- p_plot + ggplot2::geom_polygon(ggplot2::aes(
           x = x + (polylist[[sex]])[[i]]$x * boxw,
           y = y + (polylist[[sex]])[[i]]$y * boxh, fill = fill,
           color = border
         ))
-        tips <- dataTooltips[dataTooltips$id == id, tips_names]
+        tips <- data_tooltips[data_tooltips$id == id, tips_names]
         tips <- tips[][c(!is.na(tips))]
         tips <- paste(colnames(tips), ":", tips, collapse = "<br>")
 
-        pPlot <- pPlot + geom_text(aes(
+        p_plot <- p_plot + ggplot2::geom_text(ggplot2::aes(
           x = midx, y = midy, label = plabel,
-          text = tips, color = colText
+          text = tips, color = col_text
         ))
       }
     }
@@ -463,16 +462,16 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
         x + .6 * boxw, y - .1 * boxh
       )
       if (ggplot_gen) {
-        pPlot <- pPlot +
-          annotate("segment",
+        p_plot <- p_plot +
+          ggplot2::annotate("segment",
             x = x - .6 * boxw, y = y + 1.1 * boxh,
             xend = x + .6 * boxw, yend = y - .1 * boxh
           )
       }
     }
     ## Do a black slash per Beth, old line was
-    ##        x+ .6*boxw, y- .1*boxh, col = avail)
-    return(pPlot)
+    ## (x + .6*boxw, y - .1 * boxh, col = avail)
+    return(p_plot)
   } ## drawbox
   legend_labels <- c(
     "Unaffected and unavailable",
@@ -480,22 +479,23 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
     "Affected and unavailable",
     "Affected and available"
   )
-  colorsPlot <- unique(c(fill, border))
+  colors_plot <- unique(c(fill, border))
 
-  p <- ggplot() +
-    scale_fill_manual(
-      values = setNames(colorsPlot, colorsPlot), name = "Availability",
+  p <- ggplot2::ggplot() +
+    ggplot2::scale_fill_manual(
+      values = setNames(colors_plot, colors_plot), name = "Availability",
       labels = setNames(legend_labels, 1:4), drop = FALSE
     ) +
-    scale_color_manual(values = setNames(colorsPlot, colorsPlot), guide = F)
+    ggplot2::scale_color_manual(values = setNames(colors_plot, colors_plot),
+        guide = FALSE)
 
   ## Doc: symbols
   sex <- as.numeric(ped$sex)
 
-  message("Drawing the individuals", appendLF = T)
-  PB <- txtProgressBar(0, maxlev, char = "|", width = 50, style = 3)
+  message("Drawing the individuals", appendLF = TRUE)
+  prog_bar <- txtProgressBar(0, maxlev, char = "|", width = 50, style = 3)
   for (i in 1:maxlev) {
-    setTxtProgressBar(PB, i)
+    setTxtProgressBar(prog_bar, i)
     for (j in seq_len(plist$n[i])) {
       k <- plist$nid[i, j]
       p <- drawbox(
@@ -510,7 +510,7 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
       )
       if (ggplot_gen) {
         p <- p +
-          annotate("text",
+          ggplot2::annotate("text",
             label = id[k],
             x = plist$pos[i, j], y = i + boxh + labh * .7
           )
@@ -528,10 +528,10 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
   ## Doc: lines between spouses
 
   maxcol <- ncol(plist$nid) # all have the same size
-  message("\nDrawing connection spouse", appendLF = T)
+  message("\nDrawing connection spouse", appendLF = TRUE)
   i <- 4
   for (i in 1:maxlev) {
-    setTxtProgressBar(PB, i)
+    setTxtProgressBar(prog_bar, i)
     tempy <- i + boxh / 2
     if (any(plist$spouse[i, ] > 0)) {
       temp <- (1:maxcol)[plist$spouse[i, ] > 0]
@@ -543,9 +543,9 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
       )
 
       if (ggplot_gen) {
-        for (i2 in 1:length(temp)) {
+        for (i2 in seq_len(length(temp))) {
           p <- p +
-            annotate("segment",
+            ggplot2::annotate("segment",
               x = plist$pos[i, temp][i2] + boxw / 2,
               y = rep(tempy, length(temp))[i2],
               xend = plist$pos[i, temp + 1][i2] - boxw / 2,
@@ -561,9 +561,9 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
           plist$pos[i, temp + 1] - boxw / 2, rep(tempy, length(temp))
         )
         if (ggplot_gen) {
-          for (i2 in 1:length(temp)) {
+          for (i2 in seq_len(length(temp))) {
             p <- p +
-              annotate("segment",
+              ggplot2::annotate("segment",
                 x = plist$pos[i, temp][i2] + boxw / 2,
                 y = rep(tempy, length(temp))[i2],
                 xend = plist$pos[i, temp + 1][i2] - boxw / 2,
@@ -578,7 +578,7 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
 
   message("\nDrawing connection childrens", appendLF = TRUE)
   for (i in 2:maxlev) {
-    setTxtProgressBar(PB, i)
+    setTxtProgressBar(prog_bar, i)
     zed <- unique(plist$fam[i, ])
     zed <- zed[zed > 0] # list of family ids
 
@@ -591,8 +591,8 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
       if (is.null(plist$twins)) {
         target <- plist$pos[i, who]
       } else {
-        twin.to.left <- (c(0, plist$twins[i, who])[1:sum(who)])
-        temp <- cumsum(twin.to.left == 0) # increment if no twin to the left
+        twin_to_left <- (c(0, plist$twins[i, who])[1:sum(who)])
+        temp <- cumsum(twin_to_left == 0) # increment if no twin to the left
         # 5 sibs, middle 3 are triplets gives 1,2,2,2,3
         # twin, twin, singleton gives 1,1,2,2,3
         tcount <- table(temp)
@@ -601,8 +601,8 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
       yy <- rep(i, sum(who))
       segments(plist$pos[i, who], yy, target, yy - legh)
       if (ggplot_gen) {
-        for (i2 in 1:length(yy)) {
-          p <- p + annotate("segment",
+        for (i2 in seq_len(length(yy))) {
+          p <- p + ggplot2::annotate("segment",
             x = plist$pos[i, who][i2], y = yy[i2],
             xend = target[i2], yend = yy[i2] - legh
           )
@@ -617,8 +617,8 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
         yy <- rep(i, length(who2)) - legh / 2
         segments(temp1, yy, temp2, yy)
         if (ggplot_gen) {
-          for (i2 in 1:length(yy)) {
-            p <- p + annotate("segment",
+          for (i2 in seq_len(length(yy))) {
+            p <- p + ggplot2::annotate("segment",
               x = temp1[i2], y = yy[i2],
               xend = temp2[i2], yend = yy[i2]
             )
@@ -634,9 +634,9 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
         yy <- rep(i, length(who2)) - legh / 2
         text((temp1 + temp2) / 2, yy, "?")
         if (ggplot_gen) {
-          for (i2 in 1:length(yy)) {
+          for (i2 in seq_len(length(yy))) {
             p <- p +
-              annotate("text",
+              ggplot2::annotate("text",
                 label = "?",
                 x = (temp1[i2] + temp2[i2]) / 2,
                 y = yy[i2]
@@ -648,7 +648,7 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
       # Add the horizontal line
       segments(min(target), i - legh, max(target), i - legh)
       if (ggplot_gen) {
-        p <- p + annotate("segment",
+        p <- p + ggplot2::annotate("segment",
           x = min(target), y = i - legh,
           xend = max(target), yend = i - legh
         )
@@ -669,7 +669,7 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
       if (branch == 0) {
         segments(x1, y1, parentx, (i - 1) + boxh / 2)
         if (ggplot_gen) {
-          p <- p + geom_segment(aes(
+          p <- p + ggplot2::geom_segment(ggplot2::aes(
             x = x1, y = y1,
             xend = parentx, yend = (i - 1) + boxh / 2
           ))
@@ -683,16 +683,16 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
           c(x1, x2, x2), c(y1 + ydelta, y2 - ydelta, y2)
         )
         if (ggplot_gen) {
-          for (i2 in 1:length(x1)) {
-            p <- p + annotate("segment",
+          for (i2 in seq_len(length(x1))) {
+            p <- p + ggplot2::annotate("segment",
               x = x1[i2], y = y1[i2],
               xend = x1[i2], yend = y1[i2] + ydelta
             )
-            p <- p + annotate("segment",
+            p <- p + ggplot2::annotate("segment",
               x = x1[i2], y = y1[i2] + ydelta,
               xend = x2[i2], yend = y2[i2] - ydelta
             )
-            p <- p + annotate("segment",
+            p <- p + ggplot2::annotate("segment",
               x = x2[i2], y = y2[i2] - ydelta,
               xend = x2[i2], yend = y2[i2]
             )
@@ -708,7 +708,7 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
     yy <- seq(y[1], y[2], length = 15) + (seq(-7, 7))^2 / 98 - .5
     lines(xx, yy, lty = 2)
     if (ggplot_gen) {
-      p <- p + annotate("line", xx, yy, linetype = "dashed")
+      p <- p + ggplot2::annotate("line", xx, yy, linetype = "dashed")
     }
     return(p)
   }
@@ -719,11 +719,11 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
   imax <- length(unique(uid[uid > 0]))
   i <- 0
   if (imax > 0) {
-    message("\nDrawing arcs for same Id", appendLF = T)
-    PB <- txtProgressBar(0, imax - 1, width = 50, style = 3, char = "|")
+    message("\nDrawing arcs for same Id", appendLF = TRUE)
+    prog_bar <- txtProgressBar(0, imax - 1, width = 50, style = 3, char = "|")
   }
   for (id in unique(uid[uid > 0])) {
-    setTxtProgressBar(PB, i)
+    setTxtProgressBar(prog_bar, i)
     indx <- which(plist$nid == id)
     if (length(indx) > 1) { # subject is a multiple
       tx <- plist$pos[indx]
@@ -735,7 +735,7 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
     }
     i <- i + 1
   }
-  close(PB)
+  close(prog_bar)
 
   ## Doc: finish/Final
   ckall <- paste(df$id[is.na(match(df$id, df$id[plist$nid]))],
@@ -749,7 +749,7 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
     par(oldpar)
   }
 
-  tmp <- match(1:length(df$id), plist$nid)
+  tmp <- match(seq_len(length(df$id)), plist$nid)
   if (ggplot_gen) {
     invisible(list(
       plist = plist, x = plist$pos[tmp], y = row(plist$pos)[tmp],
