@@ -424,11 +424,6 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
       }
       midx <- x + mean(range(polylist[[sex]][[i]]$x * boxw))
       midy <- y + mean(range(polylist[[sex]][[i]]$y * boxh))
-      if (avail == 2) {
-        borderSize <- c(boxw * 30, boxw * 10)
-      } else {
-        borderSize <- c(boxw * 5, boxw)
-      }
       polygon(x + (polylist[[sex]])[[i]]$x * boxw,
         y + (polylist[[sex]])[[i]]$y * boxh,
         col = fill, border = border
