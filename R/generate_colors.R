@@ -1,8 +1,8 @@
-#' Process the information for affection
+#' Process the colors based on affection and availability
 #'
 #' @details Perform transformation uppon a column given as the one
-#' containing affection status to get an `affected` column usable for
-#' the rest of the script
+#' containing affection status to compute the filling color and use
+#' the `avail` column to compute the border color.
 #'
 #' @param df The dataframe to process
 #' @param col_aff The name of the column containing the values to process as
