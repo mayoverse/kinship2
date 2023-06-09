@@ -1,16 +1,15 @@
 #### Libraries needed ####
-library(magick)
-library(dplyr)
-library(hexSticker)
-library(kinship2)
+usethis::use_package("magick")
+usethis::use_package("dplyr")
+usethis::use_package("hexSticker")
 
 # Charge necessary data
 data(sample.ped)
 
 # Create pedigree object
 ped_all <- with(sample.ped, pedigree(id, father, mother, sex,
-   affected = cbind(affected, avail), famid = ped
- ))
+  affected = cbind(affected, avail), famid = ped
+))
 
 # Select first family
 ped1 <- ped_all["1"]

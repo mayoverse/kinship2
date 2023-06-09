@@ -51,10 +51,12 @@ required to make a {\em pedigreeList} object, but not for a single
 
 ```{r, pedList}
 data(sample.ped)
-sample.ped[1:10,]
-pedAll <- pedigree(id=sample.ped$id, 
-                dadid=sample.ped$father, momid=sample.ped$mother, 
-                sex=sample.ped$sex, famid=sample.ped$ped)
+sample.ped[1:10, ]
+pedAll <- pedigree(
+  id = sample.ped$id,
+  dadid = sample.ped$father, momid = sample.ped$mother,
+  sex = sample.ped$sex, famid = sample.ped$ped
+)
 print(pedAll)
 ``` 
 
@@ -64,8 +66,8 @@ we show below.  The print method prints a short summary of the pedigree,
 while the plot in Figure~\ref{basicPed2} displays the smaller pedigree.
 
 ```{r, plot12}
-ped1basic <- pedAll['1']
-ped2basic <- pedAll['2']
+ped1basic <- pedAll["1"]
+ped2basic <- pedAll["2"]
 print(ped1basic)
 print(ped2basic)
 plot(ped2basic)
@@ -89,9 +91,9 @@ the specified subject (in this case, $209$). Reassign this code to ~datped22~ to
 the specified subject entirely.
 
 ```{r, datped2}
-datped2 <- sample.ped[sample.ped$ped %in% 2,]
+datped2 <- sample.ped[sample.ped$ped %in% 2, ]
 datped2[datped2$id %in% 203, "sex"] <- 2
-datped2 <- datped2[-which(datped2$id %in% 209),]
+datped2 <- datped2[-which(datped2$id %in% 209), ]
 ```
 
 An error occurs when the *pedigree()* function notices that id $203$ is not 
@@ -102,7 +104,7 @@ further fixing the pedigree.
 
 ```{r, fixped}
 tryout <- try({
-   ped2 <- with(datped2, pedigree(id, father, mother, sex))
+  ped2 <- with(datped2, pedigree(id, father, mother, sex))
 })
 fixped2 <- with(datped2, fixParents(id, father, mother, sex))
 fixped2
@@ -152,11 +154,13 @@ show a snapshot of them for the two families, where the row and columns names
 are the ids of the subject.
 
 ```{r, kinAll}
-pedAll <- pedigree(id=sample.ped$id, 
-                dadid=sample.ped$father, momid=sample.ped$mother, 
-                sex=sample.ped$sex, famid=sample.ped$ped)
+pedAll <- pedigree(
+  id = sample.ped$id,
+  dadid = sample.ped$father, momid = sample.ped$mother,
+  sex = sample.ped$sex, famid = sample.ped$ped
+)
 kinAll <- kinship(pedAll)
-kinAll[1:14,1:14]
+kinAll[1:14, 1:14]
 kinAll[40:43, 40:43]
 kinAll[42:46, 42:46]
 ```
@@ -169,12 +173,14 @@ specify monozygosity for subjects 206 and 207 in sample pedigree 2, and subjects
 
 ```{r, kintwins}
 reltwins <- rbind(c(206, 207, 1, 2), c(125, 126, 1, 1))
-colnames(reltwins)=c("id1","id2","code","famid")
-pedAll <- with(sample.ped, pedigree(id=id, dadid=father, momid=mother,
-  sex=sex, famid=ped, relation=reltwins))
+colnames(reltwins) <- c("id1", "id2", "code", "famid")
+pedAll <- with(sample.ped, pedigree(
+  id = id, dadid = father, momid = mother,
+  sex = sex, famid = ped, relation = reltwins
+))
 kinAll <- kinship(pedAll)
-kinAll[21:31,21:31]
-kinAll[42:50,42:50]
+kinAll[21:31, 21:31]
+kinAll[42:50, 42:50]
 ```
 
 Note that subject $113$ is not in pedigree 1 because they 
@@ -195,11 +201,13 @@ indicator, so we create one to indicate that the first generation of
 pedigree 2, subjects 1 and 2, are deceased.  
 
 ```{r, censor}
-df2 <- sample.ped[sample.ped$ped==2,]
+df2 <- sample.ped[sample.ped$ped == 2, ]
 names(df2)
-df2$censor <- c(1,1, rep(0, 12))
-ped2 <- pedigree(df2$id, df2$father, df2$mother, 
-                 df2$sex, status=df2$censor)
+df2$censor <- c(1, 1, rep(0, 12))
+ped2 <- pedigree(df2$id, df2$father, df2$mother,
+  df2$sex,
+  status = df2$censor
+)
 ``` 
 
 ## Affected Indicators
@@ -212,14 +220,20 @@ affected indicator from $sample.ped$ and a second indicator that we create,
 imagine as an indicator for baldness.
 
 ```{r, affected}
-ped2 <- pedigree(df2$id, df2$father, df2$mother, 
-                 df2$sex, affected=df2$affected,
-                 status=df2$censor)
-aff2 <- data.frame(blue=df2$affected, 
-                   bald=c(0,0,0,0,1,0,0,0,0,1,1,0,0,1))
-ped2 <- pedigree(df2$id, df2$father, df2$mother, 
-                 df2$sex, affected=as.matrix(aff2),
-                 status=df2$censor)
+ped2 <- pedigree(df2$id, df2$father, df2$mother,
+  df2$sex,
+  affected = df2$affected,
+  status = df2$censor
+)
+aff2 <- data.frame(
+  blue = df2$affected,
+  bald = c(0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1)
+)
+ped2 <- pedigree(df2$id, df2$father, df2$mother,
+  df2$sex,
+  affected = as.matrix(aff2),
+  status = df2$censor
+)
 ```        
 
 ## Special Relationships
@@ -235,12 +249,16 @@ unknown-zygosity twins in the most recent generation of pedigree 2.
 
 ```{r, twins}
 ## create twin relationships
-relate2 <- matrix(c(210,211,1,
-                   212,213,3), nrow=2, byrow=TRUE)
-ped2 <- pedigree(df2$id, df2$father, df2$mother, 
-                 df2$sex, affected=as.matrix(aff2),
-                 status=df2$censor,
-                 relation=relate2)
+relate2 <- matrix(c(
+  210, 211, 1,
+  212, 213, 3
+), nrow = 2, byrow = TRUE)
+ped2 <- pedigree(df2$id, df2$father, df2$mother,
+  df2$sex,
+  affected = as.matrix(aff2),
+  status = df2$censor,
+  relation = relate2
+)
 ```
 
 Another special relationship is inbreeding. Inbreeding of founders implies the founders' parents are related (the maternal and paternal genes descended from a single ancestral gene). One thing we can do is add more people to the pedigree to show this inbreeding.
@@ -249,13 +267,13 @@ To show that a pair of founders (subjects $201$ and $202$) are inbred, we must s
 
 ```{r, inbreeding}
 id <- 195:202
-dadid <- c(0,0,0,196,196,0,197,199)
-momid <- c(0,0,0,195,195,0,198,200)
-sex <- c(2,1,1,2,1,2,1,2)
+dadid <- c(0, 0, 0, 196, 196, 0, 197, 199)
+momid <- c(0, 0, 0, 195, 195, 0, 198, 200)
+sex <- c(2, 1, 1, 2, 1, 2, 1, 2)
 ped3 <- pedigree(id, dadid, momid, sex)
-ped4df <- rbind.data.frame(as.data.frame(ped2)[-c(1,2),1:4], as.data.frame(ped3))
+ped4df <- rbind.data.frame(as.data.frame(ped2)[-c(1, 2), 1:4], as.data.frame(ped3))
 ped4 <- with(ped4df, pedigree(id, dadid, momid, sex))
-plot(ped4, cex=.5)
+plot(ped4, cex = .5)
 ```
 
 Pedigree Plot Details
@@ -288,11 +306,13 @@ of the corners of the pedigree plot to show the sections of the plot
 symbols corresponding to the multiple affected indicators.
 
 ```{r, ped2update}
-id2 <- paste(df2$id, c("John", "Linda", "Jack", "Rachel", "Joe", "Deb", 
-                         "Lucy", "Ken", "Barb", "Mike", "Matt", 
-                         "Mindy", "Mark", "George"), sep="\n")
-plot(ped2, col=ifelse(df2$avail, 2, 1), id=id2, cex=.5)
-pedigree.legend(ped2, location="topright", radius=.2) 
+id2 <- paste(df2$id, c(
+  "John", "Linda", "Jack", "Rachel", "Joe", "Deb",
+  "Lucy", "Ken", "Barb", "Mike", "Matt",
+  "Mindy", "Mark", "George"
+), sep = "\n")
+plot(ped2, avail = ifelse(df2$avail, 2, 1), id = id2, cex = .5)
+pedigree.legend(ped2, location = "topright", radius = .2)
 ``` 
 
 To show some other tricks with pedigree plotting, we use pedigree 1 
@@ -306,13 +326,15 @@ in the figure below, where the subjects are colored red if their
 
 
 ```{r, plotped1}
-df1<- sample.ped[sample.ped$ped==1,]
-relate1 <- matrix(c(113, 114, 4), nrow=1)
-ped1 <- pedigree(df1$id, df1$father, df1$mother, 
-       df1$sex, affected=df1$affected, 
-                 relation=relate1)
+df1 <- sample.ped[sample.ped$ped == 1, ]
+relate1 <- matrix(c(113, 114, 4), nrow = 1)
+ped1 <- pedigree(df1$id, df1$father, df1$mother,
+  df1$sex,
+  affected = df1$affected,
+  relation = relate1
+)
 print(ped1)
-plot(ped1, col=ifelse(df1$avail==1, "red","black"),cex=.7)
+plot(ped1, avail = ifelse(df1$avail == 1, "red", "black"), cex = .7)
 ``` 
 
 ## Align by Input Order
@@ -324,10 +346,12 @@ the pedigree, we can help the plot method reduce the need to duplicate
 subjects, as Figure~\ref{reordPed1} no longer has subject $110$ duplicated.
 
 ```{r, ordering}
-df1reord <- df1[c(35:41,1:34),]
-ped1reord <- pedigree(df1reord$id, df1reord$father, df1reord$mother, 
-       df1reord$sex, affected=df1reord$affected, relation=relate1)
-plot(ped1reord, col=df1reord$avail+1, cex=.7)
+df1reord <- df1[c(35:41, 1:34), ]
+ped1reord <- pedigree(df1reord$id, df1reord$father, df1reord$mother,
+  df1reord$sex,
+  affected = df1reord$affected, relation = relate1
+)
+plot(ped1reord, avail = df1reord$avail + 1, cex = .7)
 ``` 
   
 ## Legend Plot
@@ -337,10 +361,12 @@ passed through it. First, we give it color names and new labels for the affected
 status, which is two for blue eyes and baldness that we created previously for ped2.
 
 ```{r, legendplot}
-legendPlot(ped2, col=ifelse(df2$avail, "red", "black"),
-   id=id2, symbolsize=.4,
-   affected.label=c("blue eyes", "baldness"),
-   col.label=c(`black`="no dna", `red`="dna"))
+legendPlot(ped2,
+  col = ifelse(df2$avail, "red", "black"),
+  id = id2, symbolsize = .4,
+  affected.label = c("blue eyes", "baldness"),
+  col.label = c(`black` = "no dna", `red` = "dna")
+)
 ```
 
 We can do the same plot by giving integer color codes, and a non-named vector of
@@ -349,9 +375,11 @@ for the legend.
 
 ```{r, legendplotindex}
 colnames(ped2$affected)
-legendPlot(ped2, col=ifelse(df2$avail, 2, 1),
-   id=id2, cex=.5, symbolsize=.5,
-   col.label=c("no dna", "dna"))
+legendPlot(ped2,
+  col = ifelse(df2$avail, 2, 1),
+  id = id2, cex = .5, symbolsize = .5,
+  col.label = c("no dna", "dna")
+)
 ```  
   
 Pedigree Utility Functions
@@ -400,7 +428,7 @@ trimming by looking at the $id$ vector and the $relation$ matrix.
 ped2.trim210 <- pedigree.trim(210, ped2)
 ped2.trim210$id
 ped2.trim210$relation
-ped2.trim.more <- pedigree.trim(c(212,214), ped2.trim210)
+ped2.trim.more <- pedigree.trim(c(212, 214), ped2.trim210)
 ped2.trim.more$id
 ped2.trim.more$relation
 ``` 
@@ -426,10 +454,12 @@ and plot it.
 
 ```{r, shrink1, eval=FALSE}
 set.seed(200)
-shrink1.B30 <- pedigree.shrink(ped=ped1,
-                 avail=df1$avail, maxBits=30)
+shrink1.B30 <- pedigree.shrink(
+  ped = ped1,
+  avail = df1$avail, maxBits = 30
+)
 print(shrink1.B30)
-#plot.pedigree.shrink(shrink1.B30, col=shrink1.B30$avail + 1, cex=.6)
+# plot.pedigree.shrink(shrink1.B30, avail=shrink1.B30$avail + 1, cex=.6)
 ```
 
 Now shrink pedigree 1 to bit size $25$, which requires removing 
@@ -439,10 +469,12 @@ seed setting, the method removes subjects $126$ then $125$.
 
 ```{r, shrink2, eval=FALSE}
 set.seed(10)
-shrink1.B25 <- pedigree.shrink(ped=ped1, avail=df1$avail, 
-                               maxBits=25)
+shrink1.B25 <- pedigree.shrink(
+  ped = ped1, avail = df1$avail,
+  maxBits = 25
+)
 shrink1.B25
-#plot.pedigree.shrink(shrink1.B25, col=shrink1.B25$avail+1, cex=.6)
+# plot.pedigree.shrink(shrink1.B25, avail=shrink1.B25$avail+1, cex=.6)
 ``` 
 
 Select Unrelateds
@@ -457,13 +489,15 @@ show two sets of subject ids that are selected by the routine and discuss
 below.
 
 ```{r, unrelateds}
-df2<- sample.ped[sample.ped$ped==2,]
-ped2 <- pedigree(df2$id, df2$father, df2$mother, 
-       df2$sex, affected=df2$affected)
+df2 <- sample.ped[sample.ped$ped == 2, ]
+ped2 <- pedigree(df2$id, df2$father, df2$mother,
+  df2$sex,
+  affected = df2$affected
+)
 set.seed(10)
-set1 <- pedigree.unrelated(ped2, avail=df2$avail)
+set1 <- pedigree.unrelated(ped2, avail = df2$avail)
 set1
-set2 <- pedigree.unrelated(ped2, avail=df2$avail)
+set2 <- pedigree.unrelated(ped2, avail = df2$avail)
 set2
 ``` 
 
@@ -478,7 +512,7 @@ with availability status of 1.
 
 ```{r, unrelVerify}
 df2
-kin2[df2$avail==1,df2$avail==1]
+kin2[df2$avail == 1, df2$avail == 1]
 ``` 
 
 

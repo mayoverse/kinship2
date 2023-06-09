@@ -32,25 +32,29 @@
 #'
 #' @examples
 #' data(sample.ped)
-#' pedAll <- with(sample.ped,pedigree(id, father, mother, sex,
-#'     affected=cbind(affected, avail), famid=ped)
-#' ped1 <- pedAll['1']
-#' ped1trim <- pedigree.shrink(ped1, maxBits=12)
+#' pedAll <- with(sample.ped, pedigree(id, father, mother, sex,
+#'   affected = cbind(affected, avail), famid = ped
+#' ))
+#' ped1 <- pedAll["1"]
+#' ped1trim <- pedigree.shrink(ped1, maxBits = 12)
 #'
 #' @author Original by Dan Schaid, updated to kinship2 by Jason Sinnwell
 #' @seealso \code{\link{pedigree}}, \code{\link{plot.pedigree.shrink}}
 #' @export pedigree.shrink
-pedigree.shrink <- function(ped, avail, affected=NULL, maxBits = 16) {
-  if(!inherits(ped, "pedigree"))
+pedigree.shrink <- function(ped, avail, affected = NULL, maxBits = 16) {
+  if (!inherits(ped, "pedigree")) {
     stop("Must be a pegigree object.\n")
+  }
 
-  if(any(is.na(avail)))
+  if (any(is.na(avail))) {
     stop("NA values not allowed in avail vector.")
+  }
 
-  if(is.null(affected))
-    affected = if(is.matrix(ped$affected)) ped$affected[,1] else ped$affected
+  if (is.null(affected)) {
+    affected <- if (is.matrix(ped$affected)) ped$affected[, 1] else ped$affected
+  }
 
-  ped$affected = affected
+  ped$affected <- affected
 
   idTrimmed <- numeric()
   idList <- list()
@@ -63,15 +67,14 @@ pedigree.shrink <- function(ped, avail, affected=NULL, maxBits = 16) {
 
   idTrimUnavail <- findUnavailable(ped, avail)
 
-  if(length(idTrimUnavail)) {
-
+  if (length(idTrimUnavail)) {
     pedTrimmed <- pedigree.trim(idTrimUnavail, ped)
     avail <- avail[match(pedTrimmed$id, ped$id)]
     idTrimmed <- c(idTrimmed, idTrimUnavail)
-    idList$unavail <- paste(idTrimUnavail, collapse=' ')
+    idList$unavail <- idTrimUnavail
 
   } else {
-  ## no trimming, reset to original ped
+    ## no trimming, reset to original ped
     pedTrimmed <- ped
   }
 
@@ -81,28 +84,25 @@ pedigree.shrink <- function(ped, avail, affected=NULL, maxBits = 16) {
   ## added nNew>0 check because no need to trim anymore if empty ped
 
   nChange <- 1
-  idList$noninform = NULL
+  idList$noninform <- NULL
   nNew <- length(pedTrimmed$id)
 
-  while(nChange > 0 & nNew > 0){
+  while (nChange > 0 & nNew > 0) {
     nOld <- length(pedTrimmed$id)
 
     ## findAvailNonInform finds non-informative, but after suggesting
     ## their removal, checks for more unavailable subjects before returning
     idTrimNonInform <- findAvailNonInform(pedTrimmed, avail)
 
-    if(length(idTrimNonInform)) {
+    if (length(idTrimNonInform)) {
       pedNew <- pedigree.trim(idTrimNonInform, pedTrimmed)
       avail <- avail[match(pedNew$id, pedTrimmed$id)]
       idTrimmed <- c(idTrimmed, idTrimNonInform)
-      idList$noninform = paste(c(idList$noninform, 
-                                 idTrimNonInform), collapse=' ')
+      idList$noninform <- c(idList$noninform, idTrimNonInform)
       pedTrimmed <- pedNew
-
     }
     nNew <- length(pedTrimmed$id)
     nChange <- nOld - nNew
-
   }
 
   ##  Determine number of subjects & bitSize after initial trimming
@@ -112,58 +112,53 @@ pedigree.shrink <- function(ped, avail, affected=NULL, maxBits = 16) {
 
   ## Now sequentially shrink to fit bitSize <= maxBits
 
-  bitVec <- c(bitSizeOriginal,bitSize)
+  bitVec <- c(bitSizeOriginal, bitSize)
 
   isTrimmed <- TRUE
-  idList$affect=NULL
+  idList$affect <- NULL
 
-  while(isTrimmed & (bitSize > maxBits))
-  {
-
+  while (isTrimmed & (bitSize > maxBits)) {
     ## First, try trimming by unknown status
-    save <- findAvailAffected(pedTrimmed, avail, affstatus=NA)
+    save <- findAvailAffected(pedTrimmed, avail, affstatus = NA)
     isTrimmed <- save$isTrimmed
 
     ## Second, try trimming by unaffected status if no unknowns to trim
-    if(!isTrimmed)
-    {
-      save <- findAvailAffected(pedTrimmed, avail, affstatus=0)
-      isTrimmed <- save$isTrimmed
-
-    }
-
-
-   ## Third, try trimming by affected status if no unknowns & no unaffecteds
-   ## to trim
-    if(!isTrimmed) {
-      save <- findAvailAffected(pedTrimmed, avail, affstatus=1)
+    if (!isTrimmed) {
+      save <- findAvailAffected(pedTrimmed, avail, affstatus = 0)
       isTrimmed <- save$isTrimmed
     }
 
-    if(isTrimmed)  {
+
+    ## Third, try trimming by affected status if no unknowns & no unaffecteds
+    ## to trim
+    if (!isTrimmed) {
+      save <- findAvailAffected(pedTrimmed, avail, affstatus = 1)
+      isTrimmed <- save$isTrimmed
+    }
+
+    if (isTrimmed) {
       pedTrimmed <- save$ped
       avail <- save$newAvail
       bitSize <- save$bitSize
       bitVec <- c(bitVec, bitSize)
       idTrimmed <- c(idTrimmed, save$idTrimmed)
-      idList$affect = paste(c(idList$affect, save$idTrimmed),
-                            collapse=' ')
+      idList$affect <- c(idList$affect, save$idTrimmed)
     }
-
-
   }
-    ## end while (isTrimmed) & (bitSize > maxBits)
+  ## end while (isTrimmed) & (bitSize > maxBits)
 
   nFinal <- length(pedTrimmed$id)
 
-  obj <- list(pedObj = pedTrimmed,
-              idTrimmed = idTrimmed,
-              idList = idList,
-              bitSize = bitVec,
-              avail=avail,
-              pedSizeOriginal = nOriginal,
-              pedSizeIntermed = nIntermed,
-              pedSizeFinal  = nFinal)
+  obj <- list(
+    pedObj = pedTrimmed,
+    idTrimmed = idTrimmed,
+    idList = idList,
+    bitSize = bitVec,
+    avail = avail,
+    pedSizeOriginal = nOriginal,
+    pedSizeIntermed = nIntermed,
+    pedSizeFinal = nFinal
+  )
 
   class(obj) <- "pedigree.shrink"
 
@@ -173,33 +168,34 @@ pedigree.shrink <- function(ped, avail, affected=NULL, maxBits = 16) {
 #' @rdname pedigree.shrink
 #' @method print pedigree.shrink
 #' @export
-print.pedigree.shrink <- function(x, ...){
+print.pedigree.shrink <- function(x, ...) {
+  cat("Pedigree Size:\n")
 
-    cat("Pedigree Size:\n")
+  if (length(x$idTrimmed) > 2) {
+    n <- c(x$pedSizeOriginal, x$pedSizeIntermed, x$pedSizeFinal)
+    b <- c(x$bitSize[1], x$bitSize[2], x$bitSize[length(x$bitSize)])
+    row.nms <- c("Original", "Only Informative", "Trimmed")
+  } else {
+    n <- c(x$pedSizeOriginal, x$pedSizeIntermed)
+    b <- c(x$bitSize[1], x$bitSize[2])
+    row.nms <- c("Original", "Trimmed")
+  }
 
-    if(length(x$idTrimmed) > 2)
-    {
-        n <- c(x$pedSizeOriginal, x$pedSizeIntermed, x$pedSizeFinal)
-        b <- c(x$bitSize[1], x$bitSize[2], x$bitSize[length(x$bitSize)])
-        row.nms <- c("Original","Only Informative","Trimmed")
-    } else {
-        n <- c(x$pedSizeOriginal, x$pedSizeIntermed)
-        b <- c(x$bitSize[1], x$bitSize[2])
-        row.nms <- c("Original","Trimmed")
-    }
+  df <- data.frame(N.subj = n, Bits = b)
+  rownames(df) <- row.nms
+  print(df, quote = FALSE)
 
-    df <- data.frame(N.subj = n, Bits = b)
-    rownames(df) <- row.nms
-    print(df, quote=FALSE)
+  if (!is.null(x$idList$unavail)) {
+    cat("\n Unavailable subjects trimmed:\n", x$idList$unavail, "\n")
+  }
 
-    if(!is.null(x$idList$unavail))
-        cat("\n Unavailable subjects trimmed:\n", x$idList$unavail, "\n")
+  if (!is.null(x$idList$noninform)) {
+    cat("\n Non-informative subjects trimmed:\n", x$idList$noninform, "\n")
+  }
 
-    if(!is.null(x$idList$noninform))
-        cat("\n Non-informative subjects trimmed:\n", x$idList$noninform, "\n")
+  if (!is.null(x$idList$affect)) {
+    cat("\n Informative subjects trimmed:\n", x$idList$affect, "\n")
+  }
 
-    if(!is.null(x$idList$affect))
-        cat("\n Informative subjects trimmed:\n", x$idList$affect, "\n")
-
-    invisible()
+  invisible()
 }

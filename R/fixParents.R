@@ -27,32 +27,44 @@
 #'
 #' @examples
 #'
-#' test1char <- data.frame(id=paste("fam", 101:111, sep=""),
-#'                        sex=c("male","female")[c(1,2,1,2,1, 1,2, 2,1,2, 1)],
-#'                        father=c(0,0,"fam101","fam101","fam101", 0,0,
-#'                                "fam106","fam106","fam106", "fam109"),
-#'                        mother=c(0,0,"fam102","fam102","fam102", 0,0,
-#'                                "fam107","fam107","fam107", "fam112"))
+#' test1char <- data.frame(
+#'   id = paste("fam", 101:111, sep = ""),
+#'   sex = c("male", "female")[c(1, 2, 1, 2, 1, 1, 2, 2, 1, 2, 1)],
+#'   father = c(
+#'     0, 0, "fam101", "fam101", "fam101", 0, 0,
+#'     "fam106", "fam106", "fam106", "fam109"
+#'   ),
+#'   mother = c(
+#'     0, 0, "fam102", "fam102", "fam102", 0, 0,
+#'     "fam107", "fam107", "fam107", "fam112"
+#'   )
+#' )
 #' test1newmom <- with(test1char, fixParents(id, father, mother,
-#'                                           sex, missid="0"))
-#' newped <- with(test1newmom, pedigree(id, dadid, momid, sex, missid="0"))
+#'   sex,
+#'   missid = "0"
+#' ))
+#' newped <- with(test1newmom, pedigree(id, dadid, momid, sex, missid = "0"))
 #' as.data.frame(newped)
 #'
 #' @author Jason Sinnwell
 #' @seealso \code{\link{pedigree}}
 #' @export fixParents
-fixParents <- function (id, dadid, momid, sex, missid = 0)  {
+fixParents <- function(id, dadid, momid, sex, missid = 0) {
   ## fix sex of parents
   ## add parents that are missing
   n <- length(id)
-  if (length(momid) != n)
+  if (length(momid) != n) {
     stop("Mismatched lengths, id and momid")
-  if (length(dadid) != n)
+  }
+  if (length(dadid) != n) {
     stop("Mismatched lengths, id and momid")
-  if (length(sex) != n)
+  }
+  if (length(sex) != n) {
     stop("Mismatched lengths, id and sex")
-  if (is.factor(sex))
+  }
+  if (is.factor(sex)) {
     sex <- as.character(sex)
+  }
   codes <- c("male", "female", "unknown", "terminated")
   if (is.character(sex)) {
     sex <- charmatch(casefold(sex, upper = FALSE), codes, nomatch = 3)
@@ -63,30 +75,34 @@ fixParents <- function (id, dadid, momid, sex, missid = 0)  {
     sex <- sex + 1
   }
   sex <- ifelse(sex < 1 | sex > 4, 3, sex)
-  if (all(sex > 2))
+  if (all(sex > 2)) {
     stop("Invalid values for 'sex'")
-  else if (mean(sex == 3) > 0.25)
+  } else if (mean(sex == 3) > 0.25) {
     warning("More than 25% of the gender values are 'unknown'")
+  }
   ## #  sex <- factor(sex, 1:4, labels = codes)
   if (missing(missid)) {
-    if (is.numeric(id))
+    if (is.numeric(id)) {
       missid <- 0
-    else missid <- ""
+    } else {
+      missid <- ""
+    }
   }
-  if (any(is.na(id))) 
+  if (any(is.na(id))) {
     stop("Missing value for the id variable")
+  }
   if (!is.numeric(id)) {
     id <- as.character(id)
     addids <- paste("addin", 1:length(id), sep = "-")
     dadid <- as.character(dadid)
     momid <- as.character(momid)
     missid <- as.character(missid)
-    if (length(grep("^ *$", id)) > 0) 
+    if (length(grep("^ *$", id)) > 0) {
       stop("A blank or empty string is not allowed as the id variable")
-  }
-  else {
+    }
+  } else {
     addids <- seq(max(id, na.rm = TRUE) + 1, max(id, na.rm = TRUE) +
-                  length(id))
+      length(id))
   }
 
   nofather <- (is.na(dadid) | dadid == missid)
@@ -144,6 +160,8 @@ fixParents <- function (id, dadid, momid, sex, missid = 0)  {
     dadid <- c(dadid, rep(0, length(nomom.idx)))
     momid <- c(momid, rep(0, length(nomom.idx)))
   }
-  return(data.frame(id = id, momid = momid, dadid = dadid,
-                    sex = sex))
+  return(data.frame(
+    id = id, momid = momid, dadid = dadid,
+    sex = sex
+  ))
 }
