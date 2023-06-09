@@ -30,7 +30,7 @@ usethis::use_package("dplyr")
 #'@export norm_data
 norm_data <- function(df, na_strings = "NA") {
   err_cols <- c(
-    "sexErrMoFa", "sexErrFa", "sexErrMo", "sexErrTer","sexNA", "sexError",
+    "sexErrMoFa", "sexErrFa", "sexErrMo", "sexErrTer", "sexNA", "sexError",
     "idErrFa", "idErrMo", "idErrSelf", "idErrAncestor", "idError"
   )
   cols_need <- c("IndID", "FatherID", "MotherID", "Gender")
