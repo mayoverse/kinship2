@@ -2,9 +2,9 @@ df <- c(
     1, 3, 4, 2, FALSE, NA, "1", "None",
     2, 0, 0, 1, TRUE, 1, 2, "A",
     3, 8, 7, "man", FALSE, NA, "2", "E",
-    4, 6, 5, "woman", TRUE, "A", 3, "A",
+    4, 6, 5, "woman", FALSE, "A", 3, "A",
     5, 0, 0, "f", FALSE, NA, 7, "E",
-    6, "None", 0, "m", FALSE, NA, "NA", "D",
+    6, "None", 0, "m", TRUE, NA, "NA", "D",
     7, 0, "0", 1, FALSE, "NA", 6, "A",
     8, 0, 0, 1, TRUE, "None", "3", "D",
     8, 0, 0, 2, TRUE, "None", "3", "A",
@@ -24,8 +24,8 @@ df_aff_fact <- generate_aff_inds(list_get$norm, "AffMod",
 testthat("Norm data", {
     expect_equal(dim(list_get$norm), c(4, 15))
     expect_equal(dim(list_get$errors), c(6, 15))
-    expect_equal(list_get$norm$IndID, c("1", "2", "5", "6"))
-    expect_equal(list_get$errors$IndID, c("3", "4", "7", "8", "8", "9"))
+    expect_equal(list_get$norm$IndID, c("1", "2", "4", "5"))
+    expect_equal(list_get$errors$IndID, c("3", "6", "7", "8", "8", "9"))
 })
 
 testthat("generate aff inds", {
