@@ -81,6 +81,8 @@ var_to_factor <- function(var, threshold = NULL) {
   var_fact
 }
 
+usethis::use_package("dplyr")
+
 #' Check for columns name usage
 #'
 #' @description Check for presence / absence of columns names
@@ -126,8 +128,9 @@ check_columns <- function(df,
   col_use_by_script <- cols_used[cols_used %in% cols_p]
   if (length(col_use_by_script) > 0) {
     warning(paste("Columns :", col_use_by_script,
-      "are used by the script and will be overwriten.\n"))
-    df[col_use_by_script] <- NA
+      "are used by the script and will disgarded.\n"))
+    df <- df %>%
+      dplyr::select(col_use_by_script)
   }
   cols_optional <- cols_to_use[cols_to_use %in% cols_p]
   if (length(cols_optional) > 0) {
@@ -136,7 +139,7 @@ check_columns <- function(df,
   }
 
   if (others_cols) {
-    all_cols_checked <- cols_p
+    all_cols_checked <- colnames(df)
   } else {
     all_cols_checked <- c(cols_needed, col_use_by_script, cols_optional)
     cols_not_recognize <- cols_p[!cols_p %in% all_cols_checked]
