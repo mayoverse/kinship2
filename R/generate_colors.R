@@ -24,7 +24,8 @@
 #'
 #' @return A list of two elements
 #' - The dataframe with the columns `fill` and `border` updated
-#' - List containing the corresponding scale for `col_aff` and availability
+#' - List containing the corresponding color scale used for
+#' `col_aff` and availability
 #'
 #' @export generate_colors
 generate_colors <- function(df, col_aff, keep_full_scale = FALSE, breaks = 3,
