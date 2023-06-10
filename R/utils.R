@@ -152,7 +152,7 @@ check_columns <- function(df,
   df[all_cols_checked]
 }
 
-usethis::use_package(stringr)
+usethis::use_package("stringr")
 #' Check is numeric
 #'
 #' @description Check if a variable given is numeric or NA
