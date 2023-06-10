@@ -130,7 +130,7 @@ check_columns <- function(df,
     warning(paste("Columns :", col_use_by_script,
       "are used by the script and will disgarded.\n"))
     df <- df %>%
-      dplyr::select(col_use_by_script)
+      dplyr::select(-col_use_by_script)
   }
   cols_optional <- cols_to_use[cols_to_use %in% cols_p]
   if (length(cols_optional) > 0) {
