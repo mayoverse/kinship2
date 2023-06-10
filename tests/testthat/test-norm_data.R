@@ -50,3 +50,16 @@ test_that("generate colors full scale on", {
     expect_equal(list_fact$df$border, c("black", "green", "black", "black"))
     expect_equal(list_fact$df$fill, c("grey", "#FFFFFF", "#FF0000", "#EEEE00"))
 })
+
+data(sample.ped)
+summary(sample.ped)
+sample.ped <- sample.ped %>%
+    rename(affection = affected, dadid = father, momid = mother)
+df <- sample.ped
+col_aff <- "affection"
+cols_needed <- col_aff
+df <- generate_aff_inds(sample.ped, "affection", threshold=0, sup_thres_aff=TRUE)
+listget <- generate_colors(df, "affection")
+listget$scales
+a <- createLegend(listget$scales)
+plot(a$B)
