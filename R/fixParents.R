@@ -71,7 +71,8 @@ fixParents <- function(id, dadid, momid, sex, missid = 0) {
   }
   sex <- as.integer(sex)
   if (min(sex) == 0) {
-    warning("Sex values contain 0, but expected codes 1-4.\n Setting 0=male, 1=female, 2=unknown, 3=terminated. \n")
+    warning(paste0("Sex values contain 0, but expected codes 1-4.\n",
+    "Setting 0=male, 1=female, 2=unknown, 3=terminated. \n"))
     sex <- sex + 1
   }
   sex <- ifelse(sex < 1 | sex > 4, 3, sex)
@@ -93,7 +94,7 @@ fixParents <- function(id, dadid, momid, sex, missid = 0) {
   }
   if (!is.numeric(id)) {
     id <- as.character(id)
-    addids <- paste("addin", 1:length(id), sep = "-")
+    addids <- paste("addin", seq_along(id), sep = "-")
     dadid <- as.character(dadid)
     momid <- as.character(momid)
     missid <- as.character(missid)
@@ -109,8 +110,8 @@ fixParents <- function(id, dadid, momid, sex, missid = 0) {
   nomother <- (is.na(momid) | momid == missid)
   if (any(duplicated(id))) {
     duplist <- id[duplicated(id)]
-    msg.n <- min(length(duplist), 6)
-    stop(paste("Duplicate subject id:", duplist[1:msg.n]))
+    msg_nb <- min(length(duplist), 6)
+    stop(paste("Duplicate subject id:", duplist[1:msg_nb]))
   }
   findex <- match(dadid, id, nomatch = 0)
   mindex <- match(momid, id, nomatch = 0)
@@ -143,25 +144,94 @@ fixParents <- function(id, dadid, momid, sex, missid = 0) {
 
   ## children with mom in pedigree, dad missing
   if (any(findex == 0 & mindex != 0)) {
-    nodad.idx <- which(findex == 0 & mindex != 0)
-    dadid[nodad.idx] <- addids[1:length(nodad.idx)]
-    id <- c(id, addids[1:length(nodad.idx)])
-    sex <- c(sex, rep(1, length(nodad.idx)))
-    dadid <- c(dadid, rep(0, length(nodad.idx)))
-    momid <- c(momid, rep(0, length(nodad.idx)))
+    nodad_idx <- which(findex == 0 & mindex != 0)
+    dadid[nodad_idx] <- addids[seq_along(nodad_idx)]
+    id <- c(id, addids[seq_along(nodad_idx)])
+    sex <- c(sex, rep(1, length(nodad_idx)))
+    dadid <- c(dadid, rep(0, length(nodad_idx)))
+    momid <- c(momid, rep(0, length(nodad_idx)))
   }
   ## children with dad in ped, mom missing
   addids <- addids[!(addids %in% id)]
   if (any(mindex == 0 & findex != 0)) {
-    nomom.idx <- which(mindex == 0 & findex != 0)
-    momid[nomom.idx] <- addids[1:length(nomom.idx)]
-    id <- c(id, addids[1:length(nomom.idx)])
-    sex <- c(sex, rep(2, length(nomom.idx)))
-    dadid <- c(dadid, rep(0, length(nomom.idx)))
-    momid <- c(momid, rep(0, length(nomom.idx)))
+    nodad_idx <- which(mindex == 0 & findex != 0)
+    momid[nodad_idx] <- addids[seq_along(nodad_idx)]
+    id <- c(id, addids[seq_along(nodad_idx)])
+    sex <- c(sex, rep(2, length(nodad_idx)))
+    dadid <- c(dadid, rep(0, length(nodad_idx)))
+    momid <- c(momid, rep(0, length(nodad_idx)))
   }
   return(data.frame(
     id = id, momid = momid, dadid = dadid,
     sex = sex
   ))
+}
+
+#' Fix missing parents
+#'
+#' @description Apply fixParents on a dataframe or delete missing parents.
+#'
+#' @details Check for presence of both parents id in the `id` field.
+#' If not both presence behaviour depend of `delete` parameter
+#' If TRUE then use fixParents function and merge back the other fields
+#' in the dataframe then set availability to O for non available parents.
+#' If FALSE then delete the id of missing parents
+#'
+#' @param df Dataframe to process
+#' @param delete Boolean defining if missing parents needs to be:
+#' TRUE: added as a new row
+#' FALSE: be deleted
+#' @param missid The founders are those with no father or mother in the
+#' pedigree.  The \code{dadid} and \code{momid} values for these subjects will
+#' either be NA or the value of this variable.  The default for \code{missid}
+#' is 0 if the \code{id} variable is numeric, and "" (the empty string)
+#' otherwise.
+#'
+#' @return The same dataframe with the parents ids fixed
+#'
+#' @examples
+#'
+#' @export fix_parents_df
+fix_parents_df <- function(df = df, delete = FALSE, missid = "0",
+  id = "id", avail = "avail",
+  dadid = "dadid", momid = "momid", sex = "sex") {
+  cols_needed <- c(id, dadid, momid, sex, avail)
+  df <- check_columns(df, cols_needed, "", "", others_cols = TRUE)
+
+  message("Fixing incomplete couple")
+  all_id <- c(df[[id]], df[[dadid]], df[[momid]])
+  all_id <- unique(all_id[all_id != missid])
+  message(paste(length(all_id), "individuals detected"))
+
+  if (nrow(df) > 2) {
+    if (delete) {
+      # One of the parents doesn't not have a line in id
+      dad_present <- match(df[[dadid]], df[[id]], nomatch = missid)
+      mom_present <- match(df[[momid]], df[[id]], nomatch = missid)
+      df[dad_present == missid | mom_present == missid,
+          c(momid, dadid)] <- missid
+
+      all_id_new <- c(df[[id]], df[[dadid]], df[[momid]])
+      all_id_new <- unique(all_id_new[all_id_new != missid])
+      all_id_dif <- all_id[!all_id %in% all_id_new]
+      message(paste(length(all_id_dif), "individuals deleted"))
+    }
+    df_fix <- fixParents(df[[id]], df[[dadid]], df[[momid]],
+      df[[sex]], missid = missid)
+    col_used <- which(
+      names(df) == momid |
+      names(df) == dadid |
+      names(df) == sex)
+    df <- merge(
+      df[, -col_used],
+      df_fix, by = id,
+      all.y = TRUE, all.x = TRUE)
+    df[[avail]][is.na(df[[avail]])] <- 0
+    all_id_new <- c(df[[id]], df[[dadid]], df[[momid]])
+    all_id_new <- unique(all_id_new[all_id_new != missid])
+    all_id_dif <- all_id_new[!all_id_new %in% all_id]
+    message(paste(length(all_id_dif), "individuals added"))
+  }
+  message(paste("Final:", nrow(df), "individuals detected"))
+  return(df)
 }
