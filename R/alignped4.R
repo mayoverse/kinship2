@@ -154,6 +154,10 @@ alignped4 <- function(rval, spouse, level, width, align) {
   newpos <- rval$pos
   # fit <- lsei(pmat, rep(0, nrow(pmat)), G=cmat, H=dvec)
   # newpos[myid>0] <- fit$X[myid]
-  newpos[myid > 0] <- fit$solution[myid]
+  
+  if (length(fit) > 1) {
+    newpos[myid > 0] <- fit$solution[myid]
+  }
+
   newpos
 }
