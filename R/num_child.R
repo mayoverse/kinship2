@@ -20,6 +20,8 @@
 #'
 #' @export num_child
 num_child <- function(df, relation = NULL) {
+  require(dplyr)
+  require(tidyr)
   cols_needed <- c("id", "dadid", "momid")
   cols_used <- c("num_child_dir", "num_child_ind", "num_child_tot")
 
