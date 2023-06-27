@@ -1,4 +1,4 @@
-#' data.frame from a pedigree object
+#' data.frame from a pedigreeList object
 #'
 #' @description
 #' Extract the internal data from a pedigree object into a data.frame
@@ -11,17 +11,19 @@
 #'
 #' @examples
 #' data(sample.ped)
-#' ped <- with(sample.ped, pedigree(id, father, mother, sex, affected))
+#' ped <- with(sample.ped, pedigree(id, father, mother,
+#'  sex, affected, famid = ped))
 #' as.data.frame(ped)
 #'
-#' @author Jason Sinnwell
+#' @author Louis Le Nézet
 #' @seealso \code{\link{pedigree}}
-#' @export as.data.frame.pedigree
-as.data.frame.pedigree <- function(x, ...) {
+#' @export as.data.frame.pedigreeList
+as.data.frame.pedigreeList <- function(x, ...) {
   dadid <- momid <- rep(0, length(x$id))
   dadid[x$findex > 0] <- x$id[x$findex]
   momid[x$mindex > 0] <- x$id[x$mindex]
-  df <- data.frame(id = x$id, dadid = dadid, momid = momid, sex = x$sex)
+  df <- data.frame(id = x$id, dadid = dadid, momid = momid,
+    sex = x$sex, famid = x$famid)
 
   if (!is.null(x$affected)) {
     df$affected <- x$affected
