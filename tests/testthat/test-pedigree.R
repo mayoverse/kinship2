@@ -69,3 +69,16 @@ test_that("pedigree other test", {
   ))
   expect_doppelganger("OtherPed with twin", ped2)
 })
+
+test_that("pedigree to dataframe", {
+  data(sample.ped)
+  ped <- with(sample.ped, pedigree(id, father, mother, sex, affected))
+  expect_equal(dim(as.data.frame(ped)), c(55, 5))
+})
+
+test_that("pedigreeList to dataframe", {
+  data(sample.ped)
+  ped <- with(sample.ped, pedigree(id, father, mother, sex,
+    affected, famid = ped))
+  expect_equal(dim(as.data.frame(ped)), c(55, 6))
+})
