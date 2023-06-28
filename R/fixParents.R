@@ -49,7 +49,7 @@
 #' @author Jason Sinnwell
 #' @seealso \code{\link{pedigree}}
 #' @export fixParents
-fix_parents <- function(id, dadid, momid, sex, missid = 0, ...) {
+fixParents <- function(id, dadid, momid, sex, missid = 0, ...) {
   ## fix sex of parents
   ## add parents that are missing
   n <- length(id)
@@ -191,8 +191,8 @@ fix_parents <- function(id, dadid, momid, sex, missid = 0, ...) {
 #'
 #' @examples
 #'
-#' @export fix_parents_df
-fix_parents.data.frame <- function(df = df, delete = FALSE, missid = "0",
+#' @export
+fixParents.data.frame <- function(df = df, delete = FALSE, missid = "0",
   id = "id", avail = "avail",
   dadid = "dadid", momid = "momid", sex = "sex", ...) {
   cols_needed <- c(id, dadid, momid, sex, avail)
@@ -216,7 +216,7 @@ fix_parents.data.frame <- function(df = df, delete = FALSE, missid = "0",
       all_id_dif <- all_id[!all_id %in% all_id_new]
       message(paste(length(all_id_dif), "individuals deleted"))
     }
-    df_fix <- fix_parents(df[[id]], df[[dadid]], df[[momid]],
+    df_fix <- fixParents(df[[id]], df[[dadid]], df[[momid]],
       df[[sex]], missid = missid, ...)
     col_used <- which(
       names(df) == momid |
