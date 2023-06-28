@@ -40,14 +40,19 @@ unaffected and affected, respectively.  NAs are considered missing.}
 \item{status}{Censor/Vital status (0="censored", 1="dead")}
 
 \item{relation}{A matrix with 3 required columns (id1, id2, code) specifying
-special relationship between pairs of individuals. Codes: 1=Monozygotic
-twin, 2=Dizygotic twin, 3=Twin of unknown zygosity, 4=Spouse. (The last is
-necessary in order to place a marriage with no children into the plot.) If
-famid is given in the call to create pedigrees, then famid needs to be in
-the last column of the relation matrix. Note for tuples of >= 3 with a
-mixture of zygosities, the plotting is limited to showing pairwise zygosity
-of adjacent subjects, so it is only necessary to specify the pairwise
-zygosity, in the order the subjects are given or appear on the plot.}
+special relationship between pairs of individuals.
+Codes:
+1=Monozygotic twin
+2=Dizygotic twin
+3=Twin of unknown zygosity
+4=Spouse.
+(The last is necessary in order to place a marriage with no children
+into the plot.) If famid is given in the call to create pedigrees, then
+famid needs to be in the last column of the relation matrix.
+Note for tuples of >= 3 with a mixture of zygosities, the plotting is
+limited to showing pairwise zygosity of adjacent subjects, so it is only
+necessary to specify the pairwise zygosity, in the order the subjects are
+given or appear on the plot.}
 
 \item{famid}{An optional vector of family identifiers.  If it is present the
 result will contain individual pedigrees for each family in the set, which
@@ -73,13 +78,18 @@ the following items: famid id findex mindex sex affected status relation
 Create a pedigree or pedigreeList object
 }
 \examples{
-data(minnbreast) bpeds <- with(minnbreast, pedigree(id, fatherid,
-     motherid, sex, affected=proband, famid=famid))
-bped.id8 <- bpeds['8']
+data(minnbreast)
+bpeds <- with(minnbreast, pedigree(id, fatherid,
+  motherid, sex,
+  affected = proband, famid = famid
+))
+bped.id8 <- bpeds["8"]
 print(bped.id8) ## show this pedigree with mixed zygosity quadruplets
-rel8 <- data.frame(id1=c(137,138,139), id2=c(138,139,140), code=c(1,2,2))
-bped.id8 <- with(minnbreast[minnbreast$famid==8,], pedigree(id, fatherid,
-motherid, sex, affected=proband, relation=rel8))
+rel8 <- data.frame(id1 = c(137, 138, 139), id2 = c(138, 139, 140), code = c(1, 2, 2))
+bped.id8 <- with(minnbreast[minnbreast$famid == 8, ], pedigree(id, fatherid,
+  motherid, sex,
+  affected = proband, relation = rel8
+))
 print(bped.id8)
 
 }

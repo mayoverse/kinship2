@@ -9,7 +9,7 @@
 #' Given a family id vector, also compute the familial grouping from first
 #' principles using the parenting data, and compare the results.
 #'
-#' The \code{makefamid} function is used to create a de novo family id from the
+#' The `makefamid` function is used to create a de novo family id from the
 #' parentage data, and this is compared to the family id given in the data.
 #'
 #' If there are any joins, then an attribute "join" is attached.
@@ -20,24 +20,29 @@
 #' @param id A vector of unique subject identifiers
 #' @param father.id Vector containing the id of the biological father
 #' @param mother.id Vector containing the id of the biological mother
-#' @param newfam The result of a call to \code{makefamid}. If this has already
+#' @param newfam The result of a call to `makefamid`. If this has already
 #' been computed by the user, adding it as an argument shortens the running
 #' time somewhat.
 #'
 #' @return a data frame with one row for each unique family id in the
-#' \code{famid} argument. Components of the output are:
-#' \item{famid}{ The family id, as entered into the data set }
-#' \item{n}{ Number of subjects in the family }
-#' \item{unrelated}{ Number of them that appear to be unrelated to
+#' `famid` argument. Components of the output are:
+#' ## famid
+#' The family id, as entered into the data set
+#' ## n
+#' Number of subjects in the family
+#' ## unrelated
+#' Number of them that appear to be unrelated to
 #' anyone else in the entire pedigree set.  This is usually marry-ins with no
-#' children (in the pedigree), and if so are not a problem. }
-#' \item{split}{ Number of unique "new" family ids.
+#' children (in the pedigree), and if so are not a problem.
+#' ## split
+#' Number of unique "new" family ids.
 #' 0 = no one in this "family" is related to anyone else (not good)
 #' 1 = everythings is fine
 #' 2+= the family appears to be a set of disjoint trees.
-#' Are you missing some of the people? }
-#' \item{join}{ Number of other families that had a unique
-#' famid, but are actually joined to this one.  0 is the hope. }
+#' Are you missing some of the people?
+#' ## join
+#' Number of other families that had a unique
+#' famid, but are actually joined to this one.  0 is the hope.
 #'
 #' @examples
 #'
@@ -66,7 +71,7 @@
 #'
 #' ## fcheck1.bad is a try-error
 #'
-#' @seealso \code{\link{makefamid}}, \code{\link{makekinship}}
+#' @seealso `makefamid`, `makekinship`
 #' @keywords genetics
 #' @export familycheck
 familycheck <- function(famid, id, father.id, mother.id, newfam) {

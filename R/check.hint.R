@@ -20,7 +20,7 @@
 #' @return
 #'
 #' @examples
-#' @seealso \code{\link{}}, \code{\link{}}
+#' @seealso `autohint`, `besthint`
 #' @keywords
 #' @export check.hint
 check.hint <- function(hints, sex) {

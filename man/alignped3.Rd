@@ -11,10 +11,19 @@ alignped3(x1, x2, packed, space = 1)
 }
 \value{
 A list of element containing:
-\item{n}{}
-\item{nid}{}
-\item{pos}{}
-\item{fam}{}
+## n
+A vector giving the number of subjects
+on each horizonal level of the plot
+## nid
+A matrix with one row for each level, giving the numeric id of
+each subject plotted.
+(An value of 17 means the 17th subject in the pedigree).
+## pos
+A matrix giving the horizontal position of each plot point
+## fam
+A matrix giving the family id of each plot point.
+A value of "3" would mean that the two subjects in positions 3 and 4,
+in the row above, are this subject's parents.
 }
 \description{
 This is the third of the four co-routines.
@@ -28,20 +37,22 @@ need not plot two copies of the same person side by side.
 there is no harm if they are a column bigger than finally needed.)
 Beyond that the work is simple bookkeeping.
 
-\item{Slide}{ For the unpacked case, which is the traditional way to draw
+## Slide
+For the unpacked case, which is the traditional way to draw
 a pedigree when we can assume the paper is infinitely wide, all parents are
 centered over their children. In this case we think if the two trees to be
 merged as solid blocks. On input they both have a left margin of 0.
-Compute how far over we have to slide the right tree.}
-\item{Merge}{ Now merge the two trees. Start at the top level and work down.}
+Compute how far over we have to slide the right tree.
+## Merge
+Now merge the two trees. Start at the top level and work down.
 }
 \examples{
 data(sample.ped)
-ped <- with(sample.ped,pedigree(id, father, mother, sex, affected))
+ped <- with(sample.ped, pedigree(id, father, mother, sex, affected))
 align.pedigree(ped)
 
 }
 \seealso{
-\code{\link{plot.pedigree}}, \code{\link{autohint}}
+`plot.pedigree`, `autohint`
 }
 \keyword{dplot}

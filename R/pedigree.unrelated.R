@@ -69,7 +69,7 @@
 #' ## [1] "214" "203"
 #' id2
 #'
-#' @seealso \code{\link{kinship}}, \code{\link{pedigree}}
+#' @seealso `kinship`, `pedigree`
 #' @export pedigree.unrelated
 pedigree.unrelated <- function(ped, avail) {
   # Requires: kinship function

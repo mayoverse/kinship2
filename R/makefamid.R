@@ -22,7 +22,7 @@
 #' @return An integer vector giving family groupings
 #'
 #' @author Terry Therneau
-#' @seealso \code{\link{makekinship}}
+#' @seealso `makekinship`
 #' @keywords genetics
 #' @export makefamid
 makefamid <- function(id, father.id, mother.id) {

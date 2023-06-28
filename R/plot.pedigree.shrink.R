@@ -23,7 +23,7 @@
 #'
 #' @return Plot shrinked pedigree
 #'
-#' @seealso \code{\link{pedigree.shrink}},
+#' @seealso `pedigree.shrink`
 #' @examples
 #'
 #' data(sample.ped)

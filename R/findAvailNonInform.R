@@ -17,7 +17,7 @@
 #' @return Vector of subject ids who can be removed by having lowest
 #' informativeness.
 #'
-#' @seealso \code{\link{pedigree.shrink}}
+#' @seealso `pedigree.shrink`
 #' @export findAvailNonInform
 findAvailNonInform <- function(ped, avail) {
   ## trim persons who are available but not informative b/c not parent

@@ -6,7 +6,7 @@
 #' Align a pedigree to print well
 #'
 #' @details
-#' A pedigree structure can contain a \code{hints} object which helps to
+#' A pedigree structure can contain a `hints` object which helps to
 #' reorder the pedigree (e.g. left-to-right order of children within family) so
 #' as to plot with minimal distortion. This routine is used to create an
 #' initial version of the hints.  They can then be modified if desired.
@@ -34,7 +34,7 @@
 #' children underneath parents, but without making the pedigree too wide.  Set
 #' to FALSE to speed up plotting.
 #'
-#' @return A list containing components \code{order} and \code{spouse}
+#' @return A list containing components `order` and `spouse`
 #'
 #' @examples
 #'

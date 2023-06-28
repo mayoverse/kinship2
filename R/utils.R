@@ -19,7 +19,7 @@
 #' df_cont_table(df, "var1", 0.5, "var2", c(0.25, 0.5, 0.75))
 #' df_cont_table(df, "var1", 0.5)
 #'
-#' @export get_family_infos
+#' @export df_cont_table
 df_cont_table <- function(df,
     var1, threshold1 = NULL,
     var2 = NULL, threshold2 = NULL) {
@@ -130,7 +130,7 @@ check_columns <- function(df,
     warning(paste("Columns :", col_use_by_script,
       "are used by the script and will disgarded.\n"))
     df <- df %>%
-      dplyr::select(-col_use_by_script)
+      dplyr::select(-dplyr::one_of(col_use_by_script))
   }
   cols_optional <- cols_to_use[cols_to_use %in% cols_p]
   if (length(cols_optional) > 0) {
@@ -141,7 +141,7 @@ check_columns <- function(df,
   if (others_cols) {
     all_cols_checked <- colnames(df)
   } else {
-    all_cols_checked <- c(cols_needed, col_use_by_script, cols_optional)
+    all_cols_checked <- c(cols_needed, cols_optional)
     cols_not_recognize <- cols_p[!cols_p %in% all_cols_checked]
     if (length(cols_not_recognize) > 0) {
       message(paste("Columns :", cols_not_recognize,

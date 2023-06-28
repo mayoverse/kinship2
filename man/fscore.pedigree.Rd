@@ -12,6 +12,3 @@ fscore.pedigree(ped)
 \description{
 Attempt at a founder score
 }
-\seealso{
-\code{\link{}}, \code{\link{}}
-}

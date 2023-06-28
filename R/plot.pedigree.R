@@ -17,9 +17,9 @@ usethis::use_package("stats")
 #' pedigree where all children are centered under parents simply make the width
 #' large enough, however, the symbols may get very small.
 #'
-#' The second is \code{align}, a vector of 2 alignment parameters $a$ and $b$.
-#' For each set of siblings at a set of locations \code{x} and with parents at
-#' \code{p=c(p1,p2)} the alignment penalty is \deqn{(1/k^a)\sum{i=1}{k} [(x_i -
+#' The second is `align`, a vector of 2 alignment parameters $a$ and $b$.
+#' For each set of siblings at a set of locations `x` and with parents at
+#' `p=c(p1,p2)` the alignment penalty is \deqn{(1/k^a)\sum{i=1}{k} [(x_i -
 #' (p1+p2)/2)]^2} sum(x- mean(p))^2/(k^a) where k is the number of siblings in
 #' the set. when $a=1$ moving a sibship with $k$ sibs one unit to the left or
 #' right of optimal will incur the same cost as moving one with only 1 or two
@@ -61,7 +61,7 @@ usethis::use_package("stats")
 #' the realignment of pedigrees.
 #' @param density defines density used in the symbols.  Takes up to 4 different
 #' values.
-#' @param mar margin parmeters, as in the \code{par} function
+#' @param mar margin parmeters, as in the `par` function
 #' @param angle defines angle used in the symbols.  Takes up to 4 different
 #' values.
 #' @param keep_par Default = FALSE, allows user to keep the parameter settings
@@ -72,23 +72,28 @@ usethis::use_package("stats")
 #' @param pconnect when connecting parent to children the program will try to
 #' make the connecting line as close to vertical as possible, subject to it
 #' lying inside the endpoints of the line that connects the children by at
-#' least \code{pconnect} people.  Setting this option to a large number will
+#' least `pconnect` people.  Setting this option to a large number will
 #' force the line to connect at the midpoint of the children.
-#' @param \dots Extra options that feed into the plot function.
+#' @param ... Extra options that feed into the plot function.
 #'
 #' @return an invisible list containing
-#' \item{plist}{a list that contains all the position information for
+#' ## plist
+#' A list that contains all the position information for
 #' plotting the pedigree. This will useful for further functions (yet unwritten)
-#' for manipulating the plot, but likely not to an ordinary user.}
-#' \item{x,y}{the x an and y plot coordinates of each subject in the plot.
+#' for manipulating the plot, but likely not to an ordinary user.
+#' ## x,y
+#' The x an and y plot coordinates of each subject in the plot.
 #' The coordinate is for the top of the plotted symbol.
 #' These will be in the same order as the input pedigree.  If someone in the
 #' pedigree does not appear in the plot their coordinates will be NA.  If they
 #' appear multiple times one of the instances is chosen.  (Which one is a
-#' function of the order in which the pedigree was constructed.)}
-#' \item{boxh}{the height of the symbol, in user coordinates}
-#' \item{boxw}{the width of the symbol}
-#' \item{call}{a copy of the call that generated the plot}
+#' function of the order in which the pedigree was constructed.)
+#' ## boxh
+#' The height of the symbol, in user coordinates
+#' ## boxw
+#' The width of the symbol
+#' ## call
+#' A copy of the call that generated the plot
 #'
 #' @examples
 #' data(sample.ped)
@@ -104,9 +109,9 @@ usethis::use_package("stats")
 #' print(ped2)
 #'
 #' @section Side Effects: creates plot on current plotting device.
-#' @seealso \code{\link{pedigree}}
+#' @seealso `pedigree`
 #' @keywords hplot, genetics
-#' @export plot.pedigree
+#' @export
 plot.pedigree <- function(df, id = df$id, status = df$status,
                           affected = df$affected, avail = df$avail + 1,
                           mark = NA, label = NA,

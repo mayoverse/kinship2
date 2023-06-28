@@ -12,6 +12,3 @@ descendant.pedigree(idlist, id, dad.id, mom.id)
 \description{
 Find all the descendants of a particular person given a pedigree or a list
 }
-\seealso{
-\code{\link{}}, \code{\link{}}
-}

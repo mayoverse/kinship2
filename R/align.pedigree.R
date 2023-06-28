@@ -8,8 +8,8 @@
 #'
 #' @details
 #' This is an internal routine, used almost exclusively by
-#' \code{plot.pedigree}.  The subservient functions \code{alignped1},
-#' \code{alignped2}, \code{alignped3}, and \code{alignped4} contain the bulk of
+#' `plot.pedigree`.  The subservient functions `alignped1`,
+#' `alignped2`, `alignped3`, and `alignped4` contain the bulk of
 #' the computation.
 #'
 #' @param ped A pedigree object
@@ -17,8 +17,8 @@
 #' lines connecting parents to children in order to have a smaller overall
 #' width for the plot.
 #' @param hints Plotting hints for the pedigree.
-#' This is a list with components \code{order} and \code{spouse},
-#' the second one is optional. If the hints are missing the \code{autohint}
+#' This is a list with components `order` and `spouse`,
+#' the second one is optional. If the hints are missing the `autohint`
 #' routine is called to supply an initial guess.
 #' The order component is a numeric vector with one element per subject in the
 #' pedigree.  It determines the relative order of subjects within a sibship, as
@@ -36,32 +36,38 @@
 #' (FALSE).  The latter is mostly used by internal routines.
 #'
 #' @return a structure with components
-#' \item{n}{ A vector giving the number of subjects
-#' on each horizonal level of the plot}
-#' \item{nid}{ A matrix with one row for each level, giving the numeric id of
+#' ## n
+#' A vector giving the number of subjects
+#' on each horizonal level of the plot
+#' ## nid
+#' A matrix with one row for each level, giving the numeric id of
 #' each subject plotted.
-#' (An value of 17 means the 17th subject in the pedigree). }
-#' \item{pos}{ A matrix giving the horizontal position of each plot point}
-#' \item{fam}{ A matrix giving the family id of each plot point.
+#' (An value of 17 means the 17th subject in the pedigree).
+#' ## pos
+#' A matrix giving the horizontal position of each plot point
+#' ## fam
+#' A matrix giving the family id of each plot point.
 #' A value of "3" would mean that the two subjects in positions 3 and 4,
-#' in the row above, are this subject's parents.}
-#' \item{spouse}{ A matrix with values
+#' in the row above, are this subject's parents.
+#' ## spouse
+#' A matrix with values
 #' 1 = subject plotted to the immediate right is a spouse
 #' 2 = subject plotted to the immediate right is an inbred spouse
-#' 0 = not a spouse }
-#' \item{twins}{ Optional matrix which will only be present if the pedigree
+#' 0 = not a spouse
+#' ## twins
+#' Optional matrix which will only be present if the pedigree
 #' contains twins :
 #' 1 = sibling to the right is a monozygotic twin
 #' 2 = sibling to the right is a dizygotic twin
 #' 3 = sibling to the right is a twin of unknown zygosity
-#' 0 = not a twin }
+#' 0 = not a twin
 #'
 #' @examples
 #' data(sample.ped)
 #' ped <- with(sample.ped, pedigree(id, father, mother, sex, affected))
 #' align.pedigree(ped)
 #'
-#' @seealso \code{\link{plot.pedigree}}, \code{\link{autohint}}
+#' @seealso `plot.pedigree`, `autohint`
 #' @keywords dplot
 #' @export align.pedigree
 align.pedigree <- function(ped, packed = TRUE, width = 10, align = TRUE, hints = ped$hints) {

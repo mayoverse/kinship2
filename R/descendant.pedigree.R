@@ -1,4 +1,4 @@
-# TODO add details param, return, examples, keywords, seealso
+# TODO add details param, return, examples, keywords
 
 #' Find all the descendants
 #'
@@ -13,7 +13,6 @@
 #' @return
 #'
 #' @examples
-#' @seealso \code{\link{}}, \code{\link{}}
 #' @keywords
 #' @export descendant.pedigree
 descendant.pedigree <- function(idlist, id, dad.id, mom.id) {

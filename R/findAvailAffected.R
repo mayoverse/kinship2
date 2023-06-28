@@ -18,12 +18,16 @@
 #' @param affstatus Vector of affection status 0/1 or TRUE/FALSE.
 #'
 #' @return A list is returned with the following components
-#' \item{ped}{ Dataframe with trimmed subject removed }
-#' \item{idTrimmed}{ Vector of IDs of trimmed individuals }
-#' \item{isTrimmed}{ logical value indicating whether pedigree has been trimmed }
-#' \item{bitSize}{ Bit size of the trimmed pedigree }
+#' ## ped
+#' Dataframe with trimmed subject removed
+#' ## idTrimmed
+#' Vector of IDs of trimmed individuals
+#' ## isTrimmed
+#' logical value indicating whether pedigree has been trimmed
+#' ## bitSize
+#' Bit size of the trimmed pedigree
 #'
-#' @seealso \code{\link{pedigree.shrink}}
+#' @seealso `pedigree.shrink`
 #' @export findAvailAffected
 findAvailAffected <- function(ped, avail, affstatus)
                               ## Try trimming one subject by affection status indicator

@@ -7,23 +7,23 @@
 #'
 #' @details
 #' Mark each person as to their depth in a pedigree; 0 for a founder, otherwise
-#' depth = 1 + max(father's depth, mother's depth)
+#' `depth = 1 + max(father's depth, mother's depth)`
 #'
 #' In the case of an inbred pedigree a perfect alignment obeying
-#' \code{extra=TRUE} may not exist.
+#' `extra=TRUE` may not exist.
 #'
 #' @param id Identification code for each individual
 #' @param dad_id Id code for the father
 #' @param mom_id Id code for the mother
-#' @param align If align=T, go one step further and try to make both parents of
-#' each child have the same depth.  (This is not always possible).  It helps
-#' the drawing program by lining up pedigrees that "join in the middle" via a
-#' marriage.
+#' @param align If `align=T`, go one step further and try to make both parents
+#' of each child have the same depth.  (This is not always possible).
+#' It helps the drawing program by lining up pedigrees that "join in the middle"
+#' via a marriage.
 #'
 #' @return an integer vector containing the depth for each subject
 #'
 #' @author Terry Therneau
-#' @seealso \code{\link{plot.pedigree}}
+#' @seealso `plot.pedigree`
 #' @keywords genetics
 #' @export kindepth
 kindepth <- function(id, dad_id, mom_id, align = FALSE) {

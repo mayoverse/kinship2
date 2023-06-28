@@ -47,10 +47,11 @@ individuals (chosen at random if there are multiple of the same status):
 }
 \examples{
 data(sample.ped)
-pedAll <- with(sample.ped,pedigree(id, father, mother, sex,
-    affected=cbind(affected, avail), famid=ped)
-ped1 <- pedAll['1']
-ped1trim <- pedigree.shrink(ped1, maxBits=12)
+pedAll <- with(sample.ped, pedigree(id, father, mother, sex,
+  affected = cbind(affected, avail), famid = ped
+))
+ped1 <- pedAll["1"]
+ped1trim <- pedigree.shrink(ped1, maxBits = 12)
 
 }
 \seealso{

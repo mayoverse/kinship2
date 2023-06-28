@@ -16,8 +16,8 @@
 #' as.data.frame(ped)
 #'
 #' @author Louis Le Nézet
-#' @seealso \code{\link{pedigree}}
-#' @export as.data.frame.pedigreeList
+#' @seealso `pedigree`
+#' @export
 as.data.frame.pedigreeList <- function(x, ...) {
   dadid <- momid <- rep(0, length(x$id))
   dadid[x$findex > 0] <- x$id[x$findex]

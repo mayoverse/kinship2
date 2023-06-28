@@ -20,5 +20,5 @@ Actually, these used to arise in autohint.
 Users can introduce problems as well if they modify the hints.
 }
 \seealso{
-\code{\link{}}, \code{\link{}}
+`autohint`, `besthint`
 }

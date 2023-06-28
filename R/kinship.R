@@ -8,16 +8,16 @@
 #' @details
 #' The function will usually be called with a pedigree or pedigreeList; the
 #' third form is provided for backwards compatability with an earlier release
-#' of the library that was less capable.  The first argument is named \code{id}
+#' of the library that was less capable.  The first argument is named `id`
 #' for the same reason.  Note that when using the third form any information on
 #' twins is not available to the function.
 #'
 #' When called with a pedigreeList, i.e., with multiple families, the routine
 #' will create a block-diagonal-symmetric sparse matrix object of class
-#' \code{dsCMatrix}.  Since the [i,j] value of the result is 0 for any two
-#' unrelated individuals i and j and a \code{Matrix} utilizes sparse
+#' `dsCMatrix`.  Since the [i,j] value of the result is 0 for any two
+#' unrelated individuals i and j and a `Matrix` utilizes sparse
 #' representation, the resulting object is often orders of magnitude smaller
-#' than an ordinary matrix.  When \code{kinship} is called with a single
+#' than an ordinary matrix.  When `kinship` is called with a single
 #' pedigree an ordinary matrix is returned.
 #'
 #' Two genes G1 and G2 are identical by descent (IBD) if they are both physical
@@ -38,13 +38,13 @@
 #' @param id either a pedigree object, pedigreeList object, or a vector of
 #' subject identifiers.  Subject identifiers may be numeric or character.
 #' @param dadid for each subject, the identifier of the biological father.
-#' This is only used if \code{id} is a vector.
+#' This is only used if `id` is a vector.
 #' @param momid for each subject, the identifier of the biological mother.
-#' This is only used if \code{id} is a vector.
+#' This is only used if `id` is a vector.
 #' @param sex vector of sex values coded as 1=male, 2=female
 #' @param chrtype chromosome type.  The currently supported types are
 #' "autosome" and "X" or "x".
-#' @param \dots Any number of optional arguments
+#' @param ... Any number of optional arguments
 #'
 #' @return a matrix of kinship coefficients.
 #'
@@ -61,8 +61,7 @@
 #'
 #' @section References: K Lange, Mathematical and Statistical Methods for
 #' Genetic Analysis, Springer-Verlag, New York, 1997.
-#' @seealso \code{\link{pedigree}},
-#' \code{\link{makekinship}},\code{\link{makefamid}}
+#' @seealso `pedigree`, `makekinship`, `makefamidb`
 #' @keywords genetics
 #' @export kinship
 kinship <- function(id, ...) {
@@ -125,7 +124,9 @@ kinship.default <- function(id, dadid, momid, sex, chrtype = "autosome", ...) {
   kmat
 }
 
-
+#' S3 method for class 'pedigree'
+#' @rdname kinship
+#' @export
 kinship.pedigree <- function(id, chrtype = "autosome", ...) {
   chrtype <- match.arg(casefold(chrtype), c("autosome", "x"))
   if (any(duplicated(id$id))) stop("All id values must be unique")
@@ -209,7 +210,9 @@ kinship.pedigree <- function(id, chrtype = "autosome", ...) {
   kmat
 }
 
-## kinship for pedigreeList
+#' S3 method for class 'pedigreeList'
+#' @rdname kinship
+#' @export
 kinship.pedigreeList <- function(id, chrtype = "autosome", ...) {
   famlist <- unique(id$famid)
   nfam <- length(famlist)

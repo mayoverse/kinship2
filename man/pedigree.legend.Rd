@@ -31,7 +31,7 @@ resolution for the circle}
 \item{location}{similar to how the location of a base-R legend is given,
 used only if new=TRUE.  A character string indicating which of the four
 corners to plot the legend, given by "bottomright", "bottomleft", "topleft",
-or "topright".}
+or "topright" or a vector of coordinates (numerical vector in the form x, y).}
 
 \item{new}{Logical. If TRUE, plot the legend on the current plot. Otherwise,
 plot on a separate plot.}
@@ -52,16 +52,16 @@ Circular legend for a pedigree as a key to the affection statuses.
 }
 \examples{
 
-\dontrun{
 data(sample.ped)
 fam1 <- sample.ped[sample.ped$ped == 1, ]
-ped1 <- with(fam1, pedigree(id, father, mother, sex, affected = cbind(avail,
-    affected)))
+ped1 <- with(fam1, pedigree(
+  id, father, mother, sex,
+  affected = cbind(avail, affected)
+))
 plot(ped1)
 pedigree.legend(ped1, location = "bottomright", radius = 0.8)
 pedigree.legend(ped1, location = "topleft", radius = 0.6, cex = 1.2)
 pedigree.legend(ped1, new = FALSE)
-}
 
 }
 \seealso{

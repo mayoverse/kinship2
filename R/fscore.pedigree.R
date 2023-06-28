@@ -10,7 +10,6 @@
 #' @return
 #'
 #' @examples
-#' @seealso \code{\link{}}, \code{\link{}}
 #' @keywords
 #' @export fscore.pedigree
 fscore.pedigree <- function(ped) {

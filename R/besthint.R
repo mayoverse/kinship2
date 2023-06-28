@@ -1,4 +1,4 @@
-# TODO add param, return, examples, keywords, seealso
+# TODO add param, return, examples, keywords
 
 #' Best hint for alignement
 #'
@@ -21,7 +21,7 @@
 #' @return
 #'
 #' @examples
-#' @seealso \code{\link{}}, \code{\link{}}
+#' @seealso `autohint`
 #' @keywords
 #' @export besthint
 besthint <- function(ped, wt = c(1000, 10, 1), tolerance = 0) {

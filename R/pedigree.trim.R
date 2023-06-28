@@ -1,5 +1,7 @@
 # Automatically generated from all.nw using noweb
 # TODO add documentation
+#' Trim a pedigree
+#' @export pedigree.trim
 pedigree.trim <- function(removeID, ped) {
   ## trim subjects from a pedigree who match the removeID
   ## trim relation matrix as well

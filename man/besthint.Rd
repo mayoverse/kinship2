@@ -22,5 +22,5 @@ plot with the least "stress":
 bends perfect: if anything meets this stress level, keep it
 }
 \seealso{
-\code{\link{}}, \code{\link{}}
+`autohint`
 }

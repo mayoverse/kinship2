@@ -19,18 +19,19 @@
 #' contains the mapping between this new id and the original one.  The final
 #' matrix should be labeled with the original identifiers.
 #'
-#' @param id1,id2 pairs of subject identifiers
+#' @param id1 First subject identifiers
+#' @param id2 Second subject identifiers
 #' @param x the IBD value for that pair
 #' @param idmap an optional 2 column matrix or data frame whose first element
-#' is the internal value (as found in \code{id1} and \code{id2}), and whose
+#' is the internal value (as found in `id1` and `id2`, and whose
 #' second element will be used for the dimnames of the result
 #' @param diagonal optional value for the diagonal element. If present, any
 #' missing diagonal elements in the input data will be set to this value.
 #'
-#' @return a sparse matrix of class \code{dsCMatrix}.  This is the same form
+#' @return a sparse matrix of class `dsCMatrix`.  This is the same form
 #' used for kinship matrices.
 #'
-#' @seealso \code{\link{kinship}}, \code{\link{Matrix}}
+#' @seealso `kinship`, `Matrix`
 #' @keywords genetics
 #' @export ibdMatrix
 ibdMatrix <- function(id1, id2, x, idmap, diagonal) {

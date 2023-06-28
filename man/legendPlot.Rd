@@ -51,13 +51,12 @@ represent colors and affection statuses
 }
 \examples{
 
-\dontrun{
 data(sample.ped)
 pedAll <- with(sample.ped, pedigree(id, father, mother, sex,
-               affected=cbind(affected, avail), famid=ped)
+  affected = cbind(affected, avail), famid = ped
+))
 ped1 <- pedAll["1"]
-legendPlot(ped1,  affected.label=c("cancer","available"))
-}
+legendPlot(ped1, affected.label = c("cancer", "available"))
 
 }
 \seealso{

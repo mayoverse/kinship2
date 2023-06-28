@@ -17,7 +17,7 @@
 #' @param unrelated subjects with this family id are considered to be unrelated
 #' singletons, i.e., not related to each other or to anyone else.
 #'
-#' @return a sparse kinship matrix of class \code{bdsmatrix}
+#' @return a sparse kinship matrix of class `bdsmatrix`
 #'
 #' @examples
 #'
@@ -49,7 +49,7 @@
 #' #  (if families were not contiguous in minnbreast).
 #' # However sort(match(femid, dimnames(kin1)[[1]])) would be okay.
 #'
-#' @seealso \code{\link{kinship}}, \code{\link{makefamid}}
+#' @seealso `kinship`, `makefamid`
 #' @keywords genetics
 #' @export makekinship
 makekinship <- function(famid, id, father.id, mother.id, unrelated = 0) {

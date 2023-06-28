@@ -11,43 +11,43 @@
 #' It is called with a single subject, and returns the subtree founded on said
 #' subject, as though it were the only tree.
 #'
-#' \item{Part 1}{In this routine the \code{[[nid]]} array consists of the final
-#' \code{nid array + 1/2} of the final spouse array.
-#' Note that the \code{[[spouselist]]} matrix will only contain spouse pairs
+#' 1. In this routine the `[[nid]]` array consists of the final
+#' `nid array + 1/2`` of the final spouse array.
+#' Note that the `[[spouselist]]` matrix will only contain spouse pairs
 #' that are not yet processed. The logic for anchoring is slightly tricky.
 #' First, if row 4 of the spouselist matrix is 0, we anchor at the first
-#' opportunity. Also note that if \code{spouselist[,3]==spouselist[,4]}
-#' it is the husband who is the anchor (just write out the possibilities). }
-#' \item{Part 2}{Create the set of 3 return structures, which will be matrices
+#' opportunity. Also note that if `spouselist[,3]==spouselist[,4]`
+#' it is the husband who is the anchor (just write out the possibilities).
+#' 2. Create the set of 3 return structures, which will be matrices
 #' with (1+nspouse) columns.
-#' If there are children then other routines will widen the result.}
-#' \item{Part 3}{Create the two complimentary lists lspouse and rspouse to
+#' If there are children then other routines will widen the result.
+#' 3. Create the two complimentary lists lspouse and rspouse to
 #' denote those plotted on the left and on the right. For someone with lots
 #' of spouses we try to split them evenly. If the number of spouses is odd,
 #' then men should have more on the right than on the left, women more on the
 #' right. Any hints in the spouselist matrix override.
-#' We put the undecided marriages closest to \code{[[x]]}, then add
+#' We put the undecided marriages closest to `[[x]]`, then add
 #' predetermined ones to the left and right. The majority of marriages will be
 #' undetermined singletons, for which nleft will be 1 for female (put my husband
 #' to the left) and 0 for male. In one bug found by plotting canine data,
-#' lspouse could initially be empty but \code{length(rspouse)> 1}.
-#' This caused \code{nleft>length(indx)}.
+#' lspouse could initially be empty but `length(rspouse)> 1`.
+#' This caused `nleft>length(indx)`.
 #' A fix was to not let indx to be indexed beyond its length,
-#' fix by JPS 5/2013.}
-#' \item{Part 4}{For each spouse get the list of children. If there are any we
+#' fix by JPS 5/2013.
+#' 4. For each spouse get the list of children. If there are any we
 #' call alignped2 to generate their tree and then mark the connection to their
-#' parent. If multiple marriages have children we need to join the trees. }
-#' \item{Part 5}{ To finish up we need to splice together the tree made up from
+#' parent. If multiple marriages have children we need to join the trees.
+#' 5. To finish up we need to splice together the tree made up from
 #' all the kids, which only has data from lev+1 down, with the data here.
 #' There are 3 cases:
 #' The first and easiest is when no children were found.
 #' The second is when the tree below is wider than the tree here,
 #' in which case we add the data from this level onto theirs.
-#' The third is when below is narrower, for instance an only child. }
+#' The third is when below is narrower, for instance an only child.
 #'
-#' @param x
-#' @param dad
-#' @param mom
+#' @param x Id of the subject
+#' @param dad Id of the father
+#' @param mom Id of the mother
 #' @param level
 #' @param horder
 #' @param packed
@@ -61,7 +61,7 @@
 #' ped <- with(sample.ped, pedigree(id, father, mother, sex, affected))
 #' align.pedigree(ped)
 #'
-#' @seealso \code{\link{plot.pedigree}}, \code{\link{autohint}}
+#' @seealso `plot.pedigree`, `autohint`
 #' @keywords dplot
 #' @export alignped1
 alignped1 <- function(x, dad, mom, level, horder, packed, spouselist) {
