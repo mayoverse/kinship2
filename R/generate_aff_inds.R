@@ -1,3 +1,4 @@
+usethis::use_package("plyr")
 #' Process the information for affection
 #'
 #' @details Perform transformation uppon a column given as the one

@@ -1,3 +1,5 @@
+usethis::use_package("plyr")
+
 #' Process the colors based on affection and availability
 #'
 #' @details Perform transformation uppon a column given as the one

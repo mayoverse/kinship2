@@ -1,5 +1,6 @@
 # Automatically generated from all.nw using noweb
 # TODO add params and example and return
+usethis::use_package("quadprog")
 
 #' Fourth routine alignement
 #'
@@ -127,27 +128,22 @@ alignped4 <- function(rval, spouse, level, width, align) {
     coff <- coff + nn + 1
   }
 
-  if (exists("solve.QP")) {
-    pp <- t(pmat) %*% pmat + 1e-8 * diag(ncol(pmat))
-    fit <- tryCatch(
-      {
-        solve.QP(pp, rep(0., n), t(cmat), dvec)
-      },
-      warning = function(w) {
-        message("Solve QP ended with a warning")
-        message(w)
-        return(NA)
-      },
-      error = function(e) {
-        message("Solve QP ended with an error")
-        message(e)
-        return(NA)
-      }
-    )
-
-  } else {
-    stop("Need the quadprog package")
-  }
+  pp <- t(pmat) %*% pmat + 1e-8 * diag(ncol(pmat))
+  fit <- tryCatch(
+    {
+      quadprog::solve.QP(pp, rep(0., n), t(cmat), dvec)
+    },
+    warning = function(w) {
+      message("Solve QP ended with a warning")
+      message(w)
+      return(NA)
+    },
+    error = function(e) {
+      message("Solve QP ended with an error")
+      message(e)
+      return(NA)
+    }
+  )
 
   newpos <- rval$pos
   # fit <- lsei(pmat, rep(0, nrow(pmat)), G=cmat, H=dvec)

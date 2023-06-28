@@ -341,12 +341,12 @@ oldkinship.pedigreeList <- function(id, ...) {
     if (class(temp) == "try-error") {
       stop(paste("In family", famlist[i], ":", temp))
     } else {
-      matlist[[i]] <- as(forceSymmetric(temp), "dsCMatrix")
+      matlist[[i]] <- as(Matrix::forceSymmetric(temp), "dsCMatrix")
     }
     idlist[[i]] <- tped$id
   }
 
-  result <- bdiag(matlist)
+  result <- Matrix::bdiag(matlist)
   if (any(duplicated(id$id))) {
     temp <- paste(rep(famlist, sapply(idlist, length)),
       unlist(idlist),

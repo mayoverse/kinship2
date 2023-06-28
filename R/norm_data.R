@@ -1,4 +1,6 @@
+usethis::use_package("plyr")
 usethis::use_package("dplyr")
+
 ## Normalize the date for the library and get the errors
 #' Normalise dataframe
 #'

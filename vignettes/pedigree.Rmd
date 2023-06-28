@@ -514,6 +514,3 @@ with availability status of 1.
 df2
 kin2[df2$avail == 1, df2$avail == 1]
 ``` 
-
-
-

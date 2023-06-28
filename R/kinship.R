@@ -1,3 +1,4 @@
+usethis::use_package("Matrix")
 #' Compute a kinship matrix
 #'
 #' @description
@@ -225,13 +226,13 @@ kinship.pedigreeList <- function(id, chrtype = "autosome", ...) {
     if ("try-error" %in% class(temp)) {
       stop(paste("In family", famlist[i], ":", temp))
     } else {
-      matlist[[i]] <- as(as(forceSymmetric(temp), "symmetricMatrix"), "CsparseMatrix")
+      matlist[[i]] <- as(as(Matrix::forceSymmetric(temp), "symmetricMatrix"), "CsparseMatrix")
     }
     ## deprecated in Matrix: as(forceSymmetric(temp), "dsCMatrix")
     idlist[[i]] <- tped$id
   }
 
-  result <- bdiag(matlist)
+  result <- Matrix::bdiag(matlist)
   if (any(duplicated(id$id))) {
     temp <- paste(rep(famlist, sapply(idlist, length)),
       unlist(idlist),

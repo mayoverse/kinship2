@@ -1,5 +1,5 @@
 # Automatically generated from all.nw using noweb
-
+usethis::use_package("Matrix")
 #' Create a sparse kinship matrix
 #'
 #' @description
@@ -95,8 +95,8 @@ makekinship <- function(famid, id, father.id, mother.id, unrelated = 0) {
     idlist[seq(to = cumcount[i], length = counts[i])] <- id[who]
   }
 
-  if (nzero > 0) mlist <- c(list(Diagonal(nzero)), mlist)
-  kmat <- forceSymmetric(bdiag(mlist))
+  if (nzero > 0) mlist <- c(list(Matrix::Diagonal(nzero)), mlist)
+  kmat <- Matrix::forceSymmetric(Matrix::bdiag(mlist))
   dimnames(kmat) <- list(idlist, idlist)
   kmat
 }

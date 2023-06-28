@@ -1,3 +1,5 @@
+usethis::use_package("dplyr")
+usethis::use_package("tidyr")
 #' Number of child
 #'
 #' @description Compute the number of child per individual
@@ -20,8 +22,6 @@
 #'
 #' @export num_child
 num_child <- function(df, relation = NULL) {
-  require(dplyr)
-  require(tidyr)
   cols_needed <- c("id", "dadid", "momid")
   cols_used <- c("num_child_dir", "num_child_ind", "num_child_tot")
 
@@ -43,15 +43,15 @@ num_child <- function(df, relation = NULL) {
   spouse_rel <- unique(spouse_rel[c("idmin", "idmax")])
 
   dad_child <- df[df$dadid != 0, c("dadid", "id")] %>%
-      group_by(dadid) %>%
-      summarise(child = list(id)) %>%
-      mutate(num_child_dir = lengths(child)) %>%
-      rename(id = dadid)
+      dplyr::group_by(dadid) %>%
+      dplyr::summarise(child = list(id)) %>%
+      dplyr::mutate(num_child_dir = lengths(child)) %>%
+      dplyr::rename(id = dadid)
   mom_child <- df[df$momid != 0, c("id", "momid")] %>%
-      group_by(momid) %>%
-      summarise(child = list(id)) %>%
-      mutate(num_child_dir = lengths(child)) %>%
-      rename(id = momid)
+      dplyr::group_by(momid) %>%
+      dplyr::summarise(child = list(id)) %>%
+      dplyr::mutate(num_child_dir = lengths(child)) %>%
+      dplyr::rename(id = momid)
   id_child <- rbind(dad_child, mom_child)
 
   # Number of direct child per individual
@@ -65,22 +65,24 @@ num_child <- function(df, relation = NULL) {
 
   # Number of total childs per individual
   rel_child <- spouse_rel %>%
-    left_join(id_child, by = join_by(idmin == id)) %>%
-    left_join(id_child, by = join_by(idmax == id),
+    dplyr::left_join(id_child, by = dplyr::join_by(idmin == id)) %>%
+    dplyr::left_join(id_child, by = join_by(idmax == id),
         suffix = c("_min", "_max")) %>%
-    rowwise %>%
-    mutate(childs = list(unique(unlist(list(child_min, child_max))))) %>%
-    select(c(idmin, idmax, childs)) %>%
-    pivot_longer(cols = -childs, names_to = "order", values_to="id") %>%
-    group_by(id) %>%
-    summarise(childs_all = list(unique(unlist(childs)))) %>%
-    mutate(num_child_tot = lengths(childs_all))
+    dplyr::rowwise() %>%
+    dplyr::mutate(childs = list(unique(unlist(list(child_min, child_max))))) %>%
+    dplyr::select(c(idmin, idmax, childs)) %>%
+    tidyr::pivot_longer(cols = -childs, names_to = "order", values_to="id") %>%
+    dplyr::group_by(id) %>%
+    dplyr::summarise(childs_all = list(unique(unlist(childs)))) %>%
+    dplyr::mutate(num_child_tot = lengths(childs_all))
 
   df$num_child_tot <- merge(df, rel_child[c("id", "num_child_tot")], by = "id",
     all.x = TRUE, all.y = FALSE)$num_child_tot
 
   df <- df %>%
-    mutate(across(c(num_child_dir, num_child_tot), ~replace(., is.na(.), 0)))
+    dplyr::mutate(
+      dplyr::across(c(num_child_dir, num_child_tot),
+      ~replace(., is.na(.), 0)))
 
   df$num_child_ind <- df$num_child_tot - df$num_child_dir
   message(paste(

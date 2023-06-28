@@ -46,12 +46,12 @@ test_that("fixParents_df works with sex errors", {
   expect_error(with(datped2, pedigree(id, father, mother, sex)))
 
   ## This fix the error and keep the dataframe dimensions
-  fixped2 <- fixParents_df(datped2,
+  fixped2 <- fixParents.data.frame(datped2,
     momid = "mother", dadid = "father", delete = TRUE)
   expect_no_error(with(fixped2, pedigree(id, dadid, momid, sex)))
   expect_equal(dim(fixped2), c(13,7))
 
-  fixped2 <- fixParents_df(datped2,
+  fixped2 <- fixParents.data.frame(datped2,
     momid = "mother", dadid = "father", delete = FALSE)
   expect_no_error(with(fixped2, pedigree(id, dadid, momid, sex)))
   expect_equal(dim(fixped2), c(14, 7))
