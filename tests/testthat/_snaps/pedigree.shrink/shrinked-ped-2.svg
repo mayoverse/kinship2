@@ -52,10 +52,10 @@
 <line x1='608.99' y1='471.97' x2='608.99' y2='411.91' style='stroke-width: 0.75;' />
 <line x1='608.99' y1='411.91' x2='608.99' y2='331.82' style='stroke-width: 0.75;' />
 <line x1='608.99' y1='331.82' x2='608.99' y2='271.76' style='stroke-width: 0.75;' />
-<circle cx='642.97' cy='502.56' r='1.35' style='stroke-width: 0.75; stroke: #DF536B;' />
-<circle cx='642.97' cy='509.76' r='1.35' style='stroke-width: 0.75;' />
-<text x='648.37' y='504.62' style='font-size: 6.00px; font-family: sans;' textLength='38.69px' lengthAdjust='spacingAndGlyphs'>DNA Available</text>
-<text x='648.37' y='511.82' style='font-size: 6.00px; font-family: sans;' textLength='32.02px' lengthAdjust='spacingAndGlyphs'>UnAvailable</text>
+<circle cx='642.97' cy='488.16' r='1.35' style='stroke-width: 0.75; stroke: #DF536B;' />
+<circle cx='642.97' cy='495.36' r='1.35' style='stroke-width: 0.75;' />
+<text x='648.37' y='490.22' style='font-size: 6.00px; font-family: sans;' textLength='38.69px' lengthAdjust='spacingAndGlyphs'>DNA Available</text>
+<text x='648.37' y='497.42' style='font-size: 6.00px; font-family: sans;' textLength='32.02px' lengthAdjust='spacingAndGlyphs'>UnAvailable</text>
 <text x='374.40' y='26.76' text-anchor='middle' style='font-size: 10.80px; font-weight: bold; font-family: sans;' textLength='94.87px' lengthAdjust='spacingAndGlyphs'>Sample Pedigree 2 </text>
 <text x='374.40' y='39.72' text-anchor='middle' style='font-size: 10.80px; font-weight: bold; font-family: sans;' textLength='38.13px' lengthAdjust='spacingAndGlyphs'>bits =  9</text>
 </g>

@@ -24,10 +24,13 @@ test_that("check_columns", {
         ColNR1 = 4, ColNR2 = 5)
     df_result <- data.frame(
         ColN1 = c(1, 2), ColN2 = 4,
-        ColU1 = NA, ColU2 = NA,
         ColTU1 = "A", ColTU2 = 3)
-    df_get <- check_columns(df, c("ColN1", "ColN2"),
-        c("ColU1", "ColU2"), c("ColTU1", "ColTU2"))
+    cols_needed = c("ColN1", "ColN2")
+    cols_used = c("ColU1", "ColU2")
+    cols_to_use = c("ColTU1", "ColTU2")
+    others_cols = FALSE
+    df_get <- suppressWarnings(check_columns(df, c("ColN1", "ColN2"),
+        c("ColU1", "ColU2"), c("ColTU1", "ColTU2"), others_cols = FALSE))
     expect_equal(df_get, df_result)
 })
 
