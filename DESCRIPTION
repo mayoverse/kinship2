@@ -9,9 +9,7 @@ Authors@R: c(
 	person("Elizabeth", "Atkinson", role="ctb"),
 	person("Carly", "Mester", role='ctb'))
 Depends: 
-	 R (>= 3.6.0),
-	 Matrix,
-	 quadprog
+	 R (>= 3.6.0)
 Imports: 
     graphics,
     stats,
@@ -21,8 +19,12 @@ Imports:
     ggplot2,
     utils,
     grDevices,
-	stringr,
-    dplyr
+    stringr,
+    dplyr,
+    tidyr,
+    quadprog,
+    Matrix,
+    plyr
 Description: Routines to handle family data with a pedigree object. The initial purpose
 	     was to create correlation structures that describe family relationships such 
 	     as kinship and identity-by-descent, which can be used to model family data 
@@ -36,5 +38,6 @@ RoxygenNote: 7.2.3
 VignetteBuilder: knitr
 Suggests: 
     testthat (>= 3.0.0),
-	vdiffr
+	vdiffr,
+	rmarkdown
 Config/testthat/edition: 3

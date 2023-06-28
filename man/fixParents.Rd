@@ -4,7 +4,7 @@
 \alias{fixParents}
 \title{Fix details on the parents for children of the pedigree}
 \usage{
-fixParents(id, dadid, momid, sex, missid = 0)
+fixParents(id, dadid, momid, sex, missid = 0, ...)
 }
 \arguments{
 \item{id}{Identification variable for individual}
@@ -39,15 +39,23 @@ one parent id is given.
 }
 \examples{
 
-test1char <- data.frame(id=paste("fam", 101:111, sep=""),
-                       sex=c("male","female")[c(1,2,1,2,1, 1,2, 2,1,2, 1)],
-                       father=c(0,0,"fam101","fam101","fam101", 0,0,
-                               "fam106","fam106","fam106", "fam109"),
-                       mother=c(0,0,"fam102","fam102","fam102", 0,0,
-                               "fam107","fam107","fam107", "fam112"))
+test1char <- data.frame(
+  id = paste("fam", 101:111, sep = ""),
+  sex = c("male", "female")[c(1, 2, 1, 2, 1, 1, 2, 2, 1, 2, 1)],
+  father = c(
+    0, 0, "fam101", "fam101", "fam101", 0, 0,
+    "fam106", "fam106", "fam106", "fam109"
+  ),
+  mother = c(
+    0, 0, "fam102", "fam102", "fam102", 0, 0,
+    "fam107", "fam107", "fam107", "fam112"
+  )
+)
 test1newmom <- with(test1char, fixParents(id, father, mother,
-                                          sex, missid="0"))
-newped <- with(test1newmom, pedigree(id, dadid, momid, sex, missid="0"))
+  sex,
+  missid = "0"
+))
+newped <- with(test1newmom, pedigree(id, dadid, momid, sex, missid = "0"))
 as.data.frame(newped)
 
 }
