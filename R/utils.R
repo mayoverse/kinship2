@@ -117,7 +117,7 @@ usethis::use_package("dplyr")
 #'
 #' @export check_columns
 check_columns <- function(df,
-    cols_needed, cols_used, cols_to_use,
+    cols_needed = NULL, cols_used = NULL, cols_to_use = NULL,
     others_cols = FALSE) {
   cols_p <- colnames(df)
   cols_needed_missing <- cols_needed[is.na(match(cols_needed, cols_p))]
