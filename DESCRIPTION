@@ -21,8 +21,14 @@ Imports:
     ggplot2,
     utils,
     grDevices,
-	stringr,
-    dplyr
+    stringr,
+    dplyr,
+    shiny,
+    shinyjs,
+    readxl,
+    shinyWidgets,
+    DT,
+    bootstrap
 Description: Routines to handle family data with a pedigree object. The initial purpose
 	     was to create correlation structures that describe family relationships such 
 	     as kinship and identity-by-descent, which can be used to model family data 
