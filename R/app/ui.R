@@ -7,7 +7,7 @@ shiny::shinyUI(shiny::fluidPage(
     shinyjs::useShinyjs(),
     tags$head(
         tags$style(HTML("hr {border-top: 1px solid #000000;}
-                        .navigationBar{background-color:#0001;height:350px}
+                        .navigationBar{background-color:#0001;height:600px}
                         #console{max-height: 300px;overflow-y:auto;}
                         #legendToPlot{max-height:150px};")),
         tags$script(

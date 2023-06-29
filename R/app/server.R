@@ -28,11 +28,20 @@ shiny::shinyServer(function(input, output, session) {
         }
     })
 
+    families_table <- reactive({
+        df <- df_list()[[1]]
+        if (!is.null(df) & !is.null(input$families_var_sel)) {
+            families_table <- get_families_table(df, input$families_var_sel)
+            families_table
+        } else {
+            NULL
+        }
+    })
+
     ## Rendered UI ---------------------------
     ## Family selection variable
     output$families_var <- renderUI({
-        print(df_list())
-        dfn <- df_list()
+        dfn <- df_list()[[1]]
         if (!is.null(dfn)) {
             col_no <- c("id", "dadid", "momid")
             col_all <- colnames(dfn)
@@ -43,7 +52,7 @@ shiny::shinyServer(function(input, output, session) {
                     col_sel <- c(col_sel, col)
                 }
             }
-            selectInput("families_sel",
+            selectInput("families_var_sel",
                 label = h5("Select Variable to use as families indicator"),
                 choices = as.list(setNames(col_sel, col_sel)),
                 selected = col_sel[1]
@@ -51,6 +60,10 @@ shiny::shinyServer(function(input, output, session) {
         } else {
             NULL
         }
+    })
+
+    output$families_table <- renderTable({
+        families_table()
     })
 
     ## End --------------------------------
