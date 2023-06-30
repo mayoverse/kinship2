@@ -1,3 +1,16 @@
+setwd("R/app")
+library(devtools)
+load_all()
+library(shiny)
+library(dplyr)
+source("data_management.R")
+source("data_import.R")
+source("data_col_sel.R")
+source("data_download.R")
+source("utils.R")
+
+runApp()
+
 library(kinship2)
 
 data(testped1)
