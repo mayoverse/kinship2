@@ -8,8 +8,10 @@ data_col_sel_ui <- function(id) {
 }
 
 data_col_sel_server <- function(id, df, cols_used, title, null = FALSE) {
+    stopifnot(shiny::is.reactive(df))
     ns <- shiny::NS(id)
     shiny::moduleServer(id, function(input, output, session) {
+        print("Bal: data_col_sel_server")
         cols_list <- shiny::reactive({
             all_cols <- colnames(df())
             if (null) {
