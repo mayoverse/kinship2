@@ -31,6 +31,7 @@ usethis::use_package("dplyr")
 #'
 #'@export norm_data
 norm_data <- function(df, na_strings = "NA") {
+  print("Bal: norm_data")
   err_cols <- c(
     "sexErrMoFa", "sexErrFa", "sexErrMo", "sexErrTer", "sexNA", "sexError",
     "idErrFa", "idErrMo", "idErrSelf", "idErrAncestor", "idError"
@@ -60,7 +61,7 @@ norm_data <- function(df, na_strings = "NA") {
   df$sex <- as.character(plyr::revalue(
     as.factor(casefold(df$gender, upper = FALSE)),
     sex_equiv
-    ))
+  ))
 
   is_father <- df$indId %in% df$fatherId & !is.na(df$indId)
   is_mother <- df$indId %in% df$motherId & !is.na(df$indId)
@@ -147,5 +148,46 @@ norm_data <- function(df, na_strings = "NA") {
       df[i] <- as.numeric(df[[i]])
     }
   }
+  list(norm = df, errors = errors)
+}
+
+
+
+norm_rel <- function(df){
+  print("Bal: norm_rel")
+  #### Check columns ####
+  err_cols <- c(
+    "codeErr", "sameIdErr", "idError", "id1Err", "id2Err"
+  )
+  col_needed <- c("id1", "id2", "code")
+  col_to_use <- c("family")
+  df <- check_columns(df, col_needed, err_cols, col_to_use,
+    others_cols = FALSE)
+
+  #### Check for code erros ####
+  df$code <- as.character(df$code)
+  code_vali <- c("1", "2", "3", "4")
+  df$codeErr[!df$code %in% code_vali] <- "CodeNotRecognise"
+
+  #### Check for id erros ####
+  df[c("id1", "id2")] <- as.character(df[c("id1", "id2")])
+  df$sameIdErr[df$id1 == df$id2] <- "SameId"
+  len1 <- nchar(df$id1)
+  len2 <- nchar(df$id2)
+  df$id1Err[is.na(len1) | len1 == 0] <- "Id1length0"
+  df$id2Err[is.na(len2) | len2 == 0] <- "Id2length0"
+
+  # Unite all id errors in one column
+  df <- tidyr::unite(df, "idError",
+    c("sameIdErr", "id1Err", "id2Err"),
+    na.rm = TRUE, sep = "_", remove = TRUE
+  )
+
+  #### Report####
+  errors <- df[df$idError != "" | df$sexError != "", ]
+
+  # Deletion of all individuals with errors
+  df <- df[df$idError == "" & df$codeErr == "", ]
+
   list(norm = df, errors = errors)
 }
