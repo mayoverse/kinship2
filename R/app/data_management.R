@@ -12,7 +12,7 @@ check_data <- function(df) {
         NULL
     } else {
         df_norm <- norm_data(df)
-        message("Data normalization done")
+        message("Pedigree data normalization done")
 
         message("Making family number")
         df_norm[[1]]$family <- as.factor(with(df_norm[[1]],
@@ -20,6 +20,26 @@ check_data <- function(df) {
         df_norm
     }
 }
+
+check_rel <- function(df) {
+     # Deletion of duplicated lines
+    df <- df %>%
+        dplyr::distinct(.keep_all = TRUE)
+
+    col_needed <- c("id1", "id2", "code")
+    col_used <- c("family")
+    df <- check_columns(df, col_needed, col_used, others_cols = FALSE)
+    message("Checked columns")
+
+    if (is.null(df)) {
+        NULL
+    } else {
+        df_norm <- norm_rel(df)
+        message("Relationship data normalization done")
+        df_norm
+    }
+}
+
 
 ## Choose family to plot the name used will be the most numerous race
 get_families_table <- function(df, var) {
