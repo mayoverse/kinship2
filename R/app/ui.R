@@ -7,7 +7,7 @@ shiny::shinyUI(shiny::fluidPage(
     shinyjs::useShinyjs(),
     tags$head(
         tags$style(HTML("hr {border-top: 1px solid #000000;}
-                        .navigationBar{background-color:#0001;height:600px}
+                        .navigationBar{background-color:#0001;height:300px}
                         #console{max-height: 300px;overflow-y:auto;}
                         #legendToPlot{max-height:150px};")),
         tags$script(
@@ -41,17 +41,39 @@ shiny::shinyUI(shiny::fluidPage(
     fluidRow(title = "Navigation", class = "navigationBar",
         ## ___Data and Family selection -------------
         column(2,
-            data_import_ui(id = "dataImport")),
-        column(2,
-            data_col_sel_ui(id = "dataColSel")),
-        column(2,
-            uiOutput("family_sel")
+            data_import_ui(id = "data_ped_import")),
+        column(6,
+            column(6, data_col_sel_ui(id = "data_ped_col_sel1")),
+            column(6, data_col_sel_ui(id = "data_ped_col_sel2"))
         ),
+        column(2,
+            data_import_ui(id = "data_rel_import")),
+        column(2,
+            data_col_sel_ui(id = "data_rel_col_sel"))
     ),
-    fluidRow(
-        column(5, align = "center",
-            uiOutput("families_var"),
-            tableOutput("families_table"))
+    hr(),
+    ## Errors download ----------------------------
+    fluidRow(title = "Errors download",
+        column(6, align = "center",
+            h5(strong("Pedigree data errors")),
+            data_download_ui(id = "ped_errors")),
+        column(6, align = "center",
+            h5(strong("Relationship data errors")),
+            data_download_ui(id = "rel_errors"))
+    ),
+    hr(),
+    ## Family and Health selection ---------------------------
+    fluidRow(title = "Family and Health Selection",
+        column(4, align = "center",
+            uiOutput("families_var_selector"),
+            tableOutput("families_table"),
+            uiOutput("family_selector")),
+        column(4, align = "center",
+            uiOutput("health_var_selector"),
+            uiOutput("health_full_scale_box"),
+            uiOutput("health_threshold_box")),
+        column(4, align = "center",
+            uiOutput("health_aff_sel"))
     ),
 
     ## Console ------------------------------------------------
