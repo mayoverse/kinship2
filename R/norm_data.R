@@ -9,12 +9,12 @@ usethis::use_package("dplyr")
 #' @details Normalise a dataframe and check for columns correspondance
 #' to be able to use it as an input to create pedigree object.
 #' Multiple test are done and errors are checked.
-#' Sex is calculated based in the `Gender` column the following notations
+#' Sex is calculated based in the `gender` column the following notations
 #' are accepted: f, woman, female, 2 and m, man, male, 1.
-#' The `Sterilisation` column need to be a boolean either TRUE, FALSE or "NA".
+#' The `steril` column need to be a boolean either TRUE, FALSE or "NA".
 #' Will be considered available any individual with no "NA" values in the
-#' `Availability` column.
-#' Duplicated `IndID` will nullify the relationship of the individual.
+#' `available` column.
+#' Duplicated `indId` will nullify the relationship of the individual.
 #' All individuals with errors will be remove from the dataframe and will
 #' be transfered to the error dataframe.
 #'
@@ -35,9 +35,9 @@ norm_data <- function(df, na_strings = "NA") {
     "sexErrMoFa", "sexErrFa", "sexErrMo", "sexErrTer", "sexNA", "sexError",
     "idErrFa", "idErrMo", "idErrSelf", "idErrAncestor", "idError"
   )
-  cols_need <- c("IndID", "FatherID", "MotherID", "Gender")
+  cols_need <- c("indId", "fatherId", "motherId", "gender")
   cols_used <- c("sex", "avail", "id", "dadid", "momid", err_cols)
-  cols_to_use <- c("Sterilisation", "Availability")
+  cols_to_use <- c("steril", "available")
 
   df <- check_columns(df, cols_need, cols_used, cols_to_use, others_cols = TRUE)
 
@@ -45,6 +45,9 @@ norm_data <- function(df, na_strings = "NA") {
 
   #### Set as id position in df ####
   df$id <- seq_len(dim(df)[1])
+
+  #### Initialise all errors columns ####
+  df[err_cols] <- NA
 
   #### Sex ####
   # Normalized difference notations for sex
@@ -55,27 +58,27 @@ norm_data <- function(df, na_strings = "NA") {
     "2" = "female", "1" = "male"
   )
   df$sex <- as.character(plyr::revalue(
-    as.factor(casefold(df$Gender, upper = FALSE)),
+    as.factor(casefold(df$gender, upper = FALSE)),
     sex_equiv
     ))
 
-  is_father <- df$IndID %in% df$FatherID & !is.na(df$IndID)
-  is_mother <- df$IndID %in% df$MotherID & !is.na(df$IndID)
+  is_father <- df$indId %in% df$fatherId & !is.na(df$indId)
+  is_mother <- df$indId %in% df$motherId & !is.na(df$indId)
 
   # Add missing sex due to parenthood
-  df$sex[is.na(df$Gender) & is_father] <- "male"
-  df$sex[is.na(df$Gender) & is_mother] <- "female"
+  df$sex[is.na(df$gender) & is_father] <- "male"
+  df$sex[is.na(df$gender) & is_mother] <- "female"
 
   # Add terminated for sterilized individuals
-  if ("Sterilisation" %in% colnames(df)) {
-    df$sex[df$Sterilisation == "TRUE" & !is.na(df$Sterilisation) &
+  if ("steril" %in% colnames(df)) {
+    df$sex[df$steril == "TRUE" & !is.na(df$steril) &
       !is_father & !is_mother] <- "terminated"
-    df$sexErrTer[df$Sterilisation == "TRUE" & !is.na(df$Sterilisation) &
+    df$sexErrTer[df$steril == "TRUE" & !is.na(df$steril) &
       (is_father | is_mother)] <- "IsSterelisedButIsParent"
     nb_steril_parent <- nrow(df[df$sexErrTer == "IsSterelisedButIsParent" &
       !is.na(df$sexErrTer), ])
-    message(paste(nb_steril_parent, "sterilisation corrected"))
-    df$Sterilisation[df$Sterilisation == "TRUE" & !is.na(df$Sterilisation) &
+    message(paste(nb_steril_parent, "steril corrected"))
+    df$steril[df$steril == "TRUE" & !is.na(df$steril) &
       (is_father | is_mother)] <- FALSE
   }
 
@@ -91,33 +94,37 @@ norm_data <- function(df, na_strings = "NA") {
     na.rm = TRUE, sep = "_", remove = TRUE
   )
 
-  #### Availability####
-  df$avail[!is.na(df$Availability)] <- 1
-  df$avail[is.na(df$Availability)] <- 0
+  #### available####
+  if ("available" %in% colnames(df)) {
+    df$avail[!is.na(df$available)] <- 1
+    df$avail[is.na(df$available)] <- 0
+  } else {
+    df$avail <- NA
+  }
 
   #### ParentsId####
   # Get duplicated id key
-  id_duplicated <- df$IndID[duplicated(df$IndID)]
+  id_duplicated <- df$indId[base::duplicated(df$indId)]
 
   # Set id parents for individuals with no duplicated parents
-  dadid <- df$id[match(df$FatherID, df$IndID)]
-  dadid[df$FatherID %in% id_duplicated] <- NA
+  dadid <- df$id[match(df$fatherId, df$indId)]
+  dadid[df$fatherId %in% id_duplicated] <- NA
   df$dadid <- dadid
-  momid <- df$id[match(df$MotherID, df$IndID)]
-  momid[df$MotherID %in% id_duplicated] <- NA
+  momid <- df$id[match(df$motherId, df$indId)]
+  momid[df$motherId %in% id_duplicated] <- NA
   df$momid <- momid
 
   #### OwnAncestor####
-  id_own_ancestor <- df$IndID[df$IndID == df$FatherID | df$IndID == df$MotherID]
+  id_own_ancestor <- df$indId[df$indId == df$fatherId | df$indId == df$motherId]
 
   # Register errors
-  df$idErrFa[df$FatherID %in% id_duplicated &
-    !is.na(df$FatherID)] <- "Fatherid_duplicated"
-  df$idErrMo[df$MotherID %in% id_duplicated &
-    !is.na(df$MotherID)] <- "Motherid_duplicated"
-  df$idErrSelf[df$IndID %in% id_duplicated &
-    !is.na(df$IndID)] <- "Selfid_duplicated"
-  df$idErrAncestor[df$IndID %in% id_own_ancestor] <- "IsItsOwnAncestor"
+  df$idErrFa[df$fatherId %in% id_duplicated &
+    !is.na(df$fatherId)] <- "Fatherid_duplicated"
+  df$idErrMo[df$motherId %in% id_duplicated &
+    !is.na(df$motherId)] <- "Motherid_duplicated"
+  df$idErrSelf[df$indId %in% id_duplicated &
+    !is.na(df$indId)] <- "Selfid_duplicated"
+  df$idErrAncestor[df$indId %in% id_own_ancestor] <- "IsItsOwnAncestor"
 
   # Unite all id errors in one column
   df <- tidyr::unite(df, "idError",
@@ -131,7 +138,8 @@ norm_data <- function(df, na_strings = "NA") {
   # Deletion of all individuals with errors
   df <- df[df$idError == "" & df$sexError == "", ]
 
-  #### Convert to num####
+  #### Convert to num ####
+  message("Converting to numeric if possible")
   col_to_num <- colnames(df)[!colnames(df) %in% c(cols_need, cols_to_use)]
   for (i in col_to_num) {
     is_num <- sapply(df[[i]], check_num_na, na_as_num = TRUE)
