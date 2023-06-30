@@ -33,8 +33,9 @@ usethis::use_package("shinyWidgets")
 #' @export read_data
 read_data <- function(file, sep = ";", quote = "'", header = TRUE, df_name = NA,
                 stringsAsFactors = FALSE, to_char = TRUE) {
+    print("Bal: read_data")
+    shiny::req(file)
     if (!is.null(file)) {
-        shiny::req(file)
         ext <- tools::file_ext(file)
         shiny::validate(shiny::need(
             ext %in% c("csv", "txt", "xls", "xlsx", "rda", "tab"),
@@ -59,11 +60,10 @@ read_data <- function(file, sep = ";", quote = "'", header = TRUE, df_name = NA,
                 colClasses = col_classes)
         } else if (ext %in% c("xls", "xlsx")) {
             sheets_present <- readxl::excel_sheets(file)
-            if (is.na(df_name)) {
+            if (is.null(df_name)) {
               message("Needs the name of the sheet to use 'df_name'")
               df <- NULL
             } else {
-              shiny::req(df_name)
               if (df_name %in% sheets_present) {
                 df <- as.data.frame(readxl::read_excel(file,
                                                        sheet = df_name,
@@ -76,12 +76,12 @@ read_data <- function(file, sep = ";", quote = "'", header = TRUE, df_name = NA,
               }
             }
         } else if (ext %in% c("rda")) {
+            shiny::req(df_name)
             all_data <- base::load(file)
             if (is.na(df_name)) {
               message("Needs the name of the dataframe to use 'df_name'")
               df <- NULL
             } else {
-              shiny::req(df_name)
               if (df_name %in% all_data) {
                   df <- get(df_name)
               } else {
@@ -114,6 +114,7 @@ read_data <- function(file, sep = ";", quote = "'", header = TRUE, df_name = NA,
 #' @keywords dataframe
 #' @export get_dataframe
 get_dataframe <- function(file) {
+    print("Bal: get_dataframe")
     shiny::req(file)
     ext <- tools::file_ext(file)
     if (ext %in% c("xls", "xlsx")) {
@@ -153,20 +154,12 @@ get_dataframe <- function(file) {
 #' }
 #' @keywords data
 #' @export data_import_ui
-data_import_ui <- function(id, label = "Select data file") {
+data_import_ui <- function(id) {
     ns <- shiny::NS(id)
     shiny::tagList(
-        shiny::fileInput(ns("file"), label),
-        shiny::checkboxInput(ns("heading"), "Has heading", value = TRUE),
-        shiny::checkboxInput(ns("to_char"), "Load all data as strings"),
-        shiny::checkboxInput(ns("stringsAsFactors"), "Strings as factors",
-            value = FALSE),
-        shinyWidgets::pickerInput(ns("quote"), "Quote", c(
-            "None" = "",
-            "Double quote" = "\"",
-            "Single quote" = "'",
-            "Both" = "\"'"
-        ), selected = "\""),
+        shiny::uiOutput(ns("file")),
+        shiny::actionButton(ns("options"), "Options", style = "simple",
+            size = "sm", color = "warning"),
         shiny::selectInput(ns("sep"), "Separator", c(
             "Comma" = ",",
             "Semi-colon" = ";",
@@ -195,9 +188,18 @@ data_import_ui <- function(id, label = "Select data file") {
 #' }
 #' @keywords data
 #' @export data_import_server
-data_import_server <- function(id, max_request_size = 30) {
+data_import_server <- function(id,
+    label = "Select data file",
+    max_request_size = 30) {
     options(shiny.maxRequestSize = max_request_size * 1024^2)
     shiny::moduleServer(id, function(input, output, session) {
+        print("Bal: data_import_server")
+        ## File rendering selection ------------------------
+
+        output$file <- shiny::renderUI({
+            shiny::fileInput(ns("file"), label)
+        })
+
         # The selected file, if any
         user_file <- shiny::reactive({
             # If no file is selected, don't do anything
@@ -205,11 +207,51 @@ data_import_server <- function(id, max_request_size = 30) {
             input$file
         })
 
+        ## Options rendering selection --------------------
+
+        opt <- shiny::reactiveValues(
+            heading = TRUE,
+            to_char = FALSE,
+            stringsAsFactors = FALSE,
+            quote = "\""
+        )
+        shiny::observeEvent(input$options, {
+            # display a modal dialog with a header, textinput and action buttons
+            shiny::showModal(shiny::modalDialog(
+                shiny::tags$h2("Select your options"),
+                shiny::checkboxInput(ns("heading"), "Has heading",
+                    value = opt$heading),
+                shiny::checkboxInput(ns("to_char"), "Load all data as strings",
+                    value = opt$to_char),
+                shiny::checkboxInput(ns("stringsAsFactors"),
+                    "Strings as factors", value = opt$stringsAsFactors),
+                shinyWidgets::pickerInput(ns("quote"), "Quote", c(
+                    "None" = "",
+                    "Double quote" = "\"",
+                    "Single quote" = "'",
+                    "Both" = "\"'"
+                ), selected = opt$quote, multiple = FALSE),
+                footer = shiny::tagList(
+                    shiny::actionButton(ns("close"), "Close"),
+                )
+            ))
+        })
+
+        # Store the information if the user clicks submit
+        shiny::observeEvent(input$close, {
+            shiny::removeModal()
+            opt$heading <- input$heading
+            opt$to_char <- input$to_char
+            opt$stringsAsFactors <- input$stringsAsFactors
+            opt$quote <- input$quote
+        })
+
         ## Data selection ------------------------
         df <- shiny::reactive({
             file <- user_file()$datapath
-            read_data(file, input$sep, input$quote,
-                      input$heading, input$dfSelected)
+            read_data(file, input$sep, opt$quote,
+                      opt$heading, input$dfSelected,
+                      opt$stringsAsFactors, opt$to_char)
         })
 
         # We can run observers in here if we want to
@@ -225,7 +267,7 @@ data_import_server <- function(id, max_request_size = 30) {
             df_name <- get_dataframe(file)
             if (!is.null(df_name)) {
                 shiny::selectInput(ns("dfSelected"),
-                    label = "Select dataframe to use",
+                    label = label,
                     choices = df_name, selected = df_name[1]
                 )
             } else {
