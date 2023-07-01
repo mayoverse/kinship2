@@ -29,73 +29,12 @@ sketch <- htmltools::withTags({
   )
 })
 
-print_console <- function(expr, session) {
-  withCallingHandlers(
-    results <- expr,
-    # can use "warning" instead/on top of "message" to catch warnings too 
-    message = function(m) {
-      shinyjs::html("console", m$message, TRUE)
-    }
-  )
-  session$sendCustomMessage(type = "scrollCallback", 1)
-  return(results)
-}
-
 
 # Define server logic required to draw a histogram
 ## Shiny server ----------------------------
 shinyServer(function(input, output, session) {
 
   ## Data selection ------------------------
-  readData <- reactive({
-    file <- input$pedData
-    if (!is.null(file)) {
-      ext <- tools::file_ext(file$datapath)
-      req(file)
-      validate(need(ext %in% c("csv","xls","xlsx"), "Please upload a csv file or an Excel file"))
-      if (ext == "csv") {
-        df <- read.csv2(file$datapath,sep = ";",na.strings = c("","NA"), colClasses = "character")
-        if(dim(df)[2]==1){
-          df <- read.csv2(file$datapath,sep = ",",na.strings = c("","NA"), colClasses = "character")
-        }
-      }else{
-        sheetsPresent <- excel_sheets(file$datapath)
-        req(input$sheetSelected)
-        if (input$sheetSelected %in% sheetsPresent) {
-          df <- as.data.frame(readxl::read_excel(file$datapath, sheet = input$sheetSelected,
-                                                  col_types = "text",na=c("","NA","na")))
-        }else{
-          df <- NULL
-        }
-      }
-      
-      print("Data read")
-      ResultNorm <- print_console(correctData(df),session)
-      df <- ResultNorm[[1]]
-      Errors <- ResultNorm[[2]]
-      print("Data corrected")
-      
-      if (length(Errors) > 0) {
-        showNotification(paste(nrow(Errors),"errors as occured. All individuals with errors wil be discarded"))
-      }else{
-        Errors <- NULL
-      }
-    }else{
-      print("Error data selected is null")
-      df <- NULL
-      Errors <- NULL
-    }
-    return(list(df,Errors))
-  })
-  getFamiliesTable <- reactive({
-    df <- readData()[[1]]
-    if (!is.null(df) & !is.null(input$familiesVariable)) {
-      familiesTable <- getFamiliesPresent(df, input$familiesVariable)
-      return(familiesTable)
-    }else{
-      NULL
-    }
-  })
   selectedInfInds <- reactive({
     infCustValues <- input$InfCustValues
     if (input$infSelected != "Cust") {
@@ -189,100 +128,6 @@ shinyServer(function(input, output, session) {
   }
   
   ## Navigation panel ---------------------
-  # Sheets selection
-  output$sheetSelection <- renderUI({
-    file = input$pedData
-    req(input$pedData)
-    ext <- tools::file_ext(file$datapath)
-    if (ext %in% c("xls","xlsx")) {
-      sheetsPresent <- excel_sheets(file$datapath)
-      if (!is.null(sheetsPresent)) {
-        selectInput("sheetSelected", label = "Select sheet to use",
-                    choices = sheetsPresent)
-      }else{
-        NULL
-      }
-    }else{
-      NULL
-    }
-    
-  })
-  # Reactive function for the navigation
-  output$familiesTable <- renderTable({
-    getFamiliesTable()
-  })
-  output$familySelection <- renderUI({
-    familiesTable <- getFamiliesTable()
-    if (!is.null(familiesTable)) {
-      famNum = as.numeric(familiesTable$FamilyNum)
-      if (max(famNum) > 0) {
-        return(numericInput("familySelected", label = h5(strong("Select family to plot")),
-                            value = 1, min = min(famNum), max = max(famNum)))
-      }
-    }
-    return(NULL)
-  })
-  
-  #Health parameters selection
-  output$healthVariable <- renderUI({
-    if (!is.null(readData()[[1]])) {
-      colNotAllowed = c("IndID","FatherID","MotherID")
-      colPresent = colnames(readData()[[1]])
-      colAvail = setdiff(colPresent,colNotAllowed)
-      colSelection = c()
-      for (col in colAvail) {
-        if (any(!is.na(readData()[[1]][[col]]))) {
-          colSelection = c(colSelection,col)
-        }
-      }
-      selectInput("HealthCustVariable", label = h5("Select Variable to use as health indicator"),
-                  choices = as.list(setNames(colSelection,colSelection)))
-    }else{
-      NULL
-    }
-  })
-  output$healthOptionsFullScale <- renderUI({
-    if (!is.null(input$HealthCustVariable)) {
-      checkboxInput("KeepFullScale", label = "Full scale color", 
-                    value = F)
-    }else {NULL}
-  })
-  output$healthOptionsNumToFact <- renderUI({
-    if (!is.null(input$HealthCustVariable)) {
-      if (is.numeric(readData()[[1]][[input$HealthCustVariable]])) {
-        checkboxInput("AffSupToThreshold", label = "Affected are strickly superior to threshold", 
-                      value = T)
-      }else {NULL}
-    }else {NULL}
-  })
-  output$affectedSelection <- renderUI({
-    if (!is.null(input$HealthCustVariable)) {
-      healthData = readData()[[1]][readData()[[1]]$family == input$familySelected,input$HealthCustVariable]
-      if (length(healthData)!=0){
-        if (is.numeric(healthData)) {
-          print(healthData)
-          return(sliderInput("HealthThreshold",
-                             label = h5(paste("Threshold of",input$HealthCustVariable,"to determine affected individuals")),
-                             sep = "'",
-                             min = min(healthData, na.rm = T), max = max(healthData, na.rm = T),
-                             value = (max(healthData, na.rm = T) + min(healthData, na.rm = T))/2))
-        }else {
-          var_to_useV = levels(as.factor(healthData))
-          if (length(var_to_useV) == 0) {
-            return(h5(paste("No value found for", input$HealthCustVariable)))
-          }
-          var_to_use = as.list(setNames(var_to_useV,var_to_useV))
-          return(pickerInput("HealthAffectedMod", label = "Selection of affected individuals",
-                             choices = var_to_use,options = list(`actions-box` = TRUE),
-                             multiple = TRUE, selected = var_to_useV))
-        }
-      }else{
-        NULL
-      }
-    }else{
-      NULL
-    }
-  })
   
   #Informative individuals custom selection
   output$customVariable <- renderUI({
@@ -308,23 +153,6 @@ shinyServer(function(input, output, session) {
   })
   
   ## Data representation ------------------
-  output$familiesVariable <- renderUI({
-    if (!is.null(readData()[[1]])) {
-      colNotAllowed = c("IndID","FatherID","MotherID")
-      colPresent = colnames(readData()[[1]])
-      colAvail = setdiff(colPresent,colNotAllowed)
-      colSelection = c()
-      for (col in colAvail) {
-        if (any(!is.na(readData()[[1]][[col]]))) {
-          colSelection = c(colSelection,col)
-        }
-      }
-      selectInput("familiesVariable", label = h5("Select Variable to use as families indicator"),
-                  choices = as.list(setNames(colSelection,colSelection)),selected = colSelection[1])
-    }else{
-      NULL
-    }
-  })
   output$tableFamilySelectedInfos <- DT::renderDataTable({
     if (is.null(input$HealthCustVariable) | is.null(input$familySelected)) {
       return(NULL)
