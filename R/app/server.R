@@ -2,6 +2,25 @@ usethis::use_package("shiny")
 usethis::use_package("shinyjs")
 usethis::use_package("shinyWidgets")
 usethis::use_package("dplyr")
+
+## Sketch for family Health and Availability informations
+sketch <- htmltools::withTags({
+  table(
+    class = "display",
+    thead(
+      tr(
+        th(rowspan = 2,"Variable used"),
+        th(class = 'dt-center',colspan = 3, "Availability")
+      ),
+      tr(
+        th("Ind not Avail"),
+        th("Ind Avail")
+      )
+    )
+  )
+})
+
+
 shiny::shinyServer(function(input, output, session) {
     ## Ped data import -------------------------
     ped_df <- data_import_server(id = "data_ped_import",
@@ -32,7 +51,7 @@ shiny::shinyServer(function(input, output, session) {
                 showNotification("You have selected twice the same column !")
                 NULL
             } else {
-                df_rename <- ped_df()
+                df_rename <- data.table::copy(ped_df())
                 data.table::setnames(df_rename,
                     old = as.vector(unlist(cols_ren)),
                     new = names(cols_ren))
@@ -46,7 +65,6 @@ shiny::shinyServer(function(input, output, session) {
             }
         }
     })
-
     rel_df_norm <- shiny::reactive({
         print("Bal: rel management")
         cols_ren <- cols_needed_rel()[cols_needed_rel() != ""]
@@ -91,7 +109,6 @@ shiny::shinyServer(function(input, output, session) {
             NULL
         }
     })
-
     # Family selection variable
     output$families_var_selector <- renderUI({
         print("Bal: families_var")
@@ -120,7 +137,6 @@ shiny::shinyServer(function(input, output, session) {
     output$families_table <- renderTable({
         families_table()
     })
-
     # Family selection
     output$family_selector <- renderUI({
         print("Bal: family_sel")
@@ -137,16 +153,26 @@ shiny::shinyServer(function(input, output, session) {
             NULL
         }
     })
-
     # Family information
-    output$family_info <- renderTable({
-        print("Bal: family_info")
-        if (!is.null(families_table())) {
+    output$family_info_table <- DT::renderDataTable({
+        if (!is.null(families_table()) & !is.null(ped_df_aff())) {
+            print("Bal: family_info_table")
             fam_nb <- as.numeric(families_table()$FamilyNum)
             if (max(fam_nb) > 0) {
-                fam_sel <- input$family_selector
+                fam_sel <- input$family_sel
                 if (fam_sel > 0) {
-                    get_family_info(ped_df_norm()$norm, fam_sel)
+                    fam_df <- ped_df_aff()[ped_df_aff()$family == fam_sel,] 
+                    fam_aff_cont <- fam_df %>%
+                        dplyr::group_by(mods_aff, avail) %>%
+                        dplyr::tally() %>%
+                        tidyr::spread(avail, n)
+                    DT::datatable(fam_aff_cont, container = sketch,
+                        rownames=FALSE,
+                        options = list(
+                            columnDefs = list(
+                            list(targets = "_all", className = "dt-center")),
+                            dom = "t")
+                    )
                 } else {
                     NULL
                 }
@@ -154,6 +180,14 @@ shiny::shinyServer(function(input, output, session) {
                 NULL
             }
         } else {
+            NULL
+        }
+    })
+    output$family_infos_title <- renderText({
+        print("Bal: family_infos_title")
+        if (!is.null(families_table())) {
+            paste("Health & Availability data representation for family", input$family_sel)
+        }else{
             NULL
         }
     })
@@ -190,7 +224,7 @@ shiny::shinyServer(function(input, output, session) {
             NULL
         }
     })
-    output$health_aff_sel <- renderUI({
+    output$health_aff_selector <- renderUI({
         if (!is.null(input$health_var_sel)) {
             health_df <- ped_df_norm()$norm
             health_df <- health_df[health_df$family == input$family_sel,
@@ -199,8 +233,6 @@ shiny::shinyServer(function(input, output, session) {
                 if (is.numeric(health_df)) {
                     min_h <- min(health_df, na.rm = TRUE)
                     max_h <- max(health_df, na.rm = TRUE)
-                    print(c(min_h, max_h))
-                    print(any(is.na(c(min_h, max_h))))
                     if (any(is.na(c(min_h, max_h))) |
                         any(is.infinite(c(min_h, max_h)))) {
                         h5(paste("No value found for", input$health_var_sel))
@@ -221,7 +253,7 @@ shiny::shinyServer(function(input, output, session) {
                     }
                     var_to_use <- as.list(setNames(health_var_lev,
                         health_var_lev))
-                    shinyWidgets::pickerInput("HealthAffectedMod",
+                    shinyWidgets::pickerInput("health_aff_mods",
                         label = "Selection of affected modalities",
                         choices = var_to_use,
                         options = list(`actions-box` = TRUE),
@@ -234,6 +266,23 @@ shiny::shinyServer(function(input, output, session) {
             NULL
         }
     })
+
+    ## Health affected generation ---------
+    ped_df_aff <- shiny::reactive({
+        print("Bal: ped_df_aff")
+        if (!is.null(ped_df_norm())) {
+            print_console(generate_aff_inds(ped_df_norm()$norm,
+                col_aff = input$health_var_sel,
+                mods_aff = input$health_aff_mods,
+                threshold = input$health_threshold_val,
+                sup_thres_aff = input$health_threshold_sup),
+                session)
+        } else {
+            NULL
+        }
+    })
+
+
     ## End --------------------------------
     if (!interactive()) {
         session$onSessionEnded(function() {
