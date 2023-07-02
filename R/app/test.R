@@ -13,6 +13,23 @@ runApp()
 
 library(kinship2)
 
+data(sample.ped)
+df <- sample.ped
+df$avail
+df[, c("indId", "fatherId", "motherId",
+    "gender", "available")] <- df[, c("id", "father", "mother",
+        "sex", "avail")]
+df$available
+df <- norm_data(df)[[1]]
+df$avail
+summary(df)
+df$aff <- df$avail
+df[1:4, "gender"] <- NA
+df[10:13, "avail"] <- NA
+fam_df <- generate_aff_inds(df, "gender", threshold = 1.5, sup_thres_aff = TRUE)
+fam_df$mods_aff
+
+
 data(testped1)
 
 df <- testped1
