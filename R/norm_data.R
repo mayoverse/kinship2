@@ -97,8 +97,10 @@ norm_data <- function(df, na_strings = "NA") {
 
   #### available####
   if ("available" %in% colnames(df)) {
-    df$avail[!is.na(df$available)] <- 1
-    df$avail[is.na(df$available)] <- 0
+    df$avail[!is.na(df$available) &  df$available != 0] <- 1
+    df$avail[is.na(df$available) | df$available == 0] <- 0
+    df$avail <- factor(df$avail, levels = c(0, 1),
+                        labels = c("Not avail", "Avail"))
   } else {
     df$avail <- NA
   }
