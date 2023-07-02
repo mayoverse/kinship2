@@ -71,14 +71,15 @@ shiny::shinyUI(shiny::fluidPage(
         column(4, align = "center",
             uiOutput("health_var_selector"),
             uiOutput("health_full_scale_box"),
-            uiOutput("health_threshold_box")),
+            uiOutput("health_threshold_box"),
+            uiOutput("health_aff_selector")),
         column(4, align = "center",
-            uiOutput("health_aff_selector"))
+            textOutput("family_infos_title"),
+           tableOutput("family_info_table"))
     ),
     hr(),
-    fluidRow(title = "Family and Health information",
+    fluidRow(
         column(6, align = "center",
-            DT::dataTableOutput("family_info_table"),
         )
     ),
 

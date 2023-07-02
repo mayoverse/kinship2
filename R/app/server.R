@@ -3,24 +3,6 @@ usethis::use_package("shinyjs")
 usethis::use_package("shinyWidgets")
 usethis::use_package("dplyr")
 
-## Sketch for family Health and Availability informations
-sketch <- htmltools::withTags({
-  table(
-    class = "display",
-    thead(
-      tr(
-        th(rowspan = 2,"Variable used"),
-        th(class = 'dt-center',colspan = 3, "Availability")
-      ),
-      tr(
-        th("Ind not Avail"),
-        th("Ind Avail")
-      )
-    )
-  )
-})
-
-
 shiny::shinyServer(function(input, output, session) {
     ## Ped data import -------------------------
     ped_df <- data_import_server(id = "data_ped_import",
@@ -44,7 +26,8 @@ shiny::shinyServer(function(input, output, session) {
         cols_ren <- c(cols_needed_ped1()[cols_needed_ped1() != ""],
             cols_needed_ped2()[cols_needed_ped2() != ""])
         cols_needed_ped <- c("indId", "fatherId", "motherId", "gender")
-        if (any(!cols_needed_ped %in% names(cols_ren))) {
+        if (any(!cols_needed_ped %in% names(cols_ren)) |
+            any(!cols_ren %in% colnames(ped_df()))) {
             NULL
         } else {
             if (any(duplicated(as.vector(unlist(cols_ren))))){
@@ -154,25 +137,19 @@ shiny::shinyServer(function(input, output, session) {
         }
     })
     # Family information
-    output$family_info_table <- DT::renderDataTable({
+    output$family_info_table <- renderTable({
         if (!is.null(families_table()) & !is.null(ped_df_aff())) {
             print("Bal: family_info_table")
             fam_nb <- as.numeric(families_table()$FamilyNum)
             if (max(fam_nb) > 0) {
                 fam_sel <- input$family_sel
                 if (fam_sel > 0) {
-                    fam_df <- ped_df_aff()[ped_df_aff()$family == fam_sel,] 
-                    fam_aff_cont <- fam_df %>%
-                        dplyr::group_by(mods_aff, avail) %>%
-                        dplyr::tally() %>%
-                        tidyr::spread(avail, n)
-                    DT::datatable(fam_aff_cont, container = sketch,
-                        rownames=FALSE,
-                        options = list(
-                            columnDefs = list(
-                            list(targets = "_all", className = "dt-center")),
-                            dom = "t")
-                    )
+                    fam_df <- ped_df_aff()[ped_df_aff()$family == fam_sel, ]
+                    base::table(fam_df$avail, fam_df$mods_aff,
+                        useNA = "ifany",
+                        dnn = c("Availability", input$health_var_sel)) %>%
+                        as.data.frame() %>%
+                        tidyr::spread(Availability, Freq)
                 } else {
                     NULL
                 }
@@ -187,7 +164,7 @@ shiny::shinyServer(function(input, output, session) {
         print("Bal: family_infos_title")
         if (!is.null(families_table())) {
             paste("Health & Availability data representation for family", input$family_sel)
-        }else{
+        } else {
             NULL
         }
     })
@@ -271,12 +248,17 @@ shiny::shinyServer(function(input, output, session) {
     ped_df_aff <- shiny::reactive({
         print("Bal: ped_df_aff")
         if (!is.null(ped_df_norm())) {
-            print_console(generate_aff_inds(ped_df_norm()$norm,
-                col_aff = input$health_var_sel,
-                mods_aff = input$health_aff_mods,
-                threshold = input$health_threshold_val,
-                sup_thres_aff = input$health_threshold_sup),
-                session)
+            tryCatch({
+                print_console(generate_aff_inds(ped_df_norm()$norm,
+                    col_aff = input$health_var_sel,
+                    mods_aff = input$health_aff_mods,
+                    threshold = input$health_threshold_val,
+                    sup_thres_aff = input$health_threshold_sup),
+                    session)
+            },
+            error = function(e) {
+                NULL
+            })
         } else {
             NULL
         }
