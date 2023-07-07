@@ -1,9 +1,13 @@
 usethis::use_package("shiny")
-
+library(shiny)
 data_col_sel_ui <- function(id) {
     ns <- shiny::NS(id)
     shiny::tagList(
-        shiny::uiOutput(ns("all_cols_sel"))
+        div(
+            id = ns('Div'), class = 'div-global',
+            style = "margin-top:1.5em",
+            shiny::uiOutput(ns("all_cols_sel"))
+        ),
     )
 }
 
@@ -23,9 +27,13 @@ data_col_sel_server <- function(id, df, cols_used, title, null = FALSE) {
         v <- list()
         all_sel <- shiny::reactive({
             for (col in cols_used){
-                v[[col]] <- shiny::selectInput(ns(paste0("select_", col)),
-                    label = shiny::h5(paste(title, col)),
-                    choices = cols_list())
+                v[[col]] <- div(
+                    id = ns('Div'), class = 'div-null',
+                    style = "margin-top:-1.5em",
+                    shiny::selectInput(ns(paste0("select_", col)),
+                        label = shiny::h5(paste(title, col)),
+                        choices = cols_list())
+                )
             }
             v
         })
@@ -55,10 +63,12 @@ data_col_sel_demo <- function() {
         col_sel <- data_col_sel_server("datafile",
             shiny::reactive({mtcars}),
             c("test", "id"),
-            "Select columns")
+            "Select column")
         output$selected_cols <- shiny::renderTable({
             as.data.frame(col_sel())
         })
     }
     shiny::shinyApp(ui, server)
 }
+
+data_col_sel_demo()
