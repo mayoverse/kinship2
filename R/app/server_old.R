@@ -12,23 +12,6 @@ usethis::use_package("DT")
 work_dir <- getwd()
 #try(dev.off(), silent = T)
 
-# Function and sketch
-sketch <- htmltools::withTags({
-  table(
-    class = "display",
-    thead(
-      tr(
-        th(rowspan = 2,"Variable used"),
-        th(class = 'dt-center',colspan = 3, "Availability")
-      ),
-      tr(
-        th("Ind not Avail"),
-        th("Ind Avail")
-      )
-    )
-  )
-})
-
 
 # Define server logic required to draw a histogram
 ## Shiny server ----------------------------
@@ -72,12 +55,6 @@ shinyServer(function(input, output, session) {
       infInds = NA
     }
     return(infInds)
-  })
-  getAffectedInds <- reactive({
-    return(generate_aff_inds(readData()[[1]], input$HealthCustVariable,
-                                input$HealthAffectedMod, input$HealthThreshold,
-                                input$AffSupToThreshold, input$KeepFullScale,
-                                breaks = 4))
   })
   selectIndsToPlot <- reactive({
     infCustVariable <- input$InfCustVariable
@@ -126,83 +103,9 @@ shinyServer(function(input, output, session) {
       }
     })
   }
-  
-  ## Navigation panel ---------------------
-  
-  #Informative individuals custom selection
-  output$customVariable <- renderUI({
-    if (input$infSelected == "Cust") {
-      col_allowed = c("IndID","Name","Gender","Availability",
-                      "BirthDate","FatherID","MotherID",
-                      "id","dadid","momid")
-      col_present = colnames(readData()[[1]])
-      col_selection = intersect(col_present,col_allowed)
-      selectInput("InfCustVariable", label = "Select Variable to use to select informative individuals",
-                  choices = as.list(setNames(col_selection,col_selection)))
-    }else{
-      return()
-    }
-  })
-  output$customSelection <- renderUI({
-    if (input$infSelected == "Cust") {
-      textAreaInput("InfCustValues", label = h5("Custom selection"),
-                    placeholder = "Please enter individuals values separate by a comma")
-    }else{
-      return()
-    }
-  })
-  
-  ## Data representation ------------------
-  output$tableFamilySelectedInfos <- DT::renderDataTable({
-    if (is.null(input$HealthCustVariable) | is.null(input$familySelected)) {
-      return(NULL)
-    }
-    df = readData()[[1]]
-    familyInfos <- getFamilyInfos(df[df$family == input$familySelected,],
-                                  input$HealthCustVariable, input$HealthThreshold)
-    if (is.null(familyInfos)) {return(NULL)}
-    tabInfos <- xtabs(familyInfos[["Freq"]]~familyInfos[[input$HealthCustVariable]]+
-                        familyInfos[["Availability"]], addNA = T)
-    tabInfos <- as.data.frame.matrix(tabInfos,optional = T)
-    rownames(tabInfos) <- replace(rownames(tabInfos),rownames(tabInfos) == "","NA")
-    datatable(tabInfos,container = sketch,
-              options = list(
-                columnDefs = list(
-                  list(targets = "_all", className = "dt-center"))
-                ,dom = "t")
-    )
-  })
-  output$textFamilySelectedInfos <- renderText({
-    if (length(input$familySelected) != 0) {
-      familiesTable <- getFamiliesTable()
-      varSelected = familiesTable$'Major mod'[familiesTable$FamilyNum == input$familySelected]
-      paste("Data representation for family",varSelected,input$familySelected)
-    }else{
-      NULL
-    }
-  })
+
   
   ## General Infos -----------------------
-  # Errors in data
-  output$DownloadErrorsButton <- renderUI({
-    if (is.null(readData()[[2]])) {
-      output$ErrorsText <- renderText({NULL})
-      return()
-    } else {
-      nb_errors = nrow(readData()[[2]])
-      output$ErrorsText <- renderUI({
-        HTML(paste(nb_errors," errors has been found in the data <br/>
-        (Data can only be export to Download folder)",sep = ' '))})
-      
-      output$ErrorsDownload <- downloadHandler(filename = function() {
-        paste("Errors_", Sys.Date(), ".csv", sep = "")
-      },
-        content = function(file) {
-        write.csv2(readData()[[2]], file)
-      })
-      downloadButton("ErrorsDownload","Download errors as .csv")
-    }
-  })
   # All families infos
   output$DownloadAllDataButton <- renderUI({
     if (is.null(readData()[[1]])) {

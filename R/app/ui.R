@@ -54,7 +54,9 @@ shiny::shinyUI(shiny::fluidPage(
     hr(),
     ## Errors download ----------------------------
     fluidRow(title = "Errors download",
-        column(6, align = "center",
+        align = "center",
+        h3("Download errors"),
+        column(6,
             h5(strong("Pedigree data errors")),
             data_download_ui(id = "ped_errors")),
         column(6, align = "center",
@@ -63,26 +65,71 @@ shiny::shinyUI(shiny::fluidPage(
     ),
     hr(),
     ## Family and Health selection ---------------------------
-    fluidRow(title = "Family and Health Selection",
+    fluidRow(title = "Family and Health selection",
         column(4, align = "center",
+            h3("Family selection"),
             uiOutput("families_var_selector"),
             tableOutput("families_table"),
             uiOutput("family_selector")),
         column(4, align = "center",
+            h3("Health selection"),
             uiOutput("health_var_selector"),
             uiOutput("health_full_scale_box"),
             uiOutput("health_threshold_box"),
             uiOutput("health_aff_selector")),
         column(4, align = "center",
+            h3("Family information"),
             textOutput("family_infos_title"),
-           tableOutput("family_info_table"))
+            tableOutput("family_info_table"))
     ),
     hr(),
+    ## Informative individuals selection ----------------------
     fluidRow(
         column(6, align = "center",
+            h3("Informative individuals"),
+            column(6,
+                uiOutput("inf_var_selector"),
+            ),
+            column(6,
+                uiOutput("inf_custvar_selector"),
+                uiOutput("inf_custvar_textinput")
+            )
+        ),
+        ## Filtering options ------------------------
+        column(6, align = "center",
+            h3("Filtering options"),
+            column(6,
+                numericInput("kin_max",
+                    label = h5(strong("Max kinship")),
+                    value = 4,
+                    min = 1)
+            ),
+            column(6, align = "left",
+                checkboxInput("trim_ped",
+                    label = "Trim non informative parents",
+                    value = TRUE),
+                checkboxInput("keep_inf",
+                    label = "When trimmed, keep individuals with infos",
+                    value = TRUE),
+                checkboxInput("interactivness",
+                    label = "Make the pedigree interactive",
+                    value = FALSE)
+            )
         )
     ),
-
+    hr(),
+    ## Subfamily selection -------------------------
+    fluidRow(
+        column(6, align = "center",
+            h3("Subfamily selection"),
+            column(6,
+                uiOutput("subfamilies_table")
+            ),
+            column(6,
+                uiOutput("subfamily_selector")
+            )
+        )
+    ),
     ## Console ------------------------------------------------
     fluidRow(
         pre(id = "console")
