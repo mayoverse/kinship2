@@ -62,3 +62,23 @@ get_families_table <- function(df, var) {
   }
   return(families_table)
 }
+
+
+select_from_inf <- function(df, inf_inds, kin_max) {
+  if (nrow(df) > 2) {
+    df_kin <- max_kin_inf(df, inf_inds)
+    df_kin_lim <- df_kin[df_kin$kin <= kin_max, ]
+    df_kin_trim <- fixParents.data.frame(df = df_kin_lim, delete = TRUE)
+
+    if (nrow(df_kin_trim) > 2) {
+      df_kin_trim$family <- with(df_kin_trim, makefamid(id, momid, dadid))
+    } else {
+      message("Not Enough individuals")
+      NULL
+    }
+    df_kin_trim
+  } else {
+    message("Not Enough individuals")
+    NULL
+  }
+}
