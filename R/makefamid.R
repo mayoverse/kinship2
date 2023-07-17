@@ -15,9 +15,9 @@
 #' to pedigreeList objects.
 #'
 #' @param id Identifier for each subject in the set of pedigrees
-#' @param father.id Identifier for the father.  This will be 0 or "" for a
+#' @param dadid Identifier for the father.  This will be 0 or "" for a
 #' founder.
-#' @param mother.id Identifer for the mother.
+#' @param momid Identifer for the mother.
 #'
 #' @return An integer vector giving family groupings
 #'
@@ -25,10 +25,11 @@
 #' @seealso `makekinship`
 #' @keywords genetics
 #' @export makefamid
-makefamid <- function(id, father.id, mother.id) {
+makefamid <- function(id, dadid, momid) {
+  print("Bal: makefamid")
   n <- length(id)
-  mid <- c(match(mother.id, id, nomatch = n + 1), n + 1)
-  did <- c(match(father.id, id, nomatch = n + 1), n + 1)
+  mid <- c(match(momid, id, nomatch = n + 1), n + 1)
+  did <- c(match(dadid, id, nomatch = n + 1), n + 1)
   mid2 <- sort(unique(mid))
   did2 <- sort(unique(did))
   famid <- 1:(n + 1)
@@ -50,7 +51,7 @@ makefamid <- function(id, father.id, mother.id) {
   #   marries child of D, ...).  However, at each iteration the final number
   #   must get propogated to at least one child or at least 2 parents, giving
   #   a limit of n-1
-  temp <- kindepth(id, father.id, mother.id)
+  temp <- kindepth(id, dadid, momid)
   for (i in 1:n) {
     # set children = min(self, parents)
     newid <- pmin(famid, famid[mid], famid[did])
@@ -63,7 +64,9 @@ makefamid <- function(id, father.id, mother.id) {
 
     if (all(newid == famid)) {
       break
-    } else if (i < n) famid <- newid
+    } else if (i < n) {
+      famid <- newid
+    }
   }
 
   if (all(newid == famid)) {
