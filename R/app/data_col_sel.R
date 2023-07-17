@@ -18,10 +18,9 @@ data_col_sel_server <- function(id, df, cols_used, title, null = FALSE) {
         print("Bal: data_col_sel_server")
         cols_list <- shiny::reactive({
             all_cols <- colnames(df())
-            if (null) {
-                all_cols <- c("", all_cols)
-            }
-            setNames(all_cols, all_cols)
+            setNames(
+                c("NA", all_cols),
+                c("", all_cols))
         })
 
         v <- list()
@@ -70,5 +69,3 @@ data_col_sel_demo <- function() {
     }
     shiny::shinyApp(ui, server)
 }
-
-data_col_sel_demo()
