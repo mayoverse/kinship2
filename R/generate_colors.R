@@ -44,8 +44,10 @@ generate_colors <- function(df, col_aff, keep_full_scale = FALSE, breaks = 3,
   if (length(colors_avail) != 2) {
     stop("Variable `colors_avail` need to be a vector of 2 colors")
   }
+  print('Bal: generate_colors, colors_avail')
+  df$border <- "grey"
   ## Available individual have the first color
-  df$border <- colors_avail[1]
+  df$border[df$avail == 1] <- colors_avail[1]
   ## Unavailable individual have the second color
   df$border[df$avail == 0] <- colors_avail[2]
 
@@ -53,7 +55,9 @@ generate_colors <- function(df, col_aff, keep_full_scale = FALSE, breaks = 3,
     c("Available", "Non Available"))
 
   # Set the filling color
+  print('Bal: generate_colors, fill_scale')
   if (!keep_full_scale) {
+    print("Bal: generate_colors: keep_full_scale = FALSE")
     # If the scale is binary just keep the first color of unaff
     # and the last of aff
     fill_scale <- c("0" = colors_unaff[1], "1" = colors_aff[-1])
@@ -61,12 +65,14 @@ generate_colors <- function(df, col_aff, keep_full_scale = FALSE, breaks = 3,
       fill_scale)
     lev <- na.omit(unique(df[, c("affected", "mods_aff")]))
     mods <- data.frame(lev$mods_aff, lev$affected)
-    if (any(dim(mods) != 2)) {
+    print(mods)
+    if (any(dim(mods) > 2)) {
       stop("Error while computing the affected levels filling scale")
     }
     names(fill_scale) <- mods$lev.mods_aff[match(names(fill_scale),
         mods$lev.affected)]
   } else {
+    print("Bal: generate_colors: keep_full_scale = TRUE")
     fct_scale_unaff <- grDevices::colorRampPalette(colors_unaff)
     fct_scale_aff <- grDevices::colorRampPalette(colors_aff)
 
@@ -74,6 +80,7 @@ generate_colors <- function(df, col_aff, keep_full_scale = FALSE, breaks = 3,
     mods <- data.frame(lev$mods_aff, lev$affected)
 
     if (!is.numeric(df[[col_aff]])) {
+      print("Bal: generate_colors: col_aff is not numeric")
       levs_aff <- as.factor(df[df$affected == 1 &
           !is.na(df$affected), col_aff])
       levs_unaff <- as.factor(df[df$affected == 0 &
@@ -83,6 +90,7 @@ generate_colors <- function(df, col_aff, keep_full_scale = FALSE, breaks = 3,
       fill_scale_aff <- setNames(fill_scale_aff, levels(levs_aff))
       fill_scale_unaff <- setNames(fill_scale_unaff, levels(levs_unaff))
     } else {
+      print("Bal: generate_colors: col_aff is numeric")
       mean_aff <- mean(df[df$affected == 1, col_aff], na.rm = TRUE)
       mean_unaff <- mean(df[df$affected == 0, col_aff], na.rm = TRUE)
       levs_aff <- cut(df[df$affected == 1 & !is.na(df$affected), col_aff],
@@ -99,6 +107,7 @@ generate_colors <- function(df, col_aff, keep_full_scale = FALSE, breaks = 3,
         fill_scale_unaff <- setNames(fill_scale_unaff, rev(levels(levs_unaff)))
       }
     }
+    print("Bal: generate_colors: fill_scale_aff")
     # Set fill depending on the corresponding color for aff and unaff
     df$fill[df$affected == 1 & !is.na(df$affected)] <-
       as.character(plyr::revalue(levs_aff, fill_scale_aff))

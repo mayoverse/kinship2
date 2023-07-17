@@ -27,6 +27,7 @@
 #' @keywords genetics
 #' @export kindepth
 kindepth <- function(id, dad_id, mom_id, align = FALSE) {
+  print("Bal: kindepth")
   if ("pedigree" %in% class(id) || "pedigreeList" %in% class(id)) {
     didx <- id$findex
     midx <- id$mindex
@@ -46,7 +47,6 @@ kindepth <- function(id, dad_id, mom_id, align = FALSE) {
     return(0)
   } # special case of a single subject
   parents <- which(midx == 0 & didx == 0) # founders
-
   depth <- rep(0, n)
   child_old <- rep(0, n)
   # At each iteration below, all children of the current "parents" are
@@ -54,7 +54,6 @@ kindepth <- function(id, dad_id, mom_id, align = FALSE) {
   for (i in 1:n) {
     child <- match(midx, parents, nomatch = 0) +
       match(didx, parents, nomatch = 0) # Index of parent's childs
-
     if (all(child == child_old)) {
       stop(paste("Impossible pedigree: no progress made at iteration", i))
     }
@@ -62,7 +61,7 @@ kindepth <- function(id, dad_id, mom_id, align = FALSE) {
       break
     }
     if (i == n) {
-      stop("Impossible pedegree: someone is their own ancestor")
+      stop("Impossible pedigree: someone is their own ancestor")
     }
     parents <- which(child > 0) # Old child are parents of the next generation
     depth[parents] <- i

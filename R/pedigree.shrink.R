@@ -183,7 +183,6 @@ print.pedigree.shrink <- function(x, ...) {
 
   df <- data.frame(N.subj = n, Bits = b)
   rownames(df) <- row.nms
-  print(df, quote = FALSE)
 
   if (!is.null(x$idList$unavail)) {
     cat("\n Unavailable subjects trimmed:\n", x$idList$unavail, "\n")

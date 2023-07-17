@@ -195,7 +195,6 @@ data_import_server <- function(id,
     shiny::moduleServer(id, function(input, output, session) {
         print("Bal: data_import_server")
         ## File rendering selection ------------------------
-
         output$file <- shiny::renderUI({
             shiny::fileInput(ns("file"), label)
         })
@@ -208,7 +207,6 @@ data_import_server <- function(id,
         })
 
         ## Options rendering selection --------------------
-
         opt <- shiny::reactiveValues(
             heading = TRUE,
             to_char = FALSE,
@@ -237,7 +235,7 @@ data_import_server <- function(id,
             ))
         })
 
-        # Store the information if the user clicks submit
+        # Store the information if the user clicks close
         shiny::observeEvent(input$close, {
             shiny::removeModal()
             opt$heading <- input$heading
