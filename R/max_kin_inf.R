@@ -1,3 +1,4 @@
+usethis::use_package("dplyr")
 #' @title Kinship computation
 #'
 #' @description Compute the kinship between the informative individuals and
@@ -22,6 +23,7 @@
 #'
 #' @export max_kin_inf
 max_kin_inf <- function(df, informative = "AvAf") {
+  print("Bal: max_kin_inf")
 
   cols_needed <- c("id", "dadid", "momid", "sex", "avail", "affected")
   cols_used <- c("kin", "inf")
@@ -31,10 +33,14 @@ max_kin_inf <- function(df, informative = "AvAf") {
   # Selection of all informative individuals
   # depending of the informative parameter
   id_inf <- is_informative(df, informative)
-
+  if (any(is.na(id_inf)) || length(id_inf) == 0) {
+    stop("No informative individuals detected")
+  }
   # For all individuals, compute kinship degree
-  mat <- with(df, kinship(id, dadid, momid, sex))
-  sub <- mat[, colnames(mat) %in% id_inf]
+  mat <- kinship(with(df, pedigree(id, dadid, momid, sex)))
+  sub <- mat[, colnames(mat) %in% id_inf] %>%
+    as.data.frame()
+
   df$kin <- log2(1 / apply(sub, 1, max))
   df$kin[is.infinite(df$kin)] <- NA
 
