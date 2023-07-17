@@ -34,15 +34,19 @@ is_informative <- function(df, informative = "AvAf") {
     id_inf <- ifelse(informative, df$id, NA)
   } else {
     if (informative == "AvOrAf") {
-      id_inf <- df[df$avail == 1 | df$affected == 1 & !is.na(df$affected), "id"]
+      id_inf <- df[(df$avail == 1 & !is.na(df$avail)) |
+        (df$affected == 1 & !is.na(df$affected)), "id"]
     } else if (informative == "Av") {
-      id_inf <- df[df$avail == 1, "id"]
+      id_inf <- df[df$avail == 1 & !is.na(df$avail), "id"]
     } else if (informative == "Af") {
       id_inf <- df[df$affected == 1 & !is.na(df$affected), "id"]
     } else if (informative == "AvAf") {
-      id_inf <- df[df$avail == 1 & df$affected == 1 & !is.na(df$affected), "id"]
+      id_inf <- df[(df$avail == 1 & !is.na(df$avail)) &
+        (df$affected == 1 & !is.na(df$affected)), "id"]
     } else if (informative == "All") {
       id_inf <- df$id
+    } else {
+      stop("informative parameter not recognized")
     }
   }
   unique(id_inf)
