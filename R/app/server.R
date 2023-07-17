@@ -2,6 +2,8 @@ usethis::use_package("shiny")
 usethis::use_package("shinyjs")
 usethis::use_package("shinyWidgets")
 usethis::use_package("dplyr")
+usethis::use_package("DT")
+usethis::use_package("gridExtra")
 
 shiny::shinyServer(function(input, output, session) {
     ## Ped data import -------------------------
@@ -23,8 +25,8 @@ shiny::shinyServer(function(input, output, session) {
     ## Data normalisation ----------------------
     ped_df_norm <- shiny::reactive({
         print("Bal: data management")
-        cols_ren <- c(cols_needed_ped1()[cols_needed_ped1() != ""],
-            cols_needed_ped2()[cols_needed_ped2() != ""])
+        cols_ren <- c(cols_needed_ped1()[cols_needed_ped1() != "NA"],
+            cols_needed_ped2()[cols_needed_ped2() != "NA"])
         cols_needed_ped <- c("indId", "fatherId", "motherId", "gender")
         if (any(!cols_needed_ped %in% names(cols_ren)) |
             any(!cols_ren %in% colnames(ped_df()))) {
@@ -50,7 +52,7 @@ shiny::shinyServer(function(input, output, session) {
     })
     rel_df_norm <- shiny::reactive({
         print("Bal: rel management")
-        cols_ren <- cols_needed_rel()[cols_needed_rel() != ""]
+        cols_ren <- cols_needed_rel()[cols_needed_rel() != "NA"]
         cols_needed_rel <- c("id1", "id2", "code")
         if (any(!cols_needed_rel %in% names(cols_ren))) {
             NULL
@@ -117,9 +119,11 @@ shiny::shinyServer(function(input, output, session) {
     })
 
     # Families table rendering
-    output$families_table <- renderTable({
+    output$families_table <- DT::renderDataTable({
         families_table()
-    })
+    }, options = list(paging = FALSE, scrollX = TRUE,
+        scrollY = "200px", scrollCollapse = TRUE),
+    rownames = FALSE)
     # Family selection
     output$family_selector <- renderUI({
         print("Bal: family_sel")
@@ -136,26 +140,31 @@ shiny::shinyServer(function(input, output, session) {
             NULL
         }
     })
+
+    # Select family df
+    ped_df_fam <- reactive({
+        shiny::req(input$family_sel)
+        shiny::req(ped_df_norm())
+        print("Bal: ped_df_fam")
+        df <- ped_df_norm()$norm
+        if (!is.null(df) & !is.null(input$family_sel) & input$family_sel > 0) {
+            df[df$family == input$family_sel, ]
+        } else {
+            NULL
+        }
+    })
+
     # Family information
     output$family_info_table <- renderTable({
-        if (!is.null(families_table()) & !is.null(ped_df_aff())) {
-            print("Bal: family_info_table")
-            fam_nb <- as.numeric(families_table()$FamilyNum)
-            if (max(fam_nb) > 0) {
-                fam_sel <- input$family_sel
-                if (fam_sel > 0) {
-                    fam_df <- ped_df_aff()[ped_df_aff()$family == fam_sel, ]
-                    base::table(fam_df$avail, fam_df$mods_aff,
-                        useNA = "ifany",
-                        dnn = c("Availability", input$health_var_sel)) %>%
-                        as.data.frame() %>%
-                        tidyr::spread(Availability, Freq)
-                } else {
-                    NULL
-                }
-            } else {
-                NULL
-            }
+        shiny::req(ped_df_aff())
+        print("Bal: family_info_table")
+        df <- ped_df_aff()$df
+        if (!is.null(df)) {
+            base::table(df$avail, df$mods_aff,
+                useNA = "ifany",
+                dnn = c("Availability", input$health_var_sel)) %>%
+                as.data.frame() %>%
+                tidyr::spread(Availability, Freq)
         } else {
             NULL
         }
@@ -164,16 +173,6 @@ shiny::shinyServer(function(input, output, session) {
         print("Bal: family_infos_title")
         if (!is.null(families_table())) {
             paste("Health & Availability data representation for family", input$family_sel)
-        } else {
-            NULL
-        }
-    })
-    # Select family df
-    ped_df_fam <- reactive({
-        print("Bal: ped_df_fam")
-        df <- ped_df_norm()$norm
-        if (!is.null(df) & !is.null(input$family_sel)) {
-            df[df$family == input$family_sel, ]
         } else {
             NULL
         }
@@ -255,15 +254,18 @@ shiny::shinyServer(function(input, output, session) {
 
     ## Health affected generation --------------
     ped_df_aff <- shiny::reactive({
+        shiny::req(ped_df_fam())
         print("Bal: ped_df_aff")
         if (!is.null(ped_df_fam())) {
             tryCatch({
-                print_console(generate_aff_inds(ped_df_fam(),
+                ped_df_aff <- print_console(generate_aff_inds(ped_df_fam(),
                     col_aff = input$health_var_sel,
                     mods_aff = input$health_aff_mods,
                     threshold = input$health_threshold_val,
                     sup_thres_aff = input$health_threshold_sup),
                     session)
+                generate_colors(ped_df_aff, "affected",
+                    keep_full_scale = input$health_full_scale)
             },
             error = function(e) {
                 NULL
@@ -280,7 +282,7 @@ shiny::shinyServer(function(input, output, session) {
                     label = h5(strong("Select informative individuals")),
                     choices = list(
                         "All individuals" = "All",
-                        "Available or Affected" = "Av/Af",
+                        "Available or Affected" = "AvOrAf",
                         "Available only" = "Av",
                         "Affected only" = "Af",
                         "Available and Affected" = "AvAf",
@@ -292,8 +294,9 @@ shiny::shinyServer(function(input, output, session) {
     })
     output$inf_custvar_selector <- renderUI({
         shiny::req(input$inf_selected == "Cust")
-        if (input$inf_selected == "Cust" & !is.null(ped_df_aff())) {
-            col_present <- colnames(ped_df_aff())
+        df <- ped_df_aff()$df
+        if (input$inf_selected == "Cust" & !is.null(df)) {
+            col_present <- colnames(df)
             selectInput("inf_custvar_sel",
                 label = "Select Variable to use to select informative individuals",
                 choices = as.list(setNames(col_present, col_present)))
@@ -312,21 +315,21 @@ shiny::shinyServer(function(input, output, session) {
     })
     #Informative individuals selection
     inf_inds_selected <- reactive({
-        print("Tets")
         shiny::req(ped_df_aff())
+        print("Bal: inf_inds_selected")
+        shiny::req(input$inf_selected)
+        if (input$inf_selected != "Cust") {
+            return(input$inf_selected)
+        }
+        print("Bal: inf_inds_selected custom")
         shiny::req(input$inf_custvar_val)
         shiny::req(input$inf_custvar_sel)
-        print("Bal: inf_inds_selected")
-        inf_custvar_val <- input$inf_custvar_val
-        if (input$inf_selected != "Cust") {
-            input$inf_selected
-        } else if (!identical(inf_custvar_val, "")) {
+        if (!identical(input$inf_custvar_val, "")) {
             inf_custvar_sel <- input$inf_custvar_sel
-            inf_custvar_val <- unlist(strsplit(inf_custvar_val, ","))
+            inf_custvar_val <- unlist(strsplit(input$inf_custvar_val, ","))
 
-            df <- ped_df_aff()
-
-            index <- match(inf_custvar_val, df[, inf_custvar_sel])
+            df <- ped_df_aff()$df
+            index <- which(df[, inf_custvar_sel] %in% inf_custvar_val)
             if (any(is.na(index))) {
                 showNotification(paste("Values", inf_custvar_val[is.na(index)],
                     "not present in", inf_custvar_sel))
@@ -339,14 +342,24 @@ shiny::shinyServer(function(input, output, session) {
             NULL
         }
     })
-    ped_df_final <- reactive({
+    inf_inds_sel_txt <- function() {
+        isolate({
+            if (input$inf_selected == "Cust") {
+                paste(input$InfCustVariable, "(id ",
+                    paste(inf_inds_selected(), collapse = ","),
+                    ")")
+            } else {
+                inf_inds_selected()
+            }
+        })
+    }
+    ped_df_inf <- reactive({
         shiny::req(inf_inds_selected())
-        shiny::req(input$inf_custvar_sel)
-        shiny::req(input$trimPed)
+        shiny::req(input$trim_ped)
+        shiny::req(input$keep_infos)
         shiny::req(ped_df_aff())
-        print("Bal: ped_df_final")
-        inf_custvar_sel <- input$inf_custvar_sel
-        df <- ped_df_aff()
+        print("Bal: ped_df_inf")
+        df <- ped_df_aff()$df
         inf_inds <- inf_inds_selected()
 
         if (!is.null(df) & !any(is.na(inf_inds))) {
@@ -354,9 +367,13 @@ shiny::shinyServer(function(input, output, session) {
                 inf_inds = inf_inds, kin_max = input$kin_max)
             df_from_inf <- num_child(df_from_inf,
                     relation = rel_df_norm()$norm)
-            if (input$trimPed) {
-                df_useful <- useful_inds(df_from_inf, inf_inds)
-                df_from_inf <- df_useful[df_useful$useful, ]
+            if (input$trim_ped) {
+                df_from_inf$useful <- useful_inds(df_from_inf, inf_inds,
+                    input$keep_infos)
+                df_from_inf <- fixParents.data.frame(df_from_inf,
+                    delete = FALSE, filter = "useful")
+                df_from_inf <- fixParents.data.frame(df = df_from_inf,
+                    delete = TRUE)
             }
             df_from_inf
         } else {
@@ -366,16 +383,19 @@ shiny::shinyServer(function(input, output, session) {
     ## Subfamily selection ---------------------
     subfamilies_table <- reactive({
         print("Bal: subfamilies_table")
-        ped_df <- ped_df_final()
+        shiny::req(ped_df_inf())
+        ped_df <- ped_df_inf()
         if (!is.null(ped_df) & !is.null(input$families_var_sel)) {
             get_families_table(ped_df, input$families_var_sel)
         } else {
             NULL
         }
     })
-    output$subfamilies_table <- renderTable({
+    output$subfamilies_table <- DT::renderDataTable({
         subfamilies_table()
-    })
+    }, options = list(paging = FALSE, scrollX = TRUE,
+        scrollY = "200px", scrollCollapse = TRUE),
+    rownames = FALSE)
     output$subfamily_selector <- renderUI({
         print("Bal: subfamily_sel")
         if (!is.null(subfamilies_table())) {
@@ -392,7 +412,59 @@ shiny::shinyServer(function(input, output, session) {
         }
     })
 
-    ## End --------------------------------
+    ## Final ped_df ---------------------------
+    ped_df_final <- reactive({
+        print("Bal: ped_df_final")
+        shiny::req(ped_df_inf())
+        shiny::req(input$subfamily_sel)
+        ped_df <- ped_df_inf()
+        if (!is.null(ped_df) & !is.null(input$subfamily_sel)) {
+            ped_df <- ped_df[ped_df$family == input$subfamily_sel, ]
+        }
+        ped_df
+    })
+
+    ped_gens <- reactive({
+        ped <- with(ped_df_final(), pedigree(id, dadid, momid, sex, affected))
+        align.pedigree(ped)$n
+    })
+
+    ## Plotting -------------------------------
+    plotped_obj <- plot_ped_server(
+        "plot_ped", ped_df_final, get_title_app(short = FALSE))
+
+    output$legend_plot <- renderPlot({
+        shiny::req(ped_df_aff())
+        cols <- ped_df_aff()$scales
+        legend <- create_legend(cols, size = 0.8)
+        gridExtra::grid.arrange(legend$A, legend$B, ncol = 2)
+    }, height = 150)
+
+    ## Download pedigree-----------------------
+    get_title_app <- function(short = FALSE) {
+            df <- families_table()
+            get_title(
+                input$family_sel, input$subfamily_sel,
+                input$families_var_sel,
+                df[df$FamilyNum == input$family_sel, "Major mod"],
+                inf_inds_sel_txt(), input$kin_max,
+                input$trim_ped, input$keep_infos,
+                nrow(ped_df_final()),
+                short_title = short)
+    }
+    data_download_server("plot_data_dwnl", ped_df_final,
+        filename = get_title_app(short = TRUE), label = "Subfamily data",
+        helper = FALSE)
+
+    shiny::observeEvent(ped_gens(),{
+        plot_download_server(
+            "plot_ped_dwnl", plotped_obj,
+            filename = get_title_app(short = TRUE), label = "Subfamily plot",
+            width = max(c(ped_gens() * 80, 500)),
+            height = max(c(length(ped_gens()) * 150, 500)))
+    })
+
+    ## End ------------------------------------
     if (!interactive()) {
         session$onSessionEnded(function() {
         shiny::stopApp()

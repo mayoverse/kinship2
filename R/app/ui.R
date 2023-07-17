@@ -69,7 +69,9 @@ shiny::shinyUI(shiny::fluidPage(
         column(4, align = "center",
             h3("Family selection"),
             uiOutput("families_var_selector"),
-            tableOutput("families_table"),
+            fluidRow(
+                DT::dataTableOutput("families_table", width = '500px')
+            ),
             uiOutput("family_selector")),
         column(4, align = "center",
             h3("Health selection"),
@@ -85,7 +87,7 @@ shiny::shinyUI(shiny::fluidPage(
     hr(),
     ## Informative individuals selection ----------------------
     fluidRow(
-        column(6, align = "center",
+        column(4, align = "center",
             h3("Informative individuals"),
             column(6,
                 uiOutput("inf_var_selector"),
@@ -96,40 +98,39 @@ shiny::shinyUI(shiny::fluidPage(
             )
         ),
         ## Filtering options ------------------------
-        column(6, align = "center",
+        column(4, align = "center",
             h3("Filtering options"),
             column(6,
                 numericInput("kin_max",
                     label = h5(strong("Max kinship")),
-                    value = 4,
+                    value = 3,
                     min = 1)
             ),
             column(6, align = "left",
                 checkboxInput("trim_ped",
                     label = "Trim non informative parents",
                     value = TRUE),
-                checkboxInput("keep_inf",
+                checkboxInput("keep_infos",
                     label = "When trimmed, keep individuals with infos",
-                    value = TRUE),
-                checkboxInput("interactivness",
-                    label = "Make the pedigree interactive",
-                    value = FALSE)
+                    value = TRUE)
             )
+        ),
+        ## Subfamily selection -------------------------
+        column(4, align = "center",
+            h3("Subfamily selection"),
+            fluidRow(DT::dataTableOutput("subfamilies_table", width = '500px')),
+            uiOutput("subfamily_selector")
         )
     ),
     hr(),
-    ## Subfamily selection -------------------------
+    ## Plotting pedigree ----------------------------
     fluidRow(
-        column(6, align = "center",
-            h3("Subfamily selection"),
-            column(6,
-                uiOutput("subfamilies_table")
-            ),
-            column(6,
-                uiOutput("subfamily_selector")
-            )
-        )
+        plot_ped_ui("plot_ped"),
+        plotOutput("legend_plot", height = "50px"),
+        data_download_ui("plot_data_dwnl"),
+        plot_download_ui("plot_ped_dwnl")
     ),
+
     ## Console ------------------------------------------------
     fluidRow(
         pre(id = "console")
