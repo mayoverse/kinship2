@@ -18,17 +18,23 @@
 #' or a boolean
 #'
 #' @export useful_inds
-useful_inds <- function(df, informative = "AvAf") {
+useful_inds <- function(df, informative = "AvAf", keep_infos = FALSE) {
 
   cols_needed <- c("id", "dadid", "momid", "sex",
     "avail", "affected", "num_child_tot")
-  cols_used <- c("useful")
 
-  df <- check_columns(df, cols_needed, cols_used, "", others_cols = TRUE)
+  df <- check_columns(df, cols_needed, "", "", others_cols = TRUE)
 
   # Get informative individuals
   id_inf <- is_informative(df, informative = informative)
   is_inf <- df$id %in% id_inf
+
+  # Keep individual affected or available
+  if (keep_infos) {
+    is_inf <- is_inf |
+      (!is.na(df$affected) & df$affected == 1) |
+      (!is.na(df$avail) & df$avail == 1)
+  }
 
   # Check if parents participate to the pedigree structure
   ped_part <- df$num_child_tot > 1
@@ -47,6 +53,5 @@ useful_inds <- function(df, informative = "AvAf") {
     num_ind_old <- num_ind_new
     num_ind_new <- length(df$id[to_kept])
   }
-  df$useful <- to_kept
-  df
+  to_kept
 }
