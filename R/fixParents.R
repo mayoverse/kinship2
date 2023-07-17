@@ -192,12 +192,16 @@ fixParents <- function(id, dadid, momid, sex, missid = 0, ...) {
 #' @examples
 #'
 #' @export
-fixParents.data.frame <- function(df = df, delete = FALSE, missid = "0",
-  id = "id", avail = "avail",
+fixParents.data.frame <- function(df = df, delete = FALSE, filter = NULL,
+  missid = "0", id = "id", avail = "avail",
   dadid = "dadid", momid = "momid", sex = "sex", ...) {
-  cols_needed <- c(id, dadid, momid, sex, avail)
+  print("Bal: fixParents.data.frame")
+  cols_needed <- c(id, dadid, momid, sex, avail, filter)
   df <- check_columns(df, cols_needed, "", "", others_cols = TRUE)
-
+  df_old <- df
+  if (!is.null(filter)) {
+    df <- df[df[[filter]], ]
+  }
   message("Fixing incomplete couple")
   all_id <- c(df[[id]], df[[dadid]], df[[momid]])
   all_id <- unique(all_id[all_id != missid])
@@ -219,19 +223,18 @@ fixParents.data.frame <- function(df = df, delete = FALSE, missid = "0",
     df_fix <- fixParents(df[[id]], df[[dadid]], df[[momid]],
       df[[sex]], missid = missid, ...)
     col_used <- which(
-      names(df) == momid |
-      names(df) == dadid |
-      names(df) == sex)
+      names(df_old) == momid |
+      names(df_old) == dadid |
+      names(df_old) == sex)
     df <- merge(
-      df[, -col_used],
+      df_old[, -col_used],
       df_fix, by = id,
-      all.y = TRUE, all.x = TRUE)
-    df[[avail]][is.na(df[[avail]])] <- 0
+      all.y = TRUE, all.x = FALSE)
     all_id_new <- c(df[[id]], df[[dadid]], df[[momid]])
     all_id_new <- unique(all_id_new[all_id_new != missid])
     all_id_dif <- all_id_new[!all_id_new %in% all_id]
     message(paste(length(all_id_dif), "individuals added"))
   }
   message(paste("Final:", nrow(df), "individuals detected"))
-  return(df)
+  df
 }
