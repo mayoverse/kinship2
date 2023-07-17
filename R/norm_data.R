@@ -30,7 +30,7 @@ usethis::use_package("dplyr")
 #' norm_data(ped_data)
 #'
 #'@export norm_data
-norm_data <- function(df, na_strings = "NA") {
+norm_data <- function(df, na_strings = "NA", missid = "0", try_num = FALSE) {
   print("Bal: norm_data")
   err_cols <- c(
     "sexErrMoFa", "sexErrFa", "sexErrMo", "sexErrTer", "sexNA", "sexError",
@@ -99,8 +99,6 @@ norm_data <- function(df, na_strings = "NA") {
   if ("available" %in% colnames(df)) {
     df$avail[!is.na(df$available) &  df$available != 0] <- 1
     df$avail[is.na(df$available) | df$available == 0] <- 0
-    df$avail <- factor(df$avail, levels = c(0, 1),
-                        labels = c("Not avail", "Avail"))
   } else {
     df$avail <- NA
   }
@@ -116,6 +114,8 @@ norm_data <- function(df, na_strings = "NA") {
   momid <- df$id[match(df$motherId, df$indId)]
   momid[df$motherId %in% id_duplicated] <- NA
   df$momid <- momid
+  df$dadid[is.na(df$dadid)] <- missid
+  df$momid[is.na(df$momid)] <- missid
 
   #### OwnAncestor####
   id_own_ancestor <- df$indId[df$indId == df$fatherId | df$indId == df$motherId]
@@ -142,13 +142,15 @@ norm_data <- function(df, na_strings = "NA") {
   df <- df[df$idError == "" & df$sexError == "", ]
 
   #### Convert to num ####
-  message("Converting to numeric if possible")
-  col_to_num <- colnames(df)[!colnames(df) %in% c(cols_need, cols_to_use)]
-  for (i in col_to_num) {
-    is_num <- sapply(df[[i]], check_num_na, na_as_num = TRUE)
-    if (all(is_num)) {
-      df[i] <- as.numeric(df[[i]])
+  if (try_num) {
+    message("Converting to numeric if possible")
+    col_to_num <- colnames(df)[!colnames(df) %in% c(cols_need, cols_to_use)]
+    for (i in col_to_num) {
+      is_num <- sapply(df[[i]], check_num_na, na_as_num = TRUE)
+      if (all(is_num)) {
+        df[i] <- as.numeric(df[[i]])
     }
+  }
   }
   list(norm = df, errors = errors)
 }
