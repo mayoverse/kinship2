@@ -3,6 +3,8 @@ usethis::use_package("ggplot2")
 usethis::use_package("utils")
 usethis::use_package("grDevices")
 usethis::use_package("stats")
+usethis::use_package("gridGraphics")
+usethis::use_package("grid")
 
 #' Plot pedigrees
 #'
@@ -120,7 +122,7 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
                           ggplot_gen = FALSE,
                           cex = 1, symbolsize = 1, branch = 0.6,
                           packed = TRUE, align = c(1.5, 2), width = 6,
-                          psize = par("pin"),
+                          psize = par("pin"), title = NULL,
                           density = c(-1, 35, 65, 20), mar = c(4.1, 1, 4.1, 1),
                           angle = c(90, 65, 40, 0), keep_par = FALSE,
                           subregion, pconnect = .5, ...) {
@@ -146,7 +148,6 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
   }
   if (!missing(id)) {
     if (length(id) != n) {
-      print(length(id))
       stop("Wrong length for id")
     }
   }
@@ -452,10 +453,10 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
         tips <- tips[][c(!is.na(tips))]
         tips <- paste(colnames(tips), ":", tips, collapse = "<br>")
 
-        p_plot <- p_plot + ggplot2::geom_text(ggplot2::aes(
+        p_plot <- p_plot + suppressWarnings(ggplot2::geom_text(ggplot2::aes(
           x = midx, y = midy, label = plabel,
           text = tips, color = col_text
-        ))
+        )))
       }
     }
     if (status == 1) {
@@ -493,6 +494,12 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
 
   ## Doc: symbols
   sex <- as.numeric(ped$sex)
+
+  ## Add title if exists
+  if (!is.null(title)) {
+    title(title)
+    p <- p + ggplot2::ggtitle(title)
+  }
 
   message("Drawing the individuals", appendLF = TRUE)
   prog_bar <- utils::txtProgressBar(0, maxlev, char = "|", width = 50, style = 3)
@@ -751,16 +758,23 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
     par(oldpar)
   }
 
+  ## Register the plot
+  grab_grob <- function() {
+    gridGraphics::grid.echo()
+    grid::grid.grab()
+  }
+  rplot <- grab_grob()
+
   tmp <- match(seq_len(length(df$id)), plist$nid)
   if (ggplot_gen) {
     invisible(list(
       plist = plist, x = plist$pos[tmp], y = row(plist$pos)[tmp],
-      boxw = boxw, boxh = boxh, call = call, ggplot = p, plot = grDevices::recordPlot()
+      boxw = boxw, boxh = boxh, call = call, ggplot = p, plot = rplot
     ))
   } else {
     invisible(list(
       plist = plist, x = plist$pos[tmp], y = row(plist$pos)[tmp],
-      boxw = boxw, boxh = boxh, call = call, plot = grDevices::recordPlot()
+      boxw = boxw, boxh = boxh, call = call, plot = rplot
     ))
   }
 }
