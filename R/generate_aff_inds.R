@@ -81,5 +81,6 @@ generate_aff_inds <- function(df, col_aff,
 
   df$affected <- as.factor(df$affected)
   df$mods_aff <- plyr::revalue(df$affected, levels_to_use)
+  df$affected <- as.numeric(df$affected)
   df
 }
