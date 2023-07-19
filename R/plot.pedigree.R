@@ -5,6 +5,7 @@ usethis::use_package("grDevices")
 usethis::use_package("stats")
 usethis::use_package("gridGraphics")
 usethis::use_package("grid")
+usethis::use_package("ggpattern")
 
 #' Plot pedigrees
 #'
@@ -118,7 +119,7 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
                           affected = df$affected, avail = df$avail + 1,
                           mark = NA, label = NA,
                           tips_names = NA,
-                          fill = "white", border = "black",
+                          fill = "grey", border = "black",
                           ggplot_gen = FALSE,
                           cex = 1, symbolsize = 1, branch = 0.6,
                           packed = TRUE, align = c(1.5, 2), width = 6,
@@ -434,7 +435,7 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
       midy <- y + mean(range(polylist[[sex]][[i]]$y * boxh))
       polygon(x + (polylist[[sex]])[[i]]$x * boxw,
         y + (polylist[[sex]])[[i]]$y * boxh,
-        col = fill, border = border
+        col = fill, border = border, density = density[i], angle = angle[i]
       )
 
       col_text <- "black"
@@ -445,13 +446,19 @@ plot.pedigree <- function(df, id = df$id, status = df$status,
 
       if (ggplot_gen) {
         p_plot <- p_plot + ggplot2::geom_polygon(ggplot2::aes(
-          x = x + (polylist[[sex]])[[i]]$x * boxw,
-          y = y + (polylist[[sex]])[[i]]$y * boxh, fill = fill,
-          color = border
-        ))
-        tips <- data_tooltips[data_tooltips$id == id, tips_names]
-        tips <- tips[][c(!is.na(tips))]
-        tips <- paste(colnames(tips), ":", tips, collapse = "<br>")
+          x = x + (polylist[[sex]])[[!!i]]$x * boxw,
+          y = y + (polylist[[sex]])[[!!i]]$y * boxh),
+          fill = fill, color = border)
+          # To add pattern stripes use ggpattern::geom_polygon_pattern
+          # pattern_density = density[i], pattern_angle = angle[i]))
+
+        if (!is.na(tips_names)) {
+          tips <- data_tooltips[data_tooltips$id == id, tips_names]
+          tips <- tips[][c(!is.na(tips))]
+          tips <- paste(colnames(tips), ":", tips, collapse = "<br>")
+        } else {
+          tips <- NA
+        }
 
         p_plot <- p_plot + suppressWarnings(ggplot2::geom_text(ggplot2::aes(
           x = midx, y = midy, label = plabel,
