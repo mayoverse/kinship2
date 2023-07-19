@@ -15,7 +15,7 @@ usethis::use_package("shiny")
 
 #### Function to plot pedigree #### ----------
 ped_plot <- function(df, cex_plot = 1, mar = rep(0.5, 4), psize = par("pin"),
-  tips_names = NULL, to_plotly = FALSE, mark = df$affected, fill = df$fill,
+  tips_names = NA, to_plotly = FALSE, mark = df$affected, fill = df$fill,
   border = df$border, label = NA, title = NULL) {
   ped_plot <- plot.pedigree(
     df, symbolsize = 1, cex = cex_plot,
