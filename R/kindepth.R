@@ -13,8 +13,8 @@
 #' `extra=TRUE` may not exist.
 #'
 #' @param id Identification code for each individual
-#' @param dad_id Id code for the father
-#' @param mom_id Id code for the mother
+#' @param dadid Id code for the father
+#' @param momid Id code for the mother
 #' @param align If `align=T`, go one step further and try to make both parents
 #' of each child have the same depth.  (This is not always possible).
 #' It helps the drawing program by lining up pedigrees that "join in the middle"
@@ -26,7 +26,7 @@
 #' @seealso `plot.pedigree`
 #' @keywords genetics
 #' @export kindepth
-kindepth <- function(id, dad_id, mom_id, align = FALSE) {
+kindepth <- function(id, dadid, momid, align = FALSE) {
   print("Bal: kindepth")
   if ("pedigree" %in% class(id) || "pedigreeList" %in% class(id)) {
     didx <- id$findex
@@ -34,14 +34,14 @@ kindepth <- function(id, dad_id, mom_id, align = FALSE) {
     n <- length(didx)
   } else {
     n <- length(id)
-    if (missing(dad_id) || length(dad_id) != n) {
+    if (missing(dadid) || length(dadid) != n) {
       stop("Invalid father id")
     }
-    if (missing(mom_id) || length(mom_id) != n) {
+    if (missing(momid) || length(momid) != n) {
       stop("Invalid mother id")
     }
-    midx <- match(mom_id, id, nomatch = 0) # row number of my mom
-    didx <- match(dad_id, id, nomatch = 0) # row number of my dad
+    midx <- match(momid, id, nomatch = 0) # row number of my mom
+    didx <- match(dadid, id, nomatch = 0) # row number of my dad
   }
   if (n == 1) {
     return(0)
