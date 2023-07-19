@@ -40,9 +40,10 @@ shiny::shinyServer(function(input, output, session) {
                 data.table::setnames(df_rename,
                     old = as.vector(unlist(cols_ren)),
                     new = names(cols_ren))
-                ped_df_norm <- print_console(check_data(df_rename), session)
-                if (length(ped_df_norm[[2]]) > 0) {
-                    showNotification(paste(nrow(ped_df_norm[[2]]),
+                ped_df_norm <- print_console(norm_ped(df_rename), session)
+                if (length(ped_df_norm[!is.na(ped_df_norm$error), ]) > 0) {
+                    showNotification(paste(
+                        nrow(ped_df_norm[!is.na(ped_df_norm$error), ]),
                         "errors as occured.",
                         "All individuals with errors wil be discarded"))
                 }
@@ -61,9 +62,10 @@ shiny::shinyServer(function(input, output, session) {
             data.table::setnames(rel_rename,
                 old = as.vector(unlist(cols_ren)),
                 new = names(cols_ren))
-            rel_df_norm <- print_console(check_rel(rel_rename), session)
-            if (length(ped_df_norm[[2]]) > 0) {
-                showNotification(paste(nrow(ped_df_norm[[2]]),
+            rel_df_norm <- print_console(norm_rel(rel_rename), session)
+            if (length(rel_df_norm[!is.na(rel_df_norm$error)]) > 0) {
+                showNotification(paste(
+                    nrow(rel_df_norm[!is.na(rel_df_norm$error), ]),
                     "errors as occured.",
                     "All individuals with errors wil be discarded"))
             }
@@ -73,13 +75,13 @@ shiny::shinyServer(function(input, output, session) {
 
     ## Errors download -------------------------
     shiny::observeEvent(ped_df_norm(), {
-        data_download_server("ped_errors", 
-            shiny::reactive({ped_df_norm()$errors}),
+        data_download_server("ped_errors",
+            shiny::reactive({ped_df_norm()[!is.na(ped_df_norm()$error), ]}),
             "Pedigree data errors")
     })
     shiny::observeEvent(rel_df_norm(), {
         data_download_server("rel_errors",
-            shiny::reactive({rel_df_norm()$errors}),
+            shiny::reactive({rel_df_norm()[!is.na(rel_df_norm()$error), ]}),
             "Relationship data errors")
     })
 
@@ -87,7 +89,7 @@ shiny::shinyServer(function(input, output, session) {
     # Families table
     families_table <- reactive({
         print("Bal: families_table")
-        ped_df <- ped_df_norm()$norm
+        ped_df <- ped_df_norm()[is.na(ped_df_norm()$error)]
         if (!is.null(ped_df) & !is.null(input$families_var_sel)) {
             get_families_table(ped_df, input$families_var_sel)
         } else {
@@ -97,7 +99,7 @@ shiny::shinyServer(function(input, output, session) {
     # Family selection variable
     output$families_var_selector <- renderUI({
         print("Bal: families_var")
-        dfn <- ped_df_norm()[[1]]
+        dfn <- ped_df_norm()[is.na(ped_df_norm()$error)]
         if (!is.null(dfn)) {
             col_no <- c("id", "dadid", "momid")
             col_all <- colnames(dfn)
@@ -146,7 +148,7 @@ shiny::shinyServer(function(input, output, session) {
         shiny::req(input$family_sel)
         shiny::req(ped_df_norm())
         print("Bal: ped_df_fam")
-        df <- ped_df_norm()$norm
+        df <- ped_df_norm()[is.na(ped_df_norm()$error)]
         if (!is.null(df) & !is.null(input$family_sel) & input$family_sel > 0) {
             df[df$family == input$family_sel, ]
         } else {
@@ -211,9 +213,10 @@ shiny::shinyServer(function(input, output, session) {
         }
     })
     output$health_aff_selector <- renderUI({
+        shiny::req(input$health_var_sel)
         if (!is.null(input$health_var_sel)) {
             health_df <- ped_df_fam()
-            health_df <- health_df[,input$health_var_sel]
+            health_df <- health_df[, input$health_var_sel]
             if (length(health_df) != 0) {
                 if (is.numeric(health_df)) {
                     min_h <- min(health_df, na.rm = TRUE)
@@ -363,19 +366,25 @@ shiny::shinyServer(function(input, output, session) {
         inf_inds <- inf_inds_selected()
 
         if (!is.null(df) & !any(is.na(inf_inds))) {
-            df_from_inf <- select_from_inf(df,
-                inf_inds = inf_inds, kin_max = input$kin_max)
-            df_from_inf <- num_child(df_from_inf,
-                    relation = rel_df_norm()$norm)
-            if (input$trim_ped) {
-                df_from_inf$useful <- useful_inds(df_from_inf, inf_inds,
-                    input$keep_infos)
-                df_from_inf <- fixParents.data.frame(df_from_inf,
-                    delete = FALSE, filter = "useful")
-                df_from_inf <- fixParents.data.frame(df = df_from_inf,
-                    delete = TRUE)
-            }
-            df_from_inf
+            tryCatch({
+                df_from_inf <- select_from_inf(df,
+                    inf_inds = inf_inds, kin_max = input$kin_max)
+                df_from_inf <- num_child(df_from_inf,
+                        relation = rel_df_norm()$norm)
+                if (input$trim_ped) {
+                    df_from_inf$useful <- useful_inds(df_from_inf, inf_inds,
+                        input$keep_infos)
+                    df_from_inf <- fixParents.data.frame(df_from_inf,
+                        delete = FALSE, filter = "useful")
+                    df_from_inf <- fixParents.data.frame(df = df_from_inf,
+                        delete = TRUE)
+                }
+                df_from_inf
+            },
+            error = function(e) {
+                message(paste("Error in ped_df_inf", e))
+                NULL
+            })
         } else {
             NULL
         }
@@ -456,7 +465,7 @@ shiny::shinyServer(function(input, output, session) {
         filename = get_title_app(short = TRUE), label = "Subfamily data",
         helper = FALSE)
 
-    shiny::observeEvent(ped_gens(),{
+    shiny::observeEvent(ped_gens(), {
         plot_download_server(
             "plot_ped_dwnl", plotped_obj,
             filename = get_title_app(short = TRUE), label = "Subfamily plot",
