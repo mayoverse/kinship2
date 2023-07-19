@@ -14,6 +14,11 @@ source("utils.R")
 
 runApp()
 
+df <- read.csv("C:/Users/llenezet/Documents/EnCours/pedigreecreation/PedigreeApp/data/TestPedigree2.csv", sep = ";")
+summary(df)
+
+norm_ped(df)
+
 data(sample.ped)
 df <- sample.ped
 df$avail
@@ -21,7 +26,7 @@ df[, c("indId", "fatherId", "motherId",
     "gender", "available")] <- df[, c("id", "father", "mother",
         "sex", "avail")]
 df$available
-df <- norm_data(df)[[1]]
+df <- norm_ped(df)[[1]]
 df$avail
 summary(df)
 df$aff <- df$avail
@@ -29,8 +34,11 @@ df[1:4, "gender"] <- NA
 df[10:13, "avail"] <- NA
 fam_df <- generate_aff_inds(df, "gender", threshold = 1.5, sup_thres_aff = TRUE)
 
-ped <- with(fam_df, pedigree(id, dadid, momid, sex, affected))
-legendPlot(ped, affected.label = "Affected")
+fam_df
+
+ped <- with(fam_df, pedigree(id, dadid, momid, sex, fam_df[affected]))
+ped$affected
+legendPlot(ped, affected.label = "gender")
 ncol(ped$affected)
 ped$affected
 data(testped1)
@@ -40,7 +48,7 @@ cols_ren <- c("indId" = "id", "fatherId" = "father",
 data.table::setnames(testped1,
                     old = as.vector(unlist(cols_ren)),
                     new = names(cols_ren))
-df <- check_data(testped1)
+df <- check_ped(testped1)
 df <- generate_aff_inds(df$norm,
     col_aff = "sex",
     mods_aff = "male")
@@ -60,33 +68,23 @@ plot_ped <- ped_plot(df, cex_plot = 0.5, mar = c(0.5, 0.5, 0.5, 0.5),
 
 data(minnbreast)
 df <- minnbreast
-summary(df)
 df[, c("indId", "fatherId", "motherId",
     "gender")] <- df[, c("id", "fatherid", "motherid",
         "sex")]
-df <- check_data(df)
+df$bcp <- as.numeric(df$bcpc)
+df <- check_ped(df)
 df <- generate_aff_inds(df$norm,
     col_aff = "cancer", threshold = 0, sup_thres_aff = TRUE)
 df <- generate_colors(df, "affected")$df
 df <- select_from_inf(df, c(1, 2), 3)
 df <- df[df$family == 1, ]
-ped <- with(df, pedigree(id, dadid, momid, sex, affected))
+
+summary(df)
+summary(df$affected)
+ped <- pedigree(df$id, df$dadid, df$momid, df$sex, as.matrix(df[c("affected", "bcpc")]))
 nb_ind_gen <- align.pedigree(ped)$n
+a <- plot(ped, ggplot_gen=T)
+a$ggplot
 plot_ped <- ped_plot(df, cex_plot = 0.5, mar = c(0.5, 0.5, 0.5, 0.5),
     psize = c(2, length(nb_ind_gen)),
     to_plotly = TRUE, title = "Test it is")
-plot_ped
-plot(ped, title = "Test it is", ggplot_gen = TRUE)
-library(shiny)
-library(DT)
-shinyApp(
-  ui = fluidPage(DTOutput('tbl', height = "100%")),
-  server = function(input, output) {
-    output$tbl = renderDT(
-      iris[1:3,], options = list(lengthChange = TRUE,
-      paging = FALSE, scrollX = TRUE,
-        scrollY = "200px",
-        scrollCollapse = TRUE), selection = 'none'
-    )
-  }
-)
