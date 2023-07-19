@@ -8,7 +8,7 @@ shiny::shinyUI(shiny::fluidPage(
     tags$head(
         tags$style(HTML("hr {border-top: 1px solid #000000;}
                         .navigationBar{background-color:#0001;height:300px}
-                        #console{max-height: 300px;overflow-y:auto;}
+                        #console{max-height: 500px;overflow-y:auto;}
                         #legendToPlot{max-height:150px};")),
         tags$script(
         'Shiny.addCustomMessageHandler("scrollCallback",
