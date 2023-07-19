@@ -102,6 +102,8 @@ usethis::use_package("dplyr")
 #' that will be overwritten.
 #' @param cols_to_use A vector of optional columns that are authorized.
 #' @param others_cols Boolean defining if non defined columns should be allowed.
+#' @param cols_to_use_init Boolean defining if the optional columns should be 
+#' initialised to NA.
 #'
 #' @return Dataframe with only the column allowed and all the column
 #' to be used by the script initialised to NA.
@@ -118,24 +120,35 @@ usethis::use_package("dplyr")
 #' @export check_columns
 check_columns <- function(df,
     cols_needed = NULL, cols_used = NULL, cols_to_use = NULL,
-    others_cols = FALSE) {
+    others_cols = FALSE, cols_used_init = FALSE, cols_to_use_init = FALSE) {
   cols_p <- colnames(df)
   cols_needed_missing <- cols_needed[is.na(match(cols_needed, cols_p))]
   if (length(cols_needed_missing) > 0) {
-    stop(paste("Columns :", cols_needed_missing,
+    stop(paste("Columns :", paste0(cols_needed_missing, collapse = ", "),
       "are missing. Could not continu without.\n"))
   }
-  col_use_by_script <- cols_used[cols_used %in% cols_p]
-  if (length(col_use_by_script) > 0) {
-    warning(paste("Columns :", col_use_by_script,
-      "are used by the script and will disgarded.\n"))
+  cols_use_by_script <- cols_used[cols_used %in% cols_p]
+  if (length(cols_use_by_script) > 0) {
+    warning(paste("Columns :", paste0(cols_use_by_script, collapse = ", "),
+        "are used by the script and will disgarded.\n"))
     df <- df %>%
-      dplyr::select(-dplyr::one_of(col_use_by_script))
+      dplyr::select(-dplyr::one_of(cols_use_by_script))
+  }
+  if (cols_used_init) {
+    message(paste("Columns :", paste0(cols_used, collapse = ", "),
+      "are used by the script and will be set to NA.\n"))
+    df[cols_used] <- NA
   }
   cols_optional <- cols_to_use[cols_to_use %in% cols_p]
+  cols_optional_abs <- cols_to_use[!cols_to_use %in% cols_p]
   if (length(cols_optional) > 0) {
-    message(paste("Columns :", cols_optional,
+    message(paste("Columns :", paste0(cols_optional, collapse = ", "),
       "where recognize and therefore will be used.\n"))
+  }
+  if (cols_to_use_init & length(cols_optional_abs) > 0) {
+    message(paste("Columns :", paste0(cols_optional_abs, collapse = ", "),
+      "where absent and set to NA.\n"))
+    df[cols_optional_abs] <- NA
   }
 
   if (others_cols) {
@@ -144,7 +157,7 @@ check_columns <- function(df,
     all_cols_checked <- c(cols_needed, cols_optional)
     cols_not_recognize <- cols_p[!cols_p %in% all_cols_checked]
     if (length(cols_not_recognize) > 0) {
-      message(paste("Columns :", cols_not_recognize,
+      message(paste("Columns :", paste0(cols_not_recognize, collapse = ", "),
         "not recognize and therefore will be disregarded.\n"))
     }
   }
