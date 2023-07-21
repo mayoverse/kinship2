@@ -98,7 +98,7 @@ alignped3 <- function(x1, x2, packed, space = 1) {
                 if (!packed) {
                   if (fam2[i, 1] > 0) {
                     if (fam[i, n1] > 0) {
-                      pos[i, n1] <- (x2$pos[i, 1] + pos[i, n1] + slide)/2
+                      pos[i, n1] <- (x2$pos[i, 1] + pos[i, n1] + slide) / 2
                     } else {
                       pos[i, n1] <- x2$pos[i, 1] + slide
                     }

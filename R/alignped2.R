@@ -50,7 +50,8 @@ alignped2 <- function(x, dad, mom, level, horder, packed, spouselist) {
     if (length(x) > 1) {
         mylev <- level[x[1]]
         for (i in 2:length(x)) {
-            rval2 <- alignped1(x[i], dad, mom, level, horder, packed, spouselist)
+            rval2 <- alignped1(x[i], dad, mom, level, horder, packed,
+                spouselist)
             spouselist <- rval2$spouselist
 
             # Deal with the unusual special case:
