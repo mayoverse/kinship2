@@ -5,8 +5,8 @@ library(devtools)
 library(lintr)
 library(formatR)
 
-formatR::tidy_dir(".", width.cutoff = 80, recursive = TRUE, overwrite = TRUE,
-    wrap = FALSE, indent = 4, arrow = TRUE)
+#formatR::tidy_dir(".", width.cutoff = 80, recursive = TRUE, overwrite = TRUE,
+#    wrap = FALSE, indent = 4, arrow = TRUE)
 
 # Linting
 lintr::use_lintr(type = "tidyverse")
@@ -14,7 +14,9 @@ usethis::use_github_action("lint")
 lintr::lint_package()
 
 # Must pass
+build()
 check()
+devtools::build_vignettes()
 build() # Generate less than 5Mb
 BiocCheck::BiocCheckGitClone()
 BiocCheck::BiocCheck('new-package'=TRUE)
