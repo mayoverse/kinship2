@@ -1,0 +1,74 @@
+---
+title: "Kinship2 pedigree examples"
+author: "Louis Le Nézet"
+date: "21/07/2023"
+url: "https://github.com/LouisLeNezet/kinship2"
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_depth: 2
+header-includes: \usepackage{tabularx}
+vignette: |
+  %\VignetteIndexEntry{Pedigree_Examples}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+ 
+```{r echo = FALSE}
+options(width = 100)
+```
+
+Introduction
+===============
+
+This document is a brief tutorial for the `kinship2 package`, with examples of creating pedigree objects and kinship matrices
+and other pedigree utilities.
+The `kinship2 package` contains the outines to handle family data with a pedigree object.
+The initial purpose was to create correlation structures that describe family relationships such as kinship and identity-by-descent,
+which can be used to model family data in mixed effects models, such as in the coxme function.
+It also includes tools for pedigree drawing and filterinf which is focused on producing compact layouts without intervention.
+Recent additions include utilities to trim the pedigree object with various criteria, and kinship for the X chromosome.
+
+Installation
+===============
+The `kinship2 package` is available on Bioconductor and can be installed with the following command:
+
+```{r}
+if (!requireNamespace("BiocManager", quietly = TRUE)) {
+    install.packages("BiocManager") }
+BiocManager::install("kinship2")
+```
+
+The package can then be loaded with the following command:
+
+```{r}
+library(kinship2)
+```
+
+Table of Contents
+=================
+
+- [Introduction](#introduction)
+- [Installation](#installation)
+- [Table of Contents](#table-of-contents)
+- [The pedigree object](#the-pedigree-object)
+- [Session information](#session-information)
+
+The pedigree object
+===================
+
+The pedigree object is a list of dataframes that describe the family structure.
+It contains the following components:
+
+- ped: a dataframe with the pedigree information
+- rel: a dataframe with the relationship information
+- scale: a dataframe with the affection information for the plot
+- hints: a dataframe with the hints to draw the pedigree
+
+Session information
+===================
+
+```{r}
+sessionInfo()
+```
