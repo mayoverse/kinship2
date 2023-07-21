@@ -1,3 +1,8 @@
+fixParents <- function(ped_df) {
+    UseMethod("fixParents")
+}
+
+
 #' Fix details on the parents for children of the pedigree
 #'
 #' @description
@@ -49,7 +54,7 @@
 #' @author Jason Sinnwell
 #' @seealso \code{\link{pedigree}}
 #' @export fixParents
-fixParents <- function(id, dadid, momid, sex, missid = 0, ...) {
+fixParents.default <- function(id, dadid, momid, sex, missid = 0, ...) {
   ## fix sex of parents
   ## add parents that are missing
   n <- length(id)
@@ -193,10 +198,10 @@ fixParents <- function(id, dadid, momid, sex, missid = 0, ...) {
 #'
 #' @export
 fixParents.data.frame <- function(df = df, delete = FALSE, filter = NULL,
-  missid = "0", id = "id", avail = "avail",
+  missid = "0", id = "id",
   dadid = "dadid", momid = "momid", sex = "sex", ...) {
   print("Bal: fixParents.data.frame")
-  cols_needed <- c(id, dadid, momid, sex, avail, filter)
+  cols_needed <- c(id, dadid, momid, sex, filter)
   df <- check_columns(df, cols_needed, "", "", others_cols = TRUE)
   df_old <- df
   if (!is.null(filter)) {
@@ -220,7 +225,7 @@ fixParents.data.frame <- function(df = df, delete = FALSE, filter = NULL,
       all_id_dif <- all_id[!all_id %in% all_id_new]
       message(paste(length(all_id_dif), "individuals deleted"))
     }
-    df_fix <- fixParents(df[[id]], df[[dadid]], df[[momid]],
+    df_fix <- fixParents.default(df[[id]], df[[dadid]], df[[momid]],
       df[[sex]], missid = missid, ...)
     col_used <- which(
       names(df_old) == momid |
