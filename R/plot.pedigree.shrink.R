@@ -17,7 +17,7 @@
 #' @param title Optional plot title
 #' @param location The position argument for the legend command, which allows
 #' coordinates (numerical vector in the form x, y) or, more conveniently,
-#' options such as "topright", "right", "left", "bottomleft", etc., which
+#' options such as 'topright', 'right', 'left', 'bottomleft', etc., which
 #' is useful for pedigrees that cover most of the plot region.
 #' @param ...  Optional arguments to plot method
 #'
@@ -39,37 +39,35 @@
 #'
 #' plot(ped2)
 #'
-#' plot.pedigree.shrink(shrink2, title = "Sample Pedigree 2")
+#' plot.pedigree.shrink(shrink2, title = 'Sample Pedigree 2')
 #'
 #' @export plot.pedigree.shrink
 plot.pedigree.shrink <- function(x, bigped = FALSE, title = "",
-  location = "topright", ...) {
-  ##  Plot pedigrees, coloring subjects according
-  ##   to availability, shaded by affected status used in shrink
+    location = "topright", ...) {
+    ## Plot pedigrees, coloring subjects according to availability, shaded by
+    ## affected status used in shrink
 
-  if (bigped == FALSE) {
-    tmp <- plot(x$pedObj, avail = x$avail + 1, keep_par = TRUE)
-  } else {
-    tmp <- plot.pedigree(x$pedObj,
-      align = FALSE, packed = FALSE,
-      avail = x$avail + 1, cex = 0.5, symbolsize = 0.5, keep_par = TRUE
-    )
-  }
+    if (bigped == FALSE) {
+        tmp <- plot(x$pedObj, avail = x$avail + 1, keep_par = TRUE)
+    } else {
+        tmp <- plot.pedigree(x$pedObj, align = FALSE, packed = FALSE,
+            avail = x$avail + 1, cex = 0.5, symbolsize = 0.5, keep_par = TRUE)
+    }
 
-  if (is.character(location)) {
-    ylegend <- NULL
-    xlegend <- location
-  } else if (is.numeric(location) && length(location) == 2) {
-    xlegend <- location[1]
-    ylegend <- location[2]
-  } else {
-    stop("Invalid location format: either string or numerical vetor of 2")
-  }
+    if (is.character(location)) {
+        ylegend <- NULL
+        xlegend <- location
+    } else if (is.numeric(location) && length(location) == 2) {
+        xlegend <- location[1]
+        ylegend <- location[2]
+    } else {
+        stop("Invalid location format: either string or numerical vetor of 2")
+    }
 
-  legend(
-    x = xlegend, y = ylegend, legend = c("DNA Available", "UnAvailable"),
-    pch = c(1, 1), col = c(2, 1), bty = "n", cex = .5
-  )
-  title(paste(title, "\nbits = ", x$bitSize[length(x$bitSize)]), cex.main = .9)
-  invisible(tmp)
+    legend(x = xlegend, y = ylegend, legend = c("DNA Available", "UnAvailable"),
+        pch = c(1, 1), col = c(2, 1), bty = "n", cex = 0.5)
+    title(paste(title, "\nbits = ", x$bitSize[length(x$bitSize)]),
+        cex.main = 0.9)
+    invisible(tmp)
 }
+TRUE

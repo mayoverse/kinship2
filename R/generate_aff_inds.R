@@ -21,66 +21,56 @@ usethis::use_package("plyr")
 #' @return The dataframe with the `affected` column processed accordingly
 #'
 #' @export generate_aff_inds
-generate_aff_inds <- function(df, col_aff,
-    mods_aff = NULL, threshold = NULL, sup_thres_aff = NULL) {
+generate_aff_inds <- function(df, col_aff, mods_aff = NULL,
+    threshold = NULL, sup_thres_aff = NULL) {
 
-  cols_needed <- col_aff
-  cols_to_use <- c("affected")
-  cols_used <- c("mods_aff")
+    cols_needed <- col_aff
+    cols_to_use <- c("affected")
+    cols_used <- c("mods_aff")
 
-  df <- check_columns(df, cols_needed, cols_used,
-    cols_to_use, others_cols = TRUE)
-  data_aff <- df[[col_aff]]
-  if (is.numeric(data_aff)) {
-    if (is.null(threshold) || is.na(threshold)) {
-      stop("Variable is numeric but threshold not correctly defined")
+    df <- check_columns(df, cols_needed, cols_used, cols_to_use,
+        others_cols = TRUE)
+    data_aff <- df[[col_aff]]
+    if (is.numeric(data_aff)) {
+        if (is.null(threshold) || is.na(threshold)) {
+            stop("Variable is numeric but threshold not correctly defined")
+        }
+        if (is.na(sup_thres_aff) || is.null(sup_thres_aff)) {
+            stop("Variable is numeric but sup_thres_aff not a boolean")
+        }
+        if (sup_thres_aff) {
+            # Aff are > to threshold
+            levels_to_use <- c(`1` = paste("Affected > to", threshold),
+                `0` = paste("Healthy <= to", threshold))
+            df$affected[data_aff <= threshold & !is.na(data_aff)] <- 0
+            df$affected[data_aff > threshold & !is.na(data_aff)] <- 1
+        } else {
+            # Aff are < to threshold
+            levels_to_use <- c(`1` = paste("Affected < to", threshold),
+                `0` = paste("Healthy >= to", threshold))
+            df$affected[data_aff >= threshold & !is.na(data_aff)] <- 0
+            df$affected[data_aff < threshold & !is.na(data_aff)] <- 1
+        }
+    } else {
+        # Separate for factors by levels
+        mods_non_aff <- levels(droplevels(as.factor(
+            data_aff[!data_aff %in% mods_aff])))
+        if (length(mods_non_aff) == 0) {
+            mods_non_aff <- "None"
+        }
+        if (length(mods_aff) == 0) {
+            mods_aff <- "None"
+        }
+        levels_to_use <- c(
+            `0` = paste("Healthy are", paste(mods_non_aff, collapse = "/")),
+            `1` = paste("Affected are", paste(mods_aff, collapse = "/")))
+        df$affected[!is.na(data_aff)] <- 0
+        df$affected[data_aff %in% mods_aff & !is.na(data_aff)] <- 1
     }
-    if (is.na(sup_thres_aff) || is.null(sup_thres_aff)) {
-      stop("Variable is numeric but sup_thres_aff not a boolean")
-    }
-    if (sup_thres_aff) { # Aff are > to threshold
-      levels_to_use <- c(
-        "1" = paste("Affected > to", threshold),
-        "0" = paste("Healthy <= to", threshold)
-        )
-      df$affected[data_aff <= threshold &
-        !is.na(data_aff)] <- 0
-      df$affected[data_aff > threshold &
-        !is.na(data_aff)] <- 1
-    } else { # Aff are < to threshold
-      levels_to_use <- c(
-        "1" = paste("Affected < to", threshold),
-        "0" = paste("Healthy >= to", threshold)
-        )
-      df$affected[data_aff >= threshold &
-        !is.na(data_aff)] <- 0
-      df$affected[data_aff < threshold &
-        !is.na(data_aff)] <- 1
-    }
-  } else {
-    # Separate for factors by levels
-    mods_non_aff <- levels(
-        droplevels(
-          as.factor(data_aff[!data_aff %in% mods_aff])
-          )
-        )
-    if (length(mods_non_aff) == 0) {
-      mods_non_aff <- "None"
-    }
-    if (length(mods_aff) == 0) {
-      mods_aff <- "None"
-    }
-    levels_to_use <- c(
-      "0" = paste("Healthy are", paste(mods_non_aff, collapse = "/")),
-      "1" = paste("Affected are", paste(mods_aff, collapse = "/"))
-    )
-    df$affected[!is.na(data_aff)] <- 0
-    df$affected[data_aff %in% mods_aff &
-      !is.na(data_aff)] <- 1
-  }
 
-  df$affected <- as.factor(df$affected)
-  df$mods_aff <- plyr::revalue(df$affected, levels_to_use)
-  df$affected <- as.numeric(df$affected)
-  df
+    df$affected <- as.factor(df$affected)
+    df$mods_aff <- plyr::revalue(df$affected, levels_to_use)
+    df$affected <- as.numeric(df$affected)
+    df
 }
+TRUE

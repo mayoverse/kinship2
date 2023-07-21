@@ -16,29 +16,28 @@
 #' var1 <- runif(10)
 #' var2 <- runif(10)
 #' df <- data.frame(var1, var2)
-#' df_cont_table(df, "var1", 0.5, "var2", c(0.25, 0.5, 0.75))
-#' df_cont_table(df, "var1", 0.5)
+#' df_cont_table(df, 'var1', 0.5, 'var2', c(0.25, 0.5, 0.75))
+#' df_cont_table(df, 'var1', 0.5)
 #'
 #' @export df_cont_table
-df_cont_table <- function(df,
-    var1, threshold1 = NULL,
-    var2 = NULL, threshold2 = NULL) {
-  if (! var1 %in% colnames(df)) {
-    stop(paste0(var1, "is not present in the dataframe", collapse = " "))
-  }
-  if (! var2 %in% colnames(df) && !is.null(var2)) {
-    stop(paste0(var2, "is not present in the dataframe", collapse = " "))
-  }
-  var1_fact <- var_to_factor(df[[var1]], threshold = threshold1)
-  if (is.null(var2)) {
-    cont_table <- as.data.frame(table(var1_fact))
-    colnames(cont_table) <- c(var1, "Freq")
-  } else {
-    var2_fact <- var_to_factor(df[[var2]], threshold = threshold2)
-    cont_table <- as.data.frame(table(var1_fact, var2_fact))
-    colnames(cont_table) <- c(var1, var2, "Freq")
-  }
-  cont_table
+df_cont_table <- function(df, var1, threshold1 = NULL, var2 = NULL,
+    threshold2 = NULL) {
+    if (!var1 %in% colnames(df)) {
+        stop(paste0(var1, "is not present in the dataframe", collapse = " "))
+    }
+    if (!var2 %in% colnames(df) && !is.null(var2)) {
+        stop(paste0(var2, "is not present in the dataframe", collapse = " "))
+    }
+    var1_fact <- var_to_factor(df[[var1]], threshold = threshold1)
+    if (is.null(var2)) {
+        cont_table <- as.data.frame(table(var1_fact))
+        colnames(cont_table) <- c(var1, "Freq")
+    } else {
+        var2_fact <- var_to_factor(df[[var2]], threshold = threshold2)
+        cont_table <- as.data.frame(table(var1_fact, var2_fact))
+        colnames(cont_table) <- c(var1, var2, "Freq")
+    }
+    cont_table
 }
 
 #' Variable to factor
@@ -60,25 +59,22 @@ df_cont_table <- function(df,
 #'
 #' @export var_to_factor
 var_to_factor <- function(var, threshold = NULL) {
-  if (!is.numeric(var)) {
-    var_fact <- addNA(droplevels(as.factor(var)), ifany = TRUE)
-  } else {
-    if (is.null(threshold)) {
-      stop("No threshold given")
+    if (!is.numeric(var)) {
+        var_fact <- addNA(droplevels(as.factor(var)), ifany = TRUE)
+    } else {
+        if (is.null(threshold)) {
+            stop("No threshold given")
+        }
+        labels <- NULL
+        if (length(threshold) == 1) {
+            labels <- c(paste("Inf to", threshold), paste("Sup to", threshold))
+        }
+        var_fact <- cut(var, c(min(var, na.rm = TRUE),
+            threshold, max(var, na.rm = TRUE)),
+            label = labels, include.lowest = TRUE)
+        var_fact <- addNA(var_fact, ifany = TRUE)
     }
-    labels <- NULL
-    if (length(threshold) == 1) {
-      labels <- c(paste("Inf to", threshold), paste("Sup to", threshold))
-    }
-    var_fact <- cut(
-      var,
-      c(min(var, na.rm = TRUE), threshold, max(var, na.rm = TRUE)),
-      label = labels,
-      include.lowest = TRUE
-    )
-    var_fact <- addNA(var_fact, ifany = TRUE)
-  }
-  var_fact
+    var_fact
 }
 
 usethis::use_package("dplyr")
@@ -111,64 +107,65 @@ usethis::use_package("dplyr")
 #' @examples
 #' data.frame
 #' df <- data.frame(ColN1 = c(1, 2), ColN2 = 4,
-#'          ColU1 = "B", ColU2 = "1",
-#'          ColTU1 = "A", ColTU2 = 3,
+#'          ColU1 = 'B', ColU2 = '1',
+#'          ColTU1 = 'A', ColTU2 = 3,
 #'          ColNR1 = 4, ColNR2 = 5)
-#'check_columns(df, c("ColN1", "ColN2"), c("ColU1", "ColU2"),
-#'   c("ColTU1", "ColTU2"))
+#'check_columns(df, c('ColN1', 'ColN2'), c('ColU1', 'ColU2'),
+#'   c('ColTU1', 'ColTU2'))
 #'
 #' @export check_columns
 check_columns <- function(df,
     cols_needed = NULL, cols_used = NULL, cols_to_use = NULL,
     others_cols = FALSE, cols_used_init = FALSE, cols_to_use_init = FALSE) {
-  cols_p <- colnames(df)
-  cols_needed_missing <- cols_needed[is.na(match(cols_needed, cols_p))]
-  if (length(cols_needed_missing) > 0) {
-    stop(paste("Columns :", paste0(cols_needed_missing, collapse = ", "),
-      "are missing. Could not continu without.\n"))
-  }
-  cols_use_by_script <- cols_used[cols_used %in% cols_p]
-  if (length(cols_use_by_script) > 0) {
-    warning(paste("Columns :", paste0(cols_use_by_script, collapse = ", "),
-        "are used by the script and will disgarded.\n"))
-    df <- df %>%
-      dplyr::select(-dplyr::one_of(cols_use_by_script))
-  }
-  if (cols_used_init) {
-    message(paste("Columns :", paste0(cols_used, collapse = ", "),
-      "are used by the script and will be set to NA.\n"))
-    df[cols_used] <- NA
-  }
-  cols_optional <- cols_to_use[cols_to_use %in% cols_p]
-  cols_optional_abs <- cols_to_use[!cols_to_use %in% cols_p]
-  if (length(cols_optional) > 0) {
-    message(paste("Columns :", paste0(cols_optional, collapse = ", "),
-      "where recognize and therefore will be used.\n"))
-  }
-  if (cols_to_use_init & length(cols_optional_abs) > 0) {
-    message(paste("Columns :", paste0(cols_optional_abs, collapse = ", "),
-      "where absent and set to NA.\n"))
-    df[cols_optional_abs] <- NA
-  }
+    cols_p <- colnames(df)
+    cols_needed_missing <- cols_needed[is.na(match(cols_needed, cols_p))]
+    if (length(cols_needed_missing) > 0) {
+        stop(paste("Columns :", paste0(cols_needed_missing, collapse = ", "),
+            "are missing. Could not continu without.\n"))
+    }
+    cols_use_by_script <- cols_used[cols_used %in% cols_p]
+    if (length(cols_use_by_script) > 0) {
+        warning(paste("Columns :", paste0(cols_use_by_script, collapse = ", "),
+            "are used by the script and will disgarded.\n"))
+        df <- df %>%
+            dplyr::select(-dplyr::one_of(cols_use_by_script))
+    }
+    if (cols_used_init) {
+        message(paste("Columns :", paste0(cols_used, collapse = ", "),
+            "are used by the script and will be set to NA.\n"))
+        df[cols_used] <- NA
+    }
+    cols_optional <- cols_to_use[cols_to_use %in% cols_p]
+    cols_optional_abs <- cols_to_use[!cols_to_use %in% cols_p]
+    if (length(cols_optional) > 0) {
+        message(paste("Columns :", paste0(cols_optional, collapse = ", "),
+            "where recognize and therefore will be used.\n"))
+    }
+    if (cols_to_use_init & length(cols_optional_abs) > 0) {
+        message(paste("Columns :", paste0(cols_optional_abs, collapse = ", "),
+            "where absent and set to NA.\n"))
+        df[cols_optional_abs] <- NA
+    }
 
-  if (others_cols) {
-    all_cols_checked <- colnames(df)
-  } else {
-    if (!cols_to_use_init) {
-      cols_to_use <- cols_optional
+    if (others_cols) {
+        all_cols_checked <- colnames(df)
+    } else {
+        if (!cols_to_use_init) {
+            cols_to_use <- cols_optional
+        }
+        if (!cols_used_init) {
+            cols_used <- NA
+        }
+        all_cols_checked <- c(cols_needed, cols_to_use, cols_used)
+        cols_not_recognize <- cols_p[!cols_p %in% all_cols_checked]
+        if (length(cols_not_recognize) > 0) {
+            message(paste("Columns :",
+                paste0(cols_not_recognize, collapse = ", "),
+                "not recognize and therefore will be disregarded.\n"))
+        }
     }
-    if (!cols_used_init) {
-      cols_used <- NA
-    }
-    all_cols_checked <- c(cols_needed, cols_to_use, cols_used)
-    cols_not_recognize <- cols_p[!cols_p %in% all_cols_checked]
-    if (length(cols_not_recognize) > 0) {
-      message(paste("Columns :", paste0(cols_not_recognize, collapse = ", "),
-        "not recognize and therefore will be disregarded.\n"))
-    }
-  }
 
-  df[all_cols_checked]
+    df[all_cols_checked]
 }
 
 usethis::use_package("stringr")
@@ -186,18 +183,19 @@ usethis::use_package("stringr")
 #' @return A vector of boolean of the same size as `var`
 #'
 #' @examples
-#' var <- c(45, "NA", "Test", "46.2", -2, "-46", "2NA", NA)
+#' var <- c(45, 'NA', 'Test', '46.2', -2, '-46', '2NA', NA)
 #' check_num_na(var)
 #' check_num_na(var, na_as_num = FALSE)
 #'
 #' @export check_num_na
 check_num_na <- function(var, na_as_num = TRUE) {
-  # Should the NA value considered as numeric values
-  is_num <- stringr::str_detect(var, "^\\-*[:digit:]+\\.*[:digit:]*$")
-  is_na <- FALSE
-  if (na_as_num) {
-    is_na <- stringr::str_detect(as.character(var), "^NA$")
-    is_na <- is_na | is.na(var)
-  }
-  is_num | is_na
+    # Should the NA value considered as numeric values
+    is_num <- stringr::str_detect(var, "^\\-*[:digit:]+\\.*[:digit:]*$")
+    is_na <- FALSE
+    if (na_as_num) {
+        is_na <- stringr::str_detect(as.character(var), "^NA$")
+        is_na <- is_na | is.na(var)
+    }
+    is_num | is_na
 }
+TRUE

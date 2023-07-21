@@ -12,8 +12,8 @@ usethis::use_package("Matrix")
 #'
 #' @param famid a vector of family identifiers
 #' @param id a vector of unique subject identifiers
-#' @param father.id for each subject, the identifier of their biolgical father
-#' @param mother.id for each subject, the identifier of thier biological mother
+#' @param dadid for each subject, the identifier of their biolgical father
+#' @param momid for each subject, the identifier of thier biological mother
 #' @param unrelated subjects with this family id are considered to be unrelated
 #' singletons, i.e., not related to each other or to anyone else.
 #'
@@ -37,14 +37,14 @@ usethis::use_package("Matrix")
 #' # 28081 28081
 #'
 #' class(kin1)
-#' # "dsCMatrix"
+#' # 'dsCMatrix'
 #'
 #' # kinship matrix for the females only
-#' femid <- minnbreast$id[minnbreast$sex == "F"]
+#' femid <- minnbreast$id[minnbreast$sex == 'FALSE']
 #' femindex <- !is.na(match(dimnames(kin1)[[1]], femid))
 #' kin2 <- kin1[femindex, femindex]
 #'
-#' # Note that "femindex <- match(femid, dimnames(kin1)[[1]])" is wrong, since
+#' # Note that 'femindex <- match(femid, dimnames(kin1)[[1]])' is wrong, since
 #' #  then kin1[femindex, femindex] might improperly reorder the rows/cols
 #' #  (if families were not contiguous in minnbreast).
 #' # However sort(match(femid, dimnames(kin1)[[1]])) would be okay.
@@ -52,51 +52,59 @@ usethis::use_package("Matrix")
 #' @seealso `kinship`, `makefamid`
 #' @keywords genetics
 #' @export makekinship
-makekinship <- function(famid, id, father.id, mother.id, unrelated = 0) {
-  n <- length(famid)
-  if (length(id) != n) stop("Mismatched lengths: famid and id")
-  if (length(mother.id) != n) stop("Mismatched lengths: famid and mother.id")
-  if (length(father.id) != n) stop("Mismatched lengths: famid and father.id")
-  if (any(is.na(famid))) stop("One or more subjects with missing family id")
-  if (any(is.na(id))) stop("One or more subjects with a missing id")
-  if (is.numeric(famid)) {
-    if (any(famid < 0)) stop("Invalid family id, must be >0")
-  }
-
-  if (any(duplicated(id))) stop("Subject ids must be unique")
-
-  famlist <- sort(unique(famid)) # same order as the counts table
-  idlist <- id # will be overwritten, but this makes it the
-  #  correct data type and length
-  counts <- table(famid)
-  cumcount <- cumsum(counts)
-  if (any(famid == unrelated)) {
-    # Assume that those with famid of 0 are unrelated uniques
-    #   (usually the marry-ins)
-    temp <- match(unrelated, names(counts))
-    nzero <- counts[temp]
-    counts <- counts[-temp]
-    famlist <- famlist[famlist != unrelated]
-    idlist[1:nzero] <- id[famid == unrelated]
-    cumcount <- cumsum(counts) + nzero
-  } else {
-    nzero <- 0
-  }
-
-  mlist <- vector("list", length(counts))
-  for (i in 1:length(counts)) {
-    who <- (famid == famlist[i])
-    if (sum(who) == 1) {
-      mlist[[i]] <- Matrix(0.5)
-    } # family of size 1
-    else {
-      mlist[[i]] <- kinship(id[who], mother.id[who], father.id[who])
+makekinship <- function(famid, id, dadid, momid, unrelated = 0) {
+    n <- length(famid)
+    if (length(id) != n)
+        stop("Mismatched lengths: famid and id")
+    if (length(momid) != n)
+        stop("Mismatched lengths: famid and momid")
+    if (length(dadid) != n)
+        stop("Mismatched lengths: famid and dadid")
+    if (any(is.na(famid)))
+        stop("One or more subjects with missing family id")
+    if (any(is.na(id)))
+        stop("One or more subjects with a missing id")
+    if (is.numeric(famid)) {
+        if (any(famid < 0))
+            stop("Invalid family id, must be >0")
     }
-    idlist[seq(to = cumcount[i], length = counts[i])] <- id[who]
-  }
 
-  if (nzero > 0) mlist <- c(list(Matrix::Diagonal(nzero)), mlist)
-  kmat <- Matrix::forceSymmetric(Matrix::bdiag(mlist))
-  dimnames(kmat) <- list(idlist, idlist)
-  kmat
+    if (any(duplicated(id)))
+        stop("Subject ids must be unique")
+
+    famlist <- sort(unique(famid))  # same order as the counts table
+    idlist <- id  # will be overwritten, but this makes it the
+    # correct data type and length
+    counts <- table(famid)
+    cumcount <- cumsum(counts)
+    if (any(famid == unrelated)) {
+        # Assume that those with famid of 0 are unrelated uniques (usually the
+        # marry-ins)
+        temp <- match(unrelated, names(counts))
+        nzero <- counts[temp]
+        counts <- counts[-temp]
+        famlist <- famlist[famlist != unrelated]
+        idlist[1:nzero] <- id[famid == unrelated]
+        cumcount <- cumsum(counts) + nzero
+    } else {
+        nzero <- 0
+    }
+
+    mlist <- vector("list", length(counts))
+    for (i in seq_along(counts)) {
+        who <- (famid == famlist[i])
+        if (sum(who) == 1) { # family of size 1
+                mlist[[i]] <- Matrix(0.5)
+        } else {
+            mlist[[i]] <- kinship(id[who], momid[who], dadid[who])
+        }
+        idlist[seq(to = cumcount[i], length = counts[i])] <- id[who]
+    }
+
+    if (nzero > 0)
+        mlist <- c(list(Matrix::Diagonal(nzero)), mlist)
+    kmat <- Matrix::forceSymmetric(Matrix::bdiag(mlist))
+    dimnames(kmat) <- list(idlist, idlist)
+    kmat
 }
+TRUE

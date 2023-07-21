@@ -12,42 +12,43 @@
 #'
 #' @param df Dataframe with individuals to select
 #' @param informative Informative individuals selection can take 3 values:
-#' "AvAf" (available and affected),
-#' "AvOrAf" (available or affected),
-#' "Av" (available only),
-#' "Af" (affected only),
-#' "All" (all individuals)
+#' 'AvAf' (available and affected),
+#' 'AvOrAf' (available or affected),
+#' 'Av' (available only),
+#' 'Af' (affected only),
+#' 'All' (all individuals)
 #' or a numeric vector of individuals id
 #' or a boolean
 #'
 #' @export is_informative
 is_informative <- function(df, informative = "AvAf") {
 
-  cols_needed <- c("id", "avail", "affected")
+    cols_needed <- c("id", "avail", "affected")
 
-  df <- check_columns(df, cols_needed, "", "", others_cols = TRUE)
-  # Selection of all informative individuals
-  # depending of the informative parameter
-  if (is.numeric(informative)) {
-    id_inf <- informative
-  } else if (is.logical(informative)) {
-    id_inf <- ifelse(informative, df$id, NA)
-  } else {
-    if (informative == "AvOrAf") {
-      id_inf <- df[(df$avail == 1 & !is.na(df$avail)) |
-        (df$affected == 1 & !is.na(df$affected)), "id"]
-    } else if (informative == "Av") {
-      id_inf <- df[df$avail == 1 & !is.na(df$avail), "id"]
-    } else if (informative == "Af") {
-      id_inf <- df[df$affected == 1 & !is.na(df$affected), "id"]
-    } else if (informative == "AvAf") {
-      id_inf <- df[(df$avail == 1 & !is.na(df$avail)) &
-        (df$affected == 1 & !is.na(df$affected)), "id"]
-    } else if (informative == "All") {
-      id_inf <- df$id
+    df <- check_columns(df, cols_needed, "", "", others_cols = TRUE)
+    # Selection of all informative individuals depending of the informative
+    # parameter
+    if (is.numeric(informative)) {
+        id_inf <- informative
+    } else if (is.logical(informative)) {
+        id_inf <- ifelse(informative, df$id, NA)
     } else {
-      stop("informative parameter not recognized")
+        if (informative == "AvOrAf") {
+            id_inf <- df[(df$avail == 1 & !is.na(df$avail)) |
+                (df$affected == 1 & !is.na(df$affected)), "id"]
+        } else if (informative == "Av") {
+            id_inf <- df[df$avail == 1 & !is.na(df$avail), "id"]
+        } else if (informative == "Af") {
+            id_inf <- df[df$affected == 1 & !is.na(df$affected), "id"]
+        } else if (informative == "AvAf") {
+            id_inf <- df[(df$avail == 1 & !is.na(df$avail)) &
+                (df$affected == 1 & !is.na(df$affected)), "id"]
+        } else if (informative == "All") {
+            id_inf <- df$id
+        } else {
+            stop("informative parameter not recognized")
+        }
     }
-  }
-  unique(id_inf)
+    unique(id_inf)
 }
+TRUE

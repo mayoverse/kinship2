@@ -12,14 +12,14 @@
 #' The `makefamid` function is used to create a de novo family id from the
 #' parentage data, and this is compared to the family id given in the data.
 #'
-#' If there are any joins, then an attribute "join" is attached.
+#' If there are any joins, then an attribute 'join' is attached.
 #' It will be a matrix with famid as row labels, new-family-id as the columns,
 #' and the number of subjects as entries.
 #'
 #' @param famid A vector of family identifiers
 #' @param id A vector of unique subject identifiers
-#' @param father.id Vector containing the id of the biological father
-#' @param mother.id Vector containing the id of the biological mother
+#' @param dadid Vector containing the id of the biological father
+#' @param momid Vector containing the id of the biological mother
 #' @param newfam The result of a call to `makefamid`. If this has already
 #' been computed by the user, adding it as an argument shortens the running
 #' time somewhat.
@@ -35,8 +35,8 @@
 #' anyone else in the entire pedigree set.  This is usually marry-ins with no
 #' children (in the pedigree), and if so are not a problem.
 #' ## split
-#' Number of unique "new" family ids.
-#' 0 = no one in this "family" is related to anyone else (not good)
+#' Number of unique 'new' family ids.
+#' 0 = no one in this 'family' is related to anyone else (not good)
 #' 1 = everythings is fine
 #' 2+= the family appears to be a set of disjoint trees.
 #' Are you missing some of the people?
@@ -57,7 +57,8 @@
 #' fcheck.sep
 #'
 #' ## check assigning them same ped id
-#' fcheck.combined <- with(sample.ped, familycheck(rep(1, nrow(sample.ped)), id, father, mother))
+#' fcheck.combined <- with(sample.ped, familycheck(rep(1, nrow(sample.ped)),
+#' id, father, mother))
 #' fcheck.combined
 #'
 #' # make person 120's father be her son.
@@ -74,45 +75,42 @@
 #' @seealso `makefamid`, `makekinship`
 #' @keywords genetics
 #' @export familycheck
-familycheck <- function(famid, id, father.id, mother.id, newfam) {
-  if (is.numeric(famid) && any(is.na(famid))) {
-    stop("Family id of missing not allowed")
-  }
-  nfam <- length(unique(famid))
+familycheck <- function(famid, id, dadid, momid, newfam) {
+    if (is.numeric(famid) && any(is.na(famid))) {
+        stop("Family id of missing not allowed")
+    }
+    nfam <- length(unique(famid))
 
-  if (missing(newfam)) {
-    newfam <- makefamid(id, father.id, mother.id)
-  } else if (length(newfam) != length(famid)) {
-    stop("Invalid length for newfam")
-  }
+    if (missing(newfam)) {
+        newfam <- makefamid(id, dadid, momid)
+    } else if (length(newfam) != length(famid)) {
+        stop("Invalid length for newfam")
+    }
 
-  xtab <- table(famid, newfam)
-  if (any(newfam == 0)) {
-    unrelated <- xtab[, 1]
-    xtab <- xtab[, -1, drop = FALSE]
-    ## bug fix suggested by Amanda Blackford 6/2011
-  } else {
-    unrelated <- rep(0, nfam)
-  }
+    xtab <- table(famid, newfam)
+    if (any(newfam == 0)) {
+        unrelated <- xtab[, 1]
+        xtab <- xtab[, -1, drop = FALSE]
+        ## bug fix suggested by Amanda Blackford 6/2011
+    } else {
+        unrelated <- rep(0, nfam)
+    }
 
-  splits <- apply(xtab > 0, 1, sum)
-  joins <- apply(xtab > 0, 2, sum)
+    splits <- apply(xtab > 0, 1, sum)
+    joins <- apply(xtab > 0, 2, sum)
 
-  temp <- apply((xtab > 0) * outer(rep(1, nfam), joins - 1), 1, sum)
+    temp <- apply((xtab > 0) * outer(rep(1, nfam), joins - 1), 1, sum)
 
-  out <- data.frame(
-    famid = dimnames(xtab)[[1]],
-    n = as.vector(table(famid)),
-    unrelated = as.vector(unrelated),
-    split = as.vector(splits),
-    join = temp,
-    row.names = 1:nfam
-  )
-  if (any(joins > 1)) {
-    tab1 <- xtab[temp > 0, ] # families with multiple outcomes
-    tab1 <- tab1[, apply(tab1 > 0, 2, sum) > 0] # only keep non-zero columns
-    dimnames(tab1) <- list(dimnames(tab1)[[1]], NULL)
-    attr(out, "join") <- tab1
-  }
-  out
+    out <- data.frame(famid = dimnames(xtab)[[1]],
+        n = as.vector(table(famid)), unrelated = as.vector(unrelated),
+        split = as.vector(splits), join = temp, row.names = 1:nfam)
+    if (any(joins > 1)) {
+        tab1 <- xtab[temp > 0, ]  # families with multiple outcomes
+        # only keep non-zero columns
+        tab1 <- tab1[, apply(tab1 > 0, 2, sum) > 0]
+        dimnames(tab1) <- list(dimnames(tab1)[[1]], NULL)
+        attr(out, "join") <- tab1
+    }
+    out
 }
+TRUE

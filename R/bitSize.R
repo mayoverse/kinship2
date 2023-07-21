@@ -1,5 +1,5 @@
-# Automatically generated from all.nw using noweb
-## renamed from pedBits, part of pedigree.shrink functions
+# Automatically generated from all.nw using noweb renamed from pedBits, part of
+# pedigree.shrink functions
 
 #' Get pedigree bitsize
 #'
@@ -22,24 +22,22 @@
 #' @seealso `pedigree.shrink`
 #' @export bitSize
 bitSize <- function(ped) {
-  ## calculate bit size of a pedigree
+    ## calculate bit size of a pedigree
 
-  if (!("pedigree" %in% class(ped))) {
-    stop("Must be a pegigree object.\n")
-  }
+    if (!("pedigree" %in% class(ped))) {
+        stop("Must be a pegigree object.\n")
+    }
 
-  father <- ped$findex
-  mother <- ped$mindex
-  id <- ped$id
+    father <- ped$findex
+    mother <- ped$mindex
+    id <- ped$id
 
-  founder <- father == 0 & mother == 0
-  pedSize <- length(father)
-  nFounder <- sum(founder)
-  nNonFounder <- pedSize - nFounder
-  bitSize <- 2 * nNonFounder - nFounder
-  return(list(
-    bitSize = bitSize,
-    nFounder = nFounder,
-    nNonFounder = nNonFounder
-  ))
+    founder <- father == 0 & mother == 0
+    pedSize <- length(father)
+    nFounder <- sum(founder)
+    nNonFounder <- pedSize - nFounder
+    bitSize <- 2 * nNonFounder - nFounder
+    return(list(bitSize = bitSize, nFounder = nFounder,
+        nNonFounder = nNonFounder))
 }
+TRUE

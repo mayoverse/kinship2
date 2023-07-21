@@ -1,6 +1,5 @@
-# Automatically generated from all.nw using noweb
-## Authors: Dan Schaid, Shannon McDonnell
-## Updated by Jason Sinnwell
+# Automatically generated from all.nw using noweb Authors: Dan Schaid, Shannon
+# McDonnell Updated by Jason Sinnwell
 
 #' Get unrelated subjects
 #'
@@ -43,11 +42,11 @@
 #'
 #' id1
 #' ## some possible vectors
-#' ## [1] "110" "113" "133" "109"
-#' ## [1] "113" "118" "141" "109"
-#' ## [1] "113" "118" "140" "109"
-#' ## [1] "110" "113" "116" "109"
-#' ## [1] "113" "133" "141" "109"
+#' ## [1] '110' '113' '133' '109'
+#' ## [1] '113' '118' '141' '109'
+#' ## [1] '113' '118' '140' '109'
+#' ## [1] '110' '113' '116' '109'
+#' ## [1] '113' '133' '141' '109'
 #'
 #'
 #' fam2 <- sample.ped[sample.ped$ped == 2, ]
@@ -63,70 +62,66 @@
 #' id2 <- pedigree.unrelated(ped2, avail = fam2$avail)
 #'
 #' ## some possible vectors
-#' ## [1] "203" "207"
-#' ## [1] "203" "204"
-#' ## [1] "201" "203"
-#' ## [1] "214" "203"
+#' ## [1] '203' '207'
+#' ## [1] '203' '204'
+#' ## [1] '201' '203'
+#' ## [1] '214' '203'
 #' id2
 #'
 #' @seealso `kinship`, `pedigree`
 #' @export pedigree.unrelated
 pedigree.unrelated <- function(ped, avail) {
-  # Requires: kinship function
+    # Requires: kinship function
 
-  # Given vectors id, father, and mother for a pedigree structure,
-  # and avail = vector of T/F or 1/0 for whether each subject
-  # (corresponding to id vector) is available (e.g.,
-  # has DNA available), determine set of maximum number
-  # of unrelated available subjects from a pedigree.
+    # Given vectors id, father, and mother for a pedigree structure, and avail
+    # = vector of T/F or 1/0 for whether each subject (corresponding to id
+    # vector) is available (e.g., has DNA available), determine set of maximum
+    # number of unrelated available subjects from a pedigree.
 
-  # This is a greedy algorithm that uses the kinship
-  # matrix, sequentially removing rows/cols that
-  # are non-zero for subjects that have the most
-  # number of zero kinship coefficients (greedy
-  # by choosing a row of kinship matrix that has
-  # the most number of zeros, and then remove any
-  # cols and their corresponding rows that are non-zero.
-  # To account for ties of the count of zeros for rows,
-  # a random choice is made. Hence, running this function
-  # multiple times can return different sets of unrelated
-  # subjects.
+    # This is a greedy algorithm that uses the kinship matrix, sequentially
+    # removing rows/cols that are non-zero for subjects that have the most
+    # number of zero kinship coefficients (greedy by choosing a row of kinship
+    # matrix that has the most number of zeros, and then remove any cols and
+    # their corresponding rows that are non-zero.  To account for ties of the
+    # count of zeros for rows, a random choice is made. Hence, running this
+    # function multiple times can return different sets of unrelated subjects.
 
-  id <- ped$id
-  avail <- as.integer(avail)
+    id <- ped$id
+    avail <- as.integer(avail)
 
-  kin <- kinship(ped)
+    kin <- kinship(ped)
 
-  ord <- order(id)
-  id <- id[ord]
-  avail <- as.logical(avail[ord])
-  kin <- kin[ord, ][, ord]
+    ord <- order(id)
+    id <- id[ord]
+    avail <- as.logical(avail[ord])
+    kin <- kin[ord, ][, ord]
 
-  rord <- order(runif(nrow(kin)))
+    rord <- order(runif(nrow(kin)))
 
-  id <- id[rord]
-  avail <- avail[rord]
-  kin <- kin[rord, ][, rord]
+    id <- id[rord]
+    avail <- avail[rord]
+    kin <- kin[rord, ][, rord]
 
-  id.avail <- id[avail]
-  kin.avail <- kin[avail, , drop = FALSE][, avail, drop = FALSE]
+    idAvail <- id[avail]
+    kinAvail <- kin[avail, , drop = FALSE][, avail, drop = FALSE]
 
-  diag(kin.avail) <- 0
+    diag(kinAvail) <- 0
 
-  while (any(kin.avail > 0)) {
-    nr <- nrow(kin.avail)
-    indx <- 1:nrow(kin.avail)
-    zero.count <- apply(kin.avail == 0, 1, sum)
+    while (any(kinAvail > 0)) {
+        nr <- nrow(kinAvail)
+        indx <- seq_len(nrow(kinAvail))
+        zeroCount <- apply(kinAvail == 0, 1, sum)
 
-    mx <- max(zero.count[zero.count < nr])
-    mx.zero <- indx[zero.count == mx][1]
+        mx <- max(zeroCount[zeroCount < nr])
+        zeroMx <- indx[zeroCount == mx][1]
 
-    exclude <- indx[kin.avail[, mx.zero] > 0]
+        exclude <- indx[kinAvail[, zeroMx] > 0]
 
-    kin.avail <- kin.avail[-exclude, , drop = FALSE][, -exclude, drop = FALSE]
-  }
+        kinAvail <- kinAvail[-exclude, , drop = FALSE][, -exclude, drop = FALSE]
+    }
 
-  choice <- sort(dimnames(kin.avail)[[1]])
+    choice <- sort(dimnames(kinAvail)[[1]])
 
-  return(choice)
+    return(choice)
 }
+TRUE

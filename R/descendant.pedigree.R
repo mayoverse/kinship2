@@ -7,22 +7,23 @@
 #'
 #' @param idlist
 #' @param id
-#' @param dad.id
-#' @param mom.id
+#' @param dadid
+#' @param momid
 #'
 #' @return
 #'
 #' @examples
 #' @keywords
 #' @export descendant.pedigree
-descendant.pedigree <- function(idlist, id, dad.id, mom.id) {
-  child <- id[!(is.na(match(dad.id, idlist)) & is.na(match(mom.id, idlist)))]
-  descend <- NULL
-  while (length(child > 0)) {
-    newchild <- id[!(is.na(match(dad.id, child)) &
-      is.na(match(mom.id, child)))]
-    descend <- unique(c(descend, child))
-    child <- newchild[is.na(match(newchild, c(idlist, descend)))]
-  }
-  descend
+descendant.pedigree <- function(idlist, id, dadid, momid) {
+    child <- id[!(is.na(match(dadid, idlist)) & is.na(match(momid, idlist)))]
+    descend <- NULL
+    while (length(child > 0)) {
+        newchild <- id[!(is.na(match(dadid, child)) &
+            is.na(match(momid, child)))]
+        descend <- unique(c(descend, child))
+        child <- newchild[is.na(match(newchild, c(idlist, descend)))]
+    }
+    descend
 }
+TRUE

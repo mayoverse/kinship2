@@ -1,5 +1,5 @@
-# Automatically generated from all.nw using noweb
-# TODO add params and example and return
+# Automatically generated from all.nw using noweb TODO add params and example
+# and return
 usethis::use_package("quadprog")
 
 #' Fourth routine alignement
@@ -20,9 +20,9 @@ usethis::use_package("quadprog")
 #' The other is a vector of 2 alignment parameters `a` and `b`.
 #' For each set of siblings `x` with parents at `p_1` and `p_2`
 #' the alignment penalty is :
-#' \eqn{(1/k^a)\sum{i=1}{k} (x_i - (p_1 + p_2)^2}
+#' \\eqn{(1/k^a)\\sum{i=1}{k} (x_i - (p_1 + p_2)^2}
 #' where `k` is the number of siblings in the set.
-#' Using the fact that \eqn{\sum(x_i-c)^2 = \sum(x_i-\mu)^2 + k(c-\mu)^2},
+#' Using the fact that \\eqn{\\sum(x_i-c)^2 = \\sum(x_i-\\mu)^2 + k(c-\\mu)^2},
 #' when $a=1$ then moving a sibship with $k$ sibs one unit to the left or
 #' right of optimal will incur the same cost as moving one with only 1 or
 #' two sibs out of place.  If `a=0` then large sibships are harder to move
@@ -32,9 +32,9 @@ usethis::use_package("quadprog")
 #' fairly good, so we are more flexible with the spacing of a large family.
 #' By tethering all the sibs to a single spot they tend are kept close to
 #' each other.
-#' The alignment penalty for spouses is \eqn{b(x_1 - x_2)^2}, which tends to keep
-#' them together. The size of `b` controls the relative importance of sib-parent
-#' and spouse-spouse closeness.
+#' The alignment penalty for spouses is \\eqn{b(x_1 - x_2)^2}, which tends to
+#' keep them together. The size of `b` controls the relative importance of
+#' sib-parent and spouse-spouse closeness.
 #'
 #' 1. We start by adding in these penalties.
 #' The total number of parameters in the alignment problem
@@ -46,9 +46,9 @@ usethis::use_package("quadprog")
 #' `solve.QP` does not like this.
 #' We add a tiny amount of leftward pull to the widest line.
 #' 2. If there are `k` subjects on a line there will
-#' be `k+1` constraints for that line.  The first point must be \eqn{\ge 0}, each
-#' subesquent one must be at least 1 unit to the right, and the final point
-#' must be \eqn{\le} the max width.
+#' be `k+1` constraints for that line.  The first point must be \\eqn{\\ge 0},
+#' each subesquent one must be at least 1 unit to the right, and the final point
+#' must be \\eqn{\\le} the max width.
 #'
 #' @param rval
 #' @param spouse
@@ -67,91 +67,90 @@ usethis::use_package("quadprog")
 #' @keywords dplot
 #' @export alignped4
 alignped4 <- function(rval, spouse, level, width, align) {
-  ## Doc: alignped4 -part1, spacing across page
-  if (is.logical(align)) align <- c(1.5, 2) # defaults
-  maxlev <- nrow(rval$nid)
-  width <- max(width, rval$n + .01) # width must be > the longest row
+    ## Doc: alignped4 -part1, spacing across page
+    if (is.logical(align))
+        align <- c(1.5, 2)  # defaults
+    maxlev <- nrow(rval$nid)
+    width <- max(width, rval$n + 0.01)  # width must be > the longest row
 
-  n <- sum(rval$n) # total number of subjects
-  myid <- matrix(0, maxlev, ncol(rval$nid)) # number the plotting points
-  for (i in 1:maxlev) {
-    myid[i, rval$nid[i, ] > 0] <- cumsum(c(0, rval$n))[i] + 1:rval$n[i]
-  }
-  # There will be one penalty for each spouse and one for each child
-  npenal <- sum(spouse[rval$nid > 0]) + sum(rval$fam > 0)
-  pmat <- matrix(0., nrow = npenal + 1, ncol = n)
-
-  ## Doc: alignped4 -part2
-  indx <- 0
-  # Penalties to keep spouses close
-  for (lev in 1:maxlev) {
-    if (any(spouse[lev, ])) {
-      who <- which(spouse[lev, ])
-      indx <- max(indx) + 1:length(who)
-      pmat[cbind(indx, myid[lev, who])] <- sqrt(align[2])
-      pmat[cbind(indx, myid[lev, who + 1])] <- -sqrt(align[2])
+    n <- sum(rval$n)  # total number of subjects
+    myid <- matrix(0, maxlev, ncol(rval$nid))  # number the plotting points
+    for (i in 1:maxlev) {
+        myid[i, rval$nid[i, ] > 0] <- cumsum(c(0, rval$n))[i] + 1:rval$n[i]
     }
-  }
+    # There will be one penalty for each spouse and one for each child
+    npenal <- sum(spouse[rval$nid > 0]) + sum(rval$fam > 0)
+    pmat <- matrix(0, nrow = npenal + 1, ncol = n)
 
-  # Penalties to keep kids close to parents
-  for (lev in (1:maxlev)[-1]) { # no parents at the top level
-    families <- unique(rval$fam[lev, ])
-    families <- families[families != 0] # 0 is the 'no parent' marker
-    for (i in families) { # might be none
-      who <- which(rval$fam[lev, ] == i)
-      k <- length(who)
-      indx <- max(indx) + 1:k # one penalty per child
-      penalty <- sqrt(k^(-align[1]))
-      pmat[cbind(indx, myid[lev, who])] <- -penalty
-      pmat[cbind(indx, myid[lev - 1, rval$fam[lev, who]])] <- penalty / 2
-      pmat[cbind(indx, myid[lev - 1, rval$fam[lev, who] + 1])] <- penalty / 2
-    }
-  }
-  maxrow <- min(which(rval$n == max(rval$n)))
-  pmat[nrow(pmat), myid[maxrow, 1]] <- 1e-5
-  ncon <- n + maxlev # number of constraints
-  cmat <- matrix(0., nrow = ncon, ncol = n)
-  coff <- 0 # cumulative constraint lines so var
-  dvec <- rep(1., ncon)
-  for (lev in 1:maxlev) {
-    nn <- rval$n[lev]
-    if (nn > 1) {
-      for (i in 1:(nn - 1)) {
-        cmat[coff + i, myid[lev, i + 0:1]] <- c(-1, 1)
-      }
+    ## Doc: alignped4 -part2
+    indx <- 0
+    # Penalties to keep spouses close
+    for (lev in 1:maxlev) {
+        if (any(spouse[lev, ])) {
+            who <- which(spouse[lev, ])
+            indx <- max(indx) + seq_along(who)
+            pmat[cbind(indx, myid[lev, who])] <- sqrt(align[2])
+            pmat[cbind(indx, myid[lev, who + 1])] <- -sqrt(align[2])
+        }
     }
 
-    cmat[coff + nn, myid[lev, 1]] <- 1 # first element >=0
-    dvec[coff + nn] <- 0
-    cmat[coff + nn + 1, myid[lev, nn]] <- -1 # last element <= width-1
-    dvec[coff + nn + 1] <- 1 - width
-    coff <- coff + nn + 1
-  }
-
-  pp <- t(pmat) %*% pmat + 1e-8 * diag(ncol(pmat))
-  fit <- tryCatch(
-    {
-      quadprog::solve.QP(pp, rep(0., n), t(cmat), dvec)
-    },
-    warning = function(w) {
-      message("Solve QP ended with a warning")
-      message(w)
-      return(NA)
-    },
-    error = function(e) {
-      message("Solve QP ended with an error")
-      message(e)
-      return(NA)
+    # Penalties to keep kids close to parents no parents at the top level
+    for (lev in (1:maxlev)[-1]) {
+        families <- unique(rval$fam[lev, ])
+        families <- families[families != 0]  # 0 is the 'no parent' marker
+        for (i in families) {
+            # might be none
+            who <- which(rval$fam[lev, ] == i)
+            k <- length(who)
+            indx <- max(indx) + 1:k  # one penalty per child
+            penalty <- sqrt(k^(-align[1]))
+            pmat[cbind(indx, myid[lev, who])] <- -penalty
+            pmat[cbind(indx, myid[lev - 1, rval$fam[lev, who]])] <- penalty / 2
+            pmat[cbind(indx, myid[lev - 1, rval$fam[lev, who] + 1])] <- penalty / 2
+        }
     }
-  )
+    maxrow <- min(which(rval$n == max(rval$n)))
+    pmat[nrow(pmat), myid[maxrow, 1]] <- 1e-05
+    ncon <- n + maxlev  # number of constraints
+    cmat <- matrix(0, nrow = ncon, ncol = n)
+    coff <- 0  # cumulative constraint lines so var
+    dvec <- rep(1, ncon)
+    for (lev in 1:maxlev) {
+        nn <- rval$n[lev]
+        if (nn > 1) {
+            for (i in 1:(nn - 1)) {
+                cmat[coff + i, myid[lev, i + 0:1]] <- c(-1, 1)
+            }
+        }
 
-  newpos <- rval$pos
-  # fit <- lsei(pmat, rep(0, nrow(pmat)), G=cmat, H=dvec)
-  # newpos[myid>0] <- fit$X[myid]
-  
-  if (length(fit) > 1) {
-    newpos[myid > 0] <- fit$solution[myid]
-  }
+        cmat[coff + nn, myid[lev, 1]] <- 1  # first element >=0
+        dvec[coff + nn] <- 0
+        cmat[coff + nn + 1, myid[lev, nn]] <- -1  # last element <= width-1
+        dvec[coff + nn + 1] <- 1 - width
+        coff <- coff + nn + 1
+    }
 
-  newpos
+    pp <- t(pmat) %*% pmat + 1e-08 * diag(ncol(pmat))
+    fit <- tryCatch({
+        quadprog::solve.QP(pp, rep(0, n), t(cmat), dvec)
+    }, warning = function(w) {
+        message("Solve QP ended with a warning")
+        message(w)
+        return(NA)
+    }, error = function(e) {
+        message("Solve QP ended with an error")
+        message(e)
+        return(NA)
+    })
+
+    newpos <- rval$pos
+    # fit <- lsei(pmat, rep(0, nrow(pmat)), G=cmat, H=dvec) newpos[myid>0] <-
+    # fit$X[myid]
+
+    if (length(fit) > 1) {
+        newpos[myid > 0] <- fit$solution[myid]
+    }
+
+    newpos
 }
+TRUE

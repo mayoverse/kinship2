@@ -1,6 +1,6 @@
 #' Create a Pedigree object
 #'
-#' These functions help to create a \code{Pedigree} object from
+#' These functions help to create a \\code{Pedigree} object from
 #' `data.frame`.
 #'
 #' @param ped_df
@@ -40,15 +40,12 @@ pedigree.data.frame <- function(
     old_cols <- as.vector(unlist(cols_ren_ped))
     new_cols <- names(cols_ren_ped)
     cols_to_ren <- match(old_cols, names(ped_df))
-    names(ped_df)[
-        cols_to_ren[!is.na(cols_to_ren)]] <- new_cols[!is.na(cols_to_ren)]
+    names(ped_df)[cols_to_ren[!is.na(cols_to_ren)]] <-
+        new_cols[!is.na(cols_to_ren)]
     ## Normalise the data before creating the object
     ped_df <- norm_ped(ped_df)
     rel_df <- norm_rel(rel_df)
     ## Create the object
-    new("Pedigree",
-            ped = ped_df,
-            rel = rel_df,
-            scales = scales
-        )
+    new("Pedigree", ped = ped_df, rel = rel_df, scales = scales)
 }
+TRUE

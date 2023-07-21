@@ -174,7 +174,8 @@ shiny::shinyServer(function(input, output, session) {
     output$family_infos_title <- renderText({
         print("Bal: family_infos_title")
         if (!is.null(families_table())) {
-            paste("Health & Availability data representation for family", input$family_sel)
+            paste("Health & Availability data representation for family",
+                input$family_sel)
         } else {
             NULL
         }

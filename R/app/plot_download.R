@@ -25,9 +25,7 @@ usethis::use_package("R3port")
 #' @export plot_download_ui
 plot_download_ui <- function(id) {
     ns <- shiny::NS(id)
-    shiny::tagList(
-        shiny::uiOutput(ns("btn_dwld"))
-    )
+    shiny::tagList(shiny::uiOutput(ns("btn_dwld")))
 }
 
 #### Server function of the module #### ----------
@@ -46,23 +44,17 @@ plot_download_ui <- function(id) {
 #' @param my_plot Reactive object containing the plot.
 #' @returns A Shiny UI.
 #' @export plot_download_server
-plot_download_server <- function(
-    id, my_plot, filename = "saveplot", label = "Download",
-    width = 500, height = 500, ext = "png") {
+plot_download_server <- function(id, my_plot, filename = "saveplot",
+    label = "Download", width = 500, height = 500, ext = "png") {
     stopifnot(shiny::is.reactive(my_plot))
     shiny::moduleServer(id, function(input, output, session) {
         ns <- shiny::NS(id)
 
         ## Options rendering selection --------------------
-        opt <- shiny::reactiveValues(
-            width = width,
-            height = height,
-            ext = ext,
-        )
+        opt <- shiny::reactiveValues(width = width, height = height, ext = ext)
 
         output$btn_dwld <- shiny::renderUI({
-            shiny::actionButton(ns("download"),
-                label = label, icon("download"),
+            shiny::actionButton(ns("download"), label = label, icon("download"),
                 style = "simple", size = "sm")
         })
 
@@ -92,65 +84,62 @@ plot_download_server <- function(
         })
 
 
-        output$plot_dwld <- shiny::downloadHandler(
-            filename = function() {
-                paste(filename, input$ext, sep = ".")
-            },
-            content = function(file) {
-                if (input$ext == "html") {
-                    plot_html <- my_plot()
-                    if ("ggplot" %in% class(plot_html)) {
-                        plot_html <- ggplotly(plot_html)
-                    }
-                    if ("htmlwidget" %in% class(plot_html)) {
-                        htmlwidgets::saveWidget(file = file, plot_html)
-                    } else {
-                        showNotification("Only ggplot and plotly widgets are supported to export as html",
-                            session = session)
-                    }
+        output$plot_dwld <- shiny::downloadHandler(filename = function() {
+            paste(filename, input$ext, sep = ".")
+        }, content = function(file) {
+            if (input$ext == "html") {
+                plot_html <- my_plot()
+                if ("ggplot" %in% class(plot_html)) {
+                    plot_html <- ggplotly(plot_html)
+                }
+                if ("htmlwidget" %in% class(plot_html)) {
+                    htmlwidgets::saveWidget(file = file, plot_html)
                 } else {
-                    if ("ggplot" %in% class(my_plot())) {
-                        ggplot2::ggsave(filename = file, plot = my_plot(),
-                            device = input$ext,
-                            width = input$width, height = input$height)
-                    } else if ("htmlwidgets" %in% class(my_plot())) {
-                        showNotification("htmlwidgets should be exported as html",
-                            session = session)
+                    showNotification(paste("Only ggplot and plotly widgets",
+                        "are supported to export as html",
+                        session = session))
+                }
+            } else {
+                if ("ggplot" %in% class(my_plot())) {
+                    ggplot2::ggsave(filename = file, plot = my_plot(),
+                        device = input$ext,
+                        width = input$width, height = input$height)
+                } else if ("htmlwidgets" %in% class(my_plot())) {
+                    showNotification("htmlwidgets should be exported as html",
+                        session = session)
+                } else {
+                    if (input$ext == "png") {
+                        png(filename = file, width = input$width,
+                            height = input$height)
+                    } else if (input$ext == "pdf") {
+                        pdf(file = file, width = input$width / 96,
+                            height = input$height / 96)
                     } else {
-                        if (input$ext == "png") {
-                            png(filename = file, width = input$width,
-                                height = input$height)
-                        } else if (input$ext == "pdf") {
-                            pdf(file = file, width = input$width / 96,
-                                height = input$height / 96)
-                        } else {
-                            showNotification("Other type of plot should be exported as pdf or png",
-                                session = session)
-                        }
-                        if ("grob" %in% class(my_plot())) {
-                            gridExtra::grid.arrange(my_plot())
-                        } else {
-                            plot(my_plot())
-                        }
-                        dev.off()
+                        showNotification(paste("Other type of plot should be",
+                            "exported as pdf or png", session = session))
                     }
+                    if ("grob" %in% class(my_plot())) {
+                        gridExtra::grid.arrange(my_plot())
+                    } else {
+                        plot(my_plot())
+                    }
+                    dev.off()
                 }
             }
-        )
+        })
     })
 }
 
 plot_download_demo <- function() {
-    ui <- shiny::fluidPage(
-        plotOutput("plt"),
-        plot_download_ui("dwld"),
-    )
+    ui <- shiny::fluidPage(plotOutput("plt"), plot_download_ui("dwld"), )
     server <- function(input, output, session) {
-        plot_download_server("dwld",
-            shiny::reactive({hist(mtcars$mpg)}))
+        plot_download_server("dwld", shiny::reactive({
+            hist(mtcars$mpg)
+        }))
         output$plt <- shiny::renderPlot({
             hist(mtcars$mpg)
         })
     }
     shiny::shinyApp(ui, server)
 }
+TRUE

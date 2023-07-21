@@ -26,21 +26,20 @@ usethis::use_package("shinyWidgets")
 #' character.
 #' @returns A dataframe.
 #' @examples
-#' \dontrun{
-#'     read_data("path/to/my/file.txt", sep=",", header=FALSE)
+#' \\dontrun{
+#'     read_data('path/to/my/file.txt', sep=',', header=FALSE)
 #' }
 #' @keywords data
 #' @export read_data
 read_data <- function(file, sep = ";", quote = "'", header = TRUE, df_name = NA,
-                stringsAsFactors = FALSE, to_char = TRUE) {
+    stringsAsFactors = FALSE, to_char = TRUE) {
     print("Bal: read_data")
     shiny::req(file)
     if (!is.null(file)) {
         ext <- tools::file_ext(file)
-        shiny::validate(shiny::need(
-            ext %in% c("csv", "txt", "xls", "xlsx", "rda", "tab"),
-            "Please upload a (csv, txt, xls, xlsx, rda, tab) file"
-        ))
+        shiny::validate(shiny::need(ext %in%
+            c("csv", "txt", "xls", "xlsx", "rda", "tab"),
+            "Please upload a (csv, txt, xls, xlsx, rda, tab) file"))
         if (to_char) {
             col_classes <- "character"
             col_types <- "text"
@@ -49,50 +48,41 @@ read_data <- function(file, sep = ";", quote = "'", header = TRUE, df_name = NA,
             col_types <- NULL
         }
         if (ext %in% c("csv", "txt")) {
-            df <- utils::read.csv(file,
-                sep = sep,
-                quote = quote, header = header,
-                colClasses = col_classes
-            )
+            df <- utils::read.csv(file, sep = sep, quote = quote,
+                header = header, colClasses = col_classes)
         } else if (ext %in% c("tab")) {
-            df <- utils::read.table(file, quote = quote,
-                header = header, sep = sep, fill = TRUE,
-                colClasses = col_classes)
+            df <- utils::read.table(file, quote = quote, header = header,
+                sep = sep, fill = TRUE, colClasses = col_classes)
         } else if (ext %in% c("xls", "xlsx")) {
             sheets_present <- readxl::excel_sheets(file)
             if (is.null(df_name)) {
-              message("Needs the name of the sheet to use 'df_name'")
-              df <- NULL
-            } else {
-              if (df_name %in% sheets_present) {
-                df <- as.data.frame(readxl::read_excel(file,
-                                                       sheet = df_name,
-                                                       col_names = header,
-                                                       col_types = col_types
-                ))
-              } else {
-                message("Error: Sheet selected isn't in file")
+                message("Needs the name of the sheet to use 'df_name'")
                 df <- NULL
-              }
+            } else {
+                if (df_name %in% sheets_present) {
+                  df <- as.data.frame(readxl::read_excel(file, sheet = df_name,
+                    col_names = header, col_types = col_types))
+                } else {
+                  message("Error: Sheet selected isn't in file")
+                  df <- NULL
+                }
             }
         } else if (ext %in% c("rda")) {
             shiny::req(df_name)
             all_data <- base::load(file)
             if (is.na(df_name)) {
-              message("Needs the name of the dataframe to use 'df_name'")
-              df <- NULL
+                message("Needs the name of the dataframe to use 'df_name'")
+                df <- NULL
             } else {
-              if (df_name %in% all_data) {
+                if (df_name %in% all_data) {
                   df <- get(df_name)
-              } else {
+                } else {
                   message("Error: dataframe selected isn't in file")
                   df <- NULL
-              }
+                }
             }
         }
-        as.data.frame(unclass(df),
-            stringsAsFactors = stringsAsFactors
-        )
+        as.data.frame(unclass(df), stringsAsFactors = stringsAsFactors)
     } else {
         message("Error: data selected is null")
         NULL
@@ -108,8 +98,8 @@ read_data <- function(file, sep = ";", quote = "'", header = TRUE, df_name = NA,
 #' @param file The file path
 #' @returns A vector of all the dataframe name present.
 #' @examples
-#' \dontrun{
-#'     get_dataframe("path/to/my/file.txt")
+#' \\dontrun{
+#'     get_dataframe('path/to/my/file.txt')
 #' }
 #' @keywords dataframe
 #' @export get_dataframe
@@ -149,7 +139,7 @@ get_dataframe <- function(file) {
 #' @param label A string use to prompt the user
 #' @returns A Shiny UI.
 #' @examples
-#' \dontrun{
+#' \\dontrun{
 #'     data_import_demo()
 #' }
 #' @keywords data
@@ -158,16 +148,13 @@ data_import_ui <- function(id) {
     ns <- shiny::NS(id)
     shiny::tagList(
         shiny::uiOutput(ns("file")),
-        shiny::actionButton(ns("options"), "Options", style = "simple",
-            size = "sm", color = "warning"),
-        shiny::selectInput(ns("sep"), "Separator", c(
-            "Comma" = ",",
-            "Semi-colon" = ";",
-            "Tabulation" = "\t",
-            "Space" = " "
-        ), selected = "\t"),
-        shiny::uiOutput(ns("dfSelection"))
-    )
+        shiny::actionButton(ns("options"),
+            "Options", style = "simple", size = "sm", color = "warning"),
+        shiny::selectInput(ns("sep"),
+            "Separator", c(Comma = ",", `Semi-colon` = ";",
+            Tabulation = "\t", Space = " "),
+        selected = "\t"),
+        shiny::uiOutput(ns("dfSelection")))
 }
 
 #### Server function of the module #### ----------
@@ -183,13 +170,12 @@ data_import_ui <- function(id) {
 #' @param id A string.
 #' @returns A Shiny server.
 #' @examples
-#' \dontrun{
+#' \\dontrun{
 #'     data_import_demo()
 #' }
 #' @keywords data
 #' @export data_import_server
-data_import_server <- function(id,
-    label = "Select data file",
+data_import_server <- function(id, label = "Select data file",
     max_request_size = 30) {
     options(shiny.maxRequestSize = max_request_size * 1024^2)
     shiny::moduleServer(id, function(input, output, session) {
@@ -207,12 +193,8 @@ data_import_server <- function(id,
         })
 
         ## Options rendering selection --------------------
-        opt <- shiny::reactiveValues(
-            heading = TRUE,
-            to_char = FALSE,
-            stringsAsFactors = FALSE,
-            quote = "\""
-        )
+        opt <- shiny::reactiveValues(heading = TRUE, to_char = FALSE,
+            stringsAsFactors = FALSE, quote = "\"")
         shiny::observeEvent(input$options, {
             # display a modal dialog with a header, textinput and action buttons
             shiny::showModal(shiny::modalDialog(
@@ -247,9 +229,8 @@ data_import_server <- function(id,
         ## Data selection ------------------------
         df <- shiny::reactive({
             file <- user_file()$datapath
-            read_data(file, input$sep, opt$quote,
-                      opt$heading, input$dfSelected,
-                      opt$stringsAsFactors, opt$to_char)
+            read_data(file, input$sep, opt$quote, opt$heading,
+                input$dfSelected, opt$stringsAsFactors, opt$to_char)
         })
 
         # We can run observers in here if we want to
@@ -264,10 +245,8 @@ data_import_server <- function(id,
             file <- user_file()$datapath
             df_name <- get_dataframe(file)
             if (!is.null(df_name)) {
-                shiny::selectInput(ns("dfSelected"),
-                    label = label,
-                    choices = df_name, selected = df_name[1]
-                )
+                shiny::selectInput(ns("dfSelected"), label = label,
+                    choices = df_name, selected = df_name[1])
             } else {
                 NULL
             }
@@ -277,3 +256,4 @@ data_import_server <- function(id,
         return(df)
     })
 }
+TRUE
