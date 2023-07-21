@@ -1,23 +1,32 @@
-setwd("R/app")
+setwd("R/")
 library(devtools)
 load_all()
 library(shiny)
 library(dplyr)
 library(ggplot2)
-source("data_management.R")
-source("data_import.R")
-source("data_col_sel.R")
-source("data_download.R")
-source("plot_ped.R")
-source("plot_download.R")
-source("utils.R")
+source("app/data_management.R")
+source("app/data_import.R")
+source("app/data_col_sel.R")
+source("app/data_download.R")
+source("app/plot_ped.R")
+source("app/plot_download.R")
+source("app/utils.R")
+source("class/pedigree.R")
+source("class/validity.R")
+source("class/Pedigree_class.R")
 
-runApp()
 
 df <- read.csv("C:/Users/llenezet/Documents/EnCours/pedigreecreation/PedigreeApp/data/TestPedigree2.csv", sep = ";")
 summary(df)
 
-norm_ped(df)
+
+
+
+ped_df <- df
+rel_df <- data.frame(id1 = c(10, 13), id2 = c(15, 12), code = c("mZt wIn", 2))
+object <- pedigree(ped_df, rel_df)
+
+df <- norm_ped(df)
 
 data(sample.ped)
 df <- sample.ped
