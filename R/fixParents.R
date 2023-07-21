@@ -1,3 +1,16 @@
+#' Fix details on the parents for children of the pedigree
+#'
+#' @description
+#' Fix the sex of parents, add parents that are missing from the pedigree
+#'
+#' @details
+#' First look to add parents whose ids are given in momid/dadid. Second, fix
+#' sex of parents. Last look to add second parent for children for whom only
+#' one parent id is given.
+#'
+#' @author Jason Sinnwell
+#' @seealso \\code{\\link{pedigree}}
+#' @export fixParents
 fixParents <- function(x, ...) {
     UseMethod("fixParents", x)
 }
@@ -53,7 +66,7 @@ fixParents <- function(x, ...) {
 #'
 #' @author Jason Sinnwell
 #' @seealso \\code{\\link{pedigree}}
-#' @export fixParents
+#' @export fixParents.default
 fixParents.default <- function(id, dadid, momid, sex, missid = 0, ...) {
     ## fix sex of parents add parents that are missing
     n <- length(id)
@@ -234,4 +247,20 @@ fixParents.data.frame <- function(
     }
     message(paste("Final:", nrow(df), "individuals detected"))
     df
+}
+
+#' Fix missing parents
+#'
+#' @description Apply fixParents on a numeric vector or delete missing parents
+#' @export
+fixParents.numeric <- function(id, dadid, momid, sex, missid = 0, ...){
+    fixParents.default(id, dadid, momid, sex, missid, ...)
+}
+
+#' Fix missing parents
+#'
+#' @description Apply fixParents on character vector or delete missing parents
+#' @export
+fixParents.character <- function(id, dadid, momid, sex, missid = 0, ...){
+    fixParents.default(id, dadid, momid, sex, missid, ...)
 }
