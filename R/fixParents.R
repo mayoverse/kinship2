@@ -1,5 +1,5 @@
-fixParents <- function(ped_df) {
-    UseMethod("fixParents")
+fixParents <- function(x, ...) {
+    UseMethod("fixParents", x)
 }
 
 
@@ -235,4 +235,3 @@ fixParents.data.frame <- function(
     message(paste("Final:", nrow(df), "individuals detected"))
     df
 }
-TRUE
