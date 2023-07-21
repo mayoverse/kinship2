@@ -154,7 +154,13 @@ check_columns <- function(df,
   if (others_cols) {
     all_cols_checked <- colnames(df)
   } else {
-    all_cols_checked <- c(cols_needed, cols_optional)
+    if (!cols_to_use_init) {
+      cols_to_use <- cols_optional
+    }
+    if (!cols_used_init) {
+      cols_used <- NA
+    }
+    all_cols_checked <- c(cols_needed, cols_to_use, cols_used)
     cols_not_recognize <- cols_p[!cols_p %in% all_cols_checked]
     if (length(cols_not_recognize) > 0) {
       message(paste("Columns :", paste0(cols_not_recognize, collapse = ", "),
