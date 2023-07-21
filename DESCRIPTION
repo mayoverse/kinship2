@@ -1,9 +1,11 @@
 Package: kinship2
-Version: 1.9.7
-Date: 2022-10-11
+Version: 2.0.0
+Date: 2023-07-30
 Title: Pedigree Functions
 Authors@R: c(
-	person("Jason", "Sinnwell", email="sinnwell.jason@mayo.edu", role=c("aut","cre")),
+    person("Louis", "Le Nezet", email="louislenezet@gmail.com",
+        role=c("aut","cre"), comment = c(ORCID = "0009-0000-0202-2703")),
+	person("Jason", "Sinnwell", email="sinnwell.jason@mayo.edu", role="aut"),
 	person("Terry", "Therneau", role="aut"),
 	person("Daniel", "Schaid", role="ctb"),
 	person("Elizabeth", "Atkinson", role="ctb"),
@@ -30,7 +32,12 @@ Imports:
     readxl,
     shinyWidgets,
     DT,
-    bootstrap
+    bootstrap,
+    gridGraphics,
+    grid,
+    htmlwidgets,
+    R3port,
+    ggpattern
 Description: Routines to handle family data with a pedigree object. The initial purpose
 	     was to create correlation structures that describe family relationships such 
 	     as kinship and identity-by-descent, which can be used to model family data 
@@ -47,3 +54,7 @@ Suggests:
 	vdiffr,
 	rmarkdown
 Config/testthat/edition: 3
+biocViews: Software, ShinyApps, DataRepresentation, Genetics
+BugReports: https://github.com/LouisLeLezet/kinship2/issues
+url: https://github.com/LouisLeNezet/kinship2
+BiocType: Software

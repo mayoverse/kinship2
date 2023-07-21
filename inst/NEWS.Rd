@@ -4,7 +4,13 @@
   \itemize{
     \item plot.pedigree support ggplot generation, generated from datatable instead of ped,
       tips columns can be specified for plotly, a mark inside the box can be added, add drawing progression
-    \item All documentation from pedigree.shrink.Rnw moved into Rd and R
+    \item All documentation are now generated with Roxygen
+    \item Pedigree class updated and improved
+    \item New function available: generate_aff_inds, generate_colors, is_informative, max_kin_inf,
+    norm_data, num_child, useful_inds
+    \item All functions renamed to follow the snake\_case convention
+    \item All parametes renamed to follow the snake\_case convention
+    \item All test now use testthat
     files
   }
 }

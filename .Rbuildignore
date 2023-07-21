@@ -1,6 +1,1 @@
-^documentation
-^data_raw/*
-..Rcheck
-.Rhistory
-.RData
-^doc$
+^\.github$
