@@ -3,6 +3,10 @@ BiocManager::install(version = "devel")
 BiocManager::valid()
 library(devtools)
 library(lintr)
+library(formatR)
+
+formatR::tidy_dir(".", width.cutoff = 80, recursive = TRUE, overwrite = TRUE,
+    wrap = FALSE, indent = 4, arrow = TRUE)
 
 # Linting
 lintr::use_lintr(type = "tidyverse")
