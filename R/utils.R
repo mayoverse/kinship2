@@ -20,8 +20,8 @@
 #' df_cont_table(df, 'var1', 0.5)
 #'
 #' @export df_cont_table
-df_cont_table <- function(df, var1, threshold1 = NULL, var2 = NULL,
-    threshold2 = NULL) {
+df_cont_table <- function(
+    df, var1, threshold1 = NULL, var2 = NULL, threshold2 = NULL) {
     if (!var1 %in% colnames(df)) {
         stop(paste0(var1, "is not present in the dataframe", collapse = " "))
     }
@@ -69,7 +69,8 @@ var_to_factor <- function(var, threshold = NULL) {
         if (length(threshold) == 1) {
             labels <- c(paste("Inf to", threshold), paste("Sup to", threshold))
         }
-        var_fact <- cut(var, c(min(var, na.rm = TRUE),
+        var_fact <- cut(
+            var, c(min(var, na.rm = TRUE),
             threshold, max(var, na.rm = TRUE)),
             label = labels, include.lowest = TRUE)
         var_fact <- addNA(var_fact, ifany = TRUE)
@@ -114,8 +115,8 @@ usethis::use_package("dplyr")
 #'   c('ColTU1', 'ColTU2'))
 #'
 #' @export check_columns
-check_columns <- function(df,
-    cols_needed = NULL, cols_used = NULL, cols_to_use = NULL,
+check_columns <- function(
+    df, cols_needed = NULL, cols_used = NULL, cols_to_use = NULL,
     others_cols = FALSE, cols_used_init = FALSE, cols_to_use_init = FALSE) {
     cols_p <- colnames(df)
     cols_needed_missing <- cols_needed[is.na(match(cols_needed, cols_p))]
