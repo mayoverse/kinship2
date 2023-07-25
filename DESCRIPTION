@@ -52,7 +52,8 @@ VignetteBuilder: knitr
 Suggests: 
     testthat (>= 3.0.0),
 	vdiffr,
-	rmarkdown
+	rmarkdown,
+    BiocStyle
 Config/testthat/edition: 3
 biocViews: Software, ShinyApps, DataRepresentation, Genetics
 BugReports: https://github.com/LouisLeLezet/kinship2/issues
