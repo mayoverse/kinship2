@@ -28,9 +28,9 @@ increased to that 1+ that amount (to give just a little wiggle room).
 The other is a vector of 2 alignment parameters `a` and `b`.
 For each set of siblings `x` with parents at `p_1` and `p_2`
 the alignment penalty is :
-\eqn{(1/k^a)\sum{i=1}{k} (x_i - (p_1 + p_2)^2}
+\\eqn{(1/k^a)\\sum{i=1}{k} (x_i - (p_1 + p_2)^2}
 where `k` is the number of siblings in the set.
-Using the fact that \eqn{\sum(x_i-c)^2 = \sum(x_i-\mu)^2 + k(c-\mu)^2},
+Using the fact that \\eqn{\\sum(x_i-c)^2 = \\sum(x_i-\\mu)^2 + k(c-\\mu)^2},
 when $a=1$ then moving a sibship with $k$ sibs one unit to the left or
 right of optimal will incur the same cost as moving one with only 1 or
 two sibs out of place.  If `a=0` then large sibships are harder to move
@@ -40,9 +40,9 @@ parents are somewhere between the first and last siblings the result looks
 fairly good, so we are more flexible with the spacing of a large family.
 By tethering all the sibs to a single spot they tend are kept close to
 each other.
-The alignment penalty for spouses is \eqn{b(x_1 - x_2)^2}, which tends to keep
-them together. The size of `b` controls the relative importance of sib-parent
-and spouse-spouse closeness.
+The alignment penalty for spouses is \\eqn{b(x_1 - x_2)^2}, which tends to
+keep them together. The size of `b` controls the relative importance of
+sib-parent and spouse-spouse closeness.
 
 1. We start by adding in these penalties.
 The total number of parameters in the alignment problem
@@ -54,9 +54,9 @@ shifted by a constant, the penalty matrix will not be positive definite;
 `solve.QP` does not like this.
 We add a tiny amount of leftward pull to the widest line.
 2. If there are `k` subjects on a line there will
-be `k+1` constraints for that line.  The first point must be \eqn{\ge 0}, each
-subesquent one must be at least 1 unit to the right, and the final point
-must be \eqn{\le} the max width.
+be `k+1` constraints for that line.  The first point must be \\eqn{\\ge 0},
+each subesquent one must be at least 1 unit to the right, and the final point
+must be \\eqn{\\le} the max width.
 }
 \examples{
 data(sample.ped)

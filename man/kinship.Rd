@@ -20,7 +20,7 @@ subject identifiers.  Subject identifiers may be numeric or character.}
 \item{...}{Any number of optional arguments}
 
 \item{chrtype}{chromosome type.  The currently supported types are
-"autosome" and "X" or "x".}
+'autosome' and 'X' or 'x'.}
 
 \item{dadid}{for each subject, the identifier of the biological father.
 This is only used if `id` is a vector.}

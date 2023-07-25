@@ -4,10 +4,10 @@
 \alias{descendant.pedigree}
 \title{Find all the descendants}
 \usage{
-descendant.pedigree(idlist, id, dad.id, mom.id)
+descendant.pedigree(idlist, id, dadid, momid)
 }
 \arguments{
-\item{mom.id}{}
+\item{momid}{}
 }
 \description{
 Find all the descendants of a particular person given a pedigree or a list

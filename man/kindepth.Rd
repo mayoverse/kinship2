@@ -4,18 +4,18 @@
 \alias{kindepth}
 \title{Compute the depth of each subject in a pedigree}
 \usage{
-kindepth(id, dad_id, mom_id, align = FALSE)
+kindepth(id, dadid, momid, align = FALSE)
 }
 \arguments{
 \item{id}{Identification code for each individual}
 
-\item{dad_id}{Id code for the father}
+\item{dadid}{Id code for the father}
 
-\item{mom_id}{Id code for the mother}
+\item{momid}{Id code for the mother}
 
 \item{align}{If `align=T`, go one step further and try to make both parents
 of each child have the same depth.  (This is not always possible).
-It helps the drawing program by lining up pedigrees that "join in the middle"
+It helps the drawing program by lining up pedigrees that 'join in the middle'
 via a marriage.}
 }
 \value{

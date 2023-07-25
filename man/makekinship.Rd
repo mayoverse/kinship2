@@ -4,16 +4,16 @@
 \alias{makekinship}
 \title{Create a sparse kinship matrix}
 \usage{
-makekinship(famid, id, father.id, mother.id, unrelated = 0)
+makekinship(famid, id, dadid, momid, unrelated = 0)
 }
 \arguments{
 \item{famid}{a vector of family identifiers}
 
 \item{id}{a vector of unique subject identifiers}
 
-\item{father.id}{for each subject, the identifier of their biolgical father}
+\item{dadid}{for each subject, the identifier of their biolgical father}
 
-\item{mother.id}{for each subject, the identifier of thier biological mother}
+\item{momid}{for each subject, the identifier of thier biological mother}
 
 \item{unrelated}{subjects with this family id are considered to be unrelated
 singletons, i.e., not related to each other or to anyone else.}
@@ -47,14 +47,14 @@ dim(kin1)
 # 28081 28081
 
 class(kin1)
-# "dsCMatrix"
+# 'dsCMatrix'
 
 # kinship matrix for the females only
-femid <- minnbreast$id[minnbreast$sex == "F"]
+femid <- minnbreast$id[minnbreast$sex == 'FALSE']
 femindex <- !is.na(match(dimnames(kin1)[[1]], femid))
 kin2 <- kin1[femindex, femindex]
 
-# Note that "femindex <- match(femid, dimnames(kin1)[[1]])" is wrong, since
+# Note that 'femindex <- match(femid, dimnames(kin1)[[1]])' is wrong, since
 #  then kin1[femindex, femindex] might improperly reorder the rows/cols
 #  (if families were not contiguous in minnbreast).
 # However sort(match(femid, dimnames(kin1)[[1]])) would be okay.

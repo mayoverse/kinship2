@@ -13,7 +13,7 @@
   mark = NA,
   label = NA,
   tips_names = NA,
-  fill = "white",
+  fill = "grey",
   border = "black",
   ggplot_gen = FALSE,
   cex = 1,
@@ -23,6 +23,7 @@
   align = c(1.5, 2),
   width = 6,
   psize = par("pin"),
+  title = NULL,
   density = c(-1, 35, 65, 20),
   mar = c(4.1, 1, 4.1, 1),
   angle = c(90, 65, 40, 0),
@@ -41,7 +42,7 @@
 
 \item{affected}{vector, or matrix with up to 4 columns for affected
 indicators. Subject's symbol is divided into sections for each status,
-shaded if indicator is 1, not-shaded for 0, and symbol "?" if missing (NA)}
+shaded if indicator is 1, not-shaded for 0, and symbol '?' if missing (NA)}
 
 \item{avail}{vector indicating the availability of the individual.
 If it exists, 0=unavailable and 1=available.}
@@ -132,7 +133,7 @@ large enough, however, the symbols may get very small.
 
 The second is `align`, a vector of 2 alignment parameters $a$ and $b$.
 For each set of siblings at a set of locations `x` and with parents at
-`p=c(p1,p2)` the alignment penalty is \deqn{(1/k^a)\sum{i=1}{k} [(x_i -
+`p=c(p1,p2)` the alignment penalty is \\deqn{(1/k^a)\\sum{i=1}{k} [(x_i -
 (p1+p2)/2)]^2} sum(x- mean(p))^2/(k^a) where k is the number of siblings in
 the set. when $a=1$ moving a sibship with $k$ sibs one unit to the left or
 right of optimal will incur the same cost as moving one with only 1 or two
@@ -142,7 +143,7 @@ than small ones.  The rationale for the default is as long as the parents
 are somewhere between the first and last siblings the result looks fairly
 good, so we are more flexible with the spacing of a large family. By
 tethering all the sibs to a single spot they are kept close to each other.
-The alignment penalty for spouses is \eqn{b(x_1 - x_2)^2}{b *(x1-x2)^2},
+The alignment penalty for spouses is \\eqn{b(x_1 - x_2)^2}{b *(x1-x2)^2},
 which tends to keep them together.  The size of $b$ controls the relative
 importance of sib-parent and spouse-spouse closeness.
 }
@@ -159,7 +160,7 @@ pedAll <- with(sample.ped, pedigree(id, father, mother,
   famid = ped
 ))
 
-ped2 <- pedAll["2"]
+ped2 <- pedAll['2']
 
 print(ped2)
 

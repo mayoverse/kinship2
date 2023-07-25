@@ -18,7 +18,7 @@ with smaller symbol sizes.}
 
 \item{location}{The position argument for the legend command, which allows
 coordinates (numerical vector in the form x, y) or, more conveniently,
-options such as "topright", "right", "left", "bottomleft", etc., which
+options such as 'topright', 'right', 'left', 'bottomleft', etc., which
 is useful for pedigrees that cover most of the plot region.}
 
 \item{...}{Optional arguments to plot method}
@@ -48,7 +48,7 @@ shrink2
 
 plot(ped2)
 
-plot.pedigree.shrink(shrink2, title = "Sample Pedigree 2")
+plot.pedigree.shrink(shrink2, title = 'Sample Pedigree 2')
 
 }
 \seealso{

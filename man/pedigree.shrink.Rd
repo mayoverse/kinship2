@@ -50,12 +50,12 @@ data(sample.ped)
 pedAll <- with(sample.ped, pedigree(id, father, mother, sex,
   affected = cbind(affected, avail), famid = ped
 ))
-ped1 <- pedAll["1"]
+ped1 <- pedAll['1']
 ped1trim <- pedigree.shrink(ped1, maxBits = 12)
 
 }
 \seealso{
-\code{\link{pedigree}}, \code{\link{plot.pedigree.shrink}}
+\\code{\\link{pedigree}}, \\code{\\link{plot.pedigree.shrink}}
 }
 \author{
 Original by Dan Schaid, updated to kinship2 by Jason Sinnwell

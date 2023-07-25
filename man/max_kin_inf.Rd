@@ -10,11 +10,11 @@ max_kin_inf(df, informative = "AvAf")
 \item{df}{Dataframe with individuals to select}
 
 \item{informative}{Informative individuals selection can take 3 values:
-"AvAf" (available and affected),
-"AvOrAf" (available or affected),
-"Av" (available only),
-"Af" (affected only),
-"All" (all individuals)
+'AvAf' (available and affected),
+'AvOrAf' (available or affected),
+'Av' (available only),
+'Af' (affected only),
+'All' (all individuals)
 or a numeric vector of individuals id
 or a boolean}
 }
@@ -27,7 +27,7 @@ all the others.
 }
 \examples{
 data(sample.ped)
-df <- max_kin_inf(sample.ped, informative = "Av/Af")
+df <- max_kin_inf(sample.ped, informative = 'Av/Af')
 summary(df$kin)
 
 }

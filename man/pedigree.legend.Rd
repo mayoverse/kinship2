@@ -30,8 +30,8 @@ resolution for the circle}
 
 \item{location}{similar to how the location of a base-R legend is given,
 used only if new=TRUE.  A character string indicating which of the four
-corners to plot the legend, given by "bottomright", "bottomleft", "topleft",
-or "topright" or a vector of coordinates (numerical vector in the form x, y).}
+corners to plot the legend, given by 'bottomright', 'bottomleft', 'topleft',
+or 'topright' or a vector of coordinates (numerical vector in the form x, y).}
 
 \item{new}{Logical. If TRUE, plot the legend on the current plot. Otherwise,
 plot on a separate plot.}
@@ -59,13 +59,13 @@ ped1 <- with(fam1, pedigree(
   affected = cbind(avail, affected)
 ))
 plot(ped1)
-pedigree.legend(ped1, location = "bottomright", radius = 0.8)
-pedigree.legend(ped1, location = "topleft", radius = 0.6, cex = 1.2)
+pedigree.legend(ped1, location = 'bottomright', radius = 0.8)
+pedigree.legend(ped1, location = 'topleft', radius = 0.6, cex = 1.2)
 pedigree.legend(ped1, new = FALSE)
 
 }
 \seealso{
-\code{\link{pedigree}}, \code{\link{plot.pedigree}}
+\\code{\\link{pedigree}}, \\code{\\link{plot.pedigree}}
 }
 \author{
 Jason Sinnwell

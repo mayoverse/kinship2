@@ -28,7 +28,7 @@ Bit size of the trimmed pedigree
 }
 \description{
 Finds one subject from among available non-parents with indicated affection
-status
+status.
 }
 \details{
 When used within pedigree.shrink, this function is called with the first

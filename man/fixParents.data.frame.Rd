@@ -4,12 +4,12 @@
 \alias{fixParents.data.frame}
 \title{Fix missing parents}
 \usage{
-fixParents.data.frame(
+\method{fixParents}{data.frame}(
   df = df,
   delete = FALSE,
+  filter = NULL,
   missid = "0",
   id = "id",
-  avail = "avail",
   dadid = "dadid",
   momid = "momid",
   sex = "sex",
@@ -24,9 +24,9 @@ TRUE: added as a new row
 FALSE: be deleted}
 
 \item{missid}{The founders are those with no father or mother in the
-pedigree.  The \code{dadid} and \code{momid} values for these subjects will
-either be NA or the value of this variable.  The default for \code{missid}
-is 0 if the \code{id} variable is numeric, and "" (the empty string)
+pedigree.  The \\code{dadid} and \\code{momid} values for these subjects will
+either be NA or the value of this variable.  The default for \\code{missid}
+is 0 if the \\code{id} variable is numeric, and '' (the empty string)
 otherwise.}
 }
 \value{

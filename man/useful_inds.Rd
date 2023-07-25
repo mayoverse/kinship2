@@ -4,17 +4,17 @@
 \alias{useful_inds}
 \title{Compute the usefulness of individuals}
 \usage{
-useful_inds(df, informative = "AvAf")
+useful_inds(df, informative = "AvAf", keep_infos = FALSE)
 }
 \arguments{
 \item{df}{Dataframe with individuals to select}
 
 \item{informative}{Informative individuals selection can take 3 values:
-"AvAf" (available and affected),
-"AvOrAf" (available or affected),
-"Av" (available only),
-"Af" (affected only),
-"All" (all individuals)
+'AvAf' (available and affected),
+'AvOrAf' (available or affected),
+'Av' (available only),
+'Af' (affected only),
+'All' (all individuals)
 or a numeric vector of individuals id
 or a boolean}
 }

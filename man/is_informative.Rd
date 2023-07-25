@@ -10,11 +10,11 @@ is_informative(df, informative = "AvAf")
 \item{df}{Dataframe with individuals to select}
 
 \item{informative}{Informative individuals selection can take 3 values:
-"AvAf" (available and affected),
-"AvOrAf" (available or affected),
-"Av" (available only),
-"Af" (affected only),
-"All" (all individuals)
+'AvAf' (available and affected),
+'AvOrAf' (available or affected),
+'Av' (available only),
+'Af' (affected only),
+'All' (all individuals)
 or a numeric vector of individuals id
 or a boolean}
 }

@@ -4,16 +4,16 @@
 \alias{familycheck}
 \title{Check family}
 \usage{
-familycheck(famid, id, father.id, mother.id, newfam)
+familycheck(famid, id, dadid, momid, newfam)
 }
 \arguments{
 \item{famid}{A vector of family identifiers}
 
 \item{id}{A vector of unique subject identifiers}
 
-\item{father.id}{Vector containing the id of the biological father}
+\item{dadid}{Vector containing the id of the biological father}
 
-\item{mother.id}{Vector containing the id of the biological mother}
+\item{momid}{Vector containing the id of the biological mother}
 
 \item{newfam}{The result of a call to `makefamid`. If this has already
 been computed by the user, adding it as an argument shortens the running
@@ -31,8 +31,8 @@ Number of them that appear to be unrelated to
 anyone else in the entire pedigree set.  This is usually marry-ins with no
 children (in the pedigree), and if so are not a problem.
 ## split
-Number of unique "new" family ids.
-0 = no one in this "family" is related to anyone else (not good)
+Number of unique 'new' family ids.
+0 = no one in this 'family' is related to anyone else (not good)
 1 = everythings is fine
 2+= the family appears to be a set of disjoint trees.
 Are you missing some of the people?
@@ -50,7 +50,7 @@ principles using the parenting data, and compare the results.
 The `makefamid` function is used to create a de novo family id from the
 parentage data, and this is compared to the family id given in the data.
 
-If there are any joins, then an attribute "join" is attached.
+If there are any joins, then an attribute 'join' is attached.
 It will be a matrix with famid as row labels, new-family-id as the columns,
 and the number of subjects as entries.
 }
@@ -67,7 +67,8 @@ fcheck.sep <- with(sample.ped, familycheck(ped, id, father, mother))
 fcheck.sep
 
 ## check assigning them same ped id
-fcheck.combined <- with(sample.ped, familycheck(rep(1, nrow(sample.ped)), id, father, mother))
+fcheck.combined <- with(sample.ped, familycheck(rep(1, nrow(sample.ped)),
+id, father, mother))
 fcheck.combined
 
 # make person 120's father be her son.

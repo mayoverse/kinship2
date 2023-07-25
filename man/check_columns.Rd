@@ -4,7 +4,15 @@
 \alias{check_columns}
 \title{Check for columns name usage}
 \usage{
-check_columns(df, cols_needed, cols_used, cols_to_use, others_cols = FALSE)
+check_columns(
+  df,
+  cols_needed = NULL,
+  cols_used = NULL,
+  cols_to_use = NULL,
+  others_cols = FALSE,
+  cols_used_init = FALSE,
+  cols_to_use_init = FALSE
+)
 }
 \arguments{
 \item{df}{The dataframe to use}
@@ -17,6 +25,9 @@ that will be overwritten.}
 \item{cols_to_use}{A vector of optional columns that are authorized.}
 
 \item{others_cols}{Boolean defining if non defined columns should be allowed.}
+
+\item{cols_to_use_init}{Boolean defining if the optional columns should be 
+initialised to NA.}
 }
 \value{
 Dataframe with only the column allowed and all the column
@@ -38,10 +49,10 @@ if present.
 \examples{
 data.frame
 df <- data.frame(ColN1 = c(1, 2), ColN2 = 4,
-         ColU1 = "B", ColU2 = "1",
-         ColTU1 = "A", ColTU2 = 3,
+         ColU1 = 'B', ColU2 = '1',
+         ColTU1 = 'A', ColTU2 = 3,
          ColNR1 = 4, ColNR2 = 5)
-check_columns(df, c("ColN1", "ColN2"), c("ColU1", "ColU2"),
-  c("ColTU1", "ColTU2"))
+check_columns(df, c('ColN1', 'ColN2'), c('ColU1', 'ColU2'),
+  c('ColTU1', 'ColTU2'))
 
 }

@@ -28,8 +28,8 @@ coded to NA, or another value specified by missid.}
 coded to NA, or another value specified by missid.}
 
 \item{sex}{Gender of individual noted in `id'. Either character
-("male","female", "unknown","terminated") or numeric (1="male", 2="female",
-3="unknown", 4="terminated") data is allowed.  For character data the string
+('male','female', 'unknown','terminated') or numeric (1='male', 2='female',
+3='unknown', 4='terminated') data is allowed.  For character data the string
 may be truncated, and of arbitrary case.}
 
 \item{affected}{A variable indicating affection status.  A multi-column
@@ -37,7 +37,7 @@ matrix can be used to give the status with respect to multiple traits.
 Logical, factor, and integer types are converted to 0/1 representing
 unaffected and affected, respectively.  NAs are considered missing.}
 
-\item{status}{Censor/Vital status (0="censored", 1="dead")}
+\item{status}{Censor/Vital status (0='censored', 1='dead')}
 
 \item{relation}{A matrix with 3 required columns (id1, id2, code) specifying
 special relationship between pairs of individuals.
@@ -57,12 +57,12 @@ given or appear on the plot.}
 \item{famid}{An optional vector of family identifiers.  If it is present the
 result will contain individual pedigrees for each family in the set, which
 can be extacted using subscripts. Individuals need to have a unique id
-\emph{within} family.}
+\\emph{within} family.}
 
 \item{missid}{The founders are those with no father or mother in the
 pedigree. The dadid and momid values for these subjects will either be NA or
 the value of this variable. The default for missid is 0 if the id variable
-is numeric, and "" (empty string) otherwise.}
+is numeric, and '' (empty string) otherwise.}
 
 \item{x}{Pedigree object in print and subset methods}
 
@@ -71,7 +71,7 @@ is numeric, and "" (empty string) otherwise.}
 \item{drop}{Logical, used in subset function for dropping dimensionanlity}
 }
 \value{
-An object of class \code{pedigree} or \code{pedigreeList} Containing
+An object of class \\code{pedigree} or \\code{pedigreeList} Containing
 the following items: famid id findex mindex sex affected status relation
 }
 \description{
@@ -83,7 +83,7 @@ bpeds <- with(minnbreast, pedigree(id, fatherid,
   motherid, sex,
   affected = proband, famid = famid
 ))
-bped.id8 <- bpeds["8"]
+bped.id8 <- bpeds['8']
 print(bped.id8) ## show this pedigree with mixed zygosity quadruplets
 rel8 <- data.frame(id1 = c(137, 138, 139), id2 = c(138, 139, 140), code = c(1, 2, 2))
 bped.id8 <- with(minnbreast[minnbreast$famid == 8, ], pedigree(id, fatherid,
@@ -94,8 +94,8 @@ print(bped.id8)
 
 }
 \seealso{
-\code{\link{kinship}}, \code{\link{plot.pedigree}},
-\code{\link{autohint}}
+\\code{\\link{kinship}}, \\code{\\link{plot.pedigree}},
+\\code{\\link{autohint}}
 }
 \author{
 Terry Therneau

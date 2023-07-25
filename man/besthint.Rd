@@ -10,12 +10,12 @@ besthint(ped, wt = c(1000, 10, 1), tolerance = 0)
 \item{tolerance}{}
 }
 \description{
-When computer time is cheap, use this routine to get a "best" pedigree.
+When computer time is cheap, use this routine to get a 'best' pedigree.
 }
 \details{
 The autohint routine will rearrange sibling order, but not founder order.
 This calls autohint with every possible founder order, and finds that
-plot with the least "stress":
+plot with the least 'stress':
        wt[1] * number of dotted arcs
      + wt[2] * lengths of dotted arcs
      + wt[3] * lengths of parent-child

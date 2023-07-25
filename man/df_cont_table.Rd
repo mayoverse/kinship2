@@ -29,7 +29,7 @@ variable is numerical. To do so the variables are transformed to factors.
 var1 <- runif(10)
 var2 <- runif(10)
 df <- data.frame(var1, var2)
-df_cont_table(df, "var1", 0.5, "var2", c(0.25, 0.5, 0.75))
-df_cont_table(df, "var1", 0.5)
+df_cont_table(df, 'var1', 0.5, 'var2', c(0.25, 0.5, 0.75))
+df_cont_table(df, 'var1', 0.5)
 
 }

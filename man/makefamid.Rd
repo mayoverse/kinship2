@@ -4,15 +4,15 @@
 \alias{makefamid}
 \title{Get family id}
 \usage{
-makefamid(id, father.id, mother.id)
+makefamid(id, dadid, momid)
 }
 \arguments{
 \item{id}{Identifier for each subject in the set of pedigrees}
 
-\item{father.id}{Identifier for the father.  This will be 0 or "" for a
+\item{dadid}{Identifier for the father.  This will be 0 or '' for a
 founder.}
 
-\item{mother.id}{Identifer for the mother.}
+\item{momid}{Identifer for the mother.}
 }
 \value{
 An integer vector giving family groupings
@@ -21,7 +21,7 @@ An integer vector giving family groupings
 Construct a family id from pedigree information
 }
 \details{
-Create a vector of length n, giving the family "tree" number of each
+Create a vector of length n, giving the family 'tree' number of each
 subject.  If the pedigree is totally connected, then everyone will end up in
 tree 1, otherwise the tree numbers represent the disconnected subfamilies.
 Singleton subjects give a zero for family number.
