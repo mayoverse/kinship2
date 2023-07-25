@@ -30,32 +30,36 @@ usethis::use_package("dplyr")
 #' norm_ped(ped_data)
 #'
 #'@export norm_ped
-norm_ped <- function(ped_df, na_strings = c("NA", ""),
+norm_ped <- function(
+    ped_df, na_strings = c("NA", ""),
     missid = "0", try_num = FALSE) {
     print("Bal: norm_ped")
-    err_cols <- c("sexErrMoFa", "sexErrFa", "sexErrMo", "sexErrTer", "sexNA",
+    err_cols <- c(
+        "sexErrMoFa", "sexErrFa", "sexErrMo", "sexErrTer", "sexNA",
         "sexError", "idErrFa", "idErrMo", "idErrSelf", "idErrOwParent",
         "idErrBothParent", "idError", "error")
     cols_need <- c("indId", "fatherId", "motherId", "gender")
     cols_used <- c("sex", "avail", "id", "dadid", "momid", err_cols, "family")
     cols_to_use <- c("steril", "available", "familyId", "status")
 
-    ped_df <- check_columns(ped_df, cols_need, cols_used, cols_to_use,
+    ped_df <- check_columns(
+        ped_df, cols_need, cols_used, cols_to_use,
         others_cols = TRUE, cols_to_use_init = TRUE, cols_used_init = TRUE)
 
-    ped_df <- dplyr::mutate_if(ped_df, is.character,
-        ~replace(., . %in% na_strings, NA))
+    ped_df <- dplyr::mutate_if(
+        ped_df, is.character, ~replace(., . %in% na_strings, NA))
 
     #### Sex ####
     if (is.factor(ped_df$gender) | is.numeric(ped_df$gender)) {
         ped_df$gender <- as.character(ped_df$gender)
     }
     # Normalized difference notations for sex
-    sex_equiv <- c(f = "female", m = "male", woman = "female", man = "male",
+    sex_equiv <- c(
+        f = "female", m = "male", woman = "female", man = "male",
         female = "female", male = "male", `2` = "female", `1` = "male",
         `3` = "unknown", `4` = "terminated")
-    ped_df$sex <- as.character(plyr::revalue(as.factor(casefold(ped_df$gender,
-        upper = FALSE)), sex_equiv))
+    ped_df$sex <- as.character(plyr::revalue(as.factor(
+        casefold(ped_df$gender, upper = FALSE)), sex_equiv))
     sex_codes <- c("male", "female", "unknown", "terminated")
     ped_df$sex[!ped_df$sex %in% sex_codes] <- "unknown"
 
@@ -68,15 +72,18 @@ norm_ped <- function(ped_df, na_strings = c("NA", ""),
 
     # Add terminated for sterilized individuals
     if ("steril" %in% colnames(ped_df)) {
-        ped_df$sex[ped_df$steril == "TRUE" & !is.na(ped_df$steril) &
+        ped_df$sex[
+            ped_df$steril == "TRUE" & !is.na(ped_df$steril) &
             !is_father & !is_mother] <- "terminated"
-        ped_df$sexErrTer[ped_df$steril == "TRUE" & !is.na(ped_df$steril) &
+        ped_df$sexErrTer[
+            ped_df$steril == "TRUE" & !is.na(ped_df$steril) &
             (is_father | is_mother)] <- "IsSterelisedButIsParent"
         nb_steril_parent <- nrow(ped_df[
             ped_df$sexErrTer == "IsSterelisedButIsParent" &
             !is.na(ped_df$sexErrTer), ])
         message(paste(nb_steril_parent, "steril corrected"))
-        ped_df$steril[ped_df$steril == "TRUE" & !is.na(ped_df$steril) &
+        ped_df$steril[
+            ped_df$steril == "TRUE" & !is.na(ped_df$steril) &
             (is_father | is_mother)] <- FALSE
     }
 
@@ -96,7 +103,8 @@ norm_ped <- function(ped_df, na_strings = c("NA", ""),
         ped_df$sex != "female"] <- "IsMotherButNotFemale"
 
     # Unite all sex errors in one column
-    ped_df <- tidyr::unite(ped_df, "sexError",
+    ped_df <- tidyr::unite(
+        ped_df, "sexError",
         c("sexNA", "sexErrMoFa", "sexErrMo", "sexErrFa", "sexErrTer"),
         na.rm = TRUE, sep = "_", remove = TRUE)
     ped_df$sexError[ped_df$sexError == ""] <- NA
@@ -106,7 +114,8 @@ norm_ped <- function(ped_df, na_strings = c("NA", ""),
         if (!is.numeric(ped_df[[id]])) {
             ped_df[[id]] <- as.character(ped_df[[id]])
             if (length(grep("^ *$", ped_df[[id]])) > 0) {
-                stop("A blank or empty string is not allowed as the ",
+                stop(
+                    "A blank or empty string is not allowed as the ",
                     id, " variable")
             }
         }
@@ -118,10 +127,10 @@ norm_ped <- function(ped_df, na_strings = c("NA", ""),
     pre_famid[is.na(pre_famid)] <- ""
 
     ped_df$id <- paste0(as.character(pre_famid), as.character(ped_df$indId))
-    ped_df$dadid <- paste0(as.character(pre_famid),
-        as.character(ped_df$fatherId))
-    ped_df$momid <- paste0(as.character(pre_famid),
-        as.character(ped_df$motherId))
+    ped_df$dadid <- paste0(
+        as.character(pre_famid), as.character(ped_df$fatherId))
+    ped_df$momid <- paste0(
+        as.character(pre_famid), as.character(ped_df$motherId))
 
     # Get duplicated id key
     id_duplicated <- ped_df$id[base::duplicated(ped_df$id)]
@@ -138,8 +147,8 @@ norm_ped <- function(ped_df, na_strings = c("NA", ""),
     ped_df <- fixParents(ped_df)
 
     # OwnParent
-    id_own_parent <- ped_df$id[ped_df$id == ped_df$dadid |
-        ped_df$id == ped_df$momid]
+    id_own_parent <- ped_df$id[
+        ped_df$id == ped_df$dadid | ped_df$id == ped_df$momid]
 
     # Register errors
     ped_df$idErrFa[ped_df$dadid %in% id_duplicated &
@@ -153,8 +162,9 @@ norm_ped <- function(ped_df, na_strings = c("NA", ""),
         (ped_df$dadid != missid & ped_df$momid == missid)] <- "IsItsOwnParent"
 
     # Unite all id errors in one column
-    ped_df <- tidyr::unite(ped_df, "idError",
-        c("idErrFa", "idErrMo", "idErrSelf",
+    ped_df <- tidyr::unite(
+        ped_df, "idError", c(
+            "idErrFa", "idErrMo", "idErrSelf",
             "idErrOwnParent", "idErrBothParent"),
         na.rm = TRUE, sep = "_", remove = TRUE)
     ped_df$idError[ped_df$idError == ""] <- NA
@@ -181,13 +191,15 @@ norm_ped <- function(ped_df, na_strings = c("NA", ""),
     dadid <- df_noerr$dadid
     momid <- df_noerr$momid
     df_noerr$family <- with(df_noerr, makefamid(id, dadid, momid))
-    ped_df <- merge(ped_df[!colnames(ped_df) == "family"],
+    ped_df <- merge(
+        ped_df[!colnames(ped_df) == "family"],
         df_noerr[c("id", "family")], by = "id", all.x = TRUE)
 
     #### Convert to num ####
     if (try_num) {
         message("Converting to numeric if possible")
-        col_to_num <- colnames(ped_df)[!colnames(ped_df) %in%
+        col_to_num <- colnames(ped_df)[
+            !colnames(ped_df) %in%
             c(cols_need, cols_to_use)]
         for (i in col_to_num) {
             is_num <- sapply(ped_df[[i]], check_num_na, na_as_num = TRUE)
@@ -210,15 +222,18 @@ norm_rel <- function(rel_df, na_strings = c("NA", ""), missid = "0") {
     err_cols <- c("codeErr", "sameIdErr", "idError", "id1Err", "id2Err")
     col_needed <- c("id1", "id2", "code")
     col_to_use <- c("family")
-    rel_df <- check_columns(rel_df, col_needed, err_cols, col_to_use,
+    rel_df <- check_columns(
+        rel_df, col_needed, err_cols, col_to_use,
         others_cols = FALSE, cols_to_use_init = TRUE, cols_used_init = TRUE)
     if (nrow(rel_df) > 0) {
-        rel_df <- dplyr::mutate_if(rel_df, is.character,
+        rel_df <- dplyr::mutate_if(
+            rel_df, is.character,
             ~replace(., . %in% na_strings, NA))
 
         #### Check for code ####
         code_equiv <- c(mztwin = "1", dztwin = "2", uztwin = "3", spouse = "4")
-        rel$code <- as.character(plyr::revalue(as.factor(
+        rel$code <- as.character(
+            plyr::revalue(as.factor(
             stringr::str_remove_all(
                 casefold(as.character(rel$code), upper = FALSE),
             " ")), code_equiv))
@@ -232,8 +247,8 @@ norm_rel <- function(rel_df, na_strings = c("NA", ""), missid = "0") {
 
         ## Compute id with family id
         pre_famid <- rel_df$family
-        pre_famid[!is.na(pre_famid)] <- paste0(pre_famid[!is.na(pre_famid)],
-            "_")
+        pre_famid[!is.na(pre_famid)] <- paste0(
+            pre_famid[!is.na(pre_famid)], "_")
         pre_famid[is.na(pre_famid)] <- ""
 
         rel_df$id1 <- paste0(pre_famid, rel_df$id1)
@@ -246,7 +261,8 @@ norm_rel <- function(rel_df, na_strings = c("NA", ""), missid = "0") {
         rel_df$id2Err[is.na(len2) | len2 == missid] <- "Id2length0"
 
         # Unite all id errors in one column
-        rel_df <- tidyr::unite(rel_df, "idError",
+        rel_df <- tidyr::unite(
+            rel_df, "idError",
             c("sameIdErr", "id1Err", "id2Err"),
             na.rm = TRUE, sep = "_", remove = TRUE)
         rel_df$idError[rel_df$idError == ""] <- NA

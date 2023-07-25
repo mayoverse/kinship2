@@ -14,7 +14,6 @@ usethis::use_github_action("lint")
 lintr::lint_package()
 
 # Must pass
-build()
 check()
 devtools::build_vignettes()
 build() # Generate less than 5Mb
