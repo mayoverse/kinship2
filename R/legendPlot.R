@@ -123,6 +123,6 @@ legendPlot <- function(x, id = x$id, affected = x$affected,
   plot(x,
     density = c(-1, -1, -1, -1), angle = c(90, 90, 90, 90),
     id = id, symbolsize = symbolsize, cex = cex, packed = FALSE,
-    keep_par = TRUE, fig = c(0, 1, 1 / 50, 1), new = TRUE, mar = c(3.5, 1, 1.5, 1), new = TRUE, ...
+    keep_par = TRUE, fig = c(0, 1, 1 / 50, 1), new = TRUE, mar = c(3.5, 1, 1.5, 1), ...
   )
 }
