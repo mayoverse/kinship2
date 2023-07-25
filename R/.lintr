@@ -1,2 +1,4 @@
-linters: linters_with_defaults() # see vignette("lintr")
+linters: linters_with_defaults(
+    indentation_linter = indentation_linter(indent = 4L)
+) # see vignette("lintr")
 encoding: "UTF-8"
