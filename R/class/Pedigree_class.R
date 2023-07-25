@@ -29,8 +29,7 @@ setClass(
     slots = c(
         ped = "data.frame",
         rel = "data.frame",
-        scales = "data.frame",
-        hints = "data.frame"
+        scales = "data.frame"
     )
 )
 
