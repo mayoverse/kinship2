@@ -312,7 +312,7 @@ id2 <- paste(df2$id, c(
   "Mindy", "Mark", "George"
 ), sep = "\n")
 plot(ped2, avail = ifelse(df2$avail, 2, 1), id = id2, cex = .5)
-pedigree.legend(ped2, location = "topright", radius = .2)
+#pedigree.legend(ped2, location = "topright", radius = .2)
 ``` 
 
 To show some other tricks with pedigree plotting, we use pedigree 1 
@@ -360,7 +360,7 @@ The *legendPlot()* function creates a dynamic legend based on the arguments
 passed through it. First, we give it color names and new labels for the affected
 status, which is two for blue eyes and baldness that we created previously for ped2.
 
-```{r, legendplot}
+```{r, legendplot, eval = FALSE}
 legendPlot(ped2,
   col = ifelse(df2$avail, "red", "black"),
   id = id2, symbolsize = .4,
@@ -373,7 +373,7 @@ We can do the same plot by giving integer color codes, and a non-named vector of
 colors. Also, we can let the function grab the colnames() of the affected matrix
 for the legend.
 
-```{r, legendplotindex}
+```{r, legendplotindex, eval = FALSE}
 colnames(ped2$affected)
 legendPlot(ped2,
   col = ifelse(df2$avail, 2, 1),
