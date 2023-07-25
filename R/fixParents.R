@@ -12,7 +12,27 @@
 #' @seealso \\code{\\link{pedigree}}
 #' @export fixParents
 fixParents <- function(x, ...) {
-    UseMethod("fixParents", x)
+    UseMethod("fixParents")
+}
+
+
+#' Fix details on the parents for children of the pedigree
+#'
+#' @description
+#' Fix the sex of parents, add parents that are missing from the pedigree
+#'
+#' @details
+#' First look to add parents whose ids are given in momid/dadid. Second, fix
+#' sex of parents. Last look to add second parent for children for whom only
+#' one parent id is given.
+#'
+#' @author Jason Sinnwell
+#' @seealso \\code{\\link{pedigree}}
+#' @method fixParents default
+#' @export
+fixParents.default <- function(x, ...) {
+    warning(paste("fixParents does not know how to handle object of class ", 
+        class(x),))
 }
 
 
@@ -66,8 +86,8 @@ fixParents <- function(x, ...) {
 #'
 #' @author Jason Sinnwell
 #' @seealso \\code{\\link{pedigree}}
-#' @export fixParents.default
-fixParents.default <- function(id, dadid, momid, sex, missid = 0, ...) {
+#' @export
+fix_parents <- function(id, dadid, momid, sex, missid = 0, ...) {
     ## fix sex of parents add parents that are missing
     n <- length(id)
     if (length(momid) != n) {
@@ -205,6 +225,7 @@ fixParents.default <- function(id, dadid, momid, sex, missid = 0, ...) {
 #'
 #' @examples
 #'
+#' @method fixParents data.frame
 #' @export
 fixParents.data.frame <- function(
     df = df, delete = FALSE, filter = NULL, missid = "0",
@@ -234,7 +255,7 @@ fixParents.data.frame <- function(
             all_id_dif <- all_id[!all_id %in% all_id_new]
             message(paste(length(all_id_dif), "individuals deleted"))
         }
-        df_fix <- fixParents.default(df[[id]], df[[dadid]], df[[momid]],
+        df_fix <- fix_parents(df[[id]], df[[dadid]], df[[momid]],
             df[[sex]], missid = missid, ...)
         col_used <- which(names(df_old) == momid | names(df_old) == dadid |
             names(df_old) == sex)
@@ -252,15 +273,17 @@ fixParents.data.frame <- function(
 #' Fix missing parents
 #'
 #' @description Apply fixParents on a numeric vector or delete missing parents
+#' @method fixParents numeric
 #' @export
 fixParents.numeric <- function(id, dadid, momid, sex, missid = 0, ...){
-    fixParents.default(id, dadid, momid, sex, missid, ...)
+    fix_parents(id, dadid, momid, sex, missid, ...)
 }
 
 #' Fix missing parents
 #'
 #' @description Apply fixParents on character vector or delete missing parents
+#' 
 #' @export
 fixParents.character <- function(id, dadid, momid, sex, missid = 0, ...){
-    fixParents.default(id, dadid, momid, sex, missid, ...)
+    fix_parents(id, dadid, momid, sex, missid, ...)
 }
