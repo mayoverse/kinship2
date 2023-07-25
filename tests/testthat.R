@@ -11,3 +11,4 @@ library(kinship2)
 library(vdiffr)
 
 test_check("kinship2")
+TRUE
