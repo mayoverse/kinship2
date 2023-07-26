@@ -9,10 +9,12 @@ checkColnamesSlot <- function(object, slot = NULL, colnames) {
     array_names <- colnames(slot(object, slot))
 
     if (length(array_names) == 0) {
-        paste0("Missing required colnames for ", slot,
+        paste0(
+            "Missing required colnames for ", slot,
             ". See pedigree documentation.")
     } else if (any(checkColnames(array_names, colnames))) {
-        paste0(paste0(colnames[checkColnames(array_names, colnames)],
+        paste0(paste0(
+            colnames[checkColnames(array_names, colnames)],
             collapse = ", "),
             " column is not present on slot ", slot, ".")
     }
@@ -42,7 +44,8 @@ checkValues <- function(object, slot, column, values) {
     val <- slot(object, slot)[[column]]
     val_abs <- !val %in% values
     if (any(val_abs)) {
-        paste0("Values ", val[val_abs], " in column ", column,
+        paste0(
+            "Values ", val[val_abs], " in column ", column,
             " of slot ", slot, " should be in ",
             paste0(values, collapse = ", "), ".")
     } else {
@@ -64,10 +67,12 @@ isValid <- function(object) {
     errors <- c()
 
     #### Check that the slots have the right columns ####
-    ped_cols <- c("id", "dadid", "momid", "family",
+    ped_cols <- c(
+        "id", "dadid", "momid", "family",
         "sex", "steril", "status", "avail")
     rel_cols <- c("id1", "id2", "code", "family")
-    scale_cols <- c("column", "mods_labels", "fill",
+    scale_cols <- c(
+        "column", "mods_labels", "fill",
         "border", "density", "angle")
     errors <- c(errors, checkColnamesSlot(object, "ped", ped_cols))
     errors <- c(errors, checkColnamesSlot(object, "rel", rel_cols))
@@ -81,10 +86,10 @@ isValid <- function(object) {
     }
 
     # Control values for ped
-    errors <- c(errors, checkValues(object, "ped", "dadid",
-        c(object@ped$id, missid)))
-    errors <- c(errors, checkValues(object, "ped", "momid",
-        c(object@ped$id, missid)))
+    errors <- c(errors, checkValues(
+        object, "ped", "dadid", c(object@ped$id, missid)))
+    errors <- c(errors, checkValues(
+        object, "ped", "momid", c(object@ped$id, missid)))
     errors <- c(errors, checkValues(object, "ped", "sex", c(1:4)))
     errors <- c(errors, checkValues(object, "ped", "steril", c(0, 1, NA)))
     errors <- c(errors, checkValues(object, "ped", "status", c(0, 1, NA)))
@@ -109,10 +114,10 @@ isValid <- function(object) {
     }
 
     #### Check that the rel columns have the right values ####
-    errors <- c(errors, checkValues(object, "rel", "code",
-        c("1", "2", "3", "4")))
-    errors <- c(errors, checkValues(object, "rel", "family",
-        c(object@ped$family, NA)))
+    errors <- c(errors, checkValues(
+        object, "rel", "code", c("1", "2", "3", "4")))
+    errors <- c(errors, checkValues(
+        object, "rel", "family", c(object@ped$family, NA)))
     errors <- c(errors, checkValues(object, "rel", "id1", object@ped$id))
     errors <- c(errors, checkValues(object, "rel", "id2", object@ped$id))
 
@@ -142,8 +147,8 @@ isValid <- function(object) {
     }
 
     # Check that the scales columns have the right values
-    errors <- c(errors, checkValues(object, "scales", "column",
-        colnames(object@ped)))
+    errors <- c(errors, checkValues(
+        object, "scales", "column", colnames(object@ped)))
 
     if (length(errors) == 0) {
         TRUE

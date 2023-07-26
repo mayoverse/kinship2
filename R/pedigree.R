@@ -7,13 +7,22 @@
 #' @param rel_df
 #' @param cols_ren_ped
 #' @return A Pedigree object.
-#' @examples
 #' @export
-#' @seealso [`Pedigree`]
-pedigree <- function(ped_df, rel_df, cols_ren_ped) {
+pedigree <- function(x, ...) {
     UseMethod("pedigree")
 }
 
+#' Create a Pedigree object from a data.frame
+#'
+#' @param ped_df A data.frame with the individuals informations.
+#' @param rel_df A data.frame with the special relationships between individuals.
+#' @param cols_ren_ped A named list with the columns to rename.
+#' @param scales A data.frame with the scales to use for the affection status.
+#'
+#' @return A Pedigree object.
+#'
+#' @method pedigree data.frame
+#' @export
 pedigree.data.frame <- function(
     ped_df = data.frame(
         id = character(),

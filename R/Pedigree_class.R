@@ -1,7 +1,5 @@
-#' @include validity.R
-NULL
-
 # S4 classes ###
+#' @include validity.R
 #' A class to represent a pedigree.
 #'
 #' A pedigree is a ensemble of individuals linked to each other into
@@ -35,7 +33,6 @@ setClass(
 
 setValidity("Pedigree", isValid)
 
-
 #### S4 methods ####
 
 #' Pedigree show method.
@@ -43,32 +40,40 @@ setValidity("Pedigree", isValid)
 #' @return A character vector with the informations about the object.
 setMethod("show", signature(object = "Pedigree"), function(object) {
     cat("Pedigree object with", nrow(object@ped), "individuals and",
-        nrow(object@rel), "special relationships.")
+        nrow(object@rel), "special relationships.", fill = TRUE)
 })
 
 #' Pedigree summary method.
 #' @param object A Pedigree object.
 #' @return A character vector with the summary of the object.
 setMethod("summary", signature(object = "Pedigree"), function(object) {
-    cat("Pedigree object with", nrow(object@ped), "individuals")
-    cat(summary(object@ped))
-    cat("and", nrow(object@rel), "special relationships.")
-    cat(summary(object@rel))
-    cat("The scales are:", levels(as.factor(object@scales$column)))
-
+    cat("Pedigree object with", nrow(object@ped), "individuals", fill = TRUE)
+    cols_summary <- c("family", "id", "dadid", "momid", "sex", "avail")
+    print(summary(object@ped[cols_summary], maxsum = 5))
+    cat("and", nrow(object@rel), "special relationships.", fill = TRUE)
+    print(summary(object@rel))
+    cat("The scales are:", levels(as.factor(object@scales$column)), fill = TRUE)
 })
 
-#' Accessor for the ped slot.
-#' @param object A Pedigree object.
-#' @return A data frame with the individuals informations.
-setMethod("[[", signature(x = "Pedigree", i = "ped"), function(x, i) {
-    x@ped
+setMethod("[[", c(x = "Pedigree", i = "ANY", j = "missing"),
+    function(x, i, j, ..., drop = TRUE) {
+        slot(x, i)
 })
 
-#' Accessor for the rel slot.
-#' @param object A Pedigree object.
-#' @return A data frame with the special relationships.
-setMethod("[[", signature(x = "Pedigree", i = "rel"), function(x, i) {
-    x@rel
+setMethod("[[<-", c(x = "Pedigree", i = "ANY", j = "missing", value = "ANY"),
+    function(x, i, j, ..., value) {
+        slot(x, i) <- value
+        x
 })
+
+setMethod("$", c(x = "Pedigree"),
+    function(x, name) {
+        slot(x, name)
+})
+setMethod("$<-", c(x = "Pedigree"),
+    function(x, name, value) {
+        slot(x, name) <- value
+        x
+})
+
 TRUE
