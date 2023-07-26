@@ -1,5 +1,8 @@
+#' @importFrom plyr revalue
+#' @importFrom dplyr mutate %>% across mutate_if
 usethis::use_package("plyr")
 usethis::use_package("dplyr")
+usethis::use_package("stringr")
 
 ## Normalize the date for the library and get the errors
 #' Normalise dataframe
@@ -46,7 +49,7 @@ norm_ped <- function(
         ped_df, cols_need, cols_used, cols_to_use,
         others_cols = TRUE, cols_to_use_init = TRUE, cols_used_init = TRUE)
 
-    ped_df <- dplyr::mutate_if(
+    ped_df <- mutate_if(
         ped_df, is.character, ~replace(., . %in% na_strings, NA))
 
     #### Sex ####
@@ -214,16 +217,23 @@ norm_ped <- function(
     ped_df
 }
 
-usethis::use_package("stringr")
-
+#' Normalise relationship dataframe
+#'
+#' @description Normalise relationship dataframe for pedigree object
+#'
+#' @param rel_df The dataframe to process
+#' @param na_strings Vector of strings to be considered as NA values
+#' @param missid The missing id value
+#'
+#' @return A dataframe with the errors identified
 norm_rel <- function(rel_df, na_strings = c("NA", ""), missid = "0") {
     print("Bal: norm_rel")
     #### Check columns ####
     err_cols <- c("codeErr", "sameIdErr", "idError", "id1Err", "id2Err")
-    col_needed <- c("id1", "id2", "code")
-    col_to_use <- c("family")
+    cols_needed <- c("id1", "id2", "code")
+    cols_to_use <- c("family")
     rel_df <- check_columns(
-        rel_df, col_needed, err_cols, col_to_use,
+        rel_df, cols_needed, err_cols, cols_to_use,
         others_cols = FALSE, cols_to_use_init = TRUE, cols_used_init = TRUE)
     if (nrow(rel_df) > 0) {
         rel_df <- dplyr::mutate_if(
@@ -232,10 +242,10 @@ norm_rel <- function(rel_df, na_strings = c("NA", ""), missid = "0") {
 
         #### Check for code ####
         code_equiv <- c(mztwin = "1", dztwin = "2", uztwin = "3", spouse = "4")
-        rel$code <- as.character(
+        rel_df$code <- as.character(
             plyr::revalue(as.factor(
             stringr::str_remove_all(
-                casefold(as.character(rel$code), upper = FALSE),
+                casefold(as.character(rel_df$code), upper = FALSE),
             " ")), code_equiv))
 
         code_vali <- c("1", "2", "3", "4")
