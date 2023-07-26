@@ -1,5 +1,3 @@
-# TODO add param, return, examples, keywords
-
 #' Best hint for alignement
 #'
 #' @description
@@ -14,15 +12,13 @@
 #'      + wt[3] * lengths of parent-child
 #' bends perfect: if anything meets this stress level, keep it
 #'
-#' @param ped
-#' @param wt
-#' @param tolerance
+#' @param ped A pedigree object
+#' @param wt A vector of weights for the three error measures
+#' @param tolerance The maximum stress level to accept
 #'
-#' @return
+#' @return Hint object
 #'
-#' @examples
 #' @seealso `autohint`
-#' @keywords
 #' @export besthint
 besthint <- function(ped, wt = c(1000, 10, 1), tolerance = 0) {
     # find founders married to founders the female of such pairs determines the
@@ -41,7 +37,8 @@ besthint <- function(ped, wt = c(1000, 10, 1), tolerance = 0) {
         if (n == 3) {
             rbind(x[1:3], x[c(2, 1, 3)], x[c(3, 1, 2)])
         } else {
-            temp <- paste("cbind(x[", 1:n, "], permute(x[-", 1:n, "]))",
+            temp <- paste(
+                "cbind(x[", 1:n, "], permute(x[-", 1:n, "]))",
                 collapse = ",")
             temp <- paste("rbind(", temp, ")")
             eval(parse(text = temp))
@@ -60,8 +57,8 @@ besthint <- function(ped, wt = c(1000, 10, 1), tolerance = 0) {
 
         ped$hints <- hint
         newhint <- autohint(ped)  # this fixes up marriages and such
-        plist <- align.pedigree(ped, packed = TRUE, align = TRUE, width = 8,
-            hints = newhint)
+        plist <- align.pedigree(
+            ped, packed = TRUE, align = TRUE, width = 8, hints = newhint)
 
         # Compute the error measures
         err <- rep(0, 3)
@@ -72,8 +69,9 @@ besthint <- function(ped, wt = c(1000, 10, 1), tolerance = 0) {
             if (any(dups)) {
                 err[1] <- err[1] + sum(dups)
                 for (i in idlist[dups]) {
-                  who <- (seq_along(idlist))[match(idlist, i, nomatch = 0) > 0]
-                  err[2] <- err[2] + abs(diff(plist$pos[lev, who]))
+                    who <- (seq_along(idlist))[match(
+                        idlist, i, nomatch = 0) > 0]
+                    err[2] <- err[2] + abs(diff(plist$pos[lev, who]))
                 }
             }
 
@@ -83,7 +81,7 @@ besthint <- function(ped, wt = c(1000, 10, 1), tolerance = 0) {
                 # center of kids
                 centers <- tapply(plist$pos[lev, ], fam2, mean)
                 if (any(fam2 == 0))
-                  centers <- centers[-1]
+                    centers <- centers[-1]
                 above <- plist$pos[lev - 1, sort(unique(fam2))] + 0.5  # parents
                 err[3] <- err[3] + sum(abs(centers - above))
             }
