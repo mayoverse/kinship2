@@ -21,12 +21,6 @@ fscore.pedigree <- function(ped) {
     level <- ped$depth + 1
 
 
-    # Currently, the alignment routine requires that you have either 0 parents
-    # or 2 parents, not 1.
-    if (any(dad == 0 & mom > 0) || any(dad > 0 & mom == 0)) {
-        stop("Everyone must have 0 parents or 2 parents, not just one")
-    }
-
     pfun1 <- function(id, dad, mom, sex) {
         # This function returns a list of all founders above a given id
         if (dad[id] == 0 && mom[id] == 0) {
