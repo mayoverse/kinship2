@@ -121,31 +121,36 @@ check_columns <- function(
     cols_p <- colnames(df)
     cols_needed_missing <- cols_needed[is.na(match(cols_needed, cols_p))]
     if (length(cols_needed_missing) > 0) {
-        stop(paste("Columns :", paste0(cols_needed_missing, collapse = ", "),
+        stop(paste(
+            "Columns :", paste0(cols_needed_missing, collapse = ", "),
             "are missing. Could not continu without.\n"))
     }
     cols_use_by_script <- cols_used[cols_used %in% cols_p]
     if (length(cols_use_by_script) > 0) {
-        warning(paste("Columns :", paste0(cols_use_by_script, collapse = ", "),
+        warning(paste(
+            "Columns :", paste0(cols_use_by_script, collapse = ", "),
             "are used by the script and will disgarded.\n"))
         df <- df %>%
             dplyr::select(-dplyr::one_of(cols_use_by_script))
     }
     if (cols_used_init) {
-        message(paste("Columns :", paste0(cols_used, collapse = ", "),
+        message(paste(
+            "Columns :", paste0(cols_used, collapse = ", "),
             "are used by the script and will be set to NA.\n"))
-        df[cols_used] <- NA
+        df[cols_used] <- ifelse(nrow(df) > 0, NA, list(character()))
     }
     cols_optional <- cols_to_use[cols_to_use %in% cols_p]
     cols_optional_abs <- cols_to_use[!cols_to_use %in% cols_p]
     if (length(cols_optional) > 0) {
-        message(paste("Columns :", paste0(cols_optional, collapse = ", "),
+        message(paste(
+            "Columns :", paste0(cols_optional, collapse = ", "),
             "where recognize and therefore will be used.\n"))
     }
     if (cols_to_use_init & length(cols_optional_abs) > 0) {
-        message(paste("Columns :", paste0(cols_optional_abs, collapse = ", "),
+        message(paste(
+            "Columns :", paste0(cols_optional_abs, collapse = ", "),
             "where absent and set to NA.\n"))
-        df[cols_optional_abs] <- NA
+        df[cols_optional_abs] <- ifelse(nrow(df) > 0, NA, list(character()))
     }
 
     if (others_cols) {
@@ -160,7 +165,8 @@ check_columns <- function(
         all_cols_checked <- c(cols_needed, cols_to_use, cols_used)
         cols_not_recognize <- cols_p[!cols_p %in% all_cols_checked]
         if (length(cols_not_recognize) > 0) {
-            message(paste("Columns :",
+            message(paste(
+                "Columns :",
                 paste0(cols_not_recognize, collapse = ", "),
                 "not recognize and therefore will be disregarded.\n"))
         }
