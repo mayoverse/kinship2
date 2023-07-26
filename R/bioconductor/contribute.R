@@ -2,6 +2,9 @@ setwd("R/")
 BiocManager::install(version = "devel")
 BiocManager::valid()
 library(devtools)
+
+load_all()
+
 library(lintr)
 library(formatR)
 

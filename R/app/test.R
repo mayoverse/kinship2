@@ -19,13 +19,16 @@ source("class/Pedigree_class.R")
 df <- read.csv("C:/Users/llenezet/Documents/EnCours/pedigreecreation/PedigreeApp/data/TestPedigree2.csv", sep = ";")
 summary(df)
 
-
-
-
 ped_df <- df
-rel_df <- data.frame(id1 = c(10, 13), id2 = c(15, 12), code = c("mZt wIn", 2))
-object <- pedigree(ped_df, rel_df)
+object <- pedigree(ped_df)
+class(object)
+object$ped
+object[["ped"]]
+object[["ped"]][1, "id"] <- 9
 
+object$ped[1, "id"] <- "12"
+
+summary(object)
 df <- norm_ped(df)
 
 data(sample.ped)
