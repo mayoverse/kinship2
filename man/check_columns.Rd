@@ -11,7 +11,9 @@ check_columns(
   cols_to_use = NULL,
   others_cols = FALSE,
   cols_used_init = FALSE,
-  cols_to_use_init = FALSE
+  cols_to_use_init = FALSE,
+  cols_used_del = FALSE,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -26,12 +28,17 @@ that will be overwritten.}
 
 \item{others_cols}{Boolean defining if non defined columns should be allowed.}
 
-\item{cols_to_use_init}{Boolean defining if the optional columns should be 
+\item{cols_used_init}{Boolean defining if the columns that will be used
+should be initialised to NA.}
+
+\item{cols_to_use_init}{Boolean defining if the optional columns should be
 initialised to NA.}
+
+\item{verbose}{Should message be prompted to the user}
 }
 \value{
-Dataframe with only the column allowed and all the column
-to be used by the script initialised to NA.
+Dataframe with only the column allowed and all the column correctly
+initialised.
 }
 \description{
 Check for presence / absence of columns names
@@ -45,6 +52,7 @@ an error will be prompted and the script will stop
 overwritten to NA.
 - 3 `cols_to_use` those columns are optional and will be recognise
 if present.
+The last two types of columns can be initialised to NA if needed.
 }
 \examples{
 data.frame

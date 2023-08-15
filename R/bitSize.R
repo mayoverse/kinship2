@@ -1,6 +1,3 @@
-# Automatically generated from all.nw using noweb renamed from pedBits, part of
-# pedigree.shrink functions
-
 #' Get pedigree bitsize
 #'
 #' @description
@@ -9,7 +6,9 @@
 #' @details
 #' This is a utility function used in `pedigree.shrink()`
 #'
-#' @param ped A pedigree object
+#' @param dadid Vector of fathers ids
+#' @param momid Vector of mothers ids
+#' @param missid Character defining the missing ids
 #'
 #' @return A list with the following components:
 #' ## bitSize
@@ -21,23 +20,26 @@
 #'
 #' @seealso `pedigree.shrink`
 #' @export bitSize
-bitSize <- function(ped) {
-    ## calculate bit size of a pedigree
+setGeneric("bitSize", function(obj, ...) {
+    standardGeneric("bitSize")
+})
 
-    if (!("pedigree" %in% class(ped))) {
-        stop("Must be a pegigree object.\n")
+setMethod("bitSize", "character", function(obj, momid, missid = "0") {
+    if (length(obj) != length(momid)) {
+        stop("obj and momid should have the same length")
     }
+    founder <- obj == missid & momid == missid
+    ped_size <- length(obj)
+    n_founder <- sum(founder)
+    n_non_founder <- ped_size - n_founder
+    bit_size <- 2 * n_non_founder - n_founder
+    list(
+        bitSize = bit_size, nFounder = n_founder,
+        nNonFounder = n_non_founder)
+})
 
-    father <- ped$findex
-    mother <- ped$mindex
-    id <- ped$id
-
-    founder <- father == 0 & mother == 0
-    pedSize <- length(father)
-    nFounder <- sum(founder)
-    nNonFounder <- pedSize - nFounder
-    bitSize <- 2 * nNonFounder - nFounder
-    return(list(bitSize = bitSize, nFounder = nFounder,
-        nNonFounder = nNonFounder))
-}
-TRUE
+setMethod("bitSize", "Pedigree",
+    function(obj, missid = "0", ...) {
+        bitSize(obj$ped$dadid, obj$ped$momid, missid)
+    }
+)

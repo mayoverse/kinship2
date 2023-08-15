@@ -27,6 +27,7 @@ test_that("kinship works", {
     twindat <- matrix(twindat, ncol = 4, byrow = TRUE)
     dimnames(twindat) <- list(NULL, c("id", "dadid", "momid", "sex"))
     twindat <- data.frame(twindat)
+    twindat[c("id", "dadid", "momid")] <- as.data.frame(lapply(twindat[c("id", "dadid", "momid")], as.character))
 
     relate <- data.frame(
         id1 = c(101, 102, 101, 104, 203),
@@ -34,15 +35,21 @@ test_that("kinship works", {
         code = c(1, 1, 1, 2, 1)
     )
 
-    tped <- with(twindat, pedigree(id, dadid, momid, sex,
-        relation = relate
-    ))
+    ## Test with no special relationship
+    kmat_char <- with(twindat, kinship(id, dadid, momid))
+    tped <- pedigree(twindat)
+    kmat_ped <- kinship(tped)
 
-    expect_doppelganger(
-        "Twin pedigree",
-        plot(tped)
-    )
+    expect_equal(kmat_char, kmat_ped)
 
+    ## Test with no special relationship with chr_type to X
+    kmat_char <- with(twindat, kinship(id, dadid, momid, sex, chrtype = "X"))
+    tped <- pedigree(twindat)
+    kmat_ped <- kinship(tped, chrtype = "X")
+    expect_equal(kmat_char, kmat_ped)
+
+    ## Test with monozygotic relationship
+    tped <- pedigree(twindat, rel_df = relate)
     kmat <- kinship(tped)
 
     ## should show kinship coeff of 0.5 for where MZ twins are
@@ -59,20 +66,18 @@ test_that("kinship works", {
     relate$id2 <- match(relate$id2, indx) - 1
 
     # Build the pedigree and kinship
-    tped <- with(twindat, pedigree(id, dadid, momid, sex,
-        relation = relate
-    ))
+    tped <- pedigree(twindat, rel_df = relate)
     kmat <- kinship(tped)
 
     truth <- matrix(
         c(
             5, 6, 0,
             5, 4, .25, # parent child
-            10, 11, .5, # mz twins
+            10, 11, .5, # MZ twins
             22, 12, .25, # aunt, mz with mother
             22, 13, .125, # aunt, dz
             13, 14, .25, # dz twins
-            20, 21, .5, # mz twins
+            20, 21, .5, # MZ twins
             19, 16, 0, # marry in uncle
             19, 11, .125, # aunt who is a twin
             19, 3, .125
@@ -85,18 +90,14 @@ test_that("kinship works", {
 test_that("Kinship Claus Ekstrom 09/2012", {
     ## simple test case for kinship of MZ twins from Claus Ekstrom, 9/2012
     mydata <- data.frame(
-        id = 1:4, dadid = c(NA, NA, 1, 1),
-        momid = c(NA, NA, 2, 2),
+        id = 1:4,
+        dadid = c(0, 0, 1, 1),
+        momid = c(0, 0, 2, 2),
         sex = c("male", "female", "male", "male"),
         famid = c(1, 1, 1, 1))
     relation <- data.frame(id1 = c(3), id2 = c(4), famid = c(1), code = c(1))
 
-    ped <- with(mydata, pedigree(
-        id = id, dadid = dadid,
-        momid = momid, sex = sex,
-        relation = relation))
-
-    expect_doppelganger("Twin pedigree 2", plot(ped))
+    ped <- pedigree(mydata, rel_df = relation)
 
     kmat <- kinship(ped)
     expect_true(all(kmat[3:4, 3:4] == 0.5))
@@ -120,37 +121,24 @@ test_that("kinship works with X chromosoms", {
         ncol = 5, byrow = TRUE)
 
     ped2df <- as.data.frame(ped2mat)
-    names(ped2df) <- c("fam", "id", "dad", "mom", "sex")
-    ## 1 2  3 4 5 6 7 8 9 10,11,12,13,14,15,16
-    ped2df$disease <- c(NA, NA, 1, 0, 0, 0, 0, 1, 1, 1)
-    ped2df$smoker <- c(0, NA, 0, 0, 1, 1, 1, 0, 0, 0)
-    ped2df$availstatus <- c(0, 0, 1, 1, 0, 1, 1, 1, 1, 1)
-    ped2df$vitalstatus <- c(1, 1, 1, 0, 1, 0, 0, 0, 0, 0)
-
-    ped2 <- with(ped2df, pedigree(id, dad, mom, sex,
-        status = vitalstatus,
-        affected = cbind(disease, smoker, availstatus),
-        relation = matrix(c(8, 9, 1), ncol = 3)
-    ))
+    names(ped2df) <- c("fam", "id", "dadid", "momid", "sex")
+    rel_df <- as.data.frame(matrix(c(8, 9, 1), ncol = 3))
+    names(rel_df) <- c("id1", "id2", "code")
+    ped2 <- pedigree(ped2df, rel_df = rel_df)
 
     ## regular kinship matrix
     expect_snapshot(kinship(ped2))
     expect_snapshot(kinship(ped2, chr = "X"))
 
     ped3 <- ped2
-    ped3$sex[9] <- "unknown"
+    ped3$ped$sex[10] <- "unknown"
 
     ## regular again, should be same as above
     expect_equal(kinship(ped2), kinship(ped3))
 
     ## now with unknown sex, gets NAs
     k3 <- kinship(ped3, chrtype = "X")
-    expect_true(all(is.na(k3[9, ])))
-
-    # all descendants of sex=unknown to be NAs as well
-    ped3$sex[8] <- "unknown"
-    k4 <- kinship(ped3, chr = "X")
-    expect_true(all(is.na(k4[8:10, ])))
+    expect_true(all(is.na(k3[10, ])))
 })
 
 test_that("Kinship with 2 different family", {
@@ -168,32 +156,21 @@ test_that("Kinship with 2 different family", {
     ), ncol = 5, byrow = TRUE)
 
     ped2df <- as.data.frame(ped2mat)
-    names(ped2df) <- c("fam", "id", "dad", "mom", "sex")
-    ## 1 2  3 4 5 6 7 8 9 10,11,12,13,14,15,16
-    ped2df$disease <- c(NA, NA, 1, 0, 0, 0, 0, 1, 1, 1)
-    ped2df$smoker <- c(0, NA, 0, 0, 1, 1, 1, 0, 0, 0)
-    ped2df$availstatus <- c(0, 0, 1, 1, 0, 1, 1, 1, 1, 1)
-    ped2df$vitalstatus <- c(1, 1, 1, 0, 1, 0, 0, 0, 0, 0)
+    names(ped2df) <- c("family", "id", "dadid", "momid", "sex")
 
     ## testing kinship2 on pedigreeList when only one subject in a family
-    peddf <- rbind(ped2df, c(2, 1, 0, 0, 1, 1, 0, 1, 0))
+    peddf <- rbind(ped2df, c(2, 1, 0, 0, 1))
 
-    peds <- with(peddf, pedigree(id, dad, mom, sex,
-        status = vitalstatus, fam = fam,
-        affected = cbind(disease, smoker, availstatus)
-    ))
+    peds <- pedigree(peddf)
     kinfam <- kinship(peds)
-    expect_true(all(kinfam["2/1", 1:10] == 0))
+    expect_true(all(kinfam["2_1", 1:10] == 0))
 
     ## now add two more for ped2, and check again
     peddf <- rbind(peddf,
-        c(2, 2, 0, 0, 2, 1, 0, 1, 0),
-        c(2, 3, 1, 2, 1, 1, 0, 1, 0)
+        c(2, 2, 0, 0, 2),
+        c(2, 3, 1, 2, 1)
     )
-    peds <- with(peddf, pedigree(id, dad, mom, sex,
-        status = vitalstatus, fam = fam,
-        affected = cbind(disease, smoker, availstatus)
-    ))
+    peds <- pedigree(peddf)
     kin2fam <- kinship(peds)
     expect_true(all(kin2fam[11:13, 1:10] == 0))
 })

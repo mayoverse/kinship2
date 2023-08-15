@@ -51,6 +51,7 @@ RoxygenNote: 7.2.3
 VignetteBuilder: knitr
 Suggests: 
     testthat (>= 3.0.0),
+    diffviewer,
 	vdiffr,
 	rmarkdown,
     BiocStyle
@@ -59,3 +60,13 @@ biocViews: Software, ShinyApps, DataRepresentation, Genetics
 BugReports: https://github.com/LouisLeLezet/kinship2/issues
 url: https://github.com/LouisLeNezet/kinship2
 BiocType: Software
+Collate: 
+    'bitSize.R'
+    'fixParents.R'
+    'kindepth.R'
+    'kinship.R'
+    'normData.R'
+    'pedigree.R'
+    'validity.R'
+    'pedigreeClass.R'
+    'utils.R'

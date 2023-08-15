@@ -7,20 +7,13 @@
 \alias{kinship.pedigreeList}
 \title{Compute a kinship matrix}
 \usage{
-kinship(id, ...)
-
-\method{kinship}{pedigree}(id, chrtype = "autosome", ...)
-
-\method{kinship}{pedigreeList}(id, chrtype = "autosome", ...)
+kinship(obj, ...)
 }
 \arguments{
-\item{id}{either a pedigree object, pedigreeList object, or a vector of
-subject identifiers.  Subject identifiers may be numeric or character.}
-
 \item{...}{Any number of optional arguments}
 
-\item{chrtype}{chromosome type.  The currently supported types are
-'autosome' and 'X' or 'x'.}
+\item{id}{either a pedigree object, pedigreeList object, or a vector of
+subject identifiers.  Subject identifiers may be numeric or character.}
 
 \item{dadid}{for each subject, the identifier of the biological father.
 This is only used if `id` is a vector.}
@@ -29,6 +22,9 @@ This is only used if `id` is a vector.}
 This is only used if `id` is a vector.}
 
 \item{sex}{vector of sex values coded as 1=male, 2=female}
+
+\item{chrtype}{chromosome type.  The currently supported types are
+'autosome' and 'X' or 'x'.}
 }
 \value{
 a matrix of kinship coefficients.

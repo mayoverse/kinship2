@@ -4,7 +4,7 @@
 \alias{kindepth}
 \title{Compute the depth of each subject in a pedigree}
 \usage{
-kindepth(id, dadid, momid, align = FALSE)
+kindepth(obj, ...)
 }
 \arguments{
 \item{id}{Identification code for each individual}
@@ -37,4 +37,3 @@ In the case of an inbred pedigree a perfect alignment obeying
 \author{
 Terry Therneau
 }
-\keyword{genetics}

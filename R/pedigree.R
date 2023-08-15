@@ -1,34 +1,24 @@
-#' Create a Pedigree object
-#'
-#' These functions help to create a \\code{Pedigree} object from
-#' `data.frame`.
-#'
-#' @param ped_df
-#' @param rel_df
-#' @param cols_ren_ped
-#' @return A Pedigree object.
-#' @export
-pedigree <- function(x, ...) {
-    UseMethod("pedigree")
-}
-
 #' Create a Pedigree object from a data.frame
 #'
+#'  This constructor help to create a \\code{Pedigree} object from
+#' `data.frame`.
+#'
 #' @param ped_df A data.frame with the individuals informations.
-#' @param rel_df A data.frame with the special relationships between individuals.
+#' @param rel_df A data.frame with the special relationships between
+#' individuals.
 #' @param cols_ren_ped A named list with the columns to rename.
 #' @param scales A data.frame with the scales to use for the affection status.
+#' @param normalize A logical to know if the data should be normalised.
 #'
 #' @return A Pedigree object.
-#'
-#' @method pedigree data.frame
-#' @export
-pedigree.data.frame <- function(
+#' @export pedigree
+pedigree <- function(
     ped_df = data.frame(
         id = character(),
         dadid = character(),
         momid = character(),
-        sex = numeric()),
+        sex = numeric(),
+        family = character()),
     rel_df = data.frame(
         id1 = character(),
         id2 = character(),
@@ -44,7 +34,8 @@ pedigree.data.frame <- function(
         fill = character(),
         border = character(),
         density = numeric(),
-        angle = numeric())) {
+        angle = numeric()),
+    normalize = TRUE) {
     ## Rename columns
     old_cols <- as.vector(unlist(cols_ren_ped))
     new_cols <- names(cols_ren_ped)
@@ -52,9 +43,31 @@ pedigree.data.frame <- function(
     names(ped_df)[cols_to_ren[!is.na(cols_to_ren)]] <-
         new_cols[!is.na(cols_to_ren)]
     ## Normalise the data before creating the object
-    ped_df <- norm_ped(ped_df)
-    rel_df <- norm_rel(rel_df)
+    if (normalize) {
+        ped_df <- normPed(ped_df)
+        rel_df <- normRel(rel_df)
+    } else {
+        cols_need <- c("id", "dadid", "momid", "sex")
+        cols_to_use <- c("steril", "avail", "family", "status")
+        ped_df <- check_columns(
+            ped_df, cols_need, "", cols_to_use,
+            others_cols = TRUE, cols_to_use_init = TRUE)
+        cols_need <- c("id1", "id2", "code")
+        cols_to_use <- c("family")
+        rel_df <- check_columns(
+            rel_df, cols_need, "", cols_to_use, cols_to_use_init = TRUE)
+    }
+    if (any(!is.na(ped_df$error))) {
+        warning("The pedigree informations are not valid.")
+        print("Here is the normalised pedigree informations with the errors")
+        return(ped_df)
+    }
+
+    if (any(!is.na(ped_df$error))) {
+        warning("The relationship informations are not valid.")
+        print("Here is the normalised relationship informations with the errors")
+        return(rel_df)
+    }
     ## Create the object
     new("Pedigree", ped = ped_df, rel = rel_df, scales = scales)
 }
-TRUE

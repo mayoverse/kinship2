@@ -4,10 +4,14 @@
 \alias{bitSize}
 \title{Get pedigree bitsize}
 \usage{
-bitSize(ped)
+bitSize(obj, ...)
 }
 \arguments{
-\item{ped}{A pedigree object}
+\item{dadid}{Vector of fathers ids}
+
+\item{momid}{Vector of mothers ids}
+
+\item{missid}{Character defining the missing ids}
 }
 \value{
 A list with the following components:

@@ -193,7 +193,7 @@ We include a copy of the routine for backwards compatability, but
 do not anticipate any new usage of it.
 Like most routines, this starts out with a collection of error checks.
 
-## Monozygotic Twins, for Pedigree object
+## Monozygotic twins, for Pedigree object
 
 Return now to the question of monzygotic sets, used specifically in the
 kinship for pedigree objects.

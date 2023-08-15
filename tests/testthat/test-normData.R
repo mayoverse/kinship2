@@ -1,0 +1,64 @@
+test_that("Norm ped", {
+    ped_df <- c(
+        1, 3, 4, 2, TRUE, NA, "1", "None",
+        2, 0, 0, 1, TRUE, 1, 2, "A",
+        3, 8, 7, "man", FALSE, NA, "2", "E",
+        4, 6, 5, "woman", FALSE, "A", 3, "A",
+        5, 0, 0, "f", FALSE, NA, 7, "E",
+        6, "None", 0, "m", TRUE, NA, "NA", "D",
+        7, 0, "0", 1, FALSE, "NA", 6, "A",
+        8, 0, 0, 1, FALSE, "None", "3", "D",
+        8, 2, 0, 2, FALSE, "None", "3", "A",
+        9, 9, 8, 3, FALSE, "Ab", "5", "B")
+    ped_df <- matrix(ped_df, ncol = 8, byrow = TRUE)
+    dimnames(ped_df) <- list(NULL, c("indId", "fatherId", "motherId", "gender", "steril",
+        "available", "NumOther", "AffMod"))
+    ped_df <- data.frame(ped_df)
+    ped_df <- normPed(ped_df, na_strings = c("None", "0", "NA"))
+    expect_equal(dim(ped_df), c(10, 16))
+    expect_snapshot(ped_df)
+    expect_equal(sum(is.na(ped_df$error)), 3)
+})
+
+test_that("Norm rel", {
+    rel_df <- c(
+        1, 2, 1, 1,
+        1, 3, 2, 1,
+        2, 3, 3, 1,
+        1, 2, 4, 2,
+        3, 4, "MZ twin", 2,
+        6, 7, "Other", 2,
+        8, "8", "spo Use", 2,
+        9, "0", "4", 1,
+        NA, "B", NA, 1
+    )
+
+    rel_df <- matrix(rel_df, ncol = 4, byrow = TRUE)
+    dimnames(rel_df) <- list(NULL, c("id1", "id2", "code", "family"))
+    rel_df <- data.frame(rel_df)
+
+    rel_df <- normRel(rel_df)
+    expect_equal(dim(rel_df), c(9, 5))
+    expect_snapshot(rel_df)
+    expect_equal(sum(is.na(rel_df$error)), 6)
+})
+
+test_that("prefix_famid works", {
+    family_id <- NULL
+    ind_id <- c("A", "B", "0", NA)
+    missid <- "0"
+
+    a <- prefix_famid(family_id, ind_id, missid)
+    expect_equal(a, ind_id)
+
+    family_id <- "1"
+    b <- prefix_famid(family_id, ind_id, missid)
+    expect_equal(b, c("1_A", "1_B", "0", NA))
+
+    family_id <- c("1", "2", "0", NA)
+    c <- prefix_famid(family_id, ind_id, missid)
+    expect_equal(c, c("1_A", "2_B", "0", NA))
+
+    family_id <- c("1", "2", "0")
+    expect_error(prefix_famid(family_id, ind_id, missid))
+})

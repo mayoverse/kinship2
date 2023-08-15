@@ -50,7 +50,7 @@ value of 0=male 1=female is also accepted.
 \item[relationship] Optional, a matrix or data frame with three columns.
 The first two contain the identifier values of the subject pairs, and
 the third the code for their relationship: 1 = Monozygotic twin, 2=Dizygotic twin,
-3= Twin of unknown zygosity, 4 = Spouse.  
+3= twin of unknown zygosity, 4 = Spouse.  
 \item[famid] Optional, a numeric or character vector of family identifiers.
 \end{description}
         

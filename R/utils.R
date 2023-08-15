@@ -1,45 +1,3 @@
-#' Data frame to contingency table
-#'
-#' @description Summarise two variables in a contingency table
-#'
-#' @details Proccess two variable from a dataframe in a contingency
-#' table depending on the variables selected and the thresholds in case the
-#' variable is numerical. To do so the variables are transformed to factors.
-#'
-#' @param df Dataframe containing the family informations
-#' @param var1 First column variable to select
-#' @param var2 Second column variable to select
-#' @param threshold1 Threshold to apply to `var1`
-#' @param threshold2 Threshold to apply to `var2`
-#'
-#' @examples
-#' var1 <- runif(10)
-#' var2 <- runif(10)
-#' df <- data.frame(var1, var2)
-#' df_cont_table(df, 'var1', 0.5, 'var2', c(0.25, 0.5, 0.75))
-#' df_cont_table(df, 'var1', 0.5)
-#'
-#' @export df_cont_table
-df_cont_table <- function(
-    df, var1, threshold1 = NULL, var2 = NULL, threshold2 = NULL) {
-    if (!var1 %in% colnames(df)) {
-        stop(paste0(var1, "is not present in the dataframe", collapse = " "))
-    }
-    if (!var2 %in% colnames(df) && !is.null(var2)) {
-        stop(paste0(var2, "is not present in the dataframe", collapse = " "))
-    }
-    var1_fact <- var_to_factor(df[[var1]], threshold = threshold1)
-    if (is.null(var2)) {
-        cont_table <- as.data.frame(table(var1_fact))
-        colnames(cont_table) <- c(var1, "Freq")
-    } else {
-        var2_fact <- var_to_factor(df[[var2]], threshold = threshold2)
-        cont_table <- as.data.frame(table(var1_fact, var2_fact))
-        colnames(cont_table) <- c(var1, var2, "Freq")
-    }
-    cont_table
-}
-
 #' Variable to factor
 #'
 #' @description Transform a variable into a factor
@@ -78,7 +36,52 @@ var_to_factor <- function(var, threshold = NULL) {
     var_fact
 }
 
-usethis::use_package("dplyr")
+
+#' Data frame to contingency table
+#'
+#' @description Summarise two variables in a contingency table
+#'
+#' @details Proccess two variable from a dataframe in a contingency
+#' table depending on the variables selected and the thresholds in case the
+#' variable is numerical. To do so the variables are transformed to factors.
+#'
+#' @param df Dataframe containing the family informations
+#' @param var1 First column variable to select
+#' @param var2 Second column variable to select
+#' @param threshold1 Threshold to apply to `var1`
+#' @param threshold2 Threshold to apply to `var2`
+#'
+#' @examples
+#' var1 <- runif(10)
+#' var2 <- runif(10)
+#' df <- data.frame(var1, var2)
+#' df_cont_table(df, 'var1', 0.5, 'var2', c(0.25, 0.5, 0.75))
+#' df_cont_table(df, 'var1', 0.5)
+#'
+#' @export df_cont_table
+df_cont_table <- function(
+    df, var1, threshold1 = NULL, var2 = NULL, threshold2 = NULL) {
+    if (!var1 %in% colnames(df)) {
+        stop(paste0(var1, " is not present in the dataframe", collapse = " "))
+    }
+    if (!var2 %in% colnames(df) && !is.null(var2)) {
+        stop(paste0(var2, " is not present in the dataframe", collapse = " "))
+    }
+    var1_fact <- var_to_factor(df[[var1]], threshold = threshold1)
+    if (is.null(var2)) {
+        cont_table <- as.data.frame(table(var1_fact))
+        colnames(cont_table) <- c(var1, "Freq")
+    } else {
+        var2_fact <- var_to_factor(df[[var2]], threshold = threshold2)
+        cont_table <- as.data.frame(table(var1_fact, var2_fact))
+        colnames(cont_table) <- c(var1, var2, "Freq")
+    }
+    cont_table
+}
+
+
+#' @importFrom dplyr select one_of %>%
+NULL
 
 #' Check for columns name usage
 #'
@@ -92,6 +95,7 @@ usethis::use_package("dplyr")
 #' overwritten to NA.
 #' - 3 `cols_to_use` those columns are optional and will be recognise
 #' if present.
+#' The last two types of columns can be initialised to NA if needed.
 #'
 #' @param df The dataframe to use
 #' @param cols_needed A vector of columns needed
@@ -99,11 +103,14 @@ usethis::use_package("dplyr")
 #' that will be overwritten.
 #' @param cols_to_use A vector of optional columns that are authorized.
 #' @param others_cols Boolean defining if non defined columns should be allowed.
-#' @param cols_to_use_init Boolean defining if the optional columns should be 
+#' @param cols_to_use_init Boolean defining if the optional columns should be
 #' initialised to NA.
+#' @param cols_used_init Boolean defining if the columns that will be used
+#' should be initialised to NA.
+#' @param verbose Should message be prompted to the user
 #'
-#' @return Dataframe with only the column allowed and all the column
-#' to be used by the script initialised to NA.
+#' @return Dataframe with only the column allowed and all the column correctly
+#' initialised.
 #'
 #' @examples
 #' data.frame
@@ -117,7 +124,8 @@ usethis::use_package("dplyr")
 #' @export check_columns
 check_columns <- function(
     df, cols_needed = NULL, cols_used = NULL, cols_to_use = NULL,
-    others_cols = FALSE, cols_used_init = FALSE, cols_to_use_init = FALSE) {
+    others_cols = FALSE, cols_used_init = FALSE, cols_to_use_init = FALSE,
+    cols_used_del = FALSE, verbose = FALSE) {
     cols_p <- colnames(df)
     cols_needed_missing <- cols_needed[is.na(match(cols_needed, cols_p))]
     if (length(cols_needed_missing) > 0) {
@@ -127,29 +135,40 @@ check_columns <- function(
     }
     cols_use_by_script <- cols_used[cols_used %in% cols_p]
     if (length(cols_use_by_script) > 0) {
+        if (!cols_used_del) {
+            stop(paste(
+                "Columns :", paste0(cols_use_by_script, collapse = ", "),
+                "are used by the script and would be overwritten.\n"))
+        }
         warning(paste(
             "Columns :", paste0(cols_use_by_script, collapse = ", "),
             "are used by the script and will disgarded.\n"))
-        df <- df %>%
-            dplyr::select(-dplyr::one_of(cols_use_by_script))
+        cols_to_keep <- cols_p[!cols_p %in% cols_use_by_script]
+        df <- df[, cols_to_keep]
     }
     if (cols_used_init) {
-        message(paste(
-            "Columns :", paste0(cols_used, collapse = ", "),
-            "are used by the script and will be set to NA.\n"))
+        if (verbose) {
+            message(paste(
+                "Columns :", paste0(cols_used, collapse = ", "),
+                "are used by the script and will be set to NA.\n"))
+        }
         df[cols_used] <- ifelse(nrow(df) > 0, NA, list(character()))
     }
     cols_optional <- cols_to_use[cols_to_use %in% cols_p]
     cols_optional_abs <- cols_to_use[!cols_to_use %in% cols_p]
     if (length(cols_optional) > 0) {
-        message(paste(
-            "Columns :", paste0(cols_optional, collapse = ", "),
-            "where recognize and therefore will be used.\n"))
+        if (verbose) {
+            message(paste(
+                "Columns :", paste0(cols_optional, collapse = ", "),
+                "where recognize and therefore will be used.\n"))
+        }
     }
-    if (cols_to_use_init & length(cols_optional_abs) > 0) {
-        message(paste(
-            "Columns :", paste0(cols_optional_abs, collapse = ", "),
-            "where absent and set to NA.\n"))
+    if (cols_to_use_init && length(cols_optional_abs) > 0) {
+        if (verbose) {
+            message(paste(
+                "Columns :", paste0(cols_optional_abs, collapse = ", "),
+                "where absent and set to NA.\n"))
+        }
         df[cols_optional_abs] <- ifelse(nrow(df) > 0, NA, list(character()))
     }
 
@@ -160,11 +179,11 @@ check_columns <- function(
             cols_to_use <- cols_optional
         }
         if (!cols_used_init) {
-            cols_used <- NA
+            cols_used <- NULL
         }
         all_cols_checked <- c(cols_needed, cols_to_use, cols_used)
         cols_not_recognize <- cols_p[!cols_p %in% all_cols_checked]
-        if (length(cols_not_recognize) > 0) {
+        if (length(cols_not_recognize) > 0 & verbose) {
             message(paste(
                 "Columns :",
                 paste0(cols_not_recognize, collapse = ", "),
@@ -175,7 +194,9 @@ check_columns <- function(
     df[all_cols_checked]
 }
 
-usethis::use_package("stringr")
+#'@importFrom stringr str_detect
+NULL
+
 #' Check is numeric
 #'
 #' @description Check if a variable given is numeric or NA
@@ -197,12 +218,11 @@ usethis::use_package("stringr")
 #' @export check_num_na
 check_num_na <- function(var, na_as_num = TRUE) {
     # Should the NA value considered as numeric values
-    is_num <- stringr::str_detect(var, "^\\-*[:digit:]+\\.*[:digit:]*$")
+    is_num <- str_detect(var, "^\\-*[:digit:]+\\.*[:digit:]*$")
     is_na <- FALSE
     if (na_as_num) {
-        is_na <- stringr::str_detect(as.character(var), "^NA$")
+        is_na <- str_detect(as.character(var), "^NA$")
         is_na <- is_na | is.na(var)
     }
     is_num | is_na
 }
-TRUE

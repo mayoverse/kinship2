@@ -111,7 +111,7 @@ Now, get an ordering of the pedigree to use as the starting point.
 The numbers start at 1 on each level. We do not need the final ~prettify~ step,
 hence align=F. If there is a hints structure entered, we retain its non-zero entries,
 otherwise people are put into the order of the data set.  We allow the hints
-input to be only an order vector. Twins are then further reordered.
+input to be only an order vector. twins are then further reordered.
 
 ## Fixup-autohint
 

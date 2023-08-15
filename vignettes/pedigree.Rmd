@@ -241,7 +241,7 @@ ped2 <- pedigree(df2$id, df2$father, df2$mother,
 Special pedigree relationships can be specified in a matrix 
 as the $relation$ argument.  There are 4 relationships that can 
 be specified by numeric codes: 1=Monozygotic twins, 2=Dizygotic twins, 
-3=Twins of unknown zygosity, and 4=Spouse. The spouse relationship can 
+3=twins of unknown zygosity, and 4=Spouse. The spouse relationship can 
 indicate a marry-in when a couple does not have children together.
 
 Below, we create a matrix of relationships for monozygotic and 
