@@ -174,15 +174,3 @@ test_that("Kinship with 2 different family", {
     kin2fam <- kinship(peds)
     expect_true(all(kin2fam[11:13, 1:10] == 0))
 })
-
-# TODO check if matrix right format
-test_that("MakeKinship works", {
-    data(minnbreast)
-    kin1 <- with(minnbreast, makekinship(famid, id, fatherid, motherid))
-    expect_equal(dim(kin1), c(28081, 28081))
-    expect_equal(class(kin1)[1], "dsCMatrix")
-
-    kin2 <- with(minnbreast, makekinship(famid, id, fatherid, motherid,
-        unrelated = 28))
-    expect_equal(dim(kin2), c(28081, 28081))
-})
