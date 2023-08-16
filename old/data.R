@@ -20,7 +20,7 @@
 #' For a subset of the families data was gathered on prostate cancer risk for
 #' male subjects via questionnaires sent to men over 40. Other than this, data
 #' items other than parentage are limited to the female subjects.
-#' In ___ a second phase of the study was instituted. The pedigrees were further
+#' In 2003 a second phase of the study was instituted. The pedigrees were further
 #' extended to the numbers found in this data set, and further data gathered by
 #' questionnaire.
 #'
@@ -82,9 +82,41 @@
 #'
 #' @examples
 #' data(minnbreast)
-#' breastped <- with(minnbreast, pedigree(id, fatherid, motherid, sex,
-#' status=(cancer& !is.na(cancer)), affected=proband,famid=famid))
-#' print(breastped['8'])
-#' plot(breastped['8'])  #plot family 8, proband is solid, slash for cancers
+#' breastped <- pedigree(minnbreast)
+#' print(breastped)
+#' plot(breastped)  #plot family 8, proband is solid, slash for cancers
 "minnbreast"
+
+#' Sample pedigree data
+#'
+#' @description Small sample pedigree data set.
+#'
+#' @details This is a small fictive sample pedigree data set, with 55 individuals
+#' in 2 families.
+#' The aim was to create a data set with a variety of pedigree structures.
+#'
+#' @format A data frame with 55 observations, one line per subject, on the
+#' following 7 variables.
+#' \\describe{
+#' \\item{\\code{family}}{family identifier}
+#' \\item{\\code{id}}{subject identifier}
+#' \\item{\\code{dadid}}{identifier of the father, if the father is part of the
+#' data set; zero otherwise}
+#' \\item{\\code{momid}}{identifier of the mother, if the mother is part of the
+#' data set; zero otherwise}
+#' \\item{\\code{sex}}{1 for male or 2 for F}
+#' \\item{\\code{affected}}{1 or 0}
+#' \\item{\\code{available}}{1 or 0}
+#' }
+#'
+#' @usage
+#' data(sampleped)
+#'
+#' @examples
+#' data(sampleped)
+#' ped <- pedigree(sampleped)
+#' print(ped)
+#' plot(ped)
+"sampleped"
+
 TRUE

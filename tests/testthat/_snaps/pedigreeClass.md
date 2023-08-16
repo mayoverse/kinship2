@@ -29,7 +29,7 @@
                          
       The scales are: 
 
-# pedigree from samplePed and affectation
+# pedigree from sampleped and affectation
 
     Code
       summary(ped1)

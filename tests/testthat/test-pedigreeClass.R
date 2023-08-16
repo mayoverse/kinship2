@@ -8,17 +8,18 @@ test_that("pedigree works", {
     expect_snapshot(summary(ped))
 })
 
-test_that("pedigree from samplePed and affectation", {
+test_that("pedigree from sampleped and affectation", {
     # Here is a case where the levels fail to line up properly
-    data(samplePed)
-    df1 <- samplePed[samplePed$family == 1, ]
+    data(sampleped)
+    df1 <- sampleped[sampleped$family == 1, ]
     colnames(df1)
     ped1 <- pedigree(df1, cols_ren_ped = list(
         "indId" = "id",
         "fatherId" = "dadid",
         "motherId" = "momid",
         "gender" = "sex",
-        "availability" = "avail"))
+        "available" = "avail"))
+    ped1$ped
     expect_equal(nrow(ped1@ped), 41)
     expect_equal(ncol(ped1@ped), 16)
     expect_equal(nrow(ped1@rel), 0)
