@@ -228,10 +228,11 @@ normRel <- function(rel_df, na_strings = c("NA", ""), missid = "0") {
     err_cols <- c("codeErr", "sameIdErr", "id1Err", "id2Err", "error")
     err <- data.frame(matrix(NA, nrow = nrow(rel_df), ncol = length(err_cols)))
     colnames(err) <- err_cols
-    cols_needed <- c("id1", "id2", "code")
+    cols_needed <- c("indId1", "indId2", "code")
+    cols_used <- c("id1", "id2", "error")
     cols_to_use <- c("family")
     rel_df <- check_columns(
-        rel_df, cols_needed, "error", cols_to_use,
+        rel_df, cols_needed, cols_used, cols_to_use,
         others_cols = FALSE, cols_to_use_init = TRUE, cols_used_init = TRUE)
     if (nrow(rel_df) > 0) {
         rel_df <- mutate_if(
@@ -254,17 +255,17 @@ normRel <- function(rel_df, na_strings = c("NA", ""), missid = "0") {
 
         #### Check for id errors #### Set ids as characters
         rel_df <- rel_df %>%
-            mutate(across(c("id1", "id2"), as.character))
+            mutate(across(c("indId1", "indId2"), as.character))
 
         ## Check for non null ids
-        len1 <- nchar(rel_df$id1)
-        len2 <- nchar(rel_df$id2)
-        err$id1Err[is.na(len1) | len1 == missid] <- "Id1length0"
-        err$id2Err[is.na(len2) | len2 == missid] <- "Id2length0"
+        len1 <- nchar(rel_df$indId1)
+        len2 <- nchar(rel_df$indId2)
+        err$id1Err[is.na(len1) | len1 == missid] <- "indId1length0"
+        err$id2Err[is.na(len2) | len2 == missid] <- "indId2length0"
 
         ## Compute id with family id
-        rel_df$id1 <- prefix_famid(rel_df$family, rel_df$id1, missid)
-        rel_df$id2 <- prefix_famid(rel_df$family, rel_df$id2, missid)
+        rel_df$id1 <- prefix_famid(rel_df$family, rel_df$indId1, missid)
+        rel_df$id2 <- prefix_famid(rel_df$family, rel_df$indId2, missid)
 
         err$sameIdErr[rel_df$id1 == rel_df$id2] <- "SameId"
 

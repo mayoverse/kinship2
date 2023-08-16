@@ -6,7 +6,10 @@
 #' @param ped_df A data.frame with the individuals informations.
 #' @param rel_df A data.frame with the special relationships between
 #' individuals.
-#' @param cols_ren_ped A named list with the columns to rename.
+#' @param cols_ren_ped A named list with the columns to rename for the
+#' pedigree dataframe.
+#' @param cols_ren_rel A named list with the columns to rename for the
+#' relationship matrix.
 #' @param scales A data.frame with the scales to use for the affection status.
 #' @param normalize A logical to know if the data should be normalised.
 #'
@@ -22,12 +25,16 @@ pedigree <- function(
     rel_df = data.frame(
         id1 = character(),
         id2 = character(),
-        code = numeric()),
+        code = numeric(),
+        family = character()),
     cols_ren_ped = list(
         "indId" = "id",
         "fatherId" = "dadid",
         "motherId" = "momid",
         "gender" = "sex"),
+    cols_ren_rel = list(
+        "indId1" = "id1",
+        "indId2" = "id2"),
     scales = data.frame(
         column = character(),
         mods_labels = character(),
@@ -36,11 +43,18 @@ pedigree <- function(
         density = numeric(),
         angle = numeric()),
     normalize = TRUE) {
-    ## Rename columns
+    ## Rename columns ped
     old_cols <- as.vector(unlist(cols_ren_ped))
     new_cols <- names(cols_ren_ped)
     cols_to_ren <- match(old_cols, names(ped_df))
     names(ped_df)[cols_to_ren[!is.na(cols_to_ren)]] <-
+        new_cols[!is.na(cols_to_ren)]
+    
+    ## Rename columns rel
+    old_cols <- as.vector(unlist(cols_ren_rel))
+    new_cols <- names(cols_ren_rel)
+    cols_to_ren <- match(old_cols, names(rel_df))
+    names(rel_df)[cols_to_ren[!is.na(cols_to_ren)]] <-
         new_cols[!is.na(cols_to_ren)]
     ## Normalise the data before creating the object
     if (normalize) {
@@ -63,7 +77,7 @@ pedigree <- function(
         return(ped_df)
     }
 
-    if (any(!is.na(ped_df$error))) {
+    if (any(!is.na(rel_df$error))) {
         warning("The relationship informations are not valid.")
         print("Here is the normalised relationship informations with the errors")
         return(rel_df)
