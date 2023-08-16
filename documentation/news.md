@@ -10,3 +10,4 @@
 - fixParents.R
 - kindepth.R
 - kinship.R
+- descendants.R
