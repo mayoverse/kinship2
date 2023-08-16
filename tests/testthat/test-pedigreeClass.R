@@ -30,7 +30,7 @@ test_that("pedigree from samplePed and affectation", {
     expect_error(ped1$ped$id[1] <- "102")
     expect_error(ped1$ped$dadid[1] <- "101")
     expect_no_error(ped1$ped$dadid[3] <- "1_103")
-    expect_error(ped1$ped$sex[3] <- "103")
+    expect_warning(expect_error(ped1$ped$sex[3] <- "103"))
     expect_error(ped1$ped$sex[3] <- "female")
     expect_error(ped1$ped$sex[3] <- "unknown")
     expect_no_error(ped1$ped$sex[41] <- "unknown")
