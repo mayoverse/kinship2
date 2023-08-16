@@ -21,9 +21,9 @@ test_that("pedigree from sampleped and affectation", {
         "available" = "avail"))
     ped1$ped
     expect_equal(nrow(ped1@ped), 41)
-    expect_equal(ncol(ped1@ped), 16)
+    expect_equal(ncol(ped1@ped), 15)
     expect_equal(nrow(ped1@rel), 0)
-    expect_equal(ncol(ped1@rel), 5)
+    expect_equal(ncol(ped1@rel), 7)
     expect_snapshot(summary(ped1))
 
     expect_error(ped1$ped$id <- "1")

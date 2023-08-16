@@ -34,11 +34,11 @@ test_that("Norm rel", {
     )
 
     rel_df <- matrix(rel_df, ncol = 4, byrow = TRUE)
-    dimnames(rel_df) <- list(NULL, c("id1", "id2", "code", "family"))
+    dimnames(rel_df) <- list(NULL, c("indId1", "indId2", "code", "family"))
     rel_df <- data.frame(rel_df)
 
     rel_df <- normRel(rel_df)
-    expect_equal(dim(rel_df), c(9, 5))
+    expect_equal(dim(rel_df), c(9, 7))
     expect_snapshot(rel_df)
     expect_equal(sum(is.na(rel_df$error)), 6)
 })

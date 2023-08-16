@@ -42,14 +42,14 @@
     Code
       rel_df
     Output
-         id1 id2    code family                       error
-      1  1_1 1_2 MZ twin      1                        <NA>
-      2  1_1 1_3 DZ twin      1                        <NA>
-      3  1_2 1_3 UZ twin      1                        <NA>
-      4  2_1 2_2  Spouse      2                        <NA>
-      5  2_3 2_4 MZ twin      2                        <NA>
-      6  2_6 2_7    <NA>      2            CodeNotRecognise
-      7  2_8 2_8  Spouse      2                      SameId
-      8  1_9   0  Spouse      1                        <NA>
-      9 <NA> 1_B    <NA>      1 Id1length0_CodeNotRecognise
+        indId1 indId2    code family  id1 id2                          error
+      1      1      2 MZ twin      1  1_1 1_2                           <NA>
+      2      1      3 DZ twin      1  1_1 1_3                           <NA>
+      3      2      3 UZ twin      1  1_2 1_3                           <NA>
+      4      1      2  Spouse      2  2_1 2_2                           <NA>
+      5      3      4 MZ twin      2  2_3 2_4                           <NA>
+      6      6      7    <NA>      2  2_6 2_7               CodeNotRecognise
+      7      8      8  Spouse      2  2_8 2_8                         SameId
+      8      9      0  Spouse      1  1_9   0                           <NA>
+      9   <NA>      B    <NA>      1 <NA> 1_B indId1length0_CodeNotRecognise
 
