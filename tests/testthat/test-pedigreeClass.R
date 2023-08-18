@@ -3,7 +3,9 @@ test_that("pedigree works", {
     expect_s4_class(ped, "Pedigree")
     expect_equal(nrow(ped@ped), 0)
     expect_equal(nrow(ped@rel), 0)
-    expect_equal(nrow(ped@scales), 0)
+    expect_equal(length(ped@scales), 2)
+    expect_equal(length(ped@scales$fill), 7)
+    expect_equal(length(ped@scales$border), 4)
 
     expect_snapshot(summary(ped))
 })

@@ -10,7 +10,8 @@
 #' pedigree dataframe.
 #' @param cols_ren_rel A named list with the columns to rename for the
 #' relationship matrix.
-#' @param scales A data.frame with the scales to use for the affection status.
+#' @param scales A list of two data.frame with the scales to use for the
+#' affection status and the other one for the border color (e.g availability).
 #' @param normalize A logical to know if the data should be normalised.
 #'
 #' @return A Pedigree object.
@@ -21,28 +22,43 @@ pedigree <- function(
         dadid = character(),
         momid = character(),
         sex = numeric(),
-        family = character()),
+        family = character()
+    ),
     rel_df = data.frame(
         id1 = character(),
         id2 = character(),
         code = numeric(),
-        family = character()),
+        family = character()
+    ),
     cols_ren_ped = list(
         "indId" = "id",
         "fatherId" = "dadid",
         "motherId" = "momid",
-        "gender" = "sex"),
+        "gender" = "sex"
+    ),
     cols_ren_rel = list(
         "indId1" = "id1",
-        "indId2" = "id2"),
-    scales = data.frame(
-        column = character(),
-        mods_labels = character(),
-        fill = character(),
-        border = character(),
-        density = numeric(),
-        angle = numeric()),
-    normalize = TRUE) {
+        "indId2" = "id2"
+    ),
+    scales = list(
+        fill = data.frame(
+            columns = character(),
+            mods = numeric(),
+            labels = character(),
+            affected = logical(),
+            fill = character(),
+            density = numeric(),
+            angle = numeric()
+        ),
+        border = data.frame(
+            column = character(),
+            mods = numeric(),
+            labels = character(),
+            border = character()
+        )
+    ),
+    normalize = TRUE
+    ) {
     ## Rename columns ped
     old_cols <- as.vector(unlist(cols_ren_ped))
     new_cols <- names(cols_ren_ped)

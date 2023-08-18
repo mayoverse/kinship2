@@ -1,11 +1,11 @@
 #' Print0 to max
-#' 
+#'
 #' Print0 the elements inside a vector until a maximum is reached.
-#' 
+#'
 #' @param x A vector.
 #' @param max The maximum number of elements to print.
 #' @param ... Additional arguments passed to print0
-#' 
+#'
 #' @export
 paste0max <- function(x, max = 5, ...) {
     if (length(x) > max) {
@@ -15,24 +15,37 @@ paste0max <- function(x, max = 5, ...) {
     }
 }
 
-#' Check if the colnames are present in an object slot
+#' Check if the fields are present in an object slot
 #'
 #' @param object An object.
 #' @param slot A slot of object.
-#' @param colnames A character vector with the colnames to check.
+#' @param fields A character vector with the fields to check.
 #'
 #' @return A character vector with the errors if any.
-checkColnamesSlot <- function(object, slot = NULL, colnames=character()) {
-    array_names <- colnames(slot(object, slot))
-
+check_slot_fd <- function(object, slot = NULL, fields = character()) {
+    if (is.object(object)) {
+        object <- as.list(object)
+    }
+    if (is.data.frame(object[[slot]])) {
+        array_names <- colnames(object[[slot]])
+    } else if (is.list(object[[slot]])) {
+        array_names <- names(object[[slot]])
+    } else {
+        stop(
+            "Slot ", slot, " is not a data.frame or a list.",
+            class(object[[slot]]), " found."
+        )
+    }
     if (length(array_names) == 0) {
         paste0(
-            "Missing columns in ", slot,
-            " slot. See pedigree documentation.")
-    } else if (any(!colnames %in% array_names)) {
+            "Missing fields in ", slot,
+            " slot. See pedigree documentation."
+        )
+    } else if (any(!fields %in% array_names)) {
         paste0(
-            paste0max(colnames[!colnames %in% array_names]),
-            " column(s) is not present in slot ", slot, ".")
+            "`", paste0max(fields[!fields %in% array_names]),
+            "`", " column(s) is not present in slot ", slot, "."
+        )
     }
 }
 
@@ -48,28 +61,24 @@ checkColnamesSlot <- function(object, slot = NULL, colnames=character()) {
 #' or not
 #'
 #' @return A character vector with the errors if any.
-checkValuesSlot <- function(object, slot, column, values, present=TRUE) {
-    if (length(column) > 1) {
-        stop("column must be a character vector of length 1.")
+check_values <- function(val, ref, present = TRUE) {
+    if (length(dim(val)) > 1) {
+        stop("val must be a vector")
     }
-    if (is.null(checkColnamesSlot(object, slot, column))){
-        val <- slot(object, slot)[[column]]
-        if (present) {
-            val_abs <- !val %in% values
-            should <- " should be in "
-        } else {
-            val_abs <- val %in% values
-            should <- " should not be in "
-        }
-        
-        if (any(val_abs)) {
-            paste0(
-                "Values ", paste0max(val[val_abs]), " in column ", column,
-                " of slot ", slot, should,
-                paste0max(values), ".")
-        }
+
+    if (present) {
+        val_abs <- !val %in% ref
+        should <- " should be in "
     } else {
-        checkColnamesSlot(object, slot, column)
+        val_abs <- val %in% ref
+        should <- " should not be in "
+    }
+
+    if (any(val_abs)) {
+        paste0(
+            "Values ", paste0max(val[val_abs]), should,
+            paste0max(ref), "."
+        )
     }
 }
 
@@ -78,7 +87,7 @@ checkValuesSlot <- function(object, slot, column, values, present=TRUE) {
 #' Check if the Pedigree object is valid.
 #'
 #' It will check :
-#' the colnames of the slots
+#' the fields of the slots
 #' the values in the columns of the ped, rel and scale slot
 #' @param object A Pedigree object.
 #' @return A logical value or a character vector with the errors.
@@ -89,14 +98,19 @@ isValid <- function(object) {
     #### Check that the slots have the right columns ####
     ped_cols <- c(
         "id", "dadid", "momid", "family",
-        "sex", "steril", "status", "avail")
+        "sex", "steril", "status", "avail"
+    )
     rel_cols <- c("id1", "id2", "code", "family")
-    scale_cols <- c(
-        "column", "mods_labels", "fill",
-        "border", "density", "angle")
-    errors <- c(errors, checkColnamesSlot(object, "ped", ped_cols))
-    errors <- c(errors, checkColnamesSlot(object, "rel", rel_cols))
-    errors <- c(errors, checkColnamesSlot(object, "scales", scale_cols))
+    fill_cols <- c(
+        "columns", "mods", "labels", "affected",
+        "fill", "density", "angle"
+    )
+    border_cols <- c("column", "mods", "labels", "border")
+    errors <- c(errors, check_slot_fd(object, "ped", ped_cols))
+    errors <- c(errors, check_slot_fd(object, "rel", rel_cols))
+    errors <- c(errors, check_slot_fd(object, "scales", c("fill", "border")))
+    errors <- c(errors, check_slot_fd(object$scales, "fill", fill_cols))
+    errors <- c(errors, check_slot_fd(object$scales, "border", border_cols))
 
 
     #### Check that the ped columns have the right values ####
@@ -106,17 +120,18 @@ isValid <- function(object) {
     }
 
     # Control values for ped
-    errors <- c(errors, checkValuesSlot(
-        object, "ped", "id", missid, present = FALSE))
-    errors <- c(errors, checkValuesSlot(
-        object, "ped", "dadid", c(object@ped$id, missid)))
-    errors <- c(errors, checkValuesSlot(
-        object, "ped", "momid", c(object@ped$id, missid)))
+    errors <- c(errors, check_values(object$ped$id, missid, present = FALSE))
+    errors <- c(errors, check_values(
+        object$ped$dadid, c(object@ped$id, missid)
+    ))
+    errors <- c(errors, check_values(
+        object$ped$momid, c(object@ped$id, missid)
+    ))
     sex_code <- c("male", "female", "unknown", "terminated")
-    errors <- c(errors, checkValuesSlot(object, "ped", "sex", sex_code))
-    errors <- c(errors, checkValuesSlot(object, "ped", "steril", c(0, 1, NA)))
-    errors <- c(errors, checkValuesSlot(object, "ped", "status", c(0, 1, NA)))
-    errors <- c(errors, checkValuesSlot(object, "ped", "avail", c(0, 1, NA)))
+    errors <- c(errors, check_values(object$ped$sex, sex_code))
+    errors <- c(errors, check_values(object$ped$steril, c(0, 1, NA)))
+    errors <- c(errors, check_values(object$ped$status, c(0, 1, NA)))
+    errors <- c(errors, check_values(object$ped$avail, c(0, 1, NA)))
 
     # Control sex for parents
     id <- object@ped$id
@@ -131,19 +146,21 @@ isValid <- function(object) {
     if (any(sex[is_mom] != "female")) {
         errors <- c(errors, "Some mom are not female")
     }
-    if (any((dadid %in% missid & (! momid %in% missid)) |
-        ((! dadid %in% missid) & momid %in% missid))) {
+    if (any(
+        (dadid %in% missid & (! momid %in% missid)) |
+        ((! dadid %in% missid) & momid %in% missid)
+    )) {
         errors <- c(errors, "Individuals should have both parents or none")
     }
 
     #### Check that the rel columns have the right values ####
     codes <- c("MZ twin", "DZ twin", "UZ twin", "Spouse")
-    errors <- c(errors, checkValuesSlot(
-        object, "rel", "code", codes))
-    errors <- c(errors, checkValuesSlot(
-        object, "rel", "family", c(object@ped$family, NA)))
-    errors <- c(errors, checkValuesSlot(object, "rel", "id1", object@ped$id))
-    errors <- c(errors, checkValuesSlot(object, "rel", "id2", object@ped$id))
+    errors <- c(errors, check_values(object$rel$code, codes))
+    errors <- c(errors, check_values(
+        object$rel$family, c(object@ped$family, NA)
+    ))
+    errors <- c(errors, check_values(object$rel$id1, object@ped$id))
+    errors <- c(errors, check_values(object$rel$id2, object@ped$id))
 
     # Check if twins has same parents
     code <- object@rel$code
@@ -171,8 +188,20 @@ isValid <- function(object) {
     }
 
     # Check that the scales columns have the right values
-    errors <- c(errors, checkValuesSlot(
-        object, "scales", "column", colnames(object@ped)))
+    errors <- c(errors, check_values(
+        object$scales$fill$column, colnames(object@ped)
+    ))
+    errors <- c(errors, check_values(
+        object$scales$border$column, colnames(object@ped)
+    ))
+
+    # Check that all modalities are present in the scales
+    for (col in unique(object$scales$column)){
+        errors <- c(errors, check_values(
+            object$ped$col,
+            object$scales$fill[object$scales$fill$column == col, "mods"]
+        ))
+    }
 
     if (length(errors) == 0) {
         TRUE
