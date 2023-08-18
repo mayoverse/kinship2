@@ -16,11 +16,13 @@
 #' data(sampleped)
 #' ped <- pedigree(sampleped)
 #' descendants(c("1_101", "2_208"), ped)
-#' @export descendants
+#' @include pedigreeClass.R
+#' @export
 setGeneric("descendants", function(idlist, obj, ...) {
     standardGeneric("descendants")
 })
 
+#' @export
 setMethod("descendants", signature(idlist = "character", obj = "character"),
     function(idlist, obj, dadid, momid) {
         id <- obj

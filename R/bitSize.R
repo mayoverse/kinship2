@@ -19,17 +19,19 @@
 #' The number of nonfounders in the pedgiree
 #'
 #' @seealso `pedigree.shrink`
-#' @export bitSize
+#' @include pedigreeClass.R
+#' @export
 setGeneric("bitSize", function(obj, ...) {
     standardGeneric("bitSize")
 })
 
 setMethod("bitSize", "character", function(obj, momid, missid = "0") {
-    if (length(obj) != length(momid)) {
-        stop("obj and momid should have the same length")
+    dadid <- obj
+    if (length(dadid) != length(momid)) {
+        stop("dadid and momid should have the same length")
     }
-    founder <- obj == missid & momid == missid
-    ped_size <- length(obj)
+    founder <- dadid == missid & momid == missid
+    ped_size <- length(dadid)
     n_founder <- sum(founder)
     n_non_founder <- ped_size - n_founder
     bit_size <- 2 * n_non_founder - n_founder
@@ -38,7 +40,7 @@ setMethod("bitSize", "character", function(obj, momid, missid = "0") {
         nNonFounder = n_non_founder)
 })
 
-setMethod("bitSize", "Pedigree",
+setMethod("bitSize", signature(obj = "Pedigree"),
     function(obj, missid = "0", ...) {
         bitSize(obj$ped$dadid, obj$ped$momid, missid)
     }

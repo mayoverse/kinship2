@@ -1,4 +1,4 @@
-## Extracted from checks.Rnw
+# Extracted from checks.Rnw
 
 #' Check family
 #'
@@ -74,7 +74,8 @@
 #'
 #' @seealso `makefamid`, `makekinship`
 #' @keywords genetics
-#' @export familycheck
+#' @include pedigreeClass.R
+#' @export
 setGeneric("familycheck", function(obj, ...) {
     standardGeneric("familycheck")
 })

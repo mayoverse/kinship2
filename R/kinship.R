@@ -64,11 +64,13 @@ usethis::use_package("Matrix")
 #' Genetic Analysis, Springer-Verlag, New York, 1997.
 #' @seealso `pedigree`, `makekinship`, `makefamidb`
 #' @keywords genetics
-#' @export kinship
+#' @include pedigreeClass.R
+#' @export
 setGeneric("kinship", function(obj, ...) {
     standardGeneric("kinship")
 })
 
+#' @export
 setMethod("kinship", "character",
     function(obj, dadid, momid, sex, chrtype = "autosome", ...) {
         id <- obj
@@ -126,6 +128,7 @@ setMethod("kinship", "character",
     }
 )
 
+#' @export
 setMethod("kinship", "Pedigree",
     function(obj, chrtype = "autosome", ...) {
         famlist <- unique(obj$ped$family)

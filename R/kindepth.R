@@ -22,7 +22,8 @@
 #'
 #' @author Terry Therneau
 #' @seealso `plot.pedigree`
-#' @export kindepth
+#' @include pedigreeClass.R
+#' @export
 setGeneric("kindepth", function(obj, ...) {
     standardGeneric("kindepth")
 })

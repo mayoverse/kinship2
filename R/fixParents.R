@@ -60,7 +60,7 @@ setGeneric("fixParents", function(obj, ...) {
     standardGeneric("fixParents")
 })
 
-
+#' @export
 setMethod("fixParents", "character", function(
     obj, dadid, momid, sex, family = NULL, missid = "0", ...) {
         ## fix sex of parents add parents that are missing
