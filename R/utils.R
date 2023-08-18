@@ -36,7 +36,6 @@ var_to_factor <- function(var, threshold = NULL) {
     var_fact
 }
 
-
 #' Data frame to contingency table
 #'
 #' @description Summarise two variables in a contingency table
@@ -78,7 +77,6 @@ df_cont_table <- function(
     }
     cont_table
 }
-
 
 #' @importFrom dplyr select one_of %>%
 NULL

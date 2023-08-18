@@ -7,11 +7,15 @@
 pedigree(
   ped_df = data.frame(id = character(), dadid = character(), momid = character(), sex =
     numeric(), family = character()),
-  rel_df = data.frame(id1 = character(), id2 = character(), code = numeric()),
+  rel_df = data.frame(id1 = character(), id2 = character(), code = numeric(), family =
+    character()),
   cols_ren_ped = list(indId = "id", fatherId = "dadid", motherId = "momid", gender =
     "sex"),
-  scales = data.frame(column = character(), mods_labels = character(), fill =
-    character(), border = character(), density = numeric(), angle = numeric()),
+  cols_ren_rel = list(indId1 = "id1", indId2 = "id2"),
+  scales = list(fill = data.frame(columns = character(), mods = numeric(), labels =
+    character(), affected = logical(), fill = character(), density = numeric(), angle =
+    numeric()), border = data.frame(column = character(), mods = numeric(), labels =
+    character(), border = character())),
   normalize = TRUE
 )
 }
@@ -21,9 +25,14 @@ pedigree(
 \item{rel_df}{A data.frame with the special relationships between
 individuals.}
 
-\item{cols_ren_ped}{A named list with the columns to rename.}
+\item{cols_ren_ped}{A named list with the columns to rename for the
+pedigree dataframe.}
 
-\item{scales}{A data.frame with the scales to use for the affection status.}
+\item{cols_ren_rel}{A named list with the columns to rename for the
+relationship matrix.}
+
+\item{scales}{A list of two data.frame with the scales to use for the
+affection status and the other one for the border color (e.g availability).}
 
 \item{normalize}{A logical to know if the data should be normalised.}
 }

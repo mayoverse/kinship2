@@ -17,6 +17,6 @@ Check if the Pedigree object is valid.
 }
 \details{
 It will check :
-the colnames of the slots
+the fields of the slots
 the values in the columns of the ped, rel and scale slot
 }

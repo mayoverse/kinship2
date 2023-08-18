@@ -47,6 +47,7 @@ Description: Routines to handle family data with a pedigree object. The initial 
 	     with various criteria, and kinship for the X chromosome.
 License: GPL (>= 2)
 URL: https://cran.r-project.org/package=kinship2
+Encoding: UTF-8
 RoxygenNote: 7.2.3
 VignetteBuilder: knitr
 Suggests: 
@@ -61,12 +62,17 @@ BugReports: https://github.com/LouisLeLezet/kinship2/issues
 url: https://github.com/LouisLeNezet/kinship2
 BiocType: Software
 Collate: 
-    'bitSize.R'
-    'fixParents.R'
-    'kindepth.R'
-    'kinship.R'
-    'normData.R'
     'pedigree.R'
     'validity.R'
     'pedigreeClass.R'
+    'bitSize.R'
+    'descendants.R'
+    'familycheck.R'
+    'fixParents.R'
+    'generate_aff_inds.R'
+    'generate_colors.R'
+    'kindepth.R'
+    'kinship.R'
+    'makefamid.R'
+    'normData.R'
     'utils.R'
