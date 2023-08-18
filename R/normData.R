@@ -181,8 +181,9 @@ normPed <- function(
 
         #### Available ####
         if ("available" %in% colnames(ped_df)) {
+            ped_df$avail <- as.numeric(ped_df$available)
             ped_df$avail[!is.na(ped_df$available) & ped_df$available != 0] <- 1
-            ped_df$avail[is.na(ped_df$available) | ped_df$available == 0] <- 0
+            ped_df$avail[!is.na(ped_df$available) & ped_df$available == 0] <- 0
         }
 
         #### Status ####

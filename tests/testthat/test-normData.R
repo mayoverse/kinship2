@@ -2,19 +2,19 @@ test_that("Norm ped", {
     ped_df <- c(
         1, 3, 4, 2, TRUE, NA, "1", "None",
         2, 0, 0, 1, TRUE, 1, 2, "A",
-        3, 8, 7, "man", FALSE, NA, "2", "E",
+        3, 8, 7, "man", FALSE, 0, "2", "E",
         4, 6, 5, "woman", FALSE, "A", 3, "A",
         5, 0, 0, "f", FALSE, NA, 7, "E",
-        6, "None", 0, "m", TRUE, NA, "NA", "D",
+        6, "None", 0, "m", TRUE, 0, "NA", "D",
         7, 0, "0", 1, FALSE, "NA", 6, "A",
-        8, 0, 0, 1, FALSE, "None", "3", "D",
+        8, 0, 0, 1, FALSE, "0", "3", "D",
         8, 2, 0, 2, FALSE, "None", "3", "A",
         9, 9, 8, 3, FALSE, "Ab", "5", "B")
     ped_df <- matrix(ped_df, ncol = 8, byrow = TRUE)
     dimnames(ped_df) <- list(NULL, c("indId", "fatherId", "motherId", "gender", "steril",
         "available", "NumOther", "AffMod"))
     ped_df <- data.frame(ped_df)
-    ped_df <- normPed(ped_df, na_strings = c("None", "0", "NA"))
+    ped_df <- suppressWarnings(normPed(ped_df, na_strings = c("None", "NA")))
     expect_equal(dim(ped_df), c(10, 16))
     expect_snapshot(ped_df)
     expect_equal(sum(is.na(ped_df$error)), 3)
