@@ -15,3 +15,4 @@
 - familycheck.R
 - generate_aff.R
 - generate_colors.R
+- num_child.R

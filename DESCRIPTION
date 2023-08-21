@@ -76,3 +76,4 @@ Collate:
     'kinship.R'
     'utils.R'
     'norm_data.R'
+    'num_child.R'
