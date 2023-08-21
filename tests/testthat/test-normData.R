@@ -9,12 +9,15 @@ test_that("Norm ped", {
         7, 0, "0", 1, FALSE, "NA", 6, "A",
         8, 0, 0, 1, FALSE, "0", "3", "D",
         8, 2, 0, 2, FALSE, "None", "3", "A",
-        9, 9, 8, 3, FALSE, "Ab", "5", "B")
+        9, 9, 8, 3, FALSE, "Ab", "5", "B"
+    )
     ped_df <- matrix(ped_df, ncol = 8, byrow = TRUE)
-    dimnames(ped_df) <- list(NULL, c("indId", "fatherId", "motherId", "gender", "steril",
-        "available", "NumOther", "AffMod"))
+    dimnames(ped_df) <- list(NULL, c(
+        "indId", "fatherId", "motherId", "gender",
+        "steril", "available", "NumOther", "AffMod"
+    ))
     ped_df <- data.frame(ped_df)
-    ped_df <- suppressWarnings(normPed(ped_df, na_strings = c("None", "NA")))
+    ped_df <- suppressWarnings(norm_ped(ped_df, na_strings = c("None", "NA")))
     expect_equal(dim(ped_df), c(10, 16))
     expect_snapshot(ped_df)
     expect_equal(sum(is.na(ped_df$error)), 3)
@@ -37,7 +40,7 @@ test_that("Norm rel", {
     dimnames(rel_df) <- list(NULL, c("indId1", "indId2", "code", "family"))
     rel_df <- data.frame(rel_df)
 
-    rel_df <- normRel(rel_df)
+    rel_df <- norm_Red(rel_df)
     expect_equal(dim(rel_df), c(9, 7))
     expect_snapshot(rel_df)
     expect_equal(sum(is.na(rel_df$error)), 6)

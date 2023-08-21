@@ -80,7 +80,8 @@ setGeneric("familycheck", function(obj, ...) {
     standardGeneric("familycheck")
 })
 
-
+#' @include makefamid.R
+#' @export
 setMethod("familycheck", signature(obj = "numeric"),
     function(obj, id, dadid, momid, newfam) {
         famid <- obj
@@ -111,7 +112,8 @@ setMethod("familycheck", signature(obj = "numeric"),
 
         out <- data.frame(famid = dimnames(xtab)[[1]],
             n = as.vector(table(famid)), unrelated = as.vector(unrelated),
-            split = as.vector(splits), join = temp, row.names = 1:nfam)
+            split = as.vector(splits), join = temp, row.names = 1:nfam
+        )
         if (any(joins > 1)) {
             tab1 <- xtab[temp > 0, ]  # families with multiple outcomes
             # only keep non-zero columns

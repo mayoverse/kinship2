@@ -6,13 +6,18 @@ test_that("fixParents_df works with sex errors and with family", {
 
     expect_equal(
         kindepth(ped, align = TRUE),
-        c(0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2))
+        c(0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2)
+    )
     expect_equal(
         kindepth(ped, align = FALSE),
-        c(0, 0, 0, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2))
+        c(0, 0, 0, 1, 1, 1, 1, 1, 0, 2, 2, 2, 2, 2)
+    )
 
     data(minnbreast)
-    ped <- pedigree(minnbreast, cols_ren_ped = list("indId" = "id", "fatherId" = "fatherid", "motherId" = "motherid", "gender" = "sex", "family" = "famid"))
+    ped <- pedigree(minnbreast, cols_ren_ped = list(
+        "indId" = "id", "fatherId" = "fatherid",
+        "motherId" = "motherid", "gender" = "sex", "family" = "famid"
+    ))
     expect_equal(sum(kindepth(ped)), 33147)
     expect_equal(sum(kindepth(ped, align = TRUE)), 39086)
 })

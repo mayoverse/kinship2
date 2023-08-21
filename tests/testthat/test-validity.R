@@ -1,6 +1,9 @@
 setClass("testClass", representation(x = "data.frame", y = "list"))
-obj <- new("testClass", x = data.frame(A = 1:10, B = LETTERS[1:10]), y = list(B = 11:20))
-setMethod("as.list", c(x = "Pedigree"), function(x, ...) {
+obj <- new("testClass",
+    x = data.frame(A = 1:10, B = LETTERS[1:10]),
+    y = list(B = 11:20)
+)
+setMethod("as.list", c(x = "testClass"), function(x, ...) {
     list(x = x@x, y = x@y)
 })
 lst <- list(X = data.frame(a = 1:10), Y = 11:20)

@@ -20,7 +20,8 @@ test_that("pedigree from sampleped and affectation", {
         "fatherId" = "dadid",
         "motherId" = "momid",
         "gender" = "sex",
-        "available" = "avail"))
+        "available" = "avail"
+    ))
     ped1$ped
     expect_equal(nrow(ped1@ped), 41)
     expect_equal(ncol(ped1@ped), 15)
@@ -43,11 +44,16 @@ test_that("pedigree from sampleped and affectation", {
 
 test_that("pedigree subscripting", {
     data(minnbreast)
-    minnped <- pedigree(minnbreast, cols_ren_ped = list("indId" = "id", "fatherId" = "fatherid", "motherId" = "motherid", "gender" = "sex", "family" = "famid"))
+    minnped <- pedigree(minnbreast, cols_ren_ped = list(
+        "indId" = "id", "fatherId" = "fatherid",
+        "motherId" = "motherid", "gender" = "sex", "family" = "famid"
+    ))
     expect_equal(nrow(minnped$ped), 28081)
     expect_equal(ncol(minnped[["ped"]]), 24)
 
-    ped8 <- minnped[minnped$ped$family == "8", c("id", "dadid", "momid", "sex", "cancer")]
+    ped8 <- minnped[minnped$ped$family == "8",
+        c("id", "dadid", "momid", "sex", "cancer")
+    ]
 
     expect_equal(nrow(ped8$ped), 40)
     expect_equal(ncol(ped8$ped), 9)

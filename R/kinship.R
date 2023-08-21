@@ -80,8 +80,8 @@ setMethod("kinship", "character",
         }
         n <- length(id)
         pdepth <- kindepth(id, dadid, momid)
-        momRow <- match(momid, id, nomatch = n + 1)  # row number of the mother
-        dadRow <- match(dadid, id, nomatch = n + 1)  # row number of the dad
+        mom_row <- match(momid, id, nomatch = n + 1)  # row number of the mother
+        dad_row <- match(dadid, id, nomatch = n + 1)  # row number of the dad
         if (chrtype == "autosome") {
             if (n == 1) {
                 return(matrix(0.5, 1, 1, dimnames = list(id, id)))
@@ -91,8 +91,9 @@ setMethod("kinship", "character",
             ## iter 1:0
             for (depth in 1:max(c(1, pdepth))) {
                 for (j in (1:n)[pdepth == depth]) {
-                    kmat[, j] <- kmat[j, ] <- (kmat[momRow[j], ] + kmat[dadRow[j], ]) / 2
-                    kmat[j, j] <- (1 + kmat[momRow[j], dadRow[j]]) / 2
+                    kmatv <- (kmat[mom_row[j], ] + kmat[dad_row[j], ]) / 2
+                    kmat[, j] <- kmat[j, ] <- kmatv
+                    kmat[j, j] <- (1 + kmat[mom_row[j], dad_row[j]]) / 2
                 }
             }
         } else if (chrtype == "x") {
@@ -101,20 +102,23 @@ setMethod("kinship", "character",
             }
             # 1 = female, 2=male
             if (n == 1) {
-                return(matrix(ifelse(sex > 2, sex / 2, NA), 1, 1,
-                    dimnames = list(id, id)))
+                return(
+                    matrix(ifelse(sex > 2, sex / 2, NA), 1, 1,
+                        dimnames = list(id, id)
+                    )
+                )
             }
             sex <- as.numeric(sex)
             kmat <- diag(ifelse(sex > 2, NA, c((3 - sex) / 2, 0)))
             for (depth in 1:max(c(1, pdepth))) {
                 for (j in (1:n)[pdepth == depth]) {
                     if (sex[j] == 1) {
-                        kmat[, j] <- kmat[j, ] <- kmat[momRow[j], ]
+                        kmat[, j] <- kmat[j, ] <- kmat[mom_row[j], ]
                         kmat[j, j] <- 1
                     } else if (sex[j] == 2) {
                         kmat[, j] <- kmat[j, ] <-
-                            (kmat[momRow[j], ] + kmat[dadRow[j], ]) / 2
-                        kmat[j, j] <- (1 + kmat[momRow[j], dadRow[j]]) / 2
+                            (kmat[mom_row[j], ] + kmat[dad_row[j], ]) / 2
+                        kmat[j, j] <- (1 + kmat[mom_row[j], dad_row[j]]) / 2
                     } else {
                         kmat[, j] <- kmat[j, ] <- NA
                         kmat[j, j] <- NA
@@ -129,12 +133,14 @@ setMethod("kinship", "character",
 )
 
 #' @export
+#' @include kindepth.R
 setMethod("kinship", "Pedigree",
     function(obj, chrtype = "autosome", ...) {
         famlist <- unique(obj$ped$family)
         nfam <- length(famlist)
         matlist <- vector("list", nfam)
-        idlist <- vector("list", nfam)  # the possibly reorderd list of id values
+        ## The possibly reorderd list of id values
+        idlist <- vector("list", nfam)
 
         for (i_fam in seq_along(famlist)) {
             if (is.na(famlist[i_fam])) { # If no family provided
@@ -147,24 +153,28 @@ setMethod("kinship", "Pedigree",
                 chrtype <- match.arg(casefold(chrtype), c("autosome", "x"))
                 n <- length(tped$ped$id)
                 pdepth <- kindepth(tped)
-                momRow <- match(tped$ped$momid, tped$ped$id, nomatch = n + 1)
-                dadRow <- match(tped$ped$dadid, tped$ped$id, nomatch = n + 1)
+                mom_row <- match(tped$ped$momid, tped$ped$id, nomatch = n + 1)
+                dad_row <- match(tped$ped$dadid, tped$ped$id, nomatch = n + 1)
                 # Are there any MZ twins to worry about?
-                haveMZ <- FALSE
+                have_mz <- FALSE
                 if (!is.null(tped$rel) && any(tped$rel$code == "MZ twin")) {
-                    haveMZ <- TRUE
+                    have_mz <- TRUE
                     ## Doc: MakeMZIndex
                     temp <- which(tped$rel$code == "MZ twin")
                     ## drop=FALSE added in case only one MZ twin set
                     id1x <- match(tped$rel$id1, tped$ped$id, nomatch = NA)
                     id2x <- match(tped$rel$id2, tped$ped$id, nomatch = NA)
                     if (any(is.na(id1x)) | any(is.na(id2x))) {
-                        stop("All individuals in relationship matrix should be present in the pedigree informations")
+                        stop("All individuals in relationship matrix",
+                            "should be present in the pedigree informations"
+                        )
                     }
-                    mzmat <- matrix(c(id1x, id2x), ncol = 2)[temp, , drop = FALSE]
+                    mzmat <- matrix(
+                        c(id1x, id2x), ncol = 2
+                    )[temp, , drop = FALSE]
                     mzgrp <- 1:max(mzmat)  # everyone starts in their own group
-                    ## The loop below will take k-1 iterations for a set labeled as
-                    ## (k-1):k, ..., 4:3, 3:2, 2:1; this is the worst case.
+                    ## The loop below will take k-1 iterations for a set labeled
+                    ## as (k-1):k, ..., 4:3, 3:2, 2:1; this is the worst case.
                     while (1) {
                         # Wait for all MZ to be in the same group
                         if (all(mzgrp[mzmat[, 1]] == mzgrp[mzmat[, 2]])) {
@@ -177,8 +187,8 @@ setMethod("kinship", "Pedigree",
                     }
                     ## Now make a matrix that has a row for every possible pair.
                     ## Finally, remove the rows that are identical.
-                    ## The result is a set of all pairs of observations in the matrix that
-                    ## correspond to monozygotic pairs.
+                    ## The result is a set of all pairs of observations in the
+                    ## matrix that correspond to monozygotic pairs.
                     mzindex <- cbind(unlist(tapply(mzmat, mzgrp[mzmat], function(x) {
                         z <- unique(x)
                         rep(z, length(z))
@@ -191,17 +201,25 @@ setMethod("kinship", "Pedigree",
 
                 if (chrtype == "autosome") {
                     if (n == 1) {
-                        kmat <- matrix(0.5, 1, 1, dimnames = list(tped$ped$id, tped$ped$id))
+                        kmat <- matrix(0.5, 1, 1,
+                            dimnames = list(tped$ped$id, tped$ped$id)
+                        )
                     } else {
                         kmat <- diag(c(rep(0.5, n), 0))  # founders
                         for (depth in 1:max(pdepth)) {
                             indx <- which(pdepth == depth)
-                            kmat[indx, ] <- (kmat[momRow[indx], ] + kmat[dadRow[indx], ]) / 2
-                            kmat[, indx] <- (kmat[, momRow[indx]] + kmat[, dadRow[indx]]) / 2
+                            kmat[indx, ] <- (
+                                kmat[mom_row[indx], ] + kmat[dad_row[indx], ]
+                            ) / 2
+                            kmat[, indx] <- (
+                                kmat[, mom_row[indx]] + kmat[, dad_row[indx]]
+                            ) / 2
                             for (j in indx) {
-                                kmat[j, j] <- (1 + kmat[momRow[j], dadRow[j]]) / 2
+                                kmat[j, j] <- (
+                                    1 + kmat[mom_row[j], dad_row[j]]
+                                ) / 2
                             }
-                            if (haveMZ) {
+                            if (have_mz) {
                                 kmat[mzindex] <- (diag(kmat))[mzindex[, 1]]
                             }
                         }
@@ -209,23 +227,30 @@ setMethod("kinship", "Pedigree",
                 } else if (chrtype == "x") {
                     sex <- as.numeric(tped$ped$sex)  # 1=female, 2=male
                     if (n == 1) {
-                        kmat <- matrix(sex / 2, 1, 1, dimnames = list(tped$ped$id, tped$ped$id))
+                        kmat <- matrix(sex / 2, 1, 1,
+                            dimnames = list(tped$ped$id, tped$ped$id)
+                        )
                     } else {
-                        kmat <- diag(c((3 - sex) / 2, 0))  # 1 for males, 1/2 for females
+                        ## 1 for males, 1/2 for females
+                        kmat <- diag(c((3 - sex) / 2, 0))
                         for (depth in 1:max(pdepth)) {
                             for (j in (1:n)[pdepth == depth]) {
                                 if (sex[j] == 1) {
-                                    kmat[, j] <- kmat[j, ] <- kmat[momRow[j], ]
+                                    kmat[, j] <- kmat[j, ] <- kmat[mom_row[j], ]
                                     kmat[j, j] <- 1
                                 } else if (sex[j] == 2) {
-                                    kmat[, j] <- kmat[j, ] <- (kmat[momRow[j], ] +
-                                        kmat[dadRow[j], ]) / 2
-                                    kmat[j, j] <- (1 + kmat[dadRow[j], momRow[j]]) / 2
+                                    kmatv <- (kmat[mom_row[j], ] +
+                                            kmat[dad_row[j], ]
+                                    ) / 2
+                                    kmat[, j] <- kmat[j, ] <- kmatv
+                                    kmat[j, j] <- (
+                                        1 + kmat[dad_row[j], mom_row[j]]
+                                    ) / 2
                                 } else {
                                     kmat[, j] <- kmat[j, ] <- NA
                                     kmat[j, j] <- NA
                                 }
-                                if (haveMZ)
+                                if (have_mz)
                                     kmat[mzindex] <- (diag(kmat))[mzindex[, 1]]
                             }
                         }
@@ -249,9 +274,10 @@ setMethod("kinship", "Pedigree",
             return(matlist[[1]])
         } else {
             for (i_fam in seq_along(famlist)) {
-                matlist[[i_fam]] <- as(as(Matrix::forceSymmetric(matlist[[i_fam]]),
-                    "symmetricMatrix"),
-                    "CsparseMatrix")
+                matlist[[i_fam]] <- as(as(
+                    Matrix::forceSymmetric(matlist[[i_fam]]),
+                    "symmetricMatrix"
+                ), "CsparseMatrix")
             }
             result <- Matrix::bdiag(matlist)
             temp <- unlist(idlist)

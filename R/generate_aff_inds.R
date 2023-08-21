@@ -20,8 +20,8 @@ usethis::use_package("plyr")
 #'
 #' @export
 generate_aff_inds <- function(values, mods_aff = NULL,
-    threshold = NULL, sup_thres_aff = NULL) {
-
+    threshold = NULL, sup_thres_aff = NULL
+) {
     mods <- rep(NA, length(values))
     if (is.numeric(values)) {
         if (is.null(threshold) || is.na(threshold)) {

@@ -29,7 +29,7 @@ object[["ped"]][1, "id"] <- 9
 object$ped[1, "id"] <- "12"
 
 summary(object)
-df <- normPed(df)
+df <- norm_ped(df)
 
 data(sample.ped)
 df <- sample.ped
@@ -38,7 +38,7 @@ df[, c("indId", "fatherId", "motherId",
     "gender", "available")] <- df[, c("id", "father", "mother",
         "sex", "avail")]
 df$available
-df <- normPed(df)[[1]]
+df <- norm_ped(df)[[1]]
 df$avail
 summary(df)
 df$aff <- df$avail

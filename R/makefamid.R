@@ -64,21 +64,22 @@ setMethod("makefamid", "character",
         did2 <- sort(unique(did))
         famid <- 1:(n + 1)
         # The key idea of the algorithm: 1. iteratively set the family id of
-        # parent/child sets to the minimum value of the set 2. add a subject 'n+1',
-        # who is the parent of all orphans, and also of himself, to make the
-        # father/mother/child vectors all be the same length
+        # parent/child sets to the minimum value of the set 2.
+        # Add a subject 'n+1', who is the parent of all orphans, and also of
+        # himself, to make the father/mother/child vectors all be the same
+        # length
 
         # Run the depth routine to check for impossible parentage loops, which
-        # would lead to infinite iterations.  And even then, give it an upper limit
-        # of n iterations (it should never even come close to this).  You might
-        # think it would finish in max(depth) iterations, but assume 2 families of
-        # depth 3 who intermarry at the last generation: the final id propogates
-        # down one tree and then up the other.  Chains can take even longer (child
-        # of A marries child of B, second child of B marries child of C, second
-        # child of C marries child of D, ...).  However, at each iteration the
-        # final number must get propogated to at least one child or at least 2
-        # parents, giving a limit of n-1
-        temp <- kindepth(id, dadid, momid)
+        # would lead to infinite iterations.  And even then, give it an upper
+        # limit of n iterations (it should never even come close to this).
+        # You might think it would finish in max(depth) iterations, but assume
+        # 2 families of depth 3 who intermarry at the last generation: the final
+        # id propogates down one tree and then up the other.
+        # Chains can take even longer (child of A marries child of B, second
+        # child of B marries child of C, second child of C marries child of D,
+        # ...).
+        # However, at each iteration the final number must get propogated to at
+        # least one child or at least 2 parents, giving a limit of n-1
         for (i in 1:n) {
             # set children = min(self, parents)
             newid <- pmin(famid, famid[mid], famid[did])
@@ -138,7 +139,9 @@ setMethod("makefamid", signature(obj = "Pedigree"),
     function(obj) {
         ped <- obj
         family <- makefamid(ped$ped$id, ped$ped$dadid, ped$ped$momid)
-        col_ped_compute <- c("sex", "avail", "id", "dadid", "momid", "family", "momid", "error", "steril", "status")
+        col_ped_compute <- c("sex", "avail", "id", "dadid", "momid",
+            "family", "momid", "error", "steril", "status"
+        )
         ped_df <- ped$ped[! colnames(ped$ped) %in% col_ped_compute]
         ped_df$family <- family
         col_rel_compute <- c("family", "error")
@@ -147,10 +150,14 @@ setMethod("makefamid", signature(obj = "Pedigree"),
         fam_id2 <- family[match(rel_df$id2, ped$ped$id)]
 
         if (any(fam_id1 != fam_id2)) {
-            stop("The two individuals in the relationship are not in the same family")
+            stop(paste0("The two individuals in the relationship",
+                "are not in the same family"
+            ))
         }
 
         rel_df$family <- fam_id1
-        pedigree(ped_df = ped_df, rel_df = rel_df, scales = ped$scales, normalize = TRUE)
+        pedigree(ped_df = ped_df, rel_df = rel_df,
+            scales = ped$scales, normalize = TRUE
+        )
     }
 )

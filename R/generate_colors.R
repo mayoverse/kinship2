@@ -26,11 +26,11 @@ usethis::use_package("plyr")
 #'
 #' @export
 generate_fill <- function(
-        values, affected, labels,
-        keep_full_scale = FALSE, breaks = 3,
-        colors_aff = c("yellow2", "red"),
-        colors_unaff = c("white", "steelblue4")
-    ) {
+    values, affected, labels,
+    keep_full_scale = FALSE, breaks = 3,
+    colors_aff = c("yellow2", "red"),
+    colors_unaff = c("white", "steelblue4")
+) {
 
     n <- length(values)
 
@@ -70,7 +70,9 @@ generate_fill <- function(
         if (!is.numeric(values)) {
             print("Bal: generate_colors: col_aff is not numeric")
             levs_aff <- as.factor(values[affected == TRUE & !is.na(affected)])
-            levs_unaff <- as.factor(values[affected == FALSE & !is.na(affected)])
+            levs_unaff <- as.factor(
+                values[affected == FALSE & !is.na(affected)]
+            )
             fill_scale_aff <- fct_scale_aff(length(levels(levs_aff)))
             fill_scale_unaff <- fct_scale_unaff(length(levels(levs_unaff)))
             fill_scale <- c(fill_scale_unaff, fill_scale_aff)
@@ -80,9 +82,11 @@ generate_fill <- function(
             mean_aff <- mean(values[affected == TRUE], na.rm = TRUE)
             mean_unaff <- mean(values[affected == FALSE], na.rm = TRUE)
             levs_aff <- cut(values[affected == TRUE & !is.na(affected)],
-                breaks = breaks, include.lowest = TRUE)
+                breaks = breaks, include.lowest = TRUE
+            )
             levs_unaff <- cut(values[affected == FALSE & !is.na(affected)],
-                breaks = breaks, include.lowest = TRUE)
+                breaks = breaks, include.lowest = TRUE
+            )
             fill_scale_aff <- fct_scale_aff(breaks)
             fill_scale_unaff <- fct_scale_unaff(breaks)
             if (mean_aff > mean_unaff) {
@@ -197,7 +201,7 @@ generate_border <- function(avail, colors_avail = c("green", "black")) {
 #' @param colors_avail Set of 2 colors to use for the box's border of an
 #' individual. The first color will be used for available individual (avail
 #' == 1) and the second for the unavailable individual (avail == 0).
-#' 
+#'
 #' @return A list of two elements
 #' - The processed dataframe with the `affected` and `avail` columns
 #' processed accordingly
@@ -205,9 +209,8 @@ generate_border <- function(avail, colors_avail = c("green", "black")) {
 #'
 #' @export
 setGeneric("generate_colors", function(obj, ...) {
-        standardGeneric("generate_colors")
-    }
-)
+    standardGeneric("generate_colors")
+})
 
 #' @export
 setMethod("generate_colors", "data.frame",
@@ -220,9 +223,13 @@ setMethod("generate_colors", "data.frame",
         col_avail = "avail", colors_avail = c("green", "black")
     ) {
         new_col <- paste0(col_aff, "_aff")
-        df <- check_columns(obj, c(col_aff, col_avail), "", new_col , others_cols = TRUE)
+        df <- check_columns(obj, c(col_aff, col_avail),
+            "", new_col, others_cols = TRUE
+        )
 
-        affected <- generate_aff_inds(df[[col_aff]], mods_aff, threshold, sup_thres_aff)
+        affected <- generate_aff_inds(df[[col_aff]],
+            mods_aff, threshold, sup_thres_aff
+        )
         border <- generate_border(df[[col_avail]], colors_avail)
         fill <- generate_fill(
             df[[col_aff]], affected$affected, affected$labels,

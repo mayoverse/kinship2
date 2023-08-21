@@ -27,7 +27,9 @@ test_that("kinship works", {
     twindat <- matrix(twindat, ncol = 4, byrow = TRUE)
     dimnames(twindat) <- list(NULL, c("id", "dadid", "momid", "sex"))
     twindat <- data.frame(twindat)
-    twindat[c("id", "dadid", "momid")] <- as.data.frame(lapply(twindat[c("id", "dadid", "momid")], as.character))
+    twindat[c("id", "dadid", "momid")] <- as.data.frame(lapply(
+        twindat[c("id", "dadid", "momid")], as.character
+    ))
 
     relate <- data.frame(
         id1 = c(101, 102, 101, 104, 203),
@@ -54,7 +56,10 @@ test_that("kinship works", {
 
     ## should show kinship coeff of 0.5 for where MZ twins are
     ## ids: 102-103 and 203-204
-    expect_true(all(kmat[c("102", "101", "103"), c("102", "101", "103")] == 0.5))
+    expect_true(all(kmat[
+        c("102", "101", "103"),
+        c("102", "101", "103")
+    ] == 0.5))
     expect_true(all(kmat[c("203", "204"), c("203", "204")] == 0.5))
 
     # Renumber everyone as 1,2,....; makes the all.equal checks easier
@@ -94,7 +99,8 @@ test_that("Kinship Claus Ekstrom 09/2012", {
         dadid = c(0, 0, 1, 1),
         momid = c(0, 0, 2, 2),
         sex = c("male", "female", "male", "male"),
-        famid = c(1, 1, 1, 1))
+        famid = c(1, 1, 1, 1)
+    )
     relation <- data.frame(id1 = c(3), id2 = c(4), famid = c(1), code = c(1))
 
     ped <- pedigree(mydata, rel_df = relation)
@@ -117,8 +123,8 @@ test_that("kinship works with X chromosoms", {
         1, 7, 3, 5, 2,
         1, 8, 6, 4, 1,
         1, 9, 6, 4, 1,
-        1, 10, 8, 7, 2),
-        ncol = 5, byrow = TRUE)
+        1, 10, 8, 7, 2
+    ), ncol = 5, byrow = TRUE)
 
     ped2df <- as.data.frame(ped2mat)
     names(ped2df) <- c("fam", "id", "dadid", "momid", "sex")

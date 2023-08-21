@@ -74,8 +74,8 @@ pedigree <- function(
         new_cols[!is.na(cols_to_ren)]
     ## Normalise the data before creating the object
     if (normalize) {
-        ped_df <- normPed(ped_df)
-        rel_df <- normRel(rel_df)
+        ped_df <- norm_ped(ped_df)
+        rel_df <- norm_Red(rel_df)
     } else {
         cols_need <- c("id", "dadid", "momid", "sex")
         cols_to_use <- c("steril", "avail", "family", "status")

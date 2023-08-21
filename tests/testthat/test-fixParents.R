@@ -8,12 +8,19 @@ test_that("fixParents works with number", {
 })
 
 test_that("fixParents works with character", {
-    test1char <- data.frame(id = paste("fam", 101:111, sep = ""), sex = c("male",
-        "female")[c(1, 2, 1, 2, 1, 1, 2, 2, 1, 2, 1)], dadid = c(0, 0, "fam101",
-        "fam101", "fam101", 0, 0, "fam106", "fam106", "fam106", "fam109"), momid = c(0,
-        0, "fam102", "fam102", "fam102", 0, 0, "fam107", "fam107", "fam107", "fam112"))
+    test1char <- data.frame(id = paste("fam", 101:111, sep = ""),
+        sex = c("male", "female")[c(1, 2, 1, 2, 1, 1, 2, 2, 1, 2, 1)],
+        dadid = c(0, 0, "fam101", "fam101", "fam101", 0, 0,
+            "fam106", "fam106", "fam106", "fam109"
+        ),
+        momid = c(0, 0, "fam102", "fam102", "fam102", 0, 0,
+            "fam107", "fam107", "fam107", "fam112"
+        )
+    )
     expect_error(pedigree(test1char))
-    test1newmom <- with(test1char, fixParents(id, dadid, momid, sex, missid = "0"))
+    test1newmom <- with(test1char,
+        fixParents(id, dadid, momid, sex, missid = "0")
+    )
     expect_no_error(pedigree(test1newmom))
 })
 
@@ -27,7 +34,9 @@ test_that("fixParents works with sex errors", {
     expect_warning(pedigree(datped2))
 
     ## This fix the error
-    datped2[, c("id", "momid", "dadid")] <- as.data.frame(lapply(datped2[, c("id", "momid", "dadid")], as.character))
+    datped2[, c("id", "momid", "dadid")] <- as.data.frame(lapply(
+        datped2[, c("id", "momid", "dadid")], as.character
+    ))
     fixped2 <- with(datped2, fixParents(id, dadid, momid, sex, missid = "0"))
     expect_no_error(pedigree(fixped2))
 })
@@ -45,7 +54,9 @@ test_that("fixParents_df works with sex errors and with family", {
     expect_warning(pedigree(datped2))
 
     ## This fix the error and keep the dataframe dimensions
-    datped2[, c("id", "momid", "dadid")] <- as.data.frame(lapply(datped2[, c("id", "momid", "dadid")], as.character))
+    datped2[, c("id", "momid", "dadid")] <- as.data.frame(lapply(
+        datped2[, c("id", "momid", "dadid")], as.character
+    ))
     fixped2 <- fixParents(datped2, delete = TRUE)
     expect_no_error(pedigree(fixped2))
     expect_equal(dim(fixped2), c(13, 7))

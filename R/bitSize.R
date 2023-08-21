@@ -37,7 +37,8 @@ setMethod("bitSize", "character", function(obj, momid, missid = "0") {
     bit_size <- 2 * n_non_founder - n_founder
     list(
         bitSize = bit_size, nFounder = n_founder,
-        nNonFounder = n_non_founder)
+        nNonFounder = n_non_founder
+    )
 })
 
 setMethod("bitSize", signature(obj = "Pedigree"),

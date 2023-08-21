@@ -5,5 +5,6 @@ test_that("descendants works", {
     desc <- descendants(idlist, ped)
     expect_equal(desc, c(
         "1_109", "2_212", "2_213", "2_214",
-        "1_121", "1_122", "1_123", "1_124"))
+        "1_121", "1_122", "1_123", "1_124"
+    ))
 })

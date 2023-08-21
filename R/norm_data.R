@@ -22,7 +22,8 @@ prefix_famid <- function(family_id, ind_id, missid = "0") {
 
     pre_famid <- ifelse(
         is.na(family_id) | is.null(family_id),
-        "", paste0(as.character(family_id), "_"))
+        "", paste0(as.character(family_id), "_")
+    )
     ifelse(ind_id == missid, missid, paste0(pre_famid, as.character(ind_id)))
 }
 
@@ -52,16 +53,19 @@ prefix_famid <- function(family_id, ind_id, missid = "0") {
 #'
 #' @examples
 #' data(ped_data)
-#' normPed(ped_data)
+#' norm_ped(ped_data)
 #'
-#'@export normPed
-normPed <- function(
-    ped_df, na_strings = c("NA", ""), missid = "0", try_num = FALSE) {
-    print("Bal: normPed")
+#' @export norm_ped
+#' @include utils.R
+norm_ped <- function(
+    ped_df, na_strings = c("NA", ""), missid = "0", try_num = FALSE
+) {
+    print("Bal: norm_ped")
     err_cols <- c(
         "sexErrMoFa", "sexErrFa", "sexErrMo", "sexErrTer", "sexNA",
         "sexError", "idErrFa", "idErrMo", "idErrSelf", "idErrOwnParent",
-        "idErrBothParent", "idError", "error")
+        "idErrBothParent", "idError", "error"
+    )
     err <- data.frame(matrix(NA, nrow = nrow(ped_df), ncol = length(err_cols)))
     colnames(err) <- err_cols
     cols_need <- c("indId", "fatherId", "motherId", "gender")
@@ -70,10 +74,12 @@ normPed <- function(
 
     ped_df <- check_columns(
         ped_df, cols_need, cols_used, cols_to_use,
-        others_cols = TRUE, cols_to_use_init = TRUE, cols_used_init = TRUE)
+        others_cols = TRUE, cols_to_use_init = TRUE, cols_used_init = TRUE
+    )
     if (nrow(ped_df) > 0) {
         ped_df <- mutate_if(
-            ped_df, is.character, ~replace(., . %in% na_strings, NA))
+            ped_df, is.character, ~replace(., . %in% na_strings, NA)
+        )
 
         #### Id #### Check id type
         for (id in c("indId", "fatherId", "motherId", "family")) {
@@ -82,7 +88,8 @@ normPed <- function(
                 if (length(grep("^ *$", ped_df[[id]])) > 0) {
                     stop(
                         "A blank or empty string is not allowed as the ",
-                        id, " variable")
+                        id, " variable"
+                    )
                 }
             }
         }
@@ -92,20 +99,23 @@ normPed <- function(
         ped_df$dadid <- prefix_famid(ped_df$family, ped_df$fatherId, missid)
         ped_df$momid <- prefix_famid(ped_df$family, ped_df$motherId, missid)
 
-        ped_df <- mutate_at(
-            ped_df, c("id", "dadid", "momid"), ~replace(., . %in% na_strings, missid))
+        ped_df <- mutate_at(ped_df, c("id", "dadid", "momid"),
+            ~replace(., . %in% na_strings, missid)
+        )
 
         #### Sex ####
-        if (is.factor(ped_df$gender) | is.numeric(ped_df$gender)) {
+        if (is.factor(ped_df$gender) || is.numeric(ped_df$gender)) {
             ped_df$gender <- as.character(ped_df$gender)
         }
         ## Normalized difference notations for sex
         sex_equiv <- c(
             f = "female", m = "male", woman = "female", man = "male",
             female = "female", male = "male", `2` = "female", `1` = "male",
-            `3` = "unknown", `4` = "terminated")
+            `3` = "unknown", `4` = "terminated"
+        )
         ped_df$sex <- as.character(revalue(as.factor(
-            casefold(ped_df$gender, upper = FALSE)), sex_equiv))
+            casefold(ped_df$gender, upper = FALSE)
+        ), sex_equiv))
         sex_codes <- c("male", "female", "unknown", "terminated")
         ped_df$sex[!ped_df$sex %in% sex_codes] <- "unknown"
 
@@ -119,35 +129,42 @@ normPed <- function(
         ## Set as ordered factor
         ped_df$sex <- factor(ped_df$sex, sex_codes, ordered = TRUE)
 
-        ## Add terminated for sterilized individuals that is neither father nor mother
+        ## Add terminated for sterilized individuals that is neither dad nor mom
         if ("steril" %in% colnames(ped_df)) {
             ped_df$sex[
                 ped_df$steril == "TRUE" & !is.na(ped_df$steril) &
-                !is_father & !is_mother] <- "terminated"
+                    !is_father & !is_mother
+            ] <- "terminated"
             err$sexErrTer[
-                (ped_df$sex == "terminated" | ped_df$steril == "TRUE" & !is.na(ped_df$steril))  &
-                (is_father | is_mother)] <- "isSterilButIsParent"
+                (ped_df$sex == "terminated" |
+                        ped_df$steril == "TRUE" & !is.na(ped_df$steril)
+                )  & (is_father | is_mother)
+            ] <- "isSterilButIsParent"
             nb_steril_parent <- sum(!is.na(err$sexErrTer))
             message(paste(nb_steril_parent, "steril corrected"))
-            ped_df$steril[
-                !is.na(err$sexErrTer) &
-                (is_father | is_mother)] <- FALSE
+            ped_df$steril[!is.na(err$sexErrTer) &
+                    (is_father | is_mother)
+            ] <- FALSE
         }
 
         ## Check error between sex and parentality
         err$sexNA[!ped_df$sex %in%
-            c("male", "female", "terminated", "unknown")] <- "sexNotRecognise"
+                c("male", "female", "terminated", "unknown")
+        ] <- "sexNotRecognise"
         err$sexErrMoFa[is_father & is_mother] <- "isMotherAndFather"
         err$sexErrFa[
-            is_father & ped_df$sex != "male"] <- "isFatherButNotMale"
+            is_father & ped_df$sex != "male"
+        ] <- "isFatherButNotMale"
         err$sexErrMo[is_mother &
-            ped_df$sex != "female"] <- "isMotherButNotFemale"
+                ped_df$sex != "female"
+        ] <- "isMotherButNotFemale"
 
         ## Unite all sex errors in one column
         err <- unite(
             err, "sexError",
             c("sexNA", "sexErrMoFa", "sexErrMo", "sexErrFa", "sexErrTer"),
-            na.rm = TRUE, sep = "_", remove = TRUE)
+            na.rm = TRUE, sep = "_", remove = TRUE
+        )
         err$sexError[err$sexError == ""] <- NA
 
 
@@ -157,26 +174,32 @@ normPed <- function(
 
         ## OwnParent
         id_own_parent <- ped_df$id[
-            ped_df$id == ped_df$dadid | ped_df$id == ped_df$momid]
+            ped_df$id == ped_df$dadid | ped_df$id == ped_df$momid
+        ]
 
         ## Register errors
         err$idErrFa[ped_df$dadid %in% id_duplicated &
-            !is.na(ped_df$dadid)] <- "fatherIdDuplicated"
+                !is.na(ped_df$dadid)
+        ] <- "fatherIdDuplicated"
         err$idErrMo[ped_df$momid %in% id_duplicated &
-            !is.na(ped_df$momid)] <- "motherIdDuplicated"
+                !is.na(ped_df$momid)
+        ] <- "motherIdDuplicated"
         err$idErrSelf[ped_df$id %in% id_duplicated &
-            !is.na(ped_df$id)] <- "selfIdDuplicated"
+                !is.na(ped_df$id)
+        ] <- "selfIdDuplicated"
         err$idErrOwnParent[ped_df$id %in% id_own_parent] <- "isItsOwnParent"
         err$idErrBothParent[
             (ped_df$dadid == missid & ped_df$momid != missid) |
-            (ped_df$dadid != missid & ped_df$momid == missid)] <- "oneParentMissing"
+                (ped_df$dadid != missid & ped_df$momid == missid)
+        ] <- "oneParentMissing"
 
         ## Unite all id errors in one column
         err <- unite(
             err, "idError", c(
                 "idErrFa", "idErrMo", "idErrSelf",
-                "idErrOwnParent", "idErrBothParent"),
-            na.rm = TRUE, sep = "_", remove = TRUE)
+                "idErrOwnParent", "idErrBothParent"
+            ), na.rm = TRUE, sep = "_", remove = TRUE
+        )
         err$idError[err$idError == ""] <- NA
 
         #### Available ####
@@ -197,7 +220,8 @@ normPed <- function(
             message("Converting to numeric if possible")
             col_to_num <- colnames(ped_df)[
                 !colnames(ped_df) %in%
-                c(cols_need, cols_to_use)]
+                    c(cols_need, cols_to_use)
+            ]
             for (i in col_to_num) {
                 is_num <- sapply(ped_df[[i]], check_num_na, na_as_num = TRUE)
                 if (all(is_num)) {
@@ -208,7 +232,8 @@ normPed <- function(
 
         ped_df$error <- unite(
             err, "error", c("idError", "sexError"),
-            na.rm = TRUE, sep = "_", remove = TRUE)$error
+            na.rm = TRUE, sep = "_", remove = TRUE
+        )$error
         ped_df$error[ped_df$error == ""] <- NA
     }
     ped_df
@@ -223,8 +248,8 @@ normPed <- function(
 #' @param missid The missing id value
 #'
 #' @return A dataframe with the errors identified
-normRel <- function(rel_df, na_strings = c("NA", ""), missid = "0") {
-    print("Bal: normRel")
+norm_Red <- function(rel_df, na_strings = c("NA", ""), missid = "0") {
+    print("Bal: norm_Red")
     #### Check columns ####
     err_cols <- c("codeErr", "sameIdErr", "id1Err", "id2Err", "error")
     err <- data.frame(matrix(NA, nrow = nrow(rel_df), ncol = length(err_cols)))
@@ -234,23 +259,25 @@ normRel <- function(rel_df, na_strings = c("NA", ""), missid = "0") {
     cols_to_use <- c("family")
     rel_df <- check_columns(
         rel_df, cols_needed, cols_used, cols_to_use,
-        others_cols = FALSE, cols_to_use_init = TRUE, cols_used_init = TRUE)
+        others_cols = FALSE, cols_to_use_init = TRUE, cols_used_init = TRUE
+    )
     if (nrow(rel_df) > 0) {
         rel_df <- mutate_if(
             rel_df, is.character,
-            ~replace(., . %in% na_strings, NA))
+            ~replace(., . %in% na_strings, NA)
+        )
 
         #### Check for code ####
         code_equiv <- c(
-            mztwin = "MZ twin", dztwin = "DZ twin", uztwin = "UZ twin", spouse = "Spouse",
+            mztwin = "MZ twin", dztwin = "DZ twin", uztwin = "UZ twin",
+            spouse = "Spouse",
             `1` = "MZ twin", `2` = "DZ twin", `3` = "UZ twin", `4` = "Spouse"
         )
         codes <- c("MZ twin", "DZ twin", "UZ twin", "Spouse")
-        rel_df$code <- as.character(
-            revalue(as.factor(
-            str_remove_all(
-                casefold(as.character(rel_df$code), upper = FALSE),
-            " ")), code_equiv))
+        rel_df$code <- as.character(revalue(as.factor(str_remove_all(
+            casefold(as.character(rel_df$code), upper = FALSE),
+            " "
+        )), code_equiv))
         rel_df$code <- factor(rel_df$code, codes, ordered = TRUE)
         err$codeErr[!rel_df$code %in% codes] <- "CodeNotRecognise"
 
@@ -270,10 +297,11 @@ normRel <- function(rel_df, na_strings = c("NA", ""), missid = "0") {
 
         err$sameIdErr[rel_df$id1 == rel_df$id2] <- "SameId"
 
-        ## Unite all id errors in one column        
-        rel_df$error <- unite(
-            err, "error", c("sameIdErr", "id1Err", "id2Err", "codeErr"),
-            na.rm = TRUE, sep = "_", remove = TRUE)$error
+        ## Unite all id errors in one column
+        rel_df$error <- unite(err, "error",
+            c("sameIdErr", "id1Err", "id2Err", "codeErr"),
+            na.rm = TRUE, sep = "_", remove = TRUE
+        )$error
         rel_df$error[rel_df$error == ""] <- NA
     }
     rel_df

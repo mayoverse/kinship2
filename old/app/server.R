@@ -40,7 +40,7 @@ shiny::shinyServer(function(input, output, session) {
                 data.table::setnames(df_rename,
                     old = as.vector(unlist(cols_ren)),
                     new = names(cols_ren))
-                ped_df_norm <- print_console(normPed(df_rename), session)
+                ped_df_norm <- print_console(norm_ped(df_rename), session)
                 if (length(ped_df_norm[!is.na(ped_df_norm$error), ]) > 0) {
                     showNotification(paste(
                         nrow(ped_df_norm[!is.na(ped_df_norm$error), ]),
@@ -62,7 +62,7 @@ shiny::shinyServer(function(input, output, session) {
             data.table::setnames(rel_rename,
                 old = as.vector(unlist(cols_ren)),
                 new = names(cols_ren))
-            rel_df_norm <- print_console(normRel(rel_rename), session)
+            rel_df_norm <- print_console(norm_Red(rel_rename), session)
             if (length(rel_df_norm[!is.na(rel_df_norm$error)]) > 0) {
                 showNotification(paste(
                     nrow(rel_df_norm[!is.na(rel_df_norm$error), ]),

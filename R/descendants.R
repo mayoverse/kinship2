@@ -27,11 +27,15 @@ setMethod("descendants", signature(idlist = "character", obj = "character"),
     function(idlist, obj, dadid, momid) {
         id <- obj
         child <- id[!(is.na(match(dadid, idlist)) &
-            is.na(match(momid, idlist)))]
+                    is.na(match(momid, idlist))
+            )
+        ]
         descend <- NULL
         while (length(child > 0)) {
             newchild <- id[!(is.na(match(dadid, child)) &
-                is.na(match(momid, child)))]
+                        is.na(match(momid, child))
+                )
+            ]
             descend <- unique(c(descend, child))
             child <- newchild[is.na(match(newchild, c(idlist, descend)))]
         }
