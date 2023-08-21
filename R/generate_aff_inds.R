@@ -1,4 +1,6 @@
-usethis::use_package("plyr")
+#' @importFrom plyr revalue
+NULL
+
 #' Process the information for affection
 #'
 #' @details Perform transformation uppon a column given as the one
@@ -68,8 +70,8 @@ generate_aff_inds <- function(values, mods_aff = NULL,
     aff_to_use <- c(TRUE, FALSE)
     names(aff_to_use) <- c(aff_lab, healthy_lab)
 
-    labels <- plyr::revalue(as.character(mods), labels_to_use)
-    affected <- plyr::revalue(labels, aff_to_use)
+    labels <- revalue(as.character(mods), labels_to_use)
+    affected <- revalue(labels, aff_to_use)
     as.data.frame(list(mods = mods, labels = labels, affected = affected))
 }
 TRUE
