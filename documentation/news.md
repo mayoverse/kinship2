@@ -16,3 +16,4 @@
 - generate_aff.R
 - generate_colors.R
 - num_child.R
+- is_informative.R
