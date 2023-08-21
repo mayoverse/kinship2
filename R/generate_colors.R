@@ -1,4 +1,5 @@
-usethis::use_package("plyr")
+#' @importFrom plyr revalue
+NULL
 
 #' Process the colors based on affection
 #'
@@ -60,8 +61,8 @@ generate_fill <- function(
         # last of aff
         fill_to_use <- c(colors_unaff[1], colors_aff[-1], "grey")
         names(fill_to_use) <- c("FALSE", "TRUE", NA)
-        fill <- plyr::revalue(affected, fill_to_use)
-        mods <- plyr::revalue(affected, c("FALSE" = 0, "TRUE" = 1))
+        fill <- revalue(affected, fill_to_use)
+        mods <- revalue(affected, c("FALSE" = 0, "TRUE" = 1))
     } else {
         print("Bal: generate_colors: keep_full_scale = TRUE")
         fct_scale_unaff <- grDevices::colorRampPalette(colors_unaff)
@@ -108,17 +109,17 @@ generate_fill <- function(
         print("Bal: generate_colors: fill_scale_aff")
         # Set fill depending on the corresponding color for aff and unaff
         fill[affected == TRUE & !is.na(affected)] <-
-            as.character(plyr::revalue(levs_aff, fill_scale))
+            as.character(revalue(levs_aff, fill_scale))
 
         fill[affected == FALSE & !is.na(affected)] <-
-            as.character(plyr::revalue(levs_unaff, fill_scale))
+            as.character(revalue(levs_unaff, fill_scale))
 
         # Set modalities as factor levels
         mods[affected == TRUE & !is.na(affected)] <- as.character(levs_aff)
         mods[affected == FALSE & !is.na(affected)] <- as.character(levs_unaff)
         mods_to_use <- seq_along(fill_scale)
         names(mods_to_use) <- names(fill_scale)
-        mods <- plyr::revalue(mods, mods_to_use)
+        mods <- revalue(mods, mods_to_use)
     }
     # Set to grey color individual with no informations
     fill[is.na(fill)] <- "grey"
