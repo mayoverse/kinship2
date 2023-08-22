@@ -224,3 +224,72 @@ check_num_na <- function(var, na_as_num = TRUE) {
     }
     is_num | is_na
 }
+
+
+#' Check wich individuals are parents
+#'
+#' @description Check which individuals are parents.
+#'
+#' @param id Vector of individual id
+#' @param dadid Vector of father index
+#' @param momid Vector of mother index
+#' @param missid Missing value identifier
+#'
+#' @return A vector of boolean of the same size as `id`
+#' with TRUE if the individual is a parent and FALSE otherwise
+#'
+#' @export
+is_parent <- function(id, dadid, momid, missid = "0") {
+    # determine subjects who are parents assume input of dadid/momid indices,
+    # not ids
+
+    if (length(id) != length(dadid) | length(id) != length(momid)) {
+        stop("The length of the vectors are not the same")
+    }
+
+    is_father <- !is.na(match(id, unique(dadid[dadid != missid])))
+    is_mother <- !is.na(match(id, unique(momid[momid != missid])))
+    is_father | is_mother
+}
+
+#' Check wich individuals are founders
+#'
+#' @description Check which individuals are founders.
+#'
+#' @param dadid Vector of father index
+#' @param momid Vector of mother index
+#' @param missid Missing value identifier
+#'
+#' @return A vector of boolean of the same size as `dadid` and `momid`
+#' with TRUE if the individual has no parents (i.e is a founder) and FALSE
+#' otherwise.
+#'
+#' @export
+is_founder <- function(momid, dadid, missid = "0") {
+    (dadid == missid) & (momid == missid)
+}
+
+#' Check wich individuals are disconnected
+#'
+#' @description Check which individuals are disconnected.
+#'
+#' @details An individuals is considered disconnected if the kinship with
+#' all the other individuals is 0.
+#'
+#' @param id Vector of individual id
+#' @param dadid Vector of father id
+#' @param momid Vector of mother id
+#'
+#' @return A vector of boolean of the same size as `id`
+#' with TRUE if the individual is disconnected and FALSE otherwise
+#'
+#' @include kinship.R
+#' @export
+is_disconnected <- function(id, dadid, momid) {
+    # check to see if any subjects are disconnected in pedigree by checking for
+    # kinship = 0 for all subjects excluding self
+    kin_mat <- kinship(id, dadid, momid)
+    diag(kin_mat) <- 0
+    apply(kin_mat == 0, 1, all)
+}
+TRUE
