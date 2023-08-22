@@ -1,0 +1,86 @@
+#' @importFrom dplyr %>%
+NULL
+
+#' @title Kinship computation
+#'
+#' @description Compute the kinship between the informative individuals and
+#' all the others.
+#'
+#' @param id A vector of individuals id
+#' @param dadid A vector of individuals dadid
+#' @param momid A vector of individuals momid
+#' @param sex A vector of the individuals sex
+#' @param avail A vector of individuals availability (0, 1 or NA)
+#' @param affected A vector of individuals affected status (0, 1 or NA)
+#' @param informative Informative individuals selection can take 3 values:
+#' 'AvAf' (available and affected),
+#' 'AvOrAf' (available or affected),
+#' 'Av' (available only),
+#' 'Af' (affected only),
+#' 'All' (all individuals)
+#' or a numeric vector of individuals id
+#' or a boolean
+#' @param ... Other parameters passed to \code{\link{is_informative}}
+#' when using a pedigree object
+#'
+#' @return Dataframe with selected individuals
+#'
+#' @examples
+#' data(sample.ped)
+#' df <- max_kin_inf(sample.ped, informative = 'Av/Af')
+#' summary(df$kin)
+#'
+#' @include is_informative.R
+#' @include kinship.R
+#' @export max_kin_inf
+setGeneric("max_kin_inf", signature = "obj",
+    function(obj, ...) standardGeneric("max_kin_inf")
+)
+
+setMethod("max_kin_inf", "character", function(
+    obj, dadid, momid, sex, avail, affected, informative = "AvAf"
+) {
+    id <- obj
+    # Selection of all informative individuals depending of the informative
+    # parameter
+    id_inf <- is_informative(id, avail, affected, informative)
+    if (any(is.na(id_inf)) || length(id_inf) == 0) {
+        stop("No informative individuals detected")
+    }
+    # For all individuals, compute kinship degree
+    mat <- kinship(id, dadid, momid, sex)
+    sub <- mat[, colnames(mat) %in% id_inf] %>%
+        as.data.frame()
+
+    kin <- log2(1 / apply(sub, 1, max))
+    kin[is.infinite(kin)] <- NA
+
+    checked <- length(kin[!is.na(kin)])
+    message(paste(checked,
+        "individuals linked to informative individuals detected"
+    ))
+
+    kin
+})
+
+setMethod("max_kin_inf", "data.frame",
+    function(obj, informative = "AvAf") {
+        cols_needed <- c("id", "dadid", "momid", "sex", "avail", "affected")
+
+        df <- check_columns(obj, cols_needed, "", "", others_cols = TRUE)
+
+        max_kin_inf(
+            df$id, informative = informative,
+            df$dadid, df$momid, df$sex, df$avail, df$affected
+        )
+    }
+)
+
+setMethod("max_kin_inf", "Pedigree", function(obj, informative = "AvAf", ...) {
+    ped <- is_informative(obj, informative = informative, ...)$ped
+    kin <- max_kin_inf(obj$ped, informative = informative)
+
+    check_columns(ped$ped, NULL, NULL, "kin")
+    ped$ped$kin <- kin
+    ped
+})

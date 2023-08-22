@@ -24,17 +24,11 @@
 #' or a boolean
 #'
 #' @export
-setGeneric("is_informative",
-    function(
-        obj, avail = NULL, affected = NULL,
-        column = NULL, informative = "AvAf", ...
-    ) {
-        standardGeneric("is_informative")
-    }
+setGeneric("is_informative", signature = "obj",
+    function(obj, ...) standardGeneric("is_informative")
 )
 
-setMethod("is_informative",
-    signature(obj = "character", avail = "numeric", affected = "numeric"),
+setMethod("is_informative", "character",
     function(
         obj, avail, affected, informative = "AvAf", missid = "0"
     ) {
@@ -69,14 +63,16 @@ setMethod("is_informative",
     }
 )
 
-setMethod("is_informative", "data.frame", function(obj, informative = "AvAf") {
-    cols_needed <- c("id", "avail", "affected")
-    obj <- check_columns(obj, cols_needed, "", "", others_cols = TRUE)
-    is_informative(obj$id, obj$avail, obj$affected, informative = informative)
-})
+setMethod("is_informative", "data.frame",
+    function(obj, informative = "AvAf", missid = "0") {
+        cols_needed <- c("id", "avail", "affected")
+        obj <- check_columns(obj, cols_needed, "", "", others_cols = TRUE)
+        is_informative(obj$id, obj$avail, obj$affected, informative, missid)
+    }
+)
 
 setMethod("is_informative", "Pedigree", function(
-    obj, column = "affected", informative = "AvAf"
+    obj, column = "affected", informative = "AvAf", missid = "0"
 ) {
     obj$ped$affected <- NA
     aff_scl <- obj$scales$fill
@@ -92,5 +88,10 @@ setMethod("is_informative", "Pedigree", function(
     } else {
         stop("The column ", column, " is not in the scales fill")
     }
-    is_informative(obj$ped, informative = informative)
+    id_inf <- is_informative(obj$ped, informative = informative, missid)
+
+    check_columns(obj$ped, NULL, NULL, "id_inf")
+
+    obj$ped$inf <- ifelse(obj$ped$id %in% id_inf, 1, 0)
+    list(ped = obj, inf = id_inf)
 })

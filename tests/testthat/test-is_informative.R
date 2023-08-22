@@ -51,7 +51,13 @@ test_that("is_informative works with Pedigree", {
     data(sampleped)
 
     ped <- pedigree(sampleped[1:7])
-    expect_equal(is_informative(ped, informative = "AvAf"),
+    ped <- generate_colors(ped, col_aff = "affected",
+        threshold = 0.5, sup_thres_aff = TRUE
+    )
+    expect_equal(
+        is_informative(ped, column = "affected_aff",
+            informative = "AvAf"
+        )$inf,
         c(
             "1_110", "1_116", "1_118", "1_119", "1_124", "1_127",
             "1_128", "2_201", "2_203", "2_206", "2_207", "2_214"
@@ -63,7 +69,7 @@ test_that("is_informative works with Pedigree", {
 
     ped <- generate_colors(ped, col_aff = "sex", mods_aff = "male")
     expect_equal(
-        length(is_informative(ped, column = "sex_aff", informative = "Af")),
+        length(is_informative(ped, column = "sex_aff", informative = "Af")$inf),
         length(ped$ped[ped$ped$sex == "male", "id"])
     )
 
@@ -80,8 +86,9 @@ test_that("is_informative works with Pedigree", {
     )
     expect_equal(
         length(is_informative(ped,
-            column = "education_aff", informative = "Af"
-        )),
+                column = "education_aff", informative = "Af"
+            )$inf
+        ),
         sum(minnbreast$education > 3, na.rm = TRUE)
     )
 })
