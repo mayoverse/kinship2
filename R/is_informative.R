@@ -72,7 +72,7 @@ setMethod("is_informative", "data.frame",
 )
 
 setMethod("is_informative", "Pedigree", function(
-    obj, column = "affected", informative = "AvAf", missid = "0"
+    obj, column = "affected", informative = "AvAf", missid = "0", reset = FALSE
 ) {
     obj$ped$affected <- NA
     aff_scl <- obj$scales$fill
@@ -90,7 +90,9 @@ setMethod("is_informative", "Pedigree", function(
     }
     id_inf <- is_informative(obj$ped, informative = informative, missid)
 
-    check_columns(obj$ped, NULL, NULL, "id_inf")
+    if (!reset) {
+        check_columns(obj$ped, NULL, "id_inf", NULL)
+    }
 
     obj$ped$inf <- ifelse(obj$ped$id %in% id_inf, 1, 0)
     list(ped = obj, inf = id_inf)

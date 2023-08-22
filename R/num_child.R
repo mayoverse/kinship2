@@ -112,15 +112,25 @@ setMethod("num_child", "data.frame", function(obj, relation = NULL, ...) {
     cols_needed <- c("id", "dadid", "momid")
     cols_used <- c("num_child_dir", "num_child_ind", "num_child_tot")
 
-    df <- check_columns(df, cols_needed, cols_used, "", others_cols = TRUE)
+    df <- check_columns(obj, cols_needed, cols_used, "", others_cols = TRUE)
 
     num_child(df$id, df$dadid, df$momid, relation = relation)
 })
 
 #' @export
-setMethod("num_child", "Pedigree", function(obj) {
+setMethod("num_child", "Pedigree", function(obj, reset = FALSE) {
     df <- num_child(obj$ped, relation = obj$rel)
-    obj@ped <- df
+
+    if (!reset) {
+        check_columns(df, NULL,
+            c("num_child_tot", "num_child_ind", "num_child_dir"), NULL, others_cols = TRUE
+        )
+    }
+
+    obj$ped <- merge(obj$ped,
+        df[c("id", "num_child_tot", "num_child_ind", "num_child_dir")], by = "id"
+    )
+
     obj
 })
 TRUE

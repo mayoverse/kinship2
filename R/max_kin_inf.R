@@ -76,11 +76,15 @@ setMethod("max_kin_inf", "data.frame",
     }
 )
 
-setMethod("max_kin_inf", "Pedigree", function(obj, informative = "AvAf", ...) {
-    ped <- is_informative(obj, informative = informative, ...)$ped
-    kin <- max_kin_inf(obj$ped, informative = informative)
+setMethod("max_kin_inf", "Pedigree",
+    function(obj, informative = "AvAf", reset = FALSE, ...) {
+        ped <- is_informative(obj, informative = informative, ...)$ped
+        kin <- max_kin_inf(obj$ped, informative = informative)
 
-    check_columns(ped$ped, NULL, NULL, "kin")
-    ped$ped$kin <- kin
-    ped
-})
+        if (!reset) {
+            check_columns(ped$ped, NULL, "kin", NULL)
+        }
+        ped$ped$kin <- kin
+        ped
+    }
+)
