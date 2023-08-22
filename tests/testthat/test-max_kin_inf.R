@@ -18,7 +18,9 @@ test_that("max_kin_inf works", {
     expect_equal(sum(mxkin, na.rm = TRUE), 90)
     mxkin <- max_kin_inf(sampleped, informative = "AvOrAf")
     expect_equal(sum(mxkin, na.rm = TRUE), 76)
+})
 
+test_that("max_kin_inf works with pedigree", {
     data("sampleped")
     ped <- pedigree(sampleped)
     ped <- generate_colors(ped, col_aff = "affected",

@@ -122,13 +122,14 @@ setMethod("num_child", "Pedigree", function(obj, reset = FALSE) {
     df <- num_child(obj$ped, relation = obj$rel)
 
     if (!reset) {
-        check_columns(df, NULL,
+        check_columns(obj$ped, NULL,
             c("num_child_tot", "num_child_ind", "num_child_dir"), NULL, others_cols = TRUE
         )
     }
 
     obj$ped <- merge(obj$ped,
-        df[c("id", "num_child_tot", "num_child_ind", "num_child_dir")], by = "id"
+        df[c("id", "num_child_tot", "num_child_ind", "num_child_dir")], by = "id",
+        sort = FALSE
     )
 
     obj
