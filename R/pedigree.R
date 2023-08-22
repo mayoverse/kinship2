@@ -57,15 +57,19 @@ pedigree <- function(
             border = character()
         )
     ),
+    hints = list(
+        order = numeric(),
+        spouse = matrix(nrow = 0, ncol = 2)
+    ),
     normalize = TRUE
-    ) {
+) {
     ## Rename columns ped
     old_cols <- as.vector(unlist(cols_ren_ped))
     new_cols <- names(cols_ren_ped)
     cols_to_ren <- match(old_cols, names(ped_df))
     names(ped_df)[cols_to_ren[!is.na(cols_to_ren)]] <-
         new_cols[!is.na(cols_to_ren)]
-    
+
     ## Rename columns rel
     old_cols <- as.vector(unlist(cols_ren_rel))
     new_cols <- names(cols_ren_rel)
@@ -81,11 +85,13 @@ pedigree <- function(
         cols_to_use <- c("steril", "avail", "family", "status")
         ped_df <- check_columns(
             ped_df, cols_need, "", cols_to_use,
-            others_cols = TRUE, cols_to_use_init = TRUE)
+            others_cols = TRUE, cols_to_use_init = TRUE
+        )
         cols_need <- c("id1", "id2", "code")
         cols_to_use <- c("family")
         rel_df <- check_columns(
-            rel_df, cols_need, "", cols_to_use, cols_to_use_init = TRUE)
+            rel_df, cols_need, "", cols_to_use, cols_to_use_init = TRUE
+        )
     }
     if (any(!is.na(ped_df$error))) {
         warning("The pedigree informations are not valid.")
@@ -95,9 +101,11 @@ pedigree <- function(
 
     if (any(!is.na(rel_df$error))) {
         warning("The relationship informations are not valid.")
-        print("Here is the normalised relationship informations with the errors")
+        print(paste0("Here is the normalised relationship informations",
+            "with the errors"
+        ))
         return(rel_df)
     }
     ## Create the object
-    new("Pedigree", ped = ped_df, rel = rel_df, scales = scales)
+    new("Pedigree", ped = ped_df, rel = rel_df, scales = scales, hints = hints)
 }

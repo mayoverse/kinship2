@@ -2,11 +2,11 @@
 #'
 #' Print0 the elements inside a vector until a maximum is reached.
 #'
-#' @param x A vector.
-#' @param max The maximum number of elements to print.
-#' @param ... Additional arguments passed to print0
+#' $param x A vector.
+#' $param max The maximum number of elements to print.
+#' $param ... Additional arguments passed to print0
 #'
-#' @export
+#' $export
 paste0max <- function(x, max = 5, ...) {
     if (length(x) > max) {
         paste(paste0(unique(x[1:max]), collapse=", ", ...), "...")
@@ -17,11 +17,11 @@ paste0max <- function(x, max = 5, ...) {
 
 #' Check if the fields are present in an object slot
 #'
-#' @param object An object.
-#' @param slot A slot of object.
-#' @param fields A character vector with the fields to check.
+#' $param object An object.
+#' $param slot A slot of object.
+#' $param fields A character vector with the fields to check.
 #'
-#' @return A character vector with the errors if any.
+#' $return A character vector with the errors if any.
 check_slot_fd <- function(object, slot = NULL, fields = character()) {
     if (is.object(object)) {
         object <- as.list(object)
@@ -53,14 +53,14 @@ check_slot_fd <- function(object, slot = NULL, fields = character()) {
 #'
 #' Check if the all the values in a slot are in a vector of values.
 #'
-#' @param object An object.
-#' @param slot A slot of the object.
-#' @param column A column of the slot.
-#' @param values A vector of values to check.
-#' @param present A logical value indicating if the values should be present
+#' $param object An object.
+#' $param slot A slot of the object.
+#' $param column A column of the slot.
+#' $param values A vector of values to check.
+#' $param present A logical value indicating if the values should be present
 #' or not
 #'
-#' @return A character vector with the errors if any.
+#' $return A character vector with the errors if any.
 check_values <- function(val, ref, present = TRUE) {
     if (length(dim(val)) > 1) {
         stop("val must be a vector")
@@ -89,8 +89,8 @@ check_values <- function(val, ref, present = TRUE) {
 #' It will check :
 #' the fields of the slots
 #' the values in the columns of the ped, rel and scale slot
-#' @param object A Pedigree object.
-#' @return A logical value or a character vector with the errors.
+#' $param object A Pedigree object.
+#' $return A logical value or a character vector with the errors.
 isValid <- function(object) {
     missid <- "0"
     errors <- c()
@@ -115,17 +115,17 @@ isValid <- function(object) {
 
     #### Check that the ped columns have the right values ####
     # Check for ped$id uniqueness
-    if (any(duplicated(object@ped$id))) {
+    if (any(duplicated(object$ped$id))) {
         errors <- c(errors, "Id in ped slot must be unique")
     }
 
     # Control values for ped
     errors <- c(errors, check_values(object$ped$id, missid, present = FALSE))
     errors <- c(errors, check_values(
-        object$ped$dadid, c(object@ped$id, missid)
+        object$ped$dadid, c(object$ped$id, missid)
     ))
     errors <- c(errors, check_values(
-        object$ped$momid, c(object@ped$id, missid)
+        object$ped$momid, c(object$ped$id, missid)
     ))
     sex_code <- c("male", "female", "unknown", "terminated")
     errors <- c(errors, check_values(object$ped$sex, sex_code))
@@ -134,10 +134,10 @@ isValid <- function(object) {
     errors <- c(errors, check_values(object$ped$avail, c(0, 1, NA)))
 
     # Control sex for parents
-    id <- object@ped$id
-    momid <- object@ped$momid
-    dadid <- object@ped$dadid
-    sex <- object@ped$sex
+    id <- object$ped$id
+    momid <- object$ped$momid
+    dadid <- object$ped$dadid
+    sex <- object$ped$sex
     is_dad <- id %in% dadid
     is_mom <- id %in% momid
     if (any(sex[is_dad] != "male")) {
@@ -157,16 +157,16 @@ isValid <- function(object) {
     codes <- c("MZ twin", "DZ twin", "UZ twin", "Spouse")
     errors <- c(errors, check_values(object$rel$code, codes))
     errors <- c(errors, check_values(
-        object$rel$family, c(object@ped$family, NA)
+        object$rel$family, c(object$ped$family, NA)
     ))
-    errors <- c(errors, check_values(object$rel$id1, object@ped$id))
-    errors <- c(errors, check_values(object$rel$id2, object@ped$id))
+    errors <- c(errors, check_values(object$rel$id1, object$ped$id))
+    errors <- c(errors, check_values(object$rel$id2, object$ped$id))
 
     # Check if twins has same parents
-    code <- object@rel$code
+    code <- object$rel$code
     ncode <- as.numeric(code)
-    id1 <- object@rel$id1
-    id2 <- object@rel$id2
+    id1 <- object$rel$id1
+    id2 <- object$rel$id2
     temp1 <- match(id1, id, nomatch = 0)
     temp2 <- match(id2, id, nomatch = 0)
     if (any(ncode < 3)) {
@@ -189,10 +189,10 @@ isValid <- function(object) {
 
     # Check that the scales columns have the right values
     errors <- c(errors, check_values(
-        object$scales$fill$column, colnames(object@ped)
+        object$scales$fill$column, colnames(object$ped)
     ))
     errors <- c(errors, check_values(
-        object$scales$border$column, colnames(object@ped)
+        object$scales$border$column, colnames(object$ped)
     ))
 
     # Check that all modalities are present in the scales

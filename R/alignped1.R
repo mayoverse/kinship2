@@ -46,12 +46,12 @@
 #' The third is when below is narrower, for instance an only child.
 #'
 #' @param x Id of the subject
-#' @param dad Id of the father
-#' @param mom Id of the mother
-#' @param level
-#' @param horder
-#' @param packed
-#' @param spouselist
+#' @param dad index of the father
+#' @param mom index of the mother
+#' @param level vector of the level of each subject
+#' @param horder vector of the horizontal order of each subject
+#' @param packed logical value indicating if the pedigree should be compressed
+#' @param spouselist matrix of the spouses
 #'
 #' @return A set of matrices along with the spouselist matrix.
 #' The latter has marriages removed as they are processed.

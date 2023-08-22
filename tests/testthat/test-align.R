@@ -1,6 +1,6 @@
 test_that("align.pedigree works", {
-    data("sample.ped")
-    ped <- with(sample.ped, pedigree(id, father, mother, sex))
+    data("sampleped")
+    ped <- pedigree(sampleped)
     withr::local_options(width = 50)
     expect_snapshot(align.pedigree(ped))
     align <- align.pedigree(ped)
@@ -8,10 +8,13 @@ test_that("align.pedigree works", {
 })
 
 test_that("test autohint works", {
-    data("sample.ped")
-    ped <- with(sample.ped, pedigree(id, father, mother, sex))
+    data("sampleped")
+    ped <- pedigree(sampleped)
     newhint <- autohint(ped)  #this fixes up marriages and such
-    plist <- align.pedigree(ped, packed = TRUE, align = TRUE, width = 8, hints = newhint)
+    check_hints(newhint, ped$ped$sex)
+    plist <- align.pedigree(ped, packed = TRUE,
+        align = TRUE, width = 8, hints = newhint
+    )
     expect_snapshot(plist)
 })
 TRUE

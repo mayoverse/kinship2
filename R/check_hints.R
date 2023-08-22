@@ -1,11 +1,9 @@
 ## Extracted from checks.Rnw
 
-# TODO add param, return, examples, keywords, seealso
-
-#' Remove inconsistencies
+#' Detect hints inconsistencies
 #'
 #' @description
-#' This routine tries to remove inconsistencies in spousal hints.
+#' This routine tries to detect inconsistencies in spousal hints.
 #'
 #' @details
 #' These arise in autohint with complex pedigrees.
@@ -14,32 +12,32 @@
 #' Actually, these used to arise in autohint.
 #' Users can introduce problems as well if they modify the hints.
 #'
-#' @param hints
-#' @param sex
+#' @param hints A list of hints
+#' @param sex A vector with the sex of all the individuals
 #'
-#' @return
 #'
 #' @examples
 #' @seealso `autohint`, `besthint`
 #' @keywords
-#' @export checkHint
-checkHint <- function(hints, sex) {
-    if (is.null(hints$order))
-        stop("Missing order component")
-    if (!is.numeric(hints$order))
-        stop("Invalid order component")
+#' @export check_hints
+check_hints <- function(hints, sex) {
+    if (is.null(hints$order)) {
+        stop("Order component must be present in hints")
+    }
+    if (!is.numeric(hints$order)) {
+        stop("Order component must be numeric")
+    }
     n <- length(sex)
-    if (length(hints$order) != n)
-        stop("Wrong length for order component")
+    if (length(hints$order) != n) {
+        stop("Length for order component should be equal to sex length")
+    }
 
     spouse <- hints$spouse
-    if (is.null(spouse)) {
-        hints
-    } else {
+    if (!is.null(spouse)) {
         lspouse <- spouse[, 1]
         rspouse <- spouse[, 2]
         if (any(lspouse < 1 | lspouse > n | rspouse < 1 | rspouse > n)) {
-            stop("Invalid spouse value")
+            stop("Invalid spouse value, should be between 1 and n")
         }
 
         temp1 <- (sex[lspouse] == "female" & sex[rspouse] == "male")
@@ -55,6 +53,5 @@ checkHint <- function(hints, sex) {
         # TODO Break any loops: A left of B, B left of C, C left of A.  Not yet
         # done
     }
-    hints
 }
 TRUE

@@ -29,7 +29,8 @@ setClass(
     slots = c(
         ped = "data.frame",
         rel = "data.frame",
-        scales = "list"
+        scales = "list",
+        hints = "list"
     )
 )
 
@@ -134,7 +135,8 @@ setMethod("as.list", c(x = "Pedigree"),
         list(
             ped = x$ped,
             rel = x$rel,
-            scales = x$scales
+            scales = x$scales,
+            hints = x$hints
         )
     }
 )
