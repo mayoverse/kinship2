@@ -76,13 +76,13 @@
 #' @keywords genetics
 #' @include pedigreeClass.R
 #' @export
-setGeneric("familycheck", function(obj, ...) {
-    standardGeneric("familycheck")
-})
+setGeneric("familycheck", signature = "obj",
+    function(obj, ...) standardGeneric("familycheck")
+)
 
 #' @include makefamid.R
 #' @export
-setMethod("familycheck", signature(obj = "numeric"),
+setMethod("familycheck", "numeric",
     function(obj, id, dadid, momid, newfam) {
         famid <- obj
         if (is.numeric(famid) && any(is.na(famid))) {
@@ -125,7 +125,7 @@ setMethod("familycheck", signature(obj = "numeric"),
     }
 )
 
-setMethod("familycheck", signature(obj = "Pedigree"),
+setMethod("familycheck", "Pedigree",
     function(obj) {
         familycheck(obj$ped$family, obj$ped$id, obj$ped$dadid, obj$ped$momid)
     }

@@ -24,11 +24,11 @@
 #' @seealso `plot.pedigree`
 #' @include pedigreeClass.R
 #' @export
-setGeneric("kindepth", function(obj, ...) {
-    standardGeneric("kindepth")
-})
+setGeneric("kindepth", signature = "obj",
+    function(obj, ...) standardGeneric("kindepth")
+)
 
-
+#' @export
 setMethod("kindepth", "character", function(obj, dadid, momid, align = FALSE) {
     id <- obj
     n <- length(id)
@@ -210,6 +210,7 @@ setMethod("kindepth", "character", function(obj, dadid, momid, align = FALSE) {
 }
 )
 
+#' @export
 setMethod("kindepth", "Pedigree",
     function(obj, ...) {
         kindepth(obj$ped$id, obj$ped$dadid, obj$ped$momid, ...)

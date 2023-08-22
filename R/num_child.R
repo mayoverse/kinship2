@@ -25,9 +25,9 @@ NULL
 #'
 #' @include pedigreeClass.R
 #' @export
-setGeneric("num_child", function(obj, ...) {
-    standardGeneric("num_child")
-})
+setGeneric("num_child", signature = "obj",
+    function(obj, ...) standardGeneric("num_child")
+)
 
 #' @export
 setMethod("num_child", "character",

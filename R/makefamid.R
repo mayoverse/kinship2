@@ -25,9 +25,9 @@
 #' @seealso `kinship`
 #' @keywords genetics
 #' @export makefamid
-setGeneric("makefamid", function(obj, ...) {
-    standardGeneric("makefamid")
-})
+setGeneric("makefamid", signature = "obj",
+    function(obj, ...) standardGeneric("makefamid")
+)
 
 #' Get family id
 #'
@@ -135,7 +135,7 @@ setMethod("makefamid", "character",
 #' @seealso `kinship`
 #' @keywords genetics
 #' @export makefamid
-setMethod("makefamid", signature(obj = "Pedigree"),
+setMethod("makefamid", "Pedigree",
     function(obj) {
         ped <- obj
         family <- makefamid(ped$ped$id, ped$ped$dadid, ped$ped$momid)

@@ -66,13 +66,13 @@ usethis::use_package("Matrix")
 #' @keywords genetics
 #' @include pedigreeClass.R
 #' @export
-setGeneric("kinship", function(obj, ...) {
-    standardGeneric("kinship")
-})
+setGeneric("kinship", signature = "obj",
+    function(obj, ...) standardGeneric("kinship")
+)
 
 #' @export
 setMethod("kinship", "character",
-    function(obj, dadid, momid, sex, chrtype = "autosome", ...) {
+    function(obj, dadid, momid, sex, chrtype = "autosome") {
         id <- obj
         chrtype <- match.arg(casefold(chrtype), c("autosome", "x"))
         if (any(duplicated(id))) {
@@ -132,10 +132,10 @@ setMethod("kinship", "character",
     }
 )
 
-#' @export
 #' @include kindepth.R
+#' @export
 setMethod("kinship", "Pedigree",
-    function(obj, chrtype = "autosome", ...) {
+    function(obj, chrtype = "autosome") {
         famlist <- unique(obj$ped$family)
         nfam <- length(famlist)
         matlist <- vector("list", nfam)

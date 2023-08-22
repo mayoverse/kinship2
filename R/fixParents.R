@@ -56,13 +56,13 @@ NULL
 #' @author Jason Sinnwell
 #' @seealso \\code{\\link{pedigree}}
 #' @export
-setGeneric("fixParents", function(obj, ...) {
-    standardGeneric("fixParents")
-})
+setGeneric("fixParents", signature = "obj",
+    function(obj, ...) standardGeneric("fixParents")
+)
 
 #' @export
 setMethod("fixParents", "character", function(
-        obj, dadid, momid, sex, family = NULL, missid = "0", ...) {
+        obj, dadid, momid, sex, family = NULL, missid = "0") {
     ## fix sex of parents add parents that are missing
     n <- length(obj)
     id <- obj
@@ -208,7 +208,7 @@ setMethod("fixParents", "character", function(
 setMethod("fixParents", "data.frame", function(
         obj, delete = FALSE, filter = NULL, missid = "0",
         id = "id", dadid = "dadid", momid = "momid", sex = "sex",
-        family = "family", ...) {
+        family = "family") {
     print("Bal: fixParents.data.frame")
     cols_needed <- c(id, dadid, momid, sex, filter, family)
     df <- check_columns(obj, cols_needed, "", "", others_cols = TRUE)
@@ -241,7 +241,7 @@ setMethod("fixParents", "data.frame", function(
         }
         df_fix <- fixParents(
             df[[id]], df[[dadid]], df[[momid]],
-            df[[sex]], missid = missid, family = df[[family]], ...
+            df[[sex]], missid = missid, family = df[[family]]
         )
         col_used <- which(names(df_old) == momid | names(df_old) == dadid |
                 names(df_old) == sex | names(df_old) == family

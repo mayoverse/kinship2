@@ -18,9 +18,9 @@
 #' descendants(c("1_101", "2_208"), ped)
 #' @include pedigreeClass.R
 #' @export
-setGeneric("descendants", function(idlist, obj, ...) {
-    standardGeneric("descendants")
-})
+setGeneric("descendants",
+    function(idlist, obj, ...) standardGeneric("descendants")
+)
 
 #' @export
 setMethod("descendants", signature(idlist = "character", obj = "character"),
@@ -43,6 +43,7 @@ setMethod("descendants", signature(idlist = "character", obj = "character"),
     }
 )
 
+#' @export
 setMethod("descendants", signature(idlist = "character", obj = "Pedigree"),
     function(idlist, obj) {
         descendants(idlist, obj$ped$id, obj$ped$dadid, obj$ped$momid)

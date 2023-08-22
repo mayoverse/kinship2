@@ -21,9 +21,9 @@
 #' @seealso `pedigree.shrink`
 #' @include pedigreeClass.R
 #' @export
-setGeneric("bitSize", function(obj, ...) {
-    standardGeneric("bitSize")
-})
+setGeneric("bitSize", signature = "obj",
+    function(obj, ...) standardGeneric("bitSize")
+)
 
 setMethod("bitSize", "character", function(obj, momid, missid = "0") {
     dadid <- obj
@@ -41,8 +41,8 @@ setMethod("bitSize", "character", function(obj, momid, missid = "0") {
     )
 })
 
-setMethod("bitSize", signature(obj = "Pedigree"),
-    function(obj, missid = "0", ...) {
+setMethod("bitSize", "Pedigree",
+    function(obj, missid = "0") {
         bitSize(obj$ped$dadid, obj$ped$momid, missid)
     }
 )
