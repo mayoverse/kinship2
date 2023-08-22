@@ -209,9 +209,9 @@ generate_border <- function(avail, colors_avail = c("green", "black")) {
 #' - A dataframe containing the description of each modality of the scale
 #'
 #' @export
-setGeneric("generate_colors", function(obj, ...) {
-    standardGeneric("generate_colors")
-})
+setGeneric("generate_colors", signature = "obj",
+    function(obj, ...) standardGeneric("generate_colors")
+)
 
 #' @export
 setMethod("generate_colors", "data.frame",
