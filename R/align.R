@@ -43,7 +43,7 @@ ancestor <- function(idx, momx, dadx) {
 #' width for the plot.
 #' @param hints Plotting hints for the pedigree.
 #' This is a list with components `order` and `spouse`,
-#' the second one is optional. If the hints are missing the `autohint`
+#' the second one is optional. If the hints are missing the `auto_hint`
 #' routine is called to supply an initial guess.
 #' The order component is a numeric vector with one element per subject in the
 #' pedigree.  It determines the relative order of subjects within a sibship, as
@@ -90,42 +90,36 @@ ancestor <- function(idx, momx, dadx) {
 #' @examples
 #' data(sample.ped)
 #' ped <- with(sample.ped, pedigree(id, father, mother, sex, affected))
-#' align.pedigree(ped)
+#' align(ped)
 #'
-#' @seealso `plot.pedigree`, `autohint`
+#' @seealso `plot.pedigree`, `auto_hint`
 #' @keywords dplot
 #' @export
 setGeneric("align", signature = "obj",
     function(obj, ...) standardGeneric("align")
 )
 
-#' @include autohint.R
+#' @include auto_hint.R
+#' @include kindepth.R
 #' @include check_hints.R
 #' @include pedigreeClass.R
 setMethod("align", "Pedigree", function(obj, packed = TRUE, width = 10,
     align = TRUE, hints = obj$hints, missid = "0"
-){
-
-})
-
-align.pedigree <- function(ped, packed = TRUE, width = 10,
-    align = TRUE, hints = ped$hints, missid = "0"
 ) {
-    if ("pedigreeList" %in% class(ped)) {
-        nped <- length(unique(ped$famid))
-        alignment <- vector("list", nped)
-        for (i in 1:nped) {
-            temp <- align.pedigree(ped[i], packed, width, align)
-            alignment[[i]] <- temp$alignment
+    ped <- obj
+    famlist <- unique(ped$ped$family)
+    if (length(famlist) > 1) {
+        nfam <- length(famlist)
+        alignment <- vector("list", nfam)
+        for (i_fam in famlist) {
+            ped_fam <- obj[ped$ped$family == i_fam]
+            alignment[[i_fam]] <- align(ped_fam, packed, width, align)
         }
-        ped$alignment <- alignment
-        class(ped) <- "pedigreeListAligned"
-        return(ped)
+        return(alignment)
     }
-
-    if (length(hints$order) == 0) {
+    if (is.null(hints$order)) {
         hints <- try({
-            autohint(ped)
+            auto_hint(ped)
         }, silent = TRUE)
         ## sometimes appears dim(ped) is empty (ped is NULL), so try fix here:
         ## (JPS 6/6/17
@@ -143,7 +137,7 @@ align.pedigree <- function(ped, packed = TRUE, width = 10,
 
     if (!is.null(hints$spouse)) {
         # start with the hints list
-        tsex <- ped$sex[hints$spouse[, 1]]  # sex of the left member
+        tsex <- ped$ped$sex[hints$spouse[, 1]]  # sex of the left member
         spouselist <- cbind(0, 0, 1 + (tsex != "male"), hints$spouse[, 3])
         spouselist[, 1] <- ifelse(tsex == "male", hints$spouse[, 1],
             hints$spouse[, 2]
@@ -173,7 +167,7 @@ align.pedigree <- function(ped, packed = TRUE, width = 10,
     hash <- spouselist[, 1] * n + spouselist[, 2]
     spouselist <- spouselist[!duplicated(hash), , drop = FALSE]
     ## Doc: Founders -align
-    noparents <- (dad[spouselist[, 1]] > 0 & mom[spouselist[, 2]] > 0)
+    noparents <- (dad[spouselist[, 1]] == 0 & dad[spouselist[, 2]] == 0)
     ## Take duplicated mothers and fathers, then founder mothers
     dupmom <- spouselist[noparents, 2][duplicated(spouselist[noparents, 2])]
     ## Founding mothers with multiple marriages
@@ -238,5 +232,5 @@ align.pedigree <- function(ped, packed = TRUE, width = 10,
             twins = twins
         )
     }
-}
-TRUE
+})
+

@@ -84,6 +84,27 @@ setMethod("$<-", c(x = "Pedigree"),
         x
 })
 
+sub_sel_hints <- function(hints, index){
+    if (!is.null(hints$order)) {
+        temp <- list(order = hints$order[index])
+    } else {
+        temp <- list(order = NULL)
+    }
+
+    if (!is.null(hints$spouse)) {
+        indx1 <- match(hints$spouse[, 1], index, nomatch = 0)
+        indx2 <- match(hints$spouse[, 2], index, nomatch = 0)
+        keep <- (indx1 > 0 & indx2 > 0)  # keep only if both id's are kept
+        if (any(keep)) {
+            temp$spouse <- cbind(indx1[keep], indx2[keep],
+                hints$spouse[keep, 3])
+        }
+    } else {
+        temp$spouse <- NULL
+    }
+    temp
+}
+
 setMethod("[", c(x = "Pedigree", i = "ANY", j = "ANY"),
     function(x, i, j, ..., drop = TRUE) {
         if (is.factor(i)) {
@@ -95,7 +116,9 @@ setMethod("[", c(x = "Pedigree", i = "ANY", j = "ANY"),
         ped_df <- x$ped[i, j, drop = drop]
         allId <- unique(c(ped_df$id, ped_df$dadid, ped_df$momid))
         rel_df <- x$rel[x$rel$id1 %in% allId | x$rel$id2 %in% allId, ]
-        new_ped <- pedigree(ped_df, rel_df, x$scales, cols_ren_ped = NULL, normalize = FALSE)
+        idx <- match(allId, ped_df$id, nomatch = 0)
+        sub_hints <- sub_sel_hints(x$hints, idx)
+        new_ped <- pedigree(ped_df, rel_df, x$scales, hints = sub_hints, cols_ren_ped = NULL, normalize = FALSE)
         validObject(new_ped)
         new_ped
 })
@@ -119,7 +142,9 @@ setMethod("[", c(x = "Pedigree", i = "ANY", j = "missing"),
         ped_df <- x$ped[i,]
         allId <- unique(c(ped_df$id, ped_df$dadid, ped_df$momid))
         rel_df <- x$rel[x$rel$id1 %in% allId | x$rel$id2 %in% allId, ]
-        new_ped <- pedigree(ped_df, rel_df, x$scales, cols_ren_ped = NULL, normalize = FALSE)
+        idx <- match(allId, ped_df$id, nomatch = 0)
+        sub_hints <- sub_sel_hints(x$hints, idx)
+        new_ped <- pedigree(ped_df, rel_df, x$scales, hints = sub_hints, cols_ren_ped = NULL, normalize = FALSE)
         validObject(new_ped)
         new_ped
 })

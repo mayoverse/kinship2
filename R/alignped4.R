@@ -50,20 +50,21 @@ usethis::use_package("quadprog")
 #' each subesquent one must be at least 1 unit to the right, and the final point
 #' must be \\eqn{\\le} the max width.
 #'
-#' @param rval
-#' @param spouse
-#' @param level
-#' @param width
-#' @param align
+#' @param rval A list with components `n`, `nid`, `pos`, and `fam`.
+#' @param spouse A matrix with one row per level, giving the index of the
+#' spouse for each subject. 0 means no spouse.
+#' @param level A vector giving the level of each subject.
+#' @param width The minimum width of the plot.
+#' @param align A vector of two alignment parameters.
 #'
 #' @return newpos
 #'
 #' @examples
 #' data(sample.ped)
 #' ped <- with(sample.ped, pedigree(id, father, mother, sex, affected))
-#' align.pedigree(ped)
+#' align(ped)
 #'
-#' @seealso `plot.pedigree`, `autohint`
+#' @seealso `plot.pedigree`, `auto_hint`
 #' @keywords dplot
 #' @export alignped4
 alignped4 <- function(rval, spouse, level, width, align) {
@@ -106,7 +107,9 @@ alignped4 <- function(rval, spouse, level, width, align) {
             penalty <- sqrt(k^(-align[1]))
             pmat[cbind(indx, myid[lev, who])] <- -penalty
             pmat[cbind(indx, myid[lev - 1, rval$fam[lev, who]])] <- penalty / 2
-            pmat[cbind(indx, myid[lev - 1, rval$fam[lev, who] + 1])] <- penalty / 2
+            pmat[cbind(indx,
+                myid[lev - 1, rval$fam[lev, who] + 1]
+            )] <- penalty / 2
         }
     }
     maxrow <- min(which(rval$n == max(rval$n)))

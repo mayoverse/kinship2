@@ -25,10 +25,10 @@
 #' ## Merge
 #' Now merge the two trees. Start at the top level and work down.
 #'
-#' @param x1
-#' @param x2
-#' @param packed
-#' @param space
+#' @param x1 Alignement of the first tree
+#' @param x2 Alignement of the second tree
+#' @param packed Should the pedigree be compressed, i.e., to allow diagonal
+#' @param space Space between two subjects
 #'
 #' @return A list of element containing:
 #' ## n
@@ -48,9 +48,9 @@
 #' @examples
 #' data(sample.ped)
 #' ped <- with(sample.ped, pedigree(id, father, mother, sex, affected))
-#' align.pedigree(ped)
+#' align(ped)
 #'
-#' @seealso `plot.pedigree`, `autohint`
+#' @seealso `plot.pedigree`, `auto_hint`
 #' @keywords dplot
 #' @export alignped3
 alignped3 <- function(x1, x2, packed, space = 1) {
@@ -73,14 +73,14 @@ alignped3 <- function(x1, x2, packed, space = 1) {
         for (i in 1:maxlev) {
             n1 <- x1$n[i]
             n2 <- x2$n[i]
-            if (n1 > 0 & n2 > 0) {
+            if (n1 > 0 && n2 > 0) {
                 if (nid[i, n1] == x2$nid[i, 1]) {
-                  temp <- pos[i, n1] - x2$pos[i, 1]
+                    temp <- pos[i, n1] - x2$pos[i, 1]
                 } else {
-                  temp <- space + pos[i, n1] - x2$pos[i, 1]
+                    temp <- space + pos[i, n1] - x2$pos[i, 1]
                 }
                 if (temp > slide)
-                  slide <- temp
+                    slide <- temp
             }
         }
     }
@@ -96,13 +96,15 @@ alignped3 <- function(x1, x2, packed, space = 1) {
                 fam[i, n1] <- max(fam[i, n1], fam2[i, 1])
                 nid[i, n1] <- max(nid[i, n1], x2$nid[i, 1])  # preserve a '.5'
                 if (!packed) {
-                  if (fam2[i, 1] > 0) {
-                    if (fam[i, n1] > 0) {
-                      pos[i, n1] <- (x2$pos[i, 1] + pos[i, n1] + slide) / 2
-                    } else {
-                      pos[i, n1] <- x2$pos[i, 1] + slide
+                    if (fam2[i, 1] > 0) {
+                        if (fam[i, n1] > 0) {
+                            pos[i, n1] <- (x2$pos[i, 1] + pos[i, n1] +
+                                    slide
+                            ) / 2
+                        } else {
+                            pos[i, n1] <- x2$pos[i, 1] + slide
+                        }
                     }
-                  }
                 }
                 n[i] <- n[i] - 1
             } else {
@@ -110,8 +112,11 @@ alignped3 <- function(x1, x2, packed, space = 1) {
             }
 
             if (packed)
-                slide <- if (n1 == 0)
-                  0 else pos[i, n1] + space - overlap
+                slide <- if (n1 == 0) {
+                    0
+                } else {
+                    pos[i, n1] + space - overlap
+                }
 
             zz <- seq(from = overlap + 1, length = n2 - overlap)
             nid[i, n1 + zz - overlap] <- x2$nid[i, zz]

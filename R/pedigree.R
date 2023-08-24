@@ -58,8 +58,8 @@ pedigree <- function(
         )
     ),
     hints = list(
-        order = numeric(),
-        spouse = matrix(nrow = 0, ncol = 2)
+        order = NULL,
+        spouse = NULL
     ),
     normalize = TRUE
 ) {

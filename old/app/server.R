@@ -436,7 +436,7 @@ shiny::shinyServer(function(input, output, session) {
 
     ped_gens <- reactive({
         ped <- with(ped_df_final(), pedigree(id, dadid, momid, sex, affected))
-        align.pedigree(ped)$n
+        align(ped)$n
     })
 
     ## Plotting -------------------------------

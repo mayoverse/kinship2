@@ -21,7 +21,7 @@ Introduction
 ==============
 
 The plotting function for pedigrees has 5 tasks
-  1. Gather information and check the data.  An important step is the call to align.pedigree.
+  1. Gather information and check the data.  An important step is the call to align.
   2. Set up the plot region and size the symbols.  The program wants to plot circles
    and squares, so needs to understand the geometry of the paper, pedigree size,
     and text size to get the right shape and size symbols.
@@ -59,7 +59,7 @@ the symbol representing that affected status.
 Sizing
 ===============
 Now we need to set the sizes. 
-From align.pedigree we will get the maximum width and depth. 
+From align we will get the maximum width and depth. 
 There is one plotted row for each row of the returned matrices.
 The number of columns of the matrices is the max width of the pedigree,
 so there are unused positions in shorter rows, these can be identifed
@@ -114,7 +114,7 @@ automatic plots, but users keep asking for more.
 
 The argument is [[subregion=c(min x, max x, min depth, max depth)]],
 and works by editing away portions of the [[plist]] object
-returned by align.pedigree.  First decide what lines to keep. 
+returned by align.  First decide what lines to keep. 
 Then take subjects away from each line, update spouses and twins,
 and fix up parentage for the line below.
 

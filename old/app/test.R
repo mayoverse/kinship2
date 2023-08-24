@@ -73,7 +73,7 @@ df <- df[df$family == 1, ]
 ped <- with(df, pedigree(id, dadid, momid, sex, affected))
 
 legendPlot(ped, affected = as.data.frame(ped$affected))
-nb_ind_gen <- align.pedigree(ped)$n
+nb_ind_gen <- align(ped)$n
 plot_ped <- ped_plot(df, cex_plot = 0.5, mar = c(0.5, 0.5, 0.5, 0.5),
     psize = c(2, length(nb_ind_gen)),
     to_plotly = FALSE)
@@ -94,7 +94,7 @@ df <- df[df$family == 1, ]
 summary(df)
 summary(df$affected)
 ped <- pedigree(df$id, df$dadid, df$momid, df$sex, as.matrix(df[c("affected", "bcpc")]))
-nb_ind_gen <- align.pedigree(ped)$n
+nb_ind_gen <- align(ped)$n
 a <- plot(ped, ggplot_gen=T)
 a$ggplot
 plot_ped <- ped_plot(df, cex_plot = 0.5, mar = c(0.5, 0.5, 0.5, 0.5),

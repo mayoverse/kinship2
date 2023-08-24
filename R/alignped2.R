@@ -23,13 +23,13 @@
 #' onto rval. The rule thus is to not add any 1 element tree whose value
 #' (which must be `x[i]` is already in the rval structure for this level.
 #'
-#' @param x
-#' @param dad
-#' @param mom
-#' @param level
-#' @param horder
-#' @param packed
-#' @param spouselist
+#' @param x vector of the id of the subject
+#' @param dad index of the father
+#' @param mom index of the mother
+#' @param level vector of the level of each subject
+#' @param horder vector of the horizontal order of each subject
+#' @param packed logical value indicating if the pedigree should be compressed
+#' @param spouselist matrix of the spouses
 #'
 #' @return A set of matrices along with the spouselist matrix.
 #' The latter has marriages removed as they are processed.
@@ -37,9 +37,9 @@
 #' @examples
 #' data(sample.ped)
 #' ped <- with(sample.ped, pedigree(id, father, mother, sex, affected))
-#' align.pedigree(ped)
+#' align(ped)
 #'
-#' @seealso `plot.pedigree`, `autohint`
+#' @seealso `plot.pedigree`, `auto_hint`
 #' @keywords dplot
 #' @export alignped2
 alignped2 <- function(x, dad, mom, level, horder, packed, spouselist) {
@@ -50,13 +50,15 @@ alignped2 <- function(x, dad, mom, level, horder, packed, spouselist) {
     if (length(x) > 1) {
         mylev <- level[x[1]]
         for (i in 2:length(x)) {
-            rval2 <- alignped1(x[i], dad, mom, level, horder, packed,
-                spouselist)
+            rval2 <- alignped1(x[i], dad, mom,
+                level, horder, packed, spouselist
+            )
             spouselist <- rval2$spouselist
 
             # Deal with the unusual special case:
-            if ((rval2$n[mylev] > 1) || (is.na(match(x[i], floor(rval$nid[mylev,
-                ]))))) {
+            if ((rval2$n[mylev] > 1) ||
+                    (is.na(match(x[i], floor(rval$nid[mylev, ]))))
+            ) {
                 rval <- alignped3(rval, rval2, packed)
             }
         }

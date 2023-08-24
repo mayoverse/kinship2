@@ -1,7 +1,5 @@
 # Automatically generated from all.nw using noweb
 
-# TODO add params and example
-
 #' First routine alignement
 #'
 #' @description
@@ -59,9 +57,9 @@
 #' @examples
 #' data(sample.ped)
 #' ped <- with(sample.ped, pedigree(id, father, mother, sex, affected))
-#' align.pedigree(ped)
+#' align(ped)
 #'
-#' @seealso `plot.pedigree`, `autohint`
+#' @seealso `plot.pedigree`, `auto_hint`
 #' @keywords dplot
 #' @export alignped1
 alignped1 <- function(x, dad, mom, level, horder, packed, spouselist) {
@@ -76,14 +74,18 @@ alignped1 <- function(x, dad, mom, level, horder, packed, spouselist) {
         if (any(spouselist[, 1] == x)) {
             sex <- 1  # I'm male
             sprows <- (spouselist[, 1] == x &
-                (spouselist[, 4] == spouselist[, 3] |
-                spouselist[, 4] == 0))
+                    (spouselist[, 4] == spouselist[, 3] |
+                            spouselist[, 4] == 0
+                    )
+            )
             spouse <- spouselist[sprows, 2]  # ids of the spouses
         } else {
             sex <- 2
             sprows <- (spouselist[, 2] == x &
-                (spouselist[, 4] != spouselist[, 3] |
-                spouselist[, 4] == 0))
+                    (spouselist[, 4] != spouselist[, 3] |
+                            spouselist[, 4] == 0
+                    )
+            )
             spouse <- spouselist[sprows, 1]
         }
     }
@@ -104,7 +106,8 @@ alignped1 <- function(x, dad, mom, level, horder, packed, spouselist) {
         # Easy case: the 'tree rooted at x' is only x itself
         nid[lev, 1] <- x
         return(list(nid = nid, pos = pos, fam = fam, n = n,
-            spouselist = spouselist))
+            spouselist = spouselist
+        ))
     }
     ## Doc: alignped1 -part3
     lspouse <- spouse[spouselist[sprows, 3] == 3 - sex]  # 1-2 or 2-1
@@ -112,12 +115,14 @@ alignped1 <- function(x, dad, mom, level, horder, packed, spouselist) {
     if (any(spouselist[sprows, 3] == 0)) {
         # Not yet decided spouses
         indx <- which(spouselist[sprows, 3] == 0)
-        nleft <- floor((length(sprows) + (sex == 2))/2)  # total number to left
+        # total number to left
+        nleft <- floor((length(sprows) + (sex == 2)) / 2)
         nleft <- nleft - length(lspouse)  # number of undecideds to the left
         if (nleft > 0) {
             # JPS fixed 5/2013, don't index when nleft > length(indx)
             lspouse <- c(lspouse,
-                spouse[indx[seq_len(min(nleft, length(indx)))]])
+                spouse[indx[seq_len(min(nleft, length(indx)))]]
+            )
             indx <- indx[-(seq_len(min(nleft, length(indx))))]
         }
         if (length(indx))
@@ -134,10 +139,12 @@ alignped1 <- function(x, dad, mom, level, horder, packed, spouselist) {
     for (i in 1:nspouse) {
         ispouse <- spouse[i]
         children <- which((dad == x & mom == ispouse) |
-            (dad == ispouse & mom == x))
+                (dad == ispouse & mom == x)
+        )
         if (length(children) > 0) {
-            rval1 <- alignped2(children, dad, mom, level, horder, packed,
-                spouselist)
+            rval1 <- alignped2(children, dad, mom,
+                level, horder, packed, spouselist
+            )
             spouselist <- rval1$spouselist
             # set the parentage for any kids a nuisance: it's possible to have
             # a child appear twice, when via inbreeding two children marry ---
@@ -152,18 +159,18 @@ alignped1 <- function(x, dad, mom, level, horder, packed, spouselist) {
                 kidmean <- mean(rval1$pos[lev + 1, indx])
                 parmean <- mean(pos[lev, i + 0:1])
                 if (kidmean > parmean) {
-                  # kids to the right of parents: move the parents
-                  indx <- i:(nspouse + 1)
-                  pos[lev, indx] <- pos[lev, indx] + (kidmean - parmean)
+                    # kids to the right of parents: move the parents
+                    indx <- i:(nspouse + 1)
+                    pos[lev, indx] <- pos[lev, indx] + (kidmean - parmean)
                 } else {
-                  # move the kids and their spouses and all below
-                  shift <- parmean - kidmean
-                  for (j in (lev + 1):maxlev) {
-                    jn <- rval1$n[j]
-                    if (jn > 0) {
-                      rval1$pos[j, 1:jn] <- rval1$pos[j, 1:jn] + shift
+                    # move the kids and their spouses and all below
+                    shift <- parmean - kidmean
+                    for (j in (lev + 1):maxlev) {
+                        jn <- rval1$n[j]
+                        if (jn > 0) {
+                            rval1$pos[j, 1:jn] <- rval1$pos[j, 1:jn] + shift
+                        }
                     }
-                  }
                 }
             }
             if (nokids) {
@@ -177,7 +184,8 @@ alignped1 <- function(x, dad, mom, level, horder, packed, spouselist) {
     ## Doc: alignped1 -part5
     if (nokids) {
         return(list(nid = nid, pos = pos, fam = fam, n = n,
-            spouselist = spouselist))
+            spouselist = spouselist
+        ))
     }
 
     if (ncol(rval$nid) >= 1 + nspouse) {

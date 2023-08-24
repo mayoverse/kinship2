@@ -1,0 +1,119 @@
+#' Best hint for alignement
+#'
+#' @description
+#' When computer time is cheap, use this routine to get a 'best' pedigree.
+#'
+#' @details
+#' The auto_hint routine will rearrange sibling order, but not founder order.
+#' This calls auto_hint with every possible founder order, and finds that
+#' plot with the least 'stress':
+#'        wt[1] * number of dotted arcs
+#'      + wt[2] * lengths of dotted arcs
+#'      + wt[3] * lengths of parent-child
+#' bends perfect: if anything meets this stress level, keep it
+#'
+#' @param ped A pedigree object
+#' @param wt A vector of weights for the three error measures
+#' @param tolerance The maximum stress level to accept
+#'
+#' @return Hint object
+#'
+#' @seealso `auto_hint`
+#' @export
+setGeneric("best_hint", signature = "obj",
+    function(obj, ...) standardGeneric("best_hint")
+)
+
+#' @include auto_hint.R
+#' @include align.R
+#' @export
+setMethod("best_hint", "Pedigree",
+    function(obj, wt = c(1000, 10, 1), tolerance = 0) {
+        ped <- obj
+
+        # find founders married to founders the female of such pairs
+        # determines the plot order of founders
+        mom <- match(ped$ped$momid, ped$ped$id)
+        dad <- match(ped$ped$dadid, ped$ped$id)
+        # founders and marry-ins
+        founders <- ped$ped$id[is.na(mom) & is.na(dad)]
+        fpair <- !(is.na(match(ped$ped$momid, founders)) |
+                is.na(match(ped$ped$dadid, founders))
+        )
+        # row num of founding moms
+        fmom <- unique(match(ped$ped$momid[fpair], ped$ped$id))
+
+        # This function generates the permutations one after the other
+        permute <- function(x) {
+            n <- length(x)
+            if (n == 3) {
+                rbind(x[1:3], x[c(2, 1, 3)], x[c(3, 1, 2)])
+            } else {
+                temp <- paste(
+                    "cbind(x[", 1:n, "], permute(x[-", 1:n, "]))",
+                    collapse = ","
+                )
+                temp <- paste("rbind(", temp, ")")
+                eval(parse(text = temp))
+            }
+        }
+        pmat <- permute(seq_along(fmom))
+        # Put the subsets into a random order For most pedigrees,
+        # there are several permutations that will give a tolerance
+        # or near tolerance plot.
+        # This way we should hit one of them soon.
+        pmat <- pmat[order(runif(nrow(pmat))), ]
+
+        n <- length(ped$ped$id)
+        for (perm in seq_len(nrow(pmat))) {
+            hint <- cbind(1:n, rep(0, n))
+            hint[fmom, 1] <- pmat[perm, ]
+            # this fixes up marriages and such
+            newhint <- auto_hint(ped, hints = hint[, 1])
+            plist <- align(
+                ped, packed = TRUE, align = TRUE, width = 8, hints = newhint
+            )
+
+            # Compute the error measures
+            err <- rep(0, 3)
+            maxlev <- nrow(plist$nid)
+            for (lev in 1:maxlev) {
+                idlist <- plist$nid[lev, 1:plist$n[lev]]
+                dups <- duplicated(idlist)
+                if (any(dups)) {
+                    err[1] <- err[1] + sum(dups)
+                    for (i in idlist[dups]) {
+                        who <- (seq_along(idlist))[match(
+                            idlist, i, nomatch = 0
+                        ) > 0]
+                        err[2] <- err[2] + abs(diff(plist$pos[lev, who]))
+                    }
+                }
+
+                # get parent-child pulls
+                fam2 <- plist$fam[lev, ]
+                if (any(fam2 > 0)) {
+                    # center of kids
+                    centers <- tapply(plist$pos[lev, ], fam2, mean)
+                    if (any(fam2 == 0)) {
+                        centers <- centers[-1]
+                    }
+                    # parents
+                    above <- plist$pos[lev - 1, sort(unique(fam2))] + 0.5
+                    err[3] <- err[3] + sum(abs(centers - above))
+                }
+            }
+
+            # best one so far?
+            total <- sum(err * wt)
+            if (perm == 1 || total < besttot) {
+                besttot <- total
+                besthint <- newhint
+            }
+            if (besttot <= tolerance)
+                break  # we needn't do better than this!
+        }
+        besthint
+    }
+)
+TRUE

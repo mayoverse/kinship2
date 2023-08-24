@@ -6,10 +6,10 @@
 #' This routine tries to detect inconsistencies in spousal hints.
 #'
 #' @details
-#' These arise in autohint with complex pedigrees.
+#' These arise in auto_hint with complex pedigrees.
 #' One can have ABA (subject A is on both the left and the right of B),
 #' cycles, etc.
-#' Actually, these used to arise in autohint.
+#' Actually, these used to arise in auto_hint.
 #' Users can introduce problems as well if they modify the hints.
 #'
 #' @param hints A list of hints
@@ -17,7 +17,7 @@
 #'
 #'
 #' @examples
-#' @seealso `autohint`, `besthint`
+#' @seealso `auto_hint`, `besthint`
 #' @keywords
 #' @export check_hints
 check_hints <- function(hints, sex) {
@@ -37,7 +37,7 @@ check_hints <- function(hints, sex) {
         lspouse <- spouse[, 1]
         rspouse <- spouse[, 2]
         if (any(lspouse < 1 | lspouse > n | rspouse < 1 | rspouse > n)) {
-            stop("Invalid spouse value, should be between 1 and n")
+            stop("Invalid spouse value, should be between 1 and", n)
         }
 
         temp1 <- (sex[lspouse] == "female" & sex[rspouse] == "male")

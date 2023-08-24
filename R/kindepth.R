@@ -100,7 +100,7 @@ setMethod("kindepth", "character", function(obj, dadid, momid, align = FALSE) {
     ## down a grandparent but not the sibs of that grandparent.
 
     ## It may be possible to do better alignment when the pedigree has loops,
-    ## but it is definitely beyond this program, perhaps in autohint one day.
+    ## but it is definitely beyond this program, perhaps in auto_hint one day.
 
     chaseup <- function(x, midx, didx) {
         new <- c(midx[x], didx[x])  # mother and father

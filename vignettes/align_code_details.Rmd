@@ -64,14 +64,14 @@ left-hand member of the pair, the right-hand member, and which of the two
 is the anchor, i.e., directly connected to thier parent.  
 Double and triple marriages can start to get interesting.
 
-## Autohint
+## auto_hint
 
-The [[autohint]] routine is used to create an initial hints list. It is a part of
+The [[auto_hint]] routine is used to create an initial hints list. It is a part of
 the general intention to make the routine do pretty good'' drawings automatically.
 The basic algorithm is trial and error. 
 \begin{itemize}
   \item Start with the simplest possible hints (user input is accepted)
-  \item Call align.pedigree to see how this works out
+  \item Call align to see how this works out
   \item Fix any spouses that are not next to each other but could be.
   \item Any fix on the top level mixes up everything below, so we do the
     fixes one level at a time.
@@ -92,11 +92,11 @@ that there are no ties (who knows what a user may have used for starting
 values.)  
 
 A recent addition is to carry forward packaged and align to 
-kindepth and align.pedigree.
+kindepth and align.
 
 
 
-### Shift in autohint
+### Shift in auto_hint
 Next is an internal function that  rearranges someone to be
 the leftmost or rightmost of his/her siblings.  The only
 real complication is twins -- if one of them moves the other has to move too.  
@@ -106,16 +106,16 @@ first move all the twins to the left end (or right
 as the case may be), then move all the monozygotes to the
 left, then move the subject himself to the left.
 
-### init-autohint
+### init-auto_hint
 Now, get an ordering of the pedigree to use as the starting point.  
 The numbers start at 1 on each level. We do not need the final ~prettify~ step,
 hence align=F. If there is a hints structure entered, we retain its non-zero entries,
 otherwise people are put into the order of the data set.  We allow the hints
 input to be only an order vector. twins are then further reordered.
 
-## Fixup-autohint
+## Fixup-auto_hint
 
-The result coming back from align.pedigree is a set of vectors and
+The result coming back from align is a set of vectors and
 matrices:
 \begin{description}
   \item[n] vector, number of entries per level
@@ -127,9 +127,9 @@ matrices:
 \end{description}
 
 \begin{figure}
-  \myfig{autohint1}
+  \myfig{auto_hint1}
   \caption{A simple pedigree before (left) and after (right) the
-    autohint computations.}
+    auto_hint computations.}
   \label{fig:auto1}
 \end{figure}
 
@@ -141,7 +141,7 @@ add a marriage hint.
 Figure \ref{fig:auto1} shows a simple case.  The input data set has
 the subjects ordered from 1--11, the left panel is the result without
 hints which processes subjects in the order encountered.
-The return values from [[align.pedigree]] have subject 9 shown twice.
+The return values from [[align]] have subject 9 shown twice.
 The first is when he is recognized as the spouse of subject 4, the second
 as the child of 6--7.
 
@@ -164,7 +164,7 @@ The basic logic is
         connected to a family, then either end may be listed as the anchor
         in the output; follow the suggestion of the duporder routine.  If
         only one is, it is usually better to anchor it there, so that the
-        marriage is processed by[[align.pedigree]] when that family is.
+        marriage is processed by[[align]] when that family is.
         (At least I think so.)
     \end{itemize}
 \end{enumerate}
@@ -174,7 +174,7 @@ function, which returns a matrix with columns 1 and 2 being a pair of duplicates
 direction. Note that in the following code [[idlist]] refers to the row numbers of
 each subject in the pedigree, not to their label [[ped$id]].
 
-### duporder - autohint
+### duporder - auto_hint
 For the case shown in figure \ref{fig:align1} the [[duporder]] function
 will return a single row array with values (2, 6, 1), the first two
 being the positions of the duplicated subject.  
@@ -190,7 +190,7 @@ In this particular case the final element could be a 1 or a 2, since both
 are connected to their parents.
 
 \begin{figure}
-  \myfig{autohint2}
+  \myfig{auto_hint2}
   \caption{A more complex pedigree.}
   \label{fig:align2}
 \end{figure}
@@ -269,7 +269,7 @@ connection has an upward parent.
 In the right hand panel subject 2 has an anchor variable of (0,1).
 
 
-Align.pedigree
+align
 ================
 
 The top level routine for alignment has 5 arguments
@@ -285,11 +285,11 @@ The top level routine for alignment has 5 arguments
       one of the generations.
     \item[align] should the final step of alignment be done?  This
       tries to center children under parents, to the degree possible.
-    \item a hints object.  This is normally blank and autohint
+    \item a hints object.  This is normally blank and auto_hint
       is invoked. 
 \end{description}
 
-The result coming back from align.pedigree is a set of vectors and
+The result coming back from align is a set of vectors and
 matrices:
 \begin{description}
   \item[n] vector, number of entries per level
@@ -303,7 +303,7 @@ matrices:
 
 
 
-## Setup1 -align.pedigree
+## Setup1 -align
 
 Start with some setup. Throughout this routine the row number is used as a
 subject id (ignoring the actual id label).
@@ -326,10 +326,10 @@ subject id (ignoring the actual id label).
   unique (but temporary) spouse-pair id using a simple hash.
 \end{itemize}
 
-When importing data from autohint, that routine's spouse matrix has column
+When importing data from auto_hint, that routine's spouse matrix has column
 1 = subject plotted on the left, 2 = subject plotted on the right.
 The [[spouselist]] array has column 1=husband, 2=wife. Hence the clumsy
-looking ifelse below.  The autohint format is more congenial to users, who
+looking ifelse below.  The auto_hint format is more congenial to users, who
 might modify the output, the spouselist format easier for the code.
 
 

@@ -89,7 +89,7 @@ findspouse <- function(mypos, plist, lev, ped) {
         rpos <- rpos + 1
     }
     if (rpos == lpos) {
-        stop("autohint bug 3")
+        stop("auto_hint bug 3")
     }
 
     opposite <- ped$ped$sex[plist$nid[lev, lpos:rpos]] !=
@@ -97,7 +97,7 @@ findspouse <- function(mypos, plist, lev, ped) {
 
     ## Can happen with a triple marriage
     if (!any(opposite)) {
-        stop("autohint bug 4") # no spouse
+        stop("auto_hint bug 4") # no spouse
     }
     spouse <- min((lpos:rpos)[opposite])
     spouse
@@ -116,7 +116,7 @@ findspouse <- function(mypos, plist, lev, ped) {
 findsibs <- function(mypos, plist, lev) {
     family <- plist$fam[lev, mypos]
     if (family == 0) {
-        stop("autohint bug 6")
+        stop("auto_hint bug 6")
     }
     which(plist$fam[lev, ] == family)
 }
@@ -195,7 +195,7 @@ duporder <- function(idlist, plist, lev, ped) {
 #' in a pedigree. It complete the missing twin relationships for
 #' triplets, quads, etc. It also determine the order of the twins
 #' in the pedigree.
-#' It is used by \code{\link{autohint}}.
+#' It is used by \code{\link{auto_hint}}.
 #'
 #' @param ped The pedigree structure
 #'
@@ -254,7 +254,7 @@ get_twin_rel <- function(ped) {
 #' For more complex structures hand-tuning of the hints matrix may be required.
 #'
 #' The pedigree in the example below is one where rearranging the founders
-#' greatly decreases the number of extra connections. When autohint is called
+#' greatly decreases the number of extra connections. When auto_hint is called
 #' with a a vector of numbers as the second argument, the values for the
 #' founder females are used to order the founder families left to right across
 #' the plot.  The values within a sibship are used as the preliminary order of
@@ -287,39 +287,44 @@ get_twin_rel <- function(ped) {
 #' temp[30] <- temp[8] + .1
 #' temp[65] <- temp[4] + .1
 #' temp[14] <- temp[3] + .1
-#' ped1$hints <- autohint(ped1, temp)
+#' ped1$hints <- auto_hint(ped1, temp)
 #' plot(ped1, cex = .7)
 #'
 #' @seealso pedigree, besthint
 #' @keywords genetics
 #' @export
-setGeneric("autohint", signature = "obj",
-    function(obj, ...) standardGeneric("autohint")
+setGeneric("auto_hint", signature = "obj",
+    function(obj, ...) standardGeneric("auto_hint")
 )
 
 #' @include kindepth.R
 #' @export
-setMethod("autohint", "Pedigree", function(
+setMethod("auto_hint", "Pedigree", function(
     obj, hints = NULL, packed = TRUE, align = FALSE, reset = FALSE
 ) {
     ## full documentation now in vignette: align_code_details.Rmd
     ## References to those sections appear here as:
-    ## Doc: AutoHint
-    if ((length(obj$hints$order) > 0 ||
-                dim(obj$hints$spouse)[1] > 0
+    ## Doc: auto_hint
+    if ((!is.null(obj$hints$order) ||
+                !is.null(obj$hints$spouse)
         ) & !reset
     ) {
         return(obj$hints)
     } # nothing to do
+
+    if (length(unique(obj$ped$family)) > 1) {
+        stop("auto_hint only works on pedigrees with a single family")
+    }
+
     n <- length(obj$ped$id)
     depth <- kindepth(obj, align = TRUE)
 
-    ## Doc: init-autohint
+    ## Doc: init-auto_hint
     if (!is.null(hints)) {
         if (is.vector(hints)) {
             hints <- list(order = hints)
         }
-        if (is.matrix(hints)){
+        if (is.matrix(hints)) {
             hints <- list(spouse = hints)
         }
         if (is.null(hints$order)) {
@@ -366,10 +371,12 @@ setMethod("autohint", "Pedigree", function(
     } else {
         sptemp <- NULL
     }
-    plist <- align.pedigree(obj,
+
+    plist <- align(obj,
         packed = packed, align = align,
         hints = list(order = horder, spouse = sptemp)
     )
+
 
     ## Doc: fixup-2
     ## Fix if duplicate individuales present
@@ -428,8 +435,10 @@ setMethod("autohint", "Pedigree", function(
                 NULL
             )
 
-            if (is.null(tmp)) {
-                warning("Unexpected result in autohint, please contact developer")
+            if (is.null(temp)) {
+                warning("Unexpected result in auto_hint,",
+                    "please contact developer"
+                )
                 return(list(order = 1:n)) # punt
             } else {
                 sptemp <- rbind(sptemp, temp)
@@ -438,7 +447,7 @@ setMethod("autohint", "Pedigree", function(
         #
         # Recompute, since this shifts things on levels below
         #
-        plist <- align.pedigree(obj,
+        plist <- align(obj,
             packed = packed, align = align,
             hints = list(order = horder, spouse = sptemp)
         )
