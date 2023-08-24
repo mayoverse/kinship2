@@ -64,7 +64,7 @@ left-hand member of the pair, the right-hand member, and which of the two
 is the anchor, i.e., directly connected to thier parent.  
 Double and triple marriages can start to get interesting.
 
-## auto_hint
+## Auto_hint
 
 The [[auto_hint]] routine is used to create an initial hints list. It is a part of
 the general intention to make the routine do pretty good'' drawings automatically.
@@ -269,7 +269,7 @@ connection has an upward parent.
 In the right hand panel subject 2 has an anchor variable of (0,1).
 
 
-align
+Align
 ================
 
 The top level routine for alignment has 5 arguments
