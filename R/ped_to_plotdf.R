@@ -63,12 +63,13 @@ ped_to_plotdf <- function(
 
     # border mods of each box
     border_mods <- ped$ped[id, unique(bord_df[["column"]])]
-    border_idx <- match(bord_df["mods"], border_mods)
+    border_idx <- match(border_mods, bord_df[["mods"]])
 
     for (aff in seq_len(n_aff)) {
         aff_df <- all_aff[all_aff$order == aff, ]
         aff_mods <- ped$ped[id, aff_df[["column_mods"]]]
-        aff_idx <- match(aff_mods, aff_df["mods"])
+        aff_idx <- match(aff_mods, aff_df[["mods"]])
+
 
         # mean range of each box for each polygon for each subregion
         poly_aff <- lapply(polylist, "[[", aff)
@@ -76,7 +77,6 @@ ped_to_plotdf <- function(
         poly_aff_y <- lapply(poly_aff, "[[", "y")
         poly_aff_x_mr <- sapply(poly_aff_x, function(x) mean(range(x * boxw)))
         poly_aff_y_mr <- sapply(poly_aff_x, function(x) mean(range(x * boxw)))
-
         p <- data.frame(
             x0 = pos, y0 = i,
             type = paste(names(polylist)[sex], aff, sep = "_"),
@@ -90,9 +90,11 @@ ped_to_plotdf <- function(
             x0 = pos + poly_aff_x_mr[sex],
             y0 = i +  poly_aff_y_mr[sex],
             label = ped$ped[id, aff_df[["column_values"]]],
+            fill = "black",
             type = "text"
         )
         plot_df <- rbind.fill(plot_df, p, label)
     }
+    
     plot_df
 }
