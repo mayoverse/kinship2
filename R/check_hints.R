@@ -15,11 +15,8 @@
 #' @param hints A list of hints
 #' @param sex A vector with the sex of all the individuals
 #'
-#'
-#' @examples
-#' @seealso `auto_hint`, `besthint`
-#' @keywords
-#' @export check_hints
+#' @seealso `auto_hint`, `best_hint`
+#' @export
 check_hints <- function(hints, sex) {
     if (is.null(hints$order)) {
         stop("Order component must be present in hints")
