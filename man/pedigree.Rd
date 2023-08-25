@@ -12,11 +12,14 @@ pedigree(
   cols_ren_ped = list(indId = "id", fatherId = "dadid", motherId = "momid", gender =
     "sex"),
   cols_ren_rel = list(indId1 = "id1", indId2 = "id2"),
-  scales = list(fill = data.frame(columns = character(), mods = numeric(), labels =
-    character(), affected = logical(), fill = character(), density = numeric(), angle =
-    numeric()), border = data.frame(column = character(), mods = numeric(), labels =
-    character(), border = character())),
-  normalize = TRUE
+  scales = list(fill = data.frame(order = numeric(), column_values = character(),
+    column_mods = character(), mods = numeric(), labels = character(), affected =
+    logical(), fill = character(), density = numeric(), angle = numeric()), border =
+    data.frame(column = character(), mods = numeric(), labels = character(), border =
+    character())),
+  hints = list(order = NULL, spouse = NULL),
+  normalize = TRUE,
+  ...
 )
 }
 \arguments{
@@ -35,6 +38,8 @@ relationship matrix.}
 affection status and the other one for the border color (e.g availability).}
 
 \item{normalize}{A logical to know if the data should be normalised.}
+
+\item{...}{Other arguments to pass to the function `generate_colors`.}
 }
 \value{
 A Pedigree object.

@@ -6,13 +6,13 @@
 \usage{
 paste0max(x, max = 5, ...)
 }
-\arguments{
-\item{x}{A vector.}
-
-\item{max}{The maximum number of elements to print.}
-
-\item{...}{Additional arguments passed to print0}
-}
 \description{
 Print0 the elements inside a vector until a maximum is reached.
+}
+\details{
+$param x A vector.
+$param max The maximum number of elements to print.
+$param ... Additional arguments passed to print0
+
+$export
 }

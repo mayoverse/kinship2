@@ -6,16 +6,11 @@
 \usage{
 check_slot_fd(object, slot = NULL, fields = character())
 }
-\arguments{
-\item{object}{An object.}
-
-\item{slot}{A slot of object.}
-
-\item{fields}{A character vector with the fields to check.}
-}
-\value{
-A character vector with the errors if any.
-}
 \description{
-Check if the fields are present in an object slot
+$param object An object.
+$param slot A slot of object.
+$param fields A character vector with the fields to check.
+}
+\details{
+$return A character vector with the errors if any.
 }

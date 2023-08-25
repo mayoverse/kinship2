@@ -13,8 +13,7 @@
   dadid = "dadid",
   momid = "momid",
   sex = "sex",
-  family = "family",
-  ...
+  family = "family"
 )
 }
 \arguments{
