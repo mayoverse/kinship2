@@ -84,3 +84,9 @@ test_that("pedigree subscripting", {
     expect_equal(nrow(pedrow$ped), 5)
     expect_equal(ncol(pedrow$ped), 24)
 })
+
+test_that("pedigree to dataframe", {
+    data(sampleped)
+    ped <- pedigree(sampleped)
+    expect_equal(dim(as.data.frame(ped)), c(55, 15))
+})
