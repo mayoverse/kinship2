@@ -58,7 +58,9 @@ ancestor <- function(idx, momx, dadx) {
 #' @param width for a packed output, the minimum width
 #' @param align for a packed pedigree, align children under parents (TRUE), to
 #' the extent possible given the page width, or align to to the left margin
-#' (FALSE).  The latter is mostly used by internal routines.
+#' (FALSE). This argument can be a two element vector, giving the alignment
+#' parameters, or a logical value.  If TRUE, the default is c(1.5, 2), or
+#' numeric the routine `alignped4` will be called.
 #'
 #' @return a structure with components
 #' ## n
@@ -112,7 +114,7 @@ setMethod("align", "Pedigree", function(obj, packed = TRUE, width = 10,
         nfam <- length(famlist)
         alignment <- vector("list", nfam)
         for (i_fam in famlist) {
-            ped_fam <- obj[ped$ped$family == i_fam]
+            ped_fam <- obj[obj$ped$family == i_fam]
             alignment[[i_fam]] <- align(ped_fam, packed, width, align)
         }
         return(alignment)
@@ -206,12 +208,12 @@ setMethod("align", "Pedigree", function(obj, packed = TRUE, width = 10,
     if (nrow(ped$rel) > 0 && any(ped$rel$code != "spouse")) {
         twins <- 0 * nid
         who <- (ped$rel$code != "spouse")
-        ltwin <- ped$rel[who, "id1"]
-        rtwin <- ped$rel[who, "id2"]
+        ltwin <- match(ped$rel[who, "id1"], ped$ped$id, nomatch = 0)
+        rtwin <- match(ped$rel[who, "id2"], ped$ped$id, nomatch = 0)
         ttype <- ped$rel[who, "code"]
         # find where each of them is plotted (any twin only appears once with a
         # family id, i.e., under their parents)
-        # matix of connected-to-parent ids
+        # matrix of connected-to-parent ids
         ntemp <- ifelse(rval$fam > 0, nid, 0)
         ltemp <- (seq_along(ntemp))[match(ltwin, ntemp, nomatch = 0)]
         rtemp <- (seq_along(ntemp))[match(rtwin, ntemp, nomatch = 0)]
@@ -233,4 +235,3 @@ setMethod("align", "Pedigree", function(obj, packed = TRUE, width = 10,
         )
     }
 })
-
