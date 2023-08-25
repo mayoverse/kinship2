@@ -70,7 +70,7 @@ norm_ped <- function(
     colnames(err) <- err_cols
     cols_need <- c("indId", "fatherId", "motherId", "gender")
     cols_used <- c("sex", "avail", "id", "dadid", "momid", "error")
-    cols_to_use <- c("steril", "available", "family", "status")
+    cols_to_use <- c("steril", "available", "family", "status", "affected")
 
     ped_df <- check_columns(
         ped_df, cols_need, cols_used, cols_to_use,
@@ -248,8 +248,8 @@ norm_ped <- function(
 #' @param missid The missing id value
 #'
 #' @return A dataframe with the errors identified
-norm_Red <- function(rel_df, na_strings = c("NA", ""), missid = "0") {
-    print("Bal: norm_Red")
+norm_rel <- function(rel_df, na_strings = c("NA", ""), missid = "0") {
+    print("Bal: norm_rel")
     #### Check columns ####
     err_cols <- c("codeErr", "sameIdErr", "id1Err", "id2Err", "error")
     err <- data.frame(matrix(NA, nrow = nrow(rel_df), ncol = length(err_cols)))
