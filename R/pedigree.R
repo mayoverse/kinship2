@@ -13,6 +13,7 @@
 #' @param scales A list of two data.frame with the scales to use for the
 #' affection status and the other one for the border color (e.g availability).
 #' @param normalize A logical to know if the data should be normalised.
+#' @param ... Other arguments to pass to the function `generate_colors`.
 #'
 #' @return A Pedigree object.
 #' @export pedigree
@@ -42,7 +43,9 @@ pedigree <- function(
     ),
     scales = list(
         fill = data.frame(
-            columns = character(),
+            order = numeric(),
+            column_values = character(),
+            column_mods = character(),
             mods = numeric(),
             labels = character(),
             affected = logical(),
@@ -61,7 +64,8 @@ pedigree <- function(
         order = NULL,
         spouse = NULL
     ),
-    normalize = TRUE
+    normalize = TRUE,
+    ...
 ) {
     ## Rename columns ped
     old_cols <- as.vector(unlist(cols_ren_ped))
@@ -79,7 +83,7 @@ pedigree <- function(
     ## Normalise the data before creating the object
     if (normalize) {
         ped_df <- norm_ped(ped_df)
-        rel_df <- norm_Red(rel_df)
+        rel_df <- norm_rel(rel_df)
     } else {
         cols_need <- c("id", "dadid", "momid", "sex")
         cols_to_use <- c("steril", "avail", "family", "status")
@@ -107,5 +111,8 @@ pedigree <- function(
         return(rel_df)
     }
     ## Create the object
-    new("Pedigree", ped = ped_df, rel = rel_df, scales = scales, hints = hints)
+    ped <- new("Pedigree", ped = ped_df, rel = rel_df,
+        scales = scales, hints = hints
+    )
+    generate_colors(ped, ...)
 }

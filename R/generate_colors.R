@@ -207,7 +207,6 @@ generate_border <- function(avail, colors_avail = c("green", "black")) {
 #' - The processed dataframe with the `affected` and `avail` columns
 #' processed accordingly
 #' - A dataframe containing the description of each modality of the scale
-#'
 #' @export
 setGeneric("generate_colors", signature = "obj",
     function(obj, ...) standardGeneric("generate_colors")
@@ -216,8 +215,8 @@ setGeneric("generate_colors", signature = "obj",
 #' @export
 setMethod("generate_colors", "data.frame",
     function(
-        obj, col_aff,
-        mods_aff = NULL, threshold = NULL, sup_thres_aff = NULL,
+        obj, col_aff = "affected",
+        mods_aff = NULL, threshold = 0.5, sup_thres_aff = TRUE,
         keep_full_scale = FALSE, breaks = 3,
         colors_aff = c("yellow2", "red"),
         colors_unaff = c("white", "steelblue4"),
@@ -237,7 +236,8 @@ setMethod("generate_colors", "data.frame",
             keep_full_scale, breaks, colors_aff, colors_unaff
         )
         df[new_col] <- fill$mods
-        fill$fill_scale$columns <- new_col
+        fill$fill_scale$column_mods <- new_col
+        fill$fill_scale$column_values <- col_aff
         scales <- list(
             fill = fill$fill_scale,
             border = border
@@ -247,12 +247,21 @@ setMethod("generate_colors", "data.frame",
     }
 )
 
+#' @importFrom plyr rbind.fill
+#' @include pedigreeClass.R
 #' @export
 setMethod("generate_colors", "Pedigree",
     function(obj, ...) {
         list_aff <- generate_colors(obj$ped, ...)
 
         obj$ped <- list_aff$df
+        new_order <- ifelse(nrow(obj$scales$fill) > 0,
+            max(obj$scales$fill$order) + 1, 1
+        )
+        list_aff$scales$fill$order <- new_order
+        list_aff$scales$fill <- rbind.fill(obj$scales$fill,
+            list_aff$scales$fill
+        )
         obj$scales <- list_aff$scales
         validObject(obj)
         obj

@@ -98,12 +98,12 @@ isValid <- function(object) {
     #### Check that the slots have the right columns ####
     ped_cols <- c(
         "id", "dadid", "momid", "family",
-        "sex", "steril", "status", "avail"
+        "sex", "steril", "status", "avail", "affected"
     )
     rel_cols <- c("id1", "id2", "code", "family")
     fill_cols <- c(
-        "columns", "mods", "labels", "affected",
-        "fill", "density", "angle"
+        "order", "column_values", "column_mods", "mods",
+        "labels", "affected", "fill", "density", "angle"
     )
     border_cols <- c("column", "mods", "labels", "border")
     errors <- c(errors, check_slot_fd(object, "ped", ped_cols))
@@ -132,6 +132,7 @@ isValid <- function(object) {
     errors <- c(errors, check_values(object$ped$steril, c(0, 1, NA)))
     errors <- c(errors, check_values(object$ped$status, c(0, 1, NA)))
     errors <- c(errors, check_values(object$ped$avail, c(0, 1, NA)))
+    errors <- c(errors, check_values(object$ped$affected, c(0, 1, NA)))
 
     # Control sex for parents
     id <- object$ped$id
@@ -148,7 +149,7 @@ isValid <- function(object) {
     }
     if (any(
         (dadid %in% missid & (! momid %in% missid)) |
-        ((! dadid %in% missid) & momid %in% missid)
+            ((! dadid %in% missid) & momid %in% missid)
     )) {
         errors <- c(errors, "Individuals should have both parents or none")
     }
@@ -189,7 +190,10 @@ isValid <- function(object) {
 
     # Check that the scales columns have the right values
     errors <- c(errors, check_values(
-        object$scales$fill$column, colnames(object$ped)
+        object$scales$fill$column_values, colnames(object$ped)
+    ))
+    errors <- c(errors, check_values(
+        object$scales$fill$column_mods, colnames(object$ped)
     ))
     errors <- c(errors, check_values(
         object$scales$border$column, colnames(object$ped)
@@ -199,7 +203,7 @@ isValid <- function(object) {
     for (col in unique(object$scales$column)){
         errors <- c(errors, check_values(
             object$ped$col,
-            object$scales$fill[object$scales$fill$column == col, "mods"]
+            object$scales$fill[object$scales$fill$column_mods == col, "mods"]
         ))
     }
 
