@@ -40,7 +40,7 @@ test_that("Norm rel", {
     dimnames(rel_df) <- list(NULL, c("indId1", "indId2", "code", "family"))
     rel_df <- data.frame(rel_df)
 
-    rel_df <- norm_Red(rel_df)
+    rel_df <- norm_rel(rel_df)
     expect_equal(dim(rel_df), c(9, 7))
     expect_snapshot(rel_df)
     expect_equal(sum(is.na(rel_df$error)), 6)
