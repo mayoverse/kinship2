@@ -296,12 +296,29 @@ draw_mz_twin_connection <- function(
 #' @return Plot the segments or add it to a ggplot object
 #'
 #' @export
-draw_segment <- function(x0, y0, x1, y1, p, ggplot_gen) {
-    segments(x0, y0, x1, y1)
+draw_segment <- function(
+    x0, y0, x1, y1,
+    p, ggplot_gen,
+    col = par("fg"), lwd = par("lwd"), lty = par("lty")
+) {
+    segments(x0, y0, x1, y1, col = col, lty = lty, lwd = lwd)
     if (ggplot_gen) {
         p <- p + annotate("segment", x = x0, y = y0,
-            xend = x1, yend = y1
+            xend = x1, yend = y1, color = col, linetype = lty, size = lwd
         )
+    }
+    p
+}
+
+draw_polygon <- function(
+    x, y, p, ggplot_gen = FALSE,
+    fill, border = NULL, density = NULL, angle = 45
+) {
+    polygon(x, y, col = fill, border = border, density = density, angle = angle)
+    if (ggplot_gen) {
+        p <- p + geom_polygon(aes(x = x, y = y), fill = fill, color = border)
+        # To add pattern stripes use ggpattern::geom_polygon_pattern
+        # pattern_density = density[i], pattern_angle = angle[i]))
     }
     p
 }
@@ -317,10 +334,12 @@ draw_segment <- function(x0, y0, x1, y1, p, ggplot_gen) {
 #' @return Plot the text or add it to a ggplot object
 #'
 #' @export
-draw_text <- function(x, y, label, p, ggplot_gen, cex = 1) {
-    text(x, y, label, cex = cex)
+draw_text <- function(x, y, label, p, ggplot_gen = FALSE, cex = 1, col = NULL) {
+    text(x, y, label, cex = cex, col = col)
     if (ggplot_gen) {
-        p <- p + annotate("text", x = x, y = y, label = label, size = cex)
+        p <- p + annotate(
+            "text", x = x, y = y, label = label, size = cex, color = col
+        )
     }
     p
 }
