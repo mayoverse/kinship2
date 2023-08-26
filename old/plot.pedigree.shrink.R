@@ -66,7 +66,7 @@ plot.pedigree.shrink <- function(x, bigped = FALSE, title = "",
 
     legend(x = xlegend, y = ylegend, legend = c("DNA Available", "UnAvailable"),
         pch = c(1, 1), col = c(2, 1), bty = "n", cex = 0.5)
-    title(paste(title, "\nbits = ", x$bitSize[length(x$bitSize)]),
+    title(paste(title, "\nbits = ", x$bit_size[length(x$bit_size)]),
         cex.main = 0.9)
     invisible(tmp)
 }

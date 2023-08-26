@@ -24,7 +24,7 @@
 #' Vector of IDs of trimmed individuals
 #' ## isTrimmed
 #' logical value indicating whether pedigree has been trimmed
-#' ## bitSize
+#' ## bit_size
 #' Bit size of the trimmed pedigree
 #'
 #' @seealso `pedigree.shrink`
@@ -41,7 +41,7 @@ findAvailAffected <- function(ped, avail, affstatus) {
 
     if (nTrim == 0) {
         return(list(ped = ped, idTrimmed = NA, isTrimmed = FALSE,
-            bitSize = bitSize(ped)$bitSize))
+            bit_size = bit_size(ped)$bit_size))
     }
 
     trimDat <- NULL
@@ -52,7 +52,7 @@ findAvailAffected <- function(ped, avail, affstatus) {
         idRm <- findUnavailable(ped, availTry)
         newPed <- pedigree.trim(idRm, ped)
         trimDat <- rbind(trimDat, c(id = idTrim,
-            bitSize = bitSize(newPed)$bitSize))
+            bit_size = bit_size(newPed)$bit_size))
     }
 
     bits <- trimDat[, 2]
@@ -70,9 +70,9 @@ findAvailAffected <- function(ped, avail, affstatus) {
     avail[ped$id == idTrim] <- FALSE
     idRm <- findUnavailable(ped, avail)
     newPed <- pedigree.trim(idRm, ped)
-    pedSize <- bitSize(newPed)$bitSize
+    pedSize <- bit_size(newPed)$bit_size
     avail <- avail[!(ped$id %in% idRm)]
 
     return(list(ped = newPed, newAvail = avail, idTrimmed = idTrim,
-    isTrimmed = TRUE, bitSize = pedSize))
+    isTrimmed = TRUE, bit_size = pedSize))
 }

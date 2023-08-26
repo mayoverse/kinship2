@@ -61,7 +61,7 @@ pedigree.shrink <- function(ped, avail, affected = NULL, maxBits = 16) {
     idList <- list()
     nOriginal <- length(ped$id)
 
-    bitSizeOriginal <- bitSize(ped)$bitSize
+    bit_sizeOriginal <- bit_size(ped)$bit_size
 
     ## first find unavailable subjects to remove anyone who is not available
     ## and does not have an available descendant
@@ -106,19 +106,19 @@ pedigree.shrink <- function(ped, avail, affected = NULL, maxBits = 16) {
         nChange <- nOld - nNew
     }
 
-    ## Determine number of subjects & bitSize after initial trimming
+    ## Determine number of subjects & bit_size after initial trimming
     nIntermed <- length(pedTrimmed$id)
 
-    bitSize <- bitSize(pedTrimmed)$bitSize
+    bit_size <- bit_size(pedTrimmed)$bit_size
 
-    ## Now sequentially shrink to fit bitSize <= maxBits
+    ## Now sequentially shrink to fit bit_size <= maxBits
 
-    bitVec <- c(bitSizeOriginal, bitSize)
+    bitVec <- c(bit_sizeOriginal, bit_size)
 
     isTrimmed <- TRUE
     idList$affect <- NULL
 
-    while (isTrimmed & (bitSize > maxBits)) {
+    while (isTrimmed & (bit_size > maxBits)) {
         ## First, try trimming by unknown status
         save <- findAvailAffected(pedTrimmed, avail, affstatus = NA)
         isTrimmed <- save$isTrimmed
@@ -140,18 +140,18 @@ pedigree.shrink <- function(ped, avail, affected = NULL, maxBits = 16) {
         if (isTrimmed) {
             pedTrimmed <- save$ped
             avail <- save$newAvail
-            bitSize <- save$bitSize
-            bitVec <- c(bitVec, bitSize)
+            bit_size <- save$bit_size
+            bitVec <- c(bitVec, bit_size)
             idTrimmed <- c(idTrimmed, save$idTrimmed)
             idList$affect <- c(idList$affect, save$idTrimmed)
         }
     }
-    ## end while (isTrimmed) & (bitSize > maxBits)
+    ## end while (isTrimmed) & (bit_size > maxBits)
 
     nFinal <- length(pedTrimmed$id)
 
     obj <- list(pedObj = pedTrimmed, idTrimmed = idTrimmed, idList = idList,
-        bitSize = bitVec, avail = avail, pedSizeOriginal = nOriginal,
+        bit_size = bitVec, avail = avail, pedSizeOriginal = nOriginal,
         pedSizeIntermed = nIntermed, pedSizeFinal = nFinal)
 
     class(obj) <- "pedigree.shrink"
@@ -167,11 +167,11 @@ print.pedigree.shrink <- function(x, ...) {
 
     if (length(x$idTrimmed) > 2) {
         n <- c(x$pedSizeOriginal, x$pedSizeIntermed, x$pedSizeFinal)
-        b <- c(x$bitSize[1], x$bitSize[2], x$bitSize[length(x$bitSize)])
+        b <- c(x$bit_size[1], x$bit_size[2], x$bit_size[length(x$bit_size)])
         row.nms <- c("Original", "Only Informative", "Trimmed")
     } else {
         n <- c(x$pedSizeOriginal, x$pedSizeIntermed)
-        b <- c(x$bitSize[1], x$bitSize[2])
+        b <- c(x$bit_size[1], x$bit_size[2])
         row.nms <- c("Original", "Trimmed")
     }
 

@@ -6,7 +6,7 @@
 - normData.R
 - validity.R
 - PedigreeClass.R
-- bitSize.R
+- bit_size.R
 - fixParents.R
 - kindepth.R
 - kinship.R

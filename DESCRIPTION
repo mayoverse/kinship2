@@ -74,7 +74,7 @@ Collate:
     'alignped3.R'
     'alignped4.R'
     'best_hint.R'
-    'bitSize.R'
+    'bit_size.R'
     'descendants.R'
     'makefamid.R'
     'familycheck.R'

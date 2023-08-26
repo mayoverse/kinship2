@@ -25,7 +25,7 @@
 #' \\code{\\link{pedigree.shrink}}: Shrink a pedigree to a specific bit size,
 #' removing non-informative members first.
 #'
-#' \\code{\\link{bitSize}}: Approximate the output from SAS's \\code{PROC FREQ}
+#' \\code{\\link{bit_size}}: Approximate the output from SAS's \\code{PROC FREQ}
 #' procedure when using the \\code{/list} option of the \\code{TABLE} statement.
 #'
 #' @section Data:

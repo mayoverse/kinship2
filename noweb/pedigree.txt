@@ -560,7 +560,7 @@
 #'                    cat("Pedigree object with", length(x$id), "subjects")
 #'                   if (!is.null(x$famid)) cat(", family id=", x$famid[1], "\n")
 #'                    else cat("\n")
-#'                    cat("Bit size=", bitSize(x)$bitSize, "\n")
+#'                    cat("Bit size=", bit_size(x)$bit_size, "\n")
 #'                  }
 #'               
 #'               print.pedigreeList <- function(x, ...) {

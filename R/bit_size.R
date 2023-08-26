@@ -1,7 +1,7 @@
-#' Get pedigree bitsize
+#' Get pedigree bit_size
 #'
 #' @description
-#' Calculate pedigree bitsize, defined as 2 * # NonFounders - # Founders
+#' Calculate pedigree bit_size, defined as 2 * # NonFounders - # Founders
 #'
 #' @details
 #' This is a utility function used in `pedigree.shrink()`
@@ -11,8 +11,8 @@
 #' @param missid Character defining the missing ids
 #'
 #' @return A list with the following components:
-#' ## bitSize
-#' The bitSize of input pedigree
+#' ## bit_size
+#' The bit_size of input pedigree
 #' ## nFounder
 #' The number of founders in the pedigree
 #' ## nNonFounder
@@ -21,11 +21,11 @@
 #' @seealso `pedigree.shrink`
 #' @include pedigreeClass.R
 #' @export
-setGeneric("bitSize", signature = "obj",
-    function(obj, ...) standardGeneric("bitSize")
+setGeneric("bit_size", signature = "obj",
+    function(obj, ...) standardGeneric("bit_size")
 )
 
-setMethod("bitSize", "character", function(obj, momid, missid = "0") {
+setMethod("bit_size", "character", function(obj, momid, missid = "0") {
     dadid <- obj
     if (length(dadid) != length(momid)) {
         stop("dadid and momid should have the same length")
@@ -36,13 +36,13 @@ setMethod("bitSize", "character", function(obj, momid, missid = "0") {
     n_non_founder <- ped_size - n_founder
     bit_size <- 2 * n_non_founder - n_founder
     list(
-        bitSize = bit_size, nFounder = n_founder,
+        bit_size = bit_size, nFounder = n_founder,
         nNonFounder = n_non_founder
     )
 })
 
-setMethod("bitSize", "Pedigree",
+setMethod("bit_size", "Pedigree",
     function(obj, missid = "0") {
-        bitSize(obj$ped$dadid, obj$ped$momid, missid)
+        bit_size(obj$ped$dadid, obj$ped$momid, missid)
     }
 )

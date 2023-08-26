@@ -60,7 +60,7 @@ Accepts the following input
 #'  idList <- list()
 #'  nOriginal <- length(ped$id)
 #'  
-#'  bitSizeOriginal <- bitSize(ped)$bitSize
+#'  bit_sizeOriginal <- bit_size(ped)$bit_size
 #'  
   ## first find unavailable subjects to remove anyone who is not 
   ## available and does not have an available descendant
@@ -109,19 +109,19 @@ Accepts the following input
 #'    
 #'  }
 #'  
-  ##  Determine number of subjects & bitSize after initial trimming
+  ##  Determine number of subjects & bit_size after initial trimming
 #'  nIntermed <- length(pedTrimmed$id)
 #'  
-#'  bitSize <- bitSize(pedTrimmed)$bitSize
+#'  bit_size <- bit_size(pedTrimmed)$bit_size
 #'  
-  ## Now sequentially shrink to fit bitSize <= maxBits
+  ## Now sequentially shrink to fit bit_size <= maxBits
 #'  
-#'  bitVec <- c(bitSizeOriginal,bitSize)
+#'  bitVec <- c(bit_sizeOriginal,bit_size)
 #'  
 #'  isTrimmed <- TRUE
 #'  idList$affect=NULL 
 #'  
-#'  while(isTrimmed & (bitSize > maxBits))
+#'  while(isTrimmed & (bit_size > maxBits))
 #'  {  
 #'    
     ## First, try trimming by unknown status
@@ -147,8 +147,8 @@ Accepts the following input
 #'    if(isTrimmed)  {
 #'      pedTrimmed <- save$ped
 #'      avail <- save$newAvail
-#'      bitSize <- save$bitSize
-#'      bitVec <- c(bitVec, bitSize)          
+#'      bit_size <- save$bit_size
+#'      bitVec <- c(bitVec, bit_size)          
 #'      idTrimmed <- c(idTrimmed, save$idTrimmed)
 #'      idList$affect = paste(c(idList$affect, save$idTrimmed), 
 #'                            collapse=' ')
@@ -156,14 +156,14 @@ Accepts the following input
 #'   
 #'    
 #'  } 
-    ## end while (isTrimmed) & (bitSize > maxBits)
+    ## end while (isTrimmed) & (bit_size > maxBits)
 #'
 #'  nFinal <- length(pedTrimmed$id)
 #'  
 #'  obj <- list(pedObj = pedTrimmed,
 #'              idTrimmed = idTrimmed,
 #'              idList = idList,
-#'              bitSize = bitVec,
+#'              bit_size = bitVec,
 #'              avail=avail,
 #'              pedSizeOriginal = nOriginal,
 #'              pedSizeIntermed = nIntermed,
@@ -205,7 +205,7 @@ What was previously pedTrim is now split into two functions, pedigree.trim and f
 
 pedigree.trim : remove subjects from pedigree object given their id. 
 Update for version 1.2.8 (9/27/11) Allow creation of an empty pedigree 
-if all IDs are removed. This allows bitSize and 
+if all IDs are removed. This allows bit_size and 
 pedigree.shrink to still complete with an empty pedigree. 
 
 findUnavail: identify subjects are not available and who do not have 
@@ -445,11 +445,11 @@ the likelihood of the observed genotypes given the pedigree structure.
 The Lander-Green handles smaller pedigrees and many markers
 The Elston-Stewart handles larger pedigrees and fewer markers.
 
-<<bitSize>>=
+<<bit_size>>=
 #'@examples
   ## renamed from pedBits, part of pedigree.shrink functions
 #'
-#'bitSize <- function(ped) {
+#'bit_size <- function(ped) {
   ## calculate bit size of a pedigree
 #'
 #'if(class(ped) != "pedigree")
@@ -463,8 +463,8 @@ The Elston-Stewart handles larger pedigrees and fewer markers.
 #'pedSize <- length(father)
 #'nFounder <- sum(founder)
 #'nNonFounder <- pedSize - nFounder
-#'bitSize <- 2*nNonFounder - nFounder
-#'return(list(bitSize=bitSize,
+#'bit_size <- 2*nNonFounder - nFounder
+#'return(list(bit_size=bit_size,
 #'nFounder = nFounder,
 #'nNonFounder = nNonFounder))
 #'}
@@ -543,7 +543,7 @@ is now fixed with the option set specifically in the data.frames sset to FALSE.
 #'  return(list(ped=ped,
 #'  idTrimmed = NA,
 #'  isTrimmed = FALSE,
-#'  bitSize = bitSize(ped)$bitSize))
+#'  bit_size = bit_size(ped)$bit_size))
 #' }
 #'  
 #'  trimDat <- NULL
@@ -555,7 +555,7 @@ is now fixed with the option set specifically in the data.frames sset to FALSE.
 #'  id.rm <- findUnavailable(ped, avail.try)
 #'  newPed <- pedigree.trim(id.rm, ped)
 #'  trimDat <- rbind(trimDat,
-#'  c(id=idTrim, bitSize=bitSize(newPed)$bitSize))
+#'  c(id=idTrim, bit_size=bit_size(newPed)$bit_size))
 #'  }
 #'  
 #'  bits <- trimDat[,2]
@@ -575,14 +575,14 @@ is now fixed with the option set specifically in the data.frames sset to FALSE.
 #'  avail[ped$id==idTrim] <- FALSE
 #'  id.rm <- findUnavailable(ped, avail)
 #'  newPed <- pedigree.trim(id.rm, ped)
-#'  pedSize <- bitSize(newPed)$bitSize
+#'  pedSize <- bit_size(newPed)$bit_size
 #'  avail <- avail[!(ped$id %in% id.rm)]
 #'  
 #'  return(list(ped=newPed,
 #'  newAvail = avail,
 #'  idTrimmed = idTrim,
 #'  isTrimmed = TRUE,
-#'  bitSize = pedSize))
+#'  bit_size = pedSize))
 #'}
 #'
 #'@ 
@@ -644,11 +644,11 @@ Print a pedigree.shrink object.  Tell the original bit size and the trimmed bit 
 #'if(length(x$idTrimmed) > 2)
 #'{
 #'  n <- c(x$pedSizeOriginal, x$pedSizeIntermed, x$pedSizeFinal)
-#'  b <- c(x$bitSize[1], x$bitSize[2], x$bitSize[length(x$bitSize)])
+#'  b <- c(x$bit_size[1], x$bit_size[2], x$bit_size[length(x$bit_size)])
 #'  row.nms <- c("Original","Only Informative","Trimmed")
 #'} else {
 #'  n <- c(x$pedSizeOriginal, x$pedSizeIntermed)
-#'  b <- c(x$bitSize[1], x$bitSize[2])
+#'  b <- c(x$bit_size[1], x$bit_size[2])
 #'  row.nms <- c("Original","Trimmed")
 #'}
 #'
@@ -665,7 +665,7 @@ Print a pedigree.shrink object.  Tell the original bit size and the trimmed bit 
 #'if(!is.null(x$idList$affect)) 
 #'cat("\n Informative subjects trimmed:\n", x$idList$affect, "\n")
 #'
-  ##cat("\n Pedigree after trimming:", x$bitSize, "\n")
+  ##cat("\n Pedigree after trimming:", x$bit_size, "\n")
 #'
 #'invisible()
 #'}
@@ -777,7 +777,7 @@ pedigree object.
 #'
 #'legend(x = xlegend, legend = c("DNA Available", "UnAvailable"), 
 #'pch = c(1, 1), col = c(2, 1), bty = "n", cex=.5)
-#'title(paste(title, "\nbits = ", x$bitSize[length(x$bitSize)]),cex.main=.9)
+#'title(paste(title, "\nbits = ", x$bit_size[length(x$bit_size)]),cex.main=.9)
 #'invisible(tmp)
 #'} 
 #'

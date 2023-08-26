@@ -24,7 +24,7 @@ SFUN =  align.pedigree.R\
 	as.data.frame.pedigree.R \
 	ped2df.R \
 	pedigree.shrink.R \
-	bitSize.R \
+	bit_size.R \
 	pedigree.trim.R \
 	findUnavailable.R \
 	findAvailNonInform.R \
