@@ -34,7 +34,7 @@ setClass(
     )
 )
 
-setValidity("Pedigree", isValid)
+setValidity("Pedigree", is_valid)
 
 #### S4 methods ####
 

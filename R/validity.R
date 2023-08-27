@@ -91,7 +91,7 @@ check_values <- function(val, ref, present = TRUE) {
 #' the values in the columns of the ped, rel and scale slot
 #' $param object A Pedigree object.
 #' $return A logical value or a character vector with the errors.
-isValid <- function(object) {
+is_valid <- function(object) {
     missid <- "0"
     errors <- c()
 
