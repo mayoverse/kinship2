@@ -5,14 +5,13 @@ NULL
 #' @include plot_fct.R
 #' @export
 plot_from_df <- function(
-    df, par_usr = NULL, naff = 1, title = NULL, ggplot_gen = FALSE, boxw = 1,
+    df, par_usr = NULL, title = NULL, ggplot_gen = FALSE, boxw = 1,
     boxh = 1
 ) {
     frame()
     if (!is.null(par_usr)) {
         par(usr = par_usr)
     }
-    polylist <- polygons(naff)
     p <- ggplot()
 
     ## Add title if exists
@@ -21,10 +20,14 @@ plot_from_df <- function(
         p <- p + ggtitle(title)
     }
 
+    naff <- max(as.numeric(str_split_i(df$type, "_", 2)), na.rm = TRUE)
+
     ## Add boxes
+    polylist <- polygons(naff)
     all_types <- unlist(lapply(names(polylist),
         paste, seq_len(naff), sep = "_"
     ))
+
     boxes <- df[df$type %in% all_types, ]
     boxes[c("poly", "naff")] <- str_split_fixed(boxes$type, "_", 2)
     boxes$angle[boxes$angle == "NA"] <- 45

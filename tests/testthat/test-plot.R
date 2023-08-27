@@ -30,6 +30,8 @@ test_that("pedigree other test", {
     p$ggplot
 
     load_all()
+    ped <- generate_colors(ped, "smoker", colors_aff = c("#00e6ee", "#c300ff"))
+    ped$scales
     lst <- ped_to_plotdf(ped)
     p <- plot_from_df(lst$df, par_usr = lst$par$par_usr,
         title = "Pedigree", ggplot_gen = TRUE,
