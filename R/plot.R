@@ -378,7 +378,7 @@ setMethod("plot", c(x = "Pedigree", y = "missing"),
                 ty <- ((row(plist$pos))[indx])[order(tx)]
                 tx <- sort(tx)
                 for (j in 1:(length(indx) - 1)) {
-                    p <- draw_arc(tx[j + 0:1], ty[j + 0:1], p, ggplot_gen)
+                    p <- draw_arc(tx[j], ty[j], tx[j + 1], ty[j + 1], p, ggplot_gen)
                 }
             }
             i <- i + 1
