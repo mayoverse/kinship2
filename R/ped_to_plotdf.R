@@ -263,7 +263,7 @@ ped_to_plotdf <- function(
                     x1 = tx[j + 1], y1 = ty[j + 1],
                     type = "arc", fill = "black", cex = cex
                 )
-                p <- draw_arc(tx[j + 0:1], ty[j + 0:1])
+                plot_df <- rbind.fill(plot_df, arc)
             }
         }
     }

@@ -43,10 +43,18 @@ plot_from_df <- function(
         txt$x0, txt$y0, txt$label,
         p, ggplot_gen, txt$cex, txt$fill
     )
+
     seg <- df[df$type == "segments", ]
     p <- draw_segment(
         seg$x0, seg$y0, seg$x1, seg$y1,
         p, ggplot_gen, seg$fill, seg$cex
     )
+
+    arcs <- df[df$type == "arc", ]
+    for (it in nrow(arcs)){
+        arc <- arcs[it, ]
+        p <- draw_arc(arc$x0, arc$y0, arc$x1, arc$y1,
+            p, ggplot_gen, cex = arc$cex, col = arc$fill)
+    }
     p
 }

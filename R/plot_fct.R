@@ -355,10 +355,10 @@ draw_text <- function(x, y, label, p, ggplot_gen = FALSE, cex = 1, col = NULL) {
 #' @return Plot the arcs or add it to a ggplot object
 #'
 #' @export
-draw_arc <- function(x, y, p, ggplot_gen = FALSE) {
-    xx <- seq(x[1], x[2], length = 15)
-    yy <- seq(y[1], y[2], length = 15) + (seq(-7, 7))^2 / 98 - 0.5
-    lines(xx, yy, lty = 2)
+draw_arc <- function(x0, y0, x1, y1, p, ggplot_gen = FALSE, cex = 1, col = "black") {
+    xx <- seq(x0, x1, length = 15)
+    yy <- seq(y0, y1, length = 15) + (seq(-7, 7))^2 / 98 - 0.5
+    lines(xx, yy, lty = 2, lwd = cex, col = col)
     if (ggplot_gen) {
         p <- p + annotate("line", xx, yy, linetype = "dashed")
     }
