@@ -105,19 +105,21 @@ ped_to_plotdf <- function(
     status <- ped$ped[id[idx], "status"]
     idx_dead <- idx[status == 1]
 
-    dead_df <- data.frame(
-        x0 = pos[idx_dead] - 0.6 * boxw, y0 = i[idx_dead] + 1.1 * boxh,
-        x1 = pos[idx_dead] + 0.6 * boxw, y1 = i[idx_dead] - 0.1 * boxh,
-        type = "segments", fill = "black", cex = cex,
-        id = "dead"
-    )
+    if (length(idx_dead) > 0) {
+        dead_df <- data.frame(
+            x0 = pos[idx_dead] - 0.6 * boxw, y0 = i[idx_dead] + 1.1 * boxh,
+            x1 = pos[idx_dead] + 0.6 * boxw, y1 = i[idx_dead] - 0.1 * boxh,
+            type = "segments", fill = "black", cex = cex,
+            id = "dead"
+        )
 
-    plot_df <- rbind.fill(plot_df, dead_df)
+        plot_df <- rbind.fill(plot_df, dead_df)
+    }
 
     ## Add ids
     id_df <- data.frame(
         x0 = pos[idx], y0 = i[idx] + boxh + labh * 0.7,
-        label = id[idx], fill = "black",
+        label = ped$ped[id[idx], "id"], fill = "black",
         type = "text", cex = cex,
         id = "id"
     )
@@ -152,19 +154,20 @@ ped_to_plotdf <- function(
 
     ## Add doubles mariage
     spouses2 <- which(plist$spouse == 2)
-
-    l_spouses2_i <- i[spouses2] + boxh / 2 + boxh / 10
-    pos_sp21 <- pos[spouses2]
-    pos_sp22 <- pos[spouses2 + maxlev]
-    l_spouses2 <- data.frame(
-        x0 = pos_sp21 + boxw / 2,
-        y0 = l_spouses2_i,
-        x1 = pos_sp22 - boxw / 2,
-        y1 = l_spouses2_i,
-        type = "segments", fill = "black", cex = cex,
-        id = "line_spouses2"
-    )
-    plot_df <- rbind.fill(plot_df, l_spouses2)
+    if (length(spouses2) > 0) {
+        l_spouses2_i <- i[spouses2] + boxh / 2 + boxh / 10
+        pos_sp21 <- pos[spouses2]
+        pos_sp22 <- pos[spouses2 + maxlev]
+        l_spouses2 <- data.frame(
+            x0 = pos_sp21 + boxw / 2,
+            y0 = l_spouses2_i,
+            x1 = pos_sp22 - boxw / 2,
+            y1 = l_spouses2_i,
+            type = "segments", fill = "black", cex = cex,
+            id = "line_spouses2"
+        )
+        plot_df <- rbind.fill(plot_df, l_spouses2)
+    }
 
     ## Children to parents lines
     for (gen in 1:maxlev) {
