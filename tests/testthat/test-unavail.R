@@ -16,3 +16,19 @@ test_that("unavailable detection works", {
         c("1_101", "1_102", "1_107", "1_108")
     )
 })
+
+test_that("Unrelated detection works", {
+    data(sampleped)
+
+    ped <- pedigree(sampleped)
+
+    ped1 <- ped[ped$ped$family == 1, ]
+    ped2 <- ped[ped$ped$family == 2, ]
+
+    set.seed(10)
+    expect_equal(unrelated(ped1),
+        c("1_109", "1_113", "1_133", "1_141")
+    )
+    set.seed(10)
+    expect_equal(unrelated(ped2), c("2_203", "2_206"))
+})

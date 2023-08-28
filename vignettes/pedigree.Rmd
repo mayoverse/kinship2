@@ -419,16 +419,16 @@ ped2$relation
 
 The steps above only work for subsetting by the index of the 
 pedigree object vectors, not by the ~id~ of the subjects themselves.  
-We provide *pedigree.trim()*, which trims subjects from a pedigree by 
+We provide *pedigree_trim()*, which trims subjects from a pedigree by 
 their $id$.  Below is an example of removing subject 110, as done above, 
 then we further trim the pedigree by a vector of subject ids. We check the
 trimming by looking at the $id$ vector and the $relation$ matrix.
 
 ```{r, trim}
-ped2.trim210 <- pedigree.trim(210, ped2)
+ped2.trim210 <- pedigree_trim(210, ped2)
 ped2.trim210$id
 ped2.trim210$relation
-ped2.trim.more <- pedigree.trim(c(212, 214), ped2.trim210)
+ped2.trim.more <- pedigree_trim(c(212, 214), ped2.trim210)
 ped2.trim.more$id
 ped2.trim.more$relation
 ``` 
@@ -480,7 +480,7 @@ shrink1.B25
 Select Unrelateds
 =======================
 
-In this section we briefly show how to use $pedigree.unrelated$ to find
+In this section we briefly show how to use $unrelated$ to find
 a set of the maximum number of unrelated available subjects from a pedigree.
 The input required is a pedigree object and a vector indicating availability.
 In some pedigrees there are numerous sets of subjects that satisfy the maximum
@@ -495,13 +495,13 @@ ped2 <- pedigree(df2$id, df2$father, df2$mother,
   affected = df2$affected
 )
 set.seed(10)
-set1 <- pedigree.unrelated(ped2, avail = df2$avail)
+set1 <- unrelated(ped2, avail = df2$avail)
 set1
-set2 <- pedigree.unrelated(ped2, avail = df2$avail)
+set2 <- unrelated(ped2, avail = df2$avail)
 set2
 ``` 
 
-We can easily verify the sets selected by $pedigree.unrelated$ by
+We can easily verify the sets selected by $unrelated$ by
 referring to Figure~\ref{basicPed2} and see that subjects 203 and 209 are
 unrelated to everyone else in the pedigree except their children. Furthermore, 
 we see in df2 that of these two, only subject 203 is available. Therefore,

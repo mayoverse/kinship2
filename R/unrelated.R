@@ -38,7 +38,7 @@
 #'
 #' ## to see plot:
 #' ## plot.pedigree(ped1, align=FALSE)
-#' id1 <- pedigree.unrelated(ped1, avail = fam1$avail)
+#' id1 <- unrelated(ped1, avail = fam1$avail)
 #'
 #' id1
 #' ## some possible vectors
@@ -59,7 +59,7 @@
 #' ## to see plot:
 #' ## plot.pedigree(ped2, align=FALSE)
 #'
-#' id2 <- pedigree.unrelated(ped2, avail = fam2$avail)
+#' id2 <- unrelated(ped2, avail = fam2$avail)
 #'
 #' ## some possible vectors
 #' ## [1] '203' '207'
@@ -69,8 +69,8 @@
 #' id2
 #'
 #' @seealso `kinship`, `pedigree`
-#' @export pedigree.unrelated
-pedigree.unrelated <- function(ped, avail) {
+#' @export unrelated
+unrelated <- function(ped, avail = ped$ped$avail) {
     # Requires: kinship function
 
     # Given vectors id, father, and mother for a pedigree structure, and avail
@@ -86,8 +86,7 @@ pedigree.unrelated <- function(ped, avail) {
     # count of zeros for rows, a random choice is made. Hence, running this
     # function multiple times can return different sets of unrelated subjects.
 
-    id <- ped$id
-    avail <- as.integer(avail)
+    id <- ped$ped$id
 
     kin <- kinship(ped)
 
@@ -102,26 +101,23 @@ pedigree.unrelated <- function(ped, avail) {
     avail <- avail[rord]
     kin <- kin[rord, ][, rord]
 
-    idAvail <- id[avail]
-    kinAvail <- kin[avail, , drop = FALSE][, avail, drop = FALSE]
+    kin_avail <- kin[avail, , drop = FALSE][, avail, drop = FALSE]
 
-    diag(kinAvail) <- 0
+    diag(kin_avail) <- 0
 
-    while (any(kinAvail > 0)) {
-        nr <- nrow(kinAvail)
-        indx <- seq_len(nrow(kinAvail))
-        zeroCount <- apply(kinAvail == 0, 1, sum)
+    while (any(kin_avail > 0)) {
+        nr <- nrow(kin_avail)
+        indx <- seq_len(nrow(kin_avail))
+        zero_count <- apply(kin_avail == 0, 1, sum)
 
-        mx <- max(zeroCount[zeroCount < nr])
-        zeroMx <- indx[zeroCount == mx][1]
+        mx <- max(zero_count[zero_count < nr])
+        zero_mx <- indx[zero_count == mx][1]
 
-        exclude <- indx[kinAvail[, zeroMx] > 0]
+        exclude <- indx[kin_avail[, zero_mx] > 0]
 
-        kinAvail <- kinAvail[-exclude, , drop = FALSE][, -exclude, drop = FALSE]
+        kin_avail <- kin_avail[-exclude, , drop = FALSE][, -exclude, drop = FALSE]
     }
 
-    choice <- sort(dimnames(kinAvail)[[1]])
-
-    return(choice)
+    sort(dimnames(kin_avail)[[1]])
 }
 TRUE
