@@ -66,7 +66,7 @@ pedigree.shrink <- function(ped, avail, affected = NULL, maxBits = 16) {
     ## first find unavailable subjects to remove anyone who is not available
     ## and does not have an available descendant
 
-    idTrimUnavail <- findUnavailable(ped, avail)
+    idTrimUnavail <- find_unavailable(ped, avail)
 
     if (length(idTrimUnavail)) {
         pedTrimmed <- pedigree.trim(idTrimUnavail, ped)
