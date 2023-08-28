@@ -64,10 +64,14 @@ plot_from_df <- function(
     )
 
     arcs <- df[df$type == "arc", ]
-    for (it in nrow(arcs)){
-        arc <- arcs[it, ]
-        p <- draw_arc(arc$x0, arc$y0, arc$x1, arc$y1,
-            p, ggplot_gen, cex = arc$cex, col = arc$fill)
+    if (nrow(arcs) > 0) {
+        for (it in nrow(arcs)){
+            arc <- arcs[it, ]
+            p <- draw_arc(arc$x0, arc$y0, arc$x1, arc$y1,
+                p, ggplot_gen, cex = arc$cex, col = arc$fill
+            )
+        }
     }
+
     p
 }
