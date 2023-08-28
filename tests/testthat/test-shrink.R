@@ -3,25 +3,44 @@
 
 test_that("Pedigree shrink works", {
     data(minnbreast)
-    pedMN <- with(minnbreast, pedigree(id, fatherid, motherid, sex, famid = famid,
-        affected = cbind(cancer, bcpc, proband)))
+    ped_mb <- pedigree(minnbreast,
+        cols_ren_ped = list(fatherId = "fatherid", motherId = "motherid",
+            indId = "id", gender = "sex", family = "famid"
+        )
+    )
+    mn2 <- ped_mb[ped_mb$ped$family == "5", ]
+    mn2 <- generate_colors(mn2, col_aff = "cancer", add_to_scale = FALSE)
+    mn2$scales
+    plot(mn2)
 
     ## this pedigree as one person with cancer. The pedigree is not informative
     ## if they are the only available, so pedigree.shrink trims all.
-    ## This caused an error in pedigree.shrink before kinship2. v1.2.8. Now fixed
-    mn2 <- pedMN[2]
+    ## This caused an error in pedigree.shrink before kinship2. v1.2.8.
+    ## Now fixed
+
+    mn2 <- ped_mb[2]
     expect_doppelganger("pedigree shrink 1", plot(mn2))
 
-    ## breaks in pedigree.trim
-    shrink.mn2 <- pedigree.shrink(mn2, avail = ifelse(is.na(mn2$affected[, 1]), 0,
-        mn2$affected[, 1]))
+    ## breaks in pedigree_trim
+    mn2_s <- shrink(mn2,
+        avail = ifelse(is.na(mn2$ped$cancer), 0, mn2$ped$cancer)
+    )
 
-    expect_equal(shrink.mn2$idList$unavail, c(44, 45, 46, 47, 48, 49, 50, 51, 52,
-        53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71,
-        72, 73, 74, 75, 76, 77, 78, 79, 26050, 26051))
+    expect_equal(mn2_s$id_lst$unavail,
+        paste("5", c(
+            44, 45, 46, 47, 48, 49, 50, 51, 52,
+            53, 54, 55, 56, 57, 58, 59, 60, 61,
+            62, 63, 64, 65, 66, 67, 68, 69, 70, 71,
+            72, 73, 74, 75, 76, 77, 78, 79, 26050, 26051
+        ), sep = "_")
+    )
 
-    mnf8 <- pedMN["8"]
+    mnf8 <- ped_mb["8"]
     expect_doppelganger("pedigree shrink 2", plot(mnf8))
+
+    ped_mb <- with(minnbreast, pedigree(id, fatherid, motherid, sex, famid = famid,
+        affected = cbind(cancer, bcpc, proband))
+    )
 
     shrink.mnf8 <- pedigree.shrink(mnf8, avail = ifelse(is.na(mnf8$affected[, 1]),
         0, mnf8$affected[, 1]))
