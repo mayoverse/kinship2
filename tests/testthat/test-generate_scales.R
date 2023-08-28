@@ -103,7 +103,9 @@ test_that("generate colors works on pedigree object", {
     data(sampleped)
     ped <- pedigree(sampleped[sampleped$family == "1", -1])
     ped$ped$id <- as.numeric(ped$ped$id)
-    ped_aff <- generate_colors(ped, "id", threshold = 120, sup_thres_aff = TRUE)
+    ped_aff <- generate_colors(ped, col_aff = "id",
+        threshold = 120, sup_thres_aff = TRUE, add_to_scale = FALSE
+    )
     expect_equal(ped_aff$ped$id_aff, c(rep(0, 20), rep(1, 21)))
     expect_equal(ped_aff$scales$fill$fill, c("white", "red"))
     expect_equal(ped_aff$scales$fill$labels,

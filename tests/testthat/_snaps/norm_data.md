@@ -36,17 +36,17 @@
       8                 selfIdDuplicated_isMotherAndFather_isMotherButNotFemale
       9  selfIdDuplicated_oneParentMissing_isMotherAndFather_isFatherButNotMale
       10                   motherIdDuplicated_isItsOwnParent_isFatherButNotMale
-         family status
-      1    <NA>      0
-      2    <NA>      0
-      3    <NA>      0
-      4    <NA>      0
-      5    <NA>      0
-      6    <NA>      0
-      7    <NA>      0
-      8    <NA>      0
-      9    <NA>      0
-      10   <NA>      0
+         family status affected
+      1    <NA>      0       NA
+      2    <NA>      0       NA
+      3    <NA>      0       NA
+      4    <NA>      0       NA
+      5    <NA>      0       NA
+      6    <NA>      0       NA
+      7    <NA>      0       NA
+      8    <NA>      0       NA
+      9    <NA>      0       NA
+      10   <NA>      0       NA
 
 # Norm rel
 

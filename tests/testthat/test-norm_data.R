@@ -18,7 +18,7 @@ test_that("Norm ped", {
     ))
     ped_df <- data.frame(ped_df)
     ped_df <- suppressWarnings(norm_ped(ped_df, na_strings = c("None", "NA")))
-    expect_equal(dim(ped_df), c(10, 16))
+    expect_equal(dim(ped_df), c(10, 17))
     expect_snapshot(ped_df)
     expect_equal(sum(is.na(ped_df$error)), 3)
 })

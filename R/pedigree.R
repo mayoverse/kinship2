@@ -23,7 +23,9 @@ pedigree <- function(
         dadid = character(),
         momid = character(),
         sex = numeric(),
-        family = character()
+        family = character(),
+        available = numeric(),
+        affected = numeric()
     ),
     rel_df = data.frame(
         id1 = character(),
@@ -86,7 +88,7 @@ pedigree <- function(
         rel_df <- norm_rel(rel_df)
     } else {
         cols_need <- c("id", "dadid", "momid", "sex")
-        cols_to_use <- c("steril", "avail", "family", "status")
+        cols_to_use <- c("steril", "avail", "family", "status", "affected")
         ped_df <- check_columns(
             ped_df, cols_need, "", cols_to_use,
             others_cols = TRUE, cols_to_use_init = TRUE
@@ -114,5 +116,6 @@ pedigree <- function(
     ped <- new("Pedigree", ped = ped_df, rel = rel_df,
         scales = scales, hints = hints
     )
+
     generate_colors(ped, ...)
 }

@@ -118,7 +118,11 @@ setMethod("[", c(x = "Pedigree", i = "ANY", j = "ANY"),
         rel_df <- x$rel[x$rel$id1 %in% allId | x$rel$id2 %in% allId, ]
         idx <- match(allId, ped_df$id, nomatch = 0)
         sub_hints <- sub_sel_hints(x$hints, idx)
-        new_ped <- pedigree(ped_df, rel_df, x$scales, hints = sub_hints, cols_ren_ped = NULL, normalize = FALSE)
+        fill <- x$scales$fill[x$scales$fill$column_values %in% names(ped_df),]
+        border <- x$scales$border[x$scales$border$column %in% names(ped_df),]
+        scales <- list(fill = fill, border = border)
+
+        new_ped <- pedigree(ped_df, rel_df, scales, hints = sub_hints, cols_ren_ped = NULL, normalize = FALSE)
         validObject(new_ped)
         new_ped
 })

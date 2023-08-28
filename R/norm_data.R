@@ -208,7 +208,6 @@ norm_ped <- function(
             ped_df$avail[!is.na(ped_df$available) & ped_df$available != 0] <- 1
             ped_df$avail[!is.na(ped_df$available) & ped_df$available == 0] <- 0
         }
-
         #### Status ####
         if ("status" %in% colnames(ped_df)) {
             ped_df$status[!is.na(ped_df$status) & ped_df$status != 0] <- 1

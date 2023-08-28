@@ -4,7 +4,7 @@ test_that("pedigree works", {
     expect_equal(nrow(ped@ped), 0)
     expect_equal(nrow(ped@rel), 0)
     expect_equal(length(ped@scales), 2)
-    expect_equal(length(ped@scales$fill), 7)
+    expect_equal(length(ped@scales$fill), 9)
     expect_equal(length(ped@scales$border), 4)
 
     expect_snapshot(summary(ped))
@@ -24,7 +24,7 @@ test_that("pedigree from sampleped and affectation", {
     ))
     ped1$ped
     expect_equal(nrow(ped1@ped), 41)
-    expect_equal(ncol(ped1@ped), 15)
+    expect_equal(ncol(ped1@ped), 16)
     expect_equal(nrow(ped1@rel), 0)
     expect_equal(ncol(ped1@rel), 7)
     expect_snapshot(summary(ped1))
@@ -49,14 +49,14 @@ test_that("pedigree subscripting", {
         "motherId" = "motherid", "gender" = "sex", "family" = "famid"
     ))
     expect_equal(nrow(minnped$ped), 28081)
-    expect_equal(ncol(minnped[["ped"]]), 24)
+    expect_equal(ncol(minnped[["ped"]]), 26)
 
     ped8 <- minnped[minnped$ped$family == "8",
         c("id", "dadid", "momid", "sex", "cancer")
     ]
 
     expect_equal(nrow(ped8$ped), 40)
-    expect_equal(ncol(ped8$ped), 9)
+    expect_equal(ncol(ped8$ped), 11)
 
     # Subjects 150, 152, 154, 158 are children,
     # and 143, 162, 149 are parents and a child
@@ -78,15 +78,15 @@ test_that("pedigree subscripting", {
 
     pedcol <- minnped[, c("id", "dadid", "momid", "sex", "cancer")]
     expect_equal(nrow(pedcol$ped), 28081)
-    expect_equal(ncol(pedcol$ped), 9)
+    expect_equal(ncol(pedcol$ped), 11)
 
     pedrow <- minnped[c("8_150", "8_163", "8_145", "8_135", "8_136")]
     expect_equal(nrow(pedrow$ped), 5)
-    expect_equal(ncol(pedrow$ped), 24)
+    expect_equal(ncol(pedrow$ped), 26)
 })
 
 test_that("pedigree to dataframe", {
     data(sampleped)
     ped <- pedigree(sampleped)
-    expect_equal(dim(as.data.frame(ped)), c(55, 15))
+    expect_equal(dim(as.data.frame(ped)), c(55, 16))
 })

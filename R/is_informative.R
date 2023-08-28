@@ -76,12 +76,12 @@ setMethod("is_informative", "Pedigree", function(
 ) {
     obj$ped$affected <- NA
     aff_scl <- obj$scales$fill
-    if (column %in% aff_scl$column) {
+    if (column %in% aff_scl$column_mods) {
         aff <- aff_scl$mods[aff_scl$affected == TRUE &
-                aff_scl$column == column
+                aff_scl$column_mods == column
         ]
         unaff <- aff_scl$mods[aff_scl$affected == FALSE &
-                aff_scl$column == column
+                aff_scl$column_mods == column
         ]
         obj$ped$affected[obj$ped[, column] %in% aff] <- 1
         obj$ped$affected[obj$ped[, column] %in% unaff] <- 0

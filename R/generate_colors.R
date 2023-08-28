@@ -151,12 +151,14 @@ generate_fill <- function(
 #'
 #' @export
 generate_border <- function(avail, colors_avail = c("green", "black")) {
-    if (! is.numeric(avail)) {
-        stop("Available variable need to be numeric")
-    }
+    if (length(avail) > 0) {
+        if (! is.numeric(avail) && ! all(is.na(avail))) {
+            stop("Available variable need to be numeric")
+        }
 
-    if (!all(levels(as.factor(avail)) %in% c("0", "1", "NA"))) {
-        stop("Available variable need to have only 0, 1 or NA")
+        if (!all(levels(as.factor(avail)) %in% c("0", "1", "NA"))) {
+            stop("Available variable need to have only 0, 1 or NA")
+        }
     }
 
     # Set border colors
@@ -230,19 +232,23 @@ setMethod("generate_colors", "data.frame",
         affected <- generate_aff_inds(df[[col_aff]],
             mods_aff, threshold, sup_thres_aff
         )
+
         border <- generate_border(df[[col_avail]], colors_avail)
         fill <- generate_fill(
             df[[col_aff]], affected$affected, affected$labels,
             keep_full_scale, breaks, colors_aff, colors_unaff
         )
+
         df[new_col] <- fill$mods
-        fill$fill_scale$column_mods <- new_col
-        fill$fill_scale$column_values <- col_aff
+        if (nrow(fill$fill_scale) > 0) {
+            fill$fill_scale$column_mods <- new_col
+            fill$fill_scale$column_values <- col_aff
+        }
+
         scales <- list(
             fill = fill$fill_scale,
             border = border
         )
-
         list(df = df, scales = scales)
     }
 )
@@ -251,17 +257,24 @@ setMethod("generate_colors", "data.frame",
 #' @include pedigreeClass.R
 #' @export
 setMethod("generate_colors", "Pedigree",
-    function(obj, ...) {
+    function(obj, add_to_scale = TRUE, ...) {
+        if (nrow(obj$ped) == 0) {
+            return(obj)
+        }
         list_aff <- generate_colors(obj$ped, ...)
-
         obj$ped <- list_aff$df
         new_order <- ifelse(nrow(obj$scales$fill) > 0,
             max(obj$scales$fill$order) + 1, 1
         )
         list_aff$scales$fill$order <- new_order
-        list_aff$scales$fill <- rbind.fill(obj$scales$fill,
-            list_aff$scales$fill
-        )
+        if (add_to_scale) {
+            list_aff$scales$fill <- rbind.fill(obj$scales$fill,
+                list_aff$scales$fill
+            )
+        } else {
+            list_aff$scales$fill <- list_aff$scales$fill
+        }
+
         obj$scales <- list_aff$scales
         validObject(obj)
         obj
