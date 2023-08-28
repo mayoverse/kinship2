@@ -69,7 +69,7 @@ pedigree.shrink <- function(ped, avail, affected = NULL, maxBits = 16) {
     idTrimUnavail <- find_unavailable(ped, avail)
 
     if (length(idTrimUnavail)) {
-        pedTrimmed <- pedigree.trim(idTrimUnavail, ped)
+        pedTrimmed <- pedigree_trim(idTrimUnavail, ped)
         avail <- avail[match(pedTrimmed$id, ped$id)]
         idTrimmed <- c(idTrimmed, idTrimUnavail)
         idList$unavail <- idTrimUnavail
@@ -91,12 +91,12 @@ pedigree.shrink <- function(ped, avail, affected = NULL, maxBits = 16) {
     while (nChange > 0 & nNew > 0) {
         nOld <- length(pedTrimmed$id)
 
-        ## findAvailNonInform finds non-informative, but after suggesting their
+        ## find_avail_noninform finds non-informative, but after suggesting their
         ## removal, checks for more unavailable subjects before returning
-        idTrimNonInform <- findAvailNonInform(pedTrimmed, avail)
+        idTrimNonInform <- find_avail_noninform(pedTrimmed, avail)
 
         if (length(idTrimNonInform)) {
-            pedNew <- pedigree.trim(idTrimNonInform, pedTrimmed)
+            pedNew <- pedigree_trim(idTrimNonInform, pedTrimmed)
             avail <- avail[match(pedNew$id, pedTrimmed$id)]
             idTrimmed <- c(idTrimmed, idTrimNonInform)
             idList$noninform <- c(idList$noninform, idTrimNonInform)
@@ -120,12 +120,12 @@ pedigree.shrink <- function(ped, avail, affected = NULL, maxBits = 16) {
 
     while (isTrimmed & (bit_size > maxBits)) {
         ## First, try trimming by unknown status
-        save <- findAvailAffected(pedTrimmed, avail, affstatus = NA)
+        save <- find_avail_affected(pedTrimmed, avail, affstatus = NA)
         isTrimmed <- save$isTrimmed
 
         ## Second, try trimming by unaffected status if no unknowns to trim
         if (!isTrimmed) {
-            save <- findAvailAffected(pedTrimmed, avail, affstatus = 0)
+            save <- find_avail_affected(pedTrimmed, avail, affstatus = 0)
             isTrimmed <- save$isTrimmed
         }
 
@@ -133,7 +133,7 @@ pedigree.shrink <- function(ped, avail, affected = NULL, maxBits = 16) {
         ## Third, try trimming by affected status if no unknowns & no
         ## unaffecteds to trim
         if (!isTrimmed) {
-            save <- findAvailAffected(pedTrimmed, avail, affstatus = 1)
+            save <- find_avail_affected(pedTrimmed, avail, affstatus = 1)
             isTrimmed <- save$isTrimmed
         }
 

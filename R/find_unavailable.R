@@ -5,13 +5,13 @@
 #' @description
 #' Find the ID of subjects in a pedigree iteratively, as anyone who is not
 #' available and does not have an available descendant by successively removing
-#' unavailable terminal nodes. `pedigree.trim` carries out the removal of the
+#' unavailable terminal nodes. `pedigree_trim` carries out the removal of the
 #' subjects identified by `findUnavailabl`e.
 #'
 #' @details
 #' Originally written as pedTrim by Steve Iturria, modified by Dan Schaid 2007,
 #' and now split into the two separate functions: `find_unavailable()`, and
-#' `pedigree.trim()` to do the tasks separately.  `find_unavailable()`
+#' `pedigree_trim()` to do the tasks separately.  `find_unavailable()`
 #' calls `exclude_stray_marryin` to find stray available marry-ins who are
 #' isolated after trimming their unavailable offspring, and
 #' exclude_unavail_founders.
@@ -21,26 +21,25 @@
 #'
 #' @aliases
 #' find_unavailable
-#' pedigree.trim
+#' pedigree_trim
 #' exclude_unavail_founders
 #' exclude_stray_marryin
 #'
 #' @param ped A pedigree object with an id, findex, mindex, sex, plus other
 #' optional items
-#' @param avail Logical vector of availability status (e.g., available) 0/1 or
-#' TRUE/FALSE
+#' @param avail Logical vector of availability status (e.g., available) 0/1
 #' @param removeID vector of subject ids of persons to trim from a pedigree
 #'
 #' @return `find_unavailable` returns a vector of subject ids for who can be
-#' removed. `pedigree.trim` returns a trimmed pedigree object.
+#' removed. `pedigree_trim` returns a trimmed pedigree object.
 #'
-#' @section Side Effects: relation matrix from `pedigree.trim` is trimmed of any
+#' @section Side Effects: relation matrix from `pedigree_trim` is trimmed of any
 #' special relations that include the subjects to trim.
 #'
 #' @seealso `pedigree.shrink`
 #' @include utils.R
 #' @export find_unavailable
-find_unavailable <- function(ped) {
+find_unavailable <- function(ped, avail = ped$ped$avail) {
     ## find id within pedigree anyone who is not available and
     ## does not have an available descendant
 
@@ -49,30 +48,19 @@ find_unavailable <- function(ped) {
     ## will do this iteratively by successively removing unavailable
     ## terminal nodes
     ## Steve Iturria, PhD, modified by Dan Schaid
-    ped <- ped$ped
+    df <- ped$ped
+    df$avail <- avail
     cont <- TRUE # flag for whether to keep iterating
 
-    ped$is_terminal <- (is_parent(ped$id, ped$dadid, ped$momid) == FALSE)
+    df$is_terminal <- (is_parent(df$id, df$dadid, df$momid) == FALSE)
     ## JPS 3/10/14 add strings check in case of char ids
     while (cont) {
-        num_found <- 0
-        id_to_remove <- NULL
-
-        for (i in seq_len(nrow(ped))) {
-            if (ped$is_terminal[i]) {
-                # if not available
-                if (ped$avail[i] == FALSE) {
-                    id_to_remove <- c(id_to_remove, ped$id[i])
-                    num_found <- num_found + 1
-                }
-            }
-        }
-
-        if (num_found > 0) {
-            idx_to_remove <- match(id_to_remove, ped$id)
-            ped <- ped[-idx_to_remove, ]
-            ped$is_terminal <-
-                (is_parent(ped$id, ped$dadid, ped$momid) == FALSE)
+        id_to_remove <- df$id[df$is_terminal & df$avail == 0]
+        if (length(id_to_remove) > 0) {
+            idx_to_remove <- match(id_to_remove, df$id)
+            df <- df[-idx_to_remove, ]
+            df$is_terminal <-
+                (is_parent(df$id, df$dadid, df$momid) == FALSE)
         } else {
             cont <- FALSE
         }
@@ -82,15 +70,13 @@ find_unavailable <- function(ped) {
 
     ## remove unavailable founders
     tmp_ped <- exclude_unavail_founders(
-        ped$id,
-        ped$dadid, ped$momid, ped$avail
+        df$id,
+        df$dadid, df$momid, df$avail
     )
 
     tmp_ped <- exclude_stray_marryin(tmp_ped$id, tmp_ped$dadid, tmp_ped$momid)
 
-    id_remove <- ped$id[is.na(match(ped$id, tmp_ped$id))]
-
-    return(id_remove)
+    df$id[is.na(match(df$id, tmp_ped$id))]
 }
 
 exclude_stray_marryin <- function(id, dadid, momid) {
@@ -110,7 +96,7 @@ exclude_stray_marryin <- function(id, dadid, momid) {
 
 exclude_unavail_founders <- function(id, dadid, momid, avail, missid = "0") {
     n_old <- length(id)
-    id_old <- id
+
     ## zed = TRUE if both parents are present
     zed <- dadid != missid & momid != missid
     ## concat ids to represent marriages.
