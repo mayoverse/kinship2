@@ -263,15 +263,17 @@ setMethod("generate_colors", "Pedigree",
         }
         list_aff <- generate_colors(obj$ped, ...)
         obj$ped <- list_aff$df
-        new_order <- ifelse(nrow(obj$scales$fill) > 0,
-            max(obj$scales$fill$order) + 1, 1
-        )
-        list_aff$scales$fill$order <- new_order
+
         if (add_to_scale) {
+            new_order <- ifelse(nrow(obj$scales$fill) > 0,
+                max(obj$scales$fill$order) + 1, 1
+            )
+            list_aff$scales$fill$order <- new_order
             list_aff$scales$fill <- rbind.fill(obj$scales$fill,
                 list_aff$scales$fill
             )
         } else {
+            list_aff$scales$fill$order <- 1
             list_aff$scales$fill <- list_aff$scales$fill
         }
 
