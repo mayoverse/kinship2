@@ -195,95 +195,6 @@ polygons <- function(naffection = 1) {
 #'@importFrom ggplot2 geom_polygon aes annotate
 NULL
 
-#' Draw a box for a pedigree
-#'
-#' @param x x coordinate
-#' @param y y coordinate
-#' @param sex sex of the subject
-#'
-#' @return Plot the box or add it to a ggplot object
-drawbox <- function(
-    x, y, sex, affected, status, avail, mark, polylist,
-    fill, border, density, angle, boxw, boxh, p_plot, id, data_tooltips,
-    cex, ggplot_gen = FALSE, tips_names = NULL
-) {
-    for (i in seq_len(length(affected))) {
-        plabel <- mark
-        if (is.null(mark[i])) {
-            plabel <- "?"
-        }
-        midx <- x + mean(range(polylist[[sex]][[i]]$x * boxw))
-        midy <- y + mean(range(polylist[[sex]][[i]]$y * boxh))
-        polygon(
-            x + (polylist[[sex]])[[i]]$x * boxw,
-            y + (polylist[[sex]])[[i]]$y * boxh,
-            col = fill, border = border, density = density[i], angle = angle[i]
-        )
-
-        col_text <- "black"
-        text(midx, midy, labels = plabel,
-            cex = cex / length(affected), col = col_text
-        )
-
-        if (ggplot_gen) {
-            p_plot <- p_plot + geom_polygon(aes(
-                x = x + (polylist[[sex]])[[!!i]]$x * boxw,
-                y = y + (polylist[[sex]])[[!!i]]$y * boxh
-            ), fill = fill, color = border)
-            # To add pattern stripes use ggpattern::geom_polygon_pattern
-            # pattern_density = density[i], pattern_angle = angle[i]))
-
-            if (!is.na(tips_names)) {
-                tips <- data_tooltips[data_tooltips$id == id, tips_names]
-                tips <- tips[][c(!is.na(tips))]
-                tips <- paste(colnames(tips), ":", tips, collapse = "<br>")
-            } else {
-                tips <- NA
-            }
-
-            p_plot <- p_plot +
-                suppressWarnings(geom_text(aes(
-                    x = midx, y = midy, label = plabel,
-                    text = tips, color = col_text
-                )))
-        }
-    }
-    if (status == 1) {
-        draw_segment(
-            x - 0.6 * boxw, y + 1.1 * boxh,
-            x + 0.6 * boxw, y - 0.1 * boxh,
-            p_plot, ggplot_gen
-        )
-    }
-    ## Do a black slash per Beth, old line was (x + .6*boxw, y - .1 * boxh,
-    ## col = avail)
-    return(p_plot)
-}  ## drawbox
-
-#' Draw midpoint MZ twin line
-draw_mz_twin_connection <- function(
-    twins, pos, target, i, legh, p, ggplot_gen
-) {
-    ## draw midpoint MZ twin line
-    if (any(twins == 1)) {
-        who2 <- which(twins == 1)
-        temp1 <- (pos[who2] + target[who2]) / 2
-        temp2 <- (pos[who2 + 1] + target[who2]) / 2
-        yy <- rep(i, length(who2)) - legh / 2
-        p <- draw_segment(temp1, yy, temp2, yy, p, ggplot_gen)
-    }
-
-    # Add a question mark for those of unknown zygosity
-    if (any(twins == 3)) {
-        who2 <- which(twins == 3)
-        temp1 <- (pos[who2] + target[who2]) / 2
-        temp2 <- (pos[who2 + 1] + target[who2]) / 2
-        yy <- rep(i, length(who2)) - legh / 2
-        p <- draw_text((temp1 + temp2) / 2, yy, "?", p, ggplot_gen)
-    }
-    p
-}
-
 #' Draw segments for a pedigree
 #'
 #' @param x0 x coordinate of the first point
@@ -304,7 +215,7 @@ draw_segment <- function(
     segments(x0, y0, x1, y1, col = col, lty = lty, lwd = lwd)
     if (ggplot_gen) {
         p <- p + annotate("segment", x = x0, y = y0,
-            xend = x1, yend = y1, color = col, linetype = lty, size = lwd
+            xend = x1, yend = y1, color = col, linetype = lty, linewidth = lwd
         )
     }
     p
@@ -312,7 +223,7 @@ draw_segment <- function(
 
 draw_polygon <- function(
     x, y, p, ggplot_gen = FALSE,
-    fill, border = NULL, density = NULL, angle = 45
+    fill = "grey", border = NULL, density = NULL, angle = 45
 ) {
     polygon(x, y, col = fill, border = border, density = density, angle = angle)
     if (ggplot_gen) {
@@ -338,7 +249,7 @@ draw_text <- function(x, y, label, p, ggplot_gen = FALSE, cex = 1, col = NULL) {
     text(x, y, label, cex = cex, col = col)
     if (ggplot_gen) {
         p <- p + annotate(
-            "text", x = x, y = y, label = label, size = cex, color = col
+            "text", x = x, y = y, label = label, size = cex / 0.3, color = col
         )
     }
     p

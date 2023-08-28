@@ -15,7 +15,9 @@ test_that("pedigree other test", {
     )
 
     ped2df <- as.data.frame(ped2mat)
-    names(ped2df) <- c("family", "indId", "fatherId", "motherId", "gender", "affected", "available")
+    names(ped2df) <- c("family", "indId", "fatherId", "motherId",
+        "gender", "affected", "available"
+    )
     ## 1 2  3 4 5 6 7 8 9 10,11,12,13,14,15,16
     ped2df$disease <- c(NA, NA, 1, 0, 0, 0, 0, 1, 1, 1)
     ped2df$smoker <- c(0, NA, 0, 0, 1, 1, 1, 0, 0, 0)
@@ -24,18 +26,19 @@ test_that("pedigree other test", {
 
     rel_df <- data.frame(indId1 = 8, indId2 = 9, code = 3, family = 1)
     ped <- pedigree(ped2df, rel_df = rel_df)
-    plot(ped, label = ped$ped$smoker, mark = ped$ped$disease)
+    vdiffr::expect_doppelganger("Ped simple affection", ped)
 
-    p <- plot(ped, label = ped$ped$smoker, mark = ped$ped$disease, ggplot_gen = TRUE)
-    p$ggplot
+    lst <- plot(ped, label = "smoker", mark = FALSE, ggplot_gen = TRUE)
+    vdiffr::expect_doppelganger("Ped simple affection ggplot", lst$ggplot)
 
-    load_all()
-    ped <- generate_colors(ped, "smoker", colors_aff = c("#00e6ee", "#c300ff"))
-    ped$scales
+    ped <- generate_colors(ped, add_to_scale = TRUE,
+        col_aff = "smoker", colors_aff = c("#00e6ee", "#c300ff")
+    )
+
     lst <- ped_to_plotdf(ped)
     p <- plot_from_df(lst$df, par_usr = lst$par$par_usr,
         title = "Pedigree", ggplot_gen = TRUE,
         boxw = lst$par$boxw, boxh = lst$par$boxh
     )
-    vdiffr::expect_doppelganger("OtherPed with twin", ped)
+    vdiffr::expect_doppelganger("Ped 2 affections ggplot", p)
 })

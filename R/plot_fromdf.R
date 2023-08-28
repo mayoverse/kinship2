@@ -1,5 +1,5 @@
-#' @importFrom ggplot2 ggplot ggtitle
-#' @importFrom stringr str_split_fixed
+#' @importFrom ggplot2 ggplot ggtitle theme element_blank element_rect
+#' @importFrom stringr str_split_fixed str_split_i
 NULL
 
 #' @include plot_fct.R
@@ -12,7 +12,17 @@ plot_from_df <- function(
     if (!is.null(par_usr)) {
         par(usr = par_usr)
     }
-    p <- ggplot()
+    p <- ggplot() +
+        theme(
+            plot.margin = unit(c(0, 0, 0, 0), "cm"),
+            panel.background = element_rect(fill = "transparent", color = NA),
+            panel.grid.major = element_blank(),
+            panel.grid.minor = element_blank(),
+            axis.ticks = element_blank(),
+            axis.text = element_blank(),
+            axis.title = element_blank()
+        ) +
+        scale_y_reverse()
 
     ## Add title if exists
     if (!is.null(title)) {
@@ -34,11 +44,11 @@ plot_from_df <- function(
 
     for (i in seq_len(dim(boxes)[1])){
         poly <- polylist[[boxes$poly[i]]][[as.numeric(boxes$naff[i])]]
-        draw_polygon(
+        p <- draw_polygon(
             boxes$x0[i] + poly$x * boxw,
             boxes$y0[i] + poly$y * boxh,
-            p, ggplot_gen, boxes$fill[i], boxes$border[i], boxes$density[i],
-            boxes$angle[i]
+            p, ggplot_gen,
+            boxes$fill[i], boxes$border[i], boxes$density[i], boxes$angle[i]
         )
     }
     txt <- df[df$type == "text" & !is.na(df$label), ]

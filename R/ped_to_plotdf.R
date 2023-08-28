@@ -3,7 +3,8 @@ NULL
 
 ped_to_plotdf <- function(
     ped, packed = FALSE, width = 10, align = c(1.5, 2),
-    subregion = NULL, cex = 1, symbolsize = cex, pconnect = 0.5, branch = 0.6, ...
+    subregion = NULL, cex = 1, symbolsize = cex, pconnect = 0.5, branch = 0.6,
+    mark = TRUE, label = NULL, ...
 ) {
 
     famlist <- unique(ped$ped$family)
@@ -20,6 +21,7 @@ ped_to_plotdf <- function(
     }
 
     plot_df <- data.frame(
+        id = character(),
         x0 = numeric(), y0 = numeric(), x1 = numeric(), y1 = numeric(),
         type = character(), fill = character(), border = character(),
         angle = numeric(), density = numeric(), cex = numeric(),
@@ -37,8 +39,6 @@ ped_to_plotdf <- function(
         cex, ped$ped$id, maxlev, xrange, symbolsize, ...
     )
 
-    par_usr <- params_plot$par_usr
-    oldpar <- params_plot$oldpar
     boxw <- params_plot$boxw
     boxh <- params_plot$boxh
     labh <- params_plot$labh
@@ -76,24 +76,29 @@ ped_to_plotdf <- function(
         poly_aff_x <- lapply(poly_aff, "[[", "x")
         poly_aff_y <- lapply(poly_aff, "[[", "y")
         poly_aff_x_mr <- sapply(poly_aff_x, function(x) mean(range(x * boxw)))
-        poly_aff_y_mr <- sapply(poly_aff_x, function(x) mean(range(x * boxw)))
-        p <- data.frame(
+        poly_aff_y_mr <- sapply(poly_aff_y, function(x) mean(range(x * boxw)))
+        ind <- data.frame(
             x0 = pos[idx], y0 = i[idx],
             type = paste(names(polylist)[sex], aff, sep = "_"),
             fill = aff_df[aff_idx, "fill"],
             density = aff_df[aff_idx, "density"],
             angle = aff_df[aff_idx, "angle"],
-            border = bord_df[border_idx, "border"]
+            border = bord_df[border_idx, "border"],
+            id = "polygon"
         )
+        plot_df <- rbind.fill(plot_df, ind)
 
-        label <- data.frame(
-            x0 = pos[idx] + poly_aff_x_mr[sex],
-            y0 = i[idx] +  poly_aff_y_mr[sex],
-            label = ped$ped[id[idx], aff_df[["column_values"]]],
-            fill = "black",
-            type = "text", cex = cex
-        )
-        plot_df <- rbind.fill(plot_df, p, label)
+        if (mark) {
+            mark_df <- data.frame(
+                x0 = pos[idx] + poly_aff_x_mr[sex],
+                y0 = i[idx] +  poly_aff_y_mr[sex],
+                label = ped$ped[id[idx], unique(aff_df[["column_values"]])],
+                fill = "black",
+                type = "text", cex = cex,
+                id = "mark"
+            )
+            plot_df <- rbind.fill(plot_df, mark_df)
+        }
     }
 
     ## Add status
@@ -103,7 +108,8 @@ ped_to_plotdf <- function(
     dead_df <- data.frame(
         x0 = pos[idx_dead] - 0.6 * boxw, y0 = i[idx_dead] + 1.1 * boxh,
         x1 = pos[idx_dead] + 0.6 * boxw, y1 = i[idx_dead] - 0.1 * boxh,
-        type = "segments", fill = "black", cex = cex
+        type = "segments", fill = "black", cex = cex,
+        id = "dead"
     )
 
     plot_df <- rbind.fill(plot_df, dead_df)
@@ -112,9 +118,24 @@ ped_to_plotdf <- function(
     id_df <- data.frame(
         x0 = pos[idx], y0 = i[idx] + boxh + labh * 0.7,
         label = id[idx], fill = "black",
-        type = "text", cex = cex
+        type = "text", cex = cex,
+        id = "id"
     )
     plot_df <- rbind.fill(plot_df, id_df)
+
+
+    ## Add a label if given
+    if (!is.null(label)) {
+        check_columns(ped$ped, label)
+        label <- data.frame(
+            x0 = pos[idx], y0 = i[idx] + boxh + labh * 1.4,
+            label = ped$ped[id[idx], label],
+            fill = "black",
+            type = "text", cex = cex,
+            id = "label"
+        )
+        plot_df <- rbind.fill(plot_df, label)
+    }
 
     ## Add lines between spouses
     spouses <- which(plist$spouse > 0)
@@ -124,7 +145,8 @@ ped_to_plotdf <- function(
     l_spouses <- data.frame(
         x0 = pos_sp1, y0 = l_spouses_i,
         x1 = pos_sp2, y1 = l_spouses_i,
-        type = "segments", fill = "black", cex = cex
+        type = "segments", fill = "black", cex = cex,
+        id = "line_spouses"
     )
     plot_df <- rbind.fill(plot_df, l_spouses)
 
@@ -139,7 +161,8 @@ ped_to_plotdf <- function(
         y0 = l_spouses2_i,
         x1 = pos_sp22 - boxw / 2,
         y1 = l_spouses2_i,
-        type = "segments", fill = "black", cex = cex
+        type = "segments", fill = "black", cex = cex,
+        id = "line_spouses2"
     )
     plot_df <- rbind.fill(plot_df, l_spouses2)
 
@@ -172,7 +195,8 @@ ped_to_plotdf <- function(
             vert <- data.frame(
                 x0 = pos[gen, who], y0 = yy,
                 x1 = target, y1 = yy - legh,
-                type = "segments", fill = "black", cex = cex
+                type = "segments", fill = "black", cex = cex,
+                id = "line_children_vertical"
             )
             plot_df <- rbind.fill(plot_df, vert)
 
@@ -186,7 +210,8 @@ ped_to_plotdf <- function(
                 twin_l <- data.frame(
                     x0 = temp1, y0 = yy,
                     x1 = temp2, y1 = yy,
-                    type = "segments", fill = "black", cex = cex
+                    type = "segments", fill = "black", cex = cex,
+                    id = "line_children_twin1"
                 )
                 plot_df <- rbind.fill(plot_df, twin_l)
             }
@@ -200,7 +225,8 @@ ped_to_plotdf <- function(
                 twin_lab <- data.frame(
                     x0 = (temp1 + temp2) / 2, y0 = yy,
                     label = "?", fill = "black",
-                    type = "text", cex = cex
+                    type = "text", cex = cex,
+                    id = "label_children_twin3"
                 )
                 plot_df <- rbind.fill(plot_df, twin_lab)
             }
@@ -209,7 +235,8 @@ ped_to_plotdf <- function(
             hori <- data.frame(
                 x0 = min(target), y0 = gen - legh,
                 x1 = max(target), y1 = gen - legh,
-                type = "segments", fill = "black", cex = cex
+                type = "segments", fill = "black", cex = cex,
+                id = "line_children_horizontal"
             )
             plot_df <- rbind.fill(plot_df, hori)
 
@@ -230,7 +257,8 @@ ped_to_plotdf <- function(
                 l_child_par <- data.frame(
                     x0 = x1, y0 = y1,
                     x1 = parentx, y1 = (gen - 1) + boxh / 2,
-                    type = "segments", fill = "black", cex = cex
+                    type = "segments", fill = "black", cex = cex,
+                    id = "line_parent_mid"
                 )
             } else {
                 y2 <- (gen - 1) + boxh / 2
@@ -239,7 +267,8 @@ ped_to_plotdf <- function(
                 l_child_par <- data.frame(
                     x0 = c(x1, x1, x2), y0 = c(y1, y1 + ydelta, y2 - ydelta),
                     x1 = c(x1, x2, x2), y1 = c(y1 + ydelta, y2 - ydelta, y2),
-                    type = "segments", fill = "black", cex = cex
+                    type = "segments", fill = "black", cex = cex,
+                    id = "line_parent_mid"
                 )
             }
             plot_df <- rbind.fill(plot_df, l_child_par)
@@ -261,7 +290,8 @@ ped_to_plotdf <- function(
                 arc <- data.frame(
                     x0 = tx[j + 0], y0 = ty[j + 0],
                     x1 = tx[j + 1], y1 = ty[j + 1],
-                    type = "arc", fill = "black", cex = cex
+                    type = "arc", fill = "black", cex = cex,
+                    id = "arc"
                 )
                 plot_df <- rbind.fill(plot_df, arc)
             }
