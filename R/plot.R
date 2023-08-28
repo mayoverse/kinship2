@@ -114,11 +114,19 @@ setMethod("plot", c(x = "Pedigree", y = "missing"),
         packed = TRUE, align = c(1.5, 2), width = 6, psize = par("pin"),
         title = NULL, density = c(-1, 35, 65, 20),
         mar = c(4.1, 1, 4.1, 1), angle = c(90, 65, 40, 0),
-        keep_par = FALSE, subregion = NULL, pconnect = 0.5, ...
+        keep_par = FALSE, subregion = NULL, pconnect = 0.5, family = 1, ...
     ) {
-        lst <- ped_to_plotdf(ped, packed, width, align, subregion,
+        lst <- ped_to_plotdf(x, packed, width, align, subregion,
             cex, symbolsize, pconnect, branch, mark, label, ...
         )
+        famlist <- unique(x$ped$family)
+        if (length(famlist) > 1) {
+            message("Multiple families present, only plotting family ",
+                family
+            )
+            lst <- lst[[family]]
+        }
+
         p <- plot_from_df(lst$df, par_usr = lst$par$par_usr,
             title = title, ggplot_gen = ggplot_gen,
             boxw = lst$par$boxw, boxh = lst$par$boxh
