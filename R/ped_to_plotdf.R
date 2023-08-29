@@ -25,7 +25,8 @@ ped_to_plotdf <- function(
         x0 = numeric(), y0 = numeric(), x1 = numeric(), y1 = numeric(),
         type = character(), fill = character(), border = character(),
         angle = numeric(), density = numeric(), cex = numeric(),
-        label = character(), tips = character()
+        label = character(), tips = character(),
+        adjx = numeric(), adjy = numeric()
     )
     plist <- align(ped, packed = packed, width = width, align = align)
 
@@ -64,7 +65,7 @@ ped_to_plotdf <- function(
     # border mods of each box
     border_mods <- ped$ped[id[idx], unique(bord_df[["column"]])]
     border_idx <- match(border_mods, bord_df[["mods"]])
-    aff <- 1
+
     for (aff in seq_len(n_aff)) {
         aff_df <- all_aff[all_aff$order == aff, ]
         aff_mods <- ped$ped[id[idx], unique(aff_df[["column_mods"]])]
@@ -79,7 +80,7 @@ ped_to_plotdf <- function(
         poly_aff_y_mr <- sapply(poly_aff_y, function(x) mean(range(x * boxw)))
         ind <- data.frame(
             x0 = pos[idx], y0 = i[idx],
-            type = paste(names(polylist)[sex], aff, sep = "_"),
+            type = paste(names(polylist)[sex], n_aff, aff, sep = "_"),
             fill = aff_df[aff_idx, "fill"],
             density = aff_df[aff_idx, "density"],
             angle = aff_df[aff_idx, "angle"],
@@ -300,5 +301,5 @@ ped_to_plotdf <- function(
             }
         }
     }
-    list(df = plot_df, par = params_plot)
+    list(df = plot_df, par_usr = params_plot)
 }

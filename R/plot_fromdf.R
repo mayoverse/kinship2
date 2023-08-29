@@ -1,17 +1,21 @@
 #' @importFrom ggplot2 ggplot ggtitle theme element_blank element_rect
+#' @importFrom ggplot2 scale_y_reverse unit
 #' @importFrom stringr str_split_fixed str_split_i
 NULL
 
 #' @include plot_fct.R
 #' @export
 plot_from_df <- function(
-    df, par_usr = NULL, title = NULL, ggplot_gen = FALSE, boxw = 1,
-    boxh = 1
+    df, usr = NULL, title = NULL, ggplot_gen = FALSE, boxw = 1,
+    boxh = 1, add_to_existing = FALSE
 ) {
-    frame()
-    if (!is.null(par_usr)) {
-        par(usr = par_usr)
+    if (!add_to_existing) {
+        frame()
+        if (!is.null(usr)) {
+            par(usr = usr)
+        }
     }
+
     p <- ggplot() +
         theme(
             plot.margin = unit(c(0, 0, 0, 0), "cm"),
@@ -30,20 +34,19 @@ plot_from_df <- function(
         p <- p + ggtitle(title)
     }
 
-    naff <- max(as.numeric(str_split_i(df$type, "_", 2)), na.rm = TRUE)
+    max_aff <- max(as.numeric(str_split_i(df$type, "_", 2)), na.rm = TRUE) 
 
     ## Add boxes
-    polylist <- polygons(naff)
-    all_types <- unlist(lapply(names(polylist),
-        paste, seq_len(naff), sep = "_"
-    ))
+    poly_n <- lapply(seq_len(max_aff), polygons)
+    all_types <- apply(expand.grid(
+        names(polygons(1)), seq_len(max_aff), seq_len(max_aff)
+    ), 1, paste, collapse = "_")
 
     boxes <- df[df$type %in% all_types, ]
-    boxes[c("poly", "naff")] <- str_split_fixed(boxes$type, "_", 2)
+    boxes[c("poly", "polydiv", "naff")] <- str_split_fixed(boxes$type, "_", 3)
     boxes$angle[boxes$angle == "NA"] <- 45
-
     for (i in seq_len(dim(boxes)[1])){
-        poly <- polylist[[boxes$poly[i]]][[as.numeric(boxes$naff[i])]]
+        poly <- poly_n[[as.numeric(boxes$polydiv[i])]][[boxes$poly[i]]][[as.numeric(boxes$naff[i])]]
         p <- draw_polygon(
             boxes$x0[i] + poly$x * boxw,
             boxes$y0[i] + poly$y * boxh,
@@ -54,7 +57,7 @@ plot_from_df <- function(
     txt <- df[df$type == "text" & !is.na(df$label), ]
     p <- draw_text(
         txt$x0, txt$y0, txt$label,
-        p, ggplot_gen, txt$cex, txt$fill
+        p, ggplot_gen, txt$cex, txt$fill, txt$adjx, txt$adjy
     )
 
     seg <- df[df$type == "segments", ]
@@ -73,5 +76,5 @@ plot_from_df <- function(
         }
     }
 
-    p
+    invisible(p)
 }

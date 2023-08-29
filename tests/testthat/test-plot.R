@@ -42,3 +42,16 @@ test_that("pedigree other test", {
     )
     vdiffr::expect_doppelganger("Ped 2 affections ggplot", p)
 })
+
+test_that("pedigree fails to line up", {
+    # Here is a case where the levels fail to line up properly
+    data(sampleped)
+    df1 <- sampleped[sampleped$family == "1", ]
+    ped1 <- pedigree(df1)
+    vdiffr::expect_doppelganger("ped1", plot(ped1))
+
+    # With reordering it's better
+    df1reord <- df1[c(35:41, 1:34), ]
+    ped1reord <- pedigree(df1reord)
+    vdiffr::expect_doppelganger("ped1reorder", plot(ped1reord))
+})

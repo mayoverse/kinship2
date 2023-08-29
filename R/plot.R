@@ -121,20 +121,19 @@ setMethod("plot", c(x = "Pedigree", y = "missing"),
         )
         famlist <- unique(x$ped$family)
         if (length(famlist) > 1) {
-            message("Multiple families present, only plotting family ",
+            message("Multiple families present, only plotting family",
                 family
             )
             lst <- lst[[family]]
         }
-
-        p <- plot_from_df(lst$df, par_usr = lst$par$par_usr,
+        p <- plot_from_df(lst$df, usr = lst$par_usr$usr,
             title = title, ggplot_gen = ggplot_gen,
-            boxw = lst$par$boxw, boxh = lst$par$boxh
+            boxw = lst$par_usr$boxw, boxh = lst$par_usr$boxh
         )
         if (ggplot_gen) {
-            invisible(list(df = lst$df, par = lst$par, ggplot = p))
+            invisible(list(df = lst$df, par_usr = lst$par_usr, ggplot = p))
         } else {
-            invisible(list(df = lst$df, par = lst$par))
+            invisible(list(df = lst$df, par_usr = lst$par_usr))
         }
     }
 )

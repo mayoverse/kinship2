@@ -245,8 +245,10 @@ draw_polygon <- function(
 #' @return Plot the text or add it to a ggplot object
 #'
 #' @export
-draw_text <- function(x, y, label, p, ggplot_gen = FALSE, cex = 1, col = NULL) {
-    text(x, y, label, cex = cex, col = col)
+draw_text <- function(x, y, label, p, ggplot_gen = FALSE,
+    cex = 1, col = NULL, adjx = 0, adjy = 0
+) {
+    text(x, y, label, cex = cex, col = col, adj = c(adjx, adjy))
     if (ggplot_gen) {
         p <- p + annotate(
             "text", x = x, y = y, label = label, size = cex / 0.3, color = col
@@ -314,10 +316,10 @@ set_plot_area <- function(cex, id, maxlev, xrange, symbolsize, ...) {
     labh <- stemp2 / vscale  # height of a text string
     # how tall are the 'legs' up from a child
     legh <- min(1 / 4, boxh * 1.5)
-    par_usr <- c(xrange[1] - boxw / 2, xrange[2] + boxw / 2,
+    usr <- c(xrange[1] - boxw / 2, xrange[2] + boxw / 2,
         maxlev + boxh + stemp3 + stemp2 / 2, 1
     )
-    list(par_usr = par_usr, old_par = old_par, boxw = boxw,
+    list(usr = usr, old_par = old_par, boxw = boxw,
         boxh = boxh, labh = labh, legh = legh
     )
 }
