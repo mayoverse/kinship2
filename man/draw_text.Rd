@@ -4,7 +4,7 @@
 \alias{draw_text}
 \title{Draw text for a pedigree}
 \usage{
-draw_text(x, y, label, p, ggplot_gen, cex = 1)
+draw_text(x, y, label, p, ggplot_gen = FALSE, cex = 1, col = NULL)
 }
 \arguments{
 \item{x}{x coordinate}

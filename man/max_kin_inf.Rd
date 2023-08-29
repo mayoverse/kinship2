@@ -39,8 +39,8 @@ Compute the kinship between the informative individuals and
 all the others.
 }
 \examples{
-data(sample.ped)
-df <- max_kin_inf(sample.ped, informative = 'Av/Af')
+data(sampleped)
+df <- max_kin_inf(sampleped, informative = 'Av/Af')
 summary(df$kin)
 
 }

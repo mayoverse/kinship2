@@ -75,8 +75,8 @@ This is an internal routine, used almost exclusively by
 the computation.
 }
 \examples{
-data(sample.ped)
-ped <- with(sample.ped, pedigree(id, father, mother, sex, affected))
+data(sampleped)
+ped <- with(sampleped, pedigree(id, father, mother, sex, affected))
 align(ped)
 
 }

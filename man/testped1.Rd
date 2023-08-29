@@ -4,7 +4,7 @@
 \docType{data}
 \title{ testped1}
 \description{
-  Sample pedigree 
+  samplepedigree 
 }
 \usage{data(testped1)}
 \format{

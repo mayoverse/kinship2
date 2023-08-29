@@ -53,8 +53,8 @@ Compute how far over we have to slide the right tree.
 Now merge the two trees. Start at the top level and work down.
 }
 \examples{
-data(sample.ped)
-ped <- with(sample.ped, pedigree(id, father, mother, sex, affected))
+data(sampleped)
+ped <- with(sampleped, pedigree(id, father, mother, sex, affected))
 align(ped)
 
 }

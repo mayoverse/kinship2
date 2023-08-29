@@ -67,8 +67,8 @@ in which case we add the data from this level onto theirs.
 The third is when below is narrower, for instance an only child.
 }
 \examples{
-data(sample.ped)
-ped <- with(sample.ped, pedigree(id, father, mother, sex, affected))
+data(sampleped)
+ped <- with(sampleped, pedigree(id, father, mother, sex, affected))
 align(ped)
 
 }

@@ -45,8 +45,8 @@ onto rval. The rule thus is to not add any 1 element tree whose value
 (which must be `x[i]` is already in the rval structure for this level.
 }
 \examples{
-data(sample.ped)
-ped <- with(sample.ped, pedigree(id, father, mother, sex, affected))
+data(sampleped)
+ped <- with(sampleped, pedigree(id, father, mother, sex, affected))
 align(ped)
 
 }

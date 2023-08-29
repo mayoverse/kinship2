@@ -24,7 +24,7 @@ Find all the descendants of a particular list of individuals
 given a pedigree
 }
 \examples{
-data(sampleped)
+data("sampleped")
 ped <- pedigree(sampleped)
 descendants(c("1_101", "2_208"), ped)
 }

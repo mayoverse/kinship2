@@ -4,16 +4,16 @@
 \alias{draw_arc}
 \title{Draw arcs for multiple instances of a subject}
 \usage{
-draw_arc(x, y, p, ggplot_gen = FALSE)
+draw_arc(x0, y0, x1, y1, p, ggplot_gen = FALSE, cex = 1, col = "black")
 }
 \arguments{
-\item{x}{x coordinate}
-
-\item{y}{y coordinate}
-
 \item{p}{ggplot object}
 
 \item{ggplot_gen}{logical, if TRUE add the arcs to the ggplot object}
+
+\item{x}{x coordinate}
+
+\item{y}{y coordinate}
 }
 \value{
 Plot the arcs or add it to a ggplot object

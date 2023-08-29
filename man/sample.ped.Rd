@@ -1,21 +1,21 @@
 %-$Author: sinnwell $
 %- $Date: 2009/11/13 21:33:47 $
-%- $Header: /people/biostat3/sinnwell/genet/rpack/PedShrink/RCS/sample.ped.Rd,v 1.1 2009/11/13 21:33:47 sinnwell Exp $
+%- $Header: /people/biostat3/sinnwell/genet/rpack/PedShrink/RCS/sampleped.Rd,v 1.1 2009/11/13 21:33:47 sinnwell Exp $
 %- $Locker:  $
 % 
-% $Log: sample.ped.Rd,v $
+% $Log: sampleped.Rd,v $
 % Revision 1.1  2009/11/13 21:33:47  sinnwell
 % Initial revision
 %
 % 
-\name{sample.ped}
-\alias{sample.ped}
+\name{sampleped}
+\alias{sampleped}
 \docType{data}
 \title{ Two example pedigrees }
 \description{
   Two pedigrees of different size for testing pedigree operations
 }
-\usage{data(sample.ped)}
+\usage{data(sampleped)}
 \format{
   A data frame with 55 observations on the following 7 variables.
   \describe{
@@ -30,6 +30,6 @@
 }
 
 \examples{
-data(sample.ped)
+data(sampleped)
 }
 \keyword{datasets}

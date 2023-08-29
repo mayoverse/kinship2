@@ -6,9 +6,9 @@
 \usage{
 \S4method{plot}{Pedigree,missing}(
   x,
-  mark = NA,
-  label = NA,
-  tips_names = NA,
+  mark = TRUE,
+  label = NULL,
+  tips_names = NULL,
   fill = "grey",
   border = "black",
   ggplot_gen = FALSE,
@@ -24,8 +24,9 @@
   mar = c(4.1, 1, 4.1, 1),
   angle = c(90, 65, 40, 0),
   keep_par = FALSE,
-  subregion,
+  subregion = NULL,
   pconnect = 0.5,
+  family = 1,
   ...
 )
 }
@@ -137,9 +138,9 @@ importance of sib-parent and spouse-spouse closeness.
 }
 
 \examples{
-data(sample.ped)
+data(sampleped)
 
-pedAll <- with(sample.ped, pedigree(id, father, mother,
+pedAll <- with(sampleped, pedigree(id, father, mother,
   sex,
   affected = cbind(affected, avail),
   famid = ped

@@ -6,7 +6,7 @@
 \usage{
 pedigree(
   ped_df = data.frame(id = character(), dadid = character(), momid = character(), sex =
-    numeric(), family = character()),
+    numeric(), family = character(), available = numeric(), affected = numeric()),
   rel_df = data.frame(id1 = character(), id2 = character(), code = numeric(), family =
     character()),
   cols_ren_ped = list(indId = "id", fatherId = "dadid", motherId = "momid", gender =

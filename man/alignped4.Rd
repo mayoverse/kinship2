@@ -68,8 +68,8 @@ each subesquent one must be at least 1 unit to the right, and the final point
 must be \\eqn{\\le} the max width.
 }
 \examples{
-data(sample.ped)
-ped <- with(sample.ped, pedigree(id, father, mother, sex, affected))
+data(sampleped)
+ped <- with(sampleped, pedigree(id, father, mother, sex, affected))
 align(ped)
 
 }
