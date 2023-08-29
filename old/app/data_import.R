@@ -30,7 +30,7 @@ usethis::use_package("shinyWidgets")
 #'     read_data('path/to/my/file.txt', sep=',', header=FALSE)
 #' }
 #' @keywords data
-#' @export read_data
+#' @export
 read_data <- function(file, sep = ";", quote = "'", header = TRUE, df_name = NA,
     stringsAsFactors = FALSE, to_char = TRUE) {
     print("Bal: read_data")
@@ -102,7 +102,7 @@ read_data <- function(file, sep = ";", quote = "'", header = TRUE, df_name = NA,
 #'     get_dataframe('path/to/my/file.txt')
 #' }
 #' @keywords dataframe
-#' @export get_dataframe
+#' @export
 get_dataframe <- function(file) {
     print("Bal: get_dataframe")
     shiny::req(file)
@@ -143,7 +143,7 @@ get_dataframe <- function(file) {
 #'     data_import_demo()
 #' }
 #' @keywords data
-#' @export data_import_ui
+#' @export
 data_import_ui <- function(id) {
     ns <- shiny::NS(id)
     shiny::tagList(
@@ -174,7 +174,7 @@ data_import_ui <- function(id) {
 #'     data_import_demo()
 #' }
 #' @keywords data
-#' @export data_import_server
+#' @export
 data_import_server <- function(id, label = "Select data file",
     max_request_size = 30) {
     options(shiny.maxRequestSize = max_request_size * 1024^2)

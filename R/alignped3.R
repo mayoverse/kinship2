@@ -46,13 +46,13 @@
 #' in the row above, are this subject's parents.
 #'
 #' @examples
-#' data(sample.ped)
-#' ped <- with(sample.ped, pedigree(id, father, mother, sex, affected))
+#' data(sampleped)
+#' ped <- with(sampleped, pedigree(id, father, mother, sex, affected))
 #' align(ped)
 #'
 #' @seealso `plot.pedigree`, `auto_hint`
 #' @keywords dplot
-#' @export alignped3
+#' @export
 alignped3 <- function(x1, x2, packed, space = 1) {
     maxcol <- max(x1$n + x2$n)
     maxlev <- length(x1$n)

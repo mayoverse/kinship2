@@ -8,11 +8,11 @@ test_that("makefamid works", {
 })
 
 rel_df <- c(
-        213, 214, 1, 3,
-        210, 211, 2, 3,
-        140, 141, 3, 1,
-        133, 134, 4, 1
-    )
+    213, 214, 1, 3,
+    210, 211, 2, 3,
+    140, 141, 3, 1,
+    133, 134, 4, 1
+)
 
 rel_df <- matrix(rel_df, ncol = 4, byrow = TRUE)
 dimnames(rel_df) <- list(NULL, c("id1", "id2", "code", "family"))
@@ -20,7 +20,7 @@ rel_df <- data.frame(rel_df)
 
 test_that("makefamid works with pedigree", {
     ## Simple case with no family id
-    data(sampleped)
+    data("sampleped")
     ped <- pedigree(sampleped[-1], rel_df = rel_df[c(1:3)])
     ped <- makefamid(ped)
 
@@ -32,7 +32,7 @@ test_that("makefamid works with pedigree", {
     expect_equal(ped$rel$id1, c("2_213", "2_210", "1_140", "1_133"))
 
     ## Updating already present family id
-    data(sampleped)
+    data("sampleped")
     sampleped$family[sampleped$family == "2"] <- 3
     ped <- pedigree(sampleped, rel_df = rel_df)
     ped <- makefamid(ped)
@@ -41,7 +41,7 @@ test_that("makefamid works with pedigree", {
 })
 
 test_that("Family check works", {
-    data(sampleped)
+    data("sampleped")
     ped <- pedigree(sampleped)
 
     ## check them giving separate ped ids

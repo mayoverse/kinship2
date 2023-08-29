@@ -46,26 +46,26 @@
 #'
 #' @examples
 #'
-#' # use 2 sample peds
-#' data(sample.ped)
-#' pedAll <- with(sample.ped, pedigree(id, father, mother, sex,
+#' # use 2 samplepeds
+#' data(sampleped)
+#' pedAll <- with(sampleped, pedigree(id, father, mother, sex,
 #'   affected = cbind(affected, avail), famid = ped
 #' ))
 #'
 #' ## check them giving separate ped ids
-#' fcheck.sep <- with(sample.ped, familycheck(ped, id, father, mother))
+#' fcheck.sep <- with(sampleped, familycheck(ped, id, father, mother))
 #' fcheck.sep
 #'
 #' ## check assigning them same ped id
-#' fcheck.combined <- with(sample.ped, familycheck(rep(1, nrow(sample.ped)),
+#' fcheck.combined <- with(sampleped, familycheck(rep(1, nrow(sampleped)),
 #' id, father, mother))
 #' fcheck.combined
 #'
 #' # make person 120's father be her son.
-#' sample.ped[20, 3] <- 131
+#' sampleped[20, 3] <- 131
 #' fcheck1.bad <- try(
 #'   {
-#'     with(sample.ped, familycheck(ped, id, father, mother))
+#'     with(sampleped, familycheck(ped, id, father, mother))
 #'   },
 #'   silent = FALSE
 #' )

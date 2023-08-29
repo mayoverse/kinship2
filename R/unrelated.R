@@ -27,8 +27,8 @@
 #' @return A vector of the ids of subjects that are unrelated.
 
 #' @examples
-#' data(sample.ped)
-#' fam1 <- sample.ped[sample.ped$ped == 1, ]
+#' data(sampleped)
+#' fam1 <- sampleped[sampleped$ped == 1, ]
 #'
 #'
 #' ped1 <- pedigree(
@@ -49,7 +49,7 @@
 #' ## [1] '113' '133' '141' '109'
 #'
 #'
-#' fam2 <- sample.ped[sample.ped$ped == 2, ]
+#' fam2 <- sampleped[sampleped$ped == 2, ]
 #'
 #' ped2 <- pedigree(
 #'   fam2$id, fam2$father, fam2$mother,
@@ -69,7 +69,7 @@
 #' id2
 #'
 #' @seealso `kinship`, `pedigree`
-#' @export unrelated
+#' @export
 unrelated <- function(ped, avail = ped$ped$avail) {
     # Requires: kinship function
 

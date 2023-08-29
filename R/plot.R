@@ -89,9 +89,9 @@ NULL
 #' A copy of the call that generated the plot
 #'
 #' @examples
-#' data(sample.ped)
+#' data(sampleped)
 #'
-#' pedAll <- with(sample.ped, pedigree(id, father, mother,
+#' pedAll <- with(sampleped, pedigree(id, father, mother,
 #'   sex,
 #'   affected = cbind(affected, avail),
 #'   famid = ped

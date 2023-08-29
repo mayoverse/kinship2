@@ -31,7 +31,7 @@
 #' @include bit_size.R
 #' @include utils.R
 #' @include find_unavailable.R
-#' @export find_avail_affected
+#' @export
 find_avail_affected <- function(ped, avail = ped$ped$avail, affstatus = NA) {
     ped_df <- ped$ped
     ped_df$avail <- avail

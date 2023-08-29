@@ -60,13 +60,13 @@ usethis::use_package("quadprog")
 #' @return newpos
 #'
 #' @examples
-#' data(sample.ped)
-#' ped <- with(sample.ped, pedigree(id, father, mother, sex, affected))
+#' data(sampleped)
+#' ped <- with(sampleped, pedigree(id, father, mother, sex, affected))
 #' align(ped)
 #'
 #' @seealso `plot.pedigree`, `auto_hint`
 #' @keywords dplot
-#' @export alignped4
+#' @export
 alignped4 <- function(rval, spouse, level, width, align) {
     ## Doc: alignped4 -part1, spacing across page
     if (is.logical(align))

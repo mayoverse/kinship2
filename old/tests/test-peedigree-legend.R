@@ -1,6 +1,6 @@
 test_that("pedigree.legend works", {
-    data("sample.ped")
-    ped <- with(sample.ped, pedigree(id, father, mother, sex, affected = cbind(affected,
+    data("sampleped")
+    ped <- with(sampleped, pedigree(id, father, mother, sex, affected = cbind(affected,
         avail)))
     withr::local_options(width = 50)
 
@@ -15,8 +15,8 @@ test_that("pedigree.legend works", {
 })
 
 test_that("legendPlot works", {
-    data("sample.ped")
-    ped <- with(sample.ped, pedigree(id, father, mother, sex, affected = cbind(affected,
+    data("sampleped")
+    ped <- with(sampleped, pedigree(id, father, mother, sex, affected = cbind(affected,
         avail)))
     expect_doppelganger("Legend plot", {
         legendPlot(ped, affected.label = c("cancer", "available"))

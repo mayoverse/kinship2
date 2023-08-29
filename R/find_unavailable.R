@@ -38,7 +38,7 @@
 #'
 #' @seealso `pedigree.shrink`
 #' @include utils.R
-#' @export find_unavailable
+#' @export
 find_unavailable <- function(ped, avail = ped$ped$avail) {
     ## find id within pedigree anyone who is not available and
     ## does not have an available descendant
@@ -76,7 +76,7 @@ find_unavailable <- function(ped, avail = ped$ped$avail) {
 
     tmp_ped <- exclude_stray_marryin(tmp_ped$id, tmp_ped$dadid, tmp_ped$momid)
 
-    df$id[is.na(match(df$id, tmp_ped$id))]
+    ped$ped$id[is.na(match(ped$ped$id, tmp_ped$id))]
 }
 
 exclude_stray_marryin <- function(id, dadid, momid) {

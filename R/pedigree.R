@@ -16,7 +16,7 @@
 #' @param ... Other arguments to pass to the function `generate_colors`.
 #'
 #' @return A Pedigree object.
-#' @export pedigree
+#' @export
 pedigree <- function(
     ped_df = data.frame(
         id = character(),
@@ -101,15 +101,15 @@ pedigree <- function(
     }
     if (any(!is.na(ped_df$error))) {
         warning("The pedigree informations are not valid.")
-        print("Here is the normalised pedigree informations with the errors")
+        message("Here is the normalised pedigree informations with the errors")
         return(ped_df)
     }
 
     if (any(!is.na(rel_df$error))) {
         warning("The relationship informations are not valid.")
-        print(paste0("Here is the normalised relationship informations",
+        message("Here is the normalised relationship informations",
             "with the errors"
-        ))
+        )
         return(rel_df)
     }
     ## Create the object

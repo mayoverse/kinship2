@@ -55,13 +55,13 @@
 #' The latter has marriages removed as they are processed.
 #'
 #' @examples
-#' data(sample.ped)
-#' ped <- with(sample.ped, pedigree(id, father, mother, sex, affected))
+#' data(sampleped)
+#' ped <- with(sampleped, pedigree(id, father, mother, sex, affected))
 #' align(ped)
 #'
 #' @seealso `plot.pedigree`, `auto_hint`
 #' @keywords dplot
-#' @export alignped1
+#' @export
 alignped1 <- function(x, dad, mom, level, horder, packed, spouselist) {
     # Set a few constants
     maxlev <- max(level)

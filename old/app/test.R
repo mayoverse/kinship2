@@ -31,8 +31,8 @@ object$ped[1, "id"] <- "12"
 summary(object)
 df <- norm_ped(df)
 
-data(sample.ped)
-df <- sample.ped
+data(sampleped)
+df <- sampleped
 df$avail
 df[, c("indId", "fatherId", "motherId",
     "gender", "available")] <- df[, c("id", "father", "mother",

@@ -12,7 +12,7 @@ test_that("pedigree works", {
 
 test_that("pedigree from sampleped and affectation", {
     # Here is a case where the levels fail to line up properly
-    data(sampleped)
+    data("sampleped")
     df1 <- sampleped[sampleped$family == 1, ]
     colnames(df1)
     ped1 <- pedigree(df1, cols_ren_ped = list(
@@ -86,7 +86,7 @@ test_that("pedigree subscripting", {
 })
 
 test_that("pedigree to dataframe", {
-    data(sampleped)
+    data("sampleped")
     ped <- pedigree(sampleped)
     expect_equal(dim(as.data.frame(ped)), c(55, 16))
 })

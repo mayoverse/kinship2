@@ -90,8 +90,8 @@ ancestor <- function(idx, momx, dadx) {
 #' 0 = not a twin
 #'
 #' @examples
-#' data(sample.ped)
-#' ped <- with(sample.ped, pedigree(id, father, mother, sex, affected))
+#' data(sampleped)
+#' ped <- with(sampleped, pedigree(id, father, mother, sex, affected))
 #' align(ped)
 #'
 #' @seealso `plot.pedigree`, `auto_hint`

@@ -25,7 +25,7 @@ test_that("fixParents works with character", {
 })
 
 test_that("fixParents works with sex errors", {
-    data(sampleped)
+    data("sampleped")
     datped2 <- sampleped[sampleped$family %in% 2, ]
     datped2[datped2$id %in% 203, "sex"] <- 2
     datped2 <- datped2[-which(datped2$id %in% 209), ]
@@ -43,7 +43,7 @@ test_that("fixParents works with sex errors", {
 
 
 test_that("fixParents_df works with sex errors and with family", {
-    data(sampleped)
+    data("sampleped")
     datped2 <- sampleped[sampleped$family %in% 2, ]
     # Set individual 203 as female
     datped2[datped2$id %in% 203, "sex"] <- 2

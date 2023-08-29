@@ -22,7 +22,7 @@ usethis::use_package("R3port")
 #'
 #' @param id A string.
 #' @returns A Shiny UI.
-#' @export plot_download_ui
+#' @export
 plot_download_ui <- function(id) {
     ns <- shiny::NS(id)
     shiny::tagList(shiny::uiOutput(ns("btn_dwld")))
@@ -43,7 +43,7 @@ plot_download_ui <- function(id) {
 #' @param id A string.
 #' @param my_plot Reactive object containing the plot.
 #' @returns A Shiny UI.
-#' @export plot_download_server
+#' @export
 plot_download_server <- function(id, my_plot, filename = "saveplot",
     label = "Download", width = 500, height = 500, ext = "png") {
     stopifnot(shiny::is.reactive(my_plot))

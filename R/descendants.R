@@ -13,7 +13,7 @@
 #' List of all the descendants of the individuals in idlist.
 #' The list is not ordered.
 #' @examples
-#' data(sampleped)
+#' data("sampleped")
 #' ped <- pedigree(sampleped)
 #' descendants(c("1_101", "2_208"), ped)
 #' @include pedigreeClass.R

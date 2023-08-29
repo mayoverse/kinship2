@@ -1,5 +1,5 @@
 test_that("fixParents_df works with sex errors and with family", {
-    data(sampleped)
+    data("sampleped")
     datped2 <- sampleped[sampleped$family %in% 2, ]
     ## this gets an error
     ped <- pedigree(datped2)

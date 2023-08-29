@@ -2,15 +2,6 @@
 
     Code
       kinship(ped2)
-    Message <simpleMessage>
-      The following `from` values were not present in `x`: 1, 0
-      The following `from` values were not present in `x`: Affected are None, Healthy are None
-    Output
-      [1] "Bal: generate_colors, fill_scale"
-      [1] "Bal: generate_colors: keep_full_scale = FALSE"
-    Message <simpleMessage>
-      The following `from` values were not present in `x`: FALSE, TRUE
-      The following `from` values were not present in `x`: FALSE, TRUE
     Output
              1     2      3      4     5     6       7       8       9      10
       1  0.500 0.000 0.2500 0.2500 0.000 0.000 0.12500 0.12500 0.12500 0.12500
@@ -28,15 +19,6 @@
 
     Code
       kinship(ped2, chr = "X")
-    Message <simpleMessage>
-      The following `from` values were not present in `x`: 1, 0
-      The following `from` values were not present in `x`: Affected are None, Healthy are None
-    Output
-      [1] "Bal: generate_colors, fill_scale"
-      [1] "Bal: generate_colors: keep_full_scale = FALSE"
-    Message <simpleMessage>
-      The following `from` values were not present in `x`: FALSE, TRUE
-      The following `from` values were not present in `x`: FALSE, TRUE
     Output
             1    2     3      4     5 6      7      8      9     10
       1  1.00 0.00 0.000 0.5000 0.000 0 0.0000 0.5000 0.5000 0.2500

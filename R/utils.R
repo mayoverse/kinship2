@@ -15,7 +15,7 @@
 #' var <- runif(10)
 #' var_to_factor(var, threshold = 0.5)
 #'
-#' @export var_to_factor
+#' @export
 var_to_factor <- function(var, threshold = NULL) {
     if (!is.numeric(var)) {
         var_fact <- addNA(droplevels(as.factor(var)), ifany = TRUE)
@@ -57,7 +57,7 @@ var_to_factor <- function(var, threshold = NULL) {
 #' df_cont_table(df, 'var1', 0.5, 'var2', c(0.25, 0.5, 0.75))
 #' df_cont_table(df, 'var1', 0.5)
 #'
-#' @export df_cont_table
+#' @export
 df_cont_table <- function(
     df, var1, threshold1 = NULL, var2 = NULL, threshold2 = NULL) {
     if (!var1 %in% colnames(df)) {
@@ -119,7 +119,7 @@ NULL
 #'check_columns(df, c('ColN1', 'ColN2'), c('ColU1', 'ColU2'),
 #'   c('ColTU1', 'ColTU2'))
 #'
-#' @export check_columns
+#' @export
 check_columns <- function(
     df, cols_needed = NULL, cols_used = NULL, cols_to_use = NULL,
     others_cols = FALSE, cols_used_init = FALSE, cols_to_use_init = FALSE,
@@ -181,7 +181,7 @@ check_columns <- function(
         }
         all_cols_checked <- c(cols_needed, cols_to_use, cols_used)
         cols_not_recognize <- cols_p[!cols_p %in% all_cols_checked]
-        if (length(cols_not_recognize) > 0 & verbose) {
+        if (length(cols_not_recognize) > 0 && verbose) {
             message(paste(
                 "Columns :",
                 paste0(cols_not_recognize, collapse = ", "),
@@ -213,7 +213,7 @@ NULL
 #' check_num_na(var)
 #' check_num_na(var, na_as_num = FALSE)
 #'
-#' @export check_num_na
+#' @export
 check_num_na <- function(var, na_as_num = TRUE) {
     # Should the NA value considered as numeric values
     is_num <- str_detect(var, "^\\-*[:digit:]+\\.*[:digit:]*$")

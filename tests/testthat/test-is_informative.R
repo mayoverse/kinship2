@@ -1,5 +1,5 @@
 test_that("is_informative works", {
-    data(sampleped)
+    data("sampleped")
 
     # Test for character
     id <- as.character(sampleped$id)
@@ -48,7 +48,7 @@ test_that("is_informative works", {
 })
 
 test_that("is_informative works with Pedigree", {
-    data(sampleped)
+    data("sampleped")
 
     ped <- pedigree(sampleped[1:7])
     ped <- generate_colors(ped, col_aff = "affected",

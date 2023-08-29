@@ -95,10 +95,10 @@ plot_ped_server <- function(id, ped, title) {
 
 #### Demo function of the module #### ----------
 plot_ped_demo <- function() {
-    data(sample.ped)
-    colnames(sample.ped) <- c("family", "id", "dadid", "momid",
+    data(sampleped)
+    colnames(sampleped) <- c("family", "id", "dadid", "momid",
         "sex", "affected", "avail")
-    df <- sample.ped[sample.ped$family == 1, ]
+    df <- sampleped[sampleped$family == 1, ]
     df <- generate_aff_inds(df, "affected", threshold = 0, sup_thres_aff = TRUE)
     df <- generate_colors(df, "affected")$df
     ui <- fluidPage(plot_ped_ui("ped"), plot_download_ui("saveped"))

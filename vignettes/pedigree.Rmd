@@ -34,15 +34,15 @@ Basic Usage
 ## Example Data
 Two datasets are provided within the kinship2 package: 
 + minnbreast: 17 families from a breast cancer study
-+ sample.ped: two sample pedigrees, with 41 and 14 subjects
++ sampleped: two samplepedigrees, with 41 and 14 subjects
 
 
-This vignette uses the two pedigrees in ~sample.ped~. For more information on these
-datasets, see help(minnbreast) and help(sample.ped).
+This vignette uses the two pedigrees in ~sampleped~. For more information on these
+datasets, see help(minnbreast) and help(sampleped).
 
 ## Pedigree
 
-First, we load ~sample.ped~ and look at some of the values 
+First, we load ~sampleped~ and look at some of the values 
 in the dataset, and create a *pedigreeList* object using the 
 *pedigree()* function.  We use the required arguments 
 $id$, $father$, $mother$, and $sex$.  The $famid$ argument is 
@@ -50,12 +50,12 @@ required to make a {\em pedigreeList} object, but not for a single
 *pedigree}* object. 
 
 ```{r, pedList}
-data(sample.ped)
-sample.ped[1:10, ]
+data(sampleped)
+sampleped[1:10, ]
 pedAll <- pedigree(
-  id = sample.ped$id,
-  dadid = sample.ped$father, momid = sample.ped$mother,
-  sex = sample.ped$sex, famid = sample.ped$ped
+  id = sampleped$id,
+  dadid = sampleped$father, momid = sampleped$mother,
+  sex = sampleped$sex, famid = sampleped$ped
 )
 print(pedAll)
 ``` 
@@ -91,7 +91,7 @@ the specified subject (in this case, $209$). Reassign this code to ~datped22~ to
 the specified subject entirely.
 
 ```{r, datped2}
-datped2 <- sample.ped[sample.ped$ped %in% 2, ]
+datped2 <- sampleped[sampleped$ped %in% 2, ]
 datped2[datped2$id %in% 203, "sex"] <- 2
 datped2 <- datped2[-which(datped2$id %in% 209), ]
 ```
@@ -155,9 +155,9 @@ are the ids of the subject.
 
 ```{r, kinAll}
 pedAll <- pedigree(
-  id = sample.ped$id,
-  dadid = sample.ped$father, momid = sample.ped$mother,
-  sex = sample.ped$sex, famid = sample.ped$ped
+  id = sampleped$id,
+  dadid = sampleped$father, momid = sampleped$mother,
+  sex = sampleped$sex, famid = sampleped$ped
 )
 kinAll <- kinship(pedAll)
 kinAll[1:14, 1:14]
@@ -169,12 +169,12 @@ kinAll[42:46, 42:46]
 
 Specifying twin relationships in a pedigreeList object is complicated by the fact that the user must specify the family id to which the ~id1~ and ~id2~ belong. We show below the relation matrix
 requires the family id to be in the last column, with the column names as done below, to make the plotting and kinship matrices to show up with the monozygotic twins correctly. We show how to
-specify monozygosity for subjects 206 and 207 in sample pedigree 2, and subjects 125 and 126 in pedigree 1. We check it by looking at the kinship matrix for these pairs, which are correctly at $0.5$.
+specify monozygosity for subjects 206 and 207 in samplepedigree 2, and subjects 125 and 126 in pedigree 1. We check it by looking at the kinship matrix for these pairs, which are correctly at $0.5$.
 
 ```{r, kintwins}
 reltwins <- rbind(c(206, 207, 1, 2), c(125, 126, 1, 1))
 colnames(reltwins) <- c("id1", "id2", "code", "famid")
-pedAll <- with(sample.ped, pedigree(
+pedAll <- with(sampleped, pedigree(
   id = id, dadid = father, momid = mother,
   sex = sex, famid = ped, relation = reltwins
 ))
@@ -191,17 +191,17 @@ to handle such marry-ins for plotting.
 Optional Pedigree Features
 ===============================
 
-We use pedigree 2 from $sample.ped$ to sequentially 
+We use pedigree 2 from $sampleped$ to sequentially 
 add optional information to the pedigree object.
 
 \subsection*{Status}
 The example below shows how to specify a $status$ indicator, such as 
-vital status. The $sample.ped$ data does not include such an  
+vital status. The $sampleped$ data does not include such an  
 indicator, so we create one to indicate that the first generation of 
 pedigree 2, subjects 1 and 2, are deceased.  
 
 ```{r, censor}
-df2 <- sample.ped[sample.ped$ped == 2, ]
+df2 <- sampleped[sampleped$ped == 2, ]
 names(df2)
 df2$censor <- c(1, 1, rep(0, 12))
 ped2 <- pedigree(df2$id, df2$father, df2$mother,
@@ -214,9 +214,9 @@ ped2 <- pedigree(df2$id, df2$father, df2$mother,
 
 We show how to specify affected status with a single indicator and 
 multiple indicators in a matrix.  First, we use the affected indicator from 
-$sample.ped$, which contains 0/1 indicators and NA as missing, and let it
+$sampleped$, which contains 0/1 indicators and NA as missing, and let it
 it indicate blue eyes. Next, we create a matrix to contain the 
-affected indicator from $sample.ped$ and a second indicator that we create, 
+affected indicator from $sampleped$ and a second indicator that we create, 
 imagine as an indicator for baldness.
 
 ```{r, affected}
@@ -316,7 +316,7 @@ plot(ped2, avail = ifelse(df2$avail, 2, 1), id = id2, cex = .5)
 ``` 
 
 To show some other tricks with pedigree plotting, we use pedigree 1 
-from ~sample.ped~, which has 41 subjects in 4 generations, including a
+from ~sampleped~, which has 41 subjects in 4 generations, including a
 generation with double first cousins. After the first marriage of 114, they
 remarried subject 113 without children between them.  If we do not 
 specify the marriage with the $relation$ argument, the plot method excludes
@@ -326,7 +326,7 @@ in the figure below, where the subjects are colored red if their
 
 
 ```{r, plotped1}
-df1 <- sample.ped[sample.ped$ped == 1, ]
+df1 <- sampleped[sampleped$ped == 1, ]
 relate1 <- matrix(c(113, 114, 4), nrow = 1)
 ped1 <- pedigree(df1$id, df1$father, df1$mother,
   df1$sex,
@@ -489,7 +489,7 @@ show two sets of subject ids that are selected by the routine and discuss
 below.
 
 ```{r, unrelateds}
-df2 <- sample.ped[sample.ped$ped == 2, ]
+df2 <- sampleped[sampleped$ped == 2, ]
 ped2 <- pedigree(df2$id, df2$father, df2$mother,
   df2$sex,
   affected = df2$affected

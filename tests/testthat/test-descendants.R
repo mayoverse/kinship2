@@ -1,5 +1,5 @@
 test_that("descendants works", {
-    data(sampleped)
+    data("sampleped")
     idlist <- c("1_101", "2_208")
     ped <- pedigree(sampleped)
     desc <- descendants(idlist, ped)

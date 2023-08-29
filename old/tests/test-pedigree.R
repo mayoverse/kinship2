@@ -1,7 +1,7 @@
 test_that("pedigree fails to line up", {
     # Here is a case where the levels fail to line up properly
-    data(sample.ped)
-    df1 <- sample.ped[sample.ped$ped == 1, ]
+    data(sampleped)
+    df1 <- sampleped[sampleped$ped == 1, ]
     ped1 <- with(df1, pedigree(id, father, mother, sex, affected))
     expect_doppelganger("ped1", plot(ped1))
 

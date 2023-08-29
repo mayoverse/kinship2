@@ -100,7 +100,7 @@ test_that("generate colors works on df", {
 })
 
 test_that("generate colors works on pedigree object", {
-    data(sampleped)
+    data("sampleped")
     ped <- pedigree(sampleped[sampleped$family == "1", -1])
     ped$ped$id <- as.numeric(ped$ped$id)
     ped_aff <- generate_colors(ped, col_aff = "id",

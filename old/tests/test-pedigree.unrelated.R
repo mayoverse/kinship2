@@ -1,8 +1,8 @@
 test_that("Pedigree unrelated", {
-    data(sample.ped)
+    data(sampleped)
 
-    pedAll <- pedigree(sample.ped$id, sample.ped$father, sample.ped$mother, sample.ped$sex,
-        famid = sample.ped$ped, affected = cbind(sample.ped$affected, sample.ped$avail))
+    pedAll <- pedigree(sampleped$id, sampleped$father, sampleped$mother, sampleped$sex,
+        famid = sampleped$ped, affected = cbind(sampleped$affected, sampleped$avail))
 
     ped1 <- pedAll["1"]
     ped2 <- pedAll["2"]

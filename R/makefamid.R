@@ -24,7 +24,7 @@
 #' @author Terry Therneau
 #' @seealso `kinship`
 #' @keywords genetics
-#' @export makefamid
+#' @export
 setGeneric("makefamid", signature = "obj",
     function(obj, ...) standardGeneric("makefamid")
 )
@@ -53,7 +53,7 @@ setGeneric("makefamid", signature = "obj",
 #' @author Terry Therneau
 #' @seealso `kinship`
 #' @keywords genetics
-#' @export makefamid
+#' @export
 setMethod("makefamid", "character",
     function(obj, dadid, momid) {
         id <- obj
@@ -134,7 +134,7 @@ setMethod("makefamid", "character",
 #' @author Terry Therneau
 #' @seealso `kinship`
 #' @keywords genetics
-#' @export makefamid
+#' @export
 setMethod("makefamid", "Pedigree",
     function(obj) {
         ped <- obj

@@ -26,13 +26,13 @@ NULL
 #' @return Dataframe with selected individuals
 #'
 #' @examples
-#' data(sample.ped)
-#' df <- max_kin_inf(sample.ped, informative = 'Av/Af')
+#' data(sampleped)
+#' df <- max_kin_inf(sampleped, informative = 'Av/Af')
 #' summary(df$kin)
 #'
 #' @include is_informative.R
 #' @include kinship.R
-#' @export max_kin_inf
+#' @export
 setGeneric("max_kin_inf", signature = "obj",
     function(obj, ...) standardGeneric("max_kin_inf")
 )
@@ -56,9 +56,6 @@ setMethod("max_kin_inf", "character", function(
     kin[is.infinite(kin)] <- NA
 
     checked <- length(kin[!is.na(kin)])
-    message(paste(checked,
-        "individuals linked to informative individuals detected"
-    ))
 
     kin
 })

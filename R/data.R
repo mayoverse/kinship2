@@ -20,19 +20,20 @@
 #' For a subset of the families data was gathered on prostate cancer risk for
 #' male subjects via questionnaires sent to men over 40. Other than this, data
 #' items other than parentage are limited to the female subjects.
-#' In 2003 a second phase of the study was instituted. The pedigrees were further
-#' extended to the numbers found in this data set, and further data gathered by
-#' questionnaire.
+#' In 2003 a second phase of the study was instituted. The pedigrees were
+#' further extended to the numbers found in this data set, and further data
+#' gathered by questionnaire.
 #'
 #' @format A data frame with 28081 observations, one line per subject, on the
 #' following 14 variables.
 #' \\describe{
 #' \\item{\\code{id}}{subject identifier}
-#' \\item{\\code{proband}}{if 1, this subject is one of the original 426 probands}
-#' \\item{\\code{fatherid}}{identifier of the father, if the father is part of the
-#' data set; zero otherwise}
-#' \\item{\\code{motherid}}{identifier of the mother, if the mother is part of the
-#' data set; zero otherwise}
+#' \\item{\\code{proband}}{if 1, this subject is one of the original
+#' 426 probands}
+#' \\item{\\code{fatherid}}{identifier of the father, if the father is part of
+#' the data set; zero otherwise}
+#' \\item{\\code{motherid}}{identifier of the mother, if the mother is part of
+#' the data set; zero otherwise}
 #' \\item{\\code{famid}}{family identifier}
 #' \\item{\\code{endage}}{age at last follow-up or incident cancer}
 #' \\item{\\code{cancer}}{1= breast cancer (females) or prostate cancer (males),
@@ -46,14 +47,14 @@
 #' \\item{\\code{marstat}}{marital status: married, living with someone in a
 #' marriage-like relationship, separated
 #' or divorced, widowed, never married, refused to answer the questionaire}
-#' \\item{\\code{everpreg}}{ever pregnant: never pregnant at the time of baseline
-#' survey, ever pregnant at the time
+#' \\item{\\code{everpreg}}{ever pregnant: never pregnant at the time of
+#' baseline survey, ever pregnant at the time
 #' of baseline survey}
 #' \\item{\\code{parity}}{number of births}
 #' \\item{\\code{nbreast}}{number of breast biopsies}
 #' \\item{\\code{sex}}{M or F}
-#' \\item{\\code{bcpc}}{part of one of the families in the breast/prostate cancer
-#' substudy: 0=no, 1=yes.
+#' \\item{\\code{bcpc}}{part of one of the families in the breast/prostate
+#' cancer substudy: 0=no, 1=yes.
 #' Note that subjects who were recruited to the overall study after the date of
 #' the BP substudy are coded as zero.}
 #' }
@@ -87,12 +88,12 @@
 #' plot(breastped)  #plot family 8, proband is solid, slash for cancers
 "minnbreast"
 
-#' Sample pedigree data
+#' samplepedigree data
 #'
-#' @description Small sample pedigree data set.
+#' @description Small samplepedigree data set.
 #'
-#' @details This is a small fictive sample pedigree data set, with 55 individuals
-#' in 2 families.
+#' @details This is a small fictive samplepedigree data set, with 55
+#' individuals in 2 families.
 #' The aim was to create a data set with a variety of pedigree structures.
 #'
 #' @format A data frame with 55 observations, one line per subject, on the
@@ -110,13 +111,11 @@
 #' }
 #'
 #' @usage
-#' data(sampleped)
+#' data("sampleped")
 #'
 #' @examples
-#' data(sampleped)
+#' data("sampleped")
 #' ped <- pedigree(sampleped)
-#' print(ped)
+#' summary(ped)
 #' plot(ped)
 "sampleped"
-
-TRUE

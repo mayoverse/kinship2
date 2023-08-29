@@ -30,7 +30,7 @@
 #' procedure when using the \\code{/list} option of the \\code{TABLE} statement.
 #'
 #' @section Data:
-#' \\code{\\link{sample.ped}}: Pedigree example data sets with two pedigrees
+#' \\code{\\link{sampleped}}: Pedigree example data sets with two pedigrees
 #' \\code{\\link{minnbreast}}: Larger cohort of pedigrees from MN breast cancer
 #' study
 #'

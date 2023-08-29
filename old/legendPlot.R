@@ -25,8 +25,8 @@
 #'
 #' @examples
 #'
-#' data(sample.ped)
-#' pedAll <- with(sample.ped, pedigree(id, father, mother, sex,
+#' data(sampleped)
+#' pedAll <- with(sampleped, pedigree(id, father, mother, sex,
 #'   affected = cbind(affected, avail), famid = ped
 #' ))
 #' ped1 <- pedAll["1"]
@@ -34,7 +34,7 @@
 #'
 #' @author Jason Sinnwell, code contributed by Sara Achenbach
 #' @seealso \code{\link{pedigree}}, \code{\link{plot.pedigree}}
-#' @export legendPlot
+#' @export
 legendPlot <- function(x, id = x$id, affected = x$affected,
                       affected.label = NULL, col = 1, col.label = NULL,
                       symbolsize = .75, cex = .5, ...) {

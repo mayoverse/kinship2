@@ -26,9 +26,9 @@
 #' @seealso `pedigree.shrink`
 #' @examples
 #'
-#' data(sample.ped)
+#' data(sampleped)
 #'
-#' fam2 <- sample.ped[sample.ped$ped == 2, ]
+#' fam2 <- sampleped[sampleped$ped == 2, ]
 #' ped2 <- pedigree(
 #'   fam2$id, fam2$father, fam2$mother, fam2$sex,
 #'   fam2$affected, fam2$avail
@@ -39,9 +39,9 @@
 #'
 #' plot(ped2)
 #'
-#' plot.pedigree.shrink(shrink2, title = 'Sample Pedigree 2')
+#' plot.pedigree.shrink(shrink2, title = 'samplepedigree 2')
 #'
-#' @export plot.pedigree.shrink
+#' @export
 plot.pedigree.shrink <- function(x, bigped = FALSE, title = "",
     location = "topright", ...) {
     ## Plot pedigrees, coloring subjects according to availability, shaded by

@@ -25,8 +25,8 @@
 #' @return Plot the pedigree legend to the current plot
 #' @examples
 #'
-#' data(sample.ped)
-#' fam1 <- sample.ped[sample.ped$ped == 1, ]
+#' data(sampleped)
+#' fam1 <- sampleped[sampleped$ped == 1, ]
 #' ped1 <- with(fam1, pedigree(
 #'   id, father, mother, sex,
 #'   affected = cbind(avail, affected)
@@ -38,7 +38,7 @@
 #'
 #' @author Jason Sinnwell
 #' @seealso \\code{\\link{pedigree}}, \\code{\\link{plot.pedigree}}
-#' @export pedigree.legend
+#' @export
 pedigree.legend <- function(ped, labels = dimnames(ped$affected)[[2]],
     edges = 200, radius = NULL, location = "bottomright", new = TRUE,
     density = c(-1, 35, 65, 20), angle = c(90, 65, 40, 0), ...) {

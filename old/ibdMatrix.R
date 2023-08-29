@@ -33,7 +33,7 @@
 #'
 #' @seealso `kinship`, `Matrix`
 #' @keywords genetics
-#' @export ibdMatrix
+#' @export
 ibdMatrix <- function(id1, id2, x, idmap, diagonal) {
     if (!is.null(ncol(id1)) && ncol(id1) == 1)
         id1 <- id1[, 1]

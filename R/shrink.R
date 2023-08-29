@@ -31,8 +31,8 @@
 #' @return Pedigree object shrinked to the desired size
 #'
 #' @examples
-#' data(sample.ped)
-#' pedAll <- with(sample.ped, pedigree(id, father, mother, sex,
+#' data(sampleped)
+#' pedAll <- with(sampleped, pedigree(id, father, mother, sex,
 #'   affected = cbind(affected, avail), famid = ped
 #' ))
 #' ped1 <- pedAll['1']
@@ -40,7 +40,7 @@
 #'
 #' @author Original by Dan Schaid, updated to kinship2 by Jason Sinnwell
 #' @seealso \\code{\\link{pedigree}}, \\code{\\link{plot.pedigree.shrink}}
-#' @export pedigree.shrink
+#' @export
 shrink <- function(
     ped, avail = ped$ped$avail, affected = ped$ped$affected, max_bits = 16
 ) {
@@ -131,7 +131,7 @@ shrink <- function(
 
         if (is_trim) {
             ped_trim <- save$ped
-            avail <- save$newAvail
+            avail <- save$new_avail
             bit_size <- save$bit_size
             bitsize_vec <- c(bitsize_vec, bit_size)
             id_trim <- c(id_trim, save$id_trim)

@@ -11,7 +11,7 @@
 #'
 #' @examples
 #' @keywords
-#' @export fscore.pedigree
+#' @export
 fscore.pedigree <- function(ped) {
     n <- length(ped$depth)
     nid <- 1:n
