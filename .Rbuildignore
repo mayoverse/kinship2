@@ -1,3 +1,4 @@
 ^\.github$
 .lintr
 noweb
+^data-raw$

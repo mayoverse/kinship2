@@ -4,10 +4,10 @@ usethis::use_package("dplyr")
 usethis::use_package("hexSticker")
 
 # Charge necessary data
-data(sample.ped)
+data(sampleped)
 
 # Create pedigree object
-ped_all <- with(sample.ped, pedigree(id, father, mother, sex,
+ped_all <- with(sampleped, pedigree(id, father, mother, sex,
   affected = cbind(affected, avail), famid = ped
 ))
 
@@ -16,7 +16,7 @@ ped1 <- ped_all["1"]
 
 # Shrink pedigree
 ped1trim <- pedigree.shrink(ped1, maxBits = 12,
-    avail = sample.ped[sample.ped$ped == 1, "avail"])
+    avail = sampleped[sampleped$ped == 1, "avail"])
 
 # Export plot to png
 output_dir <- "inst/figures/graph.png"
