@@ -90,9 +90,10 @@ ped_to_plotdf <- function(
         plot_df <- rbind.fill(plot_df, ind)
 
         if (mark) {
+
             mark_df <- data.frame(
                 x0 = pos[idx] + poly_aff_x_mr[sex],
-                y0 = i[idx] +  poly_aff_y_mr[sex],
+                y0 = i[idx] + boxh / 2,
                 label = ped$ped[id[idx], unique(aff_df[["column_values"]])],
                 fill = "black",
                 type = "text", cex = cex,
