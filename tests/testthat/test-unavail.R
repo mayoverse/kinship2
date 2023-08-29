@@ -1,24 +1,23 @@
 test_that("unavailable detection works", {
     data("sampleped")
-    id <- sampleped$id
-    dadid <- sampleped$dadid
-    momid <- sampleped$momid
-    avail <- sampleped$avail
     ped <- pedigree(sampleped)
-    plot(ped)
     expect_equal(find_unavailable(ped),
-        c("1_101", "1_102", "1_107", "1_108", "1_113")
+        c(paste("1", c(
+            101, 102, 107, 108, 111, 113, 121, 122, 123, 131, 132, 134, 139
+        ), sep = "_"), paste("2", c(205, 210, 213), sep = "_"))
     )
     find_avail_affected(ped)
     ped$ped$affected[25] <- NA
     expect_equal(as.vector(find_avail_affected(ped)$id_trimmed), "1_125")
     expect_equal(find_avail_noninform(ped),
-        c("1_101", "1_102", "1_107", "1_108")
+        c(paste("1", c(
+            101, 102, 107, 108, 111, 113, 121, 122, 123, 131, 132, 134, 139
+        ), sep = "_"), paste("2", c(205, 210, 213), sep = "_"))
     )
 })
 
 test_that("Unrelated detection works", {
-    data(sampleped)
+    data("sampleped")
 
     ped <- pedigree(sampleped)
 

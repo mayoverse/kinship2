@@ -1,4 +1,4 @@
-#' @importFrom ggplot2 ggplot geom_polygon aes geom_text annotate ggtitle
+#' @importFrom ggplot2 ggplot geom_polygon aes geom_text annotate ggtitle unit
 #' @importFrom ggplot2 scale_fill_manual scale_color_manual geom_segment
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #' @importFrom stats setNames
@@ -89,9 +89,9 @@ NULL
 #' A copy of the call that generated the plot
 #'
 #' @examples
-#' data(sample.ped)
+#' data(sampleped)
 #'
-#' pedAll <- with(sample.ped, pedigree(id, father, mother,
+#' pedAll <- with(sampleped, pedigree(id, father, mother,
 #'   sex,
 #'   affected = cbind(affected, avail),
 #'   famid = ped
