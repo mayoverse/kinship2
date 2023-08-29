@@ -14,7 +14,7 @@ NULL
 #' @param missid The missing id
 #'
 #' @return The id
-#' @export prefix_famid
+#' @export
 prefix_famid <- function(family_id, ind_id, missid = "0") {
     if (length(family_id) > 1 && length(family_id) != length(ind_id)) {
         stop("family_id and ind_id must have the same length.")
@@ -55,12 +55,11 @@ prefix_famid <- function(family_id, ind_id, missid = "0") {
 #' data(ped_data)
 #' norm_ped(ped_data)
 #'
-#' @export norm_ped
+#' @export
 #' @include utils.R
 norm_ped <- function(
     ped_df, na_strings = c("NA", ""), missid = "0", try_num = FALSE
 ) {
-    print("Bal: norm_ped")
     err_cols <- c(
         "sexErrMoFa", "sexErrFa", "sexErrMo", "sexErrTer", "sexNA",
         "sexError", "idErrFa", "idErrMo", "idErrSelf", "idErrOwnParent",
@@ -113,9 +112,9 @@ norm_ped <- function(
             female = "female", male = "male", `2` = "female", `1` = "male",
             `3` = "unknown", `4` = "terminated"
         )
-        ped_df$sex <- as.character(revalue(as.factor(
+        ped_df$sex <- suppressMessages(as.character(revalue(as.factor(
             casefold(ped_df$gender, upper = FALSE)
-        ), sex_equiv))
+        ), sex_equiv)))
         sex_codes <- c("male", "female", "unknown", "terminated")
         ped_df$sex[!ped_df$sex %in% sex_codes] <- "unknown"
 
@@ -141,7 +140,6 @@ norm_ped <- function(
                 )  & (is_father | is_mother)
             ] <- "isSterilButIsParent"
             nb_steril_parent <- sum(!is.na(err$sexErrTer))
-            message(paste(nb_steril_parent, "steril corrected"))
             ped_df$steril[!is.na(err$sexErrTer) &
                     (is_father | is_mother)
             ] <- FALSE
@@ -216,7 +214,6 @@ norm_ped <- function(
 
         #### Convert to num ####
         if (try_num) {
-            message("Converting to numeric if possible")
             col_to_num <- colnames(ped_df)[
                 !colnames(ped_df) %in%
                     c(cols_need, cols_to_use)
@@ -248,7 +245,6 @@ norm_ped <- function(
 #'
 #' @return A dataframe with the errors identified
 norm_rel <- function(rel_df, na_strings = c("NA", ""), missid = "0") {
-    print("Bal: norm_rel")
     #### Check columns ####
     err_cols <- c("codeErr", "sameIdErr", "id1Err", "id2Err", "error")
     err <- data.frame(matrix(NA, nrow = nrow(rel_df), ncol = length(err_cols)))
@@ -273,10 +269,10 @@ norm_rel <- function(rel_df, na_strings = c("NA", ""), missid = "0") {
             `1` = "MZ twin", `2` = "DZ twin", `3` = "UZ twin", `4` = "Spouse"
         )
         codes <- c("MZ twin", "DZ twin", "UZ twin", "Spouse")
-        rel_df$code <- as.character(revalue(as.factor(str_remove_all(
+        rel_df$code <- suppressMessages(as.character(revalue(as.factor(str_remove_all(
             casefold(as.character(rel_df$code), upper = FALSE),
             " "
-        )), code_equiv))
+        )), code_equiv)))
         rel_df$code <- factor(rel_df$code, codes, ordered = TRUE)
         err$codeErr[!rel_df$code %in% codes] <- "CodeNotRecognise"
 

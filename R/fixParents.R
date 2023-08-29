@@ -209,7 +209,6 @@ setMethod("fixParents", "data.frame", function(
         obj, delete = FALSE, filter = NULL, missid = "0",
         id = "id", dadid = "dadid", momid = "momid", sex = "sex",
         family = "family") {
-    print("Bal: fixParents.data.frame")
     cols_needed <- c(id, dadid, momid, sex, filter, family)
     df <- check_columns(obj, cols_needed, "", "", others_cols = TRUE)
     df_old <- df
@@ -220,10 +219,8 @@ setMethod("fixParents", "data.frame", function(
             stop("Error, filtering column must me only TRUE or FALSE")
         }
     }
-    message("Fixing incomplete couple")
     all_id <- c(df[[id]], df[[dadid]], df[[momid]])
     all_id <- unique(all_id[all_id != missid])
-    message(paste(length(all_id), "individuals detected"))
 
     if (nrow(df) > 2) {
         if (delete) {
@@ -237,7 +234,6 @@ setMethod("fixParents", "data.frame", function(
             all_id_new <- c(df[[id]], df[[dadid]], df[[momid]])
             all_id_new <- unique(all_id_new[all_id_new != missid])
             all_id_dif <- all_id[!all_id %in% all_id_new]
-            message(paste(length(all_id_dif), "individuals deleted"))
         }
         df_fix <- fixParents(
             df[[id]], df[[dadid]], df[[momid]],
@@ -252,8 +248,6 @@ setMethod("fixParents", "data.frame", function(
         all_id_new <- c(df[[id]], df[[dadid]], df[[momid]])
         all_id_new <- unique(all_id_new[all_id_new != missid])
         all_id_dif <- all_id_new[!all_id_new %in% all_id]
-        message(paste(length(all_id_dif), "individuals added"))
     }
-    message(paste("Final:", nrow(df), "individuals detected"))
     df
 })

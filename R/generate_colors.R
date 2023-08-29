@@ -54,22 +54,18 @@ generate_fill <- function(
     }
 
     # Set the filling color
-    print("Bal: generate_colors, fill_scale")
     if (!keep_full_scale) {
-        print("Bal: generate_colors: keep_full_scale = FALSE")
         # If the scale is binary just keep the first color of unaff and the
         # last of aff
         fill_to_use <- c(colors_unaff[1], colors_aff[-1], "grey")
         names(fill_to_use) <- c("FALSE", "TRUE", NA)
-        fill <- revalue(affected, fill_to_use)
-        mods <- revalue(affected, c("FALSE" = 0, "TRUE" = 1))
+        fill <- suppressMessages(revalue(affected, fill_to_use))
+        mods <- suppressMessages(revalue(affected, c("FALSE" = 0, "TRUE" = 1)))
     } else {
-        print("Bal: generate_colors: keep_full_scale = TRUE")
         fct_scale_unaff <- grDevices::colorRampPalette(colors_unaff)
         fct_scale_aff <- grDevices::colorRampPalette(colors_aff)
 
         if (!is.numeric(values)) {
-            print("Bal: generate_colors: col_aff is not numeric")
             levs_aff <- as.factor(values[affected == TRUE & !is.na(affected)])
             levs_unaff <- as.factor(
                 values[affected == FALSE & !is.na(affected)]
@@ -79,7 +75,6 @@ generate_fill <- function(
             fill_scale <- c(fill_scale_unaff, fill_scale_aff)
             names(fill_scale) <- c(levels(levs_unaff), levels(levs_aff))
         } else {
-            print("Bal: generate_colors: col_aff is numeric")
             mean_aff <- mean(values[affected == TRUE], na.rm = TRUE)
             mean_unaff <- mean(values[affected == FALSE], na.rm = TRUE)
             levs_aff <- cut(values[affected == TRUE & !is.na(affected)],
@@ -106,20 +101,19 @@ generate_fill <- function(
             stop("The colors for the scale should be different")
         }
 
-        print("Bal: generate_colors: fill_scale_aff")
         # Set fill depending on the corresponding color for aff and unaff
         fill[affected == TRUE & !is.na(affected)] <-
-            as.character(revalue(levs_aff, fill_scale))
+            suppressMessages(as.character(revalue(levs_aff, fill_scale)))
 
         fill[affected == FALSE & !is.na(affected)] <-
-            as.character(revalue(levs_unaff, fill_scale))
+            suppressMessages(as.character(revalue(levs_unaff, fill_scale)))
 
         # Set modalities as factor levels
         mods[affected == TRUE & !is.na(affected)] <- as.character(levs_aff)
         mods[affected == FALSE & !is.na(affected)] <- as.character(levs_unaff)
         mods_to_use <- seq_along(fill_scale)
         names(mods_to_use) <- names(fill_scale)
-        mods <- revalue(mods, mods_to_use)
+        mods <- suppressMessages(revalue(mods, mods_to_use))
     }
     # Set to grey color individual with no informations
     fill[is.na(fill)] <- "grey"

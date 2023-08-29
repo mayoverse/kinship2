@@ -70,10 +70,6 @@ setMethod("num_child", "character",
     # Number of direct child per individual
     df$num_child_dir <- id_child$num_child_dir[match(df$id, id_child$id)]
 
-    message(paste(length(df$id[!is.na(df$num_child_dir)]),
-        "individuals have at least one child"
-    ))
-
     # Number of total childs per individual
     rel_child <- spouse_rel %>%
         left_join(id_child, by = join_by(idmin == id)) %>%
@@ -100,9 +96,6 @@ setMethod("num_child", "character",
         ))
 
     df$num_child_ind <- df$num_child_tot - df$num_child_dir
-    message(paste(length(df$id[df$num_child_ind > 0]),
-        "individuals have at least one indirected child"
-    ))
 
     df
 })
