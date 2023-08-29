@@ -2,3 +2,4 @@
 .lintr
 noweb
 ^data-raw$
+^idea$
