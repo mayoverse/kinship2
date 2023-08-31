@@ -11,7 +11,7 @@
 - kindepth.R
 - kinship.R
 - descendants.R
-- makefamid.R
+- make_famid.R
 - family_check.R
 - generate_aff.R
 - generate_colors.R

@@ -1,4 +1,4 @@
-# $Id: makefamid.s,v 1.7 2003/01/07 15:47:08 therneau Exp
+# $Id: make_famid.s,v 1.7 2003/01/07 15:47:08 therneau Exp
 
 #' Get family id
 #'
@@ -25,8 +25,8 @@
 #' @seealso `kinship`
 #' @keywords genetics
 #' @export
-setGeneric("makefamid", signature = "obj",
-    function(obj, ...) standardGeneric("makefamid")
+setGeneric("make_famid", signature = "obj",
+    function(obj, ...) standardGeneric("make_famid")
 )
 
 #' Get family id
@@ -54,7 +54,7 @@ setGeneric("makefamid", signature = "obj",
 #' @seealso `kinship`
 #' @keywords genetics
 #' @export
-setMethod("makefamid", "character",
+setMethod("make_famid", "character",
     function(obj, dadid, momid) {
         id <- obj
         n <- length(id)
@@ -135,10 +135,10 @@ setMethod("makefamid", "character",
 #' @seealso `kinship`
 #' @keywords genetics
 #' @export
-setMethod("makefamid", "Pedigree",
+setMethod("make_famid", "Pedigree",
     function(obj) {
         ped <- obj
-        family <- makefamid(ped$ped$id, ped$ped$dadid, ped$ped$momid)
+        family <- make_famid(ped$ped$id, ped$ped$dadid, ped$ped$momid)
         col_ped_compute <- c("sex", "avail", "id", "dadid", "momid",
             "family", "momid", "error", "steril", "status"
         )

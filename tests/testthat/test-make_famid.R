@@ -1,9 +1,9 @@
-test_that("makefamid works", {
+test_that("make_famid works", {
     id <- as.character(1:20)
     mom <- as.character(c(0, 0, 0, 2, 2, 2, 0, 2, 0, 0, 2, 2, 0, 2, 0, 2, 7, 7, 11, 14))
     dad <- as.character(c(0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 3, 3, 0, 3, 0, 3, 8, 8, 10, 13))
     famid <- c(1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1)
-    temp <- makefamid(id, mom, dad)
+    temp <- make_famid(id, mom, dad)
     expect_equal(temp, famid)
 })
 
@@ -18,11 +18,11 @@ rel_df <- matrix(rel_df, ncol = 4, byrow = TRUE)
 dimnames(rel_df) <- list(NULL, c("id1", "id2", "code", "family"))
 rel_df <- data.frame(rel_df)
 
-test_that("makefamid works with pedigree", {
+test_that("make_famid works with pedigree", {
     ## Simple case with no family id
     data("sampleped")
     ped <- pedigree(sampleped[-1], rel_df = rel_df[c(1:3)])
-    ped <- makefamid(ped)
+    ped <- make_famid(ped)
 
     ## Expected values
     fam <- sampleped$family
@@ -35,7 +35,7 @@ test_that("makefamid works with pedigree", {
     data("sampleped")
     sampleped$family[sampleped$family == "2"] <- 3
     ped <- pedigree(sampleped, rel_df = rel_df)
-    ped <- makefamid(ped)
+    ped <- make_famid(ped)
     expect_equal(ped$ped$id, id)
     expect_equal(ped$rel$id1, c("2_213", "2_210", "1_140", "1_133"))
 })
@@ -66,8 +66,8 @@ test_that("Family check works", {
         c(1, 55, 1, 2, 0)
     )
 
-    ## Correct the family id with makefamid
-    ped <- makefamid(ped)
+    ## Correct the family id with make_famid
+    ped <- make_famid(ped)
     fcheck_ped_corrected <- family_check(ped)
     expect_equal(as.numeric(as.vector(fcheck_ped_corrected[1, ])),
         c(0, 1, 1, 0, 0)

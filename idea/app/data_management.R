@@ -36,7 +36,7 @@ select_from_inf <- function(df, inf_inds, kin_max) {
             delete = FALSE, filter = "to_use")
         df_kin_trim <- fix_parents.data.frame(df = df_kin_trim, delete = TRUE)
         if (nrow(df_kin_trim) > 2) {
-            df_kin_trim$family <- with(df_kin_trim, makefamid(id, momid, dadid))
+            df_kin_trim$family <- with(df_kin_trim, make_famid(id, momid, dadid))
         } else {
             message("Not Enough individuals")
             NULL

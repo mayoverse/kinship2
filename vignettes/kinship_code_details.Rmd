@@ -183,7 +183,7 @@ family/subject.
 The older [[makekinship]] function,
 from before the creation of pedigreeList objects,
 accepts the raw identifier data, along with a special family code
-for unrelated subjects, as produced by the [[makefamid]] function.
+for unrelated subjects, as produced by the [[make_famid]] function.
 All the unrelated subjects are put at the front of the kinship matrix
 in this case rather than within the family.
 Because unrelateds get put into a fake family, we cannot create a

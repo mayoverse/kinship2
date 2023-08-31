@@ -9,7 +9,7 @@
 #' Given a family id vector, also compute the familial grouping from first
 #' principles using the parenting data, and compare the results.
 #'
-#' The `makefamid` function is used to create a de novo family id from the
+#' The `make_famid` function is used to create a de novo family id from the
 #' parentage data, and this is compared to the family id given in the data.
 #'
 #' If there are any joins, then an attribute 'join' is attached.
@@ -20,7 +20,7 @@
 #' @param id A vector of unique subject identifiers
 #' @param dadid Vector containing the id of the biological father
 #' @param momid Vector containing the id of the biological mother
-#' @param newfam The result of a call to `makefamid`. If this has already
+#' @param newfam The result of a call to `make_famid`. If this has already
 #' been computed by the user, adding it as an argument shortens the running
 #' time somewhat.
 #'
@@ -72,7 +72,7 @@
 #'
 #' ## fcheck1.bad is a try-error
 #'
-#' @seealso `makefamid`, `makekinship`
+#' @seealso `make_famid`, `makekinship`
 #' @keywords genetics
 #' @include pedigreeClass.R
 #' @export
@@ -80,7 +80,7 @@ setGeneric("family_check", signature = "obj",
     function(obj, ...) standardGeneric("family_check")
 )
 
-#' @include makefamid.R
+#' @include make_famid.R
 #' @export
 setMethod("family_check", "numeric",
     function(obj, id, dadid, momid, newfam) {
@@ -91,7 +91,7 @@ setMethod("family_check", "numeric",
         nfam <- length(unique(famid))
 
         if (missing(newfam)) {
-            newfam <- makefamid(id, dadid, momid)
+            newfam <- make_famid(id, dadid, momid)
         } else if (length(newfam) != length(famid)) {
             stop("Invalid length for newfam")
         }

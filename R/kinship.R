@@ -62,7 +62,7 @@ usethis::use_package("Matrix")
 #'
 #' @section References: K Lange, Mathematical and Statistical Methods for
 #' Genetic Analysis, Springer-Verlag, New York, 1997.
-#' @seealso `pedigree`, `makekinship`, `makefamidb`
+#' @seealso `pedigree`, `makekinship`, `make_famidb`
 #' @keywords genetics
 #' @include pedigreeClass.R
 #' @export

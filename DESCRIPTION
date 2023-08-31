@@ -77,7 +77,7 @@ Collate:
     'bit_size.R'
     'data.R'
     'descendants.R'
-    'makefamid.R'
+    'make_famid.R'
     'family_check.R'
     'kinship.R'
     'utils.R'

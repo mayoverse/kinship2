@@ -878,7 +878,7 @@ kinship.pedigreeList <- function(id, chrtype="autosome", ...) {
 The older [[makekinship]] function,
 from before the creation of pedigreeList objects,
 accepts the raw identifier data, along with a special family code
-for unrelated subjects, as produced by the [[makefamid]] function.
+for unrelated subjects, as produced by the [[make_famid]] function.
 All the unrelated subjects are put at the front of the kinship matrix
 in this case rather than within the family.
 Because unrelateds get put into a fake family, we cannot create a
@@ -4346,7 +4346,7 @@ family_check <- function(famid, id, father.id, mother.id, newfam) {
         stop ("Family id of missing not allowed")
     nfam <- length(unique(famid))
 
-    if (missing(newfam)) newfam <- makefamid(id, father.id, mother.id)
+    if (missing(newfam)) newfam <- make_famid(id, father.id, mother.id)
     else if (length(newfam) != length(famid))
         stop("Invalid length for newfam")
 
