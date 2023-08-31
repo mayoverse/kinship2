@@ -32,9 +32,9 @@ select_from_inf <- function(df, inf_inds, kin_max) {
         df_kin <- max_kin_inf(df, inf_inds)
         df_kin$to_use <- df_kin$kin <= kin_max & !is.na(df_kin$kin)
 
-        df_kin_trim <- fixParents.data.frame(df = df_kin,
+        df_kin_trim <- fix_parents.data.frame(df = df_kin,
             delete = FALSE, filter = "to_use")
-        df_kin_trim <- fixParents.data.frame(df = df_kin_trim, delete = TRUE)
+        df_kin_trim <- fix_parents.data.frame(df = df_kin_trim, delete = TRUE)
         if (nrow(df_kin_trim) > 2) {
             df_kin_trim$family <- with(df_kin_trim, makefamid(id, momid, dadid))
         } else {

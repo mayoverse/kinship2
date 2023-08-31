@@ -46,7 +46,7 @@ NULL
 #'     'fam107', 'fam107', 'fam107', 'fam112'
 #'   )
 #' )
-#' test1newmom <- with(test1char, fixParents(id, father, mother,
+#' test1newmom <- with(test1char, fix_parents(id, father, mother,
 #'   sex,
 #'   missid = '0'
 #' ))
@@ -56,12 +56,12 @@ NULL
 #' @author Jason Sinnwell
 #' @seealso \\code{\\link{pedigree}}
 #' @export
-setGeneric("fixParents", signature = "obj",
-    function(obj, ...) standardGeneric("fixParents")
+setGeneric("fix_parents", signature = "obj",
+    function(obj, ...) standardGeneric("fix_parents")
 )
 
 #' @export
-setMethod("fixParents", "character", function(
+setMethod("fix_parents", "character", function(
         obj, dadid, momid, sex, family = NULL, missid = "0") {
     ## fix sex of parents add parents that are missing
     n <- length(obj)
@@ -178,11 +178,11 @@ setMethod("fixParents", "character", function(
 
 #' Fix missing parents
 #'
-#' @description Apply fixParents on a dataframe or delete missing parents.
+#' @description Apply fix_parents on a dataframe or delete missing parents.
 #'
 #' @details Check for presence of both parents id in the `id` field.
 #' If not both presence behaviour depend of `delete` parameter
-#' If TRUE then use fixParents function and merge back the other fields
+#' If TRUE then use fix_parents function and merge back the other fields
 #' in the dataframe then set availability to O for non available parents.
 #' If FALSE then delete the id of missing parents
 #'
@@ -205,7 +205,7 @@ setMethod("fixParents", "character", function(
 #' @return The same dataframe with the parents ids fixed
 #'
 #' @export
-setMethod("fixParents", "data.frame", function(
+setMethod("fix_parents", "data.frame", function(
         obj, delete = FALSE, filter = NULL, missid = "0",
         id = "id", dadid = "dadid", momid = "momid", sex = "sex",
         family = "family") {
@@ -235,7 +235,7 @@ setMethod("fixParents", "data.frame", function(
             all_id_new <- unique(all_id_new[all_id_new != missid])
             all_id_dif <- all_id[!all_id %in% all_id_new]
         }
-        df_fix <- fixParents(
+        df_fix <- fix_parents(
             df[[id]], df[[dadid]], df[[momid]],
             df[[sex]], missid = missid, family = df[[family]]
         )

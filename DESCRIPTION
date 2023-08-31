@@ -84,7 +84,7 @@ Collate:
     'find_unavailable.R'
     'find_avail_affected.R'
     'find_avail_noninform.R'
-    'fixParents.R'
+    'fix_parents.R'
     'generate_aff_inds.R'
     'generate_colors.R'
     'ibd_matrix.R'

@@ -375,9 +375,9 @@ shiny::shinyServer(function(input, output, session) {
                 if (input$trim_ped) {
                     df_from_inf$useful <- useful_inds(df_from_inf, inf_inds,
                         input$keep_infos)
-                    df_from_inf <- fixParents.data.frame(df_from_inf,
+                    df_from_inf <- fix_parents.data.frame(df_from_inf,
                         delete = FALSE, filter = "useful")
-                    df_from_inf <- fixParents.data.frame(df = df_from_inf,
+                    df_from_inf <- fix_parents.data.frame(df = df_from_inf,
                         delete = TRUE)
                 }
                 df_from_inf

@@ -7,7 +7,7 @@
 - validity.R
 - PedigreeClass.R
 - bit_size.R
-- fixParents.R
+- fix_parents.R
 - kindepth.R
 - kinship.R
 - descendants.R

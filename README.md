@@ -57,6 +57,6 @@ To launch it just use: `pedigree_app()`.
 
 * `pedigree.shrink()` will shrink a pedigree to a given size, keeping the most informative individuals for a single affection variable.
 
-* `fixParents()` will add parents for children who have a mother or dad listed that is not already included. It will also fix the sex status for the parent if it is mis-specified.
+* `fix_parents()` will add parents for children who have a mother or dad listed that is not already included. It will also fix the sex status for the parent if it is mis-specified.
 
 * legendPlot() is a variation on plot.pedigree, which has an informative legend at the bottom with the ability to put labels for the affection statuses and coloring scheme.

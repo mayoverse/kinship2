@@ -33,7 +33,7 @@
 } 
 \section{Changes in version 1.7.2}{
   \itemize{
-    \item fixParents: added new function to add parents when they don't
+    \item fix_parents: added new function to add parents when they don't
     exist, but listed in momid/dadid, or fixes gender of them if it is
     wrong in the parent id row. Returns a valid pedigree
     object. Suggested by Tomos Potter.
