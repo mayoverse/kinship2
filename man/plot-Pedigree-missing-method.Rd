@@ -18,7 +18,6 @@
   packed = TRUE,
   align = c(1.5, 2),
   width = 6,
-  psize = par("pin"),
   title = NULL,
   density = c(-1, 35, 65, 20),
   mar = c(4.1, 1, 4.1, 1),
@@ -27,6 +26,10 @@
   subregion = NULL,
   pconnect = 0.5,
   family = 1,
+  legend = FALSE,
+  leg_cex = 0.8,
+  leg_symbolsize = 0.5,
+  leg_loc = NULL,
   ...
 )
 }

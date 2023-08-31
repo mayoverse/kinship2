@@ -1,5 +1,6 @@
-#' @importFrom Matrix sparseMatrix
 # Repack IBD data as a Matrix object
+#' @importFrom Matrix sparseMatrix
+NULL
 
 #' Create an IBD matrix
 #'
