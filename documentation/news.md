@@ -12,7 +12,7 @@
 - kinship.R
 - descendants.R
 - makefamid.R
-- familycheck.R
+- family_check.R
 - generate_aff.R
 - generate_colors.R
 - num_child.R

@@ -4304,8 +4304,8 @@ if (all(depth>0)) stop("You found a bug in kindepth's alignment code!")
 depth
 @ 
 
-\subsection{familycheck}
-The familycheck routine checks out a family id, by trying to construct its own
+\subsection{family_check}
+The family_check routine checks out a family id, by trying to construct its own
 and comparing the results.
 The input argument "newfam" is optional: if you've already created this
 vector for other reasons, then putting the arg in saves time.
@@ -4315,7 +4315,7 @@ vector for other reasons, then putting the arg in saves time.
    a matrix with famid as row labels, new-family-id as the columns, and
    the number of subjects as entries.  
 
-<<familycheck>>=
+<<family_check>>=
 # This routine checks out a family id, by trying to construct its own
 #  and comparing the results
 #
@@ -4341,7 +4341,7 @@ vector for other reasons, then putting the arg in saves time.
 #   a matrix with famid as row labels, new-family-id as the columns, and
 #   the number of subjects as entries.  
 #
-familycheck <- function(famid, id, father.id, mother.id, newfam) {
+family_check <- function(famid, id, father.id, mother.id, newfam) {
     if (is.numeric(famid) && any(is.na(famid)))
         stop ("Family id of missing not allowed")
     nfam <- length(unique(famid))

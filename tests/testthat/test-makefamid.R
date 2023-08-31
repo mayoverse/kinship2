@@ -46,19 +46,19 @@ test_that("Family check works", {
 
     ## check them giving separate ped ids
     fcheck_df_sep <- with(sampleped,
-        familycheck(family, as.character(id), dadid, momid)
+        family_check(family, as.character(id), dadid, momid)
     )
-    fcheck_ped_sep <- familycheck(ped)
+    fcheck_ped_sep <- family_check(ped)
     expect_equal(as.numeric(as.vector(fcheck_df_sep[1, ])), c(1, 41, 1, 1, 0))
     expect_equal(as.numeric(as.vector(fcheck_ped_sep[1, ])), c(1, 41, 1, 1, 0))
 
     ## check assigning them same ped id
-    fcheck_df_combined <- with(sampleped, familycheck(
+    fcheck_df_combined <- with(sampleped, family_check(
         rep(1, nrow(sampleped)), as.character(id), dadid, momid
     ))
     sampleped$family[sampleped$family == "2"] <- 1
     ped <- pedigree(sampleped)
-    fcheck_ped_combined <- familycheck(ped)
+    fcheck_ped_combined <- family_check(ped)
     expect_equal(as.numeric(as.vector(fcheck_df_combined[1, ])),
         c(1, 55, 1, 2, 0)
     )
@@ -68,7 +68,7 @@ test_that("Family check works", {
 
     ## Correct the family id with makefamid
     ped <- makefamid(ped)
-    fcheck_ped_corrected <- familycheck(ped)
+    fcheck_ped_corrected <- family_check(ped)
     expect_equal(as.numeric(as.vector(fcheck_ped_corrected[1, ])),
         c(0, 1, 1, 0, 0)
     )

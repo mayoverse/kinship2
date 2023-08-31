@@ -78,7 +78,7 @@ Collate:
     'data.R'
     'descendants.R'
     'makefamid.R'
-    'familycheck.R'
+    'family_check.R'
     'kinship.R'
     'utils.R'
     'find_unavailable.R'

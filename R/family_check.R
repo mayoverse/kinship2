@@ -53,11 +53,11 @@
 #' ))
 #'
 #' ## check them giving separate ped ids
-#' fcheck.sep <- with(sampleped, familycheck(ped, id, father, mother))
+#' fcheck.sep <- with(sampleped, family_check(ped, id, father, mother))
 #' fcheck.sep
 #'
 #' ## check assigning them same ped id
-#' fcheck.combined <- with(sampleped, familycheck(rep(1, nrow(sampleped)),
+#' fcheck.combined <- with(sampleped, family_check(rep(1, nrow(sampleped)),
 #' id, father, mother))
 #' fcheck.combined
 #'
@@ -65,7 +65,7 @@
 #' sampleped[20, 3] <- 131
 #' fcheck1.bad <- try(
 #'   {
-#'     with(sampleped, familycheck(ped, id, father, mother))
+#'     with(sampleped, family_check(ped, id, father, mother))
 #'   },
 #'   silent = FALSE
 #' )
@@ -76,13 +76,13 @@
 #' @keywords genetics
 #' @include pedigreeClass.R
 #' @export
-setGeneric("familycheck", signature = "obj",
-    function(obj, ...) standardGeneric("familycheck")
+setGeneric("family_check", signature = "obj",
+    function(obj, ...) standardGeneric("family_check")
 )
 
 #' @include makefamid.R
 #' @export
-setMethod("familycheck", "numeric",
+setMethod("family_check", "numeric",
     function(obj, id, dadid, momid, newfam) {
         famid <- obj
         if (is.numeric(famid) && any(is.na(famid))) {
@@ -125,9 +125,9 @@ setMethod("familycheck", "numeric",
     }
 )
 
-setMethod("familycheck", "Pedigree",
+setMethod("family_check", "Pedigree",
     function(obj) {
-        familycheck(obj$ped$family, obj$ped$id, obj$ped$dadid, obj$ped$momid)
+        family_check(obj$ped$family, obj$ped$id, obj$ped$dadid, obj$ped$momid)
     }
 )
 
