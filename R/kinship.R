@@ -271,7 +271,9 @@ setMethod("kinship", "Pedigree",
             idlist[[i_fam]] <- tped$ped$id
         }
         if (length(famlist) == 1) {
-            return(matlist[[1]])
+            as(matlist[[1]],
+                "CsparseMatrix"
+            )
         } else {
             for (i_fam in seq_along(famlist)) {
                 matlist[[i_fam]] <- as(as(

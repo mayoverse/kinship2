@@ -54,7 +54,7 @@ data(sampleped)
 sampleped[1:10, ]
 ped <- pedigree(sampleped)
 print(ped)
-``` 
+```
 
 The {\em pedigreeList} object can be subset to individual pedigrees 
 by their family id.  The pedigree object has a print and plot method, which 
@@ -102,7 +102,7 @@ further fixing the pedigree.
 tryout <- try({
     ped2 <- pedigree(datped2)
 })
-fixped2 <- with(datped2, fix_parents(id, father, mother, sex))
+fixped2 <- with(datped2, fix_parents(id, dadid, momid, sex))
 fixped2
 ped2 <- pedigree(fixped2)
 plot(ped2)
@@ -134,7 +134,7 @@ which is stored efficiently to avoid repeating elements.
 ```{r, calckinship}
 kin2 <- kinship(ped2basic)
 kin2
-``` 
+```
 
 For family 2, see that the row and column names match the id in 
 the figure below, and see that each kinship coefficient with 
@@ -144,47 +144,49 @@ marry-ins only share alleles IBD with their children with coefficient $0.25$
 
 ## Kinship for pedigreeList object
 
-The kinship function also works on a {\em pedigreeList} object. 
+The kinship function also works on a {\em pedigree} object with multiple families. 
 We show how to create the kinship matrix, then 
 show a snapshot of them for the two families, where the row and columns names
 are the ids of the subject.
 
-```{r, kinAll}
+```{r, kin_all}
 ped <- pedigree(sampleped)
-kinAll <- kinship(ped)
-kinAll[1:14, 1:14]
-kinAll[40:43, 40:43]
-kinAll[42:46, 42:46]
+kin_all <- kinship(ped)
+kin_all[1:14, 1:14]
+kin_all[40:43, 40:43]
+kin_all[42:46, 42:46]
 ```
 
 ## Kinship for twins in pedigreeList object
 
-Specifying twin relationships in a pedigreeList object is complicated by the fact that the user must specify the family id to which the ~id1~ and ~id2~ belong. We show below the relation matrix
-requires the family id to be in the last column, with the column names as done below, to make the plotting and kinship matrices to show up with the monozygotic twins correctly. We show how to
-specify monozygosity for subjects 206 and 207 in samplepedigree 2, and subjects 125 and 126 in pedigree 1. We check it by looking at the kinship matrix for these pairs, which are correctly at $0.5$.
+Specifying twin relationships in a pedigree with multiple families object is complicated by the fact that the user must specify the family id to which the ~id1~ and ~id2~ belong.
+We show below the relation matrix requires the family id to be in the last column, with the column names as done below, to make the plotting and kinship matrices to show up with the monozygotic twins correctly.
+We show how to specify monozygosity for subjects 206 and 207 in samplepedigree 2, and subjects 125 and 126 in pedigree 1.
+We check it by looking at the kinship matrix for these pairs, which are correctly at $0.5$.
 
 ```{r, kintwins}
-reltwins <- rbind(c(206, 207, 1, 2), c(125, 126, 1, 1))
+reltwins <- as.data.frame(rbind(c(206, 207, 1, 2), c(125, 126, 1, 1)))
 colnames(reltwins) <- c("indId1", "indId2", "code", "family")
 ped <- pedigree(sampleped, rel_df = reltwins)
 
-kinAll <- kinship(ped)
-kinAll[21:31, 21:31]
-kinAll[42:50, 42:50]
+kin_all <- kinship(ped)
+kin_all[21:31, 21:31]
+kin_all[42:50, 42:50]
+kin_all
 ```
 
 Note that subject $113$ is not in pedigree 1 because they 
 are a marry-in without children in the pedigree. Subject $113$ is in their own 
-pedigree of size 1 in the $kinAll$ matrix at index $41$. We later show how 
+pedigree of size 1 in the $kin_all$ matrix at index $41$. We later show how 
 to handle such marry-ins for plotting.
 
-Optional Pedigree Features
+Optional Pedigree Informations
 ===============================
 
 We use pedigree 2 from $sampleped$ to sequentially 
 add optional information to the pedigree object.
 
-\subsection*{Status}
+## Status
 The example below shows how to specify a $status$ indicator, such as 
 vital status. The $sampleped$ data does not include such an  
 indicator, so we create one to indicate that the first generation of 
@@ -195,7 +197,7 @@ df2 <- sampleped[sampleped$ped == 2, ]
 names(df2)
 df2$status <- c(1, 1, rep(0, 12))
 ped2 <- pedigree(df2)
-``` 
+```
 
 ## Affected Indicators
 
@@ -217,7 +219,7 @@ ped2 <- pedigree(df2$id, df2$father, df2$mother,
   affected = as.matrix(aff2),
   status = df2$censor
 )
-```        
+```
 
 ## Special Relationships
 
@@ -296,7 +298,7 @@ id2 <- paste(df2$id, c(
 ), sep = "\n")
 plot(ped2, avail = ifelse(df2$avail, 2, 1), id = id2, cex = .5)
 #pedigree.legend(ped2, location = "topright", radius = .2)
-``` 
+```
 
 To show some other tricks with pedigree plotting, we use pedigree 1 
 from ~sampleped~, which has 41 subjects in 4 generations, including a
@@ -318,7 +320,7 @@ ped1 <- pedigree(df1$id, df1$father, df1$mother,
 )
 print(ped1)
 plot(ped1, avail = ifelse(df1$avail == 1, "red", "black"), cex = .7)
-``` 
+```
 
 ## Align by Input Order
 
@@ -335,7 +337,7 @@ ped1reord <- pedigree(df1reord$id, df1reord$father, df1reord$mother,
   affected = df1reord$affected, relation = relate1
 )
 plot(ped1reord, avail = df1reord$avail + 1, cex = .7)
-``` 
+```
   
 ## Legend Plot
 
@@ -363,7 +365,7 @@ legendPlot(ped2,
   id = id2, cex = .5, symbolsize = .5,
   col.label = c("no dna", "dna")
 )
-```  
+```
   
 Pedigree Utility Functions
 =================================
@@ -379,7 +381,7 @@ $as.data.frame()$ method, as shown below.
 ```{r, ped2df}
 dfped2 <- as.data.frame(ped2)
 dfped2
-``` 
+```
 
 ## Subsetting and Trimming
 
@@ -398,7 +400,7 @@ ped2.rm210 <- ped2[-10]
 data.frame(ped2.rm210)
 ped2.rm210$relation
 ped2$relation
-``` 
+```
 
 The steps above only work for subsetting by the index of the 
 pedigree object vectors, not by the ~id~ of the subjects themselves.  
@@ -414,7 +416,7 @@ ped2.trim210$relation
 ped2.trim.more <- pedigree_trim(c(212, 214), ped2.trim210)
 ped2.trim.more$id
 ped2.trim.more$relation
-``` 
+```
 
 
 Shrinking
@@ -458,7 +460,7 @@ shrink1.B25 <- pedigree.shrink(
 )
 shrink1.B25
 # plot.pedigree.shrink(shrink1.B25, avail=shrink1.B25$avail+1, cex=.6)
-``` 
+```
 
 Select Unrelateds
 =======================
@@ -482,7 +484,7 @@ set1 <- unrelated(ped2, avail = df2$avail)
 set1
 set2 <- unrelated(ped2, avail = df2$avail)
 set2
-``` 
+```
 
 We can easily verify the sets selected by $unrelated$ by
 referring to Figure~\ref{basicPed2} and see that subjects 203 and 209 are
@@ -496,4 +498,4 @@ with availability status of 1.
 ```{r, unrelVerify}
 df2
 kin2[df2$avail == 1, df2$avail == 1]
-``` 
+```

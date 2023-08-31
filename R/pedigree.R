@@ -69,6 +69,12 @@ pedigree <- function(
     normalize = TRUE,
     ...
 ) {
+    if (!is.data.frame(ped_df)) {
+        stop("ped_df must be a data.frame")
+    }
+    if (!is.data.frame(rel_df)) {
+        stop("rel_df must be a data.frame")
+    }
     ## Rename columns ped
     old_cols <- as.vector(unlist(cols_ren_ped))
     new_cols <- names(cols_ren_ped)

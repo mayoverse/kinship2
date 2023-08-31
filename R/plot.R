@@ -144,7 +144,10 @@ setMethod("plot", c(x = "Pedigree", y = "missing"),
             leg$par_usr
             if (is.null(leg_loc)) {
                 wh_fr <- lst$par_usr$usr
-                leg_loc <- c(wh_fr[2] * 0.75, wh_fr[2], wh_fr[3]*0.75, wh_fr[3])
+                leg_loc <- c(
+                    wh_fr[1] + 1, wh_fr[2],
+                    wh_fr[3] + 0.1, wh_fr[3] + 0.4
+                )
             }
             leg$leg_df$x0 <- scales::rescale(leg$leg_df$x0,
                 c(leg_loc[1], leg_loc[2])

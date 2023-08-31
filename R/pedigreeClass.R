@@ -53,11 +53,11 @@ setMethod("show", signature(object = "Pedigree"), function(object) {
 #' @return A character vector with the summary of the object.
 setMethod("summary", signature(object = "Pedigree"), function(object) {
     cat("Pedigree object with", nrow(object@ped), "individuals", fill = TRUE)
-    cols_summary <- c("family", "id", "dadid", "momid", "sex", "avail")
-    print(summary(object@ped[cols_summary], maxsum = 5))
+    print(summary(object@ped, maxsum = 5))
     cat("and", nrow(object@rel), "special relationships.", fill = TRUE)
     print(summary(object@rel))
-    cat("The scales are:", levels(as.factor(object@scales$column)), fill = TRUE)
+    cat("The filling scales columns are:", levels(as.factor(object@scales$fill$column_values)), fill = TRUE)
+    cat("The border scale column are:", levels(as.factor(object@scales$border$column)), fill = TRUE)
 })
 
 setMethod("[[", c(x = "Pedigree", i = "ANY", j = "missing"),
