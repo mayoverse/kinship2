@@ -106,15 +106,20 @@ NULL
 #' @keywords hplot, genetics
 #' @include align.R
 #' @include plot_fct.R
+#' @include ped_to_plotdf.R
+#' @include ped_to_legdf.R
+#' @include plot_fromdf.R
 #' @export
 setMethod("plot", c(x = "Pedigree", y = "missing"),
     function(x, mark = TRUE,
         label = NULL, tips_names = NULL, fill = "grey", border = "black",
         ggplot_gen = FALSE, cex = 1, symbolsize = 1, branch = 0.6,
-        packed = TRUE, align = c(1.5, 2), width = 6, psize = par("pin"),
+        packed = TRUE, align = c(1.5, 2), width = 6,
         title = NULL, density = c(-1, 35, 65, 20),
         mar = c(4.1, 1, 4.1, 1), angle = c(90, 65, 40, 0),
-        keep_par = FALSE, subregion = NULL, pconnect = 0.5, family = 1, ...
+        keep_par = FALSE, subregion = NULL, pconnect = 0.5, family = 1,
+        legend = FALSE, leg_cex = 0.8, leg_symbolsize = 0.5,
+        leg_loc = NULL, ...
     ) {
         lst <- ped_to_plotdf(x, packed, width, align, subregion,
             cex, symbolsize, pconnect, branch, mark, label, ...
@@ -126,10 +131,34 @@ setMethod("plot", c(x = "Pedigree", y = "missing"),
             )
             lst <- lst[[family]]
         }
-        p <- plot_from_df(lst$df, usr = lst$par_usr$usr,
+        p <- plot_fromdf(lst$df, usr = lst$par_usr$usr,
             title = title, ggplot_gen = ggplot_gen,
             boxw = lst$par_usr$boxw, boxh = lst$par_usr$boxh
         )
+
+        if (legend) {
+            leg <- ped_to_legdf(x, cex = leg_cex,
+                boxw = lst$par_usr$boxw * leg_symbolsize,
+                boxh = lst$par_usr$boxh * leg_symbolsize
+            )
+            leg$par_usr
+            if (is.null(leg_loc)) {
+                wh_fr <- lst$par_usr$usr
+                leg_loc <- c(wh_fr[2] * 0.75, wh_fr[2], wh_fr[3]*0.75, wh_fr[3])
+            }
+            leg$leg_df$x0 <- scales::rescale(leg$leg_df$x0,
+                c(leg_loc[1], leg_loc[2])
+            )
+            leg$leg_df$y0 <- scales::rescale(leg$leg_df$y0,
+                c(leg_loc[3], leg_loc[4])
+            )
+            clip(leg_loc[1] - 1, leg_loc[2] + 1, leg_loc[3] - 1, leg_loc[4] + 1)
+            plot_fromdf(leg$leg_df, add_to_existing = TRUE,
+                boxw = lst$par_usr$boxw * leg_symbolsize,
+                boxh = lst$par_usr$boxh * leg_symbolsize
+            )
+        }
+
         if (ggplot_gen) {
             invisible(list(df = lst$df, par_usr = lst$par_usr, ggplot = p))
         } else {

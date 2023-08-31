@@ -5,7 +5,7 @@ NULL
 
 #' @include plot_fct.R
 #' @export
-plot_from_df <- function(
+plot_fromdf <- function(
     df, usr = NULL, title = NULL, ggplot_gen = FALSE, boxw = 1,
     boxh = 1, add_to_existing = FALSE
 ) {

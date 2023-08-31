@@ -17,7 +17,9 @@ test_that("Pedigree shrink works", {
     ## This caused an error in pedigree.shrink before kinship2. v1.2.8.
     ## Now fixed
 
-    vdiffr::expect_doppelganger("pedigree shrink 1", plot(mn2))
+    vdiffr::expect_doppelganger("pedigree shrink 1",
+        function() plot(mn2)
+    )
 
     ## breaks in pedigree_trim
     avail <- ifelse(is.na(mn2$ped$cancer), 0, mn2$ped$cancer)
@@ -34,7 +36,9 @@ test_that("Pedigree shrink works", {
     )
 
     mn8 <- ped_mb[ped_mb$ped$family == "8", ]
-    vdiffr::expect_doppelganger("pedigree shrink 2", plot(mn8))
+    vdiffr::expect_doppelganger("pedigree shrink 2",
+        function() plot(mn8)
+    )
 
     avail <- ifelse(is.na(mn8$ped$cancer), 0, mn8$ped$cancer)
 
@@ -122,10 +126,10 @@ test_that("Shrink works", {
     ped2_s <- shrink(ped2)
 
     vdiffr::expect_doppelganger("Whole ped",
-        plot(ped2, title = "Whole ped")
+        function() plot(ped2, title = "Whole ped")
     )
     vdiffr::expect_doppelganger("Shrinked ped",
-        plot(ped2_s$pedObj, title = "Shrinked ped")
+        function() plot(ped2_s$pedObj, title = "Shrinked ped")
     )
 })
 TRUE

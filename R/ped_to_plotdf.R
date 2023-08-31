@@ -3,7 +3,7 @@ NULL
 
 ped_to_plotdf <- function(
     ped, packed = FALSE, width = 10, align = c(1.5, 2),
-    subregion = NULL, cex = 1, symbolsize = cex, pconnect = 0.5, branch = 0.6,
+    subregion = NULL, cex = 0.5, symbolsize = cex, pconnect = 0.5, branch = 0.6,
     mark = TRUE, label = NULL, ...
 ) {
 
@@ -120,7 +120,7 @@ ped_to_plotdf <- function(
 
     ## Add ids
     id_df <- data.frame(
-        x0 = pos[idx], y0 = i[idx] + boxh + labh * 0.7,
+        x0 = pos[idx], y0 = i[idx] + boxh + labh * 1.2,
         label = ped$ped[id[idx], "id"], fill = "black",
         type = "text", cex = cex,
         id = "id"
@@ -132,7 +132,7 @@ ped_to_plotdf <- function(
     if (!is.null(label)) {
         check_columns(ped$ped, label)
         label <- data.frame(
-            x0 = pos[idx], y0 = i[idx] + boxh + labh * 1.4,
+            x0 = pos[idx], y0 = i[idx] + boxh + labh * 2.8,
             label = ped$ped[id[idx], label],
             fill = "black",
             type = "text", cex = cex,

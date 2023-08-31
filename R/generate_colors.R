@@ -114,6 +114,11 @@ generate_fill <- function(
         mods_to_use <- seq_along(fill_scale)
         names(mods_to_use) <- names(fill_scale)
         mods <- suppressMessages(revalue(mods, mods_to_use))
+        rev_fill_scale <- names(fill_scale)
+        names(rev_fill_scale) <- unlist(fill_scale)
+        labels <- paste(labels, ":",
+            suppressMessages(revalue(fill, rev_fill_scale))
+        )
     }
     # Set to grey color individual with no informations
     fill[is.na(fill)] <- "grey"

@@ -26,21 +26,25 @@ test_that("pedigree other test", {
 
     rel_df <- data.frame(indId1 = 8, indId2 = 9, code = 3, family = 1)
     ped <- pedigree(ped2df, rel_df = rel_df)
-    vdiffr::expect_doppelganger("Ped simple affection", ped)
+
+    vdiffr::expect_doppelganger("Ped simple affection",
+        function() plot(ped)
+    )
 
     lst <- plot(ped, label = "smoker", mark = FALSE, ggplot_gen = TRUE)
-    vdiffr::expect_doppelganger("Ped simple affection ggplot", lst$ggplot)
+    vdiffr::expect_doppelganger("Ped simple affection ggplot",
+        function() plot(lst$ggplot)
+    )
 
     ped <- generate_colors(ped, add_to_scale = TRUE,
         col_aff = "smoker", colors_aff = c("#00e6ee", "#c300ff")
     )
 
     lst <- ped_to_plotdf(ped)
-    p <- plot_from_df(lst$df, par_usr = lst$par$par_usr,
-        title = "Pedigree", ggplot_gen = TRUE,
-        boxw = lst$par$boxw, boxh = lst$par$boxh
+    p <- plot(ped, title = "Pedigree", ggplot_gen = TRUE)
+    vdiffr::expect_doppelganger("Ped 2 affections ggplot",
+        function() plot(p$ggplot)
     )
-    vdiffr::expect_doppelganger("Ped 2 affections ggplot", p)
 })
 
 test_that("pedigree fails to line up", {
@@ -48,10 +52,13 @@ test_that("pedigree fails to line up", {
     data(sampleped)
     df1 <- sampleped[sampleped$family == "1", ]
     ped1 <- pedigree(df1)
-    vdiffr::expect_doppelganger("ped1", plot(ped1))
-
+    vdiffr::expect_doppelganger("ped1",
+        function() plot(ped1)
+    )
     # With reordering it's better
     df1reord <- df1[c(35:41, 1:34), ]
     ped1reord <- pedigree(df1reord)
-    vdiffr::expect_doppelganger("ped1reorder", plot(ped1reord))
+    vdiffr::expect_doppelganger("ped1reorder",
+        function() plot(ped1reord)
+    )
 })

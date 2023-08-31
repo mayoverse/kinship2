@@ -114,4 +114,17 @@ test_that("generate colors works on pedigree object", {
     expect_equal(ped_aff$scales$fill$mods,  c(0, 1))
     expect_equal(ped_aff$scales$fill$affected,  c("FALSE", "TRUE"))
 })
+
+test_that("generate with full scale", {
+    data("sampleped")
+    ped <- pedigree(sampleped)
+    ped <- ped[ped$ped$family == "1", ]
+    ped <- generate_colors(ped, add_to_scale = FALSE, "indId", threshold = 115,
+        colors_aff = c("pink", "purple"), keep_full_scale = TRUE
+    )
+    expect_equal(ped$scales$fill$labels[c(1, 4)],
+        c("Healthy <= to 115 : [101,106]", "Affected > to 115 : [116,124]")
+    )
+    expect(nrow(ped$scales$fill), 6)
+})
 TRUE
