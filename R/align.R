@@ -150,14 +150,16 @@ setMethod("align", "Pedigree", function(obj, packed = TRUE, width = 10,
     } else {
         spouselist <- matrix(0L, nrow = 0, ncol = 4)
     }
-    if (nrow(ped$rel) > 0 && any(ped$rel$code == "spouse")) {
+
+    if (nrow(ped$rel) > 0 && any(ped$rel$code == "Spouse")) {
         # Add spouses from the relationship matrix
-        trel <- ped$rel[ped$rel$code == "spouse", , drop = FALSE]
+        trel <- ped$rel[ped$rel$code == "Spouse", c("id1", "id2") , drop = FALSE]
+        trel$id1 <- match(trel$id1, ped$ped$id)
+        trel$id2 <- match(trel$id2, ped$ped$id)
         tsex <- ped$ped$sex[trel[, 1]]
         trel[tsex != "male", 1:2] <- trel[tsex != "male", 2:1]
         spouselist <- rbind(spouselist, cbind(trel[, 1], trel[, 2], 0, 0))
     }
-
     dad <- match(ped$ped$dadid, ped$ped$id, nomatch = 0)
     mom <- match(ped$ped$momid, ped$ped$id, nomatch = 0)
     is_child <- dad > 0 & mom > 0
@@ -205,9 +207,9 @@ setMethod("align", "Pedigree", function(obj, packed = TRUE, width = 10,
         }
     }
     ## Doc: finish align(2)
-    if (nrow(ped$rel) > 0 && any(ped$rel$code != "spouse")) {
+    if (nrow(ped$rel) > 0 && any(ped$rel$code != "Spouse")) {
         twins <- 0 * nid
-        who <- (ped$rel$code != "spouse")
+        who <- (ped$rel$code != "Spouse")
         ltwin <- match(ped$rel[who, "id1"], ped$ped$id, nomatch = 0)
         rtwin <- match(ped$rel[who, "id2"], ped$ped$id, nomatch = 0)
         ttype <- ped$rel[who, "code"]

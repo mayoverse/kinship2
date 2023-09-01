@@ -256,11 +256,11 @@ setMethod("generate_colors", "data.frame",
 #' @include pedigreeClass.R
 #' @export
 setMethod("generate_colors", "Pedigree",
-    function(obj, add_to_scale = TRUE, ...) {
+    function(obj, col_aff = "affected", add_to_scale = TRUE, ...) {
         if (nrow(obj$ped) == 0) {
             return(obj)
         }
-        list_aff <- generate_colors(obj$ped, ...)
+        list_aff <- generate_colors(obj$ped, col_aff, ...)
         obj$ped <- list_aff$df
 
         if (add_to_scale) {

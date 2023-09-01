@@ -145,7 +145,7 @@ setMethod("[", c(x = "Pedigree", i = "ANY", j = "missing"),
         }
         ped_df <- x$ped[i,]
         allId <- unique(c(ped_df$id, ped_df$dadid, ped_df$momid))
-        rel_df <- x$rel[x$rel$id1 %in% allId | x$rel$id2 %in% allId, ]
+        rel_df <- x$rel[x$rel$id1 %in% allId & x$rel$id2 %in% allId, ]
         idx <- match(allId, ped_df$id, nomatch = 0)
         sub_hints <- sub_sel_hints(x$hints, idx)
         new_ped <- pedigree(ped_df, rel_df, x$scales, hints = sub_hints, cols_ren_ped = NULL, normalize = FALSE)

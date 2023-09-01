@@ -68,7 +68,8 @@ plot_fromdf <- function(
 
     arcs <- df[df$type == "arc", ]
     if (nrow(arcs) > 0) {
-        for (it in nrow(arcs)){
+        for (it in seq_len(nrow(arcs))){
+            print(it)
             arc <- arcs[it, ]
             p <- draw_arc(arc$x0, arc$y0, arc$x1, arc$y1,
                 p, ggplot_gen, cex = arc$cex, col = arc$fill
