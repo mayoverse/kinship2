@@ -55,16 +55,20 @@ plot_fromdf <- function(
         )
     }
     txt <- df[df$type == "text" & !is.na(df$label), ]
-    p <- draw_text(
-        txt$x0, txt$y0, txt$label,
-        p, ggplot_gen, txt$cex, txt$fill, txt$adjx, txt$adjy
-    )
+    if (nrow(txt) > 0){
+        p <- draw_text(
+            txt$x0, txt$y0, txt$label,
+            p, ggplot_gen, txt$cex, txt$fill, txt$adjx, txt$adjy
+        )
+    }
 
     seg <- df[df$type == "segments", ]
-    p <- draw_segment(
-        seg$x0, seg$y0, seg$x1, seg$y1,
-        p, ggplot_gen, seg$fill, seg$cex
-    )
+    if (nrow(seg) > 0){
+        p <- draw_segment(
+            seg$x0, seg$y0, seg$x1, seg$y1,
+            p, ggplot_gen, seg$fill, seg$cex
+        )
+    }
 
     arcs <- df[df$type == "arc", ]
     if (nrow(arcs) > 0) {
