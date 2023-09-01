@@ -14,13 +14,11 @@ vignette: |
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
-
-
-
 Introduction
 ==============
 
 The plotting function for pedigrees has 5 tasks
+
   1. Gather information and check the data.  An important step is the call to align.
   2. Set up the plot region and size the symbols.  The program wants to plot circles
    and squares, so needs to understand the geometry of the paper, pedigree size,
@@ -35,26 +33,19 @@ is how we might break a plot across multiple pages.
 Setup
 ===========
 
-The dull part is first: check all of the input data for
-correctness.  The [[sex]] variable is taken from the pedigree so we need not check
-that. The identifier for each subject is by default the [[id]] variable from
-the pedigree, but users often want to add some extra text.
-The status variable can be used to put a line through the symbol
-of those who are deceased, it is an optional part of the pedigree.
+The new version of the plotting pedigree function works in two step.
 
-The affected status is a 0/1 matrix of any marker data that the
-user might want to add.  It may be attached to the pedigree or added
-here.  It can be a vector of length [[n]] or a matrix with [[n]] rows.
-If it is not present, the default is to print open symbols without
-shading or color, which corresponds to a code of 0, while a 1 means to
-shade the symbol.  
+  - **ped_to_plotdf** create a dataframe from a pedigree given containing
+  all the necessary information to plot all the elements of the pedigree:
+  "polygons", "text", "segments", "arcs"
+  - **plot_from_df** use a given dataframe and plot all the element given
 
-If the argment is a matrix, then the shading and/or density value for
-ith column is taken from the ith element of the angle/density arguments.
+The advantage of this two step method, is that all the plotting can be parralelised,
+each element can be customised by the user if necessary and additional elements can
+also be added to the plot by just adding a new row.
 
-For purposes within the plot method, NA values in \sl{affected} are coded 
-to -1, which are plotted as a question mark (?) in the symbol, or region of
-the symbol representing that affected status.
+If multiple families are present in the pedigree object, then one dataframe per family will
+be produced and the first one will be plotted.
 
 Sizing
 ===============
@@ -75,24 +66,24 @@ We also want to vertical room for the labels. Which should have at least
 The stemp3 variable is the height of labels: users may use multi-line ones.
 Our constraints then are
 
-  1. (box height + label height)*maxlev $\le$ height: the boxes and labels have
+  1. $(box height + label height) \times maxlev \le height$ : the boxes and labels have
     to fit vertically
-  2. (box height) * (maxlev + (maxlev-1)/2) $\le$ height: at least 1/2 a box of
+  2. $(box height) \times (maxlev + (maxlev-1)/2) \le height$ : at least 1/2 a box of
     space between each row of boxes
-  3. (box width) $\le$ stemp1 in inches 
-  4. (box width) $\le$ 0.8 unit in user coordinates, otherwise they appear 
+  3. $(box width) \le stemp1$ in inches 
+  4. $(box width) \le 0.8$ unit in user coordinates, otherwise they appear 
     to touch
-  5. User coordinates go from min(xrange)- 1/2 box width to 
-    max(xrange) + 1/2 box width.
+  5. User coordinates go from $min(xrange)- 1/2 box width$ to 
+    $max(xrange) + 1/2 box width$.
   6. the box is square (in inches)
 
-The first 3 of these are easy.  The fourth comes into play only for very packed
+The first 3 of these are easy. The fourth comes into play only for very packed
 pedigrees. Assume that the box were the maximum size of .8 units, i.e., minimal
-spacing between them. Then xmin -.45 to xmax + .45 covers the plot region,
-the scaling between user coordinates and inches is (.8 + xmax-xmin) user =
-figure region inches, and the box is .8*(figure width)/(.8 + xmax-xmin).
+spacing between them. Then $xmin -.45$ to $xmax + .45$ covers the plot region,
+the scaling between user coordinates and inches is $(.8 + xmax-xmin)$
+and the box is $.8 \times (figure width) / (.8 + xmax-xmin)$.
 The transformation from user units to inches horizontally depends on the box
-size, since I need to allow for 1/2 a box on the left and right.  
+size, since we need to allow for 1/2 a box on the left and right.  
 Vertically the range from 1 to nrow spans the tops of the symbols, which 
 will be the figure region height less (the height of the text for the last
 row + 1 box); remember that the coordinates point to the top center of the box.
@@ -105,62 +96,90 @@ This section is still experimental and might change. Also, in the original
 documentation by TM Therneau, it is within the sizing section above.
 
 Sometimes a pedigree is too large to fit comfortably on one page.
-The [[subregion]] argument allows one to plot only a portion of the
+The $subregion$ argument allows one to plot only a portion of the
 pedigree based on the plot region.  Along with other tools to
 select portions of the pedigree based on relatedness, such as all
 the descendents of a particular marriage, it gives a tool for
-addressing this.  This breaks our original goal of completely
+addressing this. This breaks our original goal of completely
 automatic plots, but users keep asking for more.
 
-The argument is [[subregion=c(min x, max x, min depth, max depth)]],
-and works by editing away portions of the [[plist]] object
+The argument is $subregion = c(min x, max x, min depth, max depth)$,
+and works by editing away portions of the $plist$ object
 returned by align.  First decide what lines to keep. 
 Then take subjects away from each line, update spouses and twins,
 and fix up parentage for the line below.
 
-Drawing the Tree
+ped_to_plotdf()
 ==================
 
-1. First draw and label the boxes.  Definition of the drawbox function is
-deferred until later.  symbols code chunk.
+This first function create the dataframe with the necessary plotting information from a pedigree object.
+The steps are: 
 
-2. Draw in the connections, one by one, beginning with spouses. lines code chunk.
-3. Connect children to parents.
-4. Lines/arcs to connect multiple instances of same subject.
+1. Add boxes (depend on affection and sex) and marks.
+2. Add status crossing if present.
+3. Add id text and labels
+3. Add in the connections, one by one, beginning with spouses.
+4. Add connections children to parents.
+5. Add lines/arcs to connect multiple instances of same subject.
 
-Details on connecting children to parents. First there are lines up from each
-child, which would be trivial except for twins, triplets, etc.  Then we 
-draw the horizontal bar across siblings and finally the connector from
-the parent.  For twins, the \em{vertical} lines are angled towards a 
-common point, the variable is called [[target]] below.
+## Details on the polygon filling and border
+
+Each polygon is named based on its shape ("square", "circle", "diamond", "triangle"), the
+total number of division of the whole shape, and the position of the division to plot.
+
+```{r, polygons, eval = FALSE}
+types <- c(
+    "square_1_1", # Whole square
+    "circle_2_1", # Semi circle first division
+    "diamond_3_2", # Third of diamond second division
+    "triangle_4_3" # Fourth of triangle third division
+)
+df <- plot_df <- data.frame(
+    x0 = c(1, 3, 5, 7), y0 = 1,
+    type = types, fill = c("red", "blue", "green", "yellow"),
+    border = "black",
+    angle = c(NA, 90, 0, 45),
+    density = c(NA, 10, 20, 40)
+)
+plot_fromdf(df, usr = c(0, 8, 0, 2))
+```
+
+The number of division will depend on the number of affection register in the $fill$ slot of
+the $scale$ slot of the pedigree.
+The filling will depend on the color given by the corresponding modality for each individual,
+it is the same for the border of the polygon.
+
+## Details on connecting children to parents.
+
+First there are lines up from each child, which would be trivial except for twins, triplets, etc.
+Then we draw the horizontal bar across siblings and finally the connector from
+the parent.  For twins, the *vertical* lines are angled towards a 
+common point, the variable is called $target$ below.
 The horizontal part is easier if we do things family by
-family.  The [[plist$twins]] variable is 1/2/3 for a twin on my right,
+family.  The `plist$twins` variable is 1/2/3 for a twin on my right,
 0 otherwise.
 
-Details on arcs. The last set of lines are dotted arcs that connect mulitiple instances of
+## Details on arcs.
+
+The last set of lines are dotted arcs that connect mulitiple instances of
 a subject on the same line.  These instances may or may not be on the
 same line.
-The arrcconect function draws a quadratic arc between locations $(x_1, y_1)$
-and $(x_2, y_2$) whose height is 1/2 unit above a straight line connection.
+The arrcconect function draws a quadratic arc between locations $(x1, y1)$
+and $(x2, y2$) whose height is 1/2 unit above a straight line connection.
                
+plot_fromdf()
+==================
 
-## Drawbox
+## Polygons drawing
 
-Finally we get to the drawbox function itself, which is fairly simple.
-In 2011 updates, it allows missing, and fixeds up shadings and borders.
-For affected=0, do not fill. For affected=1, fill with density-lines and angles.
-For affected=-1 (missing), fill with *?* in the midpoint of the polygon,
-with a size adjusted by how many columns in affected.
-For all shapes drawn, make the border the color for the person.
-
-## Symbols
+### Symbols
 
 There are four sumbols corresponding to the four sex codes: square = male,
 circle = female, diamond= unknown, and triangle = terminated.  
 They are shaded according to the value(s) of affected status for each
-subject, where 0=unfilled and 1=filled, and filling uses the standard
-arguments of the [[polygon]] function.
-The nuisance is when the affected status is a matrix, in which case the
+subject, and filling uses the standard
+arguments of the $polygon()$ function.
+The complexity is when multiple affected status are given, in which case the
 symbol will be divided up into sections, clockwise starting at the 
 lower left. 
 I asked Beth about this (original author) and there was no particular
@@ -171,53 +190,56 @@ will make up the symbol.  These are then used again and again.
 The collection is kept as a list with the four elements square, circle,
 diamond and triangle.
 
-Each of these is in turn a list with ncol(affected) element, and each
+Each of these is in turn a list with `ncol(affected)` element, and each
 of those in turn a list of x and y coordinates.
-There are 3 cases: the affected matrix has
-only one column, partitioning a circle for multiple columns, and 
-partitioning the other cases for multiple columns.
 
 ### Circfun
 
-The circle function is quite simple.  The number of segments is arbitrary,
-50 seems to be enough to make the eye happy.  We draw the ray from 0 to
-the edge, then a portion of the arc.  The polygon function will connect
+The circle function is quite simple. The number of segments is arbitrary,
+50 seems to be enough to make the eye happy. We draw the ray from 0 to
+the edge, then a portion of the arc. The polygon function will connect
 back to the center.
 
 ### Polyfun
-Now for the interesting one --- dividing a polygon into ``pie slices''.
+Now for the interesting one --- dividing a polygon into ''pie slices''.
 In computing this we can't use the usual $y= a + bx$ formula for a line,
 because it doesn't work for vertical ones (like the sides of the square).
 Instead we use the alternate formulation in terms of a dummy variable 
 $z$.
+
 \begin{eqnarray*}
   x &=& a + bz \\
   y &=& c + dz \\
 \end{eqnarray*}
+
 Furthermore, we choose the constants $a$, $b$, $c$, and $d$ so that 
 the side of our polygon correspond to $0 \le z \le 1$.
 The intersection of a particular ray at angle theta with a 
 particular side will satisfy
+
 \begin{eqnarray}
   theta &=& y/x = \frac{a + bz}{c+dz} \nonumber \\
-  z &=& \frac{a\theta -c}{b - d\theta} \label{eq:z} \\
+  z &=& \frac{a\theta -c}{b - d\theta} \\
 \end{eqnarray}
 
-Equation \ref{eq:z} will lead to a division by zero if the ray from the
+Equation $z$ will lead to a division by zero if the ray from the
 origin does not intersect a side, e.g., a vertical divider will be parallel
 to the sides of a square symbol.  The only solutions we want have
-$0 \le z \le 1$ and are in the `forward' part of the ray.  This latter  %'`
+$0 \le z \le 1$ and are in the ''forward''' part of the ray.  This latter
 is true if the inner product $x \cos(\theta) + y \sin(\theta) >0$.
 Exactly one of the polygon sides will satisfy both conditions.
 
-
 Final output
 ==========================
-Remind the user of subjects who did not get
-plotted; these are ususally subjects who are married in but without
-children.  Unless the pedigree contains spousal information the
-routine does not know who is the spouse.
-Then restore the plot parameters.  This would only not be done if someone
-wants to further annotate the plot.
-Last, we give a list of the plot positions for each subject.  Someone
-who is plotted twice will have their first position listed.
+
+The pedigree is plotted in a new frame or added to the current device.
+If `ggplot_gen = TRUE`, then a ggplot object is create with the same informations
+and available in the invisible object given back by *plot_fromdf()* 
+
+    Notes:
+        Remind the user of subjects who did not get
+        plotted; these are ususally subjects who are married in but without
+        children.  Unless the pedigree contains spousal information the
+        routine does not know who is the spouse.
+        Then restore the plot parameters.  This would only not be done if someone
+        wants to further annotate the plot.

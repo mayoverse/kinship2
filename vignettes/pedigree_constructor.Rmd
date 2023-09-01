@@ -1,0 +1,182 @@
+---
+title: Pedigree_constructor_details
+author: Terry Therneau, Elizabeth Atkinson
+date: '`r format(Sys.time(),"%d %B, %Y")`'
+output:
+  rmarkdown::html_vignette:
+    toc: yes
+    toc_depth: 2
+header-includes: \usepackage{tabularx}
+vignette: |
+  %\VignetteIndexEntry{Pedigree_constructor_details}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+Introduction
+===============
+
+The pedigree routines came out of a simple need -- to quickly draw a
+pedigree structure on the screen, within R, that was "good enough" to
+help with debugging the actual routines of interest, which were those for
+fitting mixed effecs Cox models to large family data.  As such the routine
+had compactness and automation as primary goals; complete annotation
+(monozygous twins, multiple types of affected status) and most certainly
+elegance were not on the list.  Other software could do that much
+better.
+        
+It therefore came as a major surprise when these routines proved useful
+to others.  Through their constant feedback, application to more
+complex pedigrees, and ongoing requests for one more feature, the routine has 
+become what it is today.  This routine is still not 
+suitable for really large pedigrees, nor for heavily inbred ones such as in
+animal studies, and will likely not evolve in that way.  The authors fondest
+hope is that others will pick up the project.
+        
+Pedigree Constructor
+========================
+
+## Arguments
+
+The pedigree function is the first step, creating an object of class pedigree.  
+It accepts the following input
+
+- **ped_df** A dataframe containing the columns
+    - $indId$ A numeric or character vector of subject identifiers.
+    - $fatherId$ The identifier of the father.
+    - $motherId$ The identifier of the mother.
+    - $gender$ The gender of the individual.  This can be a numeric variable
+    with codes of 1=male, 2=female, 3=unknown, 4=terminated, or NA=unknown.
+    A character or factor variable can also be supplied containing
+    the above; the string may be truncated and of arbitrary case.
+    - $available$ Optional, a numeric variable with 0 = unavailable and 1 = available.
+    - $affected$ Optional, a numeric variable with 0 = unaffected and 1 = affected.
+    - $status$ Optional, a numeric variable with 0 = censored and 1 = dead.
+    - $family$ Optional, a numeric or character vector of family identifiers.
+    - $steril$ Optional, a numeric variable with 0 = not steril and 1 = steril.
+- **rel_df** Optional, a data frame with three columns or four columns.
+    - $indId1$ identifier values of the subject pairs
+    - $indId2$ identifier values of the subject pairs
+    - $code$ relationship codification : 1 = Monozygotic twin, 2=Dizygotic twin,
+    3= twin of unknown zygosity, 4 = Spouse.
+    - $family$ Optional, a numeric or character vector of family identifiers.
+- **cols_ren_ped** Optional, a named list for the renaming of the **ped_df** dataframe
+- **cols_ren_rel** Optional, a named list for the renaming of the **rel_df** dataframe
+- **scales** Optional, a list of two dataframe with the scales to use for the
+    affection status and the other one for the border color (e.g availability).
+- **normalize** Optional, a logical to know if the data should be normalised.
+- **hints** Optional, a list containing the order in which to plot the individuals and the
+    matrix of the spouse.
+
+## Notes
+
+Note that a factor variable is not listed as one of the choices for the
+subject identifier. This is on purpose.  Factors
+were designed to accomodate character strings whose values came from a limited
+class -- things like race or gender, and are not appropriate for a subject
+identifier.  All of their special properties as compared to a character
+variable turn out to be backwards for this case, in particular a memory
+of the original level set when subscripting is done.
+
+However, due to the awful decision early on in S to automatically turn every
+character into a factor --- unless you stood at the door with a club to
+head the package off --- most users have become ingrained to the idea of
+using them for every character variable.
+
+(I encourage you to set the global option `stringsAsFactors = FALSE` to turn
+off autoconversion -- it will measurably improve your R experience).
+
+Therefore, to avoid unnecessary hassle for our users 
+the code will accept a factor as input for the id variables, but
+the final structure does not retain it.  
+Gender and relation do become factors.
+Status follows the pattern of the survival routines and remains an integer.
+
+## Column renaming
+
+Based on the dataframe given for **ped_df** and **rel_df** and their corresponding
+named list, the columns are renamed for them to be used correctly.
+
+## Normalisation
+
+If the normalisation process is selected `normalize = TRUE`, then both dataframe will
+be checked by their dedicated normalization function. It will ensure that all modalities
+are written correctly and set up the right way.
+If a $family$ column is present in the dataframe, then it will be aggregated to the id
+of each individual and separated by an ''_'' to ensure the uniqueness of the individuals identifiers.
+
+### Errors present after the normalisation process
+
+If any error is detected after the normalisation process, then the normalised dataframe
+is gave back to the user with errors column added describing the encountered problems.
+
+## Validation
+
+Now that the data for the pedigree object creation are ready, they are given to a new $Pedigree$
+object, trigerring the $validation$ process.
+
+This validation step will check up for many errors such as:
+
+- All necessary columns are present
+- No duplicated $id$
+- All $momid$ and $dadid$ are present in $id$
+- $sex$ column only contain "male", "female", "unknown" or "terminated" values
+- $steril$, $status$, $available$, $affected$ only contains 0, 1 or NA values
+- Father are males and Mother are females
+- Twins have same parents and MZ twins have same sex
+
+Pedigree S4 slots
+========================
+
+After validation an $S4$ object is generated.
+This new concept make it possible to easily setup methods for this new type of object.
+The controls of the parameters is also more precise.
+
+The $Pedigree$ object contains 4 slots:
+
+- $ped$ the pedigree information as a dataframe with at least the following columns:
+    - $id$ the identifiers of the individuals
+    - $dadid$ the identifiers of the fathers
+    - $momid$ the identifiers of the mothers
+    - $sex$ the gender of each individuals
+- $rel$ the relationship dataframe describing all special relationship beetween individuals
+that can't be descibed in the $ped$ slot. The minimal columns needed are :
+    - $id1$ the identifiers of the 1st individuals
+    - $id2$ the identifiers of the 2nd individuals
+    - $code$ factor describing the type of relationship ("MZ twin", "DZ twin", "UZ twin", "Spouse")
+- $scales$ a list of two elements
+    - $fill$ a dataframe describing which modalities in which columns correspond to an affected individuals.
+    Plotting information such as colour, angle and density are also provided
+    - $border$ a dataframe describing which modalities in which columns to use to plot the border of the plot elements.
+- $hints$ a list of two elements
+    - $order$ numeric vector for the ordering of the individuals plotting
+    - $spouse$ a matrix of the spouses
+
+Pedigree methods
+========================
+
+With this new S4 object comes multiple methods to ease the use of it:
+
+- plot()
+- summary()
+- print()
+- show()
+- as.data.frame()
+- setAs()
+- [
+- [<-
+- [[
+- [[<-
+- $
+- $<-
+- shrink()
+- trim()
+- generate_colors()
+- is_informative()
+- kindepth()
+- kinship()
+- make_famid()
+- num_child()
+- unrelated()
+- useful_inds()
+
