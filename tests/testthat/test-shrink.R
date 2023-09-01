@@ -21,7 +21,7 @@ test_that("Pedigree shrink works", {
         function() plot(mn2)
     )
 
-    ## breaks in pedigree_trim
+    ## breaks in trim
     avail <- ifelse(is.na(mn2$ped$cancer), 0, mn2$ped$cancer)
 
     mn2_s <- shrink(mn2, avail)

@@ -249,6 +249,24 @@ summary(ped2$ped$status)
 plot(ped2)
 ```
 
+## Labels
+
+Here we show how to use the $label$ argument in the plot method to add 
+additional information under each subject. In the example below, we add 
+names to the existing plot by adding a new column to the *ped* dataframe.
+As space permits, more lines and characters per line can be made using the
+a {/em \n} character to indicate a new line.
+
+```{r, labels}
+ped2$ped$Names <- c(
+    "John\nDalton", "Linda", "Jack", "Rachel", "Joe", "Deb",
+    "Lucy", "Ken", "Barb", "Mike", "Matt",
+    "Mindy", "Mark", "Marie\nCurie"
+)
+plot(ped2, label = "Names")
+```
+
+
 ## Affected Indicators
 
 We show how to specify affected status with a single indicator and 
@@ -256,11 +274,13 @@ multiple indicators.  First, we use the affected indicator from
 $sampleped$, which contains 0/1 indicators and NA as missing, and let it
 it indicate blue eyes. Next, we create a vector as an indicator for baldness.
 And add it as a second filling scale for the plot with *generate_colors(add_to_scale = TRUE)*.
+The plot shapes for each subject is therefore divided into two equal parts and
+shaded differently to indicate the two affected indicators.
 
 ```{r, two_affection}
+df2$bald <- as.factor(c(0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1))
 ped2 <- pedigree(df2)
-ped2$ped$bald <- as.factor(c(0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1))
-ped2 <- generate_colors(ped2, add_to_scale = TRUE, col_aff = "bald")
+ped2 <- generate_colors(ped2, col_aff = "bald", add_to_scale = TRUE)
 plot(ped2, legend = TRUE)
 ```
 
@@ -272,8 +292,14 @@ be specified by numeric codes: 1=Monozygotic twins, 2=Dizygotic twins,
 3=twins of unknown zygosity, and 4=Spouse. The spouse relationship can 
 indicate a marry-in when a couple does not have children together.
 
+### Twins
+
 Below, we create a matrix of relationships for monozygotic and 
-unknown-zygosity twins in the most recent generation of pedigree 2.  
+unknown-zygosity twins in the most recent generation of pedigree 2.
+The twin relationships are both represented with 
+diverging lines from a single point.  The monozygotic twins have an 
+additional line connecting the diverging lines, while the other twins have 
+a question mark to indicate unknown zygosity.
 
 ```{r, twins}
 ## create twin relationships
@@ -286,6 +312,8 @@ rel_df <- data.frame(
 ped2 <- pedigree(df2, rel_df = rel_df)
 plot(ped2)
 ```
+
+### Inbreeding
 
 Another special relationship is inbreeding. Inbreeding of founders implies the founders' parents are related (the maternal and paternal genes descended from a single ancestral gene).
 One thing we can do is add more people to the pedigree to show this inbreeding.
@@ -306,65 +334,51 @@ ped4 <- pedigree(ped4df)
 plot(ped4)
 ```
 
+### Marry-ins
+
+Spouse with no child can also be specified with the $rel_df$ argument by setting
+the code value to "Spouse" or "4".
+If we use the pedigree 2 from earlier and add a new spouse relationship between the individuals
+$212$ and $211$ we get the following plot.
+
+```{r, twins}
+## create twin relationships
+rel_df <- data.frame(
+    indId1 = c(210, 212, 211),
+    indId2 = c(211, 213, 212),
+    code = c(1, 3, 4),
+    family = c(2, 2, 2)
+)
+ped2 <- pedigree(df2, rel_df = rel_df)
+plot(ped2)
+```
+
 Pedigree Plot Details
 ===========================
 
-The plot method does an admirable job plotting pedigrees within the
-standard R plotting paradigm.  It attempts to adhere to many standards
+The plot method attempts to adhere to many standards
 in pedigree plotting, as presented by [Bennet et al. 2008](https://pubmed.ncbi.nlm.nih.gov/18792771/).
-
-We show in the following figure, the plot of the updated pedigree 2.
-The plot shapes for each subject are divided into two equal parts and
-shaded differently to indicate the two affected indicators.
-Also, the two deceased subjects are displayed with a diagonal line 
-through the shape. The twin relationships are both represented with 
-diverging lines from a single point.  The monozygotic twins have an 
-additional line connecting the diverging lines, while the other twins have 
-a question mark to indicate unknown zygosity.
-
-We also show how the subjects can be colored individually, where we 
-color a subject red if their ~avail~ indicator is 1, which can 
-represent their DNA availability, a useful indicator in genetic studies.
-Lastly, we show how to use the $label$ argument in the plot method to add 
-additional information under each subject. In the example below, we add 
-names to the existing plot by adding a new column to the *ped* dataframe.
-As space permits, more lines and characters per line can be made using the
-a {/em \n} character to indicate a new line.
-
-Finally, we show how a pedigree.legend can place a simple legend in one
-of the corners of the pedigree plot to show the sections of the plot 
-symbols corresponding to the multiple affected indicators.
-
-```{r, ped2update}
-ped2$ped$Names <- c(
-  "John\nDalton", "Linda", "Jack", "Rachel", "Joe", "Deb",
-  "Lucy", "Ken", "Barb", "Mike", "Matt",
-  "Mindy", "Mark", "Marie\nCurie"
-)
-plot(ped2, label = "Names")
-#pedigree.legend(ped2, location = "topright", radius = .2)
-```
 
 To show some other tricks with pedigree plotting, we use pedigree 1 
 from ~sampleped~, which has 41 subjects in 4 generations, including a
-generation with double first cousins. After the first marriage of 114, they
-remarried subject 113 without children between them.  If we do not 
+generation with double first cousins. After the first marriage of $114$, they
+remarried subject $113$ without children between them.  If we do not 
 specify the marriage with the $relation$ argument, the plot method excludes
 subject $113$ from the plot. The basic plot of pedigree 1 is shown 
-in the figure below, where the subjects are colored red if their 
-~avail~ indicator is 1.
-
+in the figure below.
 
 ```{r, plotped1}
-df1 <- sampleped[sampleped$ped == 1, ]
-relate1 <- matrix(c(113, 114, 4), nrow = 1)
-ped1 <- pedigree(df1$id, df1$father, df1$mother,
-  df1$sex,
-  affected = df1$affected,
-  relation = relate1
+df1 <- sampleped[sampleped$family == 1, ]
+relate1 <- data.frame(
+    indId1 = 113,
+    indId2 = 114,
+    code = 4,
+    family = 1
 )
-print(ped1)
-plot(ped1, avail = ifelse(df1$avail == 1, "red", "black"), cex = .7)
+ped1 <- pedigree(df1,
+    rel_df = relate1
+)
+plot(ped1)
 ```
 
 ## Align by Input Order
@@ -377,41 +391,101 @@ subjects, as Figure~\ref{reordPed1} no longer has subject $110$ duplicated.
 
 ```{r, ordering}
 df1reord <- df1[c(35:41, 1:34), ]
-ped1reord <- pedigree(df1reord$id, df1reord$father, df1reord$mother,
-  df1reord$sex,
-  affected = df1reord$affected, relation = relate1
-)
-plot(ped1reord, avail = df1reord$avail + 1, cex = .7)
-```
-  
-## Legend Plot
-
-The *legendPlot()* function creates a dynamic legend based on the arguments
-passed through it. First, we give it color names and new labels for the affected
-status, which is two for blue eyes and baldness that we created previously for ped2.
-
-```{r, legendplot, eval = FALSE}
-legendPlot(ped2,
-  col = ifelse(df2$avail, "red", "black"),
-  id = id2, symbolsize = .4,
-  affected.label = c("blue eyes", "baldness"),
-  col.label = c(`black` = "no dna", `red` = "dna")
-)
+ped1reord <- pedigree(df1reord, rel_df = relate1)
+plot(ped1reord)
 ```
 
-We can do the same plot by giving integer color codes, and a non-named vector of
-colors. Also, we can let the function grab the colnames() of the affected matrix
-for the legend.
+Pedigree Utility Functions
+=================================
 
-```{r, legendplotindex, eval = FALSE}
-colnames(ped2$affected)
-legendPlot(ped2,
-  col = ifelse(df2$avail, 2, 1),
-  id = id2, cex = .5, symbolsize = .5,
-  col.label = c("no dna", "dna")
-)
+## Pedigree as a Data.Frame
+
+A main features of a pedigree object are vectors with an element
+for each subject. It is sometimes useful to extract these vectors from 
+the pedigree object into a $data.frame$ with basic information that can
+be used to construct a new pedigree object. This is possible with the
+$as.data.frame()$ method, as shown below.
+
+```{r, ped2df}
+dfped2 <- as.data.frame(ped2)
+dfped2
 ```
-  
+
+## Subsetting and Trimming
+
+Pedigrees with large size can be a bottleneck for programs that run 
+calculations on them. The kinship2 package contains some routines to 
+identify which subjects to remove.  We show how a subject 
+(e.g. subject 210) can be removed from 
+~ped2~, and how the pedigree object is changed by verifying that the
+~relation~ dataframe no longer has the twin relationship between subjects 
+210 and 211, as indicated by $id1$ and ~id2~.
+
+```{r, subset}
+ped2_rm210 <- ped2[-10]
+ped2_rm210$rel
+ped2$rel
+```
+
+The steps above only work for subsetting by the index of the 
+pedigree object vectors, not by the ~id~ of the subjects themselves.  
+We provide *trim()*, which trims subjects from a pedigree by 
+their $id$.  Below is an example of removing subject 110, as done above, 
+then we further trim the pedigree by a vector of subject ids. We check the
+trimming by looking at the $id$ vector and the $relation$ matrix.
+
+```{r, trim}
+ped2_trim210 <- trim(ped2, "2_210")
+ped2_trim210$ped$id
+ped2_trim210$rel
+ped2_trim_more <- trim(ped2_trim210, c("2_212", "2_214"))
+ped2_trim_more$ped$id
+ped2_trim_more$rel
+```
+
+Shrinking
+==============
+
+An additional function in kinship2 is *shrink()*, which shrinks a pedigree
+to a specified bit size while maintaining the maximal amount of 
+information for genetic linkage and association studies.  Using an indicator 
+for availability and affected status, it removes subjects in this order:
+  + unavailable with no available descendants
+  + available and are not parents
+  + available who have missing affected status
+  + available who are unaffected
+  + available who are affected
+
+We show how to shrink pedigree 1 to bit size $30$, which happens 
+to be the bit size after removing only the unavailable subjects.  We show how 
+to extract the shrunken pedigree object from the $pedigree.shrink$ result, 
+and plot it.
+
+```{r, shrink1, eval=FALSE}
+set.seed(200)
+shrink1_b30 <- shrink(
+    ped = ped1,
+    avail = df1$avail, max_bits = 30
+)
+print(shrink1.B30)
+# plot.pedigree.shrink(shrink1.B30, avail=shrink1.B30$avail + 1, cex=.6)
+```
+
+Now shrink pedigree 1 to bit size $25$, which requires removing 
+subjects who are informative.  If there is a tie between multiple subjects 
+about who to remove, the method randomly chooses one of them. With this 
+seed setting, the method removes subjects $126$ then $125$.
+
+```{r, shrink2, eval=FALSE}
+set.seed(10)
+shrink1.B25 <- pedigree.shrink(
+  ped = ped1, avail = df1$avail,
+  maxBits = 25
+)
+shrink1.B25
+# plot.pedigree.shrink(shrink1.B25, avail=shrink1.B25$avail+1, cex=.6)
+```
+
 
 Session information
 ===================

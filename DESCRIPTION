@@ -95,7 +95,7 @@ Collate:
     'num_child.R'
     'ped_to_legdf.R'
     'ped_to_plotdf.R'
-    'pedigree_trim.R'
+    'trim.R'
     'plot_fct.R'
     'plot_fromdf.R'
     'plot.R'

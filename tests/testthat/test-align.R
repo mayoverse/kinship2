@@ -65,3 +65,29 @@ test_that("besthint works", {
     expect_snapshot(plist)
 })
 TRUE
+
+test_that("Alignement with spouse", {
+    data(sampleped)
+    df1 <- sampleped[sampleped$family == 1, ]
+    relate1 <- data.frame(
+        indId1 = 113,
+        indId2 = 114,
+        code = 4,
+        family = 1
+    )
+    ped1 <- pedigree(df1,
+        rel_df = relate1
+    )
+    hints <- auto_hint(ped1)
+    expect_equal(as.vector(hints$spouse), c(9, 10, 1))
+    expect_equal(hints$order,
+        c(
+            1, 2, 3, 4, 1, 2, 3, 4, 1, 1,
+            2, 3, 5, 4, 5, 6, 7, 8, 9, 10,
+            1, 2, 3, 4, 5, 6, 7, 8, 6, 7,
+            8, 9, 10, 11, 6, 7, 11, 12, 12,
+            13, 14
+        )
+    )
+    align(ped1)
+})

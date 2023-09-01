@@ -57,7 +57,7 @@ find_avail_affected <- function(ped, avail = ped$ped$avail, affstatus = NA) {
         tmp_avail <- avail
         tmp_avail[ped_df$id == id_trim] <- FALSE
         id_rm <- find_unavailable(ped, tmp_avail)
-        new_ped <- pedigree_trim(ped, id_rm)
+        new_ped <- trim(ped, id_rm)
         trim_dat <- rbind(trim_dat, c(id = id_trim,
             bit_size = bit_size(new_ped)$bit_size
         ))
@@ -77,7 +77,7 @@ find_avail_affected <- function(ped, avail = ped$ped$avail, affstatus = NA) {
 
     avail[ped_df$id == id_trim] <- FALSE
     id_rm <- find_unavailable(ped, avail)
-    new_ped <- pedigree_trim(ped, id_rm)
+    new_ped <- trim(ped, id_rm)
     new_size <- bit_size(new_ped)$bit_size
     avail <- avail[!(ped_df$id %in% id_rm)]
 

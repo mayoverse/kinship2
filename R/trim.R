@@ -1,7 +1,7 @@
 # Automatically generated from all.nw using noweb TODO add documentation
 #' Trim a pedigree
 #' @export
-pedigree_trim <- function(ped, id_rm, missid = "0") {
+trim <- function(ped, id_rm, missid = "0") {
     ## trim subjects from a pedigree who match the removeID trim relation
     ## matrix as well
     rmidx <- match(id_rm, ped$ped$id)

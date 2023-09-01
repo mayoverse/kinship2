@@ -60,7 +60,7 @@ shrink <- function(
     id_trim_unav <- find_unavailable(ped, avail)
 
     if (length(id_trim_unav)) {
-        ped_trim <- pedigree_trim(ped, id_trim_unav)
+        ped_trim <- trim(ped, id_trim_unav)
         avail <- avail[match(ped_trim$ped$id, ped$ped$id)]
         id_trim <- c(id_trim, id_trim_unav)
         id_lst$unavail <- id_trim_unav
@@ -88,7 +88,7 @@ shrink <- function(
         id_trim_noninf <- find_avail_noninform(ped_trim, avail)
 
         if (length(id_trim_noninf)) {
-            ped_new <- pedigree_trim(ped_trim, id_trim_noninf)
+            ped_new <- trim(ped_trim, id_trim_noninf)
             avail <- avail[match(ped_new$ped$id, ped_trim$ped$id)]
             id_trim <- c(id_trim, id_trim_noninf)
             id_lst$noninform <- c(id_lst$noninform, id_trim_noninf)

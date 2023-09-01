@@ -5,13 +5,13 @@
 #' @description
 #' Find the ID of subjects in a pedigree iteratively, as anyone who is not
 #' available and does not have an available descendant by successively removing
-#' unavailable terminal nodes. `pedigree_trim` carries out the removal of the
+#' unavailable terminal nodes. `trim` carries out the removal of the
 #' subjects identified by `findUnavailabl`e.
 #'
 #' @details
 #' Originally written as pedTrim by Steve Iturria, modified by Dan Schaid 2007,
 #' and now split into the two separate functions: `find_unavailable()`, and
-#' `pedigree_trim()` to do the tasks separately.  `find_unavailable()`
+#' `trim()` to do the tasks separately.  `find_unavailable()`
 #' calls `exclude_stray_marryin` to find stray available marry-ins who are
 #' isolated after trimming their unavailable offspring, and
 #' exclude_unavail_founders.
@@ -21,7 +21,7 @@
 #'
 #' @aliases
 #' find_unavailable
-#' pedigree_trim
+#' trim
 #' exclude_unavail_founders
 #' exclude_stray_marryin
 #'
@@ -31,9 +31,9 @@
 #' @param removeID vector of subject ids of persons to trim from a pedigree
 #'
 #' @return `find_unavailable` returns a vector of subject ids for who can be
-#' removed. `pedigree_trim` returns a trimmed pedigree object.
+#' removed. `trim` returns a trimmed pedigree object.
 #'
-#' @section Side Effects: relation matrix from `pedigree_trim` is trimmed of any
+#' @section Side Effects: relation matrix from `trim` is trimmed of any
 #' special relations that include the subjects to trim.
 #'
 #' @seealso `pedigree.shrink`
