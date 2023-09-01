@@ -51,7 +51,7 @@ BiocManager::install("kinship2")
 
 The package can then be loaded with the following command:
 
-```{r library_charge, eval = FALSE}
+```{r, library_charge}
 library(kinship2)
 ```
 
@@ -330,7 +330,7 @@ fatherId <- c(0, 0, 0, 196, 196, 0, 197, 199)
 motherId <- c(0, 0, 0, 195, 195, 0, 198, 200)
 gender <- c(2, 1, 1, 2, 1, 2, 1, 2)
 ped3 <- data.frame(indId, fatherId, motherId, gender)
-ped4df <- rbind.data.frame(as.data.frame(ped2)[-c(1, 2), 2:5], ped3)
+ped4df <- rbind.data.frame(ped2$ped[-c(1, 2), 2:5], ped3)
 ped4 <- pedigree(ped4df)
 plot(ped4)
 ```
@@ -407,7 +407,7 @@ the pedigree object into a $data.frame$ with basic information that can
 be used to construct a new pedigree object. This is possible with the
 $as.data.frame()$ method, as shown below.
 
-```{r, ped2df}
+```{r, ped2df, eval = FALSE}
 dfped2 <- as.data.frame(ped2)
 dfped2
 ```
