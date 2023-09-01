@@ -81,6 +81,6 @@ round(8 * kinship(tped))
 
 }
 \seealso{
-`pedigree`, `makekinship`, `makefamidb`
+`pedigree`, `makekinship`, `make_famidb`
 }
 \keyword{genetics}

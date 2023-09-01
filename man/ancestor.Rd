@@ -9,9 +9,9 @@ ancestor(idx, momx, dadx)
 \arguments{
 \item{idx}{subject index}
 
-\item{momid}{vector of mother indexs}
+\item{momx}{vector of mother indexs}
 
-\item{dadid}{vector of father indexs}
+\item{dadx}{vector of father indexs}
 }
 \value{
 a vector of ancestor index

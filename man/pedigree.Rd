@@ -37,6 +37,9 @@ relationship matrix.}
 \item{scales}{A list of two data.frame with the scales to use for the
 affection status and the other one for the border color (e.g availability).}
 
+\item{hints}{Optional, a list containing the order in which to plot the
+individuals and the matrix of the spouse as in the \\link{align} function.}
+
 \item{normalize}{A logical to know if the data should be normalised.}
 
 \item{...}{Other arguments to pass to the function `generate_colors`.}

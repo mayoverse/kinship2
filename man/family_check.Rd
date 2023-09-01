@@ -15,7 +15,7 @@ family_check(obj, ...)
 
 \item{momid}{Vector containing the id of the biological mother}
 
-\item{newfam}{The result of a call to `makefamid`. If this has already
+\item{newfam}{The result of a call to `make_famid`. If this has already
 been computed by the user, adding it as an argument shortens the running
 time somewhat.}
 }
@@ -47,7 +47,7 @@ Error check for a family classification
 Given a family id vector, also compute the familial grouping from first
 principles using the parenting data, and compare the results.
 
-The `makefamid` function is used to create a de novo family id from the
+The `make_famid` function is used to create a de novo family id from the
 parentage data, and this is compared to the family id given in the data.
 
 If there are any joins, then an attribute 'join' is attached.
@@ -84,6 +84,6 @@ fcheck1.bad <- try(
 
 }
 \seealso{
-`makefamid`, `makekinship`
+`make_famid`, `makekinship`
 }
 \keyword{genetics}

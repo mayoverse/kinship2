@@ -1,5 +1,8 @@
 ^\.github$
 .lintr
 noweb
+.vscode
 ^data-raw$
+^documentation$
 ^idea$
+LICENSE

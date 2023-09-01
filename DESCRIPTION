@@ -37,7 +37,8 @@ Imports:
     grid,
     htmlwidgets,
     R3port,
-    ggpattern
+    ggpattern,
+    rlang
 Description: Routines to handle family data with a pedigree object. The initial purpose
 	     was to create correlation structures that describe family relationships such 
 	     as kinship and identity-by-descent, which can be used to model family data 
@@ -95,11 +96,11 @@ Collate:
     'num_child.R'
     'ped_to_legdf.R'
     'ped_to_plotdf.R'
-    'trim.R'
     'plot_fct.R'
     'plot_fromdf.R'
     'plot.R'
     'shrink.R'
+    'trim.R'
     'unrelated.R'
     'useful_inds.R'
 LazyData: true
