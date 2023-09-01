@@ -46,7 +46,7 @@ test_that("Family check works", {
 
     ## check them giving separate ped ids
     fcheck_df_sep <- with(sampleped,
-        family_check(family, as.character(id), dadid, momid)
+        family_check(family, id, dadid, momid)
     )
     fcheck_ped_sep <- family_check(ped)
     expect_equal(as.numeric(as.vector(fcheck_df_sep[1, ])), c(1, 41, 1, 1, 0))
@@ -80,3 +80,4 @@ test_that("Family check works", {
     )
 
 })
+

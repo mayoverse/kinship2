@@ -4,14 +4,34 @@
       summary(ped)
     Output
       Pedigree object with 0 individuals
-          family               id               dadid              momid          
+          indId             fatherId           motherId             gender   
+       Length:0           Length:0           Length:0           Min.   : NA  
+       Class :character   Class :character   Class :character   1st Qu.: NA  
+       Mode  :character   Mode  :character   Mode  :character   Median : NA  
+                                                                Mean   :NaN  
+                                                                3rd Qu.: NA  
+                                                                Max.   : NA  
+          family            available      affected       sex           
+       Length:0           Min.   : NA   Min.   : NA   Length:0          
+       Class :character   1st Qu.: NA   1st Qu.: NA   Class :character  
+       Mode  :character   Median : NA   Median : NA   Mode  :character  
+                          Mean   :NaN   Mean   :NaN                     
+                          3rd Qu.: NA   3rd Qu.: NA                     
+                          Max.   : NA   Max.   : NA                     
+          avail                id               dadid              momid          
        Length:0           Length:0           Length:0           Length:0          
        Class :character   Class :character   Class :character   Class :character  
        Mode  :character   Mode  :character   Mode  :character   Mode  :character  
-           sex               avail          
-       Length:0           Length:0          
-       Class :character   Class :character  
-       Mode  :character   Mode  :character  
+                                                                                  
+                                                                                  
+                                                                                  
+          error              steril             status         
+       Length:0           Length:0           Length:0          
+       Class :character   Class :character   Class :character  
+       Mode  :character   Mode  :character   Mode  :character  
+                                                               
+                                                               
+                                                               
       and 0 special relationships.
           indId1             indId2               code        family         
        Length:0           Length:0           Min.   : NA   Length:0          
@@ -27,7 +47,8 @@
                                                                
                                                                
                                                                
-      The scales are: 
+      The filling scales columns are: 
+      The border scale column are: 
 
 # pedigree from sampleped and affectation
 
@@ -35,20 +56,38 @@
       summary(ped1)
     Output
       Pedigree object with 41 individuals
-           family       id               dadid              momid          
-       Min.   :1   Length:41          Length:41          Length:41         
-       1st Qu.:1   Class :character   Class :character   Class :character  
-       Median :1   Mode  :character   Mode  :character   Mode  :character  
-       Mean   :1                                                           
-       3rd Qu.:1                                                           
-       Max.   :1                                                           
-               sex         avail       
-       male      :20   Min.   :0.0000  
-       female    :21   1st Qu.:0.0000  
-       unknown   : 0   Median :0.0000  
-       terminated: 0   Mean   :0.3902  
-                       3rd Qu.:1.0000  
-                       Max.   :1.0000  
+          family             indId             fatherId           motherId        
+       Length:41          Length:41          Length:41          Length:41         
+       Class :character   Class :character   Class :character   Class :character  
+       Mode  :character   Mode  :character   Mode  :character   Mode  :character  
+                                                                                  
+                                                                                  
+                                                                                  
+                                                                                  
+          gender             affected        available              sex    
+       Length:41          Min.   :0.0000   Min.   :0.0000   male      :20  
+       Class :character   1st Qu.:0.0000   1st Qu.:0.0000   female    :21  
+       Mode  :character   Median :1.0000   Median :0.0000   unknown   : 0  
+                          Mean   :0.5143   Mean   :0.3902   terminated: 0  
+                          3rd Qu.:1.0000   3rd Qu.:1.0000                  
+                          Max.   :1.0000   Max.   :1.0000                  
+                          NA's   :6                                        
+           avail             id               dadid              momid          
+       Min.   :0.0000   Length:41          Length:41          Length:41         
+       1st Qu.:0.0000   Class :character   Class :character   Class :character  
+       Median :0.0000   Mode  :character   Mode  :character   Mode  :character  
+       Mean   :0.3902                                                           
+       3rd Qu.:1.0000                                                           
+       Max.   :1.0000                                                           
+                                                                                
+          error            steril            status   affected_aff   
+       Length:41          Mode:logical   Min.   :0   Min.   :0.0000  
+       Class :character   NA's:41        1st Qu.:0   1st Qu.:0.0000  
+       Mode  :character                  Median :0   Median :1.0000  
+                                         Mean   :0   Mean   :0.5143  
+                                         3rd Qu.:0   3rd Qu.:1.0000  
+                                         Max.   :0   Max.   :1.0000  
+                                                     NA's   :6       
       and 0 special relationships.
           indId1             indId2               code        family         
        Length:0           Length:0           Min.   : NA   Length:0          
@@ -64,5 +103,6 @@
                                                                
                                                                
                                                                
-      The scales are: 
+      The filling scales columns are: affected
+      The border scale column are: avail
 

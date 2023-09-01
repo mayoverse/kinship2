@@ -11,8 +11,8 @@ test_that("align works", {
     expect_equal(plist2$n, c(2, 7, 5))
 
     plist <- align(ped)
-    expect_equal(plist[[1]]$n, plist1$n)
-    expect_equal(plist[[2]]$n, plist2$n)
+    expect_equal(plist[["1"]]$n, plist1$n)
+    expect_equal(plist[["2"]]$n, plist2$n)
 
 })
 
@@ -42,10 +42,9 @@ test_that("test alignement with inbreeding and relationship matrix", {
 
     ped_sr <- pedigree(sampleped[-1])
     plist_sr <- align(ped_sr)
-    plist
 
     expect_equal(plist$nid[1, ],
-        c(35, 36, 5, 6,  7,  8, 42, 43, rep(0, 14))
+        c(35, 36, 5, 6,  7,  8, 42, 43, rep(0, 16))
     )
     expect_equal(plist_sr$nid[1, ],
         c(5, 6, 7, 8, 35, 36, 42, 43, rep(0, 14))
@@ -64,7 +63,6 @@ test_that("besthint works", {
     )
     expect_snapshot(plist)
 })
-TRUE
 
 test_that("Alignement with spouse", {
     data(sampleped)

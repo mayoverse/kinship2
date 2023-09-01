@@ -3,6 +3,7 @@ test_that("Pedigree legend works", {
     ped <- pedigree(sampleped)
     ped <- ped[ped$ped$family == "1", ]
     ped <- generate_colors(ped, add_to_scale = TRUE, "avail")
+    ped$ped$indId <- as.numeric(ped$ped$indId)
     ped <- generate_colors(ped,
         add_to_scale = TRUE, "indId", threshold = 115,
         colors_aff = c("pink", "purple"), keep_full_scale = TRUE

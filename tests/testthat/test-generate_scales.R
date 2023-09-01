@@ -119,6 +119,7 @@ test_that("generate with full scale", {
     data("sampleped")
     ped <- pedigree(sampleped)
     ped <- ped[ped$ped$family == "1", ]
+    ped$ped$indId <- as.numeric(ped$ped$indId)
     ped <- generate_colors(ped, add_to_scale = FALSE, "indId", threshold = 115,
         colors_aff = c("pink", "purple"), keep_full_scale = TRUE
     )
