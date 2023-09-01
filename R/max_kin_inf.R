@@ -48,7 +48,7 @@ setMethod("max_kin_inf", "character", function(
         stop("No informative individuals detected")
     }
     # For all individuals, compute kinship degree
-    mat <- kinship(id, dadid, momid, sex)
+    mat <- as.matrix(kinship(id, dadid, momid, sex))
     sub <- mat[, colnames(mat) %in% id_inf] %>%
         as.data.frame()
 
