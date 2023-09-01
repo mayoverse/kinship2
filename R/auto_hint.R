@@ -272,26 +272,7 @@ get_twin_rel <- function(ped) {
 #'
 #' @return A list containing components `order` and `spouse`
 #'
-#' @examples
-#'
-#' data(testped1)
-#' ped1 <- with(testped1, pedigree(id, father, mother, sex))
-#' plot(ped1, cex = .7, symbolsize = .7)
-#'
-#' # rearrange some founders
-#' temp <- 1:nrow(testped1)
-#' temp[76] <- .1
-#' temp[77] <- .2
-#' temp[74] <- .3
-#' temp[60] <- .4
-#' temp[30] <- temp[8] + .1
-#' temp[65] <- temp[4] + .1
-#' temp[14] <- temp[3] + .1
-#' ped1$hints <- auto_hint(ped1, temp)
-#' plot(ped1, cex = .7)
-#'
 #' @seealso pedigree, besthint
-#' @keywords genetics
 #' @export
 setGeneric("auto_hint", signature = "obj",
     function(obj, ...) standardGeneric("auto_hint")

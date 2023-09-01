@@ -82,7 +82,7 @@ setGeneric("family_check", signature = "obj",
 
 #' @include make_famid.R
 #' @export
-setMethod("family_check", "numeric",
+setMethod("family_check", "character",
     function(obj, id, dadid, momid, newfam) {
         famid <- obj
         if (is.numeric(famid) && any(is.na(famid))) {
@@ -122,6 +122,12 @@ setMethod("family_check", "numeric",
             attr(out, "join") <- tab1
         }
         out
+    }
+)
+
+setMethod("family_check", "numeric",
+    function(obj, id, dadid, momid, newfam) {
+        family_check(as.character(obj), id, dadid, momid, newfam)
     }
 )
 

@@ -1,3 +1,5 @@
+#' @importFrom methods as
+
 usethis::use_package("Matrix")
 #' Compute a kinship matrix
 #'
@@ -128,7 +130,7 @@ setMethod("kinship", "character",
         }
         kmat <- kmat[1:n, 1:n]
         dimnames(kmat) <- list(id, id)
-        kmat
+        as(kmat, "CsparseMatrix")
     }
 )
 

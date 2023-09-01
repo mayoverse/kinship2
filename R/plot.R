@@ -2,6 +2,7 @@
 #' @importFrom ggplot2 scale_fill_manual scale_color_manual geom_segment
 #' @importFrom utils txtProgressBar setTxtProgressBar
 #' @importFrom stats setNames
+#' @importFrom graphics clip
 NULL
 
 #' Plot pedigrees
@@ -141,7 +142,6 @@ setMethod("plot", c(x = "Pedigree", y = "missing"),
                 boxw = lst$par_usr$boxw * leg_symbolsize,
                 boxh = lst$par_usr$boxh * leg_symbolsize
             )
-            leg$par_usr
             if (is.null(leg_loc)) {
                 wh_fr <- lst$par_usr$usr
                 leg_loc <- c(

@@ -7,8 +7,8 @@
 #' a common ancestor
 #'
 #' @param idx subject index
-#' @param momid vector of mother indexs
-#' @param dadid vector of father indexs
+#' @param momx vector of mother indexs
+#' @param dadx vector of father indexs
 #'
 #' @return a vector of ancestor index
 ancestor <- function(idx, momx, dadx) {

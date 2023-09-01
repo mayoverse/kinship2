@@ -21,7 +21,6 @@
 #'
 #' @aliases
 #' find_unavailable
-#' trim
 #' exclude_unavail_founders
 #' exclude_stray_marryin
 #'

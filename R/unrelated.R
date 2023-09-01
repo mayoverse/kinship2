@@ -1,3 +1,6 @@
+#' @importFrom stats runif
+NULL
+
 # Automatically generated from all.nw using noweb Authors: Dan Schaid, Shannon
 # McDonnell Updated by Jason Sinnwell
 

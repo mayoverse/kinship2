@@ -1,3 +1,7 @@
+#' @importFrom graphics par strwidth strheight text lines
+#' @importFrom graphics polygon frame segments
+NULL
+
 ## Doc: Subregions and subsetting
 
 #' Routine to subset a pedigree

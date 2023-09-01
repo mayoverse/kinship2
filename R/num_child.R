@@ -1,5 +1,6 @@
 #' @importFrom dplyr group_by summarise mutate rename left_join rowwise join_by
 #' @importFrom tidyr pivot_longer
+#' @importFrom rlang .data
 NULL
 
 #' Number of child
@@ -58,12 +59,12 @@ setMethod("num_child", "character",
     dad_child <- df[df$dadid != missid, c("dadid", "id")] %>%
         group_by(dadid) %>%
         summarise(child = list(id)) %>%
-        mutate(num_child_dir = lengths(child)) %>%
+        mutate(num_child_dir = lengths(.data$child)) %>%
         rename(id = dadid)
     mom_child <- df[df$momid != missid, c("id", "momid")] %>%
         group_by(momid) %>%
         summarise(child = list(id)) %>%
-        mutate(num_child_dir = lengths(child)) %>%
+        mutate(num_child_dir = lengths(.data$child)) %>%
         rename(id = momid)
     id_child <- rbind(dad_child, mom_child)
 
@@ -72,26 +73,26 @@ setMethod("num_child", "character",
 
     # Number of total childs per individual
     rel_child <- spouse_rel %>%
-        left_join(id_child, by = join_by(idmin == id)) %>%
-        left_join(id_child, by = join_by(idmax == id),
+        left_join(id_child, by = c("idmin" = "id")) %>%
+        left_join(id_child, by = c("idmax" = "id"),
             suffix = c("_min", "_max")
         ) %>%
         rowwise() %>%
         mutate(childs = list(unique(unlist(
-            list(child_min, child_max)
+            list(.data$child_min, .data$child_max)
         )))) %>%
-        select(c(idmin, idmax, childs)) %>%
-        tidyr::pivot_longer(cols = -childs, names_to = "order",
+        select(c(.data$idmin, .data$idmax, .data$childs)) %>%
+        tidyr::pivot_longer(cols = -.data$childs, names_to = "order",
             values_to = "id"
         ) %>%
         group_by(id) %>%
-        summarise(childs_all = list(unique(unlist(childs)))) %>%
-        mutate(num_child_tot = lengths(childs_all))
+        summarise(childs_all = list(unique(unlist(.data$childs)))) %>%
+        mutate(num_child_tot = lengths(.data$childs_all))
 
     df$num_child_tot <- rel_child$num_child_tot[match(df$id, rel_child$id)]
 
     df <- df %>%
-        mutate(across(c(num_child_dir, num_child_tot),
+        mutate(across(c(.data$num_child_dir, .data$num_child_tot),
             ~replace(., is.na(.), 0)
         ))
 
