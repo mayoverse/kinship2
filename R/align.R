@@ -42,6 +42,7 @@ ancestor <- function(idx, momx, dadx) {
 #' method is the one that is called by `plot.pedigree`.
 #'
 #' @param obj A pedigree object
+#' @param ... Additional arguments sent to the method
 #' @param packed Should the pedigree be compressed, i.e., allow diagonal
 #' lines connecting parents to children in order to have a smaller overall
 #' width for the plot.
