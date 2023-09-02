@@ -7,3 +7,6 @@ if (interactive() && Sys.getenv("TERM_PROGRAM") == "vscode") {
         })
     }
 }
+
+require(devtools)
+options(buildtools.check = function(action) TRUE)
