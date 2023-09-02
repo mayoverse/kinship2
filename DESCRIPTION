@@ -17,7 +17,6 @@ Imports:
     stats,
     methods,
     knitr,
-    usethis,
     ggplot2,
     utils,
     grDevices,
@@ -36,9 +35,7 @@ Imports:
     gridGraphics,
     grid,
     htmlwidgets,
-    R3port,
-    ggpattern,
-    rlang
+    R3port
 Description: Routines to handle family data with a pedigree object. The initial purpose
 	     was to create correlation structures that describe family relationships such 
 	     as kinship and identity-by-descent, which can be used to model family data 
@@ -63,6 +60,10 @@ BugReports: https://github.com/LouisLeLezet/kinship2/issues
 url: https://github.com/LouisLeNezet/kinship2
 BiocType: Software
 Collate: 
+    'alignped4.R'
+    'alignped3.R'
+    'alignped2.R'
+    'alignped1.R'
     'pedigree.R'
     'validity.R'
     'pedigreeClass.R'
@@ -70,10 +71,6 @@ Collate:
     'kindepth.R'
     'auto_hint.R'
     'align.R'
-    'alignped1.R'
-    'alignped2.R'
-    'alignped3.R'
-    'alignped4.R'
     'best_hint.R'
     'bit_size.R'
     'data.R'
