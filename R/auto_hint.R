@@ -1,18 +1,24 @@
 # Automatically generated from all.nw using noweb
 
-## Doc: Shift
 #' Routine to shift set of siblings to the left or right
+#'
+#' @details This routine is used by `auto_hint()`.
+#' It shifts a set of siblings to the left or right, so that the
+#' marriage is on the edge of the set of siblings, closest to the spouse.
+#' It also shifts the subject himself, so that he is on the edge of the
+#' set of siblings, closest to the spouse.
+#' It also shifts the monozygotic twins, if any, so that they are
+#' together within the set of twins.
 #'
 #' @param id The id of the subject to be shifted
 #' @param sibs The ids of the siblings
-#' @param goleft If TRUE, shift to the left, otherwise to the right
+#' @param goleft If `TRUE`, shift to the left, otherwise to the right
 #' @param hint The current hint vector
 #' @param twinrel The twin relationship matrix
 #' @param twinset The twinset vector
 #'
 #' @return The updated hint vector
-#'
-#' @keywords internal
+#' @seealso [auto_hint()]
 #' @export
 shift <- function(id, sibs, goleft, hint, twinrel, twinset) {
     if (twinset[id] > 0) {
@@ -70,21 +76,23 @@ shift <- function(id, sibs, goleft, hint, twinrel, twinset) {
 
 #' Routine to find the spouse of a subject
 #'
-#' @param mypos The position of the subject
+#' @details This routine is used by `auto_hint()`.
+#' It finds the spouse of a subject.
+#'
+#' @param idpos The position of the subject
 #' @param plist The alignment structure
-#' @param lev The level of the subject
-#' @param ped The pedigree structure
+#' @param lev The generation level of the subject
+#' @param ped A pedigre object
 #'
 #' @return The position of the spouse
-#'
-#' @keywords internal
+#' @seealso [auto_hint()]
 #' @export
-findspouse <- function(mypos, plist, lev, ped) {
-    lpos <- mypos
+findspouse <- function(idpos, plist, lev, ped) {
+    lpos <- idpos
     while (lpos > 1 && plist$spouse[lev, lpos - 1]) {
         lpos <- lpos - 1
     }
-    rpos <- mypos
+    rpos <- idpos
     while (plist$spouse[lev, rpos]) {
         rpos <- rpos + 1
     }
@@ -93,7 +101,7 @@ findspouse <- function(mypos, plist, lev, ped) {
     }
 
     opposite <- ped$ped$sex[plist$nid[lev, lpos:rpos]] !=
-        ped$ped$sex[plist$nid[lev, mypos]]
+        ped$ped$sex[plist$nid[lev, idpos]]
 
     ## Can happen with a triple marriage
     if (!any(opposite)) {
@@ -105,16 +113,16 @@ findspouse <- function(mypos, plist, lev, ped) {
 
 #' Routine to find the siblings of a subject
 #'
-#' @param mypos The position of the subject
-#' @param plist The alignment structure
-#' @param lev The level of the subject
+#' @details This routine is used by `auto_hint()`.
+#' It finds the siblings of a subject.
+#'
+#' @inheritParams findspouse
 #'
 #' @return The positions of the siblings
-#'
-#' @keywords internal
+#' @seealso [auto_hint()]
 #' @export
-findsibs <- function(mypos, plist, lev) {
-    family <- plist$fam[lev, mypos]
+findsibs <- function(idpos, plist, lev) {
+    family <- plist$fam[lev, idpos]
     if (family == 0) {
         stop("auto_hint bug 6")
     }
@@ -123,14 +131,15 @@ findsibs <- function(mypos, plist, lev) {
 
 #' Routine to find the duplicate pairs of a subject
 #'
+#' @details This routine is used by `auto_hint()`.
+#' It finds the duplicate pairs of a subject and returns them in
+#' the order they should be plotted.
+#'
 #' @param idlist The list of ids
-#' @param plist The alignment structure
-#' @param lev The level of the subject
-#' @param ped The pedigree structure
+#' @inheritParams findspouse
 #'
 #' @return A matrix of duplicate pairs
-#'
-#' @keywords internal
+#' @seealso [auto_hint()]
 #' @export
 duporder <- function(idlist, plist, lev, ped) {
     temp <- table(idlist)
@@ -195,11 +204,16 @@ duporder <- function(idlist, plist, lev, ped) {
 #' in a pedigree. It complete the missing twin relationships for
 #' triplets, quads, etc. It also determine the order of the twins
 #' in the pedigree.
-#' It is used by \code{\link{auto_hint}}.
+#' It is used by `auto_hint()`.
 #'
-#' @param ped The pedigree structure
+#' @param ped A pedigree object
 #'
-#' @return A list containing components `twinset`, `twinrel` and `twinord`
+#' @return A list containing components
+#'  1. `twinset` the set of twins
+#'  2. `twinrel` the twins relationships
+#'  3. `twinord` the order of the twins
+#' @seealso [auto_hint()]
+#' @export
 get_twin_rel <- function(ped) {
     if (is.null(ped$rel)) {
         relation <- NULL
@@ -236,69 +250,58 @@ get_twin_rel <- function(ped) {
     list(twinset = twinset, twinrel = twinrel, twinord = twinord)
 }
 
-#' Align a pedigree
+#' First initial guess for the alignment of a pedigree
 #'
 #' @description
-#' Align a pedigree to print well
+#' Compute an initial guess for the alignment of a pedigree
 #'
 #' @details
 #' A pedigree structure can contain a `hints` object which helps to
 #' reorder the pedigree (e.g. left-to-right order of children within family) so
 #' as to plot with minimal distortion. This routine is used to create an
-#' initial version of the hints.  They can then be modified if desired.
+#' initial version of the hints. They can then be modified if desired.
 #'
-#' This routine would not normally be called by a user.  It moves children
+#' This routine would not normally be called by a user. It moves children
 #' within families, so that marriages are on the "edge" of a set children,
-#' closest to the spouse.  For pedigrees that have only a single connection
+#' closest to the spouse. For pedigrees that have only a single connection
 #' between two families this simple-minded approach works surprisingly well.
 #' For more complex structures hand-tuning of the hints matrix may be required.
 #'
 #' The pedigree in the example below is one where rearranging the founders
-#' greatly decreases the number of extra connections. When auto_hint is called
-#' with a a vector of numbers as the second argument, the values for the
+#' greatly decreases the number of extra connections. When `auto_hint()` is
+#' called with a a vector of numbers as the second argument, the values for the
 #' founder females are used to order the founder families left to right across
-#' the plot.  The values within a sibship are used as the preliminary order of
+#' the plot. The values within a sibship are used as the preliminary order of
 #' siblings within a family; this may be changed to move one of them to the
 #' edge so as to match up with a spouse. The actual values in the vector are
 #' not important, only their order.
 #'
-#' @param ped A pedigree structure
-#' @param hints Optional hints object. Only the order component is used.
-#' @param packed If TRUE, uniform distance between all individuals at a given
-#' level.
-#' @param align These parameters control the extra effort spent trying to align
-#' children underneath parents, but without making the pedigree too wide.  Set
-#' to FALSE to speed up plotting.
+#' @param reset If `TRUE`, reset the hints to the initial values
+#' @inheritParams align
 #'
-#' @return A list containing components `order` and `spouse`
+#' @return The **hints** list containing components `order` and `spouse`
 #'
-#' @seealso pedigree, besthint
+#' @seealso [align()], [best_hint()]
 #' @export
-setGeneric("auto_hint", signature = "obj",
-    function(obj, ...) standardGeneric("auto_hint")
-)
-
-#' @include kindepth.R
-#' @export
-setMethod("auto_hint", "Pedigree", function(
-    obj, hints = NULL, packed = TRUE, align = FALSE, reset = FALSE
+auto_hint <- function(
+    ped, hints = NULL, packed = TRUE, align = FALSE, reset = FALSE
 ) {
     ## full documentation now in vignette: align_code_details.Rmd
     ## References to those sections appear here as:
     ## Doc: auto_hint
-    if ((!is.null(obj$hints$order) ||
-                !is.null(obj$hints$spouse)
-        ) & !reset
+    if ((!is.null(ped$hints$order) ||
+                !is.null(ped$hints$spouse)
+        ) && !reset
     ) {
-        return(obj$hints)
+        return(ped$hints)
     } # nothing to do
 
-    if (length(unique(obj$ped$family)) > 1) {
+    if (length(unique(ped$ped$family)) > 1) {
         stop("auto_hint only works on pedigrees with a single family")
     }
 
-    n <- length(obj$ped$id)
-    depth <- kindepth(obj, align = TRUE)
+    n <- length(ped$ped$id)
+    depth <- kindepth(ped, align = TRUE)
 
     ## Doc: init-auto_hint
     if (!is.null(hints)) {
@@ -325,7 +328,7 @@ setMethod("auto_hint", "Pedigree", function(
         }
     }
 
-    twin_rel <- get_twin_rel(ped = obj)
+    twin_rel <- get_twin_rel(ped = ped)
     twinset <- twin_rel$twinset
     twinord <- twin_rel$twinord
     twinrel <- twin_rel$twinrel
@@ -341,8 +344,8 @@ setMethod("auto_hint", "Pedigree", function(
         }
 
         # Then reset to integers
-        for (i in unique(obj$depth)) {
-            who <- (obj$depth == i)
+        for (i in unique(ped$depth)) {
+            who <- (ped$depth == i)
             horder[who] <- rank(horder[who]) # there should be no ties
         }
     }
@@ -353,7 +356,7 @@ setMethod("auto_hint", "Pedigree", function(
         sptemp <- NULL
     }
 
-    plist <- align(obj,
+    plist <- align(ped,
         packed = packed, align = align,
         hints = list(order = horder, spouse = sptemp)
     )
@@ -366,26 +369,26 @@ setMethod("auto_hint", "Pedigree", function(
         # subjects on this level
         idlist <- plist$nid[lev, 1:plist$n[lev]]
         # duplicates to be dealt with
-        dpairs <- duporder(idlist, plist, lev, obj)
+        dpairs <- duporder(idlist, plist, lev, ped)
         if (nrow(dpairs) == 0) next
         for (i in seq_len(nrow(dpairs))) {
             anchor <- spouse <- rep(0, 2)
             for (j in 1:2) {
                 direction <- c(FALSE, TRUE)[j]
-                mypos <- dpairs[i, j]
-                if (plist$fam[lev, mypos] > 0) {
+                idpos <- dpairs[i, j]
+                if (plist$fam[lev, idpos] > 0) {
                     # Am connected to parents at this location
                     anchor[j] <- 1 # familial anchor
-                    sibs <- idlist[findsibs(mypos, plist, lev)]
+                    sibs <- idlist[findsibs(idpos, plist, lev)]
                     if (length(sibs) > 1) {
                         horder <- shift(
-                            idlist[mypos], sibs, direction,
+                            idlist[idpos], sibs, direction,
                             horder, twinrel, twinset
                         )
                     }
                 } else {
                     # spouse at this location connected to parents ?
-                    spouse[j] <- findspouse(mypos, plist, lev, obj)
+                    spouse[j] <- findspouse(idpos, plist, lev, ped)
                     if (plist$fam[lev, spouse[j]] > 0) { # Yes they are
                         anchor[j] <- 2 # spousal anchor
                         sibs <- idlist[findsibs(spouse[j], plist, lev)]
@@ -428,12 +431,10 @@ setMethod("auto_hint", "Pedigree", function(
         #
         # Recompute, since this shifts things on levels below
         #
-        plist <- align(obj,
+        plist <- align(ped,
             packed = packed, align = align,
             hints = list(order = horder, spouse = sptemp)
         )
     }
     list(order = horder, spouse = sptemp)
-})
-
-TRUE
+}

@@ -22,9 +22,9 @@ generate_fill(
 \item{labels}{The vector containing the labels to use for the affection.}
 
 \item{keep_full_scale}{Boolean defining if the affection values need to
-be set as a scale. If `values` is numeric the filling scale will be
+be set as a scale. If \code{values} is numeric the filling scale will be
 calculated based on the values and the number of breaks given.
-If `values` isn't numeric then each levels will get it's own color}
+If \code{values} isn't numeric then each levels will get it's own color}
 
 \item{colors_aff}{Set of increasing colors to use for the filling of the
 affected individuls.}
@@ -38,8 +38,10 @@ individuals and unaffected individuals.}
 }
 \value{
 A list of two elements
-- The processed values column as a numeric factor
-- A dataframe containing the description of each modality of the scale
+\itemize{
+\item The processed values column as a numeric factor
+\item A dataframe containing the description of each modality of the scale
+}
 }
 \description{
 Process the colors based on affection

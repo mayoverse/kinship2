@@ -17,14 +17,25 @@ TRUE/FALSE}
 }
 \value{
 A list is returned with the following components
-## ped
+\subsection{ped}{
+
 Dataframe with trimmed subject removed
-## idTrimmed
+}
+
+\subsection{idTrimmed}{
+
 Vector of IDs of trimmed individuals
-## isTrimmed
+}
+
+\subsection{isTrimmed}{
+
 logical value indicating whether pedigree has been trimmed
-## bit_size
+}
+
+\subsection{bit_size}{
+
 Bit size of the trimmed pedigree
+}
 }
 \description{
 Finds one subject from among available non-parents with indicated affection
@@ -36,5 +47,5 @@ affected indicator, if the affected item in the pedigree is a matrix of
 multiple affected indicators.
 }
 \seealso{
-`pedigree.shrink`
+\code{pedigree.shrink}
 }

@@ -7,10 +7,15 @@
 get_twin_rel(ped)
 }
 \arguments{
-\item{ped}{The pedigree structure}
+\item{ped}{A pedigree object}
 }
 \value{
-A list containing components `twinset`, `twinrel` and `twinord`
+A list containing components
+\enumerate{
+\item \code{twinset} the set of twins
+\item \code{twinrel} the twins relationships
+\item \code{twinord} the order of the twins
+}
 }
 \description{
 Routine to get twin relationships
@@ -20,5 +25,8 @@ This routine function determine the twin relationships
 in a pedigree. It complete the missing twin relationships for
 triplets, quads, etc. It also determine the order of the twins
 in the pedigree.
-It is used by \code{\link{auto_hint}}.
+It is used by \code{auto_hint()}.
+}
+\seealso{
+\code{\link[=auto_hint]{auto_hint()}}
 }

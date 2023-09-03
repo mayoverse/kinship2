@@ -16,10 +16,10 @@ kinship(obj, ...)
 subject identifiers.  Subject identifiers may be numeric or character.}
 
 \item{dadid}{for each subject, the identifier of the biological father.
-This is only used if `id` is a vector.}
+This is only used if \code{id} is a vector.}
 
 \item{momid}{for each subject, the identifier of the biological mother.
-This is only used if `id` is a vector.}
+This is only used if \code{id} is a vector.}
 
 \item{sex}{vector of sex values coded as 1=male, 2=female}
 
@@ -37,16 +37,16 @@ the first argument.
 \details{
 The function will usually be called with a pedigree or pedigreeList; the
 third form is provided for backwards compatability with an earlier release
-of the library that was less capable.  The first argument is named `id`
+of the library that was less capable.  The first argument is named \code{id}
 for the same reason.  Note that when using the third form any information on
 twins is not available to the function.
 
 When called with a pedigreeList, i.e., with multiple families, the routine
 will create a block-diagonal-symmetric sparse matrix object of class
-`dsCMatrix`.  Since the [i,j] value of the result is 0 for any two
-unrelated individuals i and j and a `Matrix` utilizes sparse
+\code{dsCMatrix}.  Since the \link{i,j} value of the result is 0 for any two
+unrelated individuals i and j and a \code{Matrix} utilizes sparse
 representation, the resulting object is often orders of magnitude smaller
-than an ordinary matrix.  When `kinship` is called with a single
+than an ordinary matrix.  When \code{kinship} is called with a single
 pedigree an ordinary matrix is returned.
 
 Two genes G1 and G2 are identical by descent (IBD) if they are both physical
@@ -81,6 +81,6 @@ round(8 * kinship(tped))
 
 }
 \seealso{
-`pedigree`, `makekinship`, `make_famidb`
+\code{pedigree}, \code{makekinship}, \code{make_famidb}
 }
 \keyword{genetics}

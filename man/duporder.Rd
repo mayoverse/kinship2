@@ -11,9 +11,9 @@ duporder(idlist, plist, lev, ped)
 
 \item{plist}{The alignment structure}
 
-\item{lev}{The level of the subject}
+\item{lev}{The generation level of the subject}
 
-\item{ped}{The pedigree structure}
+\item{ped}{A pedigre object}
 }
 \value{
 A matrix of duplicate pairs
@@ -21,4 +21,11 @@ A matrix of duplicate pairs
 \description{
 Routine to find the duplicate pairs of a subject
 }
-\keyword{internal}
+\details{
+This routine is used by \code{auto_hint()}.
+It finds the duplicate pairs of a subject and returns them in
+the order they should be plotted.
+}
+\seealso{
+\code{\link[=auto_hint]{auto_hint()}}
+}

@@ -12,16 +12,16 @@ generate_colors(obj, ...)
 \item{col_aff}{The name of the column containing the affection status.}
 
 \item{mods_aff}{Vector of modality to consider as affected in the case
-where the `col_aff` is a factor.}
+where the \code{col_aff} is a factor.}
 
 \item{threshold}{Numeric value separating the affected and healthy subject
-in the case where the `col_aff` is numeric.}
+in the case where the \code{col_aff} is numeric.}
 
 \item{sup_thres_aff}{Boolean defining if the affected individual are above
 the threshold or not. If TRUE, the individuals will be considered affected
-if the value of `col_aff` is stricly above the `threshold`. If FALSE, the
+if the value of \code{col_aff} is stricly above the \code{threshold}. If FALSE, the
 individuals will be considered affected if the value is stricly under the
-`threshold`.}
+\code{threshold}.}
 
 \item{col_avail}{The name of the column containing the availability status.}
 
@@ -44,9 +44,11 @@ individual. The first color will be used for available individual (avail
 }
 \value{
 A list of two elements
-- The processed dataframe with the `affected` and `avail` columns
+\itemize{
+\item The processed dataframe with the \code{affected} and \code{avail} columns
 processed accordingly
-- A dataframe containing the description of each modality of the scale
+\item A dataframe containing the description of each modality of the scale
+}
 }
 \description{
 Process the colors based on affection and availability

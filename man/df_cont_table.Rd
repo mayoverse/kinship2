@@ -9,13 +9,9 @@ df_cont_table(df, var1, threshold1 = NULL, var2 = NULL, threshold2 = NULL)
 \arguments{
 \item{df}{Dataframe containing the family informations}
 
-\item{var1}{First column variable to select}
+\item{var1, var2}{First and second column variable to select}
 
-\item{threshold1}{Threshold to apply to `var1`}
-
-\item{var2}{Second column variable to select}
-
-\item{threshold2}{Threshold to apply to `var2`}
+\item{threshold1, threshold2}{Thresholds to apply to \code{var1} and \code{var2}}
 }
 \description{
 Summarise two variables in a contingency table

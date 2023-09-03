@@ -24,6 +24,6 @@ Check for usefulness of individuals
 \details{
 Check for the informativeness of the individuals based on the
 informative parameter given, the number of children and the usefulness
-of their parents. A `useful` column is added to the dataframe with the
+of their parents. A \code{useful} column is added to the dataframe with the
 usefulness of the individual. This boolean is hereditary.
 }

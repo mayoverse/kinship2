@@ -14,7 +14,7 @@ is_founder(momid, dadid, missid = "0")
 \item{missid}{Missing value identifier}
 }
 \value{
-A vector of boolean of the same size as `dadid` and `momid`
+A vector of boolean of the same size as \code{dadid} and \code{momid}
 with TRUE if the individual has no parents (i.e is a founder) and FALSE
 otherwise.
 }

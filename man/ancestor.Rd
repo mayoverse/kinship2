@@ -7,17 +7,23 @@
 ancestor(idx, momx, dadx)
 }
 \arguments{
-\item{idx}{subject index}
+\item{idx}{Index of the subject}
 
-\item{momx}{vector of mother indexs}
+\item{momx}{Indexs of the mothers}
 
-\item{dadx}{vector of father indexs}
+\item{dadx}{Indexs of the fathers}
 }
 \value{
-a vector of ancestor index
+A vector of ancestor indexs
 }
 \description{
-For each spouse pair, find out if it should be
-connected with a double line.  This is the case if they have
-a common ancestor
+Given the index of one individual, this
+function iterate through the mom and dad indexs to
+list out all the ancestors of the said individual.
+This function is use in the \code{align()} function to
+identify which spouse pair has a common ancestor and
+therefore if they need to be connected with a double line.
+}
+\seealso{
+\code{\link[=align]{align()}}
 }

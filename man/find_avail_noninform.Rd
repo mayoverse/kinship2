@@ -27,5 +27,5 @@ non-informative.  This is the second step to remove subjects in
 pedigree.shrink if the pedigree does not meet the desired bit size.
 }
 \seealso{
-`pedigree.shrink`
+\code{pedigree.shrink}
 }

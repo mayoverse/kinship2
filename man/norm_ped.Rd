@@ -13,8 +13,8 @@ norm_ped(ped_df, na_strings = c("NA", ""), missid = "0", try_num = FALSE)
 }
 \value{
 List of two dataframe
-`norm` is the dataframe with all the individuals without any errors.
-`errors` is the dataframe containing the individuals with errors.
+\code{norm} is the dataframe with all the individuals without any errors.
+\code{errors} is the dataframe containing the individuals with errors.
 }
 \description{
 Normalise dataframe for pedigree object
@@ -23,12 +23,12 @@ Normalise dataframe for pedigree object
 Normalise a dataframe and check for columns correspondance
 to be able to use it as an input to create pedigree object.
 Multiple test are done and errors are checked.
-Sex is calculated based in the `gender` column the following notations
+Sex is calculated based in the \code{gender} column the following notations
 are accepted: f, woman, female, 2 and m, man, male, 1.
-The `steril` column need to be a boolean either TRUE, FALSE or 'NA'.
+The \code{steril} column need to be a boolean either TRUE, FALSE or 'NA'.
 Will be considered available any individual with no 'NA' values in the
-`available` column.
-Duplicated `indId` will nullify the relationship of the individual.
+\code{available} column.
+Duplicated \code{indId} will nullify the relationship of the individual.
 All individuals with errors will be remove from the dataframe and will
 be transfered to the error dataframe.
 }

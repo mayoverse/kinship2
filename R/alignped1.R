@@ -3,77 +3,90 @@
 #' First routine alignement
 #'
 #' @description
-#' This is the first of the four co-routines.
+#' First alignement routine which create the subtree founded on a single
+#' subject as though it were the only tree.
 #'
 #' @details
-#' It is called with a single subject, and returns the subtree founded on said
-#' subject, as though it were the only tree.
-#'
-#' 1. In this routine the `[[nid]]` array consists of the final
-#' `nid array + 1/2`` of the final spouse array.
-#' Note that the `[[spouselist]]` matrix will only contain spouse pairs
-#' that are not yet processed. The logic for anchoring is slightly tricky.
-#' First, if row 4 of the spouselist matrix is 0, we anchor at the first
-#' opportunity. Also note that if `spouselist[,3]==spouselist[,4]`
-#' it is the husband who is the anchor (just write out the possibilities).
+#' 1. In this routine the **nid** array consists of the final
+#'    `nid array + 1/2` of the final spouse array.
+#'    Note that the **spouselist** matrix will only contain spouse pairs
+#'    that are not yet processed. The logic for anchoring is slightly tricky.
+#'    First, if row 4 of the spouselist matrix is 0, we anchor at the first
+#'    opportunity. Also note that if `spouselist[, 3] == spouselist[, 4]`
+#'    it is the husband who is the anchor (just write out the possibilities).
 #' 2. Create the set of 3 return structures, which will be matrices
-#' with (1+nspouse) columns.
-#' If there are children then other routines will widen the result.
-#' 3. Create the two complimentary lists lspouse and rspouse to
-#' denote those plotted on the left and on the right. For someone with lots
-#' of spouses we try to split them evenly. If the number of spouses is odd,
-#' then men should have more on the right than on the left, women more on the
-#' right. Any hints in the spouselist matrix override.
-#' We put the undecided marriages closest to `[[x]]`, then add
-#' predetermined ones to the left and right. The majority of marriages will be
-#' undetermined singletons, for which nleft will be 1 for female (put my husband
-#' to the left) and 0 for male. In one bug found by plotting canine data,
-#' lspouse could initially be empty but `length(rspouse)> 1`.
-#' This caused `nleft>length(indx)`.
-#' A fix was to not let indx to be indexed beyond its length,
-#' fix by JPS 5/2013.
+#'    with `1 + nspouse` columns.
+#'    If there are children then other routines will widen the result.
+#' 3. Create the two complimentary lists **lspouse** and **rspouse** to
+#'    denote those plotted on the left and on the right. For someone with lots
+#'    of spouses we try to split them evenly. If the number of spouses is odd,
+#'    then men should have more on the right than on the left, women more on the
+#'    right. Any hints in the spouselist matrix override.
+#'    We put the undecided marriages closest to **idx**, then add
+#'    predetermined ones to the left and right. The majority of marriages will
+#'    be undetermined singletons, for which **nleft** will be `1` for female
+#'    (put my husband to the left) and `0` for male. In one bug found by
+#'    plotting canine data, lspouse could initially be empty but
+#'    `length(rspouse) > 1`. This caused `nleft > length(indx)`.
+#'    A fix was to not let **indx** to be indexed beyond its length,
+#'    fix by JPS 5/2013.
 #' 4. For each spouse get the list of children. If there are any we
-#' call alignped2 to generate their tree and then mark the connection to their
-#' parent. If multiple marriages have children we need to join the trees.
+#'    call [alignped2()] to generate their tree and then mark the connection to
+#'    their parent.
+#'    If multiple marriages have children we need to join the trees.
 #' 5. To finish up we need to splice together the tree made up from
-#' all the kids, which only has data from lev+1 down, with the data here.
-#' There are 3 cases:
-#' The first and easiest is when no children were found.
-#' The second is when the tree below is wider than the tree here,
-#' in which case we add the data from this level onto theirs.
-#' The third is when below is narrower, for instance an only child.
+#'    all the kids, which only has data from `lev + 1` down, with the data here.
+#'    There are 3 cases:
 #'
-#' @param x Id of the subject
-#' @param dad index of the father
-#' @param mom index of the mother
-#' @param level vector of the level of each subject
-#' @param horder vector of the horizontal order of each subject
-#' @param packed logical value indicating if the pedigree should be compressed
-#' @param spouselist matrix of the spouses
+#'        1. No children were found.
+#'        2. The tree below is wider than the tree here, in which case we add
+#'           the data from this level onto theirs.
+#'        3. The tree below is narrower, for instance an only child.
 #'
-#' @return A set of matrices along with the spouselist matrix.
+#' @param idx Index of the subject
+#' @param dadx Index of the father
+#' @param momx Index of the mother
+#' @param level Vector of the level of each subject
+#' @param horder Vector of the horizontal order of each subject
+#' @inheritParams align
+#' @param spouselist Matrix of the spouses
+#'
+#' @return A list containing the elements to plot the pedigree.
+#' It contains a set of matrices along with the spouselist matrix.
 #' The latter has marriages removed as they are processed.
+#' - n A vector giving the number of subjects on each horizonal level of the
+#'     plot
+#' - nid A matrix with one row for each level, giving the numeric id of
+#'       each subject plotted.
+#'       (A value of `17` means the 17th subject in the pedigree).
+#' - pos A matrix giving the horizontal position of each plot point
+#' - fam A matrix giving the family id of each plot point.
+#'       A value of `3` would mean that the two subjects in positions 3 and 4,
+#'       in the row above, are this subject's parents.
+#' - spouse A matrix with values
+#'     - `0` = not a spouse
+#'     - `1` = subject plotted to the immediate right is a spouse
+#'     - `2` = subject plotted to the immediate right is an inbred spouse
 #'
 #' @examples
 #' data(sampleped)
-#' ped <- with(sampleped, pedigree(id, father, mother, sex, affected))
+#' ped <- pedigree(sampleped)
 #' align(ped)
 #'
-#' @seealso `plot.pedigree`, `auto_hint`
-#' @keywords dplot
+#' @seealso [align()]
 #' @export
-alignped1 <- function(x, dad, mom, level, horder, packed, spouselist) {
+alignped1 <- function(idx, dadx, momx, level, horder, packed, spouselist) {
     # Set a few constants
     maxlev <- max(level)
-    lev <- level[x]
+    lev <- level[idx]
     n <- integer(maxlev)
 
     if (length(spouselist) == 0) {
         spouse <- NULL
     } else {
-        if (any(spouselist[, 1] == x)) {
+        if (any(spouselist[, 1] == idx)) {
             sex <- 1  # I'm male
-            sprows <- (spouselist[, 1] == x &
+            sprows <- (spouselist[, 1] == idx &
                     (spouselist[, 4] == spouselist[, 3] |
                             spouselist[, 4] == 0
                     )
@@ -81,7 +94,7 @@ alignped1 <- function(x, dad, mom, level, horder, packed, spouselist) {
             spouse <- spouselist[sprows, 2]  # ids of the spouses
         } else {
             sex <- 2
-            sprows <- (spouselist[, 2] == x &
+            sprows <- (spouselist[, 2] == idx &
                     (spouselist[, 4] != spouselist[, 3] |
                             spouselist[, 4] == 0
                     )
@@ -103,8 +116,8 @@ alignped1 <- function(x, dad, mom, level, horder, packed, spouselist) {
     n[lev] <- nspouse + 1
     pos[lev, ] <- 0:nspouse
     if (nspouse == 0) {
-        # Easy case: the 'tree rooted at x' is only x itself
-        nid[lev, 1] <- x
+        # Easy case: the 'tree rooted at idx' is only idx itself
+        nid[lev, 1] <- idx
         return(list(nid = nid, pos = pos, fam = fam, n = n,
             spouselist = spouselist
         ))
@@ -129,7 +142,7 @@ alignped1 <- function(x, dad, mom, level, horder, packed, spouselist) {
             rspouse <- c(spouse[indx], rspouse)
     }
 
-    nid[lev, ] <- c(lspouse, x, rspouse)
+    nid[lev, ] <- c(lspouse, idx, rspouse)
     nid[lev, 1:nspouse] <- nid[lev, 1:nspouse] + 0.5  # marriages
 
     spouselist <- spouselist[-sprows, , drop = FALSE]
@@ -138,11 +151,11 @@ alignped1 <- function(x, dad, mom, level, horder, packed, spouselist) {
     spouse <- c(lspouse, rspouse)  # reorder
     for (i in 1:nspouse) {
         ispouse <- spouse[i]
-        children <- which((dad == x & mom == ispouse) |
-                (dad == ispouse & mom == x)
+        children <- which((dadx == idx & momx == ispouse) |
+                (dadx == ispouse & momx == idx)
         )
         if (length(children) > 0) {
-            rval1 <- alignped2(children, dad, mom,
+            rval1 <- alignped2(children, dadx, momx,
                 level, horder, packed, spouselist
             )
             spouselist <- rval1$spouselist
@@ -207,4 +220,3 @@ alignped1 <- function(x, dad, mom, level, horder, packed, spouselist) {
     rval$spouselist <- spouselist
     rval
 }
-TRUE

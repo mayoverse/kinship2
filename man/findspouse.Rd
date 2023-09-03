@@ -4,16 +4,16 @@
 \alias{findspouse}
 \title{Routine to find the spouse of a subject}
 \usage{
-findspouse(mypos, plist, lev, ped)
+findspouse(idpos, plist, lev, ped)
 }
 \arguments{
-\item{mypos}{The position of the subject}
+\item{idpos}{The position of the subject}
 
 \item{plist}{The alignment structure}
 
-\item{lev}{The level of the subject}
+\item{lev}{The generation level of the subject}
 
-\item{ped}{The pedigree structure}
+\item{ped}{A pedigre object}
 }
 \value{
 The position of the spouse
@@ -21,4 +21,10 @@ The position of the spouse
 \description{
 Routine to find the spouse of a subject
 }
-\keyword{internal}
+\details{
+This routine is used by \code{auto_hint()}.
+It finds the spouse of a subject.
+}
+\seealso{
+\code{\link[=auto_hint]{auto_hint()}}
+}

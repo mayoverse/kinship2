@@ -15,25 +15,25 @@ generate_aff_inds(
 \item{values}{Vector containing the values of the column to process.}
 
 \item{mods_aff}{Vector of modality to consider as affected in the case
-where the `values` is a factor.}
+where the \code{values} is a factor.}
 
 \item{threshold}{Numeric value separating the affected and healthy subject
-in the case where the `values` is numeric.}
+in the case where the \code{values} is numeric.}
 
 \item{sup_thres_aff}{Boolean defining if the affected individual are above
 the threshold or not. If TRUE, the individuals will be considered affected
-if the value of `values` is stricly above the `threshold`. If FALSE, the
+if the value of \code{values} is stricly above the \code{threshold}. If FALSE, the
 individuals will be considered affected if the value is stricly under the
-`threshold`.}
+\code{threshold}.}
 }
 \value{
-A dataframe with the `affected` column processed accordingly
+A dataframe with the \code{affected} column processed accordingly
 }
 \description{
 Process the information for affection
 }
 \details{
 Perform transformation uppon a column given as the one
-containing affection status to get an `affected` column usable for
+containing affection status to get an \code{affected} column usable for
 the rest of the script
 }

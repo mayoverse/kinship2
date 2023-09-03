@@ -11,7 +11,7 @@ shift(id, sibs, goleft, hint, twinrel, twinset)
 
 \item{sibs}{The ids of the siblings}
 
-\item{goleft}{If TRUE, shift to the left, otherwise to the right}
+\item{goleft}{If \code{TRUE}, shift to the left, otherwise to the right}
 
 \item{hint}{The current hint vector}
 
@@ -25,4 +25,15 @@ The updated hint vector
 \description{
 Routine to shift set of siblings to the left or right
 }
-\keyword{internal}
+\details{
+This routine is used by \code{auto_hint()}.
+It shifts a set of siblings to the left or right, so that the
+marriage is on the edge of the set of siblings, closest to the spouse.
+It also shifts the subject himself, so that he is on the edge of the
+set of siblings, closest to the spouse.
+It also shifts the monozygotic twins, if any, so that they are
+together within the set of twins.
+}
+\seealso{
+\code{\link[=auto_hint]{auto_hint()}}
+}

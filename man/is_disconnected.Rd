@@ -14,7 +14,7 @@ is_disconnected(id, dadid, momid)
 \item{momid}{Vector of mother id}
 }
 \value{
-A vector of boolean of the same size as `id`
+A vector of boolean of the same size as \code{id}
 with TRUE if the individual is disconnected and FALSE otherwise
 }
 \description{

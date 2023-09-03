@@ -15,30 +15,44 @@ family_check(obj, ...)
 
 \item{momid}{Vector containing the id of the biological mother}
 
-\item{newfam}{The result of a call to `make_famid`. If this has already
+\item{newfam}{The result of a call to \code{make_famid}. If this has already
 been computed by the user, adding it as an argument shortens the running
 time somewhat.}
 }
 \value{
 a data frame with one row for each unique family id in the
-`famid` argument. Components of the output are:
-## famid
+\code{famid} argument. Components of the output are:
+\subsection{famid}{
+
 The family id, as entered into the data set
-## n
+}
+
+\subsection{n}{
+
 Number of subjects in the family
-## unrelated
+}
+
+\subsection{unrelated}{
+
 Number of them that appear to be unrelated to
 anyone else in the entire pedigree set.  This is usually marry-ins with no
 children (in the pedigree), and if so are not a problem.
-## split
+}
+
+\subsection{split}{
+
 Number of unique 'new' family ids.
 0 = no one in this 'family' is related to anyone else (not good)
 1 = everythings is fine
 2+= the family appears to be a set of disjoint trees.
 Are you missing some of the people?
-## join
+}
+
+\subsection{join}{
+
 Number of other families that had a unique
 famid, but are actually joined to this one.  0 is the hope.
+}
 }
 \description{
 Error check for a family classification
@@ -47,7 +61,7 @@ Error check for a family classification
 Given a family id vector, also compute the familial grouping from first
 principles using the parenting data, and compare the results.
 
-The `make_famid` function is used to create a de novo family id from the
+The \code{make_famid} function is used to create a de novo family id from the
 parentage data, and this is compared to the family id given in the data.
 
 If there are any joins, then an attribute 'join' is attached.
@@ -84,6 +98,6 @@ fcheck1.bad <- try(
 
 }
 \seealso{
-`make_famid`, `makekinship`
+\code{make_famid}, \code{makekinship}
 }
 \keyword{genetics}

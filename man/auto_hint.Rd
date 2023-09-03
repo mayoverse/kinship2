@@ -2,49 +2,66 @@
 % Please edit documentation in R/auto_hint.R
 \name{auto_hint}
 \alias{auto_hint}
-\title{Align a pedigree}
+\title{First initial guess for the alignment of a pedigree}
 \usage{
-auto_hint(obj, ...)
+auto_hint(ped, hints = NULL, packed = TRUE, align = FALSE, reset = FALSE)
 }
 \arguments{
-\item{ped}{A pedigree structure}
+\item{ped}{A pedigree object}
 
-\item{hints}{Optional hints object. Only the order component is used.}
+\item{hints}{Plotting hints for the pedigree.
+This is a list with components \code{order} and \code{spouse}, the second one is
+optional.
+The order component is a numeric vector with one element per subject in the
+pedigree.  It determines the relative order of subjects within a sibship, as
+well as the relative order of processing for the founder couples. (For this
+latter, the female founders are ordered as though they were sisters). The
+spouse component is a matrix with one row per hinted marriage, usually only
+a few marriages in a pedigree will need an added hint, for instance reverse
+the plot order of a husband/wife pair. Each row contains the index of the
+left spouse, the right hand spouse, and the anchor
+(i.e : \code{1} = left, \code{2} = right, \code{0} = either).
+Children will preferentially appear under the parents of the anchored spouse.}
 
-\item{packed}{If TRUE, uniform distance between all individuals at a given
-level.}
+\item{packed}{Should the pedigree be compressed, i.e., allow diagonal
+lines connecting parents to children in order to have a smaller overall
+width for the plot.}
 
-\item{align}{These parameters control the extra effort spent trying to align
-children underneath parents, but without making the pedigree too wide.  Set
-to FALSE to speed up plotting.}
+\item{align}{for a packed pedigree, align children under parents \code{TRUE}, to
+the extent possible given the page width, or align to to the left margin
+\code{FALSE}. This argument can be a two element vector, giving the alignment
+parameters, or a logical value.  If \code{TRUE}, the default is \code{c(1.5, 2)}, or
+numeric the routine \code{alignped4} will be called.}
+
+\item{reset}{If \code{TRUE}, reset the hints to the initial values}
 }
 \value{
-A list containing components `order` and `spouse`
+The \strong{hints} list containing components \code{order} and \code{spouse}
 }
 \description{
-Align a pedigree to print well
+Compute an initial guess for the alignment of a pedigree
 }
 \details{
-A pedigree structure can contain a `hints` object which helps to
+A pedigree structure can contain a \code{hints} object which helps to
 reorder the pedigree (e.g. left-to-right order of children within family) so
 as to plot with minimal distortion. This routine is used to create an
-initial version of the hints.  They can then be modified if desired.
+initial version of the hints. They can then be modified if desired.
 
-This routine would not normally be called by a user.  It moves children
+This routine would not normally be called by a user. It moves children
 within families, so that marriages are on the "edge" of a set children,
-closest to the spouse.  For pedigrees that have only a single connection
+closest to the spouse. For pedigrees that have only a single connection
 between two families this simple-minded approach works surprisingly well.
 For more complex structures hand-tuning of the hints matrix may be required.
 
 The pedigree in the example below is one where rearranging the founders
-greatly decreases the number of extra connections. When auto_hint is called
-with a a vector of numbers as the second argument, the values for the
+greatly decreases the number of extra connections. When \code{auto_hint()} is
+called with a a vector of numbers as the second argument, the values for the
 founder females are used to order the founder families left to right across
-the plot.  The values within a sibship are used as the preliminary order of
+the plot. The values within a sibship are used as the preliminary order of
 siblings within a family; this may be changed to move one of them to the
 edge so as to match up with a spouse. The actual values in the vector are
 not important, only their order.
 }
 \seealso{
-pedigree, besthint
+\code{\link[=align]{align()}}, \code{\link[=best_hint]{best_hint()}}
 }

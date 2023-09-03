@@ -14,14 +14,14 @@ ibd_matrix(id1, id2, x, idmap, diagonal)
 \item{x}{the IBD value for that pair}
 
 \item{idmap}{an optional 2 column matrix or data frame whose first element
-is the internal value (as found in `id1` and `id2`, and whose
+is the internal value (as found in \code{id1} and \code{id2}, and whose
 second element will be used for the dimnames of the result}
 
 \item{diagonal}{optional value for the diagonal element. If present, any
 missing diagonal elements in the input data will be set to this value.}
 }
 \value{
-a sparse matrix of class `dsCMatrix`.  This is the same form
+a sparse matrix of class \code{dsCMatrix}.  This is the same form
 used for kinship matrices.
 }
 \description{
@@ -42,6 +42,6 @@ contains the mapping between this new id and the original one.  The final
 matrix should be labeled with the original identifiers.
 }
 \seealso{
-`kinship`, `Matrix`
+\code{kinship}, \code{Matrix}
 }
 \keyword{genetics}

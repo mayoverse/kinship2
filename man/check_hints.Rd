@@ -22,5 +22,5 @@ Actually, these used to arise in auto_hint.
 Users can introduce problems as well if they modify the hints.
 }
 \seealso{
-`auto_hint`, `best_hint`
+\code{auto_hint}, \code{best_hint}
 }

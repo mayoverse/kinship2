@@ -20,7 +20,7 @@ Transform a variable into a factor
 \details{
 Transform a numeric or string variable into a factor.
 In the case of a numerical variable the threshold is used to separate
-the variable using the `cut` function.
+the variable using the \code{cut} function.
 }
 \examples{
 var <- runif(10)

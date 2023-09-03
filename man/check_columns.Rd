@@ -46,13 +46,15 @@ depending on their need
 }
 \details{
 3 types of columns are here checked:
-- 1 `cols_needed` those columns need to be present if any is missing
+\itemize{
+\item 1 \code{cols_needed} those columns need to be present if any is missing
 an error will be prompted and the script will stop
-- 2 `cols_used` those columns will be used in the script and will be
+\item 2 \code{cols_used} those columns will be used in the script and will be
 overwritten to NA.
-- 3 `cols_to_use` those columns are optional and will be recognise
+\item 3 \code{cols_to_use} those columns are optional and will be recognise
 if present.
 The last two types of columns can be initialised to NA if needed.
+}
 }
 \examples{
 data.frame

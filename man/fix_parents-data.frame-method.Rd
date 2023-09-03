@@ -48,8 +48,8 @@ The same dataframe with the parents ids fixed
 Apply fix_parents on a dataframe or delete missing parents.
 }
 \details{
-Check for presence of both parents id in the `id` field.
-If not both presence behaviour depend of `delete` parameter
+Check for presence of both parents id in the \code{id} field.
+If not both presence behaviour depend of \code{delete} parameter
 If TRUE then use fix_parents function and merge back the other fields
 in the dataframe then set availability to O for non available parents.
 If FALSE then delete the id of missing parents

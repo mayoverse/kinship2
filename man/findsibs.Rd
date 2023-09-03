@@ -4,14 +4,14 @@
 \alias{findsibs}
 \title{Routine to find the siblings of a subject}
 \usage{
-findsibs(mypos, plist, lev)
+findsibs(idpos, plist, lev)
 }
 \arguments{
-\item{mypos}{The position of the subject}
+\item{idpos}{The position of the subject}
 
 \item{plist}{The alignment structure}
 
-\item{lev}{The level of the subject}
+\item{lev}{The generation level of the subject}
 }
 \value{
 The positions of the siblings
@@ -19,4 +19,10 @@ The positions of the siblings
 \description{
 Routine to find the siblings of a subject
 }
-\keyword{internal}
+\details{
+This routine is used by \code{auto_hint()}.
+It finds the siblings of a subject.
+}
+\seealso{
+\code{\link[=auto_hint]{auto_hint()}}
+}

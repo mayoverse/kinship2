@@ -21,7 +21,7 @@ a matrix of 0/1 values
 \description{
 Doc: still part of setup/data affected is a 0/1 matrix of any marker
 data.  It may be attached to the pedigree or added here.  It can be a
-vector of length [[n]] or a matrix with [[n]] rows. If not present,
+vector of length [\link{n}] or a matrix with [\link{n}] rows. If not present,
 the default is to plot open symbols without shading or color
 If affected is a matrix, then the shading and/or density value for
 ith column is taken from the ith element of the angle/density

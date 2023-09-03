@@ -19,8 +19,8 @@ Codes: 1=Monozygotic twin, 2=Dizygotic twin, 3=twin of unknown zygosity,
 4=Spouse.}
 }
 \value{
-A dataframe with the columns `num_child_dir`, `num_child_ind` and
-`num_child_tot` giving respectively the direct, indirect and total number
+A dataframe with the columns \code{num_child_dir}, \code{num_child_ind} and
+\code{num_child_tot} giving respectively the direct, indirect and total number
 of child.
 }
 \description{

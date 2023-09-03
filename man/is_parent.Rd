@@ -16,7 +16,7 @@ is_parent(id, dadid, momid, missid = "0")
 \item{missid}{Missing value identifier}
 }
 \value{
-A vector of boolean of the same size as `id`
+A vector of boolean of the same size as \code{id}
 with TRUE if the individual is a parent and FALSE otherwise
 }
 \description{

@@ -4,75 +4,97 @@
 \alias{alignped1}
 \title{First routine alignement}
 \usage{
-alignped1(x, dad, mom, level, horder, packed, spouselist)
+alignped1(idx, dadx, momx, level, horder, packed, spouselist)
 }
 \arguments{
-\item{x}{Id of the subject}
+\item{idx}{Index of the subject}
 
-\item{dad}{index of the father}
+\item{dadx}{Index of the father}
 
-\item{mom}{index of the mother}
+\item{momx}{Index of the mother}
 
-\item{level}{vector of the level of each subject}
+\item{level}{Vector of the level of each subject}
 
-\item{horder}{vector of the horizontal order of each subject}
+\item{horder}{Vector of the horizontal order of each subject}
 
-\item{packed}{logical value indicating if the pedigree should be compressed}
+\item{packed}{Should the pedigree be compressed, i.e., allow diagonal
+lines connecting parents to children in order to have a smaller overall
+width for the plot.}
 
-\item{spouselist}{matrix of the spouses}
+\item{spouselist}{Matrix of the spouses}
 }
 \value{
-A set of matrices along with the spouselist matrix.
+A list containing the elements to plot the pedigree.
+It contains a set of matrices along with the spouselist matrix.
 The latter has marriages removed as they are processed.
+\itemize{
+\item n A vector giving the number of subjects on each horizonal level of the
+plot
+\item nid A matrix with one row for each level, giving the numeric id of
+each subject plotted.
+(A value of \code{17} means the 17th subject in the pedigree).
+\item pos A matrix giving the horizontal position of each plot point
+\item fam A matrix giving the family id of each plot point.
+A value of \code{3} would mean that the two subjects in positions 3 and 4,
+in the row above, are this subject's parents.
+\item spouse A matrix with values
+\itemize{
+\item \code{0} = not a spouse
+\item \code{1} = subject plotted to the immediate right is a spouse
+\item \code{2} = subject plotted to the immediate right is an inbred spouse
+}
+}
 }
 \description{
-This is the first of the four co-routines.
+First alignement routine which create the subtree founded on a single
+subject as though it were the only tree.
 }
 \details{
-It is called with a single subject, and returns the subtree founded on said
-subject, as though it were the only tree.
-
-1. In this routine the `[[nid]]` array consists of the final
-`nid array + 1/2`` of the final spouse array.
-Note that the `[[spouselist]]` matrix will only contain spouse pairs
+\enumerate{
+\item In this routine the \strong{nid} array consists of the final
+\verb{nid array + 1/2} of the final spouse array.
+Note that the \strong{spouselist} matrix will only contain spouse pairs
 that are not yet processed. The logic for anchoring is slightly tricky.
 First, if row 4 of the spouselist matrix is 0, we anchor at the first
-opportunity. Also note that if `spouselist[,3]==spouselist[,4]`
+opportunity. Also note that if \code{spouselist[, 3] == spouselist[, 4]}
 it is the husband who is the anchor (just write out the possibilities).
-2. Create the set of 3 return structures, which will be matrices
-with (1+nspouse) columns.
+\item Create the set of 3 return structures, which will be matrices
+with \code{1 + nspouse} columns.
 If there are children then other routines will widen the result.
-3. Create the two complimentary lists lspouse and rspouse to
+\item Create the two complimentary lists \strong{lspouse} and \strong{rspouse} to
 denote those plotted on the left and on the right. For someone with lots
 of spouses we try to split them evenly. If the number of spouses is odd,
 then men should have more on the right than on the left, women more on the
 right. Any hints in the spouselist matrix override.
-We put the undecided marriages closest to `[[x]]`, then add
-predetermined ones to the left and right. The majority of marriages will be
-undetermined singletons, for which nleft will be 1 for female (put my husband
-to the left) and 0 for male. In one bug found by plotting canine data,
-lspouse could initially be empty but `length(rspouse)> 1`.
-This caused `nleft>length(indx)`.
-A fix was to not let indx to be indexed beyond its length,
+We put the undecided marriages closest to \strong{idx}, then add
+predetermined ones to the left and right. The majority of marriages will
+be undetermined singletons, for which \strong{nleft} will be \code{1} for female
+(put my husband to the left) and \code{0} for male. In one bug found by
+plotting canine data, lspouse could initially be empty but
+\code{length(rspouse) > 1}. This caused \code{nleft > length(indx)}.
+A fix was to not let \strong{indx} to be indexed beyond its length,
 fix by JPS 5/2013.
-4. For each spouse get the list of children. If there are any we
-call alignped2 to generate their tree and then mark the connection to their
-parent. If multiple marriages have children we need to join the trees.
-5. To finish up we need to splice together the tree made up from
-all the kids, which only has data from lev+1 down, with the data here.
+\item For each spouse get the list of children. If there are any we
+call \code{\link[=alignped2]{alignped2()}} to generate their tree and then mark the connection to
+their parent.
+If multiple marriages have children we need to join the trees.
+\item To finish up we need to splice together the tree made up from
+all the kids, which only has data from \code{lev + 1} down, with the data here.
 There are 3 cases:
-The first and easiest is when no children were found.
-The second is when the tree below is wider than the tree here,
-in which case we add the data from this level onto theirs.
-The third is when below is narrower, for instance an only child.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{1. No children were found.
+2. The tree below is wider than the tree here, in which case we add
+   the data from this level onto theirs.
+3. The tree below is narrower, for instance an only child.
+}\if{html}{\out{</div>}}
+}
 }
 \examples{
 data(sampleped)
-ped <- with(sampleped, pedigree(id, father, mother, sex, affected))
+ped <- pedigree(sampleped)
 align(ped)
 
 }
 \seealso{
-`plot.pedigree`, `auto_hint`
+\code{\link[=align]{align()}}
 }
-\keyword{dplot}

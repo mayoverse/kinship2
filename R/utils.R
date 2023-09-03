@@ -45,10 +45,8 @@ var_to_factor <- function(var, threshold = NULL) {
 #' variable is numerical. To do so the variables are transformed to factors.
 #'
 #' @param df Dataframe containing the family informations
-#' @param var1 First column variable to select
-#' @param var2 Second column variable to select
-#' @param threshold1 Threshold to apply to `var1`
-#' @param threshold2 Threshold to apply to `var2`
+#' @param var1,var2 First and second column variable to select
+#' @param threshold1,threshold2 Thresholds to apply to `var1` and `var2`
 #'
 #' @examples
 #' var1 <- runif(10)

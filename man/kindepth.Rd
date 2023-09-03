@@ -13,7 +13,7 @@ kindepth(obj, ...)
 
 \item{momid}{Id code for the mother}
 
-\item{align}{If `align=T`, go one step further and try to make both parents
+\item{align}{If \code{align=T}, go one step further and try to make both parents
 of each child have the same depth.  (This is not always possible).
 It helps the drawing program by lining up pedigrees that 'join in the middle'
 via a marriage.}
@@ -26,13 +26,13 @@ Computes the depth of each subject in the pedigree.
 }
 \details{
 Mark each person as to their depth in a pedigree; 0 for a founder, otherwise
-`depth = 1 + max(father's depth, mother's depth)`
+\verb{depth = 1 + max(father's depth, mother's depth)}
 
 In the case of an inbred pedigree a perfect alignment obeying
-`extra=TRUE` may not exist.
+\code{extra=TRUE} may not exist.
 }
 \seealso{
-`plot.pedigree`
+\code{plot.pedigree}
 }
 \author{
 Terry Therneau

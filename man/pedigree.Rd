@@ -42,12 +42,12 @@ individuals and the matrix of the spouse as in the \\link{align} function.}
 
 \item{normalize}{A logical to know if the data should be normalised.}
 
-\item{...}{Other arguments to pass to the function `generate_colors`.}
+\item{...}{Other arguments to pass to the function \code{generate_colors}.}
 }
 \value{
 A Pedigree object.
 }
 \description{
 This constructor help to create a \\code{Pedigree} object from
-`data.frame`.
+\code{data.frame}.
 }

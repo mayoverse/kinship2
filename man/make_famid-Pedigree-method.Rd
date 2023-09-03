@@ -25,7 +25,7 @@ This command is depricated. The kinship command now can be applied directly
 to pedigreeList objects.
 }
 \seealso{
-`kinship`
+\code{kinship}
 }
 \author{
 Terry Therneau

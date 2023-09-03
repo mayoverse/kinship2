@@ -76,5 +76,5 @@ id2
 
 }
 \seealso{
-`kinship`, `pedigree`
+\code{kinship}, \code{pedigree}
 }

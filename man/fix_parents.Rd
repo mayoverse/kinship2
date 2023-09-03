@@ -15,7 +15,7 @@ coded to NA, or another value specified by missid.}
 \item{momid}{Identification variable for mother. Founders parents should be
 coded to NA, or another value specified by missid.}
 
-\item{sex}{Gender of individual noted in `id`. Either character
+\item{sex}{Gender of individual noted in \code{id}. Either character
 ('male','female','unknown','terminated') or numeric (1='male', 2='female',
 3='unknown', 4='terminated') data is allowed.  For character data the string
 may be truncated, and of arbitrary case.}

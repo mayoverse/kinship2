@@ -9,18 +9,18 @@ check_num_na(var, na_as_num = TRUE)
 \arguments{
 \item{var}{Vector of value to test}
 
-\item{na_as_num}{Boolean defining if the `NA` string should be
+\item{na_as_num}{Boolean defining if the \code{NA} string should be
 considered as numerical values}
 }
 \value{
-A vector of boolean of the same size as `var`
+A vector of boolean of the same size as \code{var}
 }
 \description{
 Check if a variable given is numeric or NA
 }
 \details{
-Check if the values in `var` are numeric or if they are
-NA in the case that `na_as_num` is set to TRUE.
+Check if the values in \code{var} are numeric or if they are
+NA in the case that \code{na_as_num} is set to TRUE.
 }
 \examples{
 var <- c(45, 'NA', 'Test', '46.2', -2, '-46', '2NA', NA)

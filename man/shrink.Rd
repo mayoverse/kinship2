@@ -40,9 +40,11 @@ subjects, i.e., unavailable (not genotyped) with no available descendants.
 Next, available terminal subjects with unknown phenotype if both parents
 available. Last, iteratively shrinks pedigrees by preferentially removing
 individuals (chosen at random if there are multiple of the same status):
-1. Subjects with unknown affected status
-2. Subjects with unaffected affected status
-3. Affected subjects.
+\enumerate{
+\item Subjects with unknown affected status
+\item Subjects with unaffected affected status
+\item Affected subjects.
+}
 }
 \examples{
 data(sampleped)

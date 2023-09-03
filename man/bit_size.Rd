@@ -15,19 +15,27 @@ bit_size(obj, ...)
 }
 \value{
 A list with the following components:
-## bit_size
+\subsection{bit_size}{
+
 The bit_size of input pedigree
-## nFounder
+}
+
+\subsection{nFounder}{
+
 The number of founders in the pedigree
-## nNonFounder
+}
+
+\subsection{nNonFounder}{
+
 The number of nonfounders in the pedgiree
+}
 }
 \description{
 Calculate pedigree bit_size, defined as 2 * # NonFounders - # Founders
 }
 \details{
-This is a utility function used in `pedigree.shrink()`
+This is a utility function used in \code{pedigree.shrink()}
 }
 \seealso{
-`pedigree.shrink`
+\code{pedigree.shrink}
 }
