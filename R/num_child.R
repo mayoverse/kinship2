@@ -2,17 +2,6 @@
 #' @importFrom tidyr pivot_longer
 NULL
 
-# Create dummy vectors for the check() function
-child <- NULL
-num_child_dir <- NULL
-idmin <- NULL
-idmax <- NULL
-childs <- NULL
-num_child_tot <- NULL
-child_min <- NULL
-child_max <- NULL
-childs_all <- NULL
-
 #' Number of child
 #'
 #' @description Compute the number of child per individual
@@ -45,6 +34,17 @@ setMethod("num_child", "character",
     function(obj, dadid, momid, relation = NULL, missid = "0"
 ) {
     id <- obj
+
+    # Create dummy vectors for the check() function
+    child <- NULL
+    num_child_dir <- NULL
+    idmin <- NULL
+    idmax <- NULL
+    childs <- NULL
+    num_child_tot <- NULL
+    child_min <- NULL
+    child_max <- NULL
+    childs_all <- NULL
 
     df <- data.frame(id, dadid, momid, stringsAsFactors = FALSE)
 
