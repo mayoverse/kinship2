@@ -11,16 +11,24 @@
 \usage{
 bit_size(obj, ...)
 
-\S4method{bit_size}{character}(obj, momid, missid = "0")
+## S4 method for signature 'character'
 
-\S4method{bit_size}{Pedigree}(obj, missid = "0")
+bit_size(dadid, momid, missid = "0")
+
+## S4 method for signature 'Pedigree'
+
+bit_size(ped, missid = "0")
 }
 \arguments{
+\item{...}{Additional arguments passed to methods}
+
 \item{momid}{Vector of mothers ids}
 
 \item{missid}{Character defining the missing ids}
 
 \item{dadid}{Vector of fathers ids}
+
+\item{ped}{A pedigree object}
 }
 \value{
 A list with the following components:
@@ -32,12 +40,14 @@ A list with the following components:
 }
 \description{
 Calculate pedigree bit_size, defined as :
+
 \eqn{
   2 \times NbNonFounders - NbFounders
 }
 }
 \details{
 This is a utility function used in \code{shrink()}
+to calculate the bit_size of a pedigree.
 }
 \seealso{
 \code{\link[=shrink]{shrink()}}

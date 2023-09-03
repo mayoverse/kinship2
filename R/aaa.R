@@ -1,23 +1,3 @@
-# List of all arguments to inherit
-
-missid
-dadid
-id
-momid
-dadx
-momx
-idx
-packed
-
-# List of returned values
-n
-nid
-pos
-spouselist
-
-# Roxygen S4 methods writing
-
-```{r}
 #' My function
 #'
 #' @param obj An object either a character vector or a pedigree
@@ -38,7 +18,8 @@ setGeneric("myfunction", signature = "obj",
 #' @usage ## S4 method for signature 'character'
 #' @usage myfunction(dadid, momid, missid = "0")
 #' @return A character vector with the parents ids
-setMethod("myfunction", "character", function(dadid, momid, missid = "0") {
+setMethod("myfunction", "character", function(obj, momid, missid = "0") {
+    dadid <- obj
     paste(dadid, momid, sep = missid)
 })
 
@@ -47,12 +28,14 @@ setMethod("myfunction", "character", function(dadid, momid, missid = "0") {
 #' @param ped A pedigree object
 #' @param missid Character defining the missing ids
 #' @usage ## S4 method for signature 'Pedigree'
-#' @usage myfunction(dadid, momid, missid = "0")
+#' @usage myfunction(ped, missid = "0")
 #' @return A pedigree with the parents ids
+#' @include pedigreeClass.R
+#' @rdname myfunction
 setMethod("myfunction", "Pedigree",
-    function(ped, missid = "0") {
+    function(obj, missid = "0") {
+        ped <- obj
         ped$par <- myfunction(ped$dadid, ped$momid, missid)
         ped
     }
 )
-```

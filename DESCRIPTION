@@ -35,7 +35,8 @@ Imports:
     gridGraphics,
     grid,
     htmlwidgets,
-    R3port
+    R3port,
+    usethis
 Description: Routines to handle family data with a pedigree object. The initial purpose
 	     was to create correlation structures that describe family relationships such 
 	     as kinship and identity-by-descent, which can be used to model family data 
@@ -61,13 +62,14 @@ BugReports: https://github.com/LouisLeLezet/kinship2/issues
 url: https://github.com/LouisLeNezet/kinship2
 BiocType: Software
 Collate: 
+    'pedigree.R'
+    'validity.R'
+    'pedigreeClass.R'
+    'aaa.R'
     'alignped4.R'
     'alignped3.R'
     'alignped2.R'
     'alignped1.R'
-    'pedigree.R'
-    'validity.R'
-    'pedigreeClass.R'
     'check_hints.R'
     'kindepth.R'
     'auto_hint.R'

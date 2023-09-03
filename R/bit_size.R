@@ -9,10 +9,9 @@
 #'
 #' @details
 #' This is a utility function used in `shrink()`
+#' to calculate the bit_size of a pedigree.
 #'
-#' @param dadid Vector of fathers ids
-#' @param momid Vector of mothers ids
-#' @param missid Character defining the missing ids
+#' @param ... Additional arguments passed to methods
 #'
 #' @return A list with the following components:
 #'
@@ -31,6 +30,11 @@ setGeneric("bit_size", signature = "obj",
 #' @docType methods
 #' @aliases bit_size,character
 #' @rdname bit_size
+#' @param dadid Vector of fathers ids
+#' @param momid Vector of mothers ids
+#' @param missid Character defining the missing ids
+#' @usage ## S4 method for signature 'character'
+#' @usage bit_size(dadid, momid, missid = "0")
 setMethod("bit_size", "character", function(obj, momid, missid = "0") {
     dadid <- obj
     if (length(dadid) != length(momid)) {
@@ -50,6 +54,10 @@ setMethod("bit_size", "character", function(obj, momid, missid = "0") {
 #' @docType methods
 #' @aliases bit_size,Pedigree
 #' @rdname bit_size
+#' @param ped A pedigree object
+#' @param missid Character defining the missing ids
+#' @usage ## S4 method for signature 'Pedigree'
+#' @usage bit_size(ped, missid = "0")
 setMethod("bit_size", "Pedigree",
     function(obj, missid = "0") {
         bit_size(obj$ped$dadid, obj$ped$momid, missid)
