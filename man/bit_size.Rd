@@ -49,6 +49,11 @@ Calculate pedigree bit_size, defined as :
 This is a utility function used in \code{shrink()}
 to calculate the bit_size of a pedigree.
 }
+\examples{
+data(sampleped)
+ped <- pedigree(sampleped)
+bit_size(ped)
+}
 \seealso{
 \code{\link[=shrink]{shrink()}}
 }

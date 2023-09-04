@@ -6,16 +6,19 @@
 #' This routine tries to detect inconsistencies in spousal hints.
 #'
 #' @details
-#' These arise in auto_hint with complex pedigrees.
+#' These arise in `auto_hint()` with complex pedigrees.
 #' One can have ABA (subject A is on both the left and the right of B),
 #' cycles, etc.
-#' Actually, these used to arise in auto_hint.
 #' Users can introduce problems as well if they modify the hints.
 #'
-#' @param hints A list of hints
 #' @param sex A vector with the sex of all the individuals
-#'
-#' @seealso `auto_hint`, `best_hint`
+#' @inheritParams align
+#' @examples
+#' data(sampleped)
+#' ped1 <- pedigree(sampleped[sampleped$family == "1",])
+#' ht1 <- auto_hint(ped1)
+#' check_hints(ht1, ped1$ped$sex)
+#' @seealso [auto_hint()], [best_hint()]
 #' @export
 check_hints <- function(hints, sex) {
     if (is.null(hints$order)) {
@@ -51,4 +54,3 @@ check_hints <- function(hints, sex) {
         # done
     }
 }
-TRUE

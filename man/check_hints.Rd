@@ -7,7 +7,19 @@
 check_hints(hints, sex)
 }
 \arguments{
-\item{hints}{A list of hints}
+\item{hints}{Plotting hints for the pedigree.
+This is a list with components \code{order} and \code{spouse}, the second one is
+optional.
+The order component is a numeric vector with one element per subject in the
+pedigree.  It determines the relative order of subjects within a sibship, as
+well as the relative order of processing for the founder couples. (For this
+latter, the female founders are ordered as though they were sisters). The
+spouse component is a matrix with one row per hinted marriage, usually only
+a few marriages in a pedigree will need an added hint, for instance reverse
+the plot order of a husband/wife pair. Each row contains the index of the
+left spouse, the right hand spouse, and the anchor
+(i.e : \code{1} = left, \code{2} = right, \code{0} = either).
+Children will preferentially appear under the parents of the anchored spouse.}
 
 \item{sex}{A vector with the sex of all the individuals}
 }
@@ -15,12 +27,17 @@ check_hints(hints, sex)
 This routine tries to detect inconsistencies in spousal hints.
 }
 \details{
-These arise in auto_hint with complex pedigrees.
+These arise in \code{auto_hint()} with complex pedigrees.
 One can have ABA (subject A is on both the left and the right of B),
 cycles, etc.
-Actually, these used to arise in auto_hint.
 Users can introduce problems as well if they modify the hints.
 }
+\examples{
+data(sampleped)
+ped1 <- pedigree(sampleped[sampleped$family == "1",])
+ht1 <- auto_hint(ped1)
+check_hints(ht1, ped1$ped$sex)
+}
 \seealso{
-\code{auto_hint}, \code{best_hint}
+\code{\link[=auto_hint]{auto_hint()}}, \code{\link[=best_hint]{best_hint()}}
 }

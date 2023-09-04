@@ -43,6 +43,11 @@ the center of the children and the parents
 If during the search, a plot is found with a stress level less than
 \strong{tolerance}, the search is terminated.
 }
+\examples{
+data(sampleped)
+ped <- pedigree(sampleped)
+best_hint(ped)
+}
 \seealso{
 \code{\link[=auto_hint]{auto_hint()}}
 }

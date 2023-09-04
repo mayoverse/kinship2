@@ -62,6 +62,11 @@ siblings within a family; this may be changed to move one of them to the
 edge so as to match up with a spouse. The actual values in the vector are
 not important, only their order.
 }
+\examples{
+data(sampleped)
+ped <- pedigree(sampleped)
+auto_hint(ped)
+}
 \seealso{
 \code{\link[=align]{align()}}, \code{\link[=best_hint]{best_hint()}}
 }

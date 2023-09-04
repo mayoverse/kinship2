@@ -282,6 +282,10 @@ get_twin_rel <- function(ped) {
 #' @return The **hints** list containing components `order` and `spouse`
 #'
 #' @seealso [align()], [best_hint()]
+#' @examples
+#' data(sampleped)
+#' ped <- pedigree(sampleped)
+#' auto_hint(ped)
 #' @export
 auto_hint <- function(
     ped, hints = NULL, packed = TRUE, align = FALSE, reset = FALSE

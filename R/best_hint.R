@@ -34,6 +34,10 @@
 #'
 #' @seealso [auto_hint()]
 #' @export
+#' @examples
+#' data(sampleped)
+#' ped <- pedigree(sampleped)
+#' best_hint(ped)
 #' @include auto_hint.R
 #' @include align.R
 best_hint <- function(ped, wt = c(1000, 10, 1), tolerance = 0) {

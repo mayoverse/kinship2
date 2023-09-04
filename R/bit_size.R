@@ -22,6 +22,10 @@
 #' @seealso [shrink()]
 #' @include pedigreeClass.R
 #' @docType methods
+#' @examples
+#' data(sampleped)
+#' ped <- pedigree(sampleped)
+#' bit_size(ped)
 #' @export
 setGeneric("bit_size", signature = "obj",
     function(obj, ...) standardGeneric("bit_size")
