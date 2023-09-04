@@ -26,38 +26,38 @@
 #'
 #' @format A data frame with 28081 observations, one line per subject, on the
 #' following 14 variables.
-#' \\describe{
-#' \\item{\\code{id}}{subject identifier}
-#' \\item{\\code{proband}}{if 1, this subject is one of the original
-#' 426 probands}
-#' \\item{\\code{fatherid}}{identifier of the father, if the father is part of
-#' the data set; zero otherwise}
-#' \\item{\\code{motherid}}{identifier of the mother, if the mother is part of
-#' the data set; zero otherwise}
-#' \\item{\\code{famid}}{family identifier}
-#' \\item{\\code{endage}}{age at last follow-up or incident cancer}
-#' \\item{\\code{cancer}}{1= breast cancer (females) or prostate cancer (males),
-#' 0=censored}
-#' \\item{\\code{yob}}{year of birth}
-#' \\item{\\code{education}}{amount of education: 1-8 years, 9-12 years, high
+#'
+#' - `id` subject identifier
+#' - `proband` if 1, this subject is one of the original
+#' 426 probands
+#' - `fatherid` identifier of the father, if the father is part of
+#' the data set; zero otherwise
+#' - `motherid` identifier of the mother, if the mother is part of
+#' the data set; zero otherwise
+#' - `famid` family identifier
+#' - `endage` age at last follow-up or incident cancer
+#' - `cancer` 1= breast cancer (females) or prostate cancer (males),
+#' 0=censored
+#' - `yob` year of birth
+#' - `education` amount of education: 1-8 years, 9-12 years, high
 #' school graduate, vocational education
 #' beyond high school, some college but did not graduate, college graduate,
 #' post-graduate education, refused to
-#' answer on the questionnaire}
-#' \\item{\\code{marstat}}{marital status: married, living with someone in a
+#' answer on the questionnaire
+#' - `marstat` marital status: married, living with someone in a
 #' marriage-like relationship, separated
-#' or divorced, widowed, never married, refused to answer the questionaire}
-#' \\item{\\code{everpreg}}{ever pregnant: never pregnant at the time of
+#' or divorced, widowed, never married, refused to answer the questionaire
+#' - `everpreg` ever pregnant: never pregnant at the time of
 #' baseline survey, ever pregnant at the time
-#' of baseline survey}
-#' \\item{\\code{parity}}{number of births}
-#' \\item{\\code{nbreast}}{number of breast biopsies}
-#' \\item{\\code{sex}}{M or F}
-#' \\item{\\code{bcpc}}{part of one of the families in the breast/prostate
+#' of baseline survey
+#' - `parity` number of births
+#' - `nbreast` number of breast biopsies
+#' - `sex` M or F
+#' - `bcpc` part of one of the families in the breast/prostate
 #' cancer substudy: 0=no, 1=yes.
 #' Note that subjects who were recruited to the overall study after the date of
-#' the BP substudy are coded as zero.}
-#' }
+#' the BP substudy are coded as zero.
+#'
 #'
 #' @usage
 #' data(minnbreast)
@@ -90,25 +90,23 @@
 
 #' samplepedigree data
 #'
-#' @description Small samplepedigree data set.
+#' @description Small sample pedigree data set.
 #'
-#' @details This is a small fictive samplepedigree data set, with 55
+#' @details This is a small fictive pedigree data set, with 55
 #' individuals in 2 families.
 #' The aim was to create a data set with a variety of pedigree structures.
 #'
 #' @format A data frame with 55 observations, one line per subject, on the
 #' following 7 variables.
-#' \\describe{
-#' \\item{\\code{family}}{family identifier}
-#' \\item{\\code{id}}{subject identifier}
-#' \\item{\\code{dadid}}{identifier of the father, if the father is part of the
-#' data set; zero otherwise}
-#' \\item{\\code{momid}}{identifier of the mother, if the mother is part of the
-#' data set; zero otherwise}
-#' \\item{\\code{sex}}{1 for male or 2 for F}
-#' \\item{\\code{affected}}{1 or 0}
-#' \\item{\\code{available}}{1 or 0}
-#' }
+#' - `family` family identifier
+#' - `id` subject identifier
+#' - `dadid` identifier of the father, if the father is part of the
+#' data set; zero otherwise
+#' - `momid` identifier of the mother, if the mother is part of the
+#' data set; zero otherwise
+#' - `sex` 1 for male or 2 for F
+#' - `affected` 1 or 0
+#' - `available` 1 or 0
 #'
 #' @usage
 #' data("sampleped")

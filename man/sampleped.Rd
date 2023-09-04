@@ -7,26 +7,26 @@
 \format{
 A data frame with 55 observations, one line per subject, on the
 following 7 variables.
-\\describe{
-\\item{\\code{family}}{family identifier}
-\\item{\\code{id}}{subject identifier}
-\\item{\\code{dadid}}{identifier of the father, if the father is part of the
-data set; zero otherwise}
-\\item{\\code{momid}}{identifier of the mother, if the mother is part of the
-data set; zero otherwise}
-\\item{\\code{sex}}{1 for male or 2 for F}
-\\item{\\code{affected}}{1 or 0}
-\\item{\\code{available}}{1 or 0}
+\itemize{
+\item \code{family} family identifier
+\item \code{id} subject identifier
+\item \code{dadid} identifier of the father, if the father is part of the
+data set; zero otherwise
+\item \code{momid} identifier of the mother, if the mother is part of the
+data set; zero otherwise
+\item \code{sex} 1 for male or 2 for F
+\item \code{affected} 1 or 0
+\item \code{available} 1 or 0
 }
 }
 \usage{
 data("sampleped")
 }
 \description{
-Small samplepedigree data set.
+Small sample pedigree data set.
 }
 \details{
-This is a small fictive samplepedigree data set, with 55
+This is a small fictive pedigree data set, with 55
 individuals in 2 families.
 The aim was to create a data set with a variety of pedigree structures.
 }

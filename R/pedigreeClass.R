@@ -65,6 +65,11 @@ setMethod("summary", signature(object = "Pedigree"), function(object) {
     cat("The border scale column are:", levels(as.factor(object@scales$border$column)), fill = TRUE)
 })
 
+#' Extract parts of a Pedigree object
+#'
+#' @name [[
+#' @aliases [[,testClass-method
+#' @docType methods
 setMethod("[[", c(x = "Pedigree", i = "ANY", j = "missing"),
     function(x, i, j, ..., drop = TRUE) {
         slot(x, i)

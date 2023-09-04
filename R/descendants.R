@@ -18,11 +18,15 @@
 #' descendants(c("1_101", "2_208"), ped)
 #' @include pedigreeClass.R
 #' @export
+#' @keywords internal
+#' @docType methods
 setGeneric("descendants",
     function(idlist, obj, ...) standardGeneric("descendants")
 )
 
-#' @export
+#' @rdname descendants
+#' @aliases descendants,character
+#' @param obj A character vector
 setMethod("descendants", signature(idlist = "character", obj = "character"),
     function(idlist, obj, dadid, momid) {
         id <- obj
@@ -43,7 +47,9 @@ setMethod("descendants", signature(idlist = "character", obj = "character"),
     }
 )
 
-#' @export
+#' @rdname descendants
+#' @param obj A pedigree object
+#' @aliases descendants,Pedigree
 setMethod("descendants", signature(idlist = "character", obj = "Pedigree"),
     function(idlist, obj) {
         descendants(idlist, obj$ped$id, obj$ped$dadid, obj$ped$momid)
