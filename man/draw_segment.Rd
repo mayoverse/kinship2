@@ -28,6 +28,12 @@ draw_segment(
 \item{p}{ggplot object}
 
 \item{ggplot_gen}{logical, if TRUE add the segments to the ggplot object}
+
+\item{col}{color}
+
+\item{lwd}{line width}
+
+\item{lty}{line type}
 }
 \value{
 Plot the segments or add it to a ggplot object

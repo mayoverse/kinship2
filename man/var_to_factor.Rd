@@ -9,7 +9,7 @@ var_to_factor(var, threshold = NULL)
 \arguments{
 \item{var}{The variable to be transformed}
 
-\item{thresholds}{The thresholds to be used to separate the variable}
+\item{threshold}{The threshold to be used to separate the variable}
 }
 \value{
 a factor vector containing the transformed variable

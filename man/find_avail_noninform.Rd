@@ -11,6 +11,8 @@ find_avail_noninform(ped, avail = ped$ped$avail, missid = "0")
 
 \item{avail}{Vector of availability status (e.g. genotyped) 0/1 or
 TRUE/FALSE}
+
+\item{missid}{Character defining the missing ids}
 }
 \value{
 Vector of subject ids who can be removed by having lowest
@@ -26,6 +28,12 @@ Identify subjects to remove from a pedigree who are available but
 non-informative.  This is the second step to remove subjects in
 pedigree.shrink if the pedigree does not meet the desired bit size.
 }
+\examples{
+data(sampleped)
+ped <- pedigree(sampleped)
+find_avail_noninform(ped)
+
+}
 \seealso{
-\code{pedigree.shrink}
+\code{\link[=shrink]{shrink()}}
 }

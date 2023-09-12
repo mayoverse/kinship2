@@ -45,7 +45,7 @@ If during the search, a plot is found with a stress level less than
 }
 \examples{
 data(sampleped)
-ped <- pedigree(sampleped)
+ped <- pedigree(sampleped[sampleped$family == 1,])
 best_hint(ped)
 }
 \seealso{

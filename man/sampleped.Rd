@@ -34,6 +34,6 @@ The aim was to create a data set with a variety of pedigree structures.
 data("sampleped")
 ped <- pedigree(sampleped)
 summary(ped)
-plot(ped)
+#plot(ped)
 }
 \keyword{datasets}

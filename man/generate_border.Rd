@@ -25,3 +25,7 @@ Process the colors based on affection and availability
 Perform transformation uppon a column given as the one
 containing the availability status to compute the border color.
 }
+\examples{
+generate_border(c(1, 0, 1, 0, NA, 1, 0, 1, 0, NA))
+
+}

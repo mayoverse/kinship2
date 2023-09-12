@@ -42,6 +42,5 @@ contains the mapping between this new id and the original one.  The final
 matrix should be labeled with the original identifiers.
 }
 \seealso{
-\code{kinship}, \code{Matrix}
+\code{\link[=kinship]{kinship()}}
 }
-\keyword{genetics}

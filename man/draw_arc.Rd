@@ -7,13 +7,21 @@
 draw_arc(x0, y0, x1, y1, p, ggplot_gen = FALSE, cex = 1, col = "black")
 }
 \arguments{
+\item{x0}{x coordinate of the first point}
+
+\item{y0}{y coordinate of the first point}
+
+\item{x1}{x coordinate of the second point}
+
+\item{y1}{y coordinate of the second point}
+
 \item{p}{ggplot object}
 
 \item{ggplot_gen}{logical, if TRUE add the arcs to the ggplot object}
 
-\item{x}{x coordinate}
+\item{cex}{character expansion}
 
-\item{y}{y coordinate}
+\item{col}{color}
 }
 \value{
 Plot the arcs or add it to a ggplot object

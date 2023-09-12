@@ -17,7 +17,7 @@ generate_fill(
 \arguments{
 \item{values}{The vector containing the values to process as affection.}
 
-\item{affected}{The vector containing the affection status.}
+\item{affected}{The vector containing the affection status TRUE/FALSE.}
 
 \item{labels}{The vector containing the labels to use for the affection.}
 
@@ -26,15 +26,15 @@ be set as a scale. If \code{values} is numeric the filling scale will be
 calculated based on the values and the number of breaks given.
 If \code{values} isn't numeric then each levels will get it's own color}
 
+\item{breaks}{Number of breaks to use when using full scale with numeric
+values. The same number of breaks will be done for values from affected
+individuals and unaffected individuals.}
+
 \item{colors_aff}{Set of increasing colors to use for the filling of the
 affected individuls.}
 
 \item{colors_unaff}{Set of increasing colors to use for the filling of the
 unaffected individuls.}
-
-\item{break}{Number of breaks to use when using full scale with numeric
-values. The same number of breaks will be done for values from affected
-individuals and unaffected individuals.}
 }
 \value{
 A list of two elements
@@ -49,4 +49,9 @@ Process the colors based on affection
 \details{
 Perform transformation uppon a column given as the one
 containing affection status to compute the filling color.
+}
+\examples{
+aff <- generate_aff_inds(seq_len(5), threshold = 3, sup_thres_aff = TRUE)
+generate_fill(seq_len(5), aff$affected, aff$labels)
+generate_fill(seq_len(5), aff$affected, aff$labels, keep_full_scale = TRUE)
 }

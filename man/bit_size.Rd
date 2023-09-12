@@ -11,22 +11,18 @@
 \usage{
 bit_size(obj, ...)
 
-## S4 method for signature 'character'
+\S4method{bit_size}{character}(obj, momid, missid = "0")
 
-bit_size(dadid, momid, missid = "0")
-
-## S4 method for signature 'Pedigree'
-
-bit_size(ped, missid = "0")
+\S4method{bit_size}{Pedigree}(obj, missid = "0")
 }
 \arguments{
+\item{obj}{A pedigree object or a vector of fathers ids}
+
 \item{...}{Additional arguments passed to methods}
 
-\item{momid}{Vector of mothers ids}
+\item{momid}{A vector of mothers ids}
 
 \item{missid}{Character defining the missing ids}
-
-\item{dadid}{Vector of fathers ids}
 
 \item{ped}{A pedigree object}
 }
@@ -57,3 +53,4 @@ bit_size(ped)
 \seealso{
 \code{\link[=shrink]{shrink()}}
 }
+\keyword{internal}

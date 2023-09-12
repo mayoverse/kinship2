@@ -18,13 +18,19 @@ or sample available}
 first column of the pedigree object affected matrix.}
 
 \item{max_bits}{Optional, the bit size for which to shrink the pedigree}
-
-\item{x}{Pedigree.shrink object used in method functions}
-
-\item{...}{Optional arguments passed to internal functions}
 }
 \value{
-Pedigree object shrinked to the desired size
+A list containing the following elements:
+\itemize{
+\item pedObj: Pedigree object after trimming
+\item id_trim: Vector of ids trimmed from pedigree
+\item id_lst: List of ids trimmed by category
+\item bit_size: Vector of bit sizes after each trimming step
+\item avail: Vector of availability status after trimming
+\item pedSizeOriginal: Number of subjects in original pedigree
+\item pedSizeIntermed: Number of subjects after initial trimming
+\item pedSizeFinal: Number of subjects after final trimming
+}
 }
 \description{
 Shrink pedigree object to specified bit size with priority placed on
@@ -48,15 +54,12 @@ individuals (chosen at random if there are multiple of the same status):
 }
 \examples{
 data(sampleped)
-pedAll <- with(sampleped, pedigree(id, father, mother, sex,
-  affected = cbind(affected, avail), famid = ped
-))
-ped1 <- pedAll['1']
-ped1trim <- pedigree.shrink(ped1, max_bits = 12)
+ped1 <- pedigree(sampleped[sampleped$family == '1',])
+shrink(ped1, max_bits = 12)
 
 }
 \seealso{
-\\code{\\link{pedigree}}, \\code{\\link{plot.pedigree.shrink}}
+\code{\link[=pedigree]{pedigree()}}, \code{\link[=bit_size]{bit_size()}}
 }
 \author{
 Original by Dan Schaid, updated to kinship2 by Jason Sinnwell

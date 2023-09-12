@@ -9,7 +9,7 @@ circfun(nslice, n = 50)
 \arguments{
 \item{nslice}{number of slices}
 
-\item{n}{}
+\item{n}{Total number of points in the circle}
 }
 \value{
 a list of x and y coordinates

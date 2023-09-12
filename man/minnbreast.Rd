@@ -71,9 +71,14 @@ gathered by questionnaire.
 }
 \examples{
 data(minnbreast)
-breastped <- pedigree(minnbreast)
+breastped <- pedigree(minnbreast,
+   cols_ren_ped = list(
+       "indId" = "id", "fatherId" = "fatherid",
+       "motherId" = "motherid", "gender" = "sex", "family" = "famid"
+   )
+)
 print(breastped)
-plot(breastped)  #plot family 8, proband is solid, slash for cancers
+#plot(breastped)  #plot family 8, proband is solid, slash for cancers
 }
 \references{
 Epidemiologic and genetic follow-up study of 544 Minnesota breast cancer

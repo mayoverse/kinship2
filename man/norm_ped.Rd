@@ -10,6 +10,11 @@ norm_ped(ped_df, na_strings = c("NA", ""), missid = "0", try_num = FALSE)
 \item{ped_df}{The dataframe to process}
 
 \item{na_strings}{Vector of strings to be considered as NA values}
+
+\item{missid}{The missing id value}
+
+\item{try_num}{Boolean defining if the function should try to convert
+all the columns to numeric.}
 }
 \value{
 List of two dataframe
@@ -31,9 +36,4 @@ Will be considered available any individual with no 'NA' values in the
 Duplicated \code{indId} will nullify the relationship of the individual.
 All individuals with errors will be remove from the dataframe and will
 be transfered to the error dataframe.
-}
-\examples{
-data(ped_data)
-norm_ped(ped_data)
-
 }

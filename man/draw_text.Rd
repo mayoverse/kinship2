@@ -26,6 +26,14 @@ draw_text(
 \item{p}{ggplot object}
 
 \item{ggplot_gen}{logical, if TRUE add the text to the ggplot object}
+
+\item{cex}{character expansion}
+
+\item{col}{color}
+
+\item{adjx}{x adjustment}
+
+\item{adjy}{y adjustment}
 }
 \value{
 Plot the text or add it to a ggplot object

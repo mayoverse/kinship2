@@ -6,6 +6,24 @@
 \usage{
 set_plot_area(cex, id, maxlev, xrange, symbolsize, ...)
 }
+\arguments{
+\item{cex}{character expansion}
+
+\item{id}{id of the subject}
+
+\item{maxlev}{maximum level}
+
+\item{xrange}{range of x values}
+
+\item{symbolsize}{size of the symbols}
+
+\item{...}{other arguments passed to \code{\link[=par]{par()}}}
+}
+\value{
+a list of user coordinates, old par, box width, box height,
+label height and leg height
+}
 \description{
 Set plotting area
 }
+\keyword{internal}

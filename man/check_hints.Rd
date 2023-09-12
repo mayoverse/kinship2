@@ -41,3 +41,4 @@ check_hints(ht1, ped1$ped$sex)
 \seealso{
 \code{\link[=auto_hint]{auto_hint()}}, \code{\link[=best_hint]{best_hint()}}
 }
+\keyword{internal}

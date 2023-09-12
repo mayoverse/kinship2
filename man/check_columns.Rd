@@ -34,6 +34,9 @@ should be initialised to NA.}
 \item{cols_to_use_init}{Boolean defining if the optional columns should be
 initialised to NA.}
 
+\item{cols_used_del}{Boolean defining if the columns that will be used
+should be deleted.}
+
 \item{verbose}{Should message be prompted to the user}
 }
 \value{
@@ -62,7 +65,7 @@ df <- data.frame(ColN1 = c(1, 2), ColN2 = 4,
          ColU1 = 'B', ColU2 = '1',
          ColTU1 = 'A', ColTU2 = 3,
          ColNR1 = 4, ColNR2 = 5)
-check_columns(df, c('ColN1', 'ColN2'), c('ColU1', 'ColU2'),
-  c('ColTU1', 'ColTU2'))
+tryCatch(check_columns(df, c('ColN1', 'ColN2'), c('ColU1', 'ColU2'),
+ c('ColTU1', 'ColTU2')), error = function(e) print(e))
 
 }

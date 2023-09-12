@@ -53,30 +53,6 @@ ped$affected
 legendPlot(ped, affected.label = "gender")
 ncol(ped$affected)
 ped$affected
-data(testped1)
-summary(testped1)
-cols_ren <- c("indId" = "id", "fatherId" = "father",
-    "motherId" = "mother", "gender" = "sex")
-data.table::setnames(testped1,
-                    old = as.vector(unlist(cols_ren)),
-                    new = names(cols_ren))
-df <- check_ped(testped1)
-df <- generate_aff_inds(df$norm,
-    col_aff = "sex",
-    mods_aff = "male")
-aff <- generate_colors(df, "affected")
-df <- aff$df
-leg <- create_legend(aff$scales)
-ggarrange(leg$A, leg$B)
-df <- select_from_inf(df, c(1, 2), 3)
-df <- df[df$family == 1, ]
-ped <- with(df, pedigree(id, dadid, momid, sex, affected))
-
-legendPlot(ped, affected = as.data.frame(ped$affected))
-nb_ind_gen <- align(ped)$n
-plot_ped <- ped_plot(df, cex_plot = 0.5, mar = c(0.5, 0.5, 0.5, 0.5),
-    psize = c(2, length(nb_ind_gen)),
-    to_plotly = FALSE)
 
 data(minnbreast)
 df <- minnbreast

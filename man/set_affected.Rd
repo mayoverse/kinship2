@@ -30,3 +30,4 @@ For purposes within the plot method, NA values in 'affected'
 are coded to -1, and plotted as a question mark (?) in the plot
 symbol region for that affected status
 }
+\keyword{internal}

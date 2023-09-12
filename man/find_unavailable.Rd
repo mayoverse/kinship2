@@ -2,37 +2,62 @@
 % Please edit documentation in R/find_unavailable.R
 \name{find_unavailable}
 \alias{find_unavailable}
-\alias{exclude_unavail_founders}
 \alias{exclude_stray_marryin}
-\title{Find or trim unavailable subjects in a pedigree}
+\alias{exclude_unavail_founders}
+\title{Find unavailable subjects in a pedigree}
 \usage{
 find_unavailable(ped, avail = ped$ped$avail)
+
+exclude_stray_marryin(id, dadid, momid)
+
+exclude_unavail_founders(id, dadid, momid, avail, missid = "0")
 }
 \arguments{
-\item{ped}{A pedigree object with an id, findex, mindex, sex, plus other
-optional items}
+\item{ped}{A pedigree object}
 
-\item{avail}{Logical vector of availability status (e.g., available) 0/1}
+\item{avail}{Vector of availability status (e.g., genotyped) 0/1 or
+TRUE/FALSE}
 
-\item{removeID}{vector of subject ids of persons to trim from a pedigree}
+\item{id}{Vector of subject identifiers}
+
+\item{dadid}{A vector of the father identifiers}
+
+\item{momid}{A vector of the mother identifiers}
+
+\item{missid}{Character defining the missing ids}
 }
 \value{
-\code{find_unavailable} returns a vector of subject ids for who can be
-removed. \code{trim} returns a trimmed pedigree object.
+Returns a vector of subject ids for who can be
+removed.
+
+Returns a data frame of subject identifiers and their parents.
+The data frame is trimmed of any founders who are not parents.
+
+Returns a list with the following components:
+\itemize{
+\item n_trimmed Number of trimmed individuals
+\item id_trimmed Vector of IDs of trimmed individuals
+\item id Vector of subject identifiers
+\item dadid Vector of father identifiers
+\item momid Vector of mother identifiers
+}
 }
 \description{
 Find the ID of subjects in a pedigree iteratively, as anyone who is not
 available and does not have an available descendant by successively removing
-unavailable terminal nodes. \code{trim} carries out the removal of the
-subjects identified by \code{findUnavailabl}e.
+unavailable terminal nodes.
+
+Exclude from a pedigree any founders who are not parents.
+
+Exclude from a pedigree any unavailable founders.
 }
 \details{
 Originally written as pedTrim by Steve Iturria, modified by Dan Schaid 2007,
 and now split into the two separate functions: \code{find_unavailable()}, and
 \code{trim()} to do the tasks separately.  \code{find_unavailable()}
-calls \code{exclude_stray_marryin} to find stray available marry-ins who are
+calls \code{exclude_stray_marryin()} to find stray available marry-ins who are
 isolated after trimming their unavailable offspring, and
-exclude_unavail_founders.
+\code{exclude_unavail_founders()}.
 If the subject ids are character, make sure none of the characters in the
 ids is a colon (":"), which is a special character
 used to concatenate and split subjects within the utility.
@@ -43,5 +68,6 @@ special relations that include the subjects to trim.
 }
 
 \seealso{
-\code{pedigree.shrink}
+\code{\link[=shrink]{shrink()}}
 }
+\keyword{internal}

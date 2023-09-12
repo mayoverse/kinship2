@@ -6,6 +6,12 @@
 \usage{
 is_valid(object)
 }
+\arguments{
+\item{object}{A Pedigree object.}
+}
+\value{
+A logical value or a character vector with the errors.
+}
 \description{
 Check if the Pedigree object is valid.
 }
@@ -13,6 +19,5 @@ Check if the Pedigree object is valid.
 It will check :
 the fields of the slots
 the values in the columns of the ped, rel and scale slot
-$param object A Pedigree object.
-$return A logical value or a character vector with the errors.
 }
+\keyword{internal}

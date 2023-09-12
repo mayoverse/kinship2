@@ -7,34 +7,21 @@
 find_avail_affected(ped, avail = ped$ped$avail, affstatus = NA)
 }
 \arguments{
-\item{ped}{A pedigree objects, with id (subject ID), findex (father index),
-mindex (mother index)}
+\item{ped}{A pedigree object}
 
 \item{avail}{Vector of availability status (e.g., genotyped) 0/1 or
 TRUE/FALSE}
 
-\item{affstatus}{Vector of affection status 0/1 or TRUE/FALSE.}
+\item{affstatus}{Affection status to search for.}
 }
 \value{
 A list is returned with the following components
-\subsection{ped}{
-
-Dataframe with trimmed subject removed
-}
-
-\subsection{idTrimmed}{
-
-Vector of IDs of trimmed individuals
-}
-
-\subsection{isTrimmed}{
-
-logical value indicating whether pedigree has been trimmed
-}
-
-\subsection{bit_size}{
-
-Bit size of the trimmed pedigree
+\itemize{
+\item ped The new pedigree object
+\item newAvail Vector of availability status of trimmed individuals
+\item idTrimmed Vector of IDs of trimmed individuals
+\item isTrimmed logical value indicating whether pedigree has been trimmed
+\item bit_size Bit size of the trimmed pedigree
 }
 }
 \description{
@@ -46,6 +33,11 @@ When used within pedigree.shrink, this function is called with the first
 affected indicator, if the affected item in the pedigree is a matrix of
 multiple affected indicators.
 }
+\examples{
+data(sampleped)
+ped <- pedigree(sampleped)
+find_avail_affected(ped, affstatus = 1)
+}
 \seealso{
-\code{pedigree.shrink}
+\code{\link[=shrink]{shrink()}}
 }

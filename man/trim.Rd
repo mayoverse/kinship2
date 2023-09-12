@@ -6,6 +6,16 @@
 \usage{
 trim(ped, id_rm, missid = "0")
 }
+\arguments{
+\item{ped}{Pedigree object}
+
+\item{id_rm}{Vector of ids to remove}
+
+\item{missid}{Missing id to replace removed subjects}
+}
+\value{
+A Pedigree object with the subjects removed
+}
 \description{
-Trim a pedigree
+Carries out the removal of the subjects identified from a pedigree object.
 }

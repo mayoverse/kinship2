@@ -64,7 +64,7 @@ not important, only their order.
 }
 \examples{
 data(sampleped)
-ped <- pedigree(sampleped)
+ped <- pedigree(sampleped[sampleped$family == 1, ])
 auto_hint(ped)
 }
 \seealso{

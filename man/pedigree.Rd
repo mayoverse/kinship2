@@ -48,6 +48,11 @@ individuals and the matrix of the spouse as in the \\link{align} function.}
 A Pedigree object.
 }
 \description{
-This constructor help to create a \\code{Pedigree} object from
-\code{data.frame}.
+This constructor help to create a \code{Pedigree} object from
+different \code{data.frame}.
+}
+\details{
+If any errors are found in the data, the function will return
+the data.frame with the errors for the pedigree and the relationship
+data.frame.
 }

@@ -18,16 +18,14 @@ descendants(idlist, obj, ...)
 \arguments{
 \item{idlist}{List of individuals id to be considered}
 
-\item{obj}{A pedigree object}
+\item{obj}{A pedigree object or a vector of the individuals identifiers}
 
-\item{dadid}{Father id of the pedigree}
+\item{dadid}{A vector of the father identifiers}
 
-\item{momid}{Mother id of the pedigree}
-
-\item{id}{Individual id of the pedigree}
+\item{momid}{A vector of the mother identifiers}
 }
 \value{
-List of all the descendants of the individuals in idlist.
+Vector of all descendants of the individuals in idlist.
 The list is not ordered.
 }
 \description{

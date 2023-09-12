@@ -6,16 +6,22 @@
 \usage{
 check_values(val, ref, present = TRUE)
 }
+\arguments{
+\item{present}{A logical value indicating if the values should be present
+or not}
+
+\item{object}{An object.}
+
+\item{slot}{A slot of the object.}
+
+\item{column}{A column of the slot.}
+
+\item{values}{A vector of values to check.}
+}
+\value{
+A character vector with the errors if any.
+}
 \description{
 Check if the all the values in a slot are in a vector of values.
 }
-\details{
-$param object An object.
-$param slot A slot of the object.
-$param column A column of the slot.
-$param values A vector of values to check.
-$param present A logical value indicating if the values should be present
-or not
-
-$return A character vector with the errors if any.
-}
+\keyword{internal}

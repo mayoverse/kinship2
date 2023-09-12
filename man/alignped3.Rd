@@ -66,7 +66,7 @@ Now merge the two trees. Start at the top level and work down.
 }
 \examples{
 data(sampleped)
-ped <- with(sampleped, pedigree(id, father, mother, sex, affected))
+ped <- pedigree(sampleped)
 align(ped)
 
 }

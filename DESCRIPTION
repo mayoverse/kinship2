@@ -26,7 +26,6 @@ Imports:
     quadprog,
     Matrix,
     gridGraphics,
-    withr,
     usethis
 Description: Routines to handle family data with a pedigree object. The initial purpose
 	     was to create correlation structures that describe family relationships such 
@@ -47,7 +46,8 @@ Suggests:
 	vdiffr,
 	rmarkdown,
     BiocStyle,
-    knitr
+    knitr,
+    withr
 Config/testthat/edition: 3
 biocViews: Software, ShinyApps, DataRepresentation, Genetics
 BugReports: https://github.com/LouisLeLezet/kinship2/issues

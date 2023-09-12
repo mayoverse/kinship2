@@ -27,7 +27,13 @@ individuals will be considered affected if the value is stricly under the
 \code{threshold}.}
 }
 \value{
-A dataframe with the \code{affected} column processed accordingly
+A dataframe with the \code{affected} column processed accordingly.
+The different columns are:
+\itemize{
+\item \code{mods}: The different modalities of the column
+\item \code{labels}: The labels of the different modalities
+\item \code{affected}: The column processed to have only TRUE/FALSE values
+}
 }
 \description{
 Process the information for affection
@@ -36,4 +42,8 @@ Process the information for affection
 Perform transformation uppon a column given as the one
 containing affection status to get an \code{affected} column usable for
 the rest of the script
+}
+\examples{
+generate_aff_inds(c(1, 2, 3, 4, 5), threshold = 3, sup_thres_aff = TRUE)
+generate_aff_inds(c("A", "B", "C", "A", "V", "B"), mods_aff = c("A", "B"))
 }

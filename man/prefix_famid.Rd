@@ -14,7 +14,7 @@ prefix_famid(family_id, ind_id, missid = "0")
 \item{missid}{The missing id}
 }
 \value{
-The id
+The id with the family id merged
 }
 \description{
 Compute id with family id if the family id available
