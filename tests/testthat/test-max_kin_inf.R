@@ -26,7 +26,6 @@ test_that("max_kin_inf works with pedigree", {
     ped <- generate_colors(ped, col_aff = "affected",
         threshold = 0.5, sup_thres_aff = TRUE
     )
-    ped$scales
     mxkin <- max_kin_inf(ped, column = "affected_aff", informative = "Av")
     expect_s4_class(mxkin, "Pedigree")
     expect_equal(sum(mxkin$ped$kin, na.rm = TRUE), 90)

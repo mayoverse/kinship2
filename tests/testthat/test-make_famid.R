@@ -46,7 +46,7 @@ test_that("Family check works", {
 
     ## check them giving separate ped ids
     fcheck_df_sep <- with(sampleped,
-        family_check(family, id, dadid, momid)
+        family_check(id, dadid, momid, family)
     )
     fcheck_ped_sep <- family_check(ped)
     expect_equal(as.numeric(as.vector(fcheck_df_sep[1, ])), c(1, 41, 1, 1, 0))
@@ -54,7 +54,7 @@ test_that("Family check works", {
 
     ## check assigning them same ped id
     fcheck_df_combined <- with(sampleped, family_check(
-        rep(1, nrow(sampleped)), as.character(id), dadid, momid
+        as.character(id), dadid, momid, rep(1, nrow(sampleped))
     ))
     sampleped$family[sampleped$family == "2"] <- 1
     ped <- pedigree(sampleped)
