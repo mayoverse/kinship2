@@ -10,7 +10,7 @@
 #' In the case of an inbred pedigree a perfect alignment obeying
 #' `extra=TRUE` may not exist.
 #'
-#' @param id Identification code for each individual
+#' @param obj A pedigree object or a vector of the individuals identifiers
 #' @param dadid Id code for the father
 #' @param momid Id code for the mother
 #' @param align If `align=T`, go one step further and try to make both parents
@@ -21,7 +21,7 @@
 #' @return an integer vector containing the depth for each subject
 #'
 #' @author Terry Therneau
-#' @seealso `plot.pedigree`
+#' @seealso [align()]
 #' @include pedigreeClass.R
 #' @export
 setGeneric("kindepth", signature = "obj",
@@ -29,6 +29,9 @@ setGeneric("kindepth", signature = "obj",
 )
 
 #' @export
+#' @rdname kindepth
+#' @aliases kindepth,character
+#' @docType methods
 setMethod("kindepth", "character", function(obj, dadid, momid, align = FALSE) {
     id <- obj
     n <- length(id)
@@ -211,8 +214,11 @@ setMethod("kindepth", "character", function(obj, dadid, momid, align = FALSE) {
 )
 
 #' @export
+#' @rdname kindepth
+#' @aliases kindepth,Pedigree
+#' @docType methods
 setMethod("kindepth", "Pedigree",
-    function(obj, ...) {
-        kindepth(obj$ped$id, obj$ped$dadid, obj$ped$momid, ...)
+    function(obj, align = FALSE) {
+        kindepth(obj$ped$id, obj$ped$dadid, obj$ped$momid, align)
     }
 )

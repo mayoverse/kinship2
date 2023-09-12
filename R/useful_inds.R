@@ -7,7 +7,11 @@
 #' of their parents. A `useful` column is added to the dataframe with the
 #' usefulness of the individual. This boolean is hereditary.
 #'
-#' @param df Dataframe with individuals to select
+#' @param obj A dataframe, a Pedigree object or a character vector of ids
+#' @param num_child_tot A numeric vector of the number of children of each
+#' individuals
+#' @param keep_infos Boolean to indicate if individuals with unknown status
+#' but available or reverse should be kept
 #' @param informative Informative individuals selection can take 3 values:
 #' 'AvAf' (available and affected),
 #' 'AvOrAf' (available or affected),
@@ -24,6 +28,9 @@ setGeneric("useful_inds", signature = "obj",
 
 #' @include is_informative.R
 #' @export
+#' @rdname useful_inds
+#' @docType methods
+#' @aliases useful_inds,character
 setMethod("useful_inds", "character",
     function(obj, dadid, momid, sex, avail, affected, num_child_tot,
         informative = "AvAf", keep_infos = FALSE, missid = "0"
@@ -66,6 +73,10 @@ setMethod("useful_inds", "character",
     }
 )
 
+#' @docType methods
+#' @aliases useful_inds,data.frame
+#' @export
+#' @rdname useful_inds
 setMethod("useful_inds", "data.frame",
     function(obj, informative = "AvAf", keep_infos = FALSE, missid = "0") {
         df <- obj
@@ -83,8 +94,13 @@ setMethod("useful_inds", "data.frame",
     }
 )
 
+#' @docType methods
+#' @aliases useful_inds,Pedigree
+#' @export
+#' @rdname useful_inds
+#' @param reset Boolean to indicate if the `useful` column should be reset
 setMethod("useful_inds", "Pedigree",
-    function(obj, column = "affected", reset = FALSE, ...) {
+    function(obj, reset = FALSE, ...) {
         to_kept <- useful_inds(obj$ped, ...)
         if (!reset) {
             check_columns(obj$ped, NULL, "useful", NULL, others_cols = TRUE)
@@ -93,4 +109,3 @@ setMethod("useful_inds", "Pedigree",
         obj
     }
 )
-TRUE

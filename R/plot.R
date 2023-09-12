@@ -34,7 +34,7 @@ NULL
 #' which tends to keep them together.  The size of $b$ controls the relative
 #' importance of sib-parent and spouse-spouse closeness.
 #'
-#' @param df dataframe to use for the pedigree.
+#' @param x A pedigree object.
 #' @param mark vector indicating the text to plot in the center of the box.
 #' @param label vector indicating the text to plot bellow the box.
 #' @param tips_names vector of column names in dataframe to show when hovering
@@ -68,6 +68,15 @@ NULL
 #' lying inside the endpoints of the line that connects the children by at
 #' least `pconnect` people.  Setting this option to a large number will
 #' force the line to connect at the midpoint of the children.
+#' @param title default=NULL.  If not NULL, a title will be added to the plot.
+#' @param family default=1.  If the pedigree contains multiple families, this
+#' parameter can be used to select which family to plot.
+#' @param legend default=FALSE.  If TRUE, a legend will be added to the plot.
+#' @param leg_cex default=0.8.  Controls the size of the legend text.
+#' @param leg_symbolsize default=0.5.  Controls the size of the legend symbols.
+#' @param leg_loc default=NULL.  If NULL, the legend will be placed in the
+#' upper right corner of the plot.  Otherwise, a 4-element vector of the form
+#' (x0, x1, y0, y1) can be used to specify the location of the legend.
 #' @param ... Extra options that feed into the plot function.
 #'
 #' @return an invisible list containing
@@ -103,13 +112,14 @@ NULL
 #' print(ped2)
 #'
 #' @section Side Effects: creates plot on current plotting device.
-#' @seealso `pedigree`
-#' @keywords hplot, genetics
+#' @seealso [pedigree()]
 #' @include align.R
 #' @include plot_fct.R
 #' @include ped_to_plotdf.R
 #' @include ped_to_legdf.R
 #' @include plot_fromdf.R
+#' @aliases plot.pedigree
+#' @aliases plot,Pedigree
 #' @export
 setMethod("plot", c(x = "Pedigree", y = "missing"),
     function(x, mark = TRUE,
@@ -169,4 +179,3 @@ setMethod("plot", c(x = "Pedigree", y = "missing"),
         }
     }
 )
-TRUE

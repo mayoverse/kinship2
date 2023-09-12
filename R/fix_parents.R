@@ -5,6 +5,8 @@ NULL
 #'
 #' @description
 #' Fix the sex of parents, add parents that are missing from the pedigree
+#' Can be used with a dataframe, a pedigree object or a vector of the
+#' different individuals identifiers.
 #'
 #' @details
 #' First look to add parents whose ids are given in momid/dadid. Second, fix
@@ -13,15 +15,16 @@ NULL
 #' If a family vector is given the family id will be added to the ids of all
 #' individuals (id, dadid, momid) separated by an underscore befor proceeding.
 #'
-#' @param id Identification variable for individual
-#' @param dadid Identification variable for father. Founders parents should be
-#' coded to NA, or another value specified by missid.
-#' @param momid Identification variable for mother. Founders parents should be
-#' coded to NA, or another value specified by missid.
-#' @param sex Gender of individual noted in `id`. Either character
-#' ('male','female','unknown','terminated') or numeric (1='male', 2='female',
-#' 3='unknown', 4='terminated') data is allowed.  For character data the string
-#' may be truncated, and of arbitrary case.
+#' @param obj A pedigree object, a dataframe or a vector of the individuals
+#' identifiers
+#' @param id Individual id column
+#' @param dadid Father id column or a vector of the father identifiers
+#' @param momid Mother id column or a vector of the mother identifiers
+#' @param sex Gedner column or a vector of the sex of the individuals. Either
+#' character ('male','female','unknown','terminated') or
+#' numeric (1='male', 2='female',#' 3='unknown', 4='terminated')
+#' data is allowed.
+#' @param family Optional family column, set it to NULL to invalidate.
 #' @param missid The founders are those with no father or mother in the
 #' pedigree.  The \\code{dadid} and \\code{momid} values for these subjects will
 #' either be NA or the value of this variable.  The default for \\code{missid}
@@ -29,8 +32,10 @@ NULL
 #' otherwise.
 #' @param family Optional family identification set it to NULL to invalidate.
 #' If used it will modify the ids of the individuals by pasting it with an _.
+#' @inheritParams descendants
 #'
-#' @return A data.frame with id, dadid, momid, sex as columns
+#' @return A data.frame with id, dadid, momid, sex as columns with the
+#' relationships fixed.
 #'
 #' @examples
 #'
@@ -50,7 +55,7 @@ NULL
 #'   sex,
 #'   missid = '0'
 #' ))
-#' newped <- with(test1newmom, pedigree(id, dadid, momid, sex, missid = '0'))
+#' newped <- pedigree(test1newmom)
 #' as.data.frame(newped)
 #'
 #' @author Jason Sinnwell
@@ -61,6 +66,8 @@ setGeneric("fix_parents", signature = "obj",
 )
 
 #' @export
+#' @rdname fix_parents
+#' @aliases fix_parents,character
 setMethod("fix_parents", "character", function(
         obj, dadid, momid, sex, family = NULL, missid = "0") {
     ## fix sex of parents add parents that are missing
@@ -186,25 +193,15 @@ setMethod("fix_parents", "character", function(
 #' in the dataframe then set availability to O for non available parents.
 #' If FALSE then delete the id of missing parents
 #'
-#' @param df Dataframe to process
 #' @param delete Boolean defining if missing parents needs to be:
 #' TRUE: added as a new row
 #' FALSE: be deleted
-#' @param missid The founders are those with no father or mother in the
-#' pedigree.  The \\code{dadid} and \\code{momid} values for these subjects will
-#' either be NA or the value of this variable.  The default for \\code{missid}
-#' is 0 if the \\code{id} variable is numeric, and '' (the empty string)
-#' otherwise.
 #' @param filter Filtering column containing 0 or 1 for the individual to kept
-#' @param id Individual id column
-#' @param dadid Father id column
-#' @param momid Mother id column
-#' @param sex Sex column
-#' @param family Optional family column, set it to NULL to invalidate.
 #'
 #' @return The same dataframe with the parents ids fixed
 #'
 #' @export
+#' @rdname fix_parents
 setMethod("fix_parents", "data.frame", function(
         obj, delete = FALSE, filter = NULL, missid = "0",
         id = "id", dadid = "dadid", momid = "momid", sex = "sex",

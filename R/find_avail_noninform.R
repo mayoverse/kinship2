@@ -13,11 +13,17 @@
 #' @param ped A pedigree object
 #' @param avail Vector of availability status (e.g. genotyped) 0/1 or
 #' TRUE/FALSE
+#' @param missid Character defining the missing ids
+#'
+#' @examples
+#' data(sampleped)
+#' ped <- pedigree(sampleped)
+#' find_avail_noninform(ped)
 #'
 #' @return Vector of subject ids who can be removed by having lowest
 #' informativeness.
 #'
-#' @seealso `pedigree.shrink`
+#' @seealso [shrink()]
 #' @export
 find_avail_noninform <- function(ped, avail = ped$ped$avail, missid = "0") {
     ## trim persons who are available but not informative b/c not parent by
@@ -42,4 +48,3 @@ find_avail_noninform <- function(ped, avail = ped$ped$avail, missid = "0") {
 
     find_unavailable(ped, ped_df$avail)
 }
-TRUE

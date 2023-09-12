@@ -10,7 +10,8 @@
 #' corresponding informative individuals based on the avail and affected
 #' columns.
 #'
-#' @param id A vector of individuals id
+#' @param obj A vector of individuals identifiers, a dataframe or a Pedigree
+#' object.
 #' @param avail A vector of individuals availability (0, 1 or NA)
 #' @param affected A vector of individuals affected status (0, 1 or NA)
 #' @param column A string with the column name to use for the affected status.
@@ -22,12 +23,34 @@
 #' 'All' (all individuals)
 #' or a numeric/character vector of individuals id
 #' or a boolean
+#' @param missid A string with the missing id
+#'
+#' @return
+#'
+#' ## When obj is a vector or a dataframe
+#' A vector of individuals identifiers
+#'
+#' ## When obj is a Pedigree
+#' A list containing the Pedigree object and the vector of individuals
+#' identifiers.
+#' The Pedigree object will have a new column named 'inf' containing 1 for
+#' informative individuals and 0 otherwise.
+#'
+#' @examples
+#' data("sampleped")
+#' ped <- pedigree(sampleped)
+#' is_informative(ped)
 #'
 #' @export
+#' @docType methods
 setGeneric("is_informative", signature = "obj",
     function(obj, ...) standardGeneric("is_informative")
 )
 
+#' @export
+#' @rdname is_informative
+#' @aliases is_informative,character
+#' @docType methods
 setMethod("is_informative", "character",
     function(
         obj, avail, affected, informative = "AvAf", missid = "0"
@@ -63,6 +86,10 @@ setMethod("is_informative", "character",
     }
 )
 
+#' @export
+#' @rdname is_informative
+#' @aliases is_informative,data.frame
+#' @docType methods
 setMethod("is_informative", "data.frame",
     function(obj, informative = "AvAf", missid = "0") {
         cols_needed <- c("id", "avail", "affected")
@@ -71,17 +98,22 @@ setMethod("is_informative", "data.frame",
     }
 )
 
+#' @export
+#' @rdname is_informative
+#' @aliases is_informative,Pedigree
+#' @docType methods
+#' @param reset Boolean defining if the inf column needs to be reset
 setMethod("is_informative", "Pedigree", function(
     obj, column = "affected", informative = "AvAf", missid = "0", reset = FALSE
 ) {
     obj$ped$affected <- NA
     aff_scl <- obj$scales$fill
-    if (column %in% aff_scl$column_mods) {
+    if (column %in% aff_scl$column_values) {
         aff <- aff_scl$mods[aff_scl$affected == TRUE &
-                aff_scl$column_mods == column
+                aff_scl$column_values == column
         ]
         unaff <- aff_scl$mods[aff_scl$affected == FALSE &
-                aff_scl$column_mods == column
+                aff_scl$column_values == column
         ]
         obj$ped$affected[obj$ped[, column] %in% aff] <- 1
         obj$ped$affected[obj$ped[, column] %in% unaff] <- 0

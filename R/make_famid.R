@@ -11,49 +11,27 @@
 #' tree 1, otherwise the tree numbers represent the disconnected subfamilies.
 #' Singleton subjects give a zero for family number.
 #'
-#' This command is depricated.  The kinship command now can be applied directly
-#' to pedigreeList objects.
-#'
-#' @param id Identifier for each subject in the set of pedigrees
+#' @param obj A pedigree object or a vector of the individuals identifiers
 #' @param dadid Identifier for the father.  This will be 0 or '' for a
 #' founder.
 #' @param momid Identifer for the mother.
 #'
-#' @return An integer vector giving family groupings
+#' @return
+#' ## When used with a vector of identifiers
+#' An integer vector giving family groupings
 #'
-#' @author Terry Therneau
-#' @seealso `kinship`
-#' @keywords genetics
+#' ## When used with a pedigree object
+#' An updated pedigree object with the family id added
+#' @seealso [kinship()]
 #' @export
 setGeneric("make_famid", signature = "obj",
     function(obj, ...) standardGeneric("make_famid")
 )
 
-#' Get family id
-#'
-#' @description
-#' Construct a family id from pedigree information
-#'
-#' @details
-#' Create a vector of length n, giving the family 'tree' number of each
-#' subject.  If the pedigree is totally connected, then everyone will end up in
-#' tree 1, otherwise the tree numbers represent the disconnected subfamilies.
-#' Singleton subjects give a zero for family number.
-#'
-#' This command is depricated.  The kinship command now can be applied directly
-#' to pedigreeList objects.
-#'
-#' @param id Identifier for each subject in the set of pedigrees
-#' @param dadid Identifier for the father.  This will be 0 or '' for a
-#' founder.
-#' @param momid Identifer for the mother.
-#'
-#' @return An integer vector giving family groupings
-#'
-#' @author Terry Therneau
-#' @seealso `kinship`
-#' @keywords genetics
 #' @export
+#' @rdname make_famid
+#' @aliases make_famid,character
+#' @docType methods
 setMethod("make_famid", "character",
     function(obj, dadid, momid) {
         id <- obj
@@ -113,28 +91,11 @@ setMethod("make_famid", "character",
     }
 )
 
-#' Get family id
-#'
-#' @description
-#' Construct a family id from pedigree information
-#'
-#' @details
-#' Create a vector of length n, giving the family 'tree' number of each
-#' subject.  If the pedigree is totally connected, then everyone will end up in
-#' tree 1, otherwise the tree numbers represent the disconnected subfamilies.
-#' Singleton subjects give a zero for family number.
-#'
-#' This command is depricated. The kinship command now can be applied directly
-#' to pedigreeList objects.
-#'
-#' @param ped a pedigree object
-#'
-#' @return An updated pedigree object with the family id added
-#'
-#' @author Terry Therneau
-#' @seealso `kinship`
-#' @keywords genetics
 #' @export
+#' @rdname make_famid
+#' @aliases make_famid,Pedigree
+#' @docType methods
+#' @include pedigreeClass.R
 setMethod("make_famid", "Pedigree",
     function(obj) {
         ped <- obj

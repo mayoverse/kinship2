@@ -2,26 +2,30 @@
 #'
 #' Print0 the elements inside a vector until a maximum is reached.
 #'
-#' $param x A vector.
-#' $param max The maximum number of elements to print.
-#' $param ... Additional arguments passed to print0
+#' @param x A vector.
+#' @param max The maximum number of elements to print.
+#' @param ... Additional arguments passed to print0
 #'
-#' $export
+#' @return The character vector aggregated until the maximum is reached.
+#' @export
+#' @keywords internal
 paste0max <- function(x, max = 5, ...) {
     if (length(x) > max) {
-        paste(paste0(unique(x[1:max]), collapse=", ", ...), "...")
+        paste(paste0(unique(x[1:max]), collapse = ", ", ...), "...")
     } else {
-        paste0(unique(x), collapse=", ", ...)
+        paste0(unique(x), collapse = ", ", ...)
     }
 }
 
 #' Check if the fields are present in an object slot
 #'
-#' $param object An object.
-#' $param slot A slot of object.
-#' $param fields A character vector with the fields to check.
+#' @param object An object.
+#' @param slot A slot of object.
+#' @param fields A character vector with the fields to check.
 #'
-#' $return A character vector with the errors if any.
+#' @return A character vector with the errors if any.
+#' @export
+#' @keywords internal
 check_slot_fd <- function(object, slot = NULL, fields = character()) {
     if (is.object(object)) {
         object <- as.list(object)
@@ -53,14 +57,15 @@ check_slot_fd <- function(object, slot = NULL, fields = character()) {
 #'
 #' Check if the all the values in a slot are in a vector of values.
 #'
-#' $param object An object.
-#' $param slot A slot of the object.
-#' $param column A column of the slot.
-#' $param values A vector of values to check.
-#' $param present A logical value indicating if the values should be present
+#' @param object An object.
+#' @param slot A slot of the object.
+#' @param column A column of the slot.
+#' @param values A vector of values to check.
+#' @param present A logical value indicating if the values should be present
 #' or not
 #'
-#' $return A character vector with the errors if any.
+#' @return A character vector with the errors if any.
+#' @keywords internal
 check_values <- function(val, ref, present = TRUE) {
     if (length(dim(val)) > 1) {
         stop("val must be a vector")
@@ -89,8 +94,9 @@ check_values <- function(val, ref, present = TRUE) {
 #' It will check :
 #' the fields of the slots
 #' the values in the columns of the ped, rel and scale slot
-#' $param object A Pedigree object.
-#' $return A logical value or a character vector with the errors.
+#' @param object A Pedigree object.
+#' @return A logical value or a character vector with the errors.
+#' @keywords internal
 is_valid <- function(object) {
     missid <- "0"
     errors <- c()

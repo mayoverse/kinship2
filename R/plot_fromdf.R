@@ -3,6 +3,41 @@
 #' @importFrom stringr str_split_fixed str_split_i
 NULL
 
+#' Create a plot from a data.frame
+#'
+#' @description
+#' This function is used to create a plot from a data.frame. If ggplot_gen is
+#' set to TRUE, the plot will be generated with ggplot2 and will be returned
+#' invisibly.
+#'
+#' @param df A data.frame with the following columns:
+#' - `type`: The type of element to plot. Can be `text`, `segments`, `arc` or
+#' other polygons. For polygons, the name of the polygon must be in the form
+#' `poly_*_*` where poly is one of the type given by [polygons()], the first
+#' `*` is the number of slice in the polygon and the second `*` is the
+#' position of the division of the polygon.
+#' - `x0`: The x coordinate of the center of the element.
+#' - `y0`: The y coordinate of the center of the element.
+#' - `x1`: The x coordinate of the end of the element. Only used for `segments`
+#' and `arc`.
+#' - `y1`: The y coordinate of the end of the element. Only used for `segments`
+#' and `arc`.
+#' - `fill`: The fill color of the element.
+#' - `border`: The border color of the element.
+#' - `density`: The density of the element.
+#' - `angle`: The angle of the element.
+#' - `label`: The label of the element. Only used for `text`.
+#' - `cex`: The size of the element.
+#' - `adjx`: The x adjustment of the element. Only used for `text`.
+#' - `adjy`: The y adjustment of the element. Only used for `text`.
+#' @param usr The user coordinates of the plot.
+#' @param title The title of the plot.
+#' @param ggplot_gen A logical to know if the plot should be generated with
+#' ggplot2 or base R.
+#' @param boxw The width of each box.
+#' @param boxh The height of each box.
+#' @param add_to_existing A logical to know if the plot should be added to an
+#' existing plot.
 #' @include plot_fct.R
 #' @export
 plot_fromdf <- function(
@@ -46,7 +81,9 @@ plot_fromdf <- function(
     boxes[c("poly", "polydiv", "naff")] <- str_split_fixed(boxes$type, "_", 3)
     boxes$angle[boxes$angle == "NA"] <- 45
     for (i in seq_len(dim(boxes)[1])){
-        poly <- poly_n[[as.numeric(boxes$polydiv[i])]][[boxes$poly[i]]][[as.numeric(boxes$naff[i])]]
+        poly <- poly_n[[as.numeric(boxes$polydiv[i])]][[boxes$poly[i]]][[
+            as.numeric(boxes$naff[i])
+        ]]
         p <- draw_polygon(
             boxes$x0[i] + poly$x * boxw,
             boxes$y0[i] + poly$y * boxh,

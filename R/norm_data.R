@@ -4,7 +4,6 @@
 #' @importFrom stringr str_remove_all
 NULL
 
-## Compute id with family id
 #' Compute id with family id
 #'
 #' @description Compute id with family id if the family id available
@@ -13,7 +12,7 @@ NULL
 #' @param ind_id The individual id
 #' @param missid The missing id
 #'
-#' @return The id
+#' @return The id with the family id merged
 #' @export
 prefix_famid <- function(family_id, ind_id, missid = "0") {
     if (length(family_id) > 1 && length(family_id) != length(ind_id)) {
@@ -27,7 +26,6 @@ prefix_famid <- function(family_id, ind_id, missid = "0") {
     ifelse(ind_id == missid, missid, paste0(pre_famid, as.character(ind_id)))
 }
 
-## Normalize the date for the library and get the errors
 #' Normalise dataframe
 #'
 #' @description Normalise dataframe for pedigree object
@@ -46,6 +44,9 @@ prefix_famid <- function(family_id, ind_id, missid = "0") {
 #'
 #' @param ped_df The dataframe to process
 #' @param na_strings Vector of strings to be considered as NA values
+#' @param missid The missing id value
+#' @param try_num Boolean defining if the function should try to convert
+#' all the columns to numeric.
 #'
 #' @return List of two dataframe
 #' `norm` is the dataframe with all the individuals without any errors.
@@ -244,6 +245,7 @@ norm_ped <- function(
 #' @param missid The missing id value
 #'
 #' @return A dataframe with the errors identified
+#' @export
 norm_rel <- function(rel_df, na_strings = c("NA", ""), missid = "0") {
     #### Check columns ####
     err_cols <- c("codeErr", "sameIdErr", "id1Err", "id2Err", "error")
@@ -269,10 +271,12 @@ norm_rel <- function(rel_df, na_strings = c("NA", ""), missid = "0") {
             `1` = "MZ twin", `2` = "DZ twin", `3` = "UZ twin", `4` = "Spouse"
         )
         codes <- c("MZ twin", "DZ twin", "UZ twin", "Spouse")
-        rel_df$code <- suppressMessages(as.character(revalue(as.factor(str_remove_all(
-            casefold(as.character(rel_df$code), upper = FALSE),
-            " "
-        )), code_equiv)))
+        rel_df$code <- suppressMessages(as.character(revalue(as.factor(
+            str_remove_all(
+                casefold(as.character(rel_df$code), upper = FALSE),
+                " "
+            )
+        ), code_equiv)))
         rel_df$code <- factor(rel_df$code, codes, ordered = TRUE)
         err$codeErr[!rel_df$code %in% codes] <- "CodeNotRecognise"
 

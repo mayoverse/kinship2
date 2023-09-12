@@ -50,7 +50,7 @@
 #'
 #' @examples
 #' data(sampleped)
-#' ped <- with(sampleped, pedigree(id, father, mother, sex, affected))
+#' ped <- pedigree(sampleped)
 #' align(ped)
 #'
 #' @seealso [align()]

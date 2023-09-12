@@ -33,8 +33,7 @@ NULL
 #' @return a sparse matrix of class `dsCMatrix`.  This is the same form
 #' used for kinship matrices.
 #'
-#' @seealso `kinship`, `Matrix`
-#' @keywords genetics
+#' @seealso [kinship()]
 #' @export
 ibd_matrix <- function(id1, id2, x, idmap, diagonal) {
     if (!is.null(ncol(id1)) && ncol(id1) == 1)

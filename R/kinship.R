@@ -1,6 +1,6 @@
 #' @importFrom methods as
-
 usethis::use_package("Matrix")
+
 #' Compute a kinship matrix
 #'
 #' @description
@@ -15,13 +15,12 @@ usethis::use_package("Matrix")
 #' for the same reason.  Note that when using the third form any information on
 #' twins is not available to the function.
 #'
-#' When called with a pedigreeList, i.e., with multiple families, the routine
+#' When called with a pedigree, the routine
 #' will create a block-diagonal-symmetric sparse matrix object of class
 #' `dsCMatrix`.  Since the [i,j] value of the result is 0 for any two
 #' unrelated individuals i and j and a `Matrix` utilizes sparse
 #' representation, the resulting object is often orders of magnitude smaller
-#' than an ordinary matrix.  When `kinship` is called with a single
-#' pedigree an ordinary matrix is returned.
+#' than an ordinary matrix.
 #'
 #' Two genes G1 and G2 are identical by descent (IBD) if they are both physical
 #' copies of the same ancestral gene; two genes are identical by state if they
@@ -37,9 +36,7 @@ usethis::use_package("Matrix")
 #' The computation is based on a recursive algorithm described in Lange, which
 #' assumes that the founder alleles are all independent.
 #'
-#' @aliases kinship kinship.default kinship.pedigree kinship.pedigreeList
-#' @param id either a pedigree object, pedigreeList object, or a vector of
-#' subject identifiers.  Subject identifiers may be numeric or character.
+#' @param obj A pedigree object or a vector of subject identifiers.
 #' @param dadid for each subject, the identifier of the biological father.
 #' This is only used if `id` is a vector.
 #' @param momid for each subject, the identifier of the biological mother.
@@ -49,30 +46,32 @@ usethis::use_package("Matrix")
 #' 'autosome' and 'X' or 'x'.
 #' @param ... Any number of optional arguments
 #'
-#' @return a matrix of kinship coefficients.
+#' @return
+#' ## When obj is a vector
+#' A matrix of kinship coefficients.
+#' ## When obj is a pedigree
+#' A matrix of kinship coefficients ordered by families present
+#' in the pedigree.
 #'
 #' @examples
-#'
-#' test1 <- data.frame(
-#'   id = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14),
-#'   mom = c(0, 0, 0, 0, 2, 2, 4, 4, 6, 2, 0, 0, 12, 13),
-#'   dad = c(0, 0, 0, 0, 1, 1, 3, 3, 3, 7, 0, 0, 11, 10),
-#'   sex = c(0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1, 1, 1)
-#' )
-#' tped <- with(test1, pedigree(id, dad, mom, sex))
-#' round(8 * kinship(tped))
+#' data(sampleped)
+#' ped <- pedigree(sampleped)
+#' kinship(ped)
 #'
 #' @section References: K Lange, Mathematical and Statistical Methods for
 #' Genetic Analysis, Springer-Verlag, New York, 1997.
-#' @seealso `pedigree`, `makekinship`, `make_famidb`
-#' @keywords genetics
+#' @seealso [make_famid()], [kindepth()]
 #' @include pedigreeClass.R
 #' @export
+#' @docType methods
 setGeneric("kinship", signature = "obj",
     function(obj, ...) standardGeneric("kinship")
 )
 
 #' @export
+#' @rdname kinship
+#' @aliases kinship,character
+#' @docType methods
 setMethod("kinship", "character",
     function(obj, dadid, momid, sex, chrtype = "autosome") {
         id <- obj
@@ -136,6 +135,9 @@ setMethod("kinship", "character",
 
 #' @include kindepth.R
 #' @export
+#' @rdname kinship
+#' @aliases kinship,Pedigree
+#' @docType methods
 setMethod("kinship", "Pedigree",
     function(obj, chrtype = "autosome") {
         famlist <- unique(obj$ped$family)
@@ -191,10 +193,13 @@ setMethod("kinship", "Pedigree",
                     ## Finally, remove the rows that are identical.
                     ## The result is a set of all pairs of observations in the
                     ## matrix that correspond to monozygotic pairs.
-                    mzindex <- cbind(unlist(tapply(mzmat, mzgrp[mzmat], function(x) {
-                        z <- unique(x)
-                        rep(z, length(z))
-                    })), unlist(tapply(mzmat, mzgrp[mzmat], function(x) {
+                    mzindex <- cbind(unlist(tapply(mzmat, mzgrp[mzmat],
+                        function(x) {
+                            z <- unique(x)
+                            rep(z, length(z))
+                        }
+                    )),
+                    unlist(tapply(mzmat, mzgrp[mzmat], function(x) {
                         z <- unique(x)
                         rep(z, each = length(z))
                     })))

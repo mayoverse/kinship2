@@ -19,6 +19,7 @@
 #' ht1 <- auto_hint(ped1)
 #' check_hints(ht1, ped1$ped$sex)
 #' @seealso [auto_hint()], [best_hint()]
+#' @keywords internal
 #' @export
 check_hints <- function(hints, sex) {
     if (is.null(hints$order)) {

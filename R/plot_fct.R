@@ -8,7 +8,7 @@ NULL
 #'
 #' @param plist a pedigree list
 #' @param subreg a vector of length 4 giving the start and end positions
-#'  of the subregion and the start and end depths
+#' of the subregion and the start and end depths
 #'
 #' @return a pedigree list
 #'
@@ -71,7 +71,7 @@ subregion2 <- function(plist, subreg) {
 #' Generate a circular element
 #'
 #' @param nslice number of slices
-#' @param n
+#' @param n Total number of points in the circle
 #'
 #' @return a list of x and y coordinates
 #'
@@ -88,7 +88,7 @@ circfun <- function(nslice, n = 50) {
         )
     }
     out
-}  ## end circfun()
+}
 
 
 ## Doc: polyfun
@@ -141,7 +141,7 @@ polyfun <- function(nslice, object) {
         )
     }
     out
-}  ## end polyfun()
+}
 
 #' Create a list of the different polygonal elements
 #'
@@ -207,6 +207,9 @@ NULL
 #' @param y1 y coordinate of the second point
 #' @param p ggplot object
 #' @param ggplot_gen logical, if TRUE add the segments to the ggplot object
+#' @param col color
+#' @param lwd line width
+#' @param lty line type
 #'
 #' @return Plot the segments or add it to a ggplot object
 #'
@@ -225,6 +228,19 @@ draw_segment <- function(
     p
 }
 
+#' Draw a polygon for a pedigree
+#'
+#' @param x x coordinates
+#' @param y y coordinates
+#' @param p ggplot object
+#' @param ggplot_gen logical, if TRUE add the polygon to the ggplot object
+#' @param fill fill color
+#' @param border border color
+#' @param density density of shading
+#' @param angle angle of shading
+#'
+#' @return Plot the polygon or add it to a ggplot object
+#' @export
 draw_polygon <- function(
     x, y, p, ggplot_gen = FALSE,
     fill = "grey", border = NULL, density = NULL, angle = 45
@@ -245,6 +261,10 @@ draw_polygon <- function(
 #' @param label text to be displayed
 #' @param p ggplot object
 #' @param ggplot_gen logical, if TRUE add the text to the ggplot object
+#' @param cex character expansion
+#' @param col color
+#' @param adjx x adjustment
+#' @param adjy y adjustment
 #'
 #' @return Plot the text or add it to a ggplot object
 #'
@@ -264,15 +284,21 @@ draw_text <- function(x, y, label, p, ggplot_gen = FALSE,
 ## Doc: 4 arcs for multiple instances of subj
 #' Draw arcs for multiple instances of a subject
 #'
-#' @param x x coordinate
-#' @param y y coordinate
+#' @param x0 x coordinate of the first point
+#' @param y0 y coordinate of the first point
+#' @param x1 x coordinate of the second point
+#' @param y1 y coordinate of the second point
 #' @param p ggplot object
 #' @param ggplot_gen logical, if TRUE add the arcs to the ggplot object
+#' @param cex character expansion
+#' @param col color
 #'
 #' @return Plot the arcs or add it to a ggplot object
 #'
 #' @export
-draw_arc <- function(x0, y0, x1, y1, p, ggplot_gen = FALSE, cex = 1, col = "black") {
+draw_arc <- function(x0, y0, x1, y1, p, ggplot_gen = FALSE, cex = 1,
+    col = "black"
+) {
     xx <- seq(x0, x1, length = 15)
     yy <- seq(y0, y1, length = 15) + (seq(-7, 7))^2 / 98 - 0.5
     lines(xx, yy, lty = 2, lwd = cex, col = col)
@@ -295,7 +321,18 @@ grab_grob <- function() {
 }
 
 #' Set plotting area
-## Plotting region
+#'
+#' @param cex character expansion
+#' @param id id of the subject
+#' @param maxlev maximum level
+#' @param xrange range of x values
+#' @param symbolsize size of the symbols
+#' @param ... other arguments passed to [par()]
+#'
+#' @return a list of user coordinates, old par, box width, box height,
+#' label height and leg height
+#' @keywords internal
+#' @export
 set_plot_area <- function(cex, id, maxlev, xrange, symbolsize, ...) {
     old_par <- par(xpd = TRUE, ...)  ## took out mar=mar
     psize <- par("pin")  # plot region in inches
@@ -347,7 +384,7 @@ set_plot_area <- function(cex, id, maxlev, xrange, symbolsize, ...) {
 #' @param density density of shading
 #'
 #' @return a matrix of 0/1 values
-#'
+#' @keywords internal
 #' @export
 set_affected <- function(affected, n, angle, density) {
     if (is.null(affected)) {

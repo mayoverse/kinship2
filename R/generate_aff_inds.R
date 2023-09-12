@@ -18,8 +18,15 @@ NULL
 #' individuals will be considered affected if the value is stricly under the
 #' `threshold`.
 #'
-#' @return A dataframe with the `affected` column processed accordingly
+#' @return A dataframe with the `affected` column processed accordingly.
+#' The different columns are:
+#' - `mods`: The different modalities of the column
+#' - `labels`: The labels of the different modalities
+#' - `affected`: The column processed to have only TRUE/FALSE values
 #'
+#' @examples
+#' generate_aff_inds(c(1, 2, 3, 4, 5), threshold = 3, sup_thres_aff = TRUE)
+#' generate_aff_inds(c("A", "B", "C", "A", "V", "B"), mods_aff = c("A", "B"))
 #' @export
 generate_aff_inds <- function(values, mods_aff = NULL,
     threshold = NULL, sup_thres_aff = NULL

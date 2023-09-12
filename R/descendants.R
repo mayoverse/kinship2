@@ -5,13 +5,14 @@
 #' given a pedigree
 #'
 #' @param idlist List of individuals id to be considered
-#' @param id Individual id of the pedigree
-#' @param dadid Father id of the pedigree
-#' @param momid Mother id of the pedigree
+#' @param obj A pedigree object or a vector of the individuals identifiers
+#' @param dadid A vector of the father identifiers
+#' @param momid A vector of the mother identifiers
 #'
 #' @return
-#' List of all the descendants of the individuals in idlist.
+#' Vector of all descendants of the individuals in idlist.
 #' The list is not ordered.
+#'
 #' @examples
 #' data("sampleped")
 #' ped <- pedigree(sampleped)
@@ -25,8 +26,8 @@ setGeneric("descendants",
 )
 
 #' @rdname descendants
+#' @docType methods
 #' @aliases descendants,character
-#' @param obj A character vector
 setMethod("descendants", signature(idlist = "character", obj = "character"),
     function(idlist, obj, dadid, momid) {
         id <- obj
@@ -48,11 +49,10 @@ setMethod("descendants", signature(idlist = "character", obj = "character"),
 )
 
 #' @rdname descendants
-#' @param obj A pedigree object
+#' @docType methods
 #' @aliases descendants,Pedigree
 setMethod("descendants", signature(idlist = "character", obj = "Pedigree"),
     function(idlist, obj) {
         descendants(idlist, obj$ped$id, obj$ped$dadid, obj$ped$momid)
     }
 )
-TRUE

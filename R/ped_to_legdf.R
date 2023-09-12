@@ -1,12 +1,29 @@
-setGeneric("ped_to_legdf", function(obj, ...) {
-    standardGeneric("ped_to_legdf")
-})
-
-setMethod("ped_to_legdf", "Pedigree", function(obj,
-    boxh = 1, boxw = 1, cex = 1, ...
+#' Convert a pedigree to a legend data frame of element to plot
+#'
+#' @description
+#' Convert a pedigree to a legend data frame for it to
+#' be plotted with afterwards with [plot_fromdf()].
+#'
+#' @param ped A pedigree object
+#' @param boxh Height of the legend boxes
+#' @param boxw Width of the legend boxes
+#' @param cex Size of the legend text
+#'
+#' @return
+#' A list containing the legend data frame and the user coordinates.
+#'
+#' @examples
+#' data("sampleped")
+#' ped <- pedigree(sampleped)
+#' leg_df <- ped_to_legdf(ped)
+#' summary(leg_df$leg_df)
+#' plot_fromdf(leg_df$leg_df)
+#' @export
+#' @docType methods
+ped_to_legdf <- function(ped,
+    boxh = 1, boxw = 1, cex = 1
 ) {
     par_usr <- list(boxh = boxh, boxw = boxw, cex = cex)
-    ped <- obj
     plot_df <- data.frame(
         id = character(),
         x0 = numeric(), y0 = numeric(), x1 = numeric(), y1 = numeric(),
@@ -151,4 +168,4 @@ setMethod("ped_to_legdf", "Pedigree", function(obj,
         min(plot_df$y0), max(plot_df$y0)
     )
     list(leg_df = plot_df, par_usr = par_usr)
-})
+}

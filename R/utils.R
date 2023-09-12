@@ -7,7 +7,7 @@
 #' the variable using the `cut` function.
 #'
 #' @param var The variable to be transformed
-#' @param thresholds The thresholds to be used to separate the variable
+#' @param threshold The threshold to be used to separate the variable
 #'
 #' @return a factor vector containing the transformed variable
 #'
@@ -29,8 +29,9 @@ var_to_factor <- function(var, threshold = NULL) {
         }
         var_fact <- cut(
             var, c(min(var, na.rm = TRUE),
-            threshold, max(var, na.rm = TRUE)),
-            label = labels, include.lowest = TRUE)
+                threshold, max(var, na.rm = TRUE)
+            ), label = labels, include.lowest = TRUE
+        )
         var_fact <- addNA(var_fact, ifany = TRUE)
     }
     var_fact
@@ -57,7 +58,8 @@ var_to_factor <- function(var, threshold = NULL) {
 #'
 #' @export
 df_cont_table <- function(
-    df, var1, threshold1 = NULL, var2 = NULL, threshold2 = NULL) {
+    df, var1, threshold1 = NULL, var2 = NULL, threshold2 = NULL
+) {
     if (!var1 %in% colnames(df)) {
         stop(paste0(var1, " is not present in the dataframe", collapse = " "))
     }
@@ -103,6 +105,8 @@ NULL
 #' initialised to NA.
 #' @param cols_used_init Boolean defining if the columns that will be used
 #' should be initialised to NA.
+#' @param cols_used_del Boolean defining if the columns that will be used
+#' should be deleted.
 #' @param verbose Should message be prompted to the user
 #'
 #' @return Dataframe with only the column allowed and all the column correctly
@@ -121,24 +125,28 @@ NULL
 check_columns <- function(
     df, cols_needed = NULL, cols_used = NULL, cols_to_use = NULL,
     others_cols = FALSE, cols_used_init = FALSE, cols_to_use_init = FALSE,
-    cols_used_del = FALSE, verbose = FALSE) {
+    cols_used_del = FALSE, verbose = FALSE
+) {
     cols_p <- colnames(df)
     cols_needed_missing <- cols_needed[is.na(match(cols_needed, cols_p))]
     if (length(cols_needed_missing) > 0) {
         stop(paste(
             "Columns :", paste0(cols_needed_missing, collapse = ", "),
-            "are missing. Could not continu without.\n"))
+            "are missing. Could not continu without.\n"
+        ))
     }
     cols_use_by_script <- cols_used[cols_used %in% cols_p]
     if (length(cols_use_by_script) > 0) {
         if (!cols_used_del) {
             stop(paste(
                 "Columns :", paste0(cols_use_by_script, collapse = ", "),
-                "are used by the script and would be overwritten.\n"))
+                "are used by the script and would be overwritten.\n"
+            ))
         }
         warning(paste(
             "Columns :", paste0(cols_use_by_script, collapse = ", "),
-            "are used by the script and will disgarded.\n"))
+            "are used by the script and will disgarded.\n"
+        ))
         cols_to_keep <- cols_p[!cols_p %in% cols_use_by_script]
         df <- df[, cols_to_keep]
     }
@@ -146,7 +154,8 @@ check_columns <- function(
         if (verbose) {
             message(paste(
                 "Columns :", paste0(cols_used, collapse = ", "),
-                "are used by the script and will be set to NA.\n"))
+                "are used by the script and will be set to NA.\n"
+            ))
         }
         df[cols_used] <- ifelse(nrow(df) > 0, NA, list(character()))
     }
@@ -156,14 +165,16 @@ check_columns <- function(
         if (verbose) {
             message(paste(
                 "Columns :", paste0(cols_optional, collapse = ", "),
-                "where recognize and therefore will be used.\n"))
+                "where recognize and therefore will be used.\n"
+            ))
         }
     }
     if (cols_to_use_init && length(cols_optional_abs) > 0) {
         if (verbose) {
             message(paste(
                 "Columns :", paste0(cols_optional_abs, collapse = ", "),
-                "where absent and set to NA.\n"))
+                "where absent and set to NA.\n"
+            ))
         }
         df[cols_optional_abs] <- ifelse(nrow(df) > 0, NA, list(character()))
     }
@@ -183,7 +194,8 @@ check_columns <- function(
             message(paste(
                 "Columns :",
                 paste0(cols_not_recognize, collapse = ", "),
-                "not recognize and therefore will be disregarded.\n"))
+                "not recognize and therefore will be disregarded.\n"
+            ))
         }
     }
 

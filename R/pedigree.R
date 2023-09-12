@@ -1,7 +1,11 @@
 #' Create a Pedigree object from a data.frame
 #'
-#'  This constructor help to create a \\code{Pedigree} object from
-#' `data.frame`.
+#' This constructor help to create a `Pedigree` object from
+#' different `data.frame`.
+#'
+#' If any errors are found in the data, the function will return
+#' the data.frame with the errors for the pedigree and the relationship
+#' data.frame.
 #'
 #' @param ped_df A data.frame with the individuals informations.
 #' @param rel_df A data.frame with the special relationships between
@@ -124,6 +128,5 @@ pedigree <- function(
     ped <- new("Pedigree", ped = ped_df, rel = rel_df,
         scales = scales, hints = hints
     )
-
     generate_colors(ped, ...)
 }

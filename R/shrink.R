@@ -25,21 +25,24 @@
 #' @param affected Vector of binary affected status (0/1/NA). If NULL, uses
 #' first column of the pedigree object affected matrix.
 #' @param max_bits Optional, the bit size for which to shrink the pedigree
-#' @param x Pedigree.shrink object used in method functions
-#' @param ... Optional arguments passed to internal functions
 #'
-#' @return Pedigree object shrinked to the desired size
+#' @return A list containing the following elements:
+#' - pedObj: Pedigree object after trimming
+#' - id_trim: Vector of ids trimmed from pedigree
+#' - id_lst: List of ids trimmed by category
+#' - bit_size: Vector of bit sizes after each trimming step
+#' - avail: Vector of availability status after trimming
+#' - pedSizeOriginal: Number of subjects in original pedigree
+#' - pedSizeIntermed: Number of subjects after initial trimming
+#' - pedSizeFinal: Number of subjects after final trimming
 #'
 #' @examples
 #' data(sampleped)
-#' pedAll <- with(sampleped, pedigree(id, father, mother, sex,
-#'   affected = cbind(affected, avail), famid = ped
-#' ))
-#' ped1 <- pedAll['1']
-#' ped1trim <- pedigree.shrink(ped1, max_bits = 12)
+#' ped1 <- pedigree(sampleped[sampleped$family == '1',])
+#' shrink(ped1, max_bits = 12)
 #'
 #' @author Original by Dan Schaid, updated to kinship2 by Jason Sinnwell
-#' @seealso \\code{\\link{pedigree}}, \\code{\\link{plot.pedigree.shrink}}
+#' @seealso [pedigree()], [bit_size()]
 #' @export
 shrink <- function(
     ped, avail = ped$ped$avail, affected = ped$ped$affected, max_bits = 16
@@ -147,7 +150,7 @@ shrink <- function(
         pedSizeIntermed = n_inter, pedSizeFinal = n_final
     )
 
-    return(obj)
+    obj
 }
 
 TRUE

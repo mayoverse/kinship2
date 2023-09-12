@@ -6,7 +6,7 @@ NULL
 #' @description Compute the kinship between the informative individuals and
 #' all the others.
 #'
-#' @param id A vector of individuals id
+#' @param obj A pedigree object, a dataframe or a vector of the individuals
 #' @param dadid A vector of individuals dadid
 #' @param momid A vector of individuals momid
 #' @param sex A vector of the individuals sex
@@ -20,15 +20,21 @@ NULL
 #' 'All' (all individuals)
 #' or a numeric vector of individuals id
 #' or a boolean
-#' @param ... Other parameters passed to \code{\link{is_informative}}
+#' @param ... Other parameters passed to [is_informative()]
 #' when using a pedigree object
 #'
-#' @return Dataframe with selected individuals
+#' @return
+#' ## When obj is a vector or a dataframe
+#' A vector of kinship degree
+#'
+#' ## When obj is a Pedigree
+#' The Pedigree object with a new column named 'kin' containing the kinship
+#' degree.
 #'
 #' @examples
 #' data(sampleped)
-#' df <- max_kin_inf(sampleped, informative = 'Av/Af')
-#' summary(df$kin)
+#' ped <- pedigree(sampleped)
+#' max_kin_inf(ped)$ped
 #'
 #' @include is_informative.R
 #' @include kinship.R
@@ -37,6 +43,10 @@ setGeneric("max_kin_inf", signature = "obj",
     function(obj, ...) standardGeneric("max_kin_inf")
 )
 
+#' @export
+#' @rdname max_kin_inf
+#' @aliases max_kin_inf,character
+#' @docType methods
 setMethod("max_kin_inf", "character", function(
     obj, dadid, momid, sex, avail, affected, informative = "AvAf"
 ) {
@@ -60,6 +70,10 @@ setMethod("max_kin_inf", "character", function(
     kin
 })
 
+#' @export
+#' @rdname max_kin_inf
+#' @aliases max_kin_inf,data.frame
+#' @docType methods
 setMethod("max_kin_inf", "data.frame",
     function(obj, informative = "AvAf") {
         cols_needed <- c("id", "dadid", "momid", "sex", "avail", "affected")
@@ -73,6 +87,11 @@ setMethod("max_kin_inf", "data.frame",
     }
 )
 
+#' @export
+#' @rdname max_kin_inf
+#' @aliases max_kin_inf,Pedigree
+#' @docType methods
+#' @param reset If TRUE, the kinship column is reset
 setMethod("max_kin_inf", "Pedigree",
     function(obj, informative = "AvAf", reset = FALSE, ...) {
         ped <- is_informative(obj, informative = informative, ...)$ped

@@ -16,75 +16,70 @@
 #' It will be a matrix with famid as row labels, new-family-id as the columns,
 #' and the number of subjects as entries.
 #'
+#' @inheritParams descendants
 #' @param famid A vector of family identifiers
-#' @param id A vector of unique subject identifiers
-#' @param dadid Vector containing the id of the biological father
-#' @param momid Vector containing the id of the biological mother
-#' @param newfam The result of a call to `make_famid`. If this has already
+#' @param newfam The result of a call to `make_famid()`. If this has already
 #' been computed by the user, adding it as an argument shortens the running
 #' time somewhat.
 #'
 #' @return a data frame with one row for each unique family id in the
-#' `famid` argument. Components of the output are:
-#' ## famid
-#' The family id, as entered into the data set
-#' ## n
-#' Number of subjects in the family
-#' ## unrelated
-#' Number of them that appear to be unrelated to
+#' `famid` argument or the one detected in the pedigree object.
+#' Components of the output are:
+#' - famid The family id, as entered into the data set
+#' - n Number of subjects in the family
+#' - unrelated Number of them that appear to be unrelated to
 #' anyone else in the entire pedigree set.  This is usually marry-ins with no
 #' children (in the pedigree), and if so are not a problem.
-#' ## split
-#' Number of unique 'new' family ids.
-#' 0 = no one in this 'family' is related to anyone else (not good)
-#' 1 = everythings is fine
-#' 2+= the family appears to be a set of disjoint trees.
-#' Are you missing some of the people?
-#' ## join
-#' Number of other families that had a unique
+#' - split Number of unique 'new' family ids.
+#'     - 0 = no one in this 'family' is related to anyone else (not good)
+#'     - 1 = everythings is fine
+#'     - 2+ = the family appears to be a set of disjoint trees.
+#'       Are you missing some of the people?
+#' - join Number of other families that had a unique
 #' famid, but are actually joined to this one.  0 is the hope.
 #'
 #' @examples
 #'
 #' # use 2 samplepeds
 #' data(sampleped)
-#' pedAll <- with(sampleped, pedigree(id, father, mother, sex,
-#'   affected = cbind(affected, avail), famid = ped
-#' ))
+#' pedAll <- pedigree(sampleped)
 #'
 #' ## check them giving separate ped ids
-#' fcheck.sep <- with(sampleped, family_check(ped, id, father, mother))
+#' fcheck.sep <- family_check(pedAll)
 #' fcheck.sep
 #'
 #' ## check assigning them same ped id
-#' fcheck.combined <- with(sampleped, family_check(rep(1, nrow(sampleped)),
-#' id, father, mother))
+#' fcheck.combined <- with(sampleped, family_check(id, dadid, momid,
+#' rep(1, nrow(sampleped))))
 #' fcheck.combined
 #'
 #' # make person 120's father be her son.
 #' sampleped[20, 3] <- 131
 #' fcheck1.bad <- try(
 #'   {
-#'     with(sampleped, family_check(ped, id, father, mother))
+#'     with(sampleped, family_check(id, father, mother, family))
 #'   },
 #'   silent = FALSE
 #' )
 #'
 #' ## fcheck1.bad is a try-error
 #'
-#' @seealso `make_famid`, `makekinship`
-#' @keywords genetics
+#' @seealso [make_famid()], [kinship()]
 #' @include pedigreeClass.R
+#' @keywords internal
+#' @docType methods
 #' @export
 setGeneric("family_check", signature = "obj",
     function(obj, ...) standardGeneric("family_check")
 )
 
+#' @rdname family_check
 #' @include make_famid.R
+#' @aliases family_check,character
 #' @export
 setMethod("family_check", "character",
-    function(obj, id, dadid, momid, newfam) {
-        famid <- obj
+    function(obj, dadid, momid, famid, newfam) {
+        id <- obj
         if (is.numeric(famid) && any(is.na(famid))) {
             stop("Family id of missing not allowed")
         }
@@ -125,16 +120,11 @@ setMethod("family_check", "character",
     }
 )
 
-setMethod("family_check", "numeric",
-    function(obj, id, dadid, momid, newfam) {
-        family_check(as.character(obj), id, dadid, momid, newfam)
-    }
-)
-
+#' @rdname family_check
+#' @docType methods
+#' @aliases family_check,Pedigree
 setMethod("family_check", "Pedigree",
     function(obj) {
-        family_check(obj$ped$family, obj$ped$id, obj$ped$dadid, obj$ped$momid)
+        family_check(obj$ped$id, obj$ped$dadid, obj$ped$momid, obj$ped$family)
     }
 )
-
-TRUE

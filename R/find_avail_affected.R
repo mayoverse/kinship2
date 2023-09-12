@@ -11,23 +11,23 @@
 #' affected indicator, if the affected item in the pedigree is a matrix of
 #' multiple affected indicators.
 #'
-#' @param ped A pedigree objects, with id (subject ID), findex (father index),
-#' mindex (mother index)
+#' @param ped A pedigree object
 #' @param avail Vector of availability status (e.g., genotyped) 0/1 or
 #' TRUE/FALSE
-#' @param affstatus Vector of affection status 0/1 or TRUE/FALSE.
+#' @param affstatus Affection status to search for.
 #'
 #' @return A list is returned with the following components
-#' ## ped
-#' Dataframe with trimmed subject removed
-#' ## idTrimmed
-#' Vector of IDs of trimmed individuals
-#' ## isTrimmed
-#' logical value indicating whether pedigree has been trimmed
-#' ## bit_size
-#' Bit size of the trimmed pedigree
+#' - ped The new pedigree object
+#' - newAvail Vector of availability status of trimmed individuals
+#' - idTrimmed Vector of IDs of trimmed individuals
+#' - isTrimmed logical value indicating whether pedigree has been trimmed
+#' - bit_size Bit size of the trimmed pedigree
 #'
-#' @seealso `pedigree.shrink`
+#' @examples
+#' data(sampleped)
+#' ped <- pedigree(sampleped)
+#' find_avail_affected(ped, affstatus = 1)
+#' @seealso [shrink()]
 #' @include bit_size.R
 #' @include utils.R
 #' @include find_unavailable.R
@@ -38,9 +38,13 @@ find_avail_affected <- function(ped, avail = ped$ped$avail, affstatus = NA) {
     not_parent <- !is_parent(ped_df$id, ped_df$dadid, ped_df$momid)
 
     if (is.na(affstatus)) {
-        possibl_trim <- ped_df$id[not_parent & avail == 1 & is.na(ped_df$affected)]
+        possibl_trim <- ped_df$id[not_parent & avail == 1 &
+                is.na(ped_df$affected)
+        ]
     } else {
-        possibl_trim <- ped_df$id[not_parent & avail == 1 & ped_df$affected == affstatus]
+        possibl_trim <- ped_df$id[not_parent & avail == 1 &
+                ped_df$affected == affstatus
+        ]
     }
     n_trim <- length(possibl_trim)
 

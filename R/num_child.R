@@ -11,7 +11,7 @@ NULL
 #' If a relation ship matrix is given, then even if no children is present
 #' between 2 spouses, the indirect childs will still be added.
 #'
-#' @param id The id of the individual
+#' @param obj A pedigree object, a dataframe or a vector of the individuals
 #' @param dadid The id of the father 
 #' @param momid The id of the mother
 #' @param relation A matrix with 3 required columns (id1, id2, code) specifying
@@ -19,9 +19,15 @@ NULL
 #' Codes: 1=Monozygotic twin, 2=Dizygotic twin, 3=twin of unknown zygosity,
 #' 4=Spouse.
 #'
-#' @return A dataframe with the columns `num_child_dir`, `num_child_ind` and
+#' @return
+#' ## When obj is a vector or a dataframe
+#' A dataframe with the columns `num_child_dir`, `num_child_ind` and
 #' `num_child_tot` giving respectively the direct, indirect and total number
 #' of child.
+#' 
+#' ## When obj is a pedigree object
+#' An updated pedigree object with the columns `num_child_dir`, `num_child_ind`
+#' and `num_child_tot` added to the pedigree.
 #'
 #' @include pedigreeClass.R
 #' @export
@@ -30,6 +36,9 @@ setGeneric("num_child", signature = "obj",
 )
 
 #' @export
+#' @rdname num_child
+#' @aliases num_child,character
+#' @docType methods
 setMethod("num_child", "character",
     function(obj, dadid, momid, relation = NULL, missid = "0"
 ) {
@@ -112,6 +121,9 @@ setMethod("num_child", "character",
 })
 
 #' @export
+#' @rdname num_child
+#' @aliases num_child,data.frame
+#' @docType methods
 setMethod("num_child", "data.frame", function(obj, relation = NULL, ...) {
     cols_needed <- c("id", "dadid", "momid")
     cols_used <- c("num_child_dir", "num_child_ind", "num_child_tot")
@@ -122,6 +134,10 @@ setMethod("num_child", "data.frame", function(obj, relation = NULL, ...) {
 })
 
 #' @export
+#' @rdname num_child
+#' @aliases num_child,Pedigree
+#' @docType methods
+#' @param reset If TRUE, the num_child columns are reset
 setMethod("num_child", "Pedigree", function(obj, reset = FALSE) {
     df <- num_child(obj$ped, relation = obj$rel)
 

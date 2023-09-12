@@ -1,41 +1,32 @@
 # Automatically generated from all.nw using noweb
 
-#' Find or trim unavailable subjects in a pedigree
+#' Find unavailable subjects in a pedigree
 #'
 #' @description
 #' Find the ID of subjects in a pedigree iteratively, as anyone who is not
 #' available and does not have an available descendant by successively removing
-#' unavailable terminal nodes. `trim` carries out the removal of the
-#' subjects identified by `findUnavailabl`e.
+#' unavailable terminal nodes.
 #'
 #' @details
 #' Originally written as pedTrim by Steve Iturria, modified by Dan Schaid 2007,
 #' and now split into the two separate functions: `find_unavailable()`, and
 #' `trim()` to do the tasks separately.  `find_unavailable()`
-#' calls `exclude_stray_marryin` to find stray available marry-ins who are
+#' calls `exclude_stray_marryin()` to find stray available marry-ins who are
 #' isolated after trimming their unavailable offspring, and
-#' exclude_unavail_founders.
+#' `exclude_unavail_founders()`.
 #' If the subject ids are character, make sure none of the characters in the
 #' ids is a colon (":"), which is a special character
 #' used to concatenate and split subjects within the utility.
 #'
-#' @aliases
-#' find_unavailable
-#' exclude_unavail_founders
-#' exclude_stray_marryin
+#' @inheritParams find_avail_affected
 #'
-#' @param ped A pedigree object with an id, findex, mindex, sex, plus other
-#' optional items
-#' @param avail Logical vector of availability status (e.g., available) 0/1
-#' @param removeID vector of subject ids of persons to trim from a pedigree
-#'
-#' @return `find_unavailable` returns a vector of subject ids for who can be
-#' removed. `trim` returns a trimmed pedigree object.
+#' @return Returns a vector of subject ids for who can be
+#' removed.
 #'
 #' @section Side Effects: relation matrix from `trim` is trimmed of any
 #' special relations that include the subjects to trim.
 #'
-#' @seealso `pedigree.shrink`
+#' @seealso [shrink()]
 #' @include utils.R
 #' @export
 find_unavailable <- function(ped, avail = ped$ped$avail) {
@@ -73,11 +64,26 @@ find_unavailable <- function(ped, avail = ped$ped$avail) {
         df$dadid, df$momid, df$avail
     )
 
+    ## remove stray marry-ins
     tmp_ped <- exclude_stray_marryin(tmp_ped$id, tmp_ped$dadid, tmp_ped$momid)
 
     ped$ped$id[is.na(match(ped$ped$id, tmp_ped$id))]
 }
 
+#' Exclude stray marry-ins
+#'
+#' @description
+#' Exclude from a pedigree any founders who are not parents.
+#'
+#' @param id Vector of subject identifiers
+#' @inheritParams descendants
+#'
+#' @return
+#' Returns a data frame of subject identifiers and their parents.
+#' The data frame is trimmed of any founders who are not parents.
+#'
+#' @keywords internal
+#' @rdname find_unavailable
 exclude_stray_marryin <- function(id, dadid, momid) {
     # get rid of founders who are not parents (stray available marryins
     # who are isolated after trimming their unavailable offspring)
@@ -93,6 +99,26 @@ exclude_stray_marryin <- function(id, dadid, momid) {
     return(trio)
 }
 
+#' Exclude unavailable founders
+#'
+#' @description
+#' Exclude from a pedigree any unavailable founders.
+#'
+#' @param id Vector of subject identifiers
+#' @inheritParams descendants
+#' @inheritParams find_avail_affected
+#' @param missid Character defining the missing ids
+#'
+#' @rdname find_unavailable
+#' @keywords internal
+#'
+#' @return
+#' Returns a list with the following components:
+#' - n_trimmed Number of trimmed individuals
+#' - id_trimmed Vector of IDs of trimmed individuals
+#' - id Vector of subject identifiers
+#' - dadid Vector of father identifiers
+#' - momid Vector of mother identifiers
 exclude_unavail_founders <- function(id, dadid, momid, avail, missid = "0") {
     n_old <- length(id)
 

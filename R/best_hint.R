@@ -26,9 +26,9 @@
 #' If during the search, a plot is found with a stress level less than
 #' **tolerance**, the search is terminated.
 #'
+#' @param ped A pedigree object
 #' @param wt A vector of three weights for the three error measures
 #' @param tolerance The maximum stress level to accept
-#' @inheritParams auto_hint
 #'
 #' @return The best hint object out of all the permutations
 #'

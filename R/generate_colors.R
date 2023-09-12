@@ -7,13 +7,13 @@ NULL
 #' containing affection status to compute the filling color.
 #'
 #' @param values The vector containing the values to process as affection.
-#' @param affected The vector containing the affection status.
+#' @param affected The vector containing the affection status TRUE/FALSE.
 #' @param labels The vector containing the labels to use for the affection.
 #' @param keep_full_scale Boolean defining if the affection values need to
 #' be set as a scale. If `values` is numeric the filling scale will be
 #' calculated based on the values and the number of breaks given.
 #' If `values` isn't numeric then each levels will get it's own color
-#' @param break Number of breaks to use when using full scale with numeric
+#' @param breaks Number of breaks to use when using full scale with numeric
 #' values. The same number of breaks will be done for values from affected
 #' individuals and unaffected individuals.
 #' @param colors_aff Set of increasing colors to use for the filling of the
@@ -25,6 +25,10 @@ NULL
 #' - The processed values column as a numeric factor
 #' - A dataframe containing the description of each modality of the scale
 #'
+#' @examples
+#' aff <- generate_aff_inds(seq_len(5), threshold = 3, sup_thres_aff = TRUE)
+#' generate_fill(seq_len(5), aff$affected, aff$labels)
+#' generate_fill(seq_len(5), aff$affected, aff$labels, keep_full_scale = TRUE)
 #' @export
 generate_fill <- function(
     values, affected, labels,
@@ -148,6 +152,9 @@ generate_fill <- function(
 #' @return A dataframe containing the scale to use for the availability
 #' status.
 #'
+#' @examples
+#' generate_border(c(1, 0, 1, 0, NA, 1, 0, 1, 0, NA))
+#'
 #' @export
 generate_border <- function(avail, colors_avail = c("green", "black")) {
     if (length(avail) > 0) {
@@ -179,41 +186,36 @@ generate_border <- function(avail, colors_avail = c("green", "black")) {
 #' the colors for the filling and the border of the individuals based
 #' on the affection and availability status.
 #'
-#' @param df The dataframe containing the columns to process.
+#' @param obj A dataframe containing the columns to process or a pedigree
+#' object.
 #' @param col_aff The name of the column containing the affection status.
-#' @param mods_aff Vector of modality to consider as affected in the case
-#' where the `col_aff` is a factor.
-#' @param threshold Numeric value separating the affected and healthy subject
-#' in the case where the `col_aff` is numeric.
-#' @param sup_thres_aff Boolean defining if the affected individual are above
-#' the threshold or not. If TRUE, the individuals will be considered affected
-#' if the value of `col_aff` is stricly above the `threshold`. If FALSE, the
-#' individuals will be considered affected if the value is stricly under the
-#' `threshold`.
 #' @param col_avail The name of the column containing the availability status.
-#' @param keep_full_scale Boolean defining if the affection values need to
-#' be set as a continuous scale or to a boolean.
-#' @param breaks Number of breaks to use when using full scale with numeric
-#' values. The same number of breaks will be done for values from affected
-#' individuals and unaffected individuals.
-#' @param colors_aff Set of increasing colors to use for the filling of the
-#' affected individuls.
-#' @param colors_unaff Set of increasing colors to use for the filling of the
-#' unaffected individuls.
-#' @param colors_avail Set of 2 colors to use for the box's border of an
-#' individual. The first color will be used for available individual (avail
-#' == 1) and the second for the unavailable individual (avail == 0).
+#' @inheritParams generate_fill
 #'
-#' @return A list of two elements
+#' @return
+#' ## When used with a dataframe :
+#' A list of two elements
 #' - The processed dataframe with the `affected` and `avail` columns
 #' processed accordingly
 #' - A dataframe containing the description of each modality of the scale
+#'
+#' ## When used with a pedigree object :
+#' The pedigree object with the `affected` and `avail` columns
+#' processed accordingly
+#' The pedigree scales slots are updated
+#'
+#' @examples
+#' data("sampleped")
+#' ped <- pedigree(sampleped)
+#' generate_colors(ped, "affected", add_to_scale=FALSE)$scales
 #' @export
 setGeneric("generate_colors", signature = "obj",
     function(obj, ...) standardGeneric("generate_colors")
 )
 
 #' @export
+#' @aliases generate_colors,data.frame
+#' @rdname generate_colors
 setMethod("generate_colors", "data.frame",
     function(
         obj, col_aff = "affected",
@@ -254,9 +256,19 @@ setMethod("generate_colors", "data.frame",
 
 #' @importFrom plyr rbind.fill
 #' @include pedigreeClass.R
+#' @docType methods
+#' @aliases generate_colors,Pedigree
+#' @param add_to_scale Boolean defining if the scales need to be added to the
+#' existing scales or if they need to replace the existing scales.
+#' @param reset Boolean defining if the scale of the specified columns need to
+#' be reset if already present.
+#' @param ... Other parameters to pass to the `generate_colors` function
+#' @rdname generate_colors
 #' @export
 setMethod("generate_colors", "Pedigree",
-    function(obj, col_aff = "affected", add_to_scale = TRUE, ...) {
+    function(obj, col_aff = "affected", add_to_scale = TRUE,
+        reset = TRUE, ...
+    ) {
         if (nrow(obj$ped) == 0) {
             return(obj)
         }
@@ -264,6 +276,14 @@ setMethod("generate_colors", "Pedigree",
         obj$ped <- list_aff$df
 
         if (add_to_scale) {
+            if (col_aff %in% obj$scales$fill$column_values &
+                    !reset) {
+                stop("The column ", col_aff, " is already in the scales")
+            } else if (col_aff %in% obj$scales$fill$column_values & reset) {
+                obj$scales$fill <- obj$scales$fill[
+                    obj$scales$fill$column_values != col_aff,
+                ]
+            }
             new_order <- ifelse(nrow(obj$scales$fill) > 0,
                 max(obj$scales$fill$order) + 1, 1
             )
