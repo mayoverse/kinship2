@@ -52,10 +52,6 @@ prefix_famid <- function(family_id, ind_id, missid = "0") {
 #' `norm` is the dataframe with all the individuals without any errors.
 #' `errors` is the dataframe containing the individuals with errors.
 #'
-#' @examples
-#' data(ped_data)
-#' norm_ped(ped_data)
-#'
 #' @export
 #' @include utils.R
 norm_ped <- function(

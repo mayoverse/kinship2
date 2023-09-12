@@ -1,10 +1,7 @@
 #' @importFrom methods as new slot slot<- validObject
+NULL
 
-# S4 Pedigree classe ###
-
-#' @include validity.R
-#' @include pedigree.R
-#' A class to represent a pedigree.
+#' S4 class to represent a pedigree.
 #'
 #' A pedigree is a ensemble of individuals linked to each other into
 #' a family tree.
@@ -28,7 +25,13 @@
 #' the individuals and the second is a matrix for the spouse ordering as in the [align()]
 #' function.
 #' @seealso [pedigree()]
-#' @exportClass Pedigree
+#' @docType class
+#' @name Pedigree-class
+#' @rdname Pedigree-class
+#' @aliases Pedigree-class
+#' @include validity.R
+#' @include pedigree.R
+#' @export
 setClass(
     "Pedigree",
     slots = c(
@@ -46,6 +49,8 @@ setValidity("Pedigree", is_valid)
 #' Pedigree show method.
 #' @param object A Pedigree object.
 #' @return A character vector with the informations about the object.
+#' @rdname extract-methods
+#' @aliases show,Pedigree-method
 setMethod("show", signature(object = "Pedigree"), function(object) {
     nb_fam <- length(levels(as.factor(object@ped$family)))
     cat("Pedigree object with", nrow(object@ped), "individuals and",
@@ -56,6 +61,8 @@ setMethod("show", signature(object = "Pedigree"), function(object) {
 #' Pedigree summary method.
 #' @param object A Pedigree object.
 #' @return A character vector with the summary of the object.
+#' @rdname extract-methods
+#' @aliases summary,Pedigree-method
 setMethod("summary", signature(object = "Pedigree"), function(object) {
     cat("Pedigree object with", nrow(object@ped), "individuals", fill = TRUE)
     print(summary(object@ped, maxsum = 5))
@@ -67,25 +74,25 @@ setMethod("summary", signature(object = "Pedigree"), function(object) {
 
 #' Extract parts of a Pedigree object
 #'
-#' @name [[
-#' @aliases [[,Pedigree
-#' @docType methods
 #' @param x A Pedigree object.
 #' @param i A vector of individuals id or a vector of index.
 #' @param j A vector of columns names.
+#' @param drop A logical value indicating if the dimensions should be dropped.
+#' @param ... Other arguments.
+#' @return The slot `i` present in the pedigree object.
 setMethod("[[", c(x = "Pedigree", i = "ANY", j = "missing"),
     function(x, i, j, ..., drop = TRUE) {
         slot(x, i)
 })
 
 #' Replace parts of a Pedigree object
-#' @name [[<-
-#' @aliases [[<-,Pedigree
-#' @docType methods
+#' 
 #' @param x A Pedigree object.
 #' @param i A vector of individuals id or a vector of index.
 #' @param j A vector of columns names.
 #' @param value A vector of values to replace.
+#' @param ... Other arguments.
+#' @return The pedigree object with the slot `i` replaced by `value`.
 setMethod("[[<-", c(x = "Pedigree", i = "ANY", j = "missing", value = "ANY"),
     function(x, i, j, ..., value) {
         slot(x, i) <- value
@@ -94,23 +101,22 @@ setMethod("[[<-", c(x = "Pedigree", i = "ANY", j = "missing", value = "ANY"),
 })
 
 #' Extract parts of a Pedigree object
-#' @name $
-#' @aliases $,Pedigree
-#' @docType methods
+#' 
 #' @param x A Pedigree object.
 #' @param name A slot name.
+#' @return The slot `name` present in the pedigree object.
+#'
 setMethod("$", c(x = "Pedigree"),
     function(x, name) {
         slot(x, name)
 })
 
 #' Replace parts of a Pedigree object
-#' @name $<-
-#' @aliases $<-,Pedigree
-#' @docType methods
+#'
 #' @param x A Pedigree object.
 #' @param name A slot name.
 #' @param value A vector of values to replace.
+#' @return The pedigree object with the slot `name` replaced by `value`.
 setMethod("$<-", c(x = "Pedigree"),
     function(x, name, value) {
         slot(x, name) <- value
@@ -123,7 +129,8 @@ setMethod("$<-", c(x = "Pedigree"),
 #' @param hints A list of hints
 #' @param index A vector of index
 #' @return A list of hints subsetted
-#' @rdname Pedigree
+#' @rdname extract-methods
+#' @aliases sub_sel_hints,Pedigree-method
 #' @keywords internal
 sub_sel_hints <- function(hints, index){
     if (!is.null(hints$order)) {
@@ -147,13 +154,12 @@ sub_sel_hints <- function(hints, index){
 }
 
 #' Extract parts of a Pedigree object
-#' @name [
-#' @aliases [,Pedigree
-#' @docType methods
+#'
 #' @param x A Pedigree object.
 #' @param i A vector of individuals id or a vector of index.
 #' @param j A vector of columns names.
 #' @param drop A logical value indicating if the dimensions should be dropped.
+#' @return A Pedigree object subsetted.
 setMethod("[", c(x = "Pedigree", i = "ANY", j = "ANY"),
     function(x, i, j, drop = TRUE) {
         if (is.factor(i)) {
@@ -177,13 +183,12 @@ setMethod("[", c(x = "Pedigree", i = "ANY", j = "ANY"),
 })
 
 #' Extract parts of a Pedigree object
-#' @name [
-#' @aliases [,Pedigree
-#' @docType methods
+#'
 #' @param x A Pedigree object.
 #' @param i A vector of individuals id or a vector of index.
 #' @param j A vector of columns names.
 #' @param drop A logical value indicating if the dimensions should be dropped.
+#' @return A Pedigree object subsetted.
 setMethod("[", c(x = "Pedigree", i = "missing", j = "ANY"),
     function(x, i, j, drop = TRUE) {
         ped_df <- x$ped[, j, drop = drop]
@@ -193,13 +198,12 @@ setMethod("[", c(x = "Pedigree", i = "missing", j = "ANY"),
 })
 
 #' Extract parts of a Pedigree object
-#' @name [
-#' @aliases [,Pedigree
-#' @docType methods
+#'
 #' @param x A Pedigree object.
 #' @param i A vector of individuals id or a vector of index.
 #' @param j A vector of columns names.
 #' @param drop A logical value indicating if the dimensions should be dropped.
+#' @return A Pedigree object subsetted.
 setMethod("[", c(x = "Pedigree", i = "ANY", j = "missing"),
     function(x, i, j, drop = TRUE) {
         if (is.factor(i)) {
@@ -219,11 +223,12 @@ setMethod("[", c(x = "Pedigree", i = "ANY", j = "missing"),
 })
 
 #' Convert a Pedigree object to a data.frame
+#'
 #' @param x A Pedigree object.
 #' @return A data.frame with the individuals informations.
-#' @rdname Pedigree
-#' @keywords internal
 #' @docType methods
+#' @aliases as.data.frame,Pedigree-method
+#' @export
 setMethod("as.data.frame", c(x = "Pedigree"), 
     function(x) {
         x$ped
@@ -233,9 +238,9 @@ setMethod("as.data.frame", c(x = "Pedigree"),
 #' Convert a Pedigree object to a list
 #' @param x A Pedigree object.
 #' @return A list with all the slots of the pedigree object.
-#' @rdname Pedigree
-#' @keywords internal
 #' @docType methods
+#' @aliases as.list,Pedigree-method
+#' @export
 setMethod("as.list", c(x = "Pedigree"), 
     function(x) {
         list(

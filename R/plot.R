@@ -13,14 +13,14 @@ NULL
 #' @details
 #' Two important parameters control the looks of the result.  One is the user
 #' specified maximum width.  The smallest possible width is the maximum number
-#' of subjects on a line, if the user's suggestion %' is too low it is
-#' increased to 1+ that amount (to give just a little wiggle room). To make a
+#' of subjects on a line, if the user's suggestion is too low it is
+#' increased to 1 + that amount (to give just a little wiggle room). To make a
 #' pedigree where all children are centered under parents simply make the width
 #' large enough, however, the symbols may get very small.
 #'
 #' The second is `align`, a vector of 2 alignment parameters $a$ and $b$.
 #' For each set of siblings at a set of locations `x` and with parents at
-#' `p=c(p1,p2)` the alignment penalty is \\deqn{(1/k^a)\\sum{i=1}{k} [(x_i -
+#' `p=c(p1,p2)` the alignment penalty is \deqn{(1/k^a)\sum{i=1}{k} [(x_i -
 #' (p1+p2)/2)]^2} sum(x- mean(p))^2/(k^a) where k is the number of siblings in
 #' the set. when $a=1$ moving a sibship with $k$ sibs one unit to the left or
 #' right of optimal will incur the same cost as moving one with only 1 or two
@@ -30,7 +30,7 @@ NULL
 #' are somewhere between the first and last siblings the result looks fairly
 #' good, so we are more flexible with the spacing of a large family. By
 #' tethering all the sibs to a single spot they are kept close to each other.
-#' The alignment penalty for spouses is \\eqn{b(x_1 - x_2)^2}{b *(x1-x2)^2},
+#' The alignment penalty for spouses is \eqn{b(x_1 - x_2)^2}{b *(x1-x2)^2},
 #' which tends to keep them together.  The size of $b$ controls the relative
 #' importance of sib-parent and spouse-spouse closeness.
 #'
@@ -100,16 +100,8 @@ NULL
 #'
 #' @examples
 #' data(sampleped)
-#'
-#' pedAll <- with(sampleped, pedigree(id, father, mother,
-#'   sex,
-#'   affected = cbind(affected, avail),
-#'   famid = ped
-#' ))
-#'
-#' ped2 <- pedAll['2']
-#'
-#' print(ped2)
+#' pedAll <- pedigree(sampleped)
+#' plot(pedAll)
 #'
 #' @section Side Effects: creates plot on current plotting device.
 #' @seealso [pedigree()]
@@ -121,6 +113,7 @@ NULL
 #' @aliases plot.pedigree
 #' @aliases plot,Pedigree
 #' @export
+#' @docType methods
 setMethod("plot", c(x = "Pedigree", y = "missing"),
     function(x, mark = TRUE,
         label = NULL, tips_names = NULL, fill = "grey", border = "black",

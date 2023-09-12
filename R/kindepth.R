@@ -17,6 +17,7 @@
 #' of each child have the same depth.  (This is not always possible).
 #' It helps the drawing program by lining up pedigrees that 'join in the middle'
 #' via a marriage.
+#' @param ... Additional arguments to be passed to methods.
 #'
 #' @return an integer vector containing the depth for each subject
 #'

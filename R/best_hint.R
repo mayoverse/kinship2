@@ -36,7 +36,7 @@
 #' @export
 #' @examples
 #' data(sampleped)
-#' ped <- pedigree(sampleped)
+#' ped <- pedigree(sampleped[sampleped$family == 1,])
 #' best_hint(ped)
 #' @include auto_hint.R
 #' @include align.R

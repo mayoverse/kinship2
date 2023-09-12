@@ -34,10 +34,11 @@ NULL
 #' @examples
 #' data(sampleped)
 #' ped <- pedigree(sampleped)
-#' max_kin_inf(ped)$ped
+#' max_kin_inf(ped, column = "affected_aff")$ped
 #'
 #' @include is_informative.R
 #' @include kinship.R
+#' @docType methods
 #' @export
 setGeneric("max_kin_inf", signature = "obj",
     function(obj, ...) standardGeneric("max_kin_inf")

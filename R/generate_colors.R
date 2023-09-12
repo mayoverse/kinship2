@@ -191,6 +191,8 @@ generate_border <- function(avail, colors_avail = c("green", "black")) {
 #' @param col_aff The name of the column containing the affection status.
 #' @param col_avail The name of the column containing the availability status.
 #' @inheritParams generate_fill
+#' @inheritParams generate_border
+#' @inheritParams generate_aff_inds
 #'
 #' @return
 #' ## When used with a dataframe :

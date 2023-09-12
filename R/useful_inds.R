@@ -8,18 +8,14 @@
 #' usefulness of the individual. This boolean is hereditary.
 #'
 #' @param obj A dataframe, a Pedigree object or a character vector of ids
+#' @param sex A vector with the gender information
 #' @param num_child_tot A numeric vector of the number of children of each
 #' individuals
 #' @param keep_infos Boolean to indicate if individuals with unknown status
 #' but available or reverse should be kept
-#' @param informative Informative individuals selection can take 3 values:
-#' 'AvAf' (available and affected),
-#' 'AvOrAf' (available or affected),
-#' 'Av' (available only),
-#' 'Af' (affected only),
-#' 'All' (all individuals)
-#' or a numeric vector of individuals id
-#' or a boolean
+#' @inheritParams is_informative
+#' @inheritParams num_child
+#' @param ... Other arguments passed to methods.
 #'
 #' @export
 setGeneric("useful_inds", signature = "obj",

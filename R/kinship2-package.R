@@ -1,6 +1,4 @@
 ## Created: 2/24/2020 Author: Jason Sinnwell
-#' @keywords internal
-"_PACKAGE"
 
 #' The kinship2 package for pedigree data
 #'
@@ -37,6 +35,6 @@
 #' library(kinship2)
 #'
 #' @docType package
-#' @name kinship2
-#'
-TRUE
+#' @rdname kinship2
+#' @keywords internal
+"_PACKAGE"

@@ -15,6 +15,7 @@
 #' @param avail A vector of individuals availability (0, 1 or NA)
 #' @param affected A vector of individuals affected status (0, 1 or NA)
 #' @param column A string with the column name to use for the affected status.
+#' This column must be in the scales fill.
 #' @param informative Informative individuals selection can take 5 values:
 #' 'AvAf' (available and affected),
 #' 'AvOrAf' (available or affected),
@@ -24,6 +25,7 @@
 #' or a numeric/character vector of individuals id
 #' or a boolean
 #' @param missid A string with the missing id
+#' @param ... Other arguments passed to methods.
 #'
 #' @return
 #'
@@ -39,7 +41,7 @@
 #' @examples
 #' data("sampleped")
 #' ped <- pedigree(sampleped)
-#' is_informative(ped)
+#' is_informative(ped, column = "affected_aff")
 #'
 #' @export
 #' @docType methods
@@ -104,16 +106,19 @@ setMethod("is_informative", "data.frame",
 #' @docType methods
 #' @param reset Boolean defining if the inf column needs to be reset
 setMethod("is_informative", "Pedigree", function(
-    obj, column = "affected", informative = "AvAf", missid = "0", reset = FALSE
+    obj, column = NULL, informative = "AvAf", missid = "0", reset = FALSE
 ) {
     obj$ped$affected <- NA
     aff_scl <- obj$scales$fill
-    if (column %in% aff_scl$column_values) {
+    if (is.null(column)) {
+        stop("The column argument is required")
+    }
+    if (column %in% aff_scl$column_mods) {
         aff <- aff_scl$mods[aff_scl$affected == TRUE &
-                aff_scl$column_values == column
+                aff_scl$column_mods == column
         ]
         unaff <- aff_scl$mods[aff_scl$affected == FALSE &
-                aff_scl$column_values == column
+                aff_scl$column_mods == column
         ]
         obj$ped$affected[obj$ped[, column] %in% aff] <- 1
         obj$ped$affected[obj$ped[, column] %in% unaff] <- 0

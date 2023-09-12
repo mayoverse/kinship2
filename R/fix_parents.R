@@ -32,7 +32,7 @@ NULL
 #' otherwise.
 #' @param family Optional family identification set it to NULL to invalidate.
 #' If used it will modify the ids of the individuals by pasting it with an _.
-#' @inheritParams descendants
+#' @param ... Additional arguments to be passed to methods.
 #'
 #' @return A data.frame with id, dadid, momid, sex as columns with the
 #' relationships fixed.

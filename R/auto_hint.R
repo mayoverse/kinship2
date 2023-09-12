@@ -284,7 +284,7 @@ get_twin_rel <- function(ped) {
 #' @seealso [align()], [best_hint()]
 #' @examples
 #' data(sampleped)
-#' ped <- pedigree(sampleped)
+#' ped <- pedigree(sampleped[sampleped$family == 1, ])
 #' auto_hint(ped)
 #' @export
 auto_hint <- function(

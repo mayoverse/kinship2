@@ -18,6 +18,9 @@ NULL
 #' special relationship between pairs of individuals.
 #' Codes: 1=Monozygotic twin, 2=Dizygotic twin, 3=twin of unknown zygosity,
 #' 4=Spouse.
+#' @param missid Missing id code
+#' @param ... Additional arguments to be passed to methods.
+#' 
 #'
 #' @return
 #' ## When obj is a vector or a dataframe

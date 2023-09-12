@@ -1,5 +1,6 @@
 # Automatically generated from all.nw using noweb
-usethis::use_package("quadprog")
+#' @importFrom quadprog solve.QP
+NULL
 
 #' Fourth and last routine alignement
 #'
@@ -144,7 +145,7 @@ alignped4 <- function(rval, spouse, level, width, align) {
 
     pp <- t(pmat) %*% pmat + 1e-08 * diag(ncol(pmat))
     fit <- tryCatch({
-        quadprog::solve.QP(pp, rep(0, n), t(cmat), dvec)
+        solve.QP(pp, rep(0, n), t(cmat), dvec)
     }, warning = function(w) {
         message("Solve QP ended with a warning")
         message(w)

@@ -1,5 +1,6 @@
 #' @importFrom methods as
-usethis::use_package("Matrix")
+#' @importFrom Matrix forceSymmetric bdiag
+NULL
 
 #' Compute a kinship matrix
 #'
@@ -17,7 +18,7 @@ usethis::use_package("Matrix")
 #'
 #' When called with a pedigree, the routine
 #' will create a block-diagonal-symmetric sparse matrix object of class
-#' `dsCMatrix`.  Since the [i,j] value of the result is 0 for any two
+#' `dsCMatrix`.  Since the `[i, j]` value of the result is 0 for any two
 #' unrelated individuals i and j and a `Matrix` utilizes sparse
 #' representation, the resulting object is often orders of magnitude smaller
 #' than an ordinary matrix.
@@ -284,11 +285,11 @@ setMethod("kinship", "Pedigree",
         } else {
             for (i_fam in seq_along(famlist)) {
                 matlist[[i_fam]] <- as(as(
-                    Matrix::forceSymmetric(matlist[[i_fam]]),
+                    forceSymmetric(matlist[[i_fam]]),
                     "symmetricMatrix"
                 ), "CsparseMatrix")
             }
-            result <- Matrix::bdiag(matlist)
+            result <- bdiag(matlist)
             temp <- unlist(idlist)
             dimnames(result) <- list(temp, temp)
             result

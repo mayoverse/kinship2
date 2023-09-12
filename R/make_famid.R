@@ -15,6 +15,7 @@
 #' @param dadid Identifier for the father.  This will be 0 or '' for a
 #' founder.
 #' @param momid Identifer for the mother.
+#' @param ... Additional arguments to be passed to methods.
 #'
 #' @return
 #' ## When used with a vector of identifiers
