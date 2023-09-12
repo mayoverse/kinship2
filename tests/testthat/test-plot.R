@@ -13,12 +13,12 @@ test_that("pedigree other test", {
             1, 10, 8, 7, 2, 0, 0
         ), ncol = 7, byrow = TRUE
     )
-    local_options(width = 50)
+    withr::local_options(width = 50)
     ped2df <- as.data.frame(ped2mat)
     names(ped2df) <- c("family", "indId", "fatherId", "motherId",
         "gender", "affected", "available"
     )
-    ## 1 2  3 4 5 6 7 8 9 10,11,12,13,14,15,16
+
     ped2df$disease <- c(NA, NA, 1, 0, 0, 0, 0, 1, 1, 1)
     ped2df$smoker <- c(0, NA, 0, 0, 1, 1, 1, 0, 0, 0)
     ped2df$availability <- c(0, 0, 1, 1, 0, 1, 1, 1, 1, 1)
@@ -41,6 +41,9 @@ test_that("pedigree other test", {
     )
 
     lst <- ped_to_plotdf(ped)
+    expect_equal(length(lst), 2)
+    expect_equal(dim(lst$df), c(90, 15))
+    expect_snapshot(lst)
     p <- plot(ped, title = "Pedigree", ggplot_gen = TRUE)
     vdiffr::expect_doppelganger("Ped 2 affections ggplot",
         function() plot(p$ggplot)

@@ -135,6 +135,7 @@ setMethod("plot", c(x = "Pedigree", y = "missing"),
             )
             lst <- lst[[family]]
         }
+
         p <- plot_fromdf(lst$df, usr = lst$par_usr$usr,
             title = title, ggplot_gen = ggplot_gen,
             boxw = lst$par_usr$boxw, boxh = lst$par_usr$boxh

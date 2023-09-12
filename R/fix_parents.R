@@ -17,14 +17,10 @@ NULL
 #'
 #' @param obj A pedigree object, a dataframe or a vector of the individuals
 #' identifiers
-#' @param id Individual id column
-#' @param dadid Father id column or a vector of the father identifiers
-#' @param momid Mother id column or a vector of the mother identifiers
-#' @param sex Gedner column or a vector of the sex of the individuals. Either
+#' @param sex Gender column or a vector of the sex of the individuals. Either
 #' character ('male','female','unknown','terminated') or
 #' numeric (1='male', 2='female',#' 3='unknown', 4='terminated')
 #' data is allowed.
-#' @param family Optional family column, set it to NULL to invalidate.
 #' @param missid The founders are those with no father or mother in the
 #' pedigree.  The \\code{dadid} and \\code{momid} values for these subjects will
 #' either be NA or the value of this variable.  The default for \\code{missid}
@@ -32,6 +28,7 @@ NULL
 #' otherwise.
 #' @param family Optional family identification set it to NULL to invalidate.
 #' If used it will modify the ids of the individuals by pasting it with an _.
+#' @inheritParams descendants
 #' @param ... Additional arguments to be passed to methods.
 #'
 #' @return A data.frame with id, dadid, momid, sex as columns with the
@@ -203,10 +200,9 @@ setMethod("fix_parents", "character", function(
 #' @export
 #' @rdname fix_parents
 setMethod("fix_parents", "data.frame", function(
-        obj, delete = FALSE, filter = NULL, missid = "0",
-        id = "id", dadid = "dadid", momid = "momid", sex = "sex",
-        family = "family") {
-    cols_needed <- c(id, dadid, momid, sex, filter, family)
+    obj, delete = FALSE, filter = NULL, missid = "0"
+) {
+    cols_needed <- c("id", "dadid", "momid", "sex", filter, "family")
     df <- check_columns(obj, cols_needed, "", "", others_cols = TRUE)
     df_old <- df
     if (!is.null(filter)) {
@@ -216,33 +212,34 @@ setMethod("fix_parents", "data.frame", function(
             stop("Error, filtering column must me only TRUE or FALSE")
         }
     }
-    all_id <- c(df[[id]], df[[dadid]], df[[momid]])
+    all_id <- c(df$id, df$dadid, df$momid)
     all_id <- unique(all_id[all_id != missid])
 
     if (nrow(df) > 2) {
         if (delete) {
             # One of the parents doesn't not have a line in id
-            dad_present <- match(df[[dadid]], df[[id]], nomatch = missid)
-            mom_present <- match(df[[momid]], df[[id]], nomatch = missid)
+            dad_present <- match(df$dadid, df$id, nomatch = missid)
+            mom_present <- match(df$momid, df$id, nomatch = missid)
             df[dad_present == missid |
-                    mom_present == missid, c(momid, dadid)
+                    mom_present == missid, c("momid", "dadid")
             ] <- missid
 
-            all_id_new <- c(df[[id]], df[[dadid]], df[[momid]])
+            all_id_new <- c(df$id, df$dadid, df$momid)
             all_id_new <- unique(all_id_new[all_id_new != missid])
-            all_id_dif <- all_id[!all_id %in% all_id_new]
         }
         df_fix <- fix_parents(
-            df[[id]], df[[dadid]], df[[momid]],
-            df[[sex]], missid = missid, family = df[[family]]
+            df$id, df$dadid, df$momid,
+            df$sex, missid = missid, family = df$family
         )
-        col_used <- which(names(df_old) == momid | names(df_old) == dadid |
-                names(df_old) == sex | names(df_old) == family
+        col_used <- which(names(df_old) == df$momid |
+                names(df_old) == df$dadid |
+                names(df_old) == df$sex |
+                names(df_old) == df$family
         )
-        df <- merge(df_old[, -col_used], df_fix, by = id,
+        df <- merge(df_old[, -col_used], df_fix, by = "id",
             all.y = TRUE, all.x = FALSE
         )
-        all_id_new <- c(df[[id]], df[[dadid]], df[[momid]])
+        all_id_new <- c(df$id, df$dadid, df$momid)
         all_id_new <- unique(all_id_new[all_id_new != missid])
         all_id_dif <- all_id_new[!all_id_new %in% all_id]
     }
