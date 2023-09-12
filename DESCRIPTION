@@ -16,7 +16,6 @@ Imports:
     graphics,
     stats,
     methods,
-    knitr,
     ggplot2,
     utils,
     grDevices,
@@ -26,16 +25,8 @@ Imports:
     tidyr,
     quadprog,
     Matrix,
-    shiny,
-    shinyjs,
-    readxl,
-    shinyWidgets,
-    DT,
-    bootstrap,
     gridGraphics,
-    grid,
-    htmlwidgets,
-    R3port,
+    withr,
     usethis
 Description: Routines to handle family data with a pedigree object. The initial purpose
 	     was to create correlation structures that describe family relationships such 
@@ -55,21 +46,21 @@ Suggests:
     diffviewer,
 	vdiffr,
 	rmarkdown,
-    BiocStyle
+    BiocStyle,
+    knitr
 Config/testthat/edition: 3
 biocViews: Software, ShinyApps, DataRepresentation, Genetics
 BugReports: https://github.com/LouisLeLezet/kinship2/issues
 url: https://github.com/LouisLeNezet/kinship2
 BiocType: Software
 Collate: 
-    'pedigree.R'
-    'validity.R'
-    'pedigreeClass.R'
-    'aaa.R'
     'alignped4.R'
     'alignped3.R'
     'alignped2.R'
     'alignped1.R'
+    'pedigree.R'
+    'validity.R'
+    'pedigreeClass.R'
     'check_hints.R'
     'kindepth.R'
     'auto_hint.R'
