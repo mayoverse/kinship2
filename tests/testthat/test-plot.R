@@ -13,7 +13,7 @@ test_that("pedigree other test", {
             1, 10, 8, 7, 2, 0, 0
         ), ncol = 7, byrow = TRUE
     )
-
+    local_options(width = 50)
     ped2df <- as.data.frame(ped2mat)
     names(ped2df) <- c("family", "indId", "fatherId", "motherId",
         "gender", "affected", "available"

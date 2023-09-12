@@ -101,7 +101,7 @@ NULL
 #' @examples
 #' data(sampleped)
 #' pedAll <- pedigree(sampleped)
-#' plot(pedAll)
+#' #plot(pedAll)
 #'
 #' @section Side Effects: creates plot on current plotting device.
 #' @seealso [pedigree()]

@@ -6,7 +6,7 @@ test_that("align works", {
     expect_equal(plist1$n, c(6, 12, 17, 8))
 
     ped2 <- ped[ped$ped$family == 2]
-    withr::local_options(width = 50)
+    local_options(width = 50)
     plist2 <- align(ped2)
     expect_equal(plist2$n, c(2, 7, 5))
 

@@ -37,7 +37,7 @@ NULL
 #' ped1 <- pedigree(fam1)
 #'
 #' ## to see plot:
-#' id1 <- unrelated(ped1l)
+#' id1 <- unrelated(ped1)
 #'
 #' id1
 #' ## some possible vectors

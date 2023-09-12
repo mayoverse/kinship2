@@ -6,6 +6,8 @@
 # * https://r-pkgs.org/tests.html
 # * https://testthat.r-lib.org/reference/test_package.html#special-files
 
+
+library(withr)
 library(testthat)
 library(kinship2)
 library(vdiffr)

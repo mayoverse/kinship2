@@ -8,6 +8,7 @@ test_that("Pedigree legend works", {
         add_to_scale = TRUE, "indId", threshold = 115,
         colors_aff = c("pink", "purple"), keep_full_scale = TRUE
     )
+    local_options(width = 50)
 
     lst <- ped_to_legdf(ped, cex = 0.8)
     vdiffr::expect_doppelganger("Legend alone",
