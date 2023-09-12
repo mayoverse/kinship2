@@ -43,7 +43,7 @@ ped_to_legdf <- function(ped,
 
     max_lab <- lapply(lapply(
         all_lab, strwidth,
-        units = "inche", cex = cex
+        units = "inches", cex = cex
     ), max)
 
     posx <- unlist(lapply(max_lab, function(x) {
