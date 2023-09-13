@@ -19,25 +19,25 @@ paste0max <- function(x, max = 5, ...) {
 
 #' Check if the fields are present in an object slot
 #'
-#' @param object An object.
+#' @param obj An object.
 #' @param slot A slot of object.
 #' @param fields A character vector with the fields to check.
 #'
 #' @return A character vector with the errors if any.
 #' @export
 #' @keywords internal
-check_slot_fd <- function(object, slot = NULL, fields = character()) {
-    if (is.object(object)) {
-        object <- as.list(object)
+check_slot_fd <- function(obj, slot = NULL, fields = character()) {
+    if (is.object(obj)) {
+        obj <- as.list(obj)
     }
-    if (is.data.frame(object[[slot]])) {
-        array_names <- colnames(object[[slot]])
-    } else if (is.list(object[[slot]])) {
-        array_names <- names(object[[slot]])
+    if (is.data.frame(obj[[slot]])) {
+        array_names <- colnames(obj[[slot]])
+    } else if (is.list(obj[[slot]])) {
+        array_names <- names(obj[[slot]])
     } else {
         stop(
             "Slot ", slot, " is not a data.frame or a list.",
-            class(object[[slot]]), " found."
+            class(obj[[slot]]), " found."
         )
     }
     if (length(array_names) == 0) {
@@ -57,7 +57,7 @@ check_slot_fd <- function(object, slot = NULL, fields = character()) {
 #'
 #' Check if the all the values in a slot are in a vector of values.
 #'
-#' @param object An object.
+#' @param obj An object.
 #' @param slot A slot of the object.
 #' @param column A column of the slot.
 #' @param values A vector of values to check.

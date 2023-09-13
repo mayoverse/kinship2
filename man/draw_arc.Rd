@@ -4,7 +4,7 @@
 \alias{draw_arc}
 \title{Draw arcs for multiple instances of a subject}
 \usage{
-draw_arc(x0, y0, x1, y1, p, ggplot_gen = FALSE, cex = 1, col = "black")
+draw_arc(x0, y0, x1, y1, p, ggplot_gen = FALSE, lwd = 1, col = "black")
 }
 \arguments{
 \item{x0}{x coordinate of the first point}
@@ -17,11 +17,11 @@ draw_arc(x0, y0, x1, y1, p, ggplot_gen = FALSE, cex = 1, col = "black")
 
 \item{p}{ggplot object}
 
-\item{ggplot_gen}{logical, if TRUE add the arcs to the ggplot object}
+\item{ggplot_gen}{logical, if TRUE add the segments to the ggplot object}
 
-\item{cex}{character expansion}
+\item{lwd}{line width}
 
-\item{col}{color}
+\item{col}{line color}
 }
 \value{
 Plot the arcs or add it to a ggplot object

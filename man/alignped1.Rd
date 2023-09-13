@@ -7,11 +7,11 @@
 alignped1(idx, dadx, momx, level, horder, packed, spouselist)
 }
 \arguments{
-\item{idx}{Index of the subject}
+\item{idx}{Indexes of the subjects}
 
-\item{dadx}{Index of the father}
+\item{dadx}{Indexes of the fathers}
 
-\item{momx}{Index of the mother}
+\item{momx}{Indexes of the mothers}
 
 \item{level}{Vector of the level of each subject}
 
@@ -21,7 +21,11 @@ alignped1(idx, dadx, momx, level, horder, packed, spouselist)
 lines connecting parents to children in order to have a smaller overall
 width for the plot.}
 
-\item{spouselist}{Matrix of the spouses}
+\item{spouselist}{Matrix of the spouses with one row per hinted marriage,
+usually only a few marriages in a pedigree will need an added hint, for
+instance reverse the plot order of a husband/wife pair.
+Each row contains the index of the left spouse, the right hand spouse
+and the anchor (i.e : \code{1} = left, \code{2} = right, \code{0} = either).}
 }
 \value{
 A list containing the elements to plot the pedigree.

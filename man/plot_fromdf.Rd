@@ -42,8 +42,7 @@ and \code{arc}.
 
 \item{title}{The title of the plot.}
 
-\item{ggplot_gen}{A logical to know if the plot should be generated with
-ggplot2 or base R.}
+\item{ggplot_gen}{logical, if TRUE add the segments to the ggplot object}
 
 \item{boxw}{The width of each box.}
 

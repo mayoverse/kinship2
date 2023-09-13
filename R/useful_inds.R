@@ -8,7 +8,6 @@
 #' usefulness of the individual. This boolean is hereditary.
 #'
 #' @param obj A dataframe, a Pedigree object or a character vector of ids
-#' @param sex A vector with the gender information
 #' @param num_child_tot A numeric vector of the number of children of each
 #' individuals
 #' @param keep_infos Boolean to indicate if individuals with unknown status
@@ -28,7 +27,7 @@ setGeneric("useful_inds", signature = "obj",
 #' @docType methods
 #' @aliases useful_inds,character
 setMethod("useful_inds", "character",
-    function(obj, dadid, momid, sex, avail, affected, num_child_tot,
+    function(obj, dadid, momid, avail, affected, num_child_tot,
         informative = "AvAf", keep_infos = FALSE, missid = "0"
     ) {
         id <- obj
@@ -77,13 +76,13 @@ setMethod("useful_inds", "data.frame",
     function(obj, informative = "AvAf", keep_infos = FALSE, missid = "0") {
         df <- obj
         cols_needed <- c(
-            "id", "dadid", "momid", "sex",
+            "id", "dadid", "momid",
             "avail", "affected", "num_child_tot"
         )
 
         check_columns(df, cols_needed, "", "", others_cols = TRUE)
         with(df, useful_inds(
-            id, dadid, momid, sex,
+            id, dadid, momid,
             avail, affected, num_child_tot,
             informative, keep_infos, missid
         ))

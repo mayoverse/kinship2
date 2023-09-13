@@ -29,7 +29,7 @@ draw_segment(
 
 \item{ggplot_gen}{logical, if TRUE add the segments to the ggplot object}
 
-\item{col}{color}
+\item{col}{line color}
 
 \item{lwd}{line width}
 

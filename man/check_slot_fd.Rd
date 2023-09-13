@@ -4,10 +4,10 @@
 \alias{check_slot_fd}
 \title{Check if the fields are present in an object slot}
 \usage{
-check_slot_fd(object, slot = NULL, fields = character())
+check_slot_fd(obj, slot = NULL, fields = character())
 }
 \arguments{
-\item{object}{An object.}
+\item{obj}{An object.}
 
 \item{slot}{A slot of object.}
 

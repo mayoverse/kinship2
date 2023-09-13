@@ -4,10 +4,10 @@
 #' Find all the descendants of a particular list of individuals
 #' given a pedigree
 #'
-#' @param idlist List of individuals id to be considered
 #' @param obj A pedigree object or a vector of the individuals identifiers
 #' @param dadid A vector of the father identifiers
 #' @param momid A vector of the mother identifiers
+#' @inheritParams duporder
 #'
 #' @return
 #' Vector of all descendants of the individuals in idlist.

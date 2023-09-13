@@ -92,7 +92,7 @@ setMethod("max_kin_inf", "data.frame",
 #' @rdname max_kin_inf
 #' @aliases max_kin_inf,Pedigree
 #' @docType methods
-#' @param reset If TRUE, the kinship column is reset
+#' @param reset If TRUE, the `kin` column is reset
 setMethod("max_kin_inf", "Pedigree",
     function(obj, informative = "AvAf", reset = FALSE, ...) {
         ped <- is_informative(obj, informative = informative, ...)$ped

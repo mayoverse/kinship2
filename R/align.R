@@ -2,20 +2,21 @@
 
 #' Routine function to get ancestors of a subject
 #'
-#' @description Given the index of one individual, this
-#' function iterate through the mom and dad indexs to
-#' list out all the ancestors of the said individual.
+#' @description Given the index of one or multiple individual(s), this
+#' function iterate through the mom and dad indexes to
+#' list out all the ancestors of the said individual(s).
 #' This function is use in the `align()` function to
-#' identify which spouse pair has a common ancestor and
-#' therefore if they need to be connected with a double line.
+#' identify which spouse pairs has a common ancestor and
+#' therefore if they need to be connected with a double line
+#' (i.e. inbred).
 #'
-#' @param idx Index of the subject
-#' @param momx Indexs of the mothers
-#' @param dadx Indexs of the fathers
+#' @param idx Indexes of the subjects
+#' @param dadx Indexes of the fathers
+#' @param momx Indexes of the mothers
 #'
-#' @return A vector of ancestor indexs
+#' @return A vector of ancestor indexes
 #' @seealso [align()]
-ancestor <- function(idx, momx, dadx) {
+ancestors <- function(idx, momx, dadx) {
     alist <- idx
     repeat {
         newlist <- c(alist, momx[alist], dadx[alist])
@@ -57,15 +58,15 @@ ancestor <- function(idx, momx, dadx) {
 #' the extent possible given the page width, or align to to the left margin
 #' `FALSE`. This argument can be a two element vector, giving the alignment
 #' parameters, or a logical value.  If `TRUE`, the default is `c(1.5, 2)`, or
-#' numeric the routine `alignped4` will be called.
+#' numeric the routine `alignped4()` will be called.
 #' @param hints Plotting hints for the pedigree.
 #' This is a list with components `order` and `spouse`, the second one is
 #' optional.
-#' The order component is a numeric vector with one element per subject in the
+#' - **order** is a numeric vector with one element per subject in the
 #' pedigree.  It determines the relative order of subjects within a sibship, as
 #' well as the relative order of processing for the founder couples. (For this
-#' latter, the female founders are ordered as though they were sisters). The
-#' spouse component is a matrix with one row per hinted marriage, usually only
+#' latter, the female founders are ordered as though they were sisters).
+#' - **spouse** is a matrix with one row per hinted marriage, usually only
 #' a few marriages in a pedigree will need an added hint, for instance reverse
 #' the plot order of a husband/wife pair. Each row contains the index of the
 #' left spouse, the right hand spouse, and the anchor
@@ -205,9 +206,9 @@ align <- function(ped, packed = TRUE, width = 10,
     maxdepth <- nrow(nid)
 
     for (i in (seq_along(spouse))[spouse > 0]) {
-        a1 <- ancestor(nid[i], mom, dad)
+        a1 <- ancestors(nid[i], mom, dad)
         # matrices are in column order
-        a2 <- ancestor(nid[i + maxdepth], mom, dad)
+        a2 <- ancestors(nid[i + maxdepth], mom, dad)
         if (any(duplicated(c(a1, a2)))) {
             spouse[i] <- 2
         }

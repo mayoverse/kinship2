@@ -17,7 +17,6 @@ useful_inds(obj, ...)
   obj,
   dadid,
   momid,
-  sex,
   avail,
   affected,
   num_child_tot,
@@ -38,8 +37,6 @@ useful_inds(obj, ...)
 \item{dadid}{The id of the father}
 
 \item{momid}{The id of the mother}
-
-\item{sex}{A vector with the gender information}
 
 \item{avail}{A vector of individuals availability (0, 1 or NA)}
 

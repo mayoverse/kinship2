@@ -37,3 +37,4 @@ together within the set of twins.
 \seealso{
 \code{\link[=auto_hint]{auto_hint()}}
 }
+\keyword{internal}

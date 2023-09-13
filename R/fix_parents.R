@@ -191,9 +191,10 @@ setMethod("fix_parents", "character", function(
 #' If FALSE then delete the id of missing parents
 #'
 #' @param delete Boolean defining if missing parents needs to be:
-#' TRUE: added as a new row
-#' FALSE: be deleted
-#' @param filter Filtering column containing 0 or 1 for the individual to kept
+#' - `TRUE` : added as a new row
+#' - `FALSE` : be deleted
+#' @param filter Filtering column containing `0` or `1` for the
+#' individual to kept
 #'
 #' @return The same dataframe with the parents ids fixed
 #'

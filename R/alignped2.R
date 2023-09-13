@@ -20,6 +20,7 @@
 #' onto rval. The rule thus is to not add any 1 element tree whose value
 #' (which must be `idx[i]` is already in the rval structure for this level.
 #'
+#' @inheritParams align
 #' @inheritParams alignped1
 #'
 #' @return A list containing the elements to plot the pedigree.

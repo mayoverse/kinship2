@@ -11,17 +11,7 @@ fix_parents(obj, ...)
 
 \S4method{fix_parents}{character}(obj, dadid, momid, sex, family = NULL, missid = "0")
 
-\S4method{fix_parents}{data.frame}(
-  obj,
-  delete = FALSE,
-  filter = NULL,
-  missid = "0",
-  id = "id",
-  dadid = "dadid",
-  momid = "momid",
-  sex = "sex",
-  family = "family"
-)
+\S4method{fix_parents}{data.frame}(obj, delete = FALSE, filter = NULL, missid = "0")
 }
 \arguments{
 \item{obj}{A pedigree object, a dataframe or a vector of the individuals
@@ -29,11 +19,11 @@ identifiers}
 
 \item{...}{Additional arguments to be passed to methods.}
 
-\item{dadid}{Father id column or a vector of the father identifiers}
+\item{dadid}{A vector of the father identifiers}
 
-\item{momid}{Mother id column or a vector of the mother identifiers}
+\item{momid}{A vector of the mother identifiers}
 
-\item{sex}{Gedner column or a vector of the sex of the individuals. Either
+\item{sex}{Gender column or a vector of the sex of the individuals. Either
 character ('male','female','unknown','terminated') or
 numeric (1='male', 2='female',#' 3='unknown', 4='terminated')
 data is allowed.}
@@ -48,12 +38,13 @@ is 0 if the \\code{id} variable is numeric, and '' (the empty string)
 otherwise.}
 
 \item{delete}{Boolean defining if missing parents needs to be:
-TRUE: added as a new row
-FALSE: be deleted}
+\itemize{
+\item \code{TRUE} : added as a new row
+\item \code{FALSE} : be deleted
+}}
 
-\item{filter}{Filtering column containing 0 or 1 for the individual to kept}
-
-\item{id}{Individual id column}
+\item{filter}{Filtering column containing \code{0} or \code{1} for the
+individual to kept}
 }
 \value{
 A data.frame with id, dadid, momid, sex as columns with the

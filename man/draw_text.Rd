@@ -17,19 +17,19 @@ draw_text(
 )
 }
 \arguments{
-\item{x}{x coordinate}
+\item{x}{x coordinates}
 
-\item{y}{y coordinate}
+\item{y}{y coordinates}
 
 \item{label}{text to be displayed}
 
 \item{p}{ggplot object}
 
-\item{ggplot_gen}{logical, if TRUE add the text to the ggplot object}
+\item{ggplot_gen}{logical, if TRUE add the segments to the ggplot object}
 
-\item{cex}{character expansion}
+\item{cex}{character expansion of the text}
 
-\item{col}{color}
+\item{col}{text color}
 
 \item{adjx}{x adjustment}
 

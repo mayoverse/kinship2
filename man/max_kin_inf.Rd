@@ -44,7 +44,7 @@ when using a pedigree object}
 or a numeric vector of individuals id
 or a boolean}
 
-\item{reset}{If TRUE, the kinship column is reset}
+\item{reset}{If TRUE, the \code{kin} column is reset}
 }
 \value{
 \subsection{When obj is a vector or a dataframe}{

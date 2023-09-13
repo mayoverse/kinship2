@@ -216,41 +216,64 @@ setGeneric("generate_colors", signature = "obj",
 )
 
 #' @export
-#' @aliases generate_colors,data.frame
+#' @aliases generate_colors,character
 #' @rdname generate_colors
-setMethod("generate_colors", "data.frame",
+setMethod("generate_colors", "character",
     function(
-        obj, col_aff = "affected",
+        obj, avail,
         mods_aff = NULL, threshold = 0.5, sup_thres_aff = TRUE,
         keep_full_scale = FALSE, breaks = 3,
         colors_aff = c("yellow2", "red"),
         colors_unaff = c("white", "steelblue4"),
-        col_avail = "avail", colors_avail = c("green", "black")
+        colors_avail = c("green", "black")
+    ) {
+        affected_val <- obj
+        affected <- generate_aff_inds(affected_val,
+            mods_aff, threshold, sup_thres_aff
+        )
+        border <- generate_border(avail, colors_avail)
+        lst_sc <- generate_fill(
+            affected_val, affected$affected, affected$labels,
+            keep_full_scale, breaks, colors_aff, colors_unaff
+        )
+
+        lst_sc$border_scale <- border
+        lst_sc
+    }
+)
+
+#' @export
+#' @aliases generate_colors,data.frame
+#' @rdname generate_colors
+setMethod("generate_colors", "data.frame",
+    function(
+        obj, col_aff = "affected", col_avail = "avail",
+        mods_aff = NULL, threshold = 0.5, sup_thres_aff = TRUE,
+        keep_full_scale = FALSE, breaks = 3,
+        colors_aff = c("yellow2", "red"),
+        colors_unaff = c("white", "steelblue4"),
+        colors_avail = c("green", "black")
     ) {
         new_col <- paste0(col_aff, "_aff")
         df <- check_columns(obj, c(col_aff, col_avail),
             "", new_col, others_cols = TRUE
         )
 
-        affected <- generate_aff_inds(df[[col_aff]],
-            mods_aff, threshold, sup_thres_aff
+        lst_sc <- generate_colors(df[[col_aff]], df[[col_avail]],
+            mods_aff, threshold, sup_thres_aff,
+            keep_full_scale, breaks,
+            colors_aff, colors_unaff, colors_avail
         )
 
-        border <- generate_border(df[[col_avail]], colors_avail)
-        fill <- generate_fill(
-            df[[col_aff]], affected$affected, affected$labels,
-            keep_full_scale, breaks, colors_aff, colors_unaff
-        )
-
-        df[new_col] <- fill$mods
-        if (nrow(fill$fill_scale) > 0) {
-            fill$fill_scale$column_mods <- new_col
-            fill$fill_scale$column_values <- col_aff
+        df[new_col] <- lst_sc$mods
+        if (nrow(lst_sc$fill_scale) > 0) {
+            lst_sc$fill_scale$column_mods <- new_col
+            lst_sc$fill_scale$column_values <- col_aff
         }
 
         scales <- list(
-            fill = fill$fill_scale,
-            border = border
+            fill = lst_sc$fill_scale,
+            border = lst_sc$border_scale
         )
         list(df = df, scales = scales)
     }
@@ -262,7 +285,7 @@ setMethod("generate_colors", "data.frame",
 #' @aliases generate_colors,Pedigree
 #' @param add_to_scale Boolean defining if the scales need to be added to the
 #' existing scales or if they need to replace the existing scales.
-#' @param reset Boolean defining if the scale of the specified columns need to
+#' @param reset Boolean defining if the scale of the specified column need to
 #' be reset if already present.
 #' @param ... Other parameters to pass to the `generate_colors` function
 #' @rdname generate_colors

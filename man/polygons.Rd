@@ -4,10 +4,10 @@
 \alias{polygons}
 \title{Create a list of the different polygonal elements}
 \usage{
-polygons(naffection = 1)
+polygons(nslice = 1)
 }
 \arguments{
-\item{naffection}{number of affection status}
+\item{nslice}{number of slices}
 }
 \value{
 a list of polygonal elements with x, y coordinates

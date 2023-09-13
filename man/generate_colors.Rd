@@ -77,7 +77,7 @@ individual. The first color will be used for available individual (avail
 \item{add_to_scale}{Boolean defining if the scales need to be added to the
 existing scales or if they need to replace the existing scales.}
 
-\item{reset}{Boolean defining if the scale of the specified columns need to
+\item{reset}{Boolean defining if the scale of the specified column need to
 be reset if already present.}
 }
 \value{

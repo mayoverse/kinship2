@@ -19,7 +19,7 @@ is_informative(obj, ...)
 
 \S4method{is_informative}{Pedigree}(
   obj,
-  column = NULL,
+  col_aff = NULL,
   informative = "AvAf",
   missid = "0",
   reset = FALSE
@@ -46,10 +46,10 @@ or a boolean}
 
 \item{missid}{A string with the missing id}
 
-\item{column}{A string with the column name to use for the affected status.
+\item{col_aff}{A string with the column name to use for the affected status.
 This column must be in the scales fill.}
 
-\item{reset}{Boolean defining if the inf column needs to be reset}
+\item{reset}{Boolean defining if the \code{inf} column needs to be reset}
 }
 \value{
 \subsection{When obj is a vector or a dataframe}{
@@ -80,6 +80,6 @@ columns.
 \examples{
 data("sampleped")
 ped <- pedigree(sampleped)
-is_informative(ped, column = "affected_aff")
+is_informative(ped, col_aff = "affected_aff")
 
 }

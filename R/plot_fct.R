@@ -6,14 +6,14 @@ NULL
 
 #' Routine to subset a pedigree
 #'
-#' @param plist a pedigree list
 #' @param subreg a vector of length 4 giving the start and end positions
 #' of the subregion and the start and end depths
+#' @inheritParams auto_hint
 #'
 #' @return a pedigree list
 #'
 #' @export
-subregion2 <- function(plist, subreg) {
+subregion <- function(plist, subreg) {
     if (subreg[3] < 1 || subreg[4] > length(plist$n)) {
         stop("Invalid depth indices in subreg")
     }
@@ -65,7 +65,7 @@ subregion2 <- function(plist, subreg) {
         out$twins <- twin2[, 1:n, drop = FALSE]
     }
     out
-}  # end subregion2()
+}  # end subregion()
 
 ## Plotting function
 #' Generate a circular element
@@ -95,19 +95,19 @@ circfun <- function(nslice, n = 50) {
 #' Generate a polygonal element
 #'
 #' @param nslice number of slices
-#' @param object Element form which to generate the polygon
+#' @param coor Element form which to generate the polygon
 #' containing x and y coordinates and theta
 #'
 #' @return a list of x and y coordinates
 #'
 #' @export
-polyfun <- function(nslice, object) {
+polyfun <- function(nslice, coor) {
     # make the indirect segments view
-    zmat <- matrix(0, ncol = 4, nrow = length(object$x))
-    zmat[, 1] <- object$x
-    zmat[, 2] <- c(object$x[-1], object$x[1]) - object$x
-    zmat[, 3] <- object$y
-    zmat[, 4] <- c(object$y[-1], object$y[1]) - object$y
+    zmat <- matrix(0, ncol = 4, nrow = length(coor$x))
+    zmat[, 1] <- coor$x
+    zmat[, 2] <- c(coor$x[-1], coor$x[1]) - coor$x
+    zmat[, 3] <- coor$y
+    zmat[, 4] <- c(coor$y[-1], coor$y[1]) - coor$y
 
     # Find the cutpoint for each angle Yes we could vectorize the loop, but
     # nslice is never bigger than about 10 (and usually <5), so why be
@@ -125,11 +125,11 @@ polyfun <- function(nslice, object) {
         x[i] <- tx[indx]
         y[i] <- ty[indx]
     }
-    nvertex <- length(object$x)
+    nvertex <- length(coor$x)
     temp <- data.frame(
         indx = c(1:ns1, rep(0, nvertex)),
-        theta = c(theta, object$theta),
-        x = c(x, object$x), y = c(y, object$y)
+        theta = c(theta, coor$theta),
+        x = c(x, coor$x), y = c(y, coor$y)
     )
     temp <- temp[order(-temp$theta), ]
     out <- vector("list", nslice)
@@ -145,14 +145,14 @@ polyfun <- function(nslice, object) {
 
 #' Create a list of the different polygonal elements
 #'
-#' @param naffection number of affection status
+#' @param nslice number of slices
 #'
 #' @return a list of polygonal elements with x, y coordinates
 #' and theta
 #'
 #' @export
-polygons <- function(naffection = 1) {
-    if (naffection == 1) {
+polygons <- function(nslice = 1) {
+    if (nslice == 1) {
         polylist <- list(
             square = list(list(
                 x = c(-1, -1, 1, 1) / 2,
@@ -172,18 +172,18 @@ polygons <- function(naffection = 1) {
             ))
         )
     } else {
-        square <- polyfun(naffection, list(
+        square <- polyfun(nslice, list(
             x = c(-0.5, -0.5, 0.5, 0.5),
             y = c(-0.5, 0.5, 0.5, -0.5),
             theta = -c(3, 5, 7, 9) * pi / 4
         ))
-        circle <- circfun(naffection)
-        diamond <- polyfun(naffection, list(
+        circle <- circfun(nslice)
+        diamond <- polyfun(nslice, list(
             x = c(0, -0.5, 0, 0.5),
             y = c(-0.5, 0, 0.5, 0),
             theta = -(1:4) * pi / 2
         ))
-        triangle <- polyfun(naffection, list(
+        triangle <- polyfun(nslice, list(
             x = c(-0.56, 0, 0.56),
             y = c(-0.5, 0.5, -0.5),
             theta = c(-2, -4, -6) * pi / 3
@@ -207,7 +207,7 @@ NULL
 #' @param y1 y coordinate of the second point
 #' @param p ggplot object
 #' @param ggplot_gen logical, if TRUE add the segments to the ggplot object
-#' @param col color
+#' @param col line color
 #' @param lwd line width
 #' @param lty line type
 #'
@@ -232,12 +232,11 @@ draw_segment <- function(
 #'
 #' @param x x coordinates
 #' @param y y coordinates
-#' @param p ggplot object
-#' @param ggplot_gen logical, if TRUE add the polygon to the ggplot object
 #' @param fill fill color
 #' @param border border color
 #' @param density density of shading
 #' @param angle angle of shading
+#' @inheritParams draw_segment
 #'
 #' @return Plot the polygon or add it to a ggplot object
 #' @export
@@ -256,15 +255,13 @@ draw_polygon <- function(
 
 #' Draw text for a pedigree
 #'
-#' @param x x coordinate
-#' @param y y coordinate
 #' @param label text to be displayed
-#' @param p ggplot object
-#' @param ggplot_gen logical, if TRUE add the text to the ggplot object
-#' @param cex character expansion
-#' @param col color
+#' @param cex character expansion of the text
+#' @param col text color
 #' @param adjx x adjustment
 #' @param adjy y adjustment
+#' @inheritParams draw_segment
+#' @inheritParams draw_polygon
 #'
 #' @return Plot the text or add it to a ggplot object
 #'
@@ -283,25 +280,17 @@ draw_text <- function(x, y, label, p, ggplot_gen = FALSE,
 
 ## Doc: 4 arcs for multiple instances of subj
 #' Draw arcs for multiple instances of a subject
-#'
-#' @param x0 x coordinate of the first point
-#' @param y0 y coordinate of the first point
-#' @param x1 x coordinate of the second point
-#' @param y1 y coordinate of the second point
-#' @param p ggplot object
-#' @param ggplot_gen logical, if TRUE add the arcs to the ggplot object
-#' @param cex character expansion
-#' @param col color
+#' @inheritParams draw_segment
 #'
 #' @return Plot the arcs or add it to a ggplot object
 #'
 #' @export
-draw_arc <- function(x0, y0, x1, y1, p, ggplot_gen = FALSE, cex = 1,
+draw_arc <- function(x0, y0, x1, y1, p, ggplot_gen = FALSE, lwd = 1,
     col = "black"
 ) {
     xx <- seq(x0, x1, length = 15)
     yy <- seq(y0, y1, length = 15) + (seq(-7, 7))^2 / 98 - 0.5
-    lines(xx, yy, lty = 2, lwd = cex, col = col)
+    lines(xx, yy, lty = 2, lwd = lwd, col = col)
     if (ggplot_gen) {
         p <- p + annotate("line", xx, yy, linetype = "dashed")
     }
@@ -363,71 +352,4 @@ set_plot_area <- function(cex, id, maxlev, xrange, symbolsize, ...) {
     list(usr = usr, old_par = old_par, boxw = boxw,
         boxh = boxh, labh = labh, legh = legh
     )
-}
-
-#' Generate the affected matrix
-#'
-#' Doc: still part of setup/data affected is a 0/1 matrix of any marker
-#' data.  It may be attached to the pedigree or added here.  It can be a
-#' vector of length [[n]] or a matrix with [[n]] rows. If not present,
-#' the default is to plot open symbols without shading or color
-#' If affected is a matrix, then the shading and/or density value for
-#' ith column is taken from the ith element of the angle/density
-#' arguments.
-#' For purposes within the plot method, NA values in 'affected'
-#' are coded to -1, and plotted as a question mark (?) in the plot
-#' symbol region for that affected status
-#'
-#' @param affected a vector or matrix of 0/1 values
-#' @param n number of subjects
-#' @param angle angle of shading
-#' @param density density of shading
-#'
-#' @return a matrix of 0/1 values
-#' @keywords internal
-#' @export
-set_affected <- function(affected, n, angle, density) {
-    if (is.null(affected)) {
-        affected <- matrix(0, nrow = n)
-    } else {
-        if (is.matrix(affected)) {
-            if (nrow(affected) != n) {
-                stop("Wrong number of rows in affected")
-            }
-            if (is.logical(affected)) {
-                affected <- 1 * affected
-            }
-            if (ncol(affected) > length(angle) ||
-                    ncol(affected) > length(density)
-            ) {
-                stop("More columns in the affected matrix",
-                    "than angle/density values"
-                )
-            }
-        } else {
-            if (length(affected) != n) {
-                stop("Wrong length for affected")
-            }
-            if (is.logical(affected)) {
-                affected <- as.numeric(affected)
-            }
-            if (is.factor(affected)) {
-                affected <- as.numeric(affected) - 1
-            }
-        }
-        if (max(affected, na.rm = TRUE) > min(affected, na.rm = TRUE)) {
-            affected <- matrix(affected - min(affected, na.rm = TRUE),
-                nrow = n
-            )
-        } else {
-            affected <- matrix(affected, nrow = n)
-        }
-
-        ## JPS 4/28/17 bug fix b/c some cases NAs are not set to -1
-        affected[is.na(affected)] <- -1
-        if (!all(affected == 0 | affected == 1 | affected == -1)) {
-            stop("Invalid code for affected status")
-        }
-    }
-    affected
 }

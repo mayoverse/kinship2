@@ -7,13 +7,24 @@
 duporder(idlist, plist, lev, ped)
 }
 \arguments{
-\item{idlist}{The list of ids}
+\item{idlist}{List of individuals identifiers to be considered}
 
-\item{plist}{The alignment structure}
+\item{plist}{The alignment structure representing the pedigree layout.
+For the differents matrices present in the list, each row represents a
+level of the pedigree and each column a potential subject.
+It contains the following components:
+\itemize{
+\item n Vector of the number of subjects per level
+\item nid Matrix of the subjects indexes
+\item pos Matrix of the subjects positions
+\item fam Matrix of the siblings family identifiers
+\item spouse Matrix of the left spouses \code{1} = spouse, \code{0} = not spouse,
+\code{2} = inbred spouse.
+}}
 
 \item{lev}{The generation level of the subject}
 
-\item{ped}{A pedigre object}
+\item{ped}{A pedigree object}
 }
 \value{
 A matrix of duplicate pairs

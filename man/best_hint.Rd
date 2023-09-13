@@ -9,9 +9,17 @@ best_hint(ped, wt = c(1000, 10, 1), tolerance = 0)
 \arguments{
 \item{ped}{A pedigree object}
 
-\item{wt}{A vector of three weights for the three error measures}
+\item{wt}{A vector of three weights for the three error measures
+\itemize{
+\item The number of duplicate individuals in the plot
+\item The sum of the absolute values of the differences in the
+positions of duplicate individuals
+\item The sum of the absolute values of the differences between
+the center of the children and the parents
+Default is \code{c(1000, 10, 1)}.
+}}
 
-\item{tolerance}{The maximum stress level to accept}
+\item{tolerance}{The maximum stress level to accept. Default is \code{0}}
 }
 \value{
 The best hint object out of all the permutations

@@ -11,9 +11,9 @@
 \usage{
 kindepth(obj, ...)
 
-\S4method{kindepth}{character}(obj, dadid, momid, align = FALSE)
+\S4method{kindepth}{character}(obj, dadid, momid, align_parents = FALSE)
 
-\S4method{kindepth}{Pedigree}(obj, align = FALSE)
+\S4method{kindepth}{Pedigree}(obj, align_parents = FALSE)
 }
 \arguments{
 \item{obj}{A pedigree object or a vector of the individuals identifiers}
@@ -24,8 +24,9 @@ kindepth(obj, ...)
 
 \item{momid}{Id code for the mother}
 
-\item{align}{If \code{align=T}, go one step further and try to make both parents
-of each child have the same depth.  (This is not always possible).
+\item{align_parents}{If \code{align_parents=T}, go one step further and try to
+make both parents of each child have the same depth.
+(This is not always possible).
 It helps the drawing program by lining up pedigrees that 'join in the middle'
 via a marriage.}
 }

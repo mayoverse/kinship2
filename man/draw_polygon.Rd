@@ -22,7 +22,7 @@ draw_polygon(
 
 \item{p}{ggplot object}
 
-\item{ggplot_gen}{logical, if TRUE add the polygon to the ggplot object}
+\item{ggplot_gen}{logical, if TRUE add the segments to the ggplot object}
 
 \item{fill}{fill color}
 

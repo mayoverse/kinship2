@@ -46,13 +46,7 @@ NULL
 #' @param symbolsize controls symbolsize. Default=1.
 #' @param branch defines how much angle is used to connect various levels of
 #' nuclear families.
-#' @param packed default=TRUE.  If TRUE, uniform distance between all
-#' individuals at a given level.
-#' @param align these parameters control the extra effort spent trying to align
-#' children underneath parents, but without making the pedigree too wide.  Set
-#' to FALSE to speed up plotting.
-#' @param width default=8.  For a packed pedigree, the minimum width allowed in
-#' the realignment of pedigrees.
+#' @inheritParams align
 #' @param density defines density used in the symbols.  Takes up to 4 different
 #' values.
 #' @param mar margin parmeters, as in the `par` function
@@ -60,7 +54,7 @@ NULL
 #' values.
 #' @param keep_par Default = FALSE, allows user to keep the parameter settings
 #' the same as they were for plotting (useful for adding extras to the plot)
-#' @param subregion 4-element vector for (min x, max x, min depth, max depth),
+#' @param subreg 4-element vector for (min x, max x, min depth, max depth),
 #' used to edit away portions of the plot coordinates returned by
 #' align.pedigree
 #' @param pconnect when connecting parent to children the program will try to
@@ -69,8 +63,8 @@ NULL
 #' least `pconnect` people.  Setting this option to a large number will
 #' force the line to connect at the midpoint of the children.
 #' @param title default=NULL.  If not NULL, a title will be added to the plot.
-#' @param family default=1.  If the pedigree contains multiple families, this
-#' parameter can be used to select which family to plot.
+#' @param fam_to_plot default=1.  If the pedigree contains multiple families,
+#' this parameter can be used to select which family to plot.
 #' @param legend default=FALSE.  If TRUE, a legend will be added to the plot.
 #' @param leg_cex default=0.8.  Controls the size of the legend text.
 #' @param leg_symbolsize default=0.5.  Controls the size of the legend symbols.
@@ -121,19 +115,19 @@ setMethod("plot", c(x = "Pedigree", y = "missing"),
         packed = TRUE, align = c(1.5, 2), width = 6,
         title = NULL, density = c(-1, 35, 65, 20),
         mar = c(4.1, 1, 4.1, 1), angle = c(90, 65, 40, 0),
-        keep_par = FALSE, subregion = NULL, pconnect = 0.5, family = 1,
+        keep_par = FALSE, subreg = NULL, pconnect = 0.5, fam_to_plot = 1,
         legend = FALSE, leg_cex = 0.8, leg_symbolsize = 0.5,
         leg_loc = NULL, ...
     ) {
-        lst <- ped_to_plotdf(x, packed, width, align, subregion,
+        lst <- ped_to_plotdf(x, packed, width, align, subreg,
             cex, symbolsize, pconnect, branch, mark, label, ...
         )
         famlist <- unique(x$ped$family)
         if (length(famlist) > 1) {
             message("Multiple families present, only plotting family",
-                family
+                fam_to_plot
             )
-            lst <- lst[[family]]
+            lst <- lst[[fam_to_plot]]
         }
 
         p <- plot_fromdf(lst$df, usr = lst$par_usr$usr,

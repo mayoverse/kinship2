@@ -26,9 +26,15 @@
 #' If during the search, a plot is found with a stress level less than
 #' **tolerance**, the search is terminated.
 #'
-#' @param ped A pedigree object
 #' @param wt A vector of three weights for the three error measures
-#' @param tolerance The maximum stress level to accept
+#' - The number of duplicate individuals in the plot
+#' - The sum of the absolute values of the differences in the
+#'   positions of duplicate individuals
+#' - The sum of the absolute values of the differences between
+#'   the center of the children and the parents
+#' Default is `c(1000, 10, 1)`.
+#' @param tolerance The maximum stress level to accept. Default is `0`
+#' @inheritParams align
 #'
 #' @return The best hint object out of all the permutations
 #'

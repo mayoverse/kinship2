@@ -63,10 +63,10 @@ NULL
 #'    and the final point must be \eqn{\le} the max width.
 #'
 #' @param rval A list with components `n`, `nid`, `pos`, and `fam`.
-#' @param spouse A matrix with one row per level, giving the index of the
-#' spouse for each subject. `0` means no spouse.
-#' @param level A vector giving the level of each subject.
+#' @param spouse A boolean matrix with one row per level representing if
+#' the subject is a spouse or not.
 #' @inheritParams align
+#' @inheritParams alignped1
 #'
 #' @return The updated position matrix
 #'

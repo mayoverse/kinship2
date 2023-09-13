@@ -13,11 +13,13 @@
 #'
 #' @param sex A vector with the sex of all the individuals
 #' @inheritParams align
+#'
 #' @examples
 #' data(sampleped)
 #' ped1 <- pedigree(sampleped[sampleped$family == "1",])
 #' ht1 <- auto_hint(ped1)
 #' check_hints(ht1, ped1$ped$sex)
+#'
 #' @seealso [auto_hint()], [best_hint()]
 #' @keywords internal
 #' @export

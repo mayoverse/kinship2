@@ -9,7 +9,7 @@ ped_to_plotdf(
   packed = FALSE,
   width = 10,
   align = c(1.5, 2),
-  subregion = NULL,
+  subreg = NULL,
   cex = 0.5,
   symbolsize = cex,
   pconnect = 0.5,
@@ -33,9 +33,9 @@ inches.}
 the extent possible given the page width, or align to to the left margin
 \code{FALSE}. This argument can be a two element vector, giving the alignment
 parameters, or a logical value.  If \code{TRUE}, the default is \code{c(1.5, 2)}, or
-numeric the routine \code{alignped4} will be called.}
+numeric the routine \code{alignped4()} will be called.}
 
-\item{subregion}{4-element vector for (min x, max x, min depth, max depth),
+\item{subreg}{4-element vector for (min x, max x, min depth, max depth),
 used to edit away portions of the plot coordinates returned by
 align.pedigree}
 

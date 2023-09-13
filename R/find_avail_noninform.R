@@ -10,10 +10,10 @@
 #' non-informative.  This is the second step to remove subjects in
 #' pedigree.shrink if the pedigree does not meet the desired bit size.
 #'
-#' @param ped A pedigree object
 #' @param avail Vector of availability status (e.g. genotyped) 0/1 or
 #' TRUE/FALSE
 #' @param missid Character defining the missing ids
+#' @inheritParams align
 #'
 #' @examples
 #' data(sampleped)

@@ -5,7 +5,7 @@ NULL
 #'
 #' @param ped A pedigree object
 #' @inheritParams align
-#' @param subregion 4-element vector for (min x, max x, min depth, max depth),
+#' @param subreg 4-element vector for (min x, max x, min depth, max depth),
 #' used to edit away portions of the plot coordinates returned by
 #' align.pedigree
 #' @param cex Size of the text
@@ -26,7 +26,7 @@ NULL
 #' @return A list containing the data frame and the user coordinates.
 ped_to_plotdf <- function(
     ped, packed = FALSE, width = 10, align = c(1.5, 2),
-    subregion = NULL, cex = 0.5, symbolsize = cex, pconnect = 0.5, branch = 0.6,
+    subreg = NULL, cex = 0.5, symbolsize = cex, pconnect = 0.5, branch = 0.6,
     mark = TRUE, label = NULL, ...
 ) {
 
@@ -37,7 +37,7 @@ ped_to_plotdf <- function(
         for (i_fam in famlist) {
             ped_fam <- ped[ped$ped$family == i_fam]
             all_df[[i_fam]] <- ped_to_plotdf(ped_fam, packed, width, align,
-                subregion, cex, symbolsize, ...
+                subreg, cex, symbolsize, ...
             )
         }
         return(all_df)
@@ -53,8 +53,8 @@ ped_to_plotdf <- function(
     )
     plist <- align(ped, packed = packed, width = width, align = align)
 
-    if (!is.null(subregion)) {
-        plist <- subregion2(plist, subregion)
+    if (!is.null(subreg)) {
+        plist <- subregion(plist, subreg)
     }
     xrange <- range(plist$pos[plist$nid > 0])
     maxlev <- nrow(plist$pos)
@@ -95,7 +95,7 @@ ped_to_plotdf <- function(
         aff_idx <- match(aff_mods, aff_df[["mods"]])
 
 
-        # mean range of each box for each polygon for each subregion
+        # mean range of each box for each polygon for each subreg
         poly_aff <- lapply(polylist, "[[", aff)
         poly_aff_x <- lapply(poly_aff, "[[", "x")
         poly_aff_y <- lapply(poly_aff, "[[", "y")

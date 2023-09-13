@@ -19,6 +19,7 @@
 #'
 #' @return The updated hint vector
 #' @seealso [auto_hint()]
+#' @keywords internal
 #' @export
 shift <- function(id, sibs, goleft, hint, twinrel, twinset) {
     if (twinset[id] > 0) {
@@ -80,9 +81,18 @@ shift <- function(id, sibs, goleft, hint, twinrel, twinset) {
 #' It finds the spouse of a subject.
 #'
 #' @param idpos The position of the subject
-#' @param plist The alignment structure
+#' @param plist The alignment structure representing the pedigree layout.
+#' For the differents matrices present in the list, each row represents a
+#' level of the pedigree and each column a potential subject.
+#' It contains the following components:
+#' - n Vector of the number of subjects per level
+#' - nid Matrix of the subjects indexes
+#' - pos Matrix of the subjects positions
+#' - fam Matrix of the siblings family identifiers
+#' - spouse Matrix of the left spouses `1` = spouse, `0` = not spouse,
+#' `2` = inbred spouse.
 #' @param lev The generation level of the subject
-#' @param ped A pedigre object
+#' @inheritParams align
 #'
 #' @return The position of the spouse
 #' @seealso [auto_hint()]
@@ -135,7 +145,8 @@ findsibs <- function(idpos, plist, lev) {
 #' It finds the duplicate pairs of a subject and returns them in
 #' the order they should be plotted.
 #'
-#' @param idlist The list of ids
+#' @param idlist List of individuals identifiers to be considered
+#' @inheritParams align
 #' @inheritParams findspouse
 #'
 #' @return A matrix of duplicate pairs
@@ -206,7 +217,7 @@ duporder <- function(idlist, plist, lev, ped) {
 #' in the pedigree.
 #' It is used by `auto_hint()`.
 #'
-#' @param ped A pedigree object
+#' @inheritParams align
 #'
 #' @return A list containing components
 #'  1. `twinset` the set of twins
@@ -276,7 +287,8 @@ get_twin_rel <- function(ped) {
 #' edge so as to match up with a spouse. The actual values in the vector are
 #' not important, only their order.
 #'
-#' @param reset If `TRUE`, reset the hints to the initial values
+#' @param reset If `TRUE`, then even if `ped` object has hints, reset
+#' them to the initial values
 #' @inheritParams align
 #'
 #' @return The **hints** list containing components `order` and `spouse`

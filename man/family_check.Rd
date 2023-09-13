@@ -11,7 +11,7 @@
 \usage{
 family_check(obj, ...)
 
-\S4method{family_check}{character}(obj, dadid, momid, famid, newfam)
+\S4method{family_check}{character}(obj, dadid, momid, family, newfam)
 
 \S4method{family_check}{Pedigree}(obj)
 }
@@ -22,7 +22,7 @@ family_check(obj, ...)
 
 \item{momid}{A vector of the mother identifiers}
 
-\item{famid}{A vector of family identifiers}
+\item{family}{A vector of family identifiers}
 
 \item{newfam}{The result of a call to \code{make_famid()}. If this has already
 been computed by the user, adding it as an argument shortens the running
@@ -30,10 +30,10 @@ time somewhat.}
 }
 \value{
 a data frame with one row for each unique family id in the
-\code{famid} argument or the one detected in the pedigree object.
+\code{family} argument or the one detected in the pedigree object.
 Components of the output are:
 \itemize{
-\item famid The family id, as entered into the data set
+\item family The family id, as entered into the data set
 \item n Number of subjects in the family
 \item unrelated Number of them that appear to be unrelated to
 anyone else in the entire pedigree set.  This is usually marry-ins with no
@@ -46,7 +46,7 @@ children (in the pedigree), and if so are not a problem.
 Are you missing some of the people?
 }
 \item join Number of other families that had a unique
-famid, but are actually joined to this one.  0 is the hope.
+family, but are actually joined to this one.  0 is the hope.
 }
 }
 \description{
@@ -60,7 +60,7 @@ The \code{make_famid} function is used to create a de novo family id from the
 parentage data, and this is compared to the family id given in the data.
 
 If there are any joins, then an attribute 'join' is attached.
-It will be a matrix with famid as row labels, new-family-id as the columns,
+It will be a matrix with family as row labels, new-family-id as the columns,
 and the number of subjects as entries.
 }
 \examples{

@@ -10,7 +10,7 @@ check_values(val, ref, present = TRUE)
 \item{present}{A logical value indicating if the values should be present
 or not}
 
-\item{object}{An object.}
+\item{obj}{An object.}
 
 \item{slot}{A slot of the object.}
 

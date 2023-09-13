@@ -26,10 +26,10 @@
 #'
 #' Now merge the two trees. Start at the top level and work down.
 #'
-#' @param x1 Alignement of the first tree
-#' @param x2 Alignement of the second tree
+#' @param alt1 Alignement of the first tree
+#' @param alt2 Alignement of the second tree
 #' @param space Space between two subjects
-#' @inheritParams alignped1
+#' @inheritParams align
 #'
 #' @return A list containing the elements to plot the pedigree.
 #' It contains a set of matrices along with the spouselist matrix.
@@ -55,31 +55,31 @@
 #'
 #' @seealso [align()]
 #' @export
-alignped3 <- function(x1, x2, packed, space = 1) {
-    maxcol <- max(x1$n + x2$n)
-    maxlev <- length(x1$n)
-    n1 <- max(x1$n)  # These are always >1
-    n <- x1$n + x2$n
+alignped3 <- function(alt1, alt2, packed, space = 1) {
+    maxcol <- max(alt1$n + alt2$n)
+    maxlev <- length(alt1$n)
+    n1 <- max(alt1$n)  # These are always >1
+    n <- alt1$n + alt2$n
 
     nid <- matrix(0, maxlev, maxcol)
-    nid[, 1:n1] <- x1$nid
+    nid[, 1:n1] <- alt1$nid
     pos <- matrix(0, maxlev, maxcol)
-    pos[, 1:n1] <- x1$pos
+    pos[, 1:n1] <- alt1$pos
 
     fam <- matrix(0, maxlev, maxcol)
-    fam[, 1:n1] <- x1$fam
-    fam2 <- x2$fam
+    fam[, 1:n1] <- alt1$fam
+    fam2 <- alt2$fam
     if (!packed) {
         ## Doc: alignped3: slide
         slide <- 0
         for (i in 1:maxlev) {
-            n1 <- x1$n[i]
-            n2 <- x2$n[i]
+            n1 <- alt1$n[i]
+            n2 <- alt2$n[i]
             if (n1 > 0 && n2 > 0) {
-                if (nid[i, n1] == x2$nid[i, 1]) {
-                    temp <- pos[i, n1] - x2$pos[i, 1]
+                if (nid[i, n1] == alt2$nid[i, 1]) {
+                    temp <- pos[i, n1] - alt2$pos[i, 1]
                 } else {
-                    temp <- space + pos[i, n1] - x2$pos[i, 1]
+                    temp <- space + pos[i, n1] - alt2$pos[i, 1]
                 }
                 if (temp > slide)
                     slide <- temp
@@ -88,23 +88,23 @@ alignped3 <- function(x1, x2, packed, space = 1) {
     }
     ## Doc: alignped3-merge
     for (i in 1:maxlev) {
-        n1 <- x1$n[i]
-        n2 <- x2$n[i]
+        n1 <- alt1$n[i]
+        n2 <- alt2$n[i]
         if (n2 > 0) {
             # If anything needs to be done for this row...
-            if (n1 > 0 && (nid[i, n1] == floor(x2$nid[i, 1]))) {
+            if (n1 > 0 && (nid[i, n1] == floor(alt2$nid[i, 1]))) {
                 # two subjects overlap
                 overlap <- 1
                 fam[i, n1] <- max(fam[i, n1], fam2[i, 1])
-                nid[i, n1] <- max(nid[i, n1], x2$nid[i, 1])  # preserve a '.5'
+                nid[i, n1] <- max(nid[i, n1], alt2$nid[i, 1])  # preserve a '.5'
                 if (!packed) {
                     if (fam2[i, 1] > 0) {
                         if (fam[i, n1] > 0) {
-                            pos[i, n1] <- (x2$pos[i, 1] + pos[i, n1] +
+                            pos[i, n1] <- (alt2$pos[i, 1] + pos[i, n1] +
                                     slide
                             ) / 2
                         } else {
-                            pos[i, n1] <- x2$pos[i, 1] + slide
+                            pos[i, n1] <- alt2$pos[i, 1] + slide
                         }
                     }
                 }
@@ -121,9 +121,9 @@ alignped3 <- function(x1, x2, packed, space = 1) {
                 }
 
             zz <- seq(from = overlap + 1, length = n2 - overlap)
-            nid[i, n1 + zz - overlap] <- x2$nid[i, zz]
+            nid[i, n1 + zz - overlap] <- alt2$nid[i, zz]
             fam[i, n1 + zz - overlap] <- fam2[i, zz]
-            pos[i, n1 + zz - overlap] <- x2$pos[i, zz] + slide
+            pos[i, n1 + zz - overlap] <- alt2$pos[i, zz] + slide
 
             if (i < maxlev) {
                 # adjust the pointers of any children (look ahead)

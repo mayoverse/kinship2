@@ -13,8 +13,9 @@
 #' @param obj A pedigree object or a vector of the individuals identifiers
 #' @param dadid Id code for the father
 #' @param momid Id code for the mother
-#' @param align If `align=T`, go one step further and try to make both parents
-#' of each child have the same depth.  (This is not always possible).
+#' @param align_parents If `align_parents=T`, go one step further and try to
+#' make both parents of each child have the same depth.
+#' (This is not always possible).
 #' It helps the drawing program by lining up pedigrees that 'join in the middle'
 #' via a marriage.
 #' @param ... Additional arguments to be passed to methods.
@@ -33,7 +34,9 @@ setGeneric("kindepth", signature = "obj",
 #' @rdname kindepth
 #' @aliases kindepth,character
 #' @docType methods
-setMethod("kindepth", "character", function(obj, dadid, momid, align = FALSE) {
+setMethod("kindepth", "character", function(obj, dadid, momid,
+    align_parents = FALSE
+) {
     id <- obj
     n <- length(id)
     if (missing(dadid) || length(dadid) != n) {
@@ -73,7 +76,7 @@ setMethod("kindepth", "character", function(obj, dadid, momid, align = FALSE) {
         depth[parents] <- i
         child_old <- child
     }
-    if (!align) {
+    if (!align_parents) {
         return(depth)
     }
 
@@ -219,7 +222,7 @@ setMethod("kindepth", "character", function(obj, dadid, momid, align = FALSE) {
 #' @aliases kindepth,Pedigree
 #' @docType methods
 setMethod("kindepth", "Pedigree",
-    function(obj, align = FALSE) {
-        kindepth(obj$ped$id, obj$ped$dadid, obj$ped$momid, align)
+    function(obj, align_parents = FALSE) {
+        kindepth(obj$ped$id, obj$ped$dadid, obj$ped$momid, align_parents)
     }
 )

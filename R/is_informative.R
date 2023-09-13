@@ -14,7 +14,7 @@
 #' object.
 #' @param avail A vector of individuals availability (0, 1 or NA)
 #' @param affected A vector of individuals affected status (0, 1 or NA)
-#' @param column A string with the column name to use for the affected status.
+#' @param col_aff A string with the column name to use for the affected status.
 #' This column must be in the scales fill.
 #' @param informative Informative individuals selection can take 5 values:
 #' 'AvAf' (available and affected),
@@ -41,7 +41,7 @@
 #' @examples
 #' data("sampleped")
 #' ped <- pedigree(sampleped)
-#' is_informative(ped, column = "affected_aff")
+#' is_informative(ped, col_aff = "affected_aff")
 #'
 #' @export
 #' @docType methods
@@ -104,26 +104,26 @@ setMethod("is_informative", "data.frame",
 #' @rdname is_informative
 #' @aliases is_informative,Pedigree
 #' @docType methods
-#' @param reset Boolean defining if the inf column needs to be reset
+#' @param reset Boolean defining if the `inf` column needs to be reset
 setMethod("is_informative", "Pedigree", function(
-    obj, column = NULL, informative = "AvAf", missid = "0", reset = FALSE
+    obj, col_aff = NULL, informative = "AvAf", missid = "0", reset = FALSE
 ) {
     obj$ped$affected <- NA
     aff_scl <- obj$scales$fill
-    if (is.null(column)) {
-        stop("The column argument is required")
+    if (is.null(col_aff)) {
+        stop("The col_aff argument is required")
     }
-    if (column %in% aff_scl$column_mods) {
+    if (col_aff %in% aff_scl$column_mods) {
         aff <- aff_scl$mods[aff_scl$affected == TRUE &
-                aff_scl$column_mods == column
+                aff_scl$column_mods == col_aff
         ]
         unaff <- aff_scl$mods[aff_scl$affected == FALSE &
-                aff_scl$column_mods == column
+                aff_scl$column_mods == col_aff
         ]
-        obj$ped$affected[obj$ped[, column] %in% aff] <- 1
-        obj$ped$affected[obj$ped[, column] %in% unaff] <- 0
+        obj$ped$affected[obj$ped[, col_aff] %in% aff] <- 1
+        obj$ped$affected[obj$ped[, col_aff] %in% unaff] <- 0
     } else {
-        stop("The column ", column, " is not in the scales fill")
+        stop("The column ", col_aff, " is not in the scales fill")
     }
     id_inf <- is_informative(obj$ped, informative = informative, missid)
 

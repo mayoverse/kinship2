@@ -16,7 +16,7 @@ descendants(idlist, obj, ...)
 \S4method{descendants}{character,Pedigree}(idlist, obj)
 }
 \arguments{
-\item{idlist}{List of individuals id to be considered}
+\item{idlist}{List of individuals identifiers to be considered}
 
 \item{obj}{A pedigree object or a vector of the individuals identifiers}
 

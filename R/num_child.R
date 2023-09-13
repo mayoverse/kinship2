@@ -12,7 +12,7 @@ NULL
 #' between 2 spouses, the indirect childs will still be added.
 #'
 #' @param obj A pedigree object, a dataframe or a vector of the individuals
-#' @param dadid The id of the father 
+#' @param dadid The id of the father
 #' @param momid The id of the mother
 #' @param relation A matrix with 3 required columns (id1, id2, code) specifying
 #' special relationship between pairs of individuals.
@@ -20,14 +20,14 @@ NULL
 #' 4=Spouse.
 #' @param missid Missing id code
 #' @param ... Additional arguments to be passed to methods.
-#' 
+#'
 #'
 #' @return
 #' ## When obj is a vector or a dataframe
 #' A dataframe with the columns `num_child_dir`, `num_child_ind` and
 #' `num_child_tot` giving respectively the direct, indirect and total number
 #' of child.
-#' 
+#'
 #' ## When obj is a pedigree object
 #' An updated pedigree object with the columns `num_child_dir`, `num_child_ind`
 #' and `num_child_tot` added to the pedigree.
@@ -42,8 +42,8 @@ setGeneric("num_child", signature = "obj",
 #' @rdname num_child
 #' @aliases num_child,character
 #' @docType methods
-setMethod("num_child", "character",
-    function(obj, dadid, momid, relation = NULL, missid = "0"
+setMethod("num_child", "character", function(obj, dadid, momid,
+    relation = NULL, missid = "0"
 ) {
     id <- obj
 
@@ -61,8 +61,9 @@ setMethod("num_child", "character",
     df <- data.frame(id, dadid, momid, stringsAsFactors = FALSE)
 
     spouse_rel <- unique(df[df$dadid != missid &
-            df$momid != missid, c("dadid", "momid")
-    ])
+                df$momid != missid, c("dadid", "momid")
+        ]
+    )
     colnames(spouse_rel) <- c("id1", "id2")
 
     if (!is.null(relation)) {
@@ -146,13 +147,14 @@ setMethod("num_child", "Pedigree", function(obj, reset = FALSE) {
 
     if (!reset) {
         check_columns(obj$ped, NULL,
-            c("num_child_tot", "num_child_ind", "num_child_dir"), NULL, others_cols = TRUE
+            c("num_child_tot", "num_child_ind", "num_child_dir"),
+            NULL, others_cols = TRUE
         )
     }
 
     obj$ped <- merge(obj$ped,
-        df[c("id", "num_child_tot", "num_child_ind", "num_child_dir")], by = "id",
-        sort = FALSE
+        df[c("id", "num_child_tot", "num_child_ind", "num_child_dir")],
+        by = "id", sort = FALSE
     )
 
     obj

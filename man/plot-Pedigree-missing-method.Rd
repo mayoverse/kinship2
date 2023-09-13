@@ -26,9 +26,9 @@
   mar = c(4.1, 1, 4.1, 1),
   angle = c(90, 65, 40, 0),
   keep_par = FALSE,
-  subregion = NULL,
+  subreg = NULL,
   pconnect = 0.5,
-  family = 1,
+  fam_to_plot = 1,
   legend = FALSE,
   leg_cex = 0.8,
   leg_symbolsize = 0.5,
@@ -59,15 +59,18 @@ with plotly.}
 \item{branch}{defines how much angle is used to connect various levels of
 nuclear families.}
 
-\item{packed}{default=TRUE.  If TRUE, uniform distance between all
-individuals at a given level.}
+\item{packed}{Should the pedigree be compressed, i.e., allow diagonal
+lines connecting parents to children in order to have a smaller overall
+width for the plot.}
 
-\item{align}{these parameters control the extra effort spent trying to align
-children underneath parents, but without making the pedigree too wide.  Set
-to FALSE to speed up plotting.}
+\item{align}{for a packed pedigree, align children under parents \code{TRUE}, to
+the extent possible given the page width, or align to to the left margin
+\code{FALSE}. This argument can be a two element vector, giving the alignment
+parameters, or a logical value.  If \code{TRUE}, the default is \code{c(1.5, 2)}, or
+numeric the routine \code{alignped4()} will be called.}
 
-\item{width}{default=8.  For a packed pedigree, the minimum width allowed in
-the realignment of pedigrees.}
+\item{width}{for a packed output, the minimum width of the plot, in
+inches.}
 
 \item{title}{default=NULL.  If not NULL, a title will be added to the plot.}
 
@@ -82,7 +85,7 @@ values.}
 \item{keep_par}{Default = FALSE, allows user to keep the parameter settings
 the same as they were for plotting (useful for adding extras to the plot)}
 
-\item{subregion}{4-element vector for (min x, max x, min depth, max depth),
+\item{subreg}{4-element vector for (min x, max x, min depth, max depth),
 used to edit away portions of the plot coordinates returned by
 align.pedigree}
 
@@ -92,8 +95,8 @@ lying inside the endpoints of the line that connects the children by at
 least \code{pconnect} people.  Setting this option to a large number will
 force the line to connect at the midpoint of the children.}
 
-\item{family}{default=1.  If the pedigree contains multiple families, this
-parameter can be used to select which family to plot.}
+\item{fam_to_plot}{default=1.  If the pedigree contains multiple families,
+this parameter can be used to select which family to plot.}
 
 \item{legend}{default=FALSE.  If TRUE, a legend will be added to the plot.}
 

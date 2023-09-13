@@ -12,16 +12,18 @@ auto_hint(ped, hints = NULL, packed = TRUE, align = FALSE, reset = FALSE)
 \item{hints}{Plotting hints for the pedigree.
 This is a list with components \code{order} and \code{spouse}, the second one is
 optional.
-The order component is a numeric vector with one element per subject in the
+\itemize{
+\item \strong{order} is a numeric vector with one element per subject in the
 pedigree.  It determines the relative order of subjects within a sibship, as
 well as the relative order of processing for the founder couples. (For this
-latter, the female founders are ordered as though they were sisters). The
-spouse component is a matrix with one row per hinted marriage, usually only
+latter, the female founders are ordered as though they were sisters).
+\item \strong{spouse} is a matrix with one row per hinted marriage, usually only
 a few marriages in a pedigree will need an added hint, for instance reverse
 the plot order of a husband/wife pair. Each row contains the index of the
 left spouse, the right hand spouse, and the anchor
 (i.e : \code{1} = left, \code{2} = right, \code{0} = either).
-Children will preferentially appear under the parents of the anchored spouse.}
+Children will preferentially appear under the parents of the anchored spouse.
+}}
 
 \item{packed}{Should the pedigree be compressed, i.e., allow diagonal
 lines connecting parents to children in order to have a smaller overall
@@ -31,9 +33,10 @@ width for the plot.}
 the extent possible given the page width, or align to to the left margin
 \code{FALSE}. This argument can be a two element vector, giving the alignment
 parameters, or a logical value.  If \code{TRUE}, the default is \code{c(1.5, 2)}, or
-numeric the routine \code{alignped4} will be called.}
+numeric the routine \code{alignped4()} will be called.}
 
-\item{reset}{If \code{TRUE}, reset the hints to the initial values}
+\item{reset}{If \code{TRUE}, then even if \code{ped} object has hints, reset
+them to the initial values}
 }
 \value{
 The \strong{hints} list containing components \code{order} and \code{spouse}
