@@ -4,12 +4,12 @@
 \alias{polyfun}
 \title{Generate a polygonal element}
 \usage{
-polyfun(nslice, object)
+polyfun(nslice, coor)
 }
 \arguments{
 \item{nslice}{number of slices}
 
-\item{object}{Element form which to generate the polygon
+\item{coor}{Element form which to generate the polygon
 containing x and y coordinates and theta}
 }
 \value{

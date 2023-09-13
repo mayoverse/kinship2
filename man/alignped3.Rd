@@ -4,12 +4,12 @@
 \alias{alignped3}
 \title{Third routine alignement}
 \usage{
-alignped3(x1, x2, packed, space = 1)
+alignped3(alt1, alt2, packed, space = 1)
 }
 \arguments{
-\item{x1}{Alignement of the first tree}
+\item{alt1}{Alignement of the first tree}
 
-\item{x2}{Alignement of the second tree}
+\item{alt2}{Alignement of the second tree}
 
 \item{packed}{Should the pedigree be compressed, i.e., allow diagonal
 lines connecting parents to children in order to have a smaller overall

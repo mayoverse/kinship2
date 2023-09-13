@@ -3,6 +3,8 @@
 \docType{methods}
 \name{generate_colors}
 \alias{generate_colors}
+\alias{generate_colors,character-method}
+\alias{generate_colors,character}
 \alias{generate_colors,data.frame-method}
 \alias{generate_colors,data.frame}
 \alias{generate_colors,Pedigree-method}
@@ -11,9 +13,9 @@
 \usage{
 generate_colors(obj, ...)
 
-\S4method{generate_colors}{data.frame}(
+\S4method{generate_colors}{character}(
   obj,
-  col_aff = "affected",
+  avail,
   mods_aff = NULL,
   threshold = 0.5,
   sup_thres_aff = TRUE,
@@ -21,7 +23,20 @@ generate_colors(obj, ...)
   breaks = 3,
   colors_aff = c("yellow2", "red"),
   colors_unaff = c("white", "steelblue4"),
+  colors_avail = c("green", "black")
+)
+
+\S4method{generate_colors}{data.frame}(
+  obj,
+  col_aff = "affected",
   col_avail = "avail",
+  mods_aff = NULL,
+  threshold = 0.5,
+  sup_thres_aff = TRUE,
+  keep_full_scale = FALSE,
+  breaks = 3,
+  colors_aff = c("yellow2", "red"),
+  colors_unaff = c("white", "steelblue4"),
   colors_avail = c("green", "black")
 )
 
@@ -39,7 +54,8 @@ object.}
 
 \item{...}{Other parameters to pass to the \code{generate_colors} function}
 
-\item{col_aff}{The name of the column containing the affection status.}
+\item{avail}{The vector containing the availability status.
+The values need to be numeric and can only be 0, 1 or NA.}
 
 \item{mods_aff}{Vector of modality to consider as affected in the case
 where the \code{values} is a factor.}
@@ -68,11 +84,13 @@ affected individuls.}
 \item{colors_unaff}{Set of increasing colors to use for the filling of the
 unaffected individuls.}
 
-\item{col_avail}{The name of the column containing the availability status.}
-
 \item{colors_avail}{Set of 2 colors to use for the box's border of an
 individual. The first color will be used for available individual (avail
 == 1) and the second for the unavailable individual (avail == 0).}
+
+\item{col_aff}{The name of the column containing the affection status.}
+
+\item{col_avail}{The name of the column containing the availability status.}
 
 \item{add_to_scale}{Boolean defining if the scales need to be added to the
 existing scales or if they need to replace the existing scales.}
