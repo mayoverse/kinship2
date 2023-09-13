@@ -1,13 +1,25 @@
+# The `kinship2` Package <img src="./inst/figures/icon_kinship2.png" align="right" height="139" />
 
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/kinship2)](https://CRAN.R-project.org/package=kinship2)
 [![Downloads](http://cranlogs.r-pkg.org/badges/kinship2)](https://CRAN.R-project.org/package=kinship2)
 [![Total-Downloads](https://cranlogs.r-pkg.org/badges/grand-total/kinship2)](https://CRAN.R-project.org/package=kinship2)
 
-# The `kinship2` Package <img src="./inst/figures/icon_kinship2.png" align="right" height="139" />
-
 Initially a set of functions to view pedigrees while developing models that use kinship matrices, the functions were useful enough to put into a package of its own, an S4 class for pedigrees, kinship function that calculates the kinship matrix from a pedigree object, and the pedigree plotting routines that adhere to many of the standards for genetics counselors.
 
 ## Installation
+
+### From Github
+
+To install this package from Github you can use the following R script:
+
+```R
+if (!require("remotes", quietly = TRUE))
+    install.packages("remotes")
+
+remotes::install_github("louislenezet/kinship2@dev_newclass")
+````
+
+### From Bioconductor
 
 To install this package you can use the following R script:
 
