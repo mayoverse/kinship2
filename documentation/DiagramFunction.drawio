@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2023-09-13T12:50:02.578Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/117.0" etag="xu1uXiSUV3RgZ-y6mwg6" version="21.7.4" type="github">
+<mxfile host="app.diagrams.net" modified="2023-09-13T12:51:00.323Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/117.0" etag="-9YesvhzZG_L0fmHnCUZ" version="21.7.4" type="github">
   <diagram name="Page-1" id="XqKPbBKGxglJoeJdR0q-">
-    <mxGraphModel dx="2316" dy="1171" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+    <mxGraphModel dx="653" dy="330" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -539,13 +539,13 @@
         <mxCell id="gDWsdD-bvvdBo0-3pt6C-47" value="" style="group;strokeColor=none;perimeterSpacing=0;" vertex="1" connectable="0" parent="1">
           <mxGeometry x="80" y="200" width="400" height="270" as="geometry" />
         </mxCell>
-        <mxCell id="gDWsdD-bvvdBo0-3pt6C-43" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;b&gt;Main functions for the user&lt;/b&gt;&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="gDWsdD-bvvdBo0-3pt6C-47">
+        <mxCell id="gDWsdD-bvvdBo0-3pt6C-43" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;&lt;b style=&quot;font-size: 12px;&quot;&gt;Main functions for the user&lt;/b&gt;&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=12;" vertex="1" parent="gDWsdD-bvvdBo0-3pt6C-47">
           <mxGeometry x="280" y="100" width="120" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="gDWsdD-bvvdBo0-3pt6C-44" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;&lt;b&gt;Main Class&lt;/b&gt;&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="gDWsdD-bvvdBo0-3pt6C-47">
+        <mxCell id="gDWsdD-bvvdBo0-3pt6C-44" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;&lt;b style=&quot;font-size: 12px;&quot;&gt;Main Class&lt;/b&gt;&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="gDWsdD-bvvdBo0-3pt6C-47">
           <mxGeometry x="280" width="120" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="gDWsdD-bvvdBo0-3pt6C-45" value="Important functions" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=16;fontStyle=1" vertex="1" parent="gDWsdD-bvvdBo0-3pt6C-47">
+        <mxCell id="gDWsdD-bvvdBo0-3pt6C-45" value="Important functions" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;fontStyle=1" vertex="1" parent="gDWsdD-bvvdBo0-3pt6C-47">
           <mxGeometry x="280" y="200" width="120" height="40" as="geometry" />
         </mxCell>
         <mxCell id="gDWsdD-bvvdBo0-3pt6C-7" value="&lt;h1&gt;Arrows meaning&lt;br&gt;&lt;/h1&gt;&lt;p&gt;Fct1() output is used by Fct3()&lt;/p&gt;&lt;p&gt;Fct2() is called internally by Fct3()&lt;br&gt;&lt;/p&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;" vertex="1" parent="gDWsdD-bvvdBo0-3pt6C-47">
