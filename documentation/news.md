@@ -1,19 +1,11 @@
 # What has been done
 
-## Script ready and tested
+## Script ready, tested and arguments checked
 
-- utils.R
-- normData.R
-- validity.R
-- PedigreeClass.R
-- bit_size.R
-- fix_parents.R
-- kindepth.R
-- kinship.R
-- descendants.R
-- make_famid.R
-- family_check.R
-- generate_aff.R
-- generate_colors.R
-- num_child.R
-- is_informative.R
+- align
+- alignped1
+- alignped2
+- alignped3
+- alignped4
+- auto_hint
+- best_hint
