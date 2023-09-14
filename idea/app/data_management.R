@@ -29,7 +29,7 @@ select_from_inf <- function(df, inf_inds, kin_max) {
         col_used <- c("to_use")
         df <- check_columns(df, cols_used = col_used, others_cols = TRUE)
 
-        df_kin <- max_kin_inf(df, inf_inds)
+        df_kin <- min_dist_inf(df, inf_inds)
         df_kin$to_use <- df_kin$kin <= kin_max & !is.na(df_kin$kin)
 
         df_kin_trim <- fix_parents.data.frame(df = df_kin,
