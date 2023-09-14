@@ -4,10 +4,8 @@
 #' Convert a pedigree to a legend data frame for it to
 #' be plotted with afterwards with [plot_fromdf()].
 #'
-#' @param ped A pedigree object
-#' @param boxh Height of the legend boxes
-#' @param boxw Width of the legend boxes
-#' @param cex Size of the legend text
+#' @inheritParams align
+#' @inheritParams ped_to_plotdf
 #'
 #' @return
 #' A list containing the legend data frame and the user coordinates.

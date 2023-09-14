@@ -23,9 +23,8 @@ NULL
 #' zeros for rows, a random choice is made. Hence, running this function
 #' multiple times can return different sets of unrelated subjects.
 #'
-#' @param ped A pedigree objects with unique id, father index, mother index
-#' @param avail Vector of availability status (e.g., genotyped) 0/1 or
-#' TRUE/FALSE
+#' @inheritParams align
+#' @inheritParams is_informative
 #'
 #' @return A vector of the ids of subjects that are unrelated.
 

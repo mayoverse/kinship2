@@ -1,83 +1,3 @@
-#' Variable to factor
-#'
-#' @description Transform a variable into a factor
-#'
-#' @details  Transform a numeric or string variable into a factor.
-#' In the case of a numerical variable the threshold is used to separate
-#' the variable using the `cut` function.
-#'
-#' @param var The variable to be transformed
-#' @param threshold The threshold to be used to separate the variable
-#'
-#' @return a factor vector containing the transformed variable
-#'
-#' @examples
-#' var <- runif(10)
-#' var_to_factor(var, threshold = 0.5)
-#'
-#' @export
-var_to_factor <- function(var, threshold = NULL) {
-    if (!is.numeric(var)) {
-        var_fact <- addNA(droplevels(as.factor(var)), ifany = TRUE)
-    } else {
-        if (is.null(threshold)) {
-            stop("No threshold given")
-        }
-        labels <- NULL
-        if (length(threshold) == 1) {
-            labels <- c(paste("Inf to", threshold), paste("Sup to", threshold))
-        }
-        var_fact <- cut(
-            var, c(min(var, na.rm = TRUE),
-                threshold, max(var, na.rm = TRUE)
-            ), label = labels, include.lowest = TRUE
-        )
-        var_fact <- addNA(var_fact, ifany = TRUE)
-    }
-    var_fact
-}
-
-#' Data frame to contingency table
-#'
-#' @description Summarise two variables in a contingency table
-#'
-#' @details Proccess two variable from a dataframe in a contingency
-#' table depending on the variables selected and the thresholds in case the
-#' variable is numerical. To do so the variables are transformed to factors.
-#'
-#' @param df Dataframe containing the family informations
-#' @param var1,var2 First and second column variable to select
-#' @param threshold1,threshold2 Thresholds to apply to `var1` and `var2`
-#'
-#' @examples
-#' var1 <- runif(10)
-#' var2 <- runif(10)
-#' df <- data.frame(var1, var2)
-#' df_cont_table(df, 'var1', 0.5, 'var2', c(0.25, 0.5, 0.75))
-#' df_cont_table(df, 'var1', 0.5)
-#'
-#' @export
-df_cont_table <- function(
-    df, var1, threshold1 = NULL, var2 = NULL, threshold2 = NULL
-) {
-    if (!var1 %in% colnames(df)) {
-        stop(paste0(var1, " is not present in the dataframe", collapse = " "))
-    }
-    if (!var2 %in% colnames(df) && !is.null(var2)) {
-        stop(paste0(var2, " is not present in the dataframe", collapse = " "))
-    }
-    var1_fact <- var_to_factor(df[[var1]], threshold = threshold1)
-    if (is.null(var2)) {
-        cont_table <- as.data.frame(table(var1_fact))
-        colnames(cont_table) <- c(var1, "Freq")
-    } else {
-        var2_fact <- var_to_factor(df[[var2]], threshold = threshold2)
-        cont_table <- as.data.frame(table(var1_fact, var2_fact))
-        colnames(cont_table) <- c(var1, var2, "Freq")
-    }
-    cont_table
-}
-
 #' @importFrom dplyr select one_of %>%
 NULL
 
@@ -240,10 +160,14 @@ check_num_na <- function(var, na_as_num = TRUE) {
 #'
 #' @description Check which individuals are parents.
 #'
-#' @param id Vector of individual id
-#' @param dadid Vector of father index
-#' @param momid Vector of mother index
-#' @param missid Missing value identifier
+#' @param id A vector of each subjects identifiers
+#' @param dadid A vector containing for each subject, the identifiers of the
+#' biologicals fathers.
+#' @param momid  vector containing for each subject, the identifiers of the
+#' biologicals mothers.
+#' @param missid The missing identifier value. Founders are the individuals with
+#' no father and no mother in the pedigree (i.e. `dadid` and `momid` equal to
+#' the value of this variable).  The default for `missid` is `"0"`.
 #'
 #' @return A vector of boolean of the same size as `id`
 #' with TRUE if the individual is a parent and FALSE otherwise
@@ -266,9 +190,7 @@ is_parent <- function(id, dadid, momid, missid = "0") {
 #'
 #' @description Check which individuals are founders.
 #'
-#' @param dadid Vector of father index
-#' @param momid Vector of mother index
-#' @param missid Missing value identifier
+#' @inheritParams is_parent
 #'
 #' @return A vector of boolean of the same size as `dadid` and `momid`
 #' with TRUE if the individual has no parents (i.e is a founder) and FALSE
@@ -286,9 +208,7 @@ is_founder <- function(momid, dadid, missid = "0") {
 #' @details An individuals is considered disconnected if the kinship with
 #' all the other individuals is 0.
 #'
-#' @param id Vector of individual id
-#' @param dadid Vector of father id
-#' @param momid Vector of mother id
+#' @inheritParams is_parent
 #'
 #' @return A vector of boolean of the same size as `id`
 #' with TRUE if the individual is disconnected and FALSE otherwise
@@ -301,5 +221,79 @@ is_disconnected <- function(id, dadid, momid) {
     kin_mat <- kinship(id, dadid, momid)
     diag(kin_mat) <- 0
     apply(kin_mat == 0, 1, all)
+}
+
+#' @importFrom plyr revalue
+NULL
+
+#' Transform a gender variable to an ordered factor
+#'
+#' @param sex A character, factor or numeric vector corresponding to
+#' the gender of the individuals. The following values are recognized:
+#' - character() or factor() : "f", "m", "woman", "man", "male", "female",
+#' "unknown", "terminated"
+#' - numeric() : 1 = "male", 2 = "female", 3 = "unknown", 4 = "terminated"
+#'
+#' @return an ordered factor vector containing the transformed variable
+#' "male" > "female" > "unknown" > "terminated"
+#' @export
+sex_to_factor <- function(sex) {
+    if (is.factor(sex) || is.numeric(sex)) {
+        sex <- as.character(sex)
+    }
+    ## Normalized difference notations for sex
+    sex_equiv <- c(
+        f = "female", m = "male", woman = "female", man = "male",
+        female = "female", male = "male", `2` = "female", `1` = "male",
+        `3` = "unknown", `4` = "terminated"
+    )
+    sex <- suppressMessages(as.character(revalue(as.factor(
+        casefold(sex, upper = FALSE)
+    ), sex_equiv)))
+    sex_codes <- c("male", "female", "unknown", "terminated")
+    sex[!sex %in% sex_codes] <- "unknown"
+
+    sex <- factor(sex, sex_codes, ordered = TRUE)
+    sex
+}
+
+#' @importFrom stringr str_remove_all
+NULL
+
+#' Transform a relationship code variable to an ordered factor
+#'
+#' @param rel_code A character, factor or numeric vector corresponding to
+#' the realtion code of the individuals:
+#' - MZ twin = Monozygotic twin
+#' - DZ twin = Dizygotic twin
+#' - UZ twin = twin of unknown zygosity
+#' - Spouse = Spouse
+#' The following values are recognized:
+#' - character() or factor() : "MZ twin", "DZ twin", "UZ twin", "Spouse" with
+#' of without space between the words. The case is not important.
+#' - numeric() : 1 = "MZ twin", 2 = "DZ twin", 3 = "UZ twin", 4 = "Spouse"
+#'
+#' @return an ordered factor vector containing the transformed variable
+#' "MZ twin" < "DZ twin" < "UZ twin" < "Spouse"
+#' @export
+rel_code_to_factor <- function(rel_code) {
+    if (is.factor(rel_code) || is.numeric(rel_code)) {
+        rel_code <- as.character(rel_code)
+    }
+    ## Normalized difference notations for code
+    code_equiv <- c(
+        mztwin = "MZ twin", dztwin = "DZ twin", uztwin = "UZ twin",
+        spouse = "Spouse",
+        `1` = "MZ twin", `2` = "DZ twin", `3` = "UZ twin", `4` = "Spouse"
+    )
+    codes <- c("MZ twin", "DZ twin", "UZ twin", "Spouse")
+    rel_code <- suppressMessages(as.character(revalue(as.factor(
+        str_remove_all(
+            casefold(as.character(rel_code), upper = FALSE),
+            " "
+        )
+    ), code_equiv)))
+    rel_code <- factor(rel_code, codes, ordered = TRUE)
+    rel_code
 }
 TRUE

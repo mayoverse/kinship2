@@ -5,8 +5,8 @@ NULL
 #'
 #' @description
 #' Fix the sex of parents, add parents that are missing from the pedigree
-#' Can be used with a dataframe, a pedigree object or a vector of the
-#' different individuals identifiers.
+#' Can be used with a dataframe or a vector of the
+#' different individuals informations.
 #'
 #' @details
 #' First look to add parents whose ids are given in momid/dadid. Second, fix
@@ -15,21 +15,20 @@ NULL
 #' If a family vector is given the family id will be added to the ids of all
 #' individuals (id, dadid, momid) separated by an underscore befor proceeding.
 #'
-#' @param obj A pedigree object, a dataframe or a vector of the individuals
-#' identifiers
-#' @param sex Gender column or a vector of the sex of the individuals. Either
-#' character ('male','female','unknown','terminated') or
-#' numeric (1='male', 2='female',#' 3='unknown', 4='terminated')
-#' data is allowed.
-#' @param missid The founders are those with no father or mother in the
-#' pedigree.  The \\code{dadid} and \\code{momid} values for these subjects will
-#' either be NA or the value of this variable.  The default for \\code{missid}
-#' is 0 if the \\code{id} variable is numeric, and '' (the empty string)
-#' otherwise.
+#' ## Special case for dataframe
+#' Check for presence of both parents id in the `id` field.
+#' If not both presence behaviour depend of `delete` parameter
+#' - If TRUE then use fix_parents function and merge back the other fields
+#' in the dataframe then set availability to O for non available parents.
+#' - If FALSE then delete the id of missing parents
+#'
 #' @param family Optional family identification set it to NULL to invalidate.
 #' If used it will modify the ids of the individuals by pasting it with an _.
-#' @inheritParams descendants
-#' @param ... Additional arguments to be passed to methods.
+#' @inheritParams kinship
+#' @inheritParams sex_to_factor
+#' @param obj A data.frame or a vector of the individuals identifiers. If a
+#' dataframe is given it must contain the columns `id`, `dadid`, `momid`,
+#' `sex` and `family`. Family is optional.
 #'
 #' @return A data.frame with id, dadid, momid, sex as columns with the
 #' relationships fixed.
@@ -56,7 +55,6 @@ NULL
 #' as.data.frame(newped)
 #'
 #' @author Jason Sinnwell
-#' @seealso \\code{\\link{pedigree}}
 #' @export
 setGeneric("fix_parents", signature = "obj",
     function(obj, ...) standardGeneric("fix_parents")
@@ -82,14 +80,8 @@ setMethod("fix_parents", "character", function(
     if (length(family) != n & length(family) > 0) {
         stop("Mismatched lengths, id and sex")
     }
-    if (is.factor(sex)) {
-        sex <- as.character(sex)
-    }
-    codes <- c("male", "female", "unknown", "terminated")
-    if (is.character(sex)) {
-        sex <- charmatch(casefold(sex, upper = FALSE), codes, nomatch = 3)
-    }
-    sex <- as.integer(sex)
+
+    sex <- as.numeric(sex_to_factor(sex))
     if (min(sex) == 0) {
         warning(paste0("Sex values contain 0, but expected codes 1-4.\n",
             "Setting 0=male, 1=female, 2=unknown, 3=terminated. \n"
@@ -180,31 +172,21 @@ setMethod("fix_parents", "character", function(
     }
 })
 
-#' Fix missing parents
-#'
-#' @description Apply fix_parents on a dataframe or delete missing parents.
-#'
-#' @details Check for presence of both parents id in the `id` field.
-#' If not both presence behaviour depend of `delete` parameter
-#' If TRUE then use fix_parents function and merge back the other fields
-#' in the dataframe then set availability to O for non available parents.
-#' If FALSE then delete the id of missing parents
-#'
 #' @param delete Boolean defining if missing parents needs to be:
 #' - `TRUE` : added as a new row
 #' - `FALSE` : be deleted
 #' @param filter Filtering column containing `0` or `1` for the
-#' individual to kept
-#'
-#' @return The same dataframe with the parents ids fixed
+#' rows to kept before proceeding.
 #'
 #' @export
 #' @rdname fix_parents
 setMethod("fix_parents", "data.frame", function(
     obj, delete = FALSE, filter = NULL, missid = "0"
 ) {
-    cols_needed <- c("id", "dadid", "momid", "sex", filter, "family")
-    df <- check_columns(obj, cols_needed, "", "", others_cols = TRUE)
+    cols_needed <- c("id", "dadid", "momid", "sex", filter)
+    df <- check_columns(obj, cols_needed, NULL, "family", others_cols = TRUE,
+        cols_to_use_init = TRUE
+    )
     df_old <- df
     if (!is.null(filter)) {
         if (is.logical(df[[filter]])) {
@@ -213,9 +195,6 @@ setMethod("fix_parents", "data.frame", function(
             stop("Error, filtering column must me only TRUE or FALSE")
         }
     }
-    all_id <- c(df$id, df$dadid, df$momid)
-    all_id <- unique(all_id[all_id != missid])
-
     if (nrow(df) > 2) {
         if (delete) {
             # One of the parents doesn't not have a line in id
@@ -224,9 +203,6 @@ setMethod("fix_parents", "data.frame", function(
             df[dad_present == missid |
                     mom_present == missid, c("momid", "dadid")
             ] <- missid
-
-            all_id_new <- c(df$id, df$dadid, df$momid)
-            all_id_new <- unique(all_id_new[all_id_new != missid])
         }
         df_fix <- fix_parents(
             df$id, df$dadid, df$momid,
@@ -240,9 +216,6 @@ setMethod("fix_parents", "data.frame", function(
         df <- merge(df_old[, -col_used], df_fix, by = "id",
             all.y = TRUE, all.x = FALSE
         )
-        all_id_new <- c(df$id, df$dadid, df$momid)
-        all_id_new <- unique(all_id_new[all_id_new != missid])
-        all_id_dif <- all_id_new[!all_id_new %in% all_id]
     }
     df
 })

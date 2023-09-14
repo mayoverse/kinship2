@@ -18,12 +18,8 @@
 #' 2. Subjects with unaffected affected status
 #' 3. Affected subjects.
 #'
-#' @aliases pedigree.shrink print.pedigree.shrink
-#' @param ped Pedigree object created by the pedigree function,
-#' @param avail Vector of binary availability status (0/1), i.e. having data,
-#' or sample available
-#' @param affected Vector of binary affected status (0/1/NA). If NULL, uses
-#' first column of the pedigree object affected matrix.
+#' @inheritParams align
+#' @inheritParams is_informative
 #' @param max_bits Optional, the bit size for which to shrink the pedigree
 #'
 #' @return A list containing the following elements:

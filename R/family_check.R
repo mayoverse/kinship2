@@ -16,7 +16,7 @@
 #' It will be a matrix with family as row labels, new-family-id as the columns,
 #' and the number of subjects as entries.
 #'
-#' @inheritParams descendants
+#' @inheritParams kinship
 #' @param family A vector of family identifiers
 #' @param newfam The result of a call to `make_famid()`. If this has already
 #' been computed by the user, adding it as an argument shortens the running

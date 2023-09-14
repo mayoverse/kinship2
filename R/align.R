@@ -72,7 +72,7 @@ ancestors <- function(idx, momx, dadx) {
 #' left spouse, the right hand spouse, and the anchor
 #' (i.e : `1` = left, `2` = right, `0` = either).
 #' Children will preferentially appear under the parents of the anchored spouse.
-#' @param missid The missing id code in the pedigree (default is  `0`)
+#' @inheritParams is_parent
 #'
 #' @return A list with components
 #' - n A vector giving the number of subjects on each horizonal level of the

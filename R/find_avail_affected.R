@@ -11,10 +11,9 @@
 #' affected indicator, if the affected item in the pedigree is a matrix of
 #' multiple affected indicators.
 #'
-#' @param avail Vector of availability status (e.g., genotyped) 0/1 or
-#' TRUE/FALSE
 #' @param affstatus Affection status to search for.
 #' @inheritParams align
+#' @inheritParams is_informative
 #'
 #' @return A list is returned with the following components
 #' - ped The new pedigree object

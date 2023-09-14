@@ -6,8 +6,10 @@ NULL
 
 #' Routine to subset a pedigree
 #'
-#' @param subreg a vector of length 4 giving the start and end positions
-#' of the subregion and the start and end depths
+#' @param subreg 4-element vector for (min x, max x, min depth, max depth),
+#' used to edit away portions of the plot coordinates returned by
+#' [align()]. This is useful for zooming in on a particular region of the
+#' pedigree.
 #' @inheritParams auto_hint
 #'
 #' @return a pedigree list
@@ -70,7 +72,7 @@ subregion <- function(plist, subreg) {
 ## Plotting function
 #' Generate a circular element
 #'
-#' @param nslice number of slices
+#' @param nslice number of slices in the circle
 #' @param n Total number of points in the circle
 #'
 #' @return a list of x and y coordinates
@@ -94,7 +96,7 @@ circfun <- function(nslice, n = 50) {
 ## Doc: polyfun
 #' Generate a polygonal element
 #'
-#' @param nslice number of slices
+#' @param nslice number of slices in the polygon
 #' @param coor Element form which to generate the polygon
 #' containing x and y coordinates and theta
 #'
@@ -145,7 +147,7 @@ polyfun <- function(nslice, coor) {
 
 #' Create a list of the different polygonal elements
 #'
-#' @param nslice number of slices
+#' @param nslice number of slices in each element
 #'
 #' @return a list of polygonal elements with x, y coordinates
 #' and theta
@@ -280,6 +282,7 @@ draw_text <- function(x, y, label, p, ggplot_gen = FALSE,
 
 ## Doc: 4 arcs for multiple instances of subj
 #' Draw arcs for multiple instances of a subject
+#'
 #' @inheritParams draw_segment
 #'
 #' @return Plot the arcs or add it to a ggplot object
@@ -303,6 +306,8 @@ NULL
 
 #' Register the plot
 #'
+#' Use the grid.echo() and grid.grab() functions to register the plot.
+#'
 #' @export
 grab_grob <- function() {
     grid.echo()
@@ -311,12 +316,12 @@ grab_grob <- function() {
 
 #' Set plotting area
 #'
-#' @param cex character expansion
-#' @param id id of the subject
+#' @param cex character expansion of the text
 #' @param maxlev maximum level
 #' @param xrange range of x values
 #' @param symbolsize size of the symbols
 #' @param ... other arguments passed to [par()]
+#' @inheritParams is_parent
 #'
 #' @return a list of user coordinates, old par, box width, box height,
 #' label height and leg height

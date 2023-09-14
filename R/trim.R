@@ -3,9 +3,9 @@
 #'
 #' Carries out the removal of the subjects identified from a pedigree object.
 #'
-#' @param ped Pedigree object
+#' @inheritParams align
+#' @inheritParams is_parent
 #' @param id_rm Vector of ids to remove
-#' @param missid Missing id to replace removed subjects
 #'
 #' @return A Pedigree object with the subjects removed
 #'

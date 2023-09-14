@@ -8,8 +8,26 @@
 #' data.frame.
 #'
 #' @param ped_df A data.frame with the individuals informations.
+#' The minimum columns required are `id`, `dadid`, `momid` and `sex`.
+#' The `family` column can also be used to specify the family of the
+#' individuals and will be merge to the `id` field separated by an
+#' underscore.
+#' The following columns are also recognize `steril`, `avail`, `status`,
+#' `affected`. They respectively correspond to the sterilisation status,
+#' the availability status, the death status and the affection status
+#' of the individuals. The values recognized for those columns are `1` or
+#' `0`.
 #' @param rel_df A data.frame with the special relationships between
 #' individuals.
+#' The minimum columns required are `id1`, `id2` and `code`. The `family`
+#' column can also be used to specify the family of the individuals.
+#' The code values are:
+#' - `1` = Monozygotic twin
+#' - `2` = Dizygotic twin
+#' - `3` = twin of unknown zygosity
+#' - `4` = Spouse
+#' The value relation code recognized by the function are the one defined
+#' by the [rel_code_to_factor()] function.
 #' @param cols_ren_ped A named list with the columns to rename for the
 #' pedigree dataframe.
 #' @param cols_ren_rel A named list with the columns to rename for the

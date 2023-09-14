@@ -11,18 +11,15 @@
 #' tree 1, otherwise the tree numbers represent the disconnected subfamilies.
 #' Singleton subjects give a zero for family number.
 #'
-#' @param obj A pedigree object or a vector of the individuals identifiers
-#' @param dadid Identifier for the father.  This will be 0 or '' for a
-#' founder.
-#' @param momid Identifer for the mother.
-#' @param ... Additional arguments to be passed to methods.
+#' @inheritParams kinship
 #'
 #' @return
-#' ## When used with a vector of identifiers
+#' ## When used with a character vector
 #' An integer vector giving family groupings
 #'
 #' ## When used with a pedigree object
 #' An updated pedigree object with the family id added
+#'
 #' @seealso [kinship()]
 #' @export
 setGeneric("make_famid", signature = "obj",

@@ -35,34 +35,11 @@ NULL
 #' importance of sib-parent and spouse-spouse closeness.
 #'
 #' @param x A pedigree object.
-#' @param mark vector indicating the text to plot in the center of the box.
-#' @param label vector indicating the text to plot bellow the box.
-#' @param tips_names vector of column names in dataframe to show when hovering
-#' with plotly.
-#' @param fill vector of color to fill the box.
-#' @param border vector of color for the border of the box.
-#' @param ggplot_gen Boolean to indicate if a ggplot object should be created.
-#' @param cex controls text size.  Default=1.
-#' @param symbolsize controls symbolsize. Default=1.
-#' @param branch defines how much angle is used to connect various levels of
-#' nuclear families.
+#' @inheritParams ped_to_plotdf
+#' @inheritParams plot_fromdf
+#' @inheritParams set_plot_area
+#' @inheritParams subregion
 #' @inheritParams align
-#' @param density defines density used in the symbols.  Takes up to 4 different
-#' values.
-#' @param mar margin parmeters, as in the `par` function
-#' @param angle defines angle used in the symbols.  Takes up to 4 different
-#' values.
-#' @param keep_par Default = FALSE, allows user to keep the parameter settings
-#' the same as they were for plotting (useful for adding extras to the plot)
-#' @param subreg 4-element vector for (min x, max x, min depth, max depth),
-#' used to edit away portions of the plot coordinates returned by
-#' align.pedigree
-#' @param pconnect when connecting parent to children the program will try to
-#' make the connecting line as close to vertical as possible, subject to it
-#' lying inside the endpoints of the line that connects the children by at
-#' least `pconnect` people.  Setting this option to a large number will
-#' force the line to connect at the midpoint of the children.
-#' @param title default=NULL.  If not NULL, a title will be added to the plot.
 #' @param fam_to_plot default=1.  If the pedigree contains multiple families,
 #' this parameter can be used to select which family to plot.
 #' @param legend default=FALSE.  If TRUE, a legend will be added to the plot.
@@ -74,23 +51,9 @@ NULL
 #' @param ... Extra options that feed into the plot function.
 #'
 #' @return an invisible list containing
-#' ## plist
-#' A list that contains all the position information for
-#' plotting the pedigree. This will useful for further functions (yet unwritten)
-#' for manipulating the plot, but likely not to an ordinary user.
-#' ## x,y
-#' The x an and y plot coordinates of each subject in the plot.
-#' The coordinate is for the top of the plotted symbol.
-#' These will be in the same order as the input pedigree.  If someone in the
-#' pedigree does not appear in the plot their coordinates will be NA.  If they
-#' appear multiple times one of the instances is chosen.  (Which one is a
-#' function of the order in which the pedigree was constructed.)
-#' ## boxh
-#' The height of the symbol, in user coordinates
-#' ## boxw
-#' The width of the symbol
-#' ## call
-#' A copy of the call that generated the plot
+#' - df : the data.frame used to plot the pedigree
+#' - par_usr : the user coordinates used to plot the pedigree
+#' - ggplot : the ggplot object if ggplot_gen = TRUE
 #'
 #' @examples
 #' data(sampleped)
@@ -110,12 +73,9 @@ NULL
 #' @docType methods
 setMethod("plot", c(x = "Pedigree", y = "missing"),
     function(x, mark = TRUE,
-        label = NULL, tips_names = NULL, fill = "grey", border = "black",
-        ggplot_gen = FALSE, cex = 1, symbolsize = 1, branch = 0.6,
+        label = NULL, ggplot_gen = FALSE, cex = 1, symbolsize = 1, branch = 0.6,
         packed = TRUE, align = c(1.5, 2), width = 6,
-        title = NULL, density = c(-1, 35, 65, 20),
-        mar = c(4.1, 1, 4.1, 1), angle = c(90, 65, 40, 0),
-        keep_par = FALSE, subreg = NULL, pconnect = 0.5, fam_to_plot = 1,
+        title = NULL, subreg = NULL, pconnect = 0.5, fam_to_plot = 1,
         legend = FALSE, leg_cex = 0.8, leg_symbolsize = 0.5,
         leg_loc = NULL, ...
     ) {

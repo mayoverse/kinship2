@@ -11,26 +11,18 @@ NULL
 #' If a relation ship matrix is given, then even if no children is present
 #' between 2 spouses, the indirect childs will still be added.
 #'
-#' @param obj A pedigree object, a dataframe or a vector of the individuals
-#' @param dadid The id of the father
-#' @param momid The id of the mother
-#' @param relation A matrix with 3 required columns (id1, id2, code) specifying
-#' special relationship between pairs of individuals.
-#' Codes: 1=Monozygotic twin, 2=Dizygotic twin, 3=twin of unknown zygosity,
-#' 4=Spouse.
-#' @param missid Missing id code
-#' @param ... Additional arguments to be passed to methods.
-#'
+#' @inheritParams kinship
+#' @inheritParams pedigree
 #'
 #' @return
-#' ## When obj is a vector or a dataframe
+#' ## When obj is a vector
 #' A dataframe with the columns `num_child_dir`, `num_child_ind` and
 #' `num_child_tot` giving respectively the direct, indirect and total number
 #' of child.
 #'
 #' ## When obj is a pedigree object
 #' An updated pedigree object with the columns `num_child_dir`, `num_child_ind`
-#' and `num_child_tot` added to the pedigree.
+#' and `num_child_tot` added to the pedigree `ped` slot.
 #'
 #' @include pedigreeClass.R
 #' @export
@@ -43,7 +35,7 @@ setGeneric("num_child", signature = "obj",
 #' @aliases num_child,character
 #' @docType methods
 setMethod("num_child", "character", function(obj, dadid, momid,
-    relation = NULL, missid = "0"
+    rel_df = NULL, missid = "0"
 ) {
     id <- obj
 
@@ -66,13 +58,13 @@ setMethod("num_child", "character", function(obj, dadid, momid,
     )
     colnames(spouse_rel) <- c("id1", "id2")
 
-    if (!is.null(relation)) {
+    if (!is.null(rel_df)) {
         cols_needed <- c("id1", "id2", "code")
-        relation <- check_columns(relation, cols_needed, "", "",
+        rel_df <- check_columns(rel_df, cols_needed, "", "",
             others_cols = FALSE
         )
         spouse_rel <- rbind(spouse_rel,
-            relation[relation$code == "Spouse", c("id1", "id2")]
+            rel_df[rel_df$code == "Spouse", c("id1", "id2")]
         )
     }
     spouse_rel$idmin <- pmin(spouse_rel$id1, spouse_rel$id2)
@@ -126,24 +118,14 @@ setMethod("num_child", "character", function(obj, dadid, momid,
 
 #' @export
 #' @rdname num_child
-#' @aliases num_child,data.frame
-#' @docType methods
-setMethod("num_child", "data.frame", function(obj, relation = NULL, ...) {
-    cols_needed <- c("id", "dadid", "momid")
-    cols_used <- c("num_child_dir", "num_child_ind", "num_child_tot")
-
-    df <- check_columns(obj, cols_needed, cols_used, "", others_cols = TRUE)
-
-    num_child(df$id, df$dadid, df$momid, relation = relation)
-})
-
-#' @export
-#' @rdname num_child
 #' @aliases num_child,Pedigree
 #' @docType methods
-#' @param reset If TRUE, the num_child columns are reset
+#' @param reset If TRUE, the `num_child_tot`, `num_child_ind` and
+#' the `num_child_dir` columns are reset.
 setMethod("num_child", "Pedigree", function(obj, reset = FALSE) {
-    df <- num_child(obj$ped, relation = obj$rel)
+    df <- num_child(obj$ped$id, obj$ped$dadid, obj$ped$momid,
+        rel_df = obj$rel
+    )
 
     if (!reset) {
         check_columns(obj$ped, NULL,

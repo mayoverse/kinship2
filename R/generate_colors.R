@@ -186,10 +186,10 @@ generate_border <- function(avail, colors_avail = c("green", "black")) {
 #' the colors for the filling and the border of the individuals based
 #' on the affection and availability status.
 #'
-#' @param obj A dataframe containing the columns to process or a pedigree
-#' object.
-#' @param col_aff The name of the column containing the affection status.
+#' @param obj A pedigree object or a vector containing the affection status for
+#' each individuals.
 #' @param col_avail The name of the column containing the availability status.
+#' @inheritParams is_informative
 #' @inheritParams generate_fill
 #' @inheritParams generate_border
 #' @inheritParams generate_aff_inds
@@ -242,20 +242,34 @@ setMethod("generate_colors", "character",
     }
 )
 
-#' @export
-#' @aliases generate_colors,data.frame
+#' @importFrom plyr rbind.fill
+#' @include pedigreeClass.R
+#' @docType methods
+#' @aliases generate_colors,Pedigree
+#' @param add_to_scale Boolean defining if the scales need to be added to the
+#' existing scales or if they need to replace the existing scales.
+#' @param reset If `TRUE` the scale of the specified column will be reset if
+#' already present.
+#' @param ... Other parameters to pass to the `generate_colors` function
 #' @rdname generate_colors
-setMethod("generate_colors", "data.frame",
-    function(
-        obj, col_aff = "affected", col_avail = "avail",
+#' @export
+setMethod("generate_colors", "Pedigree",
+    function(obj,
+        col_aff = "affected", add_to_scale = TRUE,
+        col_avail = "avail",
         mods_aff = NULL, threshold = 0.5, sup_thres_aff = TRUE,
         keep_full_scale = FALSE, breaks = 3,
         colors_aff = c("yellow2", "red"),
         colors_unaff = c("white", "steelblue4"),
-        colors_avail = c("green", "black")
+        colors_avail = c("green", "black"),
+        reset = TRUE
     ) {
+        if (nrow(obj$ped) == 0) {
+            return(obj)
+        }
+
         new_col <- paste0(col_aff, "_aff")
-        df <- check_columns(obj, c(col_aff, col_avail),
+        df <- check_columns(obj$ped, c(col_aff, col_avail),
             "", new_col, others_cols = TRUE
         )
 
@@ -275,30 +289,8 @@ setMethod("generate_colors", "data.frame",
             fill = lst_sc$fill_scale,
             border = lst_sc$border_scale
         )
-        list(df = df, scales = scales)
-    }
-)
 
-#' @importFrom plyr rbind.fill
-#' @include pedigreeClass.R
-#' @docType methods
-#' @aliases generate_colors,Pedigree
-#' @param add_to_scale Boolean defining if the scales need to be added to the
-#' existing scales or if they need to replace the existing scales.
-#' @param reset Boolean defining if the scale of the specified column need to
-#' be reset if already present.
-#' @param ... Other parameters to pass to the `generate_colors` function
-#' @rdname generate_colors
-#' @export
-setMethod("generate_colors", "Pedigree",
-    function(obj, col_aff = "affected", add_to_scale = TRUE,
-        reset = TRUE, ...
-    ) {
-        if (nrow(obj$ped) == 0) {
-            return(obj)
-        }
-        list_aff <- generate_colors(obj$ped, col_aff, ...)
-        obj$ped <- list_aff$df
+        obj$ped <- df
 
         if (add_to_scale) {
             if (col_aff %in% obj$scales$fill$column_values &
@@ -312,16 +304,15 @@ setMethod("generate_colors", "Pedigree",
             new_order <- ifelse(nrow(obj$scales$fill) > 0,
                 max(obj$scales$fill$order) + 1, 1
             )
-            list_aff$scales$fill$order <- new_order
-            list_aff$scales$fill <- rbind.fill(obj$scales$fill,
-                list_aff$scales$fill
+            scales$fill$order <- new_order
+            scales$fill <- rbind.fill(obj$scales$fill,
+                scales$fill
             )
         } else {
-            list_aff$scales$fill$order <- 1
-            list_aff$scales$fill <- list_aff$scales$fill
+            scales$fill$order <- 1
         }
 
-        obj$scales <- list_aff$scales
+        obj$scales <- scales
         validObject(obj)
         obj
     }

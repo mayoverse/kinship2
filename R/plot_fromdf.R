@@ -32,11 +32,10 @@ NULL
 #' - `adjy`: The y adjustment of the element. Only used for `text`.
 #' @param usr The user coordinates of the plot.
 #' @param title The title of the plot.
-#' @param boxw The width of each box.
-#' @param boxh The height of each box.
-#' @param add_to_existing A logical to know if the plot should be added to an
-#' existing plot.
+#' @param add_to_existing If `TRUE`, the plot will be added to the current
+#' plot.
 #' @inheritParams draw_segment
+#' @inheritParams ped_to_plotdf
 #' @include plot_fct.R
 #' @export
 plot_fromdf <- function(

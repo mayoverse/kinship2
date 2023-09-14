@@ -10,15 +10,12 @@
 #' In the case of an inbred pedigree a perfect alignment obeying
 #' `extra=TRUE` may not exist.
 #'
-#' @param obj A pedigree object or a vector of the individuals identifiers
-#' @param dadid Id code for the father
-#' @param momid Id code for the mother
+#' @inheritParams kinship
 #' @param align_parents If `align_parents=T`, go one step further and try to
 #' make both parents of each child have the same depth.
 #' (This is not always possible).
 #' It helps the drawing program by lining up pedigrees that 'join in the middle'
 #' via a marriage.
-#' @param ... Additional arguments to be passed to methods.
 #'
 #' @return an integer vector containing the depth for each subject
 #'

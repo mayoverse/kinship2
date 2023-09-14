@@ -7,14 +7,21 @@
 #' of their parents. A `useful` column is added to the dataframe with the
 #' usefulness of the individual. This boolean is hereditary.
 #'
-#' @param obj A dataframe, a Pedigree object or a character vector of ids
 #' @param num_child_tot A numeric vector of the number of children of each
 #' individuals
 #' @param keep_infos Boolean to indicate if individuals with unknown status
 #' but available or reverse should be kept
 #' @inheritParams is_informative
 #' @inheritParams num_child
-#' @param ... Other arguments passed to methods.
+#' @inheritParams kinship
+#'
+#' @return
+#' ## When obj is a vector
+#' A vector of useful individuals identifiers
+#'
+#' ## When obj is a Pedigree
+#' The Pedigree object with a new column named 'useful' containing 1 for
+#' useful individuals and 0 otherwise.
 #'
 #' @export
 setGeneric("useful_inds", signature = "obj",
@@ -64,28 +71,7 @@ setMethod("useful_inds", "character",
             num_ind_old <- num_ind_new
             num_ind_new <- length(id[to_kept])
         }
-        to_kept
-    }
-)
-
-#' @docType methods
-#' @aliases useful_inds,data.frame
-#' @export
-#' @rdname useful_inds
-setMethod("useful_inds", "data.frame",
-    function(obj, informative = "AvAf", keep_infos = FALSE, missid = "0") {
-        df <- obj
-        cols_needed <- c(
-            "id", "dadid", "momid",
-            "avail", "affected", "num_child_tot"
-        )
-
-        check_columns(df, cols_needed, "", "", others_cols = TRUE)
-        with(df, useful_inds(
-            id, dadid, momid,
-            avail, affected, num_child_tot,
-            informative, keep_infos, missid
-        ))
+        id[to_kept]
     }
 )
 
@@ -94,13 +80,21 @@ setMethod("useful_inds", "data.frame",
 #' @export
 #' @rdname useful_inds
 #' @param reset Boolean to indicate if the `useful` column should be reset
-setMethod("useful_inds", "Pedigree",
-    function(obj, reset = FALSE, ...) {
-        to_kept <- useful_inds(obj$ped, ...)
-        if (!reset) {
-            check_columns(obj$ped, NULL, "useful", NULL, others_cols = TRUE)
-        }
-        obj$ped$useful <- to_kept
-        obj
+setMethod("useful_inds", "Pedigree", function(obj,
+    informative = "AvAf", keep_infos = FALSE,
+    missid = "0", reset = FALSE
+) {
+    cols_needed <- c(
+        "avail", "affected", "num_child_tot"
+    )
+    check_columns(obj$ped, cols_needed, "", "", others_cols = TRUE)
+    useful <- useful_inds(obj$ped$id, obj$ped$dadid, obj$ped$momid,
+        obj$ped$avail, obj$ped$affected, obj$ped$num_child_tot,
+        informative, keep_infos, missid
+    )
+    if (!reset) {
+        check_columns(obj$ped, NULL, "useful", NULL, others_cols = TRUE)
     }
-)
+    obj$ped$useful <- ifelse(obj$ped$id %in% useful, 1, 0)
+    obj
+})

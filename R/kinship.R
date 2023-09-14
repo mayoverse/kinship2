@@ -38,14 +38,11 @@ NULL
 #' assumes that the founder alleles are all independent.
 #'
 #' @param obj A pedigree object or a vector of subject identifiers.
-#' @param dadid for each subject, the identifier of the biological father.
-#' This is only used if `id` is a vector.
-#' @param momid for each subject, the identifier of the biological mother.
-#' This is only used if `id` is a vector.
-#' @param sex vector of sex values coded as 1=male, 2=female
 #' @param chrtype chromosome type.  The currently supported types are
 #' 'autosome' and 'X' or 'x'.
-#' @param ... Any number of optional arguments
+#' @param ... Additional arguments passed to methods
+#' @inheritParams sex_to_factor
+#' @inheritParams is_parent
 #'
 #' @return
 #' ## When obj is a vector
@@ -63,6 +60,7 @@ NULL
 #' Genetic Analysis, Springer-Verlag, New York, 1997.
 #' @seealso [make_famid()], [kindepth()]
 #' @include pedigreeClass.R
+#' @include utils.R
 #' @export
 #' @docType methods
 setGeneric("kinship", signature = "obj",
@@ -103,6 +101,7 @@ setMethod("kinship", "character",
                 stop("invalid sex vector")
             }
             # 1 = female, 2=male
+            sex <- as.numeric(sex_to_factor(sex))
             if (n == 1) {
                 return(
                     matrix(ifelse(sex > 2, sex / 2, NA), 1, 1,
@@ -110,7 +109,6 @@ setMethod("kinship", "character",
                     )
                 )
             }
-            sex <- as.numeric(sex)
             kmat <- diag(ifelse(sex > 2, NA, c((3 - sex) / 2, 0)))
             for (depth in 1:max(c(1, pdepth))) {
                 for (j in (1:n)[pdepth == depth]) {

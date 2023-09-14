@@ -10,7 +10,7 @@ NULL
 #'
 #' @param family_id The family id
 #' @param ind_id The individual id
-#' @param missid The missing id
+#' @inheritParams kinship
 #'
 #' @return The id with the family id merged
 #' @export
@@ -42,11 +42,11 @@ prefix_famid <- function(family_id, ind_id, missid = "0") {
 #' All individuals with errors will be remove from the dataframe and will
 #' be transfered to the error dataframe.
 #'
-#' @param ped_df The dataframe to process
 #' @param na_strings Vector of strings to be considered as NA values
-#' @param missid The missing id value
 #' @param try_num Boolean defining if the function should try to convert
 #' all the columns to numeric.
+#' @inheritParams is_parent
+#' @inheritParams pedigree
 #'
 #' @return List of two dataframe
 #' `norm` is the dataframe with all the individuals without any errors.
@@ -100,20 +100,7 @@ norm_ped <- function(
         )
 
         #### Sex ####
-        if (is.factor(ped_df$gender) || is.numeric(ped_df$gender)) {
-            ped_df$gender <- as.character(ped_df$gender)
-        }
-        ## Normalized difference notations for sex
-        sex_equiv <- c(
-            f = "female", m = "male", woman = "female", man = "male",
-            female = "female", male = "male", `2` = "female", `1` = "male",
-            `3` = "unknown", `4` = "terminated"
-        )
-        ped_df$sex <- suppressMessages(as.character(revalue(as.factor(
-            casefold(ped_df$gender, upper = FALSE)
-        ), sex_equiv)))
-        sex_codes <- c("male", "female", "unknown", "terminated")
-        ped_df$sex[!ped_df$sex %in% sex_codes] <- "unknown"
+        ped_df$sex <- sex_to_factor(ped_df$gender)
 
         is_father <- ped_df$id %in% ped_df$dadid & !is.na(ped_df$id)
         is_mother <- ped_df$id %in% ped_df$momid & !is.na(ped_df$id)
@@ -122,11 +109,9 @@ norm_ped <- function(
         ped_df$sex[is.na(ped_df$gender) & is_father] <- "male"
         ped_df$sex[is.na(ped_df$gender) & is_mother] <- "female"
 
-        ## Set as ordered factor
-        ped_df$sex <- factor(ped_df$sex, sex_codes, ordered = TRUE)
-
         ## Add terminated for sterilized individuals that is neither dad nor mom
         if ("steril" %in% colnames(ped_df)) {
+            ped_df$steril <- as.logical(ped_df$steril)
             ped_df$sex[
                 ped_df$steril == "TRUE" & !is.na(ped_df$steril) &
                     !is_father & !is_mother
@@ -236,9 +221,9 @@ norm_ped <- function(
 #'
 #' @description Normalise relationship dataframe for pedigree object
 #'
-#' @param rel_df The dataframe to process
-#' @param na_strings Vector of strings to be considered as NA values
-#' @param missid The missing id value
+#' @inheritParams norm_ped
+#' @inheritParams pedigree
+#' @inheritParams is_parent
 #'
 #' @return A dataframe with the errors identified
 #' @export
@@ -261,20 +246,10 @@ norm_rel <- function(rel_df, na_strings = c("NA", ""), missid = "0") {
         )
 
         #### Check for code ####
-        code_equiv <- c(
-            mztwin = "MZ twin", dztwin = "DZ twin", uztwin = "UZ twin",
-            spouse = "Spouse",
-            `1` = "MZ twin", `2` = "DZ twin", `3` = "UZ twin", `4` = "Spouse"
-        )
-        codes <- c("MZ twin", "DZ twin", "UZ twin", "Spouse")
-        rel_df$code <- suppressMessages(as.character(revalue(as.factor(
-            str_remove_all(
-                casefold(as.character(rel_df$code), upper = FALSE),
-                " "
-            )
-        ), code_equiv)))
-        rel_df$code <- factor(rel_df$code, codes, ordered = TRUE)
-        err$codeErr[!rel_df$code %in% codes] <- "CodeNotRecognise"
+        rel_df$code <- rel_code_to_factor(rel_df$code)
+        err$codeErr[!rel_df$code %in%
+                c("MZ twin", "DZ twin", "UZ twin", "Spouse")
+        ] <- "CodeNotRecognise"
 
         #### Check for id errors #### Set ids as characters
         rel_df <- rel_df %>%

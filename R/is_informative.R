@@ -10,32 +10,36 @@
 #' corresponding informative individuals based on the avail and affected
 #' columns.
 #'
-#' @param obj A vector of individuals identifiers, a dataframe or a Pedigree
-#' object.
-#' @param avail A vector of individuals availability (0, 1 or NA)
-#' @param affected A vector of individuals affected status (0, 1 or NA)
-#' @param col_aff A string with the column name to use for the affected status.
-#' This column must be in the scales fill.
+#' @param avail A numeric vector of availability status of each individual
+#' (e.g., genotyped). The values are:
+#' - `0`  : unavailable
+#' - `1`  : available
+#' - `NA` : availability not known
+#' @param affected A numeric vector of affection status of each individual
+#' (e.g., genotyped). The values are:
+#' - `0`  : unaffected
+#' - `1`  : affected
+#' - `NA` : affection status not known
+#' @param col_aff A string with the column name to use for the affection status.
 #' @param informative Informative individuals selection can take 5 values:
-#' 'AvAf' (available and affected),
-#' 'AvOrAf' (available or affected),
-#' 'Av' (available only),
-#' 'Af' (affected only),
-#' 'All' (all individuals)
-#' or a numeric/character vector of individuals id
-#' or a boolean
-#' @param missid A string with the missing id
-#' @param ... Other arguments passed to methods.
+#' - 'AvAf' (available and affected),
+#' - 'AvOrAf' (available or affected),
+#' - 'Av' (available only),
+#' - 'Af' (affected only),
+#' - 'All' (all individuals)
+#' - A numeric/character vector of individuals id
+#' - A boolean
+#' @inheritParams kinship
 #'
 #' @return
 #'
-#' ## When obj is a vector or a dataframe
-#' A vector of individuals identifiers
+#' ## When obj is a vector
+#' A vector of individuals informative identifiers
 #'
 #' ## When obj is a Pedigree
 #' A list containing the Pedigree object and the vector of individuals
 #' identifiers.
-#' The Pedigree object will have a new column named 'inf' containing 1 for
+#' The Pedigree object will have a new column named 'id_inf' containing 1 for
 #' informative individuals and 0 otherwise.
 #'
 #' @examples
@@ -90,21 +94,9 @@ setMethod("is_informative", "character",
 
 #' @export
 #' @rdname is_informative
-#' @aliases is_informative,data.frame
-#' @docType methods
-setMethod("is_informative", "data.frame",
-    function(obj, informative = "AvAf", missid = "0") {
-        cols_needed <- c("id", "avail", "affected")
-        obj <- check_columns(obj, cols_needed, "", "", others_cols = TRUE)
-        is_informative(obj$id, obj$avail, obj$affected, informative, missid)
-    }
-)
-
-#' @export
-#' @rdname is_informative
 #' @aliases is_informative,Pedigree
 #' @docType methods
-#' @param reset Boolean defining if the `inf` column needs to be reset
+#' @param reset If `TRUE`, the `id_inf` column is reset
 setMethod("is_informative", "Pedigree", function(
     obj, col_aff = NULL, informative = "AvAf", missid = "0", reset = FALSE
 ) {
@@ -125,12 +117,17 @@ setMethod("is_informative", "Pedigree", function(
     } else {
         stop("The column ", col_aff, " is not in the scales fill")
     }
-    id_inf <- is_informative(obj$ped, informative = informative, missid)
+
+    cols_needed <- c("id", "avail", "affected")
+    obj <- check_columns(obj, cols_needed, "", "", others_cols = TRUE)
+    id_inf <- is_informative(obj$ped$id, obj$ped$avail, obj$ped$affected,
+        informative, missid
+    )
 
     if (!reset) {
         check_columns(obj$ped, NULL, "id_inf", NULL)
     }
 
-    obj$ped$inf <- ifelse(obj$ped$id %in% id_inf, 1, 0)
-    list(ped = obj, inf = id_inf)
+    obj$ped$id_inf <- ifelse(obj$ped$id %in% id_inf, 1, 0)
+    obj
 })

@@ -23,7 +23,7 @@ NULL
 #'
 #' @param id1 First subject identifiers
 #' @param id2 Second subject identifiers
-#' @param x the IBD value for that pair
+#' @param ibd the IBD value for that pair
 #' @param idmap an optional 2 column matrix or data frame whose first element
 #' is the internal value (as found in `id1` and `id2`, and whose
 #' second element will be used for the dimnames of the result
@@ -35,7 +35,7 @@ NULL
 #'
 #' @seealso [kinship()]
 #' @export
-ibd_matrix <- function(id1, id2, x, idmap, diagonal) {
+ibd_matrix <- function(id1, id2, ibd, idmap, diagonal) {
     if (!is.null(ncol(id1)) && ncol(id1) == 1)
         id1 <- id1[, 1]
     if (!is.null(ncol(id1))) {
@@ -50,13 +50,13 @@ ibd_matrix <- function(id1, id2, x, idmap, diagonal) {
                 "but id2 argument is present"
             ))
         }
-        if (!missing(x)) {
+        if (!missing(ibd)) {
             stop(paste("First argument is a matrix or dataframe,",
-                "but x argument is present"
+                "but ibd argument is present"
             ))
         }
         id2 <- id1[, 2]
-        x <- id1[, 3]
+        ibd <- id1[, 3]
         id1 <- id1[, 1]
     }
 
@@ -70,15 +70,15 @@ ibd_matrix <- function(id1, id2, x, idmap, diagonal) {
         idlist <- unique(c(id1, id2))
         id1 <- c(id1, idlist)
         id2 <- c(id2, idlist)
-        x <- c(x, rep(diagonal, length(idlist)))
+        ibd <- c(ibd, rep(diagonal, length(idlist)))
     }
 
     # Toss away any zeros and duplicates
-    keep <- (x != 0 & !duplicated(cbind(id1, id2)))
+    keep <- (ibd != 0 & !duplicated(cbind(id1, id2)))
     if (!all(keep)) {
         id1 <- id1[keep]
         id2 <- id2[keep]
-        x <- x[keep]
+        ibd <- ibd[keep]
     }
 
 
@@ -129,7 +129,7 @@ ibd_matrix <- function(id1, id2, x, idmap, diagonal) {
         dimid <- idmap[temp, 2]
     }
 
-    sparseMatrix(i = id1, j = id2, x = x, symmetric = TRUE,
+    sparseMatrix(i = id1, j = id2, ibd = ibd, symmetric = TRUE,
         dimnames = list(dimid, dimid)
     )
 }

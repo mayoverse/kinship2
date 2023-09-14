@@ -11,7 +11,7 @@
 #' cycles, etc.
 #' Users can introduce problems as well if they modify the hints.
 #'
-#' @param sex A vector with the sex of all the individuals
+#' @inheritParams sex_to_factor
 #' @inheritParams align
 #'
 #' @examples
@@ -34,7 +34,7 @@ check_hints <- function(hints, sex) {
     if (length(hints$order) != n) {
         stop("Length for order component should be equal to sex length")
     }
-
+    sex <- as.character(sex_to_factor(sex))
     spouse <- hints$spouse
     if (!is.null(spouse)) {
         lspouse <- spouse[, 1]

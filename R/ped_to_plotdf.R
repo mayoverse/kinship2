@@ -3,13 +3,7 @@ NULL
 
 #' Convert a pedigree to a data frame of element to plot
 #'
-#' @param ped A pedigree object
 #' @inheritParams align
-#' @param subreg 4-element vector for (min x, max x, min depth, max depth),
-#' used to edit away portions of the plot coordinates returned by
-#' align.pedigree
-#' @param cex Size of the text
-#' @param symbolsize Size of the symbols
 #' @param pconnect when connecting parent to children the program will try to
 #' make the connecting line as close to vertical as possible, subject to it
 #' lying inside the endpoints of the line that connects the children by at
@@ -21,7 +15,8 @@ NULL
 #' the affection column for each filling scale.
 #' @param label if not NULL, add a label to each box corresponding to the
 #' value of the column given.
-#' @param ... Other arguments passed to [set_plot_area()].
+#' @inheritParams set_plot_area
+#' @inheritParams subregion
 #'
 #' @return A list containing the data frame and the user coordinates.
 ped_to_plotdf <- function(
