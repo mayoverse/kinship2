@@ -2,20 +2,28 @@
 % Please edit documentation in R/shrink.R
 \name{shrink}
 \alias{shrink}
-\alias{pedigree.shrink}
-\alias{print.pedigree.shrink}
 \title{Shrink pedigree object}
 \usage{
 shrink(ped, avail = ped$ped$avail, affected = ped$ped$affected, max_bits = 16)
 }
 \arguments{
-\item{ped}{Pedigree object created by the pedigree function,}
+\item{ped}{A pedigree object}
 
-\item{avail}{Vector of binary availability status (0/1), i.e. having data,
-or sample available}
+\item{avail}{A numeric vector of availability status of each individual
+(e.g., genotyped). The values are:
+\itemize{
+\item \code{0}  : unavailable
+\item \code{1}  : available
+\item \code{NA} : availability not known
+}}
 
-\item{affected}{Vector of binary affected status (0/1/NA). If NULL, uses
-first column of the pedigree object affected matrix.}
+\item{affected}{A numeric vector of affection status of each individual
+(e.g., genotyped). The values are:
+\itemize{
+\item \code{0}  : unaffected
+\item \code{1}  : affected
+\item \code{NA} : affection status not known
+}}
 
 \item{max_bits}{Optional, the bit size for which to shrink the pedigree}
 }

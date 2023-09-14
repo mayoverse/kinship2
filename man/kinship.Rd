@@ -18,15 +18,21 @@ kinship(obj, ...)
 \arguments{
 \item{obj}{A pedigree object or a vector of subject identifiers.}
 
-\item{...}{Any number of optional arguments}
+\item{...}{Additional arguments passed to methods}
 
-\item{dadid}{for each subject, the identifier of the biological father.
-This is only used if \code{id} is a vector.}
+\item{dadid}{A vector containing for each subject, the identifiers of the
+biologicals fathers.}
 
-\item{momid}{for each subject, the identifier of the biological mother.
-This is only used if \code{id} is a vector.}
+\item{momid}{vector containing for each subject, the identifiers of the
+biologicals mothers.}
 
-\item{sex}{vector of sex values coded as 1=male, 2=female}
+\item{sex}{A character, factor or numeric vector corresponding to
+the gender of the individuals. The following values are recognized:
+\itemize{
+\item character() or factor() : "f", "m", "woman", "man", "male", "female",
+"unknown", "terminated"
+\item numeric() : 1 = "male", 2 = "female", 3 = "unknown", 4 = "terminated"
+}}
 
 \item{chrtype}{chromosome type.  The currently supported types are
 'autosome' and 'X' or 'x'.}

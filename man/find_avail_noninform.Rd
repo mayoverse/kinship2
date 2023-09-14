@@ -9,10 +9,17 @@ find_avail_noninform(ped, avail = ped$ped$avail, missid = "0")
 \arguments{
 \item{ped}{A pedigree object}
 
-\item{avail}{Vector of availability status (e.g. genotyped) 0/1 or
-TRUE/FALSE}
+\item{avail}{A numeric vector of availability status of each individual
+(e.g., genotyped). The values are:
+\itemize{
+\item \code{0}  : unavailable
+\item \code{1}  : available
+\item \code{NA} : availability not known
+}}
 
-\item{missid}{Character defining the missing ids}
+\item{missid}{The missing identifier value. Founders are the individuals with
+no father and no mother in the pedigree (i.e. \code{dadid} and \code{momid} equal to
+the value of this variable).  The default for \code{missid} is \code{"0"}.}
 }
 \value{
 Vector of subject ids who can be removed by having lowest

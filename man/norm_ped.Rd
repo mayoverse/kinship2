@@ -7,11 +7,22 @@
 norm_ped(ped_df, na_strings = c("NA", ""), missid = "0", try_num = FALSE)
 }
 \arguments{
-\item{ped_df}{The dataframe to process}
+\item{ped_df}{A data.frame with the individuals informations.
+The minimum columns required are \code{id}, \code{dadid}, \code{momid} and \code{sex}.
+The \code{family} column can also be used to specify the family of the
+individuals and will be merge to the \code{id} field separated by an
+underscore.
+The following columns are also recognize \code{steril}, \code{avail}, \code{status},
+\code{affected}. They respectively correspond to the sterilisation status,
+the availability status, the death status and the affection status
+of the individuals. The values recognized for those columns are \code{1} or
+\code{0}.}
 
 \item{na_strings}{Vector of strings to be considered as NA values}
 
-\item{missid}{The missing id value}
+\item{missid}{The missing identifier value. Founders are the individuals with
+no father and no mother in the pedigree (i.e. \code{dadid} and \code{momid} equal to
+the value of this variable).  The default for \code{missid} is \code{"0"}.}
 
 \item{try_num}{Boolean defining if the function should try to convert
 all the columns to numeric.}

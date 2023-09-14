@@ -5,8 +5,6 @@
 \alias{is_informative}
 \alias{is_informative,character-method}
 \alias{is_informative,character}
-\alias{is_informative,data.frame-method}
-\alias{is_informative,data.frame}
 \alias{is_informative,Pedigree-method}
 \alias{is_informative,Pedigree}
 \title{Is informative}
@@ -14,8 +12,6 @@
 is_informative(obj, ...)
 
 \S4method{is_informative}{character}(obj, avail, affected, informative = "AvAf", missid = "0")
-
-\S4method{is_informative}{data.frame}(obj, informative = "AvAf", missid = "0")
 
 \S4method{is_informative}{Pedigree}(
   obj,
@@ -26,42 +22,52 @@ is_informative(obj, ...)
 )
 }
 \arguments{
-\item{obj}{A vector of individuals identifiers, a dataframe or a Pedigree
-object.}
+\item{obj}{A pedigree object or a vector of subject identifiers.}
 
-\item{...}{Other arguments passed to methods.}
+\item{...}{Additional arguments passed to methods}
 
-\item{avail}{A vector of individuals availability (0, 1 or NA)}
+\item{avail}{A numeric vector of availability status of each individual
+(e.g., genotyped). The values are:
+\itemize{
+\item \code{0}  : unavailable
+\item \code{1}  : available
+\item \code{NA} : availability not known
+}}
 
-\item{affected}{A vector of individuals affected status (0, 1 or NA)}
+\item{affected}{A numeric vector of affection status of each individual
+(e.g., genotyped). The values are:
+\itemize{
+\item \code{0}  : unaffected
+\item \code{1}  : affected
+\item \code{NA} : affection status not known
+}}
 
 \item{informative}{Informative individuals selection can take 5 values:
-'AvAf' (available and affected),
-'AvOrAf' (available or affected),
-'Av' (available only),
-'Af' (affected only),
-'All' (all individuals)
-or a numeric/character vector of individuals id
-or a boolean}
+\itemize{
+\item 'AvAf' (available and affected),
+\item 'AvOrAf' (available or affected),
+\item 'Av' (available only),
+\item 'Af' (affected only),
+\item 'All' (all individuals)
+\item A numeric/character vector of individuals id
+\item A boolean
+}}
 
-\item{missid}{A string with the missing id}
+\item{col_aff}{A string with the column name to use for the affection status.}
 
-\item{col_aff}{A string with the column name to use for the affected status.
-This column must be in the scales fill.}
-
-\item{reset}{Boolean defining if the \code{inf} column needs to be reset}
+\item{reset}{If \code{TRUE}, the \code{id_inf} column is reset}
 }
 \value{
-\subsection{When obj is a vector or a dataframe}{
+\subsection{When obj is a vector}{
 
-A vector of individuals identifiers
+A vector of individuals informative identifiers
 }
 
 \subsection{When obj is a Pedigree}{
 
 A list containing the Pedigree object and the vector of individuals
 identifiers.
-The Pedigree object will have a new column named 'inf' containing 1 for
+The Pedigree object will have a new column named 'id_inf' containing 1 for
 informative individuals and 0 otherwise.
 }
 }

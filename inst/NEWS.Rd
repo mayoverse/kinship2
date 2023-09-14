@@ -6,7 +6,7 @@
       tips columns can be specified for plotly, a mark inside the box can be added, add drawing progression
     \item All documentation are now generated with Roxygen
     \item Pedigree class updated and improved
-    \item New function available: generate_aff_inds, generate_colors, is_informative, max_kin_inf,
+    \item New function available: generate_aff_inds, generate_colors, is_informative, min_dist_inf,
     normData, num_child, useful_inds
     \item All functions renamed to follow the snake\_case convention
     \item All parametes renamed to follow the snake\_case convention

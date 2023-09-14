@@ -7,7 +7,7 @@
 polygons(nslice = 1)
 }
 \arguments{
-\item{nslice}{number of slices}
+\item{nslice}{number of slices in each element}
 }
 \value{
 a list of polygonal elements with x, y coordinates

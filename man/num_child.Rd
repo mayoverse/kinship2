@@ -5,40 +5,46 @@
 \alias{num_child}
 \alias{num_child,character-method}
 \alias{num_child,character}
-\alias{num_child,data.frame-method}
-\alias{num_child,data.frame}
 \alias{num_child,Pedigree-method}
 \alias{num_child,Pedigree}
 \title{Number of child}
 \usage{
 num_child(obj, ...)
 
-\S4method{num_child}{character}(obj, dadid, momid, relation = NULL, missid = "0")
-
-\S4method{num_child}{data.frame}(obj, relation = NULL, ...)
+\S4method{num_child}{character}(obj, dadid, momid, rel_df = NULL, missid = "0")
 
 \S4method{num_child}{Pedigree}(obj, reset = FALSE)
 }
 \arguments{
-\item{obj}{A pedigree object, a dataframe or a vector of the individuals}
+\item{obj}{A pedigree object or a vector of subject identifiers.}
 
-\item{...}{Additional arguments to be passed to methods.}
+\item{...}{Additional arguments passed to methods}
 
-\item{dadid}{The id of the father}
+\item{dadid}{A vector containing for each subject, the identifiers of the
+biologicals fathers.}
 
-\item{momid}{The id of the mother}
+\item{momid}{vector containing for each subject, the identifiers of the
+biologicals mothers.}
 
-\item{relation}{A matrix with 3 required columns (id1, id2, code) specifying
-special relationship between pairs of individuals.
-Codes: 1=Monozygotic twin, 2=Dizygotic twin, 3=twin of unknown zygosity,
-4=Spouse.}
+\item{rel_df}{A data.frame with the special relationships between
+individuals.
+The minimum columns required are \code{id1}, \code{id2} and \code{code}. The \code{family}
+column can also be used to specify the family of the individuals.
+The code values are:
+\itemize{
+\item \code{1} = Monozygotic twin
+\item \code{2} = Dizygotic twin
+\item \code{3} = twin of unknown zygosity
+\item \code{4} = Spouse
+The value relation code recognized by the function are the one defined
+by the \code{\link[=rel_code_to_factor]{rel_code_to_factor()}} function.
+}}
 
-\item{missid}{Missing id code}
-
-\item{reset}{If TRUE, the num_child columns are reset}
+\item{reset}{If TRUE, the \code{num_child_tot}, \code{num_child_ind} and
+the \code{num_child_dir} columns are reset.}
 }
 \value{
-\subsection{When obj is a vector or a dataframe}{
+\subsection{When obj is a vector}{
 
 A dataframe with the columns \code{num_child_dir}, \code{num_child_ind} and
 \code{num_child_tot} giving respectively the direct, indirect and total number
@@ -48,7 +54,7 @@ of child.
 \subsection{When obj is a pedigree object}{
 
 An updated pedigree object with the columns \code{num_child_dir}, \code{num_child_ind}
-and \code{num_child_tot} added to the pedigree.
+and \code{num_child_tot} added to the pedigree \code{ped} slot.
 }
 }
 \description{

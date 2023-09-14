@@ -23,7 +23,13 @@ left spouse, the right hand spouse, and the anchor
 Children will preferentially appear under the parents of the anchored spouse.
 }}
 
-\item{sex}{A vector with the sex of all the individuals}
+\item{sex}{A character, factor or numeric vector corresponding to
+the gender of the individuals. The following values are recognized:
+\itemize{
+\item character() or factor() : "f", "m", "woman", "man", "male", "female",
+"unknown", "terminated"
+\item numeric() : 1 = "male", 2 = "female", 3 = "unknown", 4 = "terminated"
+}}
 }
 \description{
 This routine tries to detect inconsistencies in spousal hints.

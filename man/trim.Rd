@@ -7,11 +7,13 @@
 trim(ped, id_rm, missid = "0")
 }
 \arguments{
-\item{ped}{Pedigree object}
+\item{ped}{A pedigree object}
 
 \item{id_rm}{Vector of ids to remove}
 
-\item{missid}{Missing id to replace removed subjects}
+\item{missid}{The missing identifier value. Founders are the individuals with
+no father and no mother in the pedigree (i.e. \code{dadid} and \code{momid} equal to
+the value of this variable).  The default for \code{missid} is \code{"0"}.}
 }
 \value{
 A Pedigree object with the subjects removed

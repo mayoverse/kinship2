@@ -37,11 +37,12 @@ numeric the routine \code{alignped4()} will be called.}
 
 \item{subreg}{4-element vector for (min x, max x, min depth, max depth),
 used to edit away portions of the plot coordinates returned by
-align.pedigree}
+\code{\link[=align]{align()}}. This is useful for zooming in on a particular region of the
+pedigree.}
 
-\item{cex}{Size of the text}
+\item{cex}{character expansion of the text}
 
-\item{symbolsize}{Size of the symbols}
+\item{symbolsize}{size of the symbols}
 
 \item{pconnect}{when connecting parent to children the program will try to
 make the connecting line as close to vertical as possible, subject to it
@@ -58,7 +59,7 @@ the affection column for each filling scale.}
 \item{label}{if not NULL, add a label to each box corresponding to the
 value of the column given.}
 
-\item{...}{Other arguments passed to \code{\link[=set_plot_area]{set_plot_area()}}.}
+\item{...}{other arguments passed to \code{\link[=par]{par()}}}
 }
 \value{
 A list containing the data frame and the user coordinates.

@@ -5,8 +5,6 @@
 \alias{useful_inds}
 \alias{useful_inds,character-method}
 \alias{useful_inds,character}
-\alias{useful_inds,data.frame-method}
-\alias{useful_inds,data.frame}
 \alias{useful_inds,Pedigree-method}
 \alias{useful_inds,Pedigree}
 \title{Compute the usefulness of individuals}
@@ -25,41 +23,71 @@ useful_inds(obj, ...)
   missid = "0"
 )
 
-\S4method{useful_inds}{data.frame}(obj, informative = "AvAf", keep_infos = FALSE, missid = "0")
-
-\S4method{useful_inds}{Pedigree}(obj, reset = FALSE, ...)
+\S4method{useful_inds}{Pedigree}(
+  obj,
+  informative = "AvAf",
+  keep_infos = FALSE,
+  missid = "0",
+  reset = FALSE
+)
 }
 \arguments{
-\item{obj}{A dataframe, a Pedigree object or a character vector of ids}
+\item{obj}{A pedigree object or a vector of subject identifiers.}
 
-\item{...}{Other arguments passed to methods.}
+\item{...}{Additional arguments passed to methods}
 
-\item{dadid}{The id of the father}
+\item{dadid}{A vector containing for each subject, the identifiers of the
+biologicals fathers.}
 
-\item{momid}{The id of the mother}
+\item{momid}{vector containing for each subject, the identifiers of the
+biologicals mothers.}
 
-\item{avail}{A vector of individuals availability (0, 1 or NA)}
+\item{avail}{A numeric vector of availability status of each individual
+(e.g., genotyped). The values are:
+\itemize{
+\item \code{0}  : unavailable
+\item \code{1}  : available
+\item \code{NA} : availability not known
+}}
 
-\item{affected}{A vector of individuals affected status (0, 1 or NA)}
+\item{affected}{A numeric vector of affection status of each individual
+(e.g., genotyped). The values are:
+\itemize{
+\item \code{0}  : unaffected
+\item \code{1}  : affected
+\item \code{NA} : affection status not known
+}}
 
 \item{num_child_tot}{A numeric vector of the number of children of each
 individuals}
 
 \item{informative}{Informative individuals selection can take 5 values:
-'AvAf' (available and affected),
-'AvOrAf' (available or affected),
-'Av' (available only),
-'Af' (affected only),
-'All' (all individuals)
-or a numeric/character vector of individuals id
-or a boolean}
+\itemize{
+\item 'AvAf' (available and affected),
+\item 'AvOrAf' (available or affected),
+\item 'Av' (available only),
+\item 'Af' (affected only),
+\item 'All' (all individuals)
+\item A numeric/character vector of individuals id
+\item A boolean
+}}
 
 \item{keep_infos}{Boolean to indicate if individuals with unknown status
 but available or reverse should be kept}
 
-\item{missid}{A string with the missing id}
-
 \item{reset}{Boolean to indicate if the \code{useful} column should be reset}
+}
+\value{
+\subsection{When obj is a vector}{
+
+A vector of useful individuals identifiers
+}
+
+\subsection{When obj is a Pedigree}{
+
+The Pedigree object with a new column named 'useful' containing 1 for
+useful individuals and 0 otherwise.
+}
 }
 \description{
 Check for usefulness of individuals

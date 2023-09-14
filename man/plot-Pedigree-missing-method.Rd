@@ -11,9 +11,6 @@
   x,
   mark = TRUE,
   label = NULL,
-  tips_names = NULL,
-  fill = "grey",
-  border = "black",
   ggplot_gen = FALSE,
   cex = 1,
   symbolsize = 1,
@@ -22,10 +19,6 @@
   align = c(1.5, 2),
   width = 6,
   title = NULL,
-  density = c(-1, 35, 65, 20),
-  mar = c(4.1, 1, 4.1, 1),
-  angle = c(90, 65, 40, 0),
-  keep_par = FALSE,
   subreg = NULL,
   pconnect = 0.5,
   fam_to_plot = 1,
@@ -39,22 +32,17 @@
 \arguments{
 \item{x}{A pedigree object.}
 
-\item{mark}{vector indicating the text to plot in the center of the box.}
+\item{mark}{if TRUE, add a mark to each box corresponding to the value of
+the affection column for each filling scale.}
 
-\item{label}{vector indicating the text to plot bellow the box.}
+\item{label}{if not NULL, add a label to each box corresponding to the
+value of the column given.}
 
-\item{tips_names}{vector of column names in dataframe to show when hovering
-with plotly.}
+\item{ggplot_gen}{logical, if TRUE add the segments to the ggplot object}
 
-\item{fill}{vector of color to fill the box.}
+\item{cex}{character expansion of the text}
 
-\item{border}{vector of color for the border of the box.}
-
-\item{ggplot_gen}{Boolean to indicate if a ggplot object should be created.}
-
-\item{cex}{controls text size.  Default=1.}
-
-\item{symbolsize}{controls symbolsize. Default=1.}
+\item{symbolsize}{size of the symbols}
 
 \item{branch}{defines how much angle is used to connect various levels of
 nuclear families.}
@@ -72,22 +60,12 @@ numeric the routine \code{alignped4()} will be called.}
 \item{width}{for a packed output, the minimum width of the plot, in
 inches.}
 
-\item{title}{default=NULL.  If not NULL, a title will be added to the plot.}
-
-\item{density}{defines density used in the symbols.  Takes up to 4 different
-values.}
-
-\item{mar}{margin parmeters, as in the \code{par} function}
-
-\item{angle}{defines angle used in the symbols.  Takes up to 4 different
-values.}
-
-\item{keep_par}{Default = FALSE, allows user to keep the parameter settings
-the same as they were for plotting (useful for adding extras to the plot)}
+\item{title}{The title of the plot.}
 
 \item{subreg}{4-element vector for (min x, max x, min depth, max depth),
 used to edit away portions of the plot coordinates returned by
-align.pedigree}
+\code{\link[=align]{align()}}. This is useful for zooming in on a particular region of the
+pedigree.}
 
 \item{pconnect}{when connecting parent to children the program will try to
 make the connecting line as close to vertical as possible, subject to it
@@ -112,36 +90,10 @@ upper right corner of the plot.  Otherwise, a 4-element vector of the form
 }
 \value{
 an invisible list containing
-\subsection{plist}{
-
-A list that contains all the position information for
-plotting the pedigree. This will useful for further functions (yet unwritten)
-for manipulating the plot, but likely not to an ordinary user.
-}
-
-\subsection{x,y}{
-
-The x an and y plot coordinates of each subject in the plot.
-The coordinate is for the top of the plotted symbol.
-These will be in the same order as the input pedigree.  If someone in the
-pedigree does not appear in the plot their coordinates will be NA.  If they
-appear multiple times one of the instances is chosen.  (Which one is a
-function of the order in which the pedigree was constructed.)
-}
-
-\subsection{boxh}{
-
-The height of the symbol, in user coordinates
-}
-
-\subsection{boxw}{
-
-The width of the symbol
-}
-
-\subsection{call}{
-
-A copy of the call that generated the plot
+\itemize{
+\item df : the data.frame used to plot the pedigree
+\item par_usr : the user coordinates used to plot the pedigree
+\item ggplot : the ggplot object if ggplot_gen = TRUE
 }
 }
 \description{

@@ -7,8 +7,10 @@
 subregion(plist, subreg)
 }
 \arguments{
-\item{subreg}{a vector of length 4 giving the start and end positions
-of the subregion and the start and end depths}
+\item{subreg}{4-element vector for (min x, max x, min depth, max depth),
+used to edit away portions of the plot coordinates returned by
+\code{\link[=align]{align()}}. This is useful for zooming in on a particular region of the
+pedigree.}
 }
 \value{
 a pedigree list

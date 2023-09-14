@@ -5,8 +5,6 @@
 \alias{generate_colors}
 \alias{generate_colors,character-method}
 \alias{generate_colors,character}
-\alias{generate_colors,data.frame-method}
-\alias{generate_colors,data.frame}
 \alias{generate_colors,Pedigree-method}
 \alias{generate_colors,Pedigree}
 \title{Process the colors based on affection and availability}
@@ -26,9 +24,10 @@ generate_colors(obj, ...)
   colors_avail = c("green", "black")
 )
 
-\S4method{generate_colors}{data.frame}(
+\S4method{generate_colors}{Pedigree}(
   obj,
   col_aff = "affected",
+  add_to_scale = TRUE,
   col_avail = "avail",
   mods_aff = NULL,
   threshold = 0.5,
@@ -37,25 +36,23 @@ generate_colors(obj, ...)
   breaks = 3,
   colors_aff = c("yellow2", "red"),
   colors_unaff = c("white", "steelblue4"),
-  colors_avail = c("green", "black")
-)
-
-\S4method{generate_colors}{Pedigree}(
-  obj,
-  col_aff = "affected",
-  add_to_scale = TRUE,
-  reset = TRUE,
-  ...
+  colors_avail = c("green", "black"),
+  reset = TRUE
 )
 }
 \arguments{
-\item{obj}{A dataframe containing the columns to process or a pedigree
-object.}
+\item{obj}{A pedigree object or a vector containing the affection status for
+each individuals.}
 
 \item{...}{Other parameters to pass to the \code{generate_colors} function}
 
-\item{avail}{The vector containing the availability status.
-The values need to be numeric and can only be 0, 1 or NA.}
+\item{avail}{A numeric vector of availability status of each individual
+(e.g., genotyped). The values are:
+\itemize{
+\item \code{0}  : unavailable
+\item \code{1}  : available
+\item \code{NA} : availability not known
+}}
 
 \item{mods_aff}{Vector of modality to consider as affected in the case
 where the \code{values} is a factor.}
@@ -88,15 +85,15 @@ unaffected individuls.}
 individual. The first color will be used for available individual (avail
 == 1) and the second for the unavailable individual (avail == 0).}
 
-\item{col_aff}{The name of the column containing the affection status.}
-
-\item{col_avail}{The name of the column containing the availability status.}
+\item{col_aff}{A string with the column name to use for the affection status.}
 
 \item{add_to_scale}{Boolean defining if the scales need to be added to the
 existing scales or if they need to replace the existing scales.}
 
-\item{reset}{Boolean defining if the scale of the specified column need to
-be reset if already present.}
+\item{col_avail}{The name of the column containing the availability status.}
+
+\item{reset}{If \code{TRUE} the scale of the specified column will be reset if
+already present.}
 }
 \value{
 \subsection{When used with a dataframe :}{

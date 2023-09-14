@@ -16,11 +16,15 @@ family_check(obj, ...)
 \S4method{family_check}{Pedigree}(obj)
 }
 \arguments{
-\item{obj}{A pedigree object or a vector of the individuals identifiers}
+\item{obj}{A pedigree object or a vector of subject identifiers.}
 
-\item{dadid}{A vector of the father identifiers}
+\item{...}{Additional arguments passed to methods}
 
-\item{momid}{A vector of the mother identifiers}
+\item{dadid}{A vector containing for each subject, the identifiers of the
+biologicals fathers.}
+
+\item{momid}{vector containing for each subject, the identifiers of the
+biologicals mothers.}
 
 \item{family}{A vector of family identifiers}
 

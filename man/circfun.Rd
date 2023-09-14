@@ -7,7 +7,7 @@
 circfun(nslice, n = 50)
 }
 \arguments{
-\item{nslice}{number of slices}
+\item{nslice}{number of slices in the circle}
 
 \item{n}{Total number of points in the circle}
 }

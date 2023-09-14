@@ -15,14 +15,21 @@ exclude_unavail_founders(id, dadid, momid, avail, missid = "0")
 \arguments{
 \item{ped}{A pedigree object}
 
-\item{avail}{Vector of availability status (e.g., genotyped) 0/1 or
-TRUE/FALSE}
+\item{avail}{A numeric vector of availability status of each individual
+(e.g., genotyped). The values are:
+\itemize{
+\item \code{0}  : unavailable
+\item \code{1}  : available
+\item \code{NA} : availability not known
+}}
 
 \item{id}{Vector of subject identifiers}
 
-\item{dadid}{A vector of the father identifiers}
+\item{dadid}{A vector containing for each subject, the identifiers of the
+biologicals fathers.}
 
-\item{momid}{A vector of the mother identifiers}
+\item{momid}{vector containing for each subject, the identifiers of the
+biologicals mothers.}
 
 \item{missid}{Character defining the missing ids}
 }

@@ -16,15 +16,12 @@ bit_size(obj, ...)
 \S4method{bit_size}{Pedigree}(obj, missid = "0")
 }
 \arguments{
-\item{obj}{A pedigree object or a vector of fathers ids}
+\item{obj}{A pedigree object or a vector of fathers identifierss}
 
 \item{...}{Additional arguments passed to methods}
 
-\item{momid}{A vector of mothers ids}
-
-\item{missid}{Character defining the missing ids}
-
-\item{ped}{A pedigree object}
+\item{momid}{vector containing for each subject, the identifiers of the
+biologicals mothers.}
 }
 \value{
 A list with the following components:

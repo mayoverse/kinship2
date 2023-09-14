@@ -23,10 +23,30 @@ pedigree(
 )
 }
 \arguments{
-\item{ped_df}{A data.frame with the individuals informations.}
+\item{ped_df}{A data.frame with the individuals informations.
+The minimum columns required are \code{id}, \code{dadid}, \code{momid} and \code{sex}.
+The \code{family} column can also be used to specify the family of the
+individuals and will be merge to the \code{id} field separated by an
+underscore.
+The following columns are also recognize \code{steril}, \code{avail}, \code{status},
+\code{affected}. They respectively correspond to the sterilisation status,
+the availability status, the death status and the affection status
+of the individuals. The values recognized for those columns are \code{1} or
+\code{0}.}
 
 \item{rel_df}{A data.frame with the special relationships between
-individuals.}
+individuals.
+The minimum columns required are \code{id1}, \code{id2} and \code{code}. The \code{family}
+column can also be used to specify the family of the individuals.
+The code values are:
+\itemize{
+\item \code{1} = Monozygotic twin
+\item \code{2} = Dizygotic twin
+\item \code{3} = twin of unknown zygosity
+\item \code{4} = Spouse
+The value relation code recognized by the function are the one defined
+by the \code{\link[=rel_code_to_factor]{rel_code_to_factor()}} function.
+}}
 
 \item{cols_ren_ped}{A named list with the columns to rename for the
 pedigree dataframe.}

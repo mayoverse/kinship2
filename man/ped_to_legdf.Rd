@@ -10,11 +10,7 @@ ped_to_legdf(ped, boxh = 1, boxw = 1, cex = 1)
 \arguments{
 \item{ped}{A pedigree object}
 
-\item{boxh}{Height of the legend boxes}
-
-\item{boxw}{Width of the legend boxes}
-
-\item{cex}{Size of the legend text}
+\item{cex}{character expansion of the text}
 }
 \value{
 A list containing the legend data frame and the user coordinates.

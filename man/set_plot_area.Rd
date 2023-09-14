@@ -7,9 +7,9 @@
 set_plot_area(cex, id, maxlev, xrange, symbolsize, ...)
 }
 \arguments{
-\item{cex}{character expansion}
+\item{cex}{character expansion of the text}
 
-\item{id}{id of the subject}
+\item{id}{A vector of each subjects identifiers}
 
 \item{maxlev}{maximum level}
 

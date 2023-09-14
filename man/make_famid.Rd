@@ -16,17 +16,18 @@ make_famid(obj, ...)
 \S4method{make_famid}{Pedigree}(obj)
 }
 \arguments{
-\item{obj}{A pedigree object or a vector of the individuals identifiers}
+\item{obj}{A pedigree object or a vector of subject identifiers.}
 
-\item{...}{Additional arguments to be passed to methods.}
+\item{...}{Additional arguments passed to methods}
 
-\item{dadid}{Identifier for the father.  This will be 0 or '' for a
-founder.}
+\item{dadid}{A vector containing for each subject, the identifiers of the
+biologicals fathers.}
 
-\item{momid}{Identifer for the mother.}
+\item{momid}{vector containing for each subject, the identifiers of the
+biologicals mothers.}
 }
 \value{
-\subsection{When used with a vector of identifiers}{
+\subsection{When used with a character vector}{
 
 An integer vector giving family groupings
 }

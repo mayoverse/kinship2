@@ -7,11 +7,15 @@
 is_founder(momid, dadid, missid = "0")
 }
 \arguments{
-\item{momid}{Vector of mother index}
+\item{momid}{vector containing for each subject, the identifiers of the
+biologicals mothers.}
 
-\item{dadid}{Vector of father index}
+\item{dadid}{A vector containing for each subject, the identifiers of the
+biologicals fathers.}
 
-\item{missid}{Missing value identifier}
+\item{missid}{The missing identifier value. Founders are the individuals with
+no father and no mother in the pedigree (i.e. \code{dadid} and \code{momid} equal to
+the value of this variable).  The default for \code{missid} is \code{"0"}.}
 }
 \value{
 A vector of boolean of the same size as \code{dadid} and \code{momid}

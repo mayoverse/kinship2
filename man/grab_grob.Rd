@@ -7,5 +7,5 @@
 grab_grob()
 }
 \description{
-Register the plot
+Use the grid.echo() and grid.grab() functions to register the plot.
 }

@@ -10,8 +10,6 @@ prefix_famid(family_id, ind_id, missid = "0")
 \item{family_id}{The family id}
 
 \item{ind_id}{The individual id}
-
-\item{missid}{The missing id}
 }
 \value{
 The id with the family id merged

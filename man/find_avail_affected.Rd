@@ -9,8 +9,13 @@ find_avail_affected(ped, avail = ped$ped$avail, affstatus = NA)
 \arguments{
 \item{ped}{A pedigree object}
 
-\item{avail}{Vector of availability status (e.g., genotyped) 0/1 or
-TRUE/FALSE}
+\item{avail}{A numeric vector of availability status of each individual
+(e.g., genotyped). The values are:
+\itemize{
+\item \code{0}  : unavailable
+\item \code{1}  : available
+\item \code{NA} : availability not known
+}}
 
 \item{affstatus}{Affection status to search for.}
 }

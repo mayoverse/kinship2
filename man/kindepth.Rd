@@ -16,13 +16,15 @@ kindepth(obj, ...)
 \S4method{kindepth}{Pedigree}(obj, align_parents = FALSE)
 }
 \arguments{
-\item{obj}{A pedigree object or a vector of the individuals identifiers}
+\item{obj}{A pedigree object or a vector of subject identifiers.}
 
-\item{...}{Additional arguments to be passed to methods.}
+\item{...}{Additional arguments passed to methods}
 
-\item{dadid}{Id code for the father}
+\item{dadid}{A vector containing for each subject, the identifiers of the
+biologicals fathers.}
 
-\item{momid}{Id code for the mother}
+\item{momid}{vector containing for each subject, the identifiers of the
+biologicals mothers.}
 
 \item{align_parents}{If \code{align_parents=T}, go one step further and try to
 make both parents of each child have the same depth.

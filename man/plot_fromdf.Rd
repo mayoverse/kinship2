@@ -44,12 +44,8 @@ and \code{arc}.
 
 \item{ggplot_gen}{logical, if TRUE add the segments to the ggplot object}
 
-\item{boxw}{The width of each box.}
-
-\item{boxh}{The height of each box.}
-
-\item{add_to_existing}{A logical to know if the plot should be added to an
-existing plot.}
+\item{add_to_existing}{If \code{TRUE}, the plot will be added to the current
+plot.}
 }
 \description{
 This function is used to create a plot from a data.frame. If ggplot_gen is

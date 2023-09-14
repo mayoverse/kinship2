@@ -7,11 +7,13 @@
 is_disconnected(id, dadid, momid)
 }
 \arguments{
-\item{id}{Vector of individual id}
+\item{id}{A vector of each subjects identifiers}
 
-\item{dadid}{Vector of father id}
+\item{dadid}{A vector containing for each subject, the identifiers of the
+biologicals fathers.}
 
-\item{momid}{Vector of mother id}
+\item{momid}{vector containing for each subject, the identifiers of the
+biologicals mothers.}
 }
 \value{
 A vector of boolean of the same size as \code{id}

@@ -4,14 +4,14 @@
 \alias{ibd_matrix}
 \title{Create an IBD matrix}
 \usage{
-ibd_matrix(id1, id2, x, idmap, diagonal)
+ibd_matrix(id1, id2, ibd, idmap, diagonal)
 }
 \arguments{
 \item{id1}{First subject identifiers}
 
 \item{id2}{Second subject identifiers}
 
-\item{x}{the IBD value for that pair}
+\item{ibd}{the IBD value for that pair}
 
 \item{idmap}{an optional 2 column matrix or data frame whose first element
 is the internal value (as found in \code{id1} and \code{id2}, and whose
