@@ -1,5 +1,5 @@
 ## How to get all function in a package
-
+load_all()
 allf <- getNamespaceExports("kinship2")
 allff <- allf[!str_detect(allf, ".__")]
 
@@ -15,6 +15,8 @@ names(allArg) <- allff
 idl <- c("descendants")
 allS4 <- allS4[!allS4 %in% idl]
 
+
+library(Rdpack)
 allS4Arg <- lapply(allS4, function(x){names(S4formals(x, "character"))})
 names(allS4Arg) <- allS4
 
@@ -32,8 +34,27 @@ df <- lapply(names(allArg), function(x) {
 }) %>% as.data.frame()
 colnames(df) <- names(allArg)
 rownames(df) <- Arg
+dim(df)
 
-heatmap(as.matrix(df[!rowSums(df) == 1, ]), cexRow = 1, cexCol = 0.8)
+heatmap(as.matrix(df[!rowSums(df) == 1, ]),
+    distfun = function(x) {
+        dist(x, method = "binary")
+    },
+    hclustfun = function(x) {
+        hclust(x, method = "ward.D2")
+    }
+)
+
+mat <- df[, df[rownames(df) == "momid", ] == 1]
+mat <- as.matrix(mat[rowSums(mat) > 0, ])
+heatmap(mat,
+    distfun = function(x) {
+        dist(x, method = "binary")
+    },
+    hclustfun = function(x) {
+        hclust(x, method = "ward.D2")
+    }
+)
 
 OnlyArg <- df[rowSums(df) == 1, ]
 OnlyArg[colSums(OnlyArg) > 0]

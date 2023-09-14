@@ -1,47 +1,74 @@
 # List of all arguments to inherit
 
 ```R
+## Arguments in kinship
+#' @param obj A pedigree object or a vector of the individuals identifiers
 #' @param ... Additional arguments passed to methods
-#' @param id A vector of individuals ids
+#' + dadid, momid, sex
 
-## Argu
+## Arguments of sex_to_factor
+#' @param sex A character, factor or numeric vector corresponding to
+#' the gender of the individuals. The following values are recognized:
+#' - character() or factor() : "f", "m", "woman", "man", "male", "female",
+#' "unknown", "terminated"
+#' - numeric() : 1 = "male", 2 = "female", 3 = "unknown", 4 = "terminated"
 
-## Arguments of fix_parents
-#' @param sex Gender column or a vector of the sex of the individuals. Either
-#' character ('male','female','unknown','terminated') or
-#' numeric (1='male', 2='female',#' 3='unknown', 4='terminated')
-#' data is allowed.
-#' @param missid The founders are those with no father or mother in the
-#' pedigree.  The \\code{dadid} and \\code{momid} values for these subjects will
-#' either be NA or the value of this variable.  The default for \\code{missid}
-#' is 0 if the \\code{id} variable is numeric, and '' (the empty string)
-#' otherwise.
+## Arguments of is_parent
+#' @param id A vector of each subjects identifiers
+#' @param dadid A vector containing for each subject, the identifiers of the
+#' biologicals fathers.
+#' @param momid  vector containing for each subject, the identifiers of the
+#' biologicals mothers.
+#' @param missid The missing identifier value. Founders are the individuals with
+#' no father and no mother in the pedigree (i.e. `dadid` and `momid` equal to the
+#' value of this variable).  The default for `missid` is `"0"`.
 
-## Argument in find_avail_noninform, find_avail_affected
-#' @param avail Vector of availability status (e.g., genotyped) 0/1 or
-#' TRUE/FALSE 
+## Argument of is_informative
+#' @param avail A numeric vector of availability status of each individual
+#' (e.g., genotyped). The values are:
+#' - `0`  : unavailable
+#' - `1`  : available
+#' - `NA` : availability not known
+#' @param informative Informative individuals selection can take 5 values:
+#' 'AvAf' (available and affected),
+#' 'AvOrAf' (available or affected),
+#' 'Av' (available only),
+#' 'Af' (affected only),
+#' 'All' (all individuals)
+#' or a numeric/character vector of individuals id
+#' or a boolean
+#' @param affected A numeric vector of affection status of each individual
+#' (e.g., genotyped). The values are:
+#' - `0`  : unaffected
+#' - `1`  : affected
+#' - `NA` : affection status not known
+#' @param col_aff A string with the column name to use for the affected status.
+
+## Arguments of useful_inds
+#' @param num_child_tot A numeric vector of the number of children of each
+#' individuals
+#' @param keep_infos Boolean to indicate if individuals with unknown status
+#' but available or reverse should be kept
 
 ## Arguments in find_avail_affected
 #' @param affstatus Affection status to search for.
 
-## Arguments in descendants, family_check
-#' @param obj A pedigree object or a vector of the individuals identifiers
-#' @param dadid A vector of the father identifiers
-#' @param momid A vector of the mother identifiers
-
-## Arguments in check_hints
-#' @param sex An ordered factor vector with the gender of all the individuals.
-#' The levels are ordered as follow : 'male', 'female', 'unknown', 'terminated'.
-
-## Argument in bit_size, descendants
-#' @param momid A vector of mothers identifiers
-#' @param ... Additional arguments passed to methods
+## Arguments of pedigree
+#' @param rel_df
+#' @param ped_df
 
 ## Arguments of bit_size
 #' @param obj A pedigree object or a vector of fathers ids
 
-## Argument in align, bitsize, find_avail_noninform, find_avail_affected
-#' @param missid The missing id code in the pedigree (default is  `0`)
+## Arguments of shrink
+#' @param max_bits Optional, the bit size for which to shrink the pedigree
+
+## Argument of kindepth
+#' @param align_parents If `align_parents=T`, go one step further and try to
+#' make both parents of each child have the same depth.
+#' (This is not always possible).
+#' It helps the drawing program by lining up pedigrees that 'join in the middle'
+#' via a marriage.
 
 ## Arguments of family_check
 #' @param famid A vector of family identifiers
@@ -96,7 +123,6 @@
 #' left spouse, the right hand spouse, and the anchor
 #' (i.e : `1` = left, `2` = right, `0` = either).
 #' Children will preferentially appear under the parents of the anchored spouse.
-#' @param missid The missing id code in the pedigree (default is  `0`)
 
 ## Arguments of shift()
 #' @param id The id of the subject to be shifted
@@ -137,11 +163,45 @@
 #' Default is `c(1000, 10, 1)`.
 #' @param tolerance The maximum stress level to accept. Default is `0`
 
-
-#' @param affstatus Affection status to search for.
+## Arguments of ped_to_plotdf
 #' @param boxh Height of the legend boxes
 #' @param boxw Width of the legend boxes
-#' @param cex Size of the legend text
+#' @param branch defines how much angle is used to connect various levels of
+#' nuclear families.
+#' @param mark if TRUE, add a mark to each box corresponding to the value of
+#' the affection column for each filling scale.
+#' @param label if not NULL, add a label to each box corresponding to the
+#' value of the column given.
+#' @param pconnect when connecting parent to children the program will try to
+#' make the connecting line as close to vertical as possible, subject to it
+#' lying inside the endpoints of the line that connects the children by at
+#' least `pconnect` people.  Setting this option to a large number will
+#' force the line to connect at the midpoint of the children.
+
+## Arguments of set_plot_area
+#' @param cex character expansion of the text
+#' @param maxlev maximum level
+#' @param xrange range of x values
+#' @param symbolsize size of the symbols
+#' @param ... other arguments passed to [par()]
+ 
+## Arguments of plot_fromdf
+#' @param df
+#' @param usr The user coordinates of the plot.
+#' @param title The title of the plot.
+#' @param add_to_existing A logical to know if the plot should be added to an
+#' existing plot.
+
+## Arguments of plot
+#' @param fam_to_plot default=1.  If the pedigree contains multiple families,
+#' this parameter can be used to select which family to plot.
+#' @param legend default=FALSE.  If TRUE, a legend will be added to the plot.
+#' @param leg_cex default=0.8.  Controls the size of the legend text.
+#' @param leg_symbolsize default=0.5.  Controls the size of the legend symbols.
+#' @param leg_loc default=NULL.  If NULL, the legend will be placed in the
+#' upper right corner of the plot.  Otherwise, a 4-element vector of the form
+#' (x0, x1, y0, y1) can be used to specify the location of the legend.
+#' @param ... Extra options that feed into the plot function.
 ```
 
 # List of returned values
