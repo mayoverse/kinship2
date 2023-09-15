@@ -53,3 +53,21 @@ library(covr)
 # If run with no arguments implicitly calls `package_coverage()`
 report()
 ```
+
+## To build the backage
+
+### Needs
+
+To build the package you need to have installed:
+
+- `R` and `R.exe` in your path
+- [MiKTeX](https://miktex.org/download) to build the pdf
+- [Font ts1-zi4r](https://tex.stackexchange.com/questions/125274/error-font-ts1-zi4r-at-540-not-found)
+- [Qpdf](https://github.com/qpdf/qpdf)
+
+If you have `R.exe` in your path you can run:
+
+```R
+R.exe CMD build .
+R.exe CMD check kinship2_2.0.0.tar.gz
+```
