@@ -19,7 +19,7 @@ if (!require("remotes", quietly = TRUE))
 remotes::install_github("louislenezet/kinship2@dev_newclass")
 ````
 
-### From Bioconductor
+### From Bioconductor (not yet available)
 
 To install this package you can use the following R script:
 
