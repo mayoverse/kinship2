@@ -48,9 +48,7 @@ prefix_famid <- function(family_id, ind_id, missid = "0") {
 #' @inheritParams is_parent
 #' @inheritParams pedigree
 #'
-#' @return List of two dataframe
-#' `norm` is the dataframe with all the individuals without any errors.
-#' `errors` is the dataframe containing the individuals with errors.
+#' @return A dataframe with the errors identified in the `error` column
 #'
 #' @export
 #' @include utils.R

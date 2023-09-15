@@ -86,6 +86,7 @@ setMethod("summary", signature(object = "Pedigree"), function(object) {
 #' @param j A vector of columns names.
 #' @param drop A logical value indicating if the dimensions should be dropped.
 #' @param ... Other arguments.
+#' @rdname extract-methods
 #' @return The slot `i` present in the pedigree object.
 setMethod("[[", c(x = "Pedigree", i = "ANY", j = "missing"),
     function(x, i, j, ..., drop = TRUE) {
@@ -100,6 +101,7 @@ setMethod("[[", c(x = "Pedigree", i = "ANY", j = "missing"),
 #' @param j A vector of columns names.
 #' @param value A vector of values to replace.
 #' @param ... Other arguments.
+#' @rdname extract-methods
 #' @return The pedigree object with the slot `i` replaced by `value`.
 setMethod("[[<-", c(x = "Pedigree", i = "ANY", j = "missing", value = "ANY"),
     function(x, i, j, ..., value) {
@@ -113,6 +115,7 @@ setMethod("[[<-", c(x = "Pedigree", i = "ANY", j = "missing", value = "ANY"),
 #'
 #' @param x A Pedigree object.
 #' @param name A slot name.
+#' @rdname extract-methods
 #' @return The slot `name` present in the pedigree object.
 #'
 setMethod("$", c(x = "Pedigree"),
@@ -126,6 +129,7 @@ setMethod("$", c(x = "Pedigree"),
 #' @param x A Pedigree object.
 #' @param name A slot name.
 #' @param value A vector of values to replace.
+#' @rdname extract-methods
 #' @return The pedigree object with the slot `name` replaced by `value`.
 setMethod("$<-", c(x = "Pedigree"),
     function(x, name, value) {
@@ -171,6 +175,7 @@ sub_sel_hints <- function(hints, index) {
 #' @param i A vector of individuals id or a vector of index.
 #' @param j A vector of columns names.
 #' @param drop A logical value indicating if the dimensions should be dropped.
+#' @rdname extract-methods
 #' @return A Pedigree object subsetted.
 setMethod("[", c(x = "Pedigree", i = "ANY", j = "ANY"),
     function(x, i, j, drop = TRUE) {
@@ -204,6 +209,7 @@ setMethod("[", c(x = "Pedigree", i = "ANY", j = "ANY"),
 #' @param j A vector of columns names.
 #' @param drop A logical value indicating if the dimensions should be dropped.
 #' @return A Pedigree object subsetted.
+#' @rdname extract-methods
 setMethod("[", c(x = "Pedigree", i = "missing", j = "ANY"),
     function(x, i, j, drop = TRUE) {
         ped_df <- x$ped[, j, drop = drop]
@@ -222,6 +228,7 @@ setMethod("[", c(x = "Pedigree", i = "missing", j = "ANY"),
 #' @param j A vector of columns names.
 #' @param drop A logical value indicating if the dimensions should be dropped.
 #' @return A Pedigree object subsetted.
+#' @rdname extract-methods
 setMethod("[", c(x = "Pedigree", i = "ANY", j = "missing"),
     function(x, i, j, drop = TRUE) {
         if (is.factor(i)) {

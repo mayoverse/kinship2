@@ -25,17 +25,17 @@
 #' @return a data frame with one row for each unique family id in the
 #' `family` argument or the one detected in the pedigree object.
 #' Components of the output are:
-#' - family The family id, as entered into the data set
-#' - n Number of subjects in the family
-#' - unrelated Number of them that appear to be unrelated to
+#' - `family` : The family id, as entered into the data set
+#' - `n` : Number of subjects in the family
+#' - `unrelated` : Number of them that appear to be unrelated to
 #' anyone else in the entire pedigree set.  This is usually marry-ins with no
 #' children (in the pedigree), and if so are not a problem.
-#' - split Number of unique 'new' family ids.
-#'     - 0 = no one in this 'family' is related to anyone else (not good)
-#'     - 1 = everythings is fine
-#'     - 2+ = the family appears to be a set of disjoint trees.
+#' - `split` : Number of unique 'new' family ids.
+#'     - `0` = no one in this 'family' is related to anyone else (not good)
+#'     - `1` = everythings is fine
+#'     - `2` and + = the family appears to be a set of disjoint trees.
 #'       Are you missing some of the people?
-#' - join Number of other families that had a unique
+#' - `join` : Number of other families that had a unique
 #' family, but are actually joined to this one.  0 is the hope.
 #'
 #' @examples

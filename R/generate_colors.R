@@ -195,15 +195,16 @@ generate_border <- function(avail, colors_avail = c("green", "black")) {
 #' @inheritParams generate_aff_inds
 #'
 #' @return
-#' ## When used with a dataframe :
-#' A list of two elements
-#' - The processed dataframe with the `affected` and `avail` columns
-#' processed accordingly
-#' - A dataframe containing the description of each modality of the scale
+#' ## When used with a vector
+#' A list of three elements
+#' - A vector containing the transformed filling modalities
+#' - A dataframe containing the description of each filling modalities
+#' - A dataframe containing the description of the border modalities
 #'
-#' ## When used with a pedigree object :
+#' ## When used with a pedigree object
 #' The pedigree object with the `affected` and `avail` columns
-#' processed accordingly
+#' processed accordingly.
+#' 
 #' The pedigree scales slots are updated
 #'
 #' @examples

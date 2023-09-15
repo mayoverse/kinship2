@@ -7,11 +7,11 @@ NULL
 #' depending on their need
 #'
 #' @details 3 types of columns are here checked:
-#' - 1 `cols_needed` those columns need to be present if any is missing
+#' - `cols_needed` : those columns need to be present if any is missing
 #' an error will be prompted and the script will stop
-#' - 2 `cols_used` those columns will be used in the script and will be
+#' - `cols_used` : those columns will be used in the script and will be
 #' overwritten to NA.
-#' - 3 `cols_to_use` those columns are optional and will be recognise
+#' - `cols_to_use` : those columns are optional and will be recognise
 #' if present.
 #' The last two types of columns can be initialised to NA if needed.
 #'
@@ -235,7 +235,7 @@ NULL
 #' - numeric() : 1 = "male", 2 = "female", 3 = "unknown", 4 = "terminated"
 #'
 #' @return an ordered factor vector containing the transformed variable
-#' "male" > "female" > "unknown" > "terminated"
+#' "male" < "female" < "unknown" < "terminated"
 #' @export
 sex_to_factor <- function(sex) {
     if (is.factor(sex) || is.numeric(sex)) {

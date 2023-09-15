@@ -11,9 +11,9 @@
 #' Originally written as pedTrim by Steve Iturria, modified by Dan Schaid 2007,
 #' and now split into the two separate functions: `find_unavailable()`, and
 #' `trim()` to do the tasks separately.  `find_unavailable()`
-#' calls `exclude_stray_marryin()` to find stray available marry-ins who are
+#' calls [exclude_stray_marryin()] to find stray available marry-ins who are
 #' isolated after trimming their unavailable offspring, and
-#' `exclude_unavail_founders()`.
+#' [exclude_unavail_founders()].
 #' If the subject ids are character, make sure none of the characters in the
 #' ids is a colon (":"), which is a special character
 #' used to concatenate and split subjects within the utility.
@@ -83,7 +83,7 @@ find_unavailable <- function(ped, avail = ped$ped$avail) {
 #' The data frame is trimmed of any founders who are not parents.
 #'
 #' @keywords internal
-#' @rdname find_unavailable
+#' @export
 exclude_stray_marryin <- function(id, dadid, momid) {
     # get rid of founders who are not parents (stray available marryins
     # who are isolated after trimming their unavailable offspring)
@@ -109,7 +109,6 @@ exclude_stray_marryin <- function(id, dadid, momid) {
 #' @inheritParams find_avail_affected
 #' @param missid Character defining the missing ids
 #'
-#' @rdname find_unavailable
 #' @keywords internal
 #'
 #' @return
@@ -119,6 +118,7 @@ exclude_stray_marryin <- function(id, dadid, momid) {
 #' - id Vector of subject identifiers
 #' - dadid Vector of father identifiers
 #' - momid Vector of mother identifiers
+#' @export
 exclude_unavail_founders <- function(id, dadid, momid, avail, missid = "0") {
     n_old <- length(id)
 

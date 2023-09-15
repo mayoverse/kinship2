@@ -10,7 +10,7 @@ NULL
 #' This transformation is done by taking the log2 of the inverse of the
 #' maximum kinship degree.
 #'
-#' \eqn{min_dist = log2(1/max(kinship))}
+#' \eqn{minDist = log2(1 / \max(kinship))}
 #'
 #' Therefore, the minimum distance is 0 when the maximum kinship is 1 and
 #' is infinite when the maximum kinship is 0. For siblings, the kinship value

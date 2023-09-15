@@ -18,20 +18,20 @@ NULL
 #' pedigree where all children are centered under parents simply make the width
 #' large enough, however, the symbols may get very small.
 #'
-#' The second is `align`, a vector of 2 alignment parameters $a$ and $b$.
+#' The second is `align`, a vector of 2 alignment parameters `a` and `b`.
 #' For each set of siblings at a set of locations `x` and with parents at
 #' `p=c(p1,p2)` the alignment penalty is \deqn{(1/k^a)\sum{i=1}{k} [(x_i -
 #' (p1+p2)/2)]^2} sum(x- mean(p))^2/(k^a) where k is the number of siblings in
-#' the set. when $a=1$ moving a sibship with $k$ sibs one unit to the left or
+#' the set. when `a = 1` moving a sibship with `k` sibs one unit to the left or
 #' right of optimal will incur the same cost as moving one with only 1 or two
-#' sibs out of place.  If $a=0$ then large sibships are harder to move than
-#' small ones, with the default value $a=1.5$ they are slightly easier to move
+#' sibs out of place.  If `a=0` then large sibships are harder to move than
+#' small ones, with the default value `a = 1.5` they are slightly easier to move
 #' than small ones.  The rationale for the default is as long as the parents
 #' are somewhere between the first and last siblings the result looks fairly
 #' good, so we are more flexible with the spacing of a large family. By
 #' tethering all the sibs to a single spot they are kept close to each other.
 #' The alignment penalty for spouses is \eqn{b(x_1 - x_2)^2}{b *(x1-x2)^2},
-#' which tends to keep them together.  The size of $b$ controls the relative
+#' which tends to keep them together.  The size of `b` controls the relative
 #' importance of sib-parent and spouse-spouse closeness.
 #'
 #' @param x A pedigree object.
@@ -60,7 +60,7 @@ NULL
 #' pedAll <- pedigree(sampleped)
 #' #plot(pedAll)
 #'
-#' @section Side Effects: creates plot on current plotting device.
+#' @section Side Effects: Creates plot on current plotting device.
 #' @seealso [pedigree()]
 #' @include align.R
 #' @include plot_fct.R

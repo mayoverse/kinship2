@@ -12,13 +12,14 @@
 #' to calculate the bit_size of a pedigree.
 #'
 #' @inheritParams kinship
+#' @inheritParams is_parent
 #' @param obj A pedigree object or a vector of fathers identifierss
 #'
 #' @return A list with the following components:
 #'
 #' - bit_size The bit_size of input pedigree
 #' - nFounder The number of founders in the pedigree
-#' - nNonFounder The number of nonfounders in the pedgiree
+#' - nNonFounder The number of nonfounders in the pedigree
 #'
 #' @seealso [shrink()]
 #' @include pedigreeClass.R

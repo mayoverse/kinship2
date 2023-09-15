@@ -27,8 +27,8 @@
 #' procedure when using the `/list` option of the `TABLE` statement.
 #'
 #' @section Data:
-#' [sampleped()]: Pedigree example data sets with two pedigrees
-#' [minnbreast()]: Larger cohort of pedigrees from MN breast cancer
+#' - [sampleped()]: Pedigree example data sets with two pedigrees
+#' - [minnbreast()]: Larger cohort of pedigrees from MN breast cancer
 #' study
 #'
 #' @examples

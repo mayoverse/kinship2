@@ -26,6 +26,7 @@
 #' - `2` = Dizygotic twin
 #' - `3` = twin of unknown zygosity
 #' - `4` = Spouse
+#'
 #' The value relation code recognized by the function are the one defined
 #' by the [rel_code_to_factor()] function.
 #' @param cols_ren_ped A named list with the columns to rename for the
