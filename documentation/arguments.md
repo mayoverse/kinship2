@@ -164,8 +164,6 @@
 #' @param tolerance The maximum stress level to accept. Default is `0`
 
 ## Arguments of ped_to_plotdf
-#' @param boxh Height of the legend boxes
-#' @param boxw Width of the legend boxes
 #' @param branch defines how much angle is used to connect various levels of
 #' nuclear families.
 #' @param mark if TRUE, add a mark to each box corresponding to the value of
@@ -191,6 +189,8 @@
 #' @param title The title of the plot.
 #' @param add_to_existing A logical to know if the plot should be added to an
 #' existing plot.
+#' @param boxh Height of the legend boxes
+#' @param boxw Width of the legend boxes
 
 ## Arguments of plot
 #' @param fam_to_plot default=1.  If the pedigree contains multiple families,

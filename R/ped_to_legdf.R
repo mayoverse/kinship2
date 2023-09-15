@@ -5,7 +5,8 @@
 #' be plotted with afterwards with [plot_fromdf()].
 #'
 #' @inheritParams align
-#' @inheritParams ped_to_plotdf
+#' @inheritParams set_plot_area
+#' @inheritParams plot_fromdf
 #'
 #' @return
 #' A list containing the legend data frame and the user coordinates.

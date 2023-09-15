@@ -37,6 +37,10 @@ the gender of the individuals. The following values are recognized:
 \item{family}{Optional family identification set it to NULL to invalidate.
 If used it will modify the ids of the individuals by pasting it with an _.}
 
+\item{missid}{The missing identifier value. Founders are the individuals with
+no father and no mother in the pedigree (i.e. \code{dadid} and \code{momid} equal to
+the value of this variable).  The default for \code{missid} is \code{"0"}.}
+
 \item{delete}{Boolean defining if missing parents needs to be:
 \itemize{
 \item \code{TRUE} : added as a new row

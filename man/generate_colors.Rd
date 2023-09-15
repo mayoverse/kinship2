@@ -5,6 +5,10 @@
 \alias{generate_colors}
 \alias{generate_colors,character-method}
 \alias{generate_colors,character}
+\alias{generate_colors,numeric-method}
+\alias{generate_colors,numeric}
+\alias{generate_colors,logical-method}
+\alias{generate_colors,logical}
 \alias{generate_colors,Pedigree-method}
 \alias{generate_colors,Pedigree}
 \title{Process the colors based on affection and availability}
@@ -12,6 +16,32 @@
 generate_colors(obj, ...)
 
 \S4method{generate_colors}{character}(
+  obj,
+  avail,
+  mods_aff = NULL,
+  threshold = 0.5,
+  sup_thres_aff = TRUE,
+  keep_full_scale = FALSE,
+  breaks = 3,
+  colors_aff = c("yellow2", "red"),
+  colors_unaff = c("white", "steelblue4"),
+  colors_avail = c("green", "black")
+)
+
+\S4method{generate_colors}{numeric}(
+  obj,
+  avail,
+  mods_aff = NULL,
+  threshold = 0.5,
+  sup_thres_aff = TRUE,
+  keep_full_scale = FALSE,
+  breaks = 3,
+  colors_aff = c("yellow2", "red"),
+  colors_unaff = c("white", "steelblue4"),
+  colors_avail = c("green", "black")
+)
+
+\S4method{generate_colors}{logical}(
   obj,
   avail,
   mods_aff = NULL,
@@ -42,7 +72,7 @@ generate_colors(obj, ...)
 }
 \arguments{
 \item{obj}{A pedigree object or a vector containing the affection status for
-each individuals.}
+each individuals. The affection status can be numeric, logical or character.}
 
 \item{...}{Other parameters to pass to the \code{generate_colors} function}
 

@@ -75,6 +75,10 @@ individuals}
 \item{keep_infos}{Boolean to indicate if individuals with unknown status
 but available or reverse should be kept}
 
+\item{missid}{The missing identifier value. Founders are the individuals with
+no father and no mother in the pedigree (i.e. \code{dadid} and \code{momid} equal to
+the value of this variable).  The default for \code{missid} is \code{"0"}.}
+
 \item{reset}{Boolean to indicate if the \code{useful} column should be reset}
 }
 \value{

@@ -40,6 +40,10 @@ The value relation code recognized by the function are the one defined
 by the \code{\link[=rel_code_to_factor]{rel_code_to_factor()}} function.
 }}
 
+\item{missid}{The missing identifier value. Founders are the individuals with
+no father and no mother in the pedigree (i.e. \code{dadid} and \code{momid} equal to
+the value of this variable).  The default for \code{missid} is \code{"0"}.}
+
 \item{reset}{If TRUE, the \code{num_child_tot}, \code{num_child_ind} and
 the \code{num_child_dir} columns are reset.}
 }

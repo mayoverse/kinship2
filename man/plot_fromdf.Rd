@@ -44,6 +44,10 @@ and \code{arc}.
 
 \item{ggplot_gen}{logical, if TRUE add the segments to the ggplot object}
 
+\item{boxw}{Width of the legend boxes}
+
+\item{boxh}{Height of the legend boxes}
+
 \item{add_to_existing}{If \code{TRUE}, the plot will be added to the current
 plot.}
 }

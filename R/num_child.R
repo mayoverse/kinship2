@@ -13,6 +13,7 @@ NULL
 #'
 #' @inheritParams kinship
 #' @inheritParams pedigree
+#' @inheritParams is_parent
 #'
 #' @return
 #' ## When obj is a vector

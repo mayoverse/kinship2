@@ -34,6 +34,8 @@ NULL
 #' @param title The title of the plot.
 #' @param add_to_existing If `TRUE`, the plot will be added to the current
 #' plot.
+#' @param boxh Height of the legend boxes
+#' @param boxw Width of the legend boxes
 #' @inheritParams draw_segment
 #' @inheritParams ped_to_plotdf
 #' @include plot_fct.R

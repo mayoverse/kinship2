@@ -70,6 +70,10 @@ the gender of the individuals. The following values are recognized:
 
 \item{col_aff}{A string with the column name to use for the affection status.}
 
+\item{missid}{The missing identifier value. Founders are the individuals with
+no father and no mother in the pedigree (i.e. \code{dadid} and \code{momid} equal to
+the value of this variable).  The default for \code{missid} is \code{"0"}.}
+
 \item{reset}{If TRUE, the \code{kin} and if \code{id_inf} columns is reset}
 }
 \value{
@@ -104,7 +108,7 @@ by 2, the minimum distance is increased by 1.
 \examples{
 data(sampleped)
 ped <- pedigree(sampleped)
-min_dist_inf(ped, column = "affected_aff")$ped
+min_dist_inf(ped, col_aff = "affected_aff")$ped
 
 }
 \seealso{

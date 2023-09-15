@@ -25,6 +25,7 @@ NULL
 #' @param family Optional family identification set it to NULL to invalidate.
 #' If used it will modify the ids of the individuals by pasting it with an _.
 #' @inheritParams kinship
+#' @inheritParams is_parent
 #' @inheritParams sex_to_factor
 #' @param obj A data.frame or a vector of the individuals identifiers. If a
 #' dataframe is given it must contain the columns `id`, `dadid`, `momid`,

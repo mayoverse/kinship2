@@ -14,6 +14,7 @@
 #' @inheritParams is_informative
 #' @inheritParams num_child
 #' @inheritParams kinship
+#' @inheritParams is_parent
 #'
 #' @return
 #' ## When obj is a vector

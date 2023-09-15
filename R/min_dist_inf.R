@@ -22,6 +22,7 @@ NULL
 #' @inheritParams sex_to_factor
 #' @inheritParams kinship
 #' @inheritParams is_informative
+#' @inheritParams is_parent
 #'
 #' @return
 #' ## When obj is a vector
@@ -36,7 +37,7 @@ NULL
 #' @examples
 #' data(sampleped)
 #' ped <- pedigree(sampleped)
-#' min_dist_inf(ped, column = "affected_aff")$ped
+#' min_dist_inf(ped, col_aff = "affected_aff")$ped
 #'
 #' @seealso [kinship()]
 #' @include is_informative.R

@@ -10,6 +10,10 @@ prefix_famid(family_id, ind_id, missid = "0")
 \item{family_id}{The family id}
 
 \item{ind_id}{The individual id}
+
+\item{missid}{The missing identifier value. Founders are the individuals with
+no father and no mother in the pedigree (i.e. \code{dadid} and \code{momid} equal to
+the value of this variable).  The default for \code{missid} is \code{"0"}.}
 }
 \value{
 The id with the family id merged

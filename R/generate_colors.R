@@ -187,7 +187,7 @@ generate_border <- function(avail, colors_avail = c("green", "black")) {
 #' on the affection and availability status.
 #'
 #' @param obj A pedigree object or a vector containing the affection status for
-#' each individuals.
+#' each individuals. The affection status can be numeric, logical or character.
 #' @param col_avail The name of the column containing the availability status.
 #' @inheritParams is_informative
 #' @inheritParams generate_fill
@@ -242,17 +242,8 @@ setMethod("generate_colors", "character",
     }
 )
 
-#' @examples
-#' data("sampleped")
-#' ped <- pedigree(sampleped)
-#' generate_colors(ped, "affected", add_to_scale=FALSE)$scales
 #' @export
-setGeneric("generate_colors", signature = "obj",
-    function(obj, ...) standardGeneric("generate_colors")
-)
-
-#' @export
-#' @aliases generate_colors,character
+#' @aliases generate_colors,numeric
 #' @rdname generate_colors
 setMethod("generate_colors", "numeric",
     function(
@@ -279,7 +270,7 @@ setMethod("generate_colors", "numeric",
 )
 
 #' @export
-#' @aliases generate_colors,character
+#' @aliases generate_colors,logical
 #' @rdname generate_colors
 setMethod("generate_colors", "logical",
     function(

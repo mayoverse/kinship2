@@ -10,7 +10,7 @@ NULL
 #'
 #' @param family_id The family id
 #' @param ind_id The individual id
-#' @inheritParams kinship
+#' @inheritParams is_parent
 #'
 #' @return The id with the family id merged
 #' @export

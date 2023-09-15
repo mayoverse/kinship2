@@ -129,7 +129,7 @@ ibd_matrix <- function(id1, id2, ibd, idmap, diagonal) {
         dimid <- idmap[temp, 2]
     }
 
-    sparseMatrix(i = id1, j = id2, ibd = ibd, symmetric = TRUE,
+    sparseMatrix(i = id1, j = id2, p = ibd, symmetric = TRUE,
         dimnames = list(dimid, dimid)
     )
 }

@@ -10,7 +10,7 @@ NULL
 #' used to edit away portions of the plot coordinates returned by
 #' [align()]. This is useful for zooming in on a particular region of the
 #' pedigree.
-#' @inheritParams auto_hint
+#' @inheritParams findspouse
 #'
 #' @return a pedigree list
 #'

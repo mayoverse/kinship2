@@ -30,7 +30,7 @@
 #' - A numeric/character vector of individuals id
 #' - A boolean
 #' @inheritParams kinship
-#'
+#' @inheritParams is_parent
 #' @return
 #'
 #' ## When obj is a vector
