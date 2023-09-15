@@ -17,7 +17,7 @@ vignette: |
 Introduction
 =====================
 The kinship matrix is foundational for random effects models with family data.  
-For $n$ subjects it is an $n \times n$ matrix whose $ij$ element contains
+For $n$ subjects it is an $n \times n$ matrix whose $i$, $j$ elements contains
 the expected fraction of alleles that would be identical by descent
 if we sampled one from subject $i$ and another from subject $j$.
 Note that the diagonal elements of the matrix will be 0.5 not 1: when we
@@ -104,6 +104,7 @@ This approach leads to
 a for loop containing operations on single rows/columns.  
 
 At one point below we use a vectorized version. It looks like the snippet below
+
 ```{r, eval=FALSE}
 for (g in 1:max(depth)) {
     indx <- which(depth == g)
@@ -126,19 +127,15 @@ to figure this out.  The unfortunate truth is that for this code
 it hardly makes a difference, and for the X chromosome calculation leads to
 impenetrable if-then-else logic.
 
-The program can be called with a pedigree, a pedigree list, or
+The program can be called with a pedigree, or
 raw data.  The first argument is $id$ instead of the more generic $x$
 for backwards compatability with an older version of the routine.
 We give founders a fake parent of subject $n+1$ who is not related to
 anybody (even themself); it avoids some if-then-else constructions.
 
-For S3 method dispatch to work on pedigree objects,
-we need to define a `kinship()`, `kinship.default()`, `kinship.pedigree()`.
-The default version takes the vectors
-
 ## Pedigree Object
 
-The method for a pedigree object is an almost trivial modification.  Since the
+The method for a pedigree object is an almost trivial modification. Since the
 mother and father are already indexed into the id list it has 
 two lines that are different, those that create mrow and drow.
 The other change is that now we potentially have information available
@@ -152,17 +149,17 @@ more involved.
 
 The total number of monozygotic twins is always small, so it is efficient to
 fix up all the monzygotic twins at each generation.
-A variable $havemz$ is set to TRUE if there are any, and an index array
+A variable $havemz$ is set to `TRUE` if there are any, and an index array
 $mzindex$ is created for matrix subscripting.
 
 
-## PedigreeList Object
+## With multiple families
 
 For the Minnesota Family Cancer Study there are 461 families and 29114
-subjects.  The raw kinship matrix would be 29114 by 29114 which is over
+subjects. The raw kinship matrix would be 29114 by 29114 which is over
 5 terabytes of memory, something that clearly will not work within S.       
 The solution is to store the overall matrix as a sparse Matrix object.
-Each family forms a single block.  For this study we have
+Each family forms a single block. For this study we have
 `n <- table(minnbreast$famid); sum(n*(n+1)/2)` or 1.07 million entries;
 assuming that only the lower half of each matrix is stored.
 The actual size is actually smaller than this, since each family
@@ -187,12 +184,13 @@ family/subject.
 The older $makekinship$ function,
 from before the creation of pedigreeList objects,
 accepts the raw identifier data, along with a special family code
-for unrelated subjects, as produced by the $make_famid$ function.
+for unrelated subjects, as produced by the `make_famid()` function.
 All the unrelated subjects are put at the front of the kinship matrix
 in this case rather than within the family.
 Because unrelateds get put into a fake family, we cannot create a
 rational family/subject identifier; the id must be unique across
 families.
+
 We include a copy of the routine for backwards compatability, but
 do not anticipate any new usage of it.
 Like most routines, this starts out with a collection of error checks.

@@ -17,23 +17,25 @@ vignette: |
 Pedigree alignment
 ==========================
 
-An \emph{aligned} pedigree is an object that contains a pedigree along
+An **aligned** pedigree is an object that contains a pedigree along
 with a set of information that allows for pretty plotting.
 This information consists of two parts: 
 a set of vertical and horizontal plotting coordinates along with the
 identifier of the subject to be plotted at each position,
 and a list of connections to be made between parent/child, spouse/spouse,
 and twin/twin.
+
 Creating this aligment turned out to be one of the more difficult parts
 of the project, and is the area where significant further work could be
 done.  
+
 All the routines in this section completely ignore the $id$ component
 of a pedigree; everyone is indexed solely by their row number in the object.
 
 Hints
 ==========================
 
-The first part of the work has to do with a [hints] list for each
+The first part of the work has to do with a **hints** list for each
 pedigree.  It consists of 3 parts:
 
 - The left to right order in which founders should be processed.
@@ -56,13 +58,14 @@ a marriage between 1 and 2, and another between 2 and 3.  In the joint
 pedigree the sets should be 1, 2, 3 from left to right.  
 
 The hints consist of a list with two components.
-The first is a vector of numbers of the same length as the pedigree,
+
+1. A vector of numbers of the same length as the pedigree,
 used to order the female founders and to order siblings within
 family.  For subjects not part of either of these the value can be 
 arbitrary.  
-The second is a 3 column matrix of spouse pairs, each row indicates the
+2. A 3 column matrix of spouse pairs, each row indicates the
 left-hand member of the pair, the right-hand member, and which of the two
-is the anchor, i.e., directly connected to thier parent.  
+is the anchor, i.e., directly connected to their parent.  
 Double and triple marriages can start to get interesting.
 
 Auto_hint
@@ -101,9 +104,10 @@ kindepth and align.
 
 Next is an internal function that  rearranges someone to be
 the leftmost or rightmost of his/her siblings.  The only
-real complication is twins -- if one of them moves the other has to move too.  
+real complication is twins. If one of them moves the other has to move too.  
 And we need to keep the monozygotics together within a band of triplets.
-Algorithm: if the person to be moved is part of a twinset, 
+
+*Algorithm* : if the person to be moved is part of a twinset, 
 first move all the twins to the left end (or right
 as the case may be), then move all the monozygotes to the
 left, then move the subject himself to the left.
@@ -111,14 +115,15 @@ left, then move the subject himself to the left.
 ## Init auto_hint
 
 Now, get an ordering of the pedigree to use as the starting point.  
-The numbers start at 1 on each level. We do not need the final $prettify$ step,
+The numbers start at 1 on each level. We do not need the final *prettify* step,
 hence `align = FALSE`. If there is a hints structure entered, we retain its non-zero entries,
-otherwise people are put into the order of the data set.  We allow the hints
-input to be only an order vector. twins are then further reordered.
+otherwise people are put into the order of the data set.
+
+We allow the hints input to be only an order vector. twins are then further reordered.
 
 ## Fixup auto_hint
 
-The result coming back from align is a set of vectors and
+The result coming back from `align()` is a set of vectors and
 matrices:
 
 - $n$ vector, number of entries per level
@@ -126,6 +131,7 @@ matrices:
 - $spouse$ integer matrix, one row per level, subject directly to my
 right is my spouse (1), a double marriage (2), or neither (0).
 - $fam$ matrix, link upward to my parents, or 0 if no link.
+
 
 \begin{figure}
   \myfig{auto_hint1}

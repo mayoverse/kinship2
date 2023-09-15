@@ -6,7 +6,7 @@ date: '`r format(Sys.time(),"%d %B, %Y")`'
 output:
   rmarkdown::html_vignette:
     toc: yes
-    toc_depth: 2
+    toc_depth: 3
 header-includes: \usepackage{tabularx}
 vignette: |
   %\VignetteIndexEntry{Pedigree_Plot_Details}
@@ -35,10 +35,10 @@ Setup
 
 The new version of the plotting pedigree function works in two step.
 
-  - **ped_to_plotdf** create a dataframe from a pedigree given containing
+  - **ped_to_plotdf()** create a dataframe from a pedigree given containing
   all the necessary information to plot all the elements of the pedigree:
   "polygons", "text", "segments", "arcs"
-  - **plot_from_df** use a given dataframe and plot all the element given
+  - **plot_from_df()** use a given dataframe and plot all the element given
 
 The advantage of this two step method, is that all the plotting can be parralelised,
 each element can be customised by the user if necessary and additional elements can
@@ -47,10 +47,19 @@ also be added to the plot by just adding a new row.
 If multiple families are present in the pedigree object, then one dataframe per family will
 be produced and the first one will be plotted.
 
+For more informations about those two functions, see the help page.
+
+```{r, help}
+help(ped_to_plotdf)
+help(plot_fromdf)
+```
+```
+
 Sizing
 ===============
+
 Now we need to set the sizes. 
-From align we will get the maximum width and depth. 
+From `align()` we will get the maximum width and depth. 
 There is one plotted row for each row of the returned matrices.
 The number of columns of the matrices is the max width of the pedigree,
 so there are unused positions in shorter rows, these can be identifed
@@ -59,11 +68,14 @@ Horizontal locations for each point go from 0 to xmax, subjects are at
 least 1 unit apart; a large number will be exactly one unit part.
 These locations will be at the top center of each plotted symbol.
 
+## Set the graphical parameters
+
 We would like to to make the boxes about 2.5 characters wide, which matches
 most labels, but no more than 0.9 units wide or .5 units high.  
-We also want to vertical room for the labels. Which should have at least
-1/2 of stemp2 space above and stemp2 space below.  
-The stemp3 variable is the height of labels: users may use multi-line ones.
+We also want to vertical room for the labels.
+This is done by the `set_plot_area()` function.
+We should have at least 1/2 of `stemp2` space above and `stemp2` space below.  
+The `stemp3` variable is the height of labels: users may use multi-line ones.
 Our constraints then are
 
   1. $(box height + label height) \times maxlev \le height$ : the boxes and labels have
@@ -190,7 +202,7 @@ will make up the symbol.  These are then used again and again.
 The collection is kept as a list with the four elements square, circle,
 diamond and triangle.
 
-Each of these is in turn a list with `ncol(affected)` element, and each
+Each of these is in turn a list with `max(ped$scales$fill$order)` elements, and each
 of those in turn a list of x and y coordinates.
 
 ### Circfun
@@ -201,6 +213,7 @@ the edge, then a portion of the arc. The polygon function will connect
 back to the center.
 
 ### Polyfun
+
 Now for the interesting one --- dividing a polygon into ''pie slices''.
 In computing this we can't use the usual $y= a + bx$ formula for a line,
 because it doesn't work for vertical ones (like the sides of the square).
