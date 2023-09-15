@@ -2,3 +2,4 @@
 *.project
 *.Rproj
 *.so
+kinship2.Rcheck/*

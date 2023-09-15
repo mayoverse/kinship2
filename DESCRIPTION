@@ -3,7 +3,7 @@ Version: 2.0.0
 Date: 2023-07-30
 Title: Pedigree Functions
 Authors@R: c(
-    person("Louis", "Le Nezet", email="louislenezet@gmail.com",
+    person("Louis", "Le Nézet", email="louislenezet@gmail.com",
         role=c("aut","cre"), comment = c(ORCID = "0009-0000-0202-2703")),
 	person("Jason", "Sinnwell", email="sinnwell.jason@mayo.edu", role="aut"),
 	person("Terry", "Therneau", role="aut"),
