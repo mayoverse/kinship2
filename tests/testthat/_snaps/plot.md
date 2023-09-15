@@ -16,17 +16,17 @@
       9                   polygon  2.499999735 3.000000
       10                  polygon  3.499999820 2.000000
       11                  polygon  3.499999735 3.000000
-      12                     mark  1.490980664 1.015664
-      13                     mark  0.490980721 2.015664
-      14                     mark -0.009019099 3.015664
-      15                     mark  0.490980896 4.015664
-      16                     mark  2.490980664 1.015664
-      17                     mark  1.490980721 2.015664
-      18                     mark  0.990980901 3.015664
-      19                     mark  2.490980721 2.015664
-      20                     mark  2.490980636 3.015664
-      21                     mark  3.490980721 2.015664
-      22                     mark  3.490980636 3.015664
+      12                     mark  1.492925717 1.013154
+      13                     mark  0.492925773 2.013154
+      14                     mark -0.007074047 3.013154
+      15                     mark  0.492925948 4.013154
+      16                     mark  2.492925717 1.013154
+      17                     mark  1.492925773 2.013154
+      18                     mark  0.992925953 3.013154
+      19                     mark  2.492925773 2.013154
+      20                     mark  2.492925688 3.013154
+      21                     mark  3.492925773 2.013154
+      22                     mark  3.492925688 3.013154
       23                  polygon  1.499999763 1.000000
       24                  polygon  0.499999820 2.000000
       25                  polygon  0.000000000 3.000000
@@ -38,62 +38,62 @@
       31                  polygon  2.499999735 3.000000
       32                  polygon  3.499999820 2.000000
       33                  polygon  3.499999735 3.000000
-      34                     mark  1.509018863 1.015664
-      35                     mark  0.509018919 2.015664
-      36                     mark  0.009019099 3.015664
-      37                     mark  0.509019094 4.015664
-      38                     mark  2.509018863 1.015664
-      39                     mark  1.509018919 2.015664
-      40                     mark  1.009019099 3.015664
-      41                     mark  2.509018919 2.015664
-      42                     mark  2.509018834 3.015664
-      43                     mark  3.509018919 2.015664
-      44                     mark  3.509018834 3.015664
-      45                     dead  1.478353925 1.034460
-      46                     dead  0.478353982 2.034460
-      47                     dead -0.021645838 3.034460
-      48                     dead  2.478353925 1.034460
-      49                     dead  1.478353982 2.034460
-      50                     dead  2.478353897 3.034460
-      51                       id  1.499999763 1.062753
-      52                       id  0.499999820 2.062753
-      53                       id  0.000000000 3.062753
-      54                       id  0.499999995 4.062753
-      55                       id  2.499999763 1.062753
-      56                       id  1.499999820 2.062753
-      57                       id  1.000000000 3.062753
-      58                       id  2.499999820 2.062753
-      59                       id  2.499999735 3.062753
-      60                       id  3.499999820 2.062753
-      61                       id  3.499999735 3.062753
-      62             line_spouses  1.518037962 1.015664
-      63             line_spouses  0.518038018 2.015664
-      64             line_spouses  0.018038198 3.015664
-      65             line_spouses  2.518038018 2.015664
-      66            line_spouses2  0.018038198 3.018797
+      34                     mark  1.507073810 1.013154
+      35                     mark  0.507073867 2.013154
+      36                     mark  0.007074047 3.013154
+      37                     mark  0.507074042 4.013154
+      38                     mark  2.507073810 1.013154
+      39                     mark  1.507073867 2.013154
+      40                     mark  1.007074047 3.013154
+      41                     mark  2.507073867 2.013154
+      42                     mark  2.507073782 3.013154
+      43                     mark  3.507073867 2.013154
+      44                     mark  3.507073782 3.013154
+      45                     dead  1.483022051 1.028940
+      46                     dead  0.483022108 2.028940
+      47                     dead -0.016977712 3.028940
+      48                     dead  2.483022051 1.028940
+      49                     dead  1.483022108 2.028940
+      50                     dead  2.483022023 3.028940
+      51                       id  1.499999763 1.052769
+      52                       id  0.499999820 2.052769
+      53                       id  0.000000000 3.052769
+      54                       id  0.499999995 4.052769
+      55                       id  2.499999763 1.052769
+      56                       id  1.499999820 2.052769
+      57                       id  1.000000000 3.052769
+      58                       id  2.499999820 2.052769
+      59                       id  2.499999735 3.052769
+      60                       id  3.499999820 2.052769
+      61                       id  3.499999735 3.052769
+      62             line_spouses  1.514147857 1.013154
+      63             line_spouses  0.514147914 2.013154
+      64             line_spouses  0.014148094 3.013154
+      65             line_spouses  2.514147914 2.013154
+      66            line_spouses2  0.014148094 3.015785
       67   line_children_vertical  0.499999820 2.000000
       68   line_children_vertical  3.499999820 2.000000
-      69 line_children_horizontal  0.499999820 1.953009
-      70          line_parent_mid  1.999999763 1.953009
-      71          line_parent_mid  1.999999763 1.671805
-      72          line_parent_mid  1.999999763 1.296867
+      69 line_children_horizontal  0.499999820 1.960537
+      70          line_parent_mid  1.999999763 1.960537
+      71          line_parent_mid  1.999999763 1.676322
+      72          line_parent_mid  1.999999763 1.297369
       73   line_children_vertical  1.000000000 3.000000
-      74 line_children_horizontal  1.000000000 2.953009
-      75          line_parent_mid  1.000000000 2.953009
-      76          line_parent_mid  1.000000000 2.671805
-      77          line_parent_mid  0.999999820 2.296867
+      74 line_children_horizontal  1.000000000 2.960537
+      75          line_parent_mid  1.000000000 2.960537
+      76          line_parent_mid  1.000000000 2.676322
+      77          line_parent_mid  0.999999820 2.297369
       78   line_children_vertical  2.499999735 3.000000
       79   line_children_vertical  3.499999735 3.000000
-      80     label_children_twin3  2.999999735 2.976504
-      81 line_children_horizontal  2.999999735 2.953009
-      82          line_parent_mid  2.999999735 2.953009
-      83          line_parent_mid  2.999999735 2.671805
-      84          line_parent_mid  2.999999820 2.296867
+      80     label_children_twin3  2.999999735 2.980268
+      81 line_children_horizontal  2.999999735 2.960537
+      82          line_parent_mid  2.999999735 2.960537
+      83          line_parent_mid  2.999999735 2.676322
+      84          line_parent_mid  2.999999820 2.297369
       85   line_children_vertical  0.499999995 4.000000
-      86 line_children_horizontal  0.499999995 3.953009
-      87          line_parent_mid  0.499999995 3.953009
-      88          line_parent_mid  0.499999995 3.671805
-      89          line_parent_mid  0.500000000 3.296867
+      86 line_children_horizontal  0.499999995 3.960537
+      87          line_parent_mid  0.499999995 3.960537
+      88          line_parent_mid  0.499999995 3.676322
+      89          line_parent_mid  0.500000000 3.297369
       90                      arc  0.000000000 3.000000
                  x1        y1       type    fill border
       1          NA        NA square_2_1     red  black
@@ -140,12 +140,12 @@
       42         NA        NA       text   black   <NA>
       43         NA        NA       text   black   <NA>
       44         NA        NA       text   black   <NA>
-      45 1.52164560 0.9968672   segments   black   <NA>
-      46 0.52164566 1.9968672   segments   black   <NA>
-      47 0.02164584 2.9968672   segments   black   <NA>
-      48 2.52164560 0.9968672   segments   black   <NA>
-      49 1.52164566 1.9968672   segments   black   <NA>
-      50 2.52164557 2.9968672   segments   black   <NA>
+      45 1.51697748 0.9973691   segments   black   <NA>
+      46 0.51697753 1.9973691   segments   black   <NA>
+      47 0.01697771 2.9973691   segments   black   <NA>
+      48 2.51697748 0.9973691   segments   black   <NA>
+      49 1.51697753 1.9973691   segments   black   <NA>
+      50 2.51697745 2.9973691   segments   black   <NA>
       51         NA        NA       text   black   <NA>
       52         NA        NA       text   black   <NA>
       53         NA        NA       text   black   <NA>
@@ -157,34 +157,34 @@
       59         NA        NA       text   black   <NA>
       60         NA        NA       text   black   <NA>
       61         NA        NA       text   black   <NA>
-      62 2.48196157 1.0156638   segments   black   <NA>
-      63 1.48196162 2.0156638   segments   black   <NA>
-      64 0.98196180 3.0156638   segments   black   <NA>
-      65 3.48196162 2.0156638   segments   black   <NA>
-      66 0.98196180 3.0187965   segments   black   <NA>
-      67 0.49999982 1.9530087   segments   black   <NA>
-      68 3.49999982 1.9530087   segments   black   <NA>
-      69 3.49999982 1.9530087   segments   black   <NA>
-      70 1.99999976 1.6718052   segments   black   <NA>
-      71 1.99999976 1.2968672   segments   black   <NA>
-      72 1.99999976 1.0156638   segments   black   <NA>
-      73 1.00000000 2.9530087   segments   black   <NA>
-      74 1.00000000 2.9530087   segments   black   <NA>
-      75 1.00000000 2.6718052   segments   black   <NA>
-      76 0.99999982 2.2968672   segments   black   <NA>
-      77 0.99999982 2.0156638   segments   black   <NA>
-      78 2.99999974 2.9530087   segments   black   <NA>
-      79 2.99999974 2.9530087   segments   black   <NA>
+      62 2.48585167 1.0131545   segments   black   <NA>
+      63 1.48585173 2.0131545   segments   black   <NA>
+      64 0.98585191 3.0131545   segments   black   <NA>
+      65 3.48585173 2.0131545   segments   black   <NA>
+      66 0.98585191 3.0157854   segments   black   <NA>
+      67 0.49999982 1.9605366   segments   black   <NA>
+      68 3.49999982 1.9605366   segments   black   <NA>
+      69 3.49999982 1.9605366   segments   black   <NA>
+      70 1.99999976 1.6763220   segments   black   <NA>
+      71 1.99999976 1.2973691   segments   black   <NA>
+      72 1.99999976 1.0131545   segments   black   <NA>
+      73 1.00000000 2.9605366   segments   black   <NA>
+      74 1.00000000 2.9605366   segments   black   <NA>
+      75 1.00000000 2.6763220   segments   black   <NA>
+      76 0.99999982 2.2973691   segments   black   <NA>
+      77 0.99999982 2.0131545   segments   black   <NA>
+      78 2.99999974 2.9605366   segments   black   <NA>
+      79 2.99999974 2.9605366   segments   black   <NA>
       80         NA        NA       text   black   <NA>
-      81 2.99999974 2.9530087   segments   black   <NA>
-      82 2.99999974 2.6718052   segments   black   <NA>
-      83 2.99999982 2.2968672   segments   black   <NA>
-      84 2.99999982 2.0156638   segments   black   <NA>
-      85 0.50000000 3.9530087   segments   black   <NA>
-      86 0.50000000 3.9530087   segments   black   <NA>
-      87 0.50000000 3.6718052   segments   black   <NA>
-      88 0.50000000 3.2968672   segments   black   <NA>
-      89 0.50000000 3.0156638   segments   black   <NA>
+      81 2.99999974 2.9605366   segments   black   <NA>
+      82 2.99999974 2.6763220   segments   black   <NA>
+      83 2.99999982 2.2973691   segments   black   <NA>
+      84 2.99999982 2.0131545   segments   black   <NA>
+      85 0.50000000 3.9605366   segments   black   <NA>
+      86 0.50000000 3.9605366   segments   black   <NA>
+      87 0.50000000 3.6763220   segments   black   <NA>
+      88 0.50000000 3.2973691   segments   black   <NA>
+      89 0.50000000 3.0131545   segments   black   <NA>
       90 2.49999974 3.0000000        arc   black   <NA>
          angle density cex label tips adjx adjy
       1     NA      NA  NA  <NA> <NA>   NA   NA
@@ -280,7 +280,8 @@
       
       $par_usr
       $par_usr$usr
-      [1] -0.0180382  3.5180380  4.1208775  1.0000000
+      [1] -0.01414809  3.51414791  4.11605893
+      [4]  1.00000000
       
       $par_usr$old_par
       $par_usr$old_par$xpd
@@ -288,16 +289,16 @@
       
       
       $par_usr$boxw
-      [1] 0.0360764
+      [1] 0.02829619
       
       $par_usr$boxh
-      [1] 0.03132753
+      [1] 0.02630893
       
       $par_usr$labh
-      [1] 0.02618791
+      [1] 0.02205037
       
       $par_usr$legh
-      [1] 0.04699129
+      [1] 0.0394634
       
       
 

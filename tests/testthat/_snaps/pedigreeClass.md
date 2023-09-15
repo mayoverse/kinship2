@@ -64,14 +64,14 @@
                                                                                   
                                                                                   
                                                                                   
-          gender             affected        available              sex    
-       Length:41          Min.   :0.0000   Min.   :0.0000   male      :20  
-       Class :character   1st Qu.:0.0000   1st Qu.:0.0000   female    :21  
-       Mode  :character   Median :1.0000   Median :0.0000   unknown   : 0  
-                          Mean   :0.5143   Mean   :0.3902   terminated: 0  
-                          3rd Qu.:1.0000   3rd Qu.:1.0000                  
-                          Max.   :1.0000   Max.   :1.0000                  
-                          NA's   :6                                        
+           gender         affected        available              sex    
+       Min.   :1.000   Min.   :0.0000   Min.   :0.0000   male      :20  
+       1st Qu.:1.000   1st Qu.:0.0000   1st Qu.:0.0000   female    :21  
+       Median :2.000   Median :1.0000   Median :0.0000   unknown   : 0  
+       Mean   :1.512   Mean   :0.5143   Mean   :0.3902   terminated: 0  
+       3rd Qu.:2.000   3rd Qu.:1.0000   3rd Qu.:1.0000                  
+       Max.   :2.000   Max.   :1.0000   Max.   :1.0000                  
+                       NA's   :6                                        
            avail             id               dadid              momid          
        Min.   :0.0000   Length:41          Length:41          Length:41         
        1st Qu.:0.0000   Class :character   Class :character   Class :character  
