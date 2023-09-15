@@ -19,5 +19,5 @@ test_that("fix_parents_df works with sex errors and with family", {
         "motherId" = "motherid", "gender" = "sex", "family" = "famid"
     ))
     expect_equal(sum(kindepth(ped)), 33147)
-    expect_equal(sum(kindepth(ped, align = TRUE)), 39086)
+    expect_equal(sum(kindepth(ped, align = TRUE)), 39087)
 })

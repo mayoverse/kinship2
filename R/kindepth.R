@@ -58,6 +58,9 @@ setMethod("kindepth", "character", function(obj, dadid, momid,
     for (i in 1:n) {
         child <- match(midx, parents, nomatch = 0) +
             match(didx, parents, nomatch = 0)  # Index of parent's childs
+
+        ## version 1.8.5 did not have this check with child_old.
+        ## Keeping it here because it was not the issue being fixed in 9/2023.
         if (all(child == child_old)) {
             stop(paste("Impossible pedigree: no progress made at iteration",
                 i
@@ -122,17 +125,20 @@ setMethod("kindepth", "character", function(obj, dadid, momid,
     dads <- didx[midx > 0 & didx > 0]  # the father side of all spouse pairs
     moms <- midx[midx > 0 & didx > 0]
     if (0) {
+        ## somewhere between version 1.8.5 and 1.9.6 this portion added
+        ## check against other test cases, but was trying to fix where a mother
+        ## had multiple marriages
         founder <- (midx == 0 & didx == 0)
         if (any(founder[dads])) {
-            drow <- which(founder[dads])  # which pairs
-            id <- unique(dads[drow])  # id
+            drow <- which(founder[dads]) # which pairs
+            id <- unique(dads[drow]) # id
             depth[id] <- tapply(depth[moms[drow]], dads[drow], min)
             dads <- dads[-drow]
             moms <- moms[-drow]
         }
         if (any(founder[moms])) {
-            mrow <- which(founder[moms])  # which pairs
-            id <- unique(moms[mrow])  # id
+            mrow <- which(founder[moms]) # which pairs
+            id <- unique(moms[mrow]) # id
             depth[id] <- tapply(depth[dads[mrow]], moms[mrow], min)
             dads <- dads[-mrow]
             moms <- moms[-mrow]
@@ -206,7 +212,10 @@ setMethod("kindepth", "character", function(obj, dadid, momid,
         }
         ## Once a subject has been shifted, we don't allow them to instigate
         ## yet another shift, possibly on another level
-        done[dads == bad | moms == bad] <- TRUE
+        done[who] <- TRUE
+        ##  This snunk into version 1.9.6, which was part of
+        ## bug: done[dads == bad | moms == bad] <- TRUE
+
     }  ## while(TRUE)
     if (all(depth > 0)) {
         stop("You found a bug in kindepth's alignment code!")
