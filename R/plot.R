@@ -42,6 +42,9 @@ NULL
 #' @inheritParams align
 #' @param fam_to_plot default=1.  If the pedigree contains multiple families,
 #' this parameter can be used to select which family to plot.
+#' It can be a numeric value or a character value. If numeric, it is the
+#' index of the family to plot returned by `unique(x$ped$family)`.
+#' If character, it is the family id to plot.
 #' @param legend default=FALSE.  If TRUE, a legend will be added to the plot.
 #' @param leg_cex default=0.8.  Controls the size of the legend text.
 #' @param leg_symbolsize default=0.5.  Controls the size of the legend symbols.
@@ -84,9 +87,12 @@ setMethod("plot", c(x = "Pedigree", y = "missing"),
         )
         famlist <- unique(x$ped$family)
         if (length(famlist) > 1) {
-            message("Multiple families present, only plotting family",
+            message("Multiple families present, only plotting family ",
                 fam_to_plot
             )
+            if (is.numeric(fam_to_plot)) {
+                fam_to_plot <- famlist[fam_to_plot]
+            }
             lst <- lst[[fam_to_plot]]
         }
 

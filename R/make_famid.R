@@ -115,7 +115,7 @@ setMethod("make_famid", "Pedigree",
         }
 
         rel_df$family <- fam_id1
-        pedigree(ped_df = ped_df, rel_df = rel_df,
+        pedigree(ped_df, rel_df = rel_df,
             scales = ped$scales, normalize = TRUE
         )
     }

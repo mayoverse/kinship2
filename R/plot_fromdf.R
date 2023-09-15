@@ -69,7 +69,7 @@ plot_fromdf <- function(
         p <- p + ggtitle(title)
     }
 
-    max_aff <- max(as.numeric(str_split_i(df$type, "_", 2)), na.rm = TRUE) 
+    max_aff <- max(as.numeric(str_split_i(df$type, "_", 2)), na.rm = TRUE)
 
     ## Add boxes
     poly_n <- lapply(seq_len(max_aff), polygons)

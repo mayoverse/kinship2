@@ -1,13 +1,14 @@
-#' Create a Pedigree object from a data.frame
+#' Create a Pedigree object
 #'
 #' This constructor help to create a `Pedigree` object from
-#' different `data.frame`.
+#' different `data.frame` or a set of vectors.
 #'
 #' If any errors are found in the data, the function will return
 #' the data.frame with the errors for the pedigree and the relationship
 #' data.frame.
 #'
-#' @param ped_df A data.frame with the individuals informations.
+#' @param obj A vector of the individuals identifiers or a data.frame
+#' with the individuals informations.
 #' The minimum columns required are `id`, `dadid`, `momid` and `sex`.
 #' The `family` column can also be used to specify the family of the
 #' individuals and will be merge to the `id` field separated by an
@@ -38,10 +39,87 @@
 #' @param normalize A logical to know if the data should be normalised.
 #' @param ... Other arguments to pass to the function `generate_colors`.
 #' @inheritParams align
+#' @inheritParams is_parent
 #' @return A Pedigree object.
 #' @export
-pedigree <- function(
-    ped_df = data.frame(
+setGeneric("pedigree", signature = "obj",
+    function(obj, ...) standardGeneric("pedigree")
+)
+
+#' @export
+#' @rdname pedigree
+#' @aliases pedigree,numeric
+#' @docType methods
+setMethod("pedigree", "numeric", function(obj, ...
+) {
+    pedigree(as.character(obj), ...)
+})
+
+#' @export
+#' @rdname pedigree
+#' @aliases pedigree,character
+#' @docType methods
+setMethod("pedigree", "character", function(obj, dadid, momid,
+    sex, famid = NA, avail = NA, affected = NA, status = NA,
+    relation = NULL, missid = "0", col_aff = "affected", ...
+) {
+    n <- length(obj)
+    ## Code transferred from noweb to markdown vignette.
+    ## Sections from the noweb/vignettes are noted here with
+    ## Doc: Error and Data Checks
+    ## Doc: Errors1
+    if (length(momid) != n) stop("Mismatched lengths, id and momid")
+    if (length(dadid) != n) stop("Mismatched lengths, id and momid")
+    if (length(sex) != n) stop("Mismatched lengths, id and sex")
+
+    ped_df <- data.frame(
+        family = famid,
+        id = obj,
+        dadid = dadid,
+        momid = momid,
+        sex = sex
+    )
+    if (any(!is.na(affected))) {
+        if (is.vector(affected)) {
+            ped_df$affected <- affected
+        } else {
+            ped_df <- cbind(ped_df, affected)
+            col_aff <- colnames(affected)
+        }
+    }
+    if (any(!is.na(avail))) {
+        ped_df$available <- avail
+    }
+    if (any(!is.na(status))) {
+        ped_df$status <- status
+    }
+    if (! is.null(relation)) {
+        rel_df <- data.frame(
+            id1 = relation[, 1],
+            id2 = relation[, 2],
+            code = relation[, 3]
+        )
+        if (dim(relation)[2] > 3) {
+            rel_df$family <- relation[, 4]
+        }
+    } else {
+        rel_df <- data.frame(
+            id1 = character(),
+            id2 = character(),
+            code = numeric(),
+            family = character()
+        )
+    }
+
+    pedigree(ped_df, rel_df = rel_df, missid = missid, col_aff = col_aff, ...)
+})
+
+#' @export
+#' @rdname pedigree
+#' @aliases pedigree,data.frame
+#' @docType methods
+setMethod("pedigree", "data.frame",  function(
+    obj = data.frame(
         id = character(),
         dadid = character(),
         momid = character(),
@@ -90,8 +168,11 @@ pedigree <- function(
         spouse = NULL
     ),
     normalize = TRUE,
+    missid = "0",
+    col_aff = "affected",
     ...
 ) {
+    ped_df <- obj
     if (!is.data.frame(ped_df)) {
         stop("ped_df must be a data.frame")
     }
@@ -111,10 +192,16 @@ pedigree <- function(
     cols_to_ren <- match(old_cols, names(rel_df))
     names(rel_df)[cols_to_ren[!is.na(cols_to_ren)]] <-
         new_cols[!is.na(cols_to_ren)]
+
+    ## Set family, id, dadid and momid to character
+    to_char <- c("family", "indId", "fatherId", "motherId")
+    to_char <- colnames(ped_df)[colnames(ped_df) %in% to_char]
+    ped_df[to_char] <- lapply(ped_df[to_char], as.character)
+
     ## Normalise the data before creating the object
     if (normalize) {
-        ped_df <- norm_ped(ped_df)
-        rel_df <- norm_rel(rel_df)
+        ped_df <- norm_ped(ped_df, missid = missid)
+        rel_df <- norm_rel(rel_df, missid = missid)
     } else {
         cols_need <- c("id", "dadid", "momid", "sex")
         cols_to_use <- c("steril", "avail", "family", "status", "affected")
@@ -141,9 +228,13 @@ pedigree <- function(
         )
         return(rel_df)
     }
+
+    rownames(ped_df) <- ped_df$id
     ## Create the object
     ped <- new("Pedigree", ped = ped_df, rel = rel_df,
         scales = scales, hints = hints
     )
-    generate_colors(ped, ...)
+
+    generate_colors(ped, col_aff = col_aff, ...)
 }
+)

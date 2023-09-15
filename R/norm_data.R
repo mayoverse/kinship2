@@ -42,11 +42,20 @@ prefix_famid <- function(family_id, ind_id, missid = "0") {
 #' All individuals with errors will be remove from the dataframe and will
 #' be transfered to the error dataframe.
 #'
+#' @param ped_df A data.frame with the individuals informations.
+#' The minimum columns required are `id`, `dadid`, `momid` and `sex`.
+#' The `family` column can also be used to specify the family of the
+#' individuals and will be merge to the `id` field separated by an
+#' underscore.
+#' The following columns are also recognize `steril`, `avail`, `status`,
+#' `affected`. They respectively correspond to the sterilisation status,
+#' the availability status, the death status and the affection status
+#' of the individuals. The values recognized for those columns are `1` or
+#' `0`.
 #' @param na_strings Vector of strings to be considered as NA values
 #' @param try_num Boolean defining if the function should try to convert
 #' all the columns to numeric.
 #' @inheritParams is_parent
-#' @inheritParams pedigree
 #'
 #' @return A dataframe with the errors identified in the `error` column
 #'

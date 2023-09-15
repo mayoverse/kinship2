@@ -323,6 +323,18 @@ setMethod("generate_colors", "Pedigree",
             return(obj)
         }
 
+        if (length(col_aff) > 1) {
+            for (col in col_aff) {
+                obj <- generate_colors(obj, col, add_to_scale,
+                    col_avail, mods_aff, threshold, sup_thres_aff,
+                    keep_full_scale, breaks,
+                    colors_aff, colors_unaff, colors_avail,
+                    reset
+                )
+            }
+            return(obj)
+        }
+
         new_col <- paste0(col_aff, "_aff")
         df <- check_columns(obj$ped, c(col_aff, col_avail),
             "", new_col, others_cols = TRUE
