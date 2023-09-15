@@ -16,7 +16,7 @@ To install this package from Github you can use the following R script:
 if (!require("remotes", quietly = TRUE))
     install.packages("remotes")
 
-remotes::install_github("louislenezet/kinship2@dev_newclass")
+remotes::install_github("louislenezet/kinship2@dev_newclass", build_vignettes=TRUE)
 ````
 
 ### From Bioconductor (not yet available)
