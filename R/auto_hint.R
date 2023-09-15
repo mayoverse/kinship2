@@ -317,7 +317,7 @@ auto_hint <- function(
     }
 
     n <- length(ped$ped$id)
-    depth <- kindepth(ped, align = TRUE)
+    depth <- kindepth(ped, align_parents = TRUE)
 
     ## Doc: init-auto_hint
     if (!is.null(hints)) {
