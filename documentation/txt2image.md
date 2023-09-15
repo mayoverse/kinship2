@@ -13,4 +13,11 @@ To use drawio
 ```bash
 drawio --version
 drawio documentation/DiagramFunction.drawio --export --format png --page-index 0 --output inst/figures/kinship2_diagram.png
+drawio documentation/DiagramFunction.drawio --export --format png --page-index 0 --layers 0 --output inst/figures/plotting.png
+drawio documentation/DiagramFunction.drawio --export --format png --page-index 0 --layers 1 --output inst/figures/shrinking.png
+drawio documentation/DiagramFunction.drawio --export --format png --page-index 0 --layers 2 --output inst/figures/infos.png
+drawio documentation/DiagramFunction.drawio --export --format png --page-index 0 --layers 3 --output inst/figures/pedigreeobj.png
+drawio documentation/DiagramFunction.drawio --export --format png --page-index 0 --layers 4 --output inst/figures/alignment.png
+drawio documentation/DiagramFunction.drawio --export --format png --page-index 0 --layers 5 --output inst/figures/checkingcol.png
+drawio documentation/DiagramFunction.drawio --export --format png --page-index 0 --layers 6 --output inst/figures/legend.png
 ```
