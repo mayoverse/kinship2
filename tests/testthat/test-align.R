@@ -37,7 +37,7 @@ test_that("test alignement with inbreeding and relationship matrix", {
         id2 = c(110, 114, 132, 109),
         code = c(1, 4, 4, 4)
     )
-    ped <- pedigree(sampleped[-1], rel_df = rel_df)
+    ped <- pedigree(sampleped[-1], rel_df)
     plist <- align(ped)
 
     ped_sr <- pedigree(sampleped[-1])
@@ -73,9 +73,7 @@ test_that("Alignement with spouse", {
         code = 4,
         family = 1
     )
-    ped1 <- pedigree(df1,
-        rel_df = relate1
-    )
+    ped1 <- pedigree(df1, relate1)
     hints <- auto_hint(ped1)
     expect_equal(as.vector(hints$spouse), c(9, 10, 1))
     expect_equal(hints$order,

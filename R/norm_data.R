@@ -229,7 +229,18 @@ norm_ped <- function(
 #' @description Normalise relationship dataframe for pedigree object
 #'
 #' @inheritParams norm_ped
-#' @inheritParams pedigree
+#' @param rel_df A data.frame with the special relationships between
+#' individuals.
+#' The minimum columns required are `id1`, `id2` and `code`. The `family`
+#' column can also be used to specify the family of the individuals.
+#' The code values are:
+#' - `1` = Monozygotic twin
+#' - `2` = Dizygotic twin
+#' - `3` = twin of unknown zygosity
+#' - `4` = Spouse
+#'
+#' The value relation code recognized by the function are the one defined
+#' by the [rel_code_to_factor()] function.
 #' @inheritParams is_parent
 #'
 #' @return A dataframe with the errors identified

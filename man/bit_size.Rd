@@ -22,13 +22,17 @@ bit_size(obj, ...)
 
 \item{momid}{vector containing for each subject, the identifiers of the
 biologicals mothers.}
+
+\item{missid}{The missing identifier value. Founders are the individuals with
+no father and no mother in the pedigree (i.e. \code{dadid} and \code{momid} equal to
+the value of this variable).  The default for \code{missid} is \code{"0"}.}
 }
 \value{
 A list with the following components:
 \itemize{
 \item bit_size The bit_size of input pedigree
 \item nFounder The number of founders in the pedigree
-\item nNonFounder The number of nonfounders in the pedgiree
+\item nNonFounder The number of nonfounders in the pedigree
 }
 }
 \description{

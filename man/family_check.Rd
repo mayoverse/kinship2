@@ -37,19 +37,19 @@ a data frame with one row for each unique family id in the
 \code{family} argument or the one detected in the pedigree object.
 Components of the output are:
 \itemize{
-\item family The family id, as entered into the data set
-\item n Number of subjects in the family
-\item unrelated Number of them that appear to be unrelated to
+\item \code{family} : The family id, as entered into the data set
+\item \code{n} : Number of subjects in the family
+\item \code{unrelated} : Number of them that appear to be unrelated to
 anyone else in the entire pedigree set.  This is usually marry-ins with no
 children (in the pedigree), and if so are not a problem.
-\item split Number of unique 'new' family ids.
+\item \code{split} : Number of unique 'new' family ids.
 \itemize{
-\item 0 = no one in this 'family' is related to anyone else (not good)
-\item 1 = everythings is fine
-\item 2+ = the family appears to be a set of disjoint trees.
+\item \code{0} = no one in this 'family' is related to anyone else (not good)
+\item \code{1} = everythings is fine
+\item \code{2} and + = the family appears to be a set of disjoint trees.
 Are you missing some of the people?
 }
-\item join Number of other families that had a unique
+\item \code{join} : Number of other families that had a unique
 family, but are actually joined to this one.  0 is the hope.
 }
 }

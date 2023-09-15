@@ -12,7 +12,7 @@ NULL
 #' between 2 spouses, the indirect childs will still be added.
 #'
 #' @inheritParams kinship
-#' @inheritParams pedigree
+#' @inheritParams norm_rel
 #' @inheritParams is_parent
 #'
 #' @return

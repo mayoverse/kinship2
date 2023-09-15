@@ -23,7 +23,7 @@ test_that("pedigree old usage compatibility", {
     ped1 <- with(sampleped,
         pedigree(id, dadid, momid, sex, family, available, affected)
     )
-    ped1$scales
+
     expect_equal(ped1, pedigree(sampleped))
 
     ped2mat <- matrix(c(
@@ -55,7 +55,7 @@ test_that("pedigree old usage compatibility", {
 
     expect_equal(ped2,
         pedigree(ped2df, col_aff = c("disease", "smoker", "available"),
-            rel_df = rel_df
+            rel_df
         )
     )
 })

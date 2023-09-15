@@ -51,7 +51,7 @@ test_that("kinship works", {
     expect_equal(kmat_char, kmat_ped)
 
     ## Test with monozygotic relationship
-    tped <- pedigree(twindat, rel_df = relate)
+    tped <- pedigree(twindat, relate)
     kmat <- kinship(tped)
 
     ## should show kinship coeff of 0.5 for where MZ twins are
@@ -71,7 +71,7 @@ test_that("kinship works", {
     relate$id2 <- match(relate$id2, indx) - 1
 
     # Build the pedigree and kinship
-    tped <- pedigree(twindat, rel_df = relate)
+    tped <- pedigree(twindat, relate)
     kmat <- kinship(tped)
 
     truth <- matrix(
@@ -103,7 +103,7 @@ test_that("Kinship Claus Ekstrom 09/2012", {
     )
     relation <- data.frame(id1 = c(3), id2 = c(4), famid = c(1), code = c(1))
 
-    ped <- pedigree(mydata, rel_df = relation)
+    ped <- pedigree(mydata, relation)
 
     kmat <- kinship(ped)
     expect_true(all(kmat[3:4, 3:4] == 0.5))
@@ -130,7 +130,7 @@ test_that("kinship works with X chromosoms", {
     names(ped2df) <- c("fam", "id", "dadid", "momid", "sex")
     rel_df <- as.data.frame(matrix(c(8, 9, 1), ncol = 3))
     names(rel_df) <- c("id1", "id2", "code")
-    ped2 <- pedigree(ped2df, rel_df = rel_df)
+    ped2 <- pedigree(ped2df, rel_df)
 
     ## regular kinship matrix
     expect_snapshot(kinship(ped2))

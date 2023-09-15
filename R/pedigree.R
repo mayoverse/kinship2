@@ -7,6 +7,7 @@
 #' the data.frame with the errors for the pedigree and the relationship
 #' data.frame.
 #'
+#' @inheritParams align
 #' @param obj A vector of the individuals identifiers or a data.frame
 #' with the individuals informations.
 #' The minimum columns required are `id`, `dadid`, `momid` and `sex`.
@@ -18,18 +19,17 @@
 #' the availability status, the death status and the affection status
 #' of the individuals. The values recognized for those columns are `1` or
 #' `0`.
-#' @param rel_df A data.frame with the special relationships between
-#' individuals.
-#' The minimum columns required are `id1`, `id2` and `code`. The `family`
-#' column can also be used to specify the family of the individuals.
-#' The code values are:
+#' @param relation A matrix or a data.frame with 3 required columns
+#' (i.e. id1, id2, code) specifying special relationship between pairs
+#' of individuals.
+#' #' The code values are:
 #' - `1` = Monozygotic twin
 #' - `2` = Dizygotic twin
 #' - `3` = twin of unknown zygosity
 #' - `4` = Spouse
 #'
-#' The value relation code recognized by the function are the one defined
-#' by the [rel_code_to_factor()] function.
+#' If `famid` is given in the call to create pedigrees, then
+#' `famid` needs to be in the last column of `relation`.
 #' @param cols_ren_ped A named list with the columns to rename for the
 #' pedigree dataframe.
 #' @param cols_ren_rel A named list with the columns to rename for the
@@ -38,8 +38,6 @@
 #' affection status and the other one for the border color (e.g availability).
 #' @param normalize A logical to know if the data should be normalised.
 #' @param ... Other arguments to pass to the function `generate_colors`.
-#' @inheritParams align
-#' @inheritParams is_parent
 #' @return A Pedigree object.
 #' @export
 setGeneric("pedigree", signature = "obj",
@@ -59,9 +57,19 @@ setMethod("pedigree", "numeric", function(obj, ...
 #' @rdname pedigree
 #' @aliases pedigree,character
 #' @docType methods
+#' @inheritParams is_parent
+#' @inheritParams sex_to_factor
+#' @inheritParams family_check
+#' @inheritParams is_informative
+#' @param status A numeric vector of vital status of each individual
+#' (e.g., genotyped). The values are:
+#' - `0`  : alive
+#' - `1`  : dead
+#' - `NA` : vital status not known
 setMethod("pedigree", "character", function(obj, dadid, momid,
-    sex, famid = NA, avail = NA, affected = NA, status = NA,
-    relation = NULL, missid = "0", col_aff = "affected", ...
+    sex, family = NA, avail = NA, affected = NA, status = NA,
+    relation =  NULL,
+    missid = "0", col_aff = "affected", ...
 ) {
     n <- length(obj)
     ## Code transferred from noweb to markdown vignette.
@@ -73,7 +81,7 @@ setMethod("pedigree", "character", function(obj, dadid, momid,
     if (length(sex) != n) stop("Mismatched lengths, id and sex")
 
     ped_df <- data.frame(
-        family = famid,
+        family = family,
         id = obj,
         dadid = dadid,
         momid = momid,
@@ -93,17 +101,8 @@ setMethod("pedigree", "character", function(obj, dadid, momid,
     if (any(!is.na(status))) {
         ped_df$status <- status
     }
-    if (! is.null(relation)) {
-        rel_df <- data.frame(
-            id1 = relation[, 1],
-            id2 = relation[, 2],
-            code = relation[, 3]
-        )
-        if (dim(relation)[2] > 3) {
-            rel_df$family <- relation[, 4]
-        }
-    } else {
-        rel_df <- data.frame(
+    if (is.null(relation)) {
+        relation <- data.frame(
             id1 = character(),
             id2 = character(),
             code = numeric(),
@@ -111,7 +110,9 @@ setMethod("pedigree", "character", function(obj, dadid, momid,
         )
     }
 
-    pedigree(ped_df, rel_df = rel_df, missid = missid, col_aff = col_aff, ...)
+    pedigree(ped_df, relation = relation,
+        missid = missid, col_aff = col_aff, ...
+    )
 })
 
 #' @export
@@ -128,7 +129,7 @@ setMethod("pedigree", "data.frame",  function(
         available = numeric(),
         affected = numeric()
     ),
-    rel_df = data.frame(
+    relation = data.frame(
         id1 = character(),
         id2 = character(),
         code = numeric(),
@@ -176,9 +177,23 @@ setMethod("pedigree", "data.frame",  function(
     if (!is.data.frame(ped_df)) {
         stop("ped_df must be a data.frame")
     }
-    if (!is.data.frame(rel_df)) {
-        stop("rel_df must be a data.frame")
+
+    if (is.matrix(relation)) {
+        print(dim(relation)[2])
+        rel_df <- data.frame(
+            id1 = relation[, 1],
+            id2 = relation[, 2],
+            code = relation[, 3]
+        )
+        if (dim(relation)[2] > 3) {
+            rel_df$family <- relation[, 4]
+        }
+    } else if (is.data.frame(relation)) {
+        rel_df <- relation
+    } else {
+        stop("relation must be a matrix or a data.frame")
     }
+
     ## Rename columns ped
     old_cols <- as.vector(unlist(cols_ren_ped))
     new_cols <- names(cols_ren_ped)

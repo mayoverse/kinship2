@@ -35,9 +35,11 @@ procedure when using the \verb{/list} option of the \code{TABLE} statement.
 
 \section{Data}{
 
-\code{\link[=sampleped]{sampleped()}}: Pedigree example data sets with two pedigrees
-\code{\link[=minnbreast]{minnbreast()}}: Larger cohort of pedigrees from MN breast cancer
+\itemize{
+\item \code{\link[=sampleped]{sampleped()}}: Pedigree example data sets with two pedigrees
+\item \code{\link[=minnbreast]{minnbreast()}}: Larger cohort of pedigrees from MN breast cancer
 study
+}
 }
 
 \examples{
@@ -53,7 +55,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Louis Le Nezet \email{louislenezet@gmail.com} (\href{https://orcid.org/0009-0000-0202-2703}{ORCID})
+\strong{Maintainer}: Louis Le Nézet \email{louislenezet@gmail.com} (\href{https://orcid.org/0009-0000-0202-2703}{ORCID})
 
 Authors:
 \itemize{

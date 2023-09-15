@@ -126,20 +126,21 @@ existing scales or if they need to replace the existing scales.}
 already present.}
 }
 \value{
-\subsection{When used with a dataframe :}{
+\subsection{When used with a vector}{
 
-A list of two elements
+A list of three elements
 \itemize{
-\item The processed dataframe with the \code{affected} and \code{avail} columns
-processed accordingly
-\item A dataframe containing the description of each modality of the scale
+\item A vector containing the transformed filling modalities
+\item A dataframe containing the description of each filling modalities
+\item A dataframe containing the description of the border modalities
 }
 }
 
-\subsection{When used with a pedigree object :}{
+\subsection{When used with a pedigree object}{
 
 The pedigree object with the \code{affected} and \code{avail} columns
-processed accordingly
+processed accordingly.
+
 The pedigree scales slots are updated
 }
 }

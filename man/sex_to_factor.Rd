@@ -17,7 +17,7 @@ the gender of the individuals. The following values are recognized:
 }
 \value{
 an ordered factor vector containing the transformed variable
-"male" > "female" > "unknown" > "terminated"
+"male" < "female" < "unknown" < "terminated"
 }
 \description{
 Transform a gender variable to an ordered factor

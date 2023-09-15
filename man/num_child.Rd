@@ -36,9 +36,10 @@ The code values are:
 \item \code{2} = Dizygotic twin
 \item \code{3} = twin of unknown zygosity
 \item \code{4} = Spouse
+}
+
 The value relation code recognized by the function are the one defined
-by the \code{\link[=rel_code_to_factor]{rel_code_to_factor()}} function.
-}}
+by the \code{\link[=rel_code_to_factor]{rel_code_to_factor()}} function.}
 
 \item{missid}{The missing identifier value. Founders are the individuals with
 no father and no mother in the pedigree (i.e. \code{dadid} and \code{momid} equal to

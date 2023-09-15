@@ -50,11 +50,11 @@ depending on their need
 \details{
 3 types of columns are here checked:
 \itemize{
-\item 1 \code{cols_needed} those columns need to be present if any is missing
+\item \code{cols_needed} : those columns need to be present if any is missing
 an error will be prompted and the script will stop
-\item 2 \code{cols_used} those columns will be used in the script and will be
+\item \code{cols_used} : those columns will be used in the script and will be
 overwritten to NA.
-\item 3 \code{cols_to_use} those columns are optional and will be recognise
+\item \code{cols_to_use} : those columns are optional and will be recognise
 if present.
 The last two types of columns can be initialised to NA if needed.
 }

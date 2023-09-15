@@ -17,9 +17,10 @@ The code values are:
 \item \code{2} = Dizygotic twin
 \item \code{3} = twin of unknown zygosity
 \item \code{4} = Spouse
+}
+
 The value relation code recognized by the function are the one defined
-by the \code{\link[=rel_code_to_factor]{rel_code_to_factor()}} function.
-}}
+by the \code{\link[=rel_code_to_factor]{rel_code_to_factor()}} function.}
 
 \item{na_strings}{Vector of strings to be considered as NA values}
 

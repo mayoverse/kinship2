@@ -21,7 +21,7 @@ rel_df <- data.frame(rel_df)
 test_that("make_famid works with pedigree", {
     ## Simple case with no family id
     data("sampleped")
-    ped <- pedigree(sampleped[-1], rel_df = rel_df[c(1:3)])
+    ped <- pedigree(sampleped[-1], rel_df[c(1:3)])
     ped <- make_famid(ped)
 
     ## Expected values
@@ -34,7 +34,7 @@ test_that("make_famid works with pedigree", {
     ## Updating already present family id
     data("sampleped")
     sampleped$family[sampleped$family == "2"] <- 3
-    ped <- pedigree(sampleped, rel_df = rel_df)
+    ped <- pedigree(sampleped, rel_df)
     ped <- make_famid(ped)
     expect_equal(ped$ped$id, id)
     expect_equal(ped$rel$id1, c("2_213", "2_210", "1_140", "1_133"))

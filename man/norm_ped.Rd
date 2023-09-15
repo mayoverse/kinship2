@@ -28,9 +28,7 @@ the value of this variable).  The default for \code{missid} is \code{"0"}.}
 all the columns to numeric.}
 }
 \value{
-List of two dataframe
-\code{norm} is the dataframe with all the individuals without any errors.
-\code{errors} is the dataframe containing the individuals with errors.
+A dataframe with the errors identified in the \code{error} column
 }
 \description{
 Normalise dataframe for pedigree object

@@ -40,7 +40,8 @@ Computes the depth of each subject in the pedigree.
 }
 \details{
 Mark each person as to their depth in a pedigree; 0 for a founder, otherwise
-\verb{depth = 1 + max(father's depth, mother's depth)}
+
+\eqn{depth = 1 + \max(fatherDepth, motherDepth)}
 
 In the case of an inbred pedigree a perfect alignment obeying
 \code{extra=TRUE} may not exist.

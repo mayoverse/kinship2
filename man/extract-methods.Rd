@@ -3,18 +3,53 @@
 \name{show,Pedigree-method}
 \alias{show,Pedigree-method}
 \alias{summary,Pedigree-method}
+\alias{[[,Pedigree,ANY,missing-method}
+\alias{[[<-,Pedigree,ANY,missing-method}
+\alias{$,Pedigree-method}
+\alias{$<-,Pedigree-method}
 \alias{sub_sel_hints}
 \alias{sub_sel_hints,Pedigree-method}
+\alias{[,Pedigree,ANY,ANY,ANY-method}
+\alias{[,Pedigree,missing,ANY,ANY-method}
+\alias{[,Pedigree,ANY,missing,ANY-method}
 \title{Pedigree show method.}
 \usage{
 \S4method{show}{Pedigree}(object)
 
 \S4method{summary}{Pedigree}(object)
 
+\S4method{[[}{Pedigree,ANY,missing}(x, i, j, ..., drop = TRUE)
+
+\S4method{[[}{Pedigree,ANY,missing}(x, i, j, ...) <- value
+
+\S4method{$}{Pedigree}(x, name)
+
+\S4method{$}{Pedigree}(x, name) <- value
+
 sub_sel_hints(hints, index)
+
+\S4method{[}{Pedigree,ANY,ANY,ANY}(x, i, j, drop = TRUE)
+
+\S4method{[}{Pedigree,missing,ANY,ANY}(x, i, j, drop = TRUE)
+
+\S4method{[}{Pedigree,ANY,missing,ANY}(x, i, j, drop = TRUE)
 }
 \arguments{
 \item{object}{A Pedigree object.}
+
+\item{x}{A Pedigree object.}
+
+\item{i}{A vector of individuals id or a vector of index.}
+
+\item{j}{A vector of columns names.}
+
+\item{...}{Other arguments.}
+
+\item{drop}{A logical value indicating if the dimensions should be dropped.}
+
+\item{value}{A vector of values to replace.}
+
+\item{name}{A slot name.}
 
 \item{hints}{A list of hints}
 
@@ -25,13 +60,41 @@ A character vector with the informations about the object.
 
 A character vector with the summary of the object.
 
+The slot \code{i} present in the pedigree object.
+
+The pedigree object with the slot \code{i} replaced by \code{value}.
+
+The slot \code{name} present in the pedigree object.
+
+The pedigree object with the slot \code{name} replaced by \code{value}.
+
 A list of hints subsetted
+
+A Pedigree object subsetted.
+
+A Pedigree object subsetted.
+
+A Pedigree object subsetted.
 }
 \description{
 Pedigree show method.
 
 Pedigree summary method.
 
+Extract parts of a Pedigree object
+
+Replace parts of a Pedigree object
+
+Extract parts of a Pedigree object
+
+Replace parts of a Pedigree object
+
 Subset the hints list based on the index given
+
+Extract parts of a Pedigree object
+
+Extract parts of a Pedigree object
+
+Extract parts of a Pedigree object
 }
 \keyword{internal}

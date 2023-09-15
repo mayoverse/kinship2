@@ -41,7 +41,7 @@ test_that("Num child", {
         c(1, 1, 0, 0, 0, 0, 1, 4, 4, 0, 0, 0, 0, 0)
     )
 
-    ped <- pedigree(df, rel_df = relation)
+    ped <- pedigree(df, relation)
     ped <- num_child(ped)
     expect_equal(ped$ped[colnames(df_num)], df_num)
 })
