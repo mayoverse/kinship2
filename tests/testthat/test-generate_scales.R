@@ -86,19 +86,6 @@ test_that("generate fill full scale on", {
     ))
 })
 
-test_that("generate colors works on df", {
-    list_num <- generate_colors(ped_df, "NumOther",
-        threshold = 4, sup_thres_aff = TRUE
-    )
-    expect_equal(list_num$df$NumOther_aff, aff_num$mods)
-    expect_equal(list_num$scale$fill$fill, c("white", "red", "grey"))
-    expect_equal(list_num$scale$fill$labels,
-        c("Healthy <= to 4", "Affected > to 4", NA)
-    )
-    expect_equal(list_num$scale$fill$mods,  c(0, 1, NA))
-    expect_equal(list_num$scale$fill$affected,  c("FALSE", "TRUE", NA))
-})
-
 test_that("generate colors works on pedigree object", {
     data("sampleped")
     ped <- pedigree(sampleped[sampleped$family == "1", -1])

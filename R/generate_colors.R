@@ -242,6 +242,69 @@ setMethod("generate_colors", "character",
     }
 )
 
+#' @examples
+#' data("sampleped")
+#' ped <- pedigree(sampleped)
+#' generate_colors(ped, "affected", add_to_scale=FALSE)$scales
+#' @export
+setGeneric("generate_colors", signature = "obj",
+    function(obj, ...) standardGeneric("generate_colors")
+)
+
+#' @export
+#' @aliases generate_colors,character
+#' @rdname generate_colors
+setMethod("generate_colors", "numeric",
+    function(
+        obj, avail,
+        mods_aff = NULL, threshold = 0.5, sup_thres_aff = TRUE,
+        keep_full_scale = FALSE, breaks = 3,
+        colors_aff = c("yellow2", "red"),
+        colors_unaff = c("white", "steelblue4"),
+        colors_avail = c("green", "black")
+    ) {
+        affected_val <- obj
+        affected <- generate_aff_inds(affected_val,
+            mods_aff, threshold, sup_thres_aff
+        )
+        border <- generate_border(avail, colors_avail)
+        lst_sc <- generate_fill(
+            affected_val, affected$affected, affected$labels,
+            keep_full_scale, breaks, colors_aff, colors_unaff
+        )
+
+        lst_sc$border_scale <- border
+        lst_sc
+    }
+)
+
+#' @export
+#' @aliases generate_colors,character
+#' @rdname generate_colors
+setMethod("generate_colors", "logical",
+    function(
+        obj, avail,
+        mods_aff = NULL, threshold = 0.5, sup_thres_aff = TRUE,
+        keep_full_scale = FALSE, breaks = 3,
+        colors_aff = c("yellow2", "red"),
+        colors_unaff = c("white", "steelblue4"),
+        colors_avail = c("green", "black")
+    ) {
+        affected_val <- obj
+        affected <- generate_aff_inds(affected_val,
+            mods_aff, threshold, sup_thres_aff
+        )
+        border <- generate_border(avail, colors_avail)
+        lst_sc <- generate_fill(
+            affected_val, affected$affected, affected$labels,
+            keep_full_scale, breaks, colors_aff, colors_unaff
+        )
+
+        lst_sc$border_scale <- border
+        lst_sc
+    }
+)
+
 #' @importFrom plyr rbind.fill
 #' @include pedigreeClass.R
 #' @docType methods

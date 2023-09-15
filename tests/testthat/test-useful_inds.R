@@ -6,9 +6,18 @@ test_that("useful_inds works", {
     sampleped[c("id", "dadid", "momid")] <- as.data.frame(
         lapply(sampleped[c("id", "dadid", "momid")], as.character)
     )
-    df <- merge(sampleped, num_child(sampleped)[c("id", "num_child_tot")])
-    df$useful <- useful_inds(df)
-    expect_equal(df$id[!df$useful], c("101", "102", "107", "108", "113", "117"))
+
+    numdf <- with(sampleped,
+        num_child(id, dadid, momid)
+    )[c("id", "num_child_tot")]
+
+    df <- merge(sampleped, numdf)
+    use_id <- with(df,
+        useful_inds(id, dadid, momid, avail, affected, num_child_tot)
+    )
+    expect_equal(df$id[!df$id %in% use_id],
+        c("101", "102", "107", "108", "113", "117")
+    )
 })
 
 test_that("useful_inds works with pedigree", {

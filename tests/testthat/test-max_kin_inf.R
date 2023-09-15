@@ -12,11 +12,13 @@ test_that("min_dist_inf works", {
         dadid, momid, sex, avail, affected
     ))
     expect_equal(sum(res, na.rm = TRUE), 97)
-    expect_equal(min_dist_inf(sampleped), res)
-
-    mxkin <- min_dist_inf(sampleped, informative = "Av")
+    mxkin <- with(sampleped, min_dist_inf(id, informative = "Av",
+        dadid, momid, sex, avail, affected
+    ))
     expect_equal(sum(mxkin, na.rm = TRUE), 90)
-    mxkin <- min_dist_inf(sampleped, informative = "AvOrAf")
+    mxkin <- with(sampleped, min_dist_inf(id, informative = "AvOrAf",
+        dadid, momid, sex, avail, affected
+    ))
     expect_equal(sum(mxkin, na.rm = TRUE), 76)
 })
 
@@ -27,7 +29,7 @@ test_that("min_dist_inf works with pedigree", {
         threshold = 0.5, sup_thres_aff = TRUE
     )
 
-    mxkin <- min_dist_inf(ped, column = "affected_aff", informative = "Av")
+    mxkin <- min_dist_inf(ped, col_aff = "affected_aff", informative = "Av")
     expect_s4_class(mxkin, "Pedigree")
     expect_equal(sum(mxkin$ped$kin, na.rm = TRUE), 90)
 })

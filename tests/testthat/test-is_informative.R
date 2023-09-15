@@ -39,7 +39,9 @@ test_that("is_informative works", {
 
     sampleped$avail <- sampleped$available
     sampleped$id <- as.character(sampleped$id)
-    expect_equal(is_informative(sampleped, informative = "AvAf"),
+    expect_equal(with(sampleped,
+            is_informative(id, avail, affected, informative = "AvAf")
+        ),
         c(
             "110", "116", "118", "119", "124", "127",
             "128", "201", "203", "206", "207", "214"
@@ -56,10 +58,12 @@ test_that("is_informative works with Pedigree", {
         add_to_scale = FALSE
     )
 
+
+    df <- is_informative(ped, col_aff = "affected_aff",
+        informative = "AvAf"
+    )$ped
     expect_equal(
-        is_informative(ped, column = "affected_aff",
-            informative = "AvAf"
-        )$inf,
+        df$id[df$id_inf == 1],
         c(
             "1_110", "1_116", "1_118", "1_119", "1_124", "1_127",
             "1_128", "2_201", "2_203", "2_206", "2_207", "2_214"
@@ -73,7 +77,9 @@ test_that("is_informative works with Pedigree", {
         col_aff = "sex", mods_aff = "male", add_to_scale = FALSE
     )
     expect_equal(
-        length(is_informative(ped, column = "sex_aff", informative = "Af")$inf),
+        sum(is_informative(ped, col_aff = "sex_aff",
+            informative = "Af"
+        )$ped$id_inf),
         length(ped$ped[ped$ped$sex == "male", "id"])
     )
 
@@ -90,9 +96,9 @@ test_that("is_informative works with Pedigree", {
         add_to_scale = FALSE
     )
     expect_equal(
-        length(is_informative(ped,
-                column = "education_aff", informative = "Af"
-            )$inf
+        sum(is_informative(ped,
+                col_aff = "education_aff", informative = "Af"
+            )$ped$id_inf
         ),
         sum(minnbreast$education > 3, na.rm = TRUE)
     )

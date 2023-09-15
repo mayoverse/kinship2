@@ -119,7 +119,7 @@ setMethod("is_informative", "Pedigree", function(
     }
 
     cols_needed <- c("id", "avail", "affected")
-    obj <- check_columns(obj, cols_needed, "", "", others_cols = TRUE)
+    obj$ped <- check_columns(obj$ped, cols_needed, "", "", others_cols = TRUE)
     id_inf <- is_informative(obj$ped$id, obj$ped$avail, obj$ped$affected,
         informative, missid
     )

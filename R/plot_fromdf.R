@@ -110,7 +110,7 @@ plot_fromdf <- function(
         for (it in seq_len(nrow(arcs))){
             arc <- arcs[it, ]
             p <- draw_arc(arc$x0, arc$y0, arc$x1, arc$y1,
-                p, ggplot_gen, cex = arc$cex, col = arc$fill
+                p, ggplot_gen, lwd = arc$cex, col = arc$fill
             )
         }
     }

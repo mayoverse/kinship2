@@ -208,10 +208,10 @@ setMethod("fix_parents", "data.frame", function(
             df$id, df$dadid, df$momid,
             df$sex, missid = missid, family = df$family
         )
-        col_used <- which(names(df_old) == df$momid |
-                names(df_old) == df$dadid |
-                names(df_old) == df$sex |
-                names(df_old) == df$family
+        col_used <- which(names(df_old) == "momid" |
+                names(df_old) == "dadid" |
+                names(df_old) == "sex" |
+                names(df_old) == "family"
         )
         df <- merge(df_old[, -col_used], df_fix, by = "id",
             all.y = TRUE, all.x = FALSE

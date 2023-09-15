@@ -77,3 +77,23 @@ df_cont_table <- function(
     }
     cont_table
 }
+
+
+test_that("var_to_factor works", {
+    var <- c(1, NA, 4, 1.2, -3)
+    expect_error(var_to_factor(var))
+    expect_snapshot(var_to_factor(var, threshold = 1))
+    expect_snapshot(var_to_factor(var, threshold = c(0, 1)))
+    expect_snapshot(var_to_factor(c("A", "B", "A", "C")))
+})
+
+test_that("df_cont_table", {
+    set.seed(10)
+    var1 <- runif(10)
+    var2 <- runif(10)
+    df <- data.frame(var1, var2)
+    expect_snapshot(df_cont_table(df, "var1", 0.5, "var2", c(0.25, 0.5, 0.75)))
+    expect_snapshot(df_cont_table(df, "var1", 0.5))
+    expect_error(df_cont_table(df, "var3"))
+    expect_error(df_cont_table(df, "var1", 0.5, "var3"))
+})
