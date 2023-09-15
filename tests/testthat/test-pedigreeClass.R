@@ -1,5 +1,13 @@
 test_that("pedigree works", {
-    ped <- pedigree()
+    ped <- pedigree(data.frame(
+        id = character(),
+        dadid = character(),
+        momid = character(),
+        sex = numeric(),
+        family = character(),
+        available = numeric(),
+        affected = numeric()
+    ))
     expect_s4_class(ped, "Pedigree")
     expect_equal(nrow(ped@ped), 0)
     expect_equal(nrow(ped@rel), 0)
@@ -8,6 +16,48 @@ test_that("pedigree works", {
     expect_equal(length(ped@scales$border), 4)
 
     expect_snapshot(summary(ped))
+})
+
+test_that("pedigree old usage compatibility", {
+    data(sampleped)
+    ped1 <- with(sampleped,
+        pedigree(id, dadid, momid, sex, family, available, affected)
+    )
+    ped1$scales
+    expect_equal(ped1, pedigree(sampleped))
+
+    ped2mat <- matrix(c(
+        1, 1, 0, 0, 1,
+        1, 2, 0, 0, 2,
+        1, 3, 1, 2, 1,
+        1, 4, 1, 2, 2,
+        1, 5, 0, 0, 2,
+        1, 6, 0, 0, 1,
+        1, 7, 3, 5, 2,
+        1, 8, 6, 4, 1,
+        1, 9, 6, 4, 1,
+        1, 10, 8, 7, 2
+    ), ncol = 5, byrow = TRUE)
+
+    ped2df <- as.data.frame(ped2mat)
+    names(ped2df) <- c("family", "id", "dadid", "momid", "sex")
+    ## 1 2  3 4 5 6 7 8 9 10,11,12,13,14,15,16
+    ped2df$disease <- c(NA, NA, 1, 0, 0, 0, 0, 1, 1, 1)
+    ped2df$smoker <- c(0, NA, 0, 0, 1, 1, 1, 0, 0, 0)
+    ped2df$available <- c(0, 0, 1, 1, 0, 1, 1, 1, 1, 1)
+    ped2df$status <- c(1, 1, 1, 0, 1, 0, 0, 0, 0, 0)
+
+    ped2 <- with(ped2df, pedigree(id, dadid, momid, sex, family,
+        available, status, affected = cbind(disease, smoker, available),
+        relation = matrix(c(8, 9, 1, 1), ncol = 4)
+    ))
+    rel_df <- data.frame(id1 = 8, id2 = 9, code = 1, family = 1)
+
+    expect_equal(ped2,
+        pedigree(ped2df, col_aff = c("disease", "smoker", "available"),
+            rel_df = rel_df
+        )
+    )
 })
 
 test_that("pedigree from sampleped and affectation", {
