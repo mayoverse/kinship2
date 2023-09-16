@@ -13,6 +13,9 @@ vignette: |
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
+```{r, library_charge}
+library(kinship2)
+```
     
 Pedigree alignment
 ==========================
@@ -132,20 +135,32 @@ matrices:
 right is my spouse (1), a double marriage (2), or neither (0).
 - $fam$ matrix, link upward to my parents, or 0 if no link.
 
+```{r, auto_hint1, echo = FALSE, fig.dim = c(10, 8)}
+#
+# A simple pedigree to illustrate autohint's code
+#
+test1 <- data.frame(id = 1:11,
+    sex = c("m", "f")[c(1, 2, 1, 2, 1, 1, 2, 2, 1, 2, 1)],
+    dadid = c(0, 0, 1, 1, 1, 0, 0, 6, 6, 6, 9),
+    momid = c(0, 0, 2, 2, 2, 0, 0, 7, 7, 7, 4)
+)
+ped1 <- pedigree(test1)
 
-\begin{figure}
-  \myfig{auto_hint1}
-  \caption{A simple pedigree before (left) and after (right) the
-    auto_hint computations.}
-  \label{fig:auto1}
-\end{figure}
+temp2 <- pedigree(test1, hints = list(
+    order = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)
+))
+
+par(mfrow = c(1, 2))
+plot(temp2, title = "Before auto_hint")
+plot(ped1, title = "After auto_hint")
+```
 
 Now, walk down through the levels one by one.
 A candidate subject is one who appears twice on the level, once
 under his/her parents and once somewhere else as a spouse.
 Move this person and spouse the the ends of their sibships and
 add a marriage hint.
-Figure \ref{fig:auto1} shows a simple case.  The input data set has
+The figure above shows a simple case.  The input data set has
 the subjects ordered from 1--11, the left panel is the result without
 hints which processes subjects in the order encountered.
 The return values from [align] have subject 9 shown twice.
@@ -181,7 +196,7 @@ each subject in the pedigree, not to their label `ped$ped$id`.
 
 ## duporder
 
-For the case shown in figure \ref{fig:align1} the [duporder] function
+For the case shown in figure above the [duporder] function
 will return a single row array with values `(2, 6, 1)`, the first two
 being the positions of the duplicated subject.  
 The anchor will be 2 since that is the copy connected to parents
@@ -195,13 +210,33 @@ matrix.
 In this particular case the final element could be a 1 or a 2, since both
 are connected to their parents.
 
-\begin{figure}
-  \myfig{auto_hint2}
-  \caption{A more complex pedigree.}
-  \label{fig:align2}
-\end{figure}
+```{r, align2, echo = FALSE, fig.dim = c(10, 8)}
+#
+# The second, more complex test pedigree
+#
+test2 <- data.frame(id = c(1:13, 21:41),
+                    dadid = c(0, 0, 1, 1, 1, 0, 0, 6, 6, 6, 0, 11, 11,
+                        0, 0, 0, 0, 0, 0, 21, 21, 21, 23, 23, 25, 28,
+                        28, 28, 28, 32, 32, 32, 32, 33
+                    ),
+                    momid = c(0, 0, 2, 2, 2, 0, 0, 7, 7, 7, 0, 5, 9,
+                        0, 0, 0, 0, 0, 0, 22, 22, 22, 24, 24, 26, 31,
+                        31, 31, 31, 29, 29, 29, 29, 13
+                    ),
+                    sex = c(1, 2, 1, 2, 2, 1, 2, 1, 2, 1, 1, 1, 2, 1,
+                        2, 1, 2, 1, 2, 1, 1, 2, 2, 2, 1, 1, 1, 2, 2,
+                        1, 2, 1, 1, 2
+                    ))
+ped2 <- pedigree(test2)
+ped2a <- pedigree(test2, hints = list(
+    order = seq_along(test2$id)
+))
+par(mfrow = c(1, 2))
+plot(ped2a, title = "Before auto_hint")
+plot(ped2, title = "After auto_hint")
+```
 
-Figure \ref{fig:align2} shows a more complex case with several arcs.
+The figure above shows a more complex case with several arcs.
 In the upper left is a double marry-in.
 The $anchor$ variable in the above code
 will be `(2,2)` since both copies have an anchored spouse.
@@ -253,22 +288,57 @@ drawing the entire pedigree.  (When drawing a pedigree and there is a
 child who can be reached from multiple founders, we only want to find
 the child once.) 
 
-The double marry-in found in figure \ref{fig:auto2}, subject 11, leads
+The double marry-in found in the figure, subject 11, leads
 to value of `(2,2)` for the [anchor] variable.  The proper addition to
 the $sptemp$ matrix in this case will be two rows, `(5, 11, 1)` indicating
 that 5 should be plotted left of 11 for the 5-11 marriage, with the first
 partner as the anchor, and a second row `(11, 9, 2)`.
 This will cause the common spouse to be plotted in the middle.
 
+```{r, align3, echo = FALSE, fig.dim = c(10, 8)}
+#
+# A simple pedigree to illustrate autohint's code
+#
+test3 <- data.frame(id = 1:14,
+                    sex = c("m", "f")[c(2, 1, 1, 1, 1, 1, 2,
+                        2, 1, 2, 1, 2, 2, 1
+                    )],
+                    dadid = c(0, 6, 2, 2, 2, 0, 0, 11, 0, 9, 6, 0, 6, 11),
+                    momid = c(0, 7, 1, 1, 1, 0, 0, 12, 0, 1, 7, 0, 7, 12),
+                    affected = c(0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0))
+ped3 <- pedigree(test3, hints = list(
+    order = 1:14
+))
+
+test4 <- data.frame(id = 1:17,
+                    sex = c("m", "f")[c(2, 1, 1, 2, 2, 1, 2, 1,
+                        2, 2, 1, 2, 2, 1, 1, 2, 2
+                    )],
+                    dadid = c(0, 8, 6, 6, 0, 0, 0, 0, 11,
+                        0, 0, 6, 0, 0, 0, 11, 14
+                    ),
+                    momid = c(0, 9, 5, 5, 0, 0, 0, 0, 10,
+                        0, 0, 7, 0, 0, 0, 12, 5
+                    ))
+
+ped4 <- pedigree(test4, hints = list(
+    order = 1:17
+))
+
+par(mfrow = c(1, 2))
+plot(ped4)
+plot(ped3)
+```
+
 Multiple marriages can lead to unanchored subjects.  
-In the left hand portion of figure \ref{fig:auto3} we have two
+In the left hand portion of the figure above we have two
 double marriages, one on the left and one on the right with 
 anchor values of `(0,2)` and `(2,0)`, respectively.  
 We add two marriages to the return list to ensure that both print
 in the correct left-right order; the 14-4 one is correct by default
 but it is easier to output a line than check sex orders.  
 
-The left panel of figure \ref{fig:auto3} shows a case where
+The left panel of the figure above shows a case where
 subject 11 marries into the pedigree but also has a second spouse.
 The $anchor$ variable for
 this case will be `(2, 0)`; the first instance of 11 has a spouse tied
