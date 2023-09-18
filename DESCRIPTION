@@ -1,5 +1,5 @@
 Package: kinship2
-Version: 2.0.0
+Version: 2.1.0
 Date: 2023-07-30
 Title: Pedigree Functions
 Authors@R: c(
@@ -11,7 +11,7 @@ Authors@R: c(
 	person("Elizabeth", "Atkinson", role="ctb"),
 	person("Carly", "Mester", role='ctb'))
 Depends: 
-	 R (>= 3.6.0)
+	 R (>= 4.3.0)
 Imports: 
     graphics,
     stats,
@@ -24,9 +24,7 @@ Imports:
     dplyr,
     tidyr,
     quadprog,
-    Matrix,
-    gridGraphics,
-    usethis
+    Matrix
 Description: Routines to handle family data with a pedigree object. The initial purpose
 	     was to create correlation structures that describe family relationships such 
 	     as kinship and identity-by-descent, which can be used to model family data 
@@ -34,7 +32,7 @@ Description: Routines to handle family data with a pedigree object. The initial 
 	     for pedigree drawing which is focused on producing compact layouts without 
 	     intervention. Recent additions include utilities to trim the pedigree object
 	     with various criteria, and kinship for the X chromosome.
-License: GPL (>= 2)
+License: Artistic-2.0
 URL: https://cran.r-project.org/package=kinship2
 Encoding: UTF-8
 RoxygenNote: 7.2.3
@@ -49,7 +47,7 @@ Suggests:
     knitr,
     withr
 Config/testthat/edition: 3
-biocViews: Software, ShinyApps, DataRepresentation, Genetics
+biocViews: Software, DataRepresentation, Genetics, Alignment
 BugReports: https://github.com/LouisLeLezet/kinship2/issues
 url: https://github.com/LouisLeNezet/kinship2
 BiocType: Software
@@ -94,4 +92,3 @@ Collate:
     'trim.R'
     'unrelated.R'
     'useful_inds.R'
-LazyData: true

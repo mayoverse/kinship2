@@ -4,6 +4,9 @@
 \name{Pedigree-class}
 \alias{Pedigree-class}
 \title{S4 class to represent a pedigree.}
+\value{
+A Pedigree object.
+}
 \description{
 A pedigree is a ensemble of individuals linked to each other into
 a family tree.

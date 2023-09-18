@@ -62,7 +62,8 @@ NULL
 #'    \eqn{\ge 0}, each subesquent one must be at least 1 unit to the right,
 #'    and the final point must be \eqn{\le} the max width.
 #'
-#' @param rval A list with components `n`, `nid`, `pos`, and `fam`.
+#' @param rval A list with components `n`, `nid`,
+#' `pos`, and `fam`.
 #' @param spouse A boolean matrix with one row per level representing if
 #' the subject is a spouse or not.
 #' @inheritParams align
@@ -86,8 +87,9 @@ alignped4 <- function(rval, spouse, level, width, align) {
 
     n <- sum(rval$n)  # total number of subjects
     myid <- matrix(0, maxlev, ncol(rval$nid))  # number the plotting points
-    for (i in 1:maxlev) {
-        myid[i, rval$nid[i, ] > 0] <- cumsum(c(0, rval$n))[i] + 1:rval$n[i]
+    for (i in seq_len(maxlev)) {
+        myid[i, rval$nid[i, ] > 0] <- cumsum(c(0, rval$n))[i] +
+            seq_len(rval$n[i])
     }
     # There will be one penalty for each spouse and one for each child
     npenal <- sum(spouse[rval$nid > 0]) + sum(rval$fam > 0)
@@ -96,7 +98,7 @@ alignped4 <- function(rval, spouse, level, width, align) {
     ## Doc: alignped4 -part2
     indx <- 0
     # Penalties to keep spouses close
-    for (lev in 1:maxlev) {
+    for (lev in seq_len(maxlev)) {
         if (any(spouse[lev, ])) {
             who <- which(spouse[lev, ])
             indx <- max(indx) + seq_along(who)
@@ -106,14 +108,14 @@ alignped4 <- function(rval, spouse, level, width, align) {
     }
 
     # Penalties to keep kids close to parents no parents at the top level
-    for (lev in (1:maxlev)[-1]) {
+    for (lev in (seq_len(maxlev))[-1]) {
         families <- unique(rval$fam[lev, ])
         families <- families[families != 0]  # 0 is the 'no parent' marker
         for (i in families) {
             # might be none
             who <- which(rval$fam[lev, ] == i)
             k <- length(who)
-            indx <- max(indx) + 1:k  # one penalty per child
+            indx <- max(indx) + seq_len(k)  # one penalty per child
             penalty <- sqrt(k^(-align[1]))
             pmat[cbind(indx, myid[lev, who])] <- -penalty
             pmat[cbind(indx, myid[lev - 1, rval$fam[lev, who]])] <- penalty / 2
@@ -128,10 +130,10 @@ alignped4 <- function(rval, spouse, level, width, align) {
     cmat <- matrix(0, nrow = ncon, ncol = n)
     coff <- 0  # cumulative constraint lines so var
     dvec <- rep(1, ncon)
-    for (lev in 1:maxlev) {
+    for (lev in seq_len(maxlev)) {
         nn <- rval$n[lev]
         if (nn > 1) {
-            for (i in 1:(nn - 1)) {
+            for (i in seq_len(nn - 1)) {
                 cmat[coff + i, myid[lev, i + 0:1]] <- c(-1, 1)
             }
         }
@@ -147,12 +149,10 @@ alignped4 <- function(rval, spouse, level, width, align) {
     fit <- tryCatch({
         solve.QP(pp, rep(0, n), t(cmat), dvec)
     }, warning = function(w) {
-        message("Solve QP ended with a warning")
-        message(w)
+        message("Solve QP ended with a warning", w)
         return(NA)
     }, error = function(e) {
-        message("Solve QP ended with an error")
-        message(e)
+        message("Solve QP ended with an error", e)
         return(NA)
     })
 

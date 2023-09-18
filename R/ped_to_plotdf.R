@@ -94,8 +94,15 @@ ped_to_plotdf <- function(
         poly_aff <- lapply(polylist, "[[", aff)
         poly_aff_x <- lapply(poly_aff, "[[", "x")
         poly_aff_y <- lapply(poly_aff, "[[", "y")
-        poly_aff_x_mr <- sapply(poly_aff_x, function(x) mean(range(x * boxw)))
-        poly_aff_y_mr <- sapply(poly_aff_y, function(x) mean(range(x * boxw)))
+
+        poly_aff_x_mr <- vapply(poly_aff_x,
+            function(x) mean(range(x * boxw)),
+            1
+        )
+        poly_aff_y_mr <- vapply(poly_aff_y,
+            function(x) mean(range(x * boxw)),
+            1
+        )
         ind <- data.frame(
             x0 = pos[idx], y0 = i[idx],
             type = paste(names(polylist)[sex], n_aff, aff, sep = "_"),
@@ -108,7 +115,6 @@ ped_to_plotdf <- function(
         plot_df <- rbind.fill(plot_df, ind)
 
         if (mark) {
-
             mark_df <- data.frame(
                 x0 = pos[idx] + poly_aff_x_mr[sex],
                 y0 = i[idx] + boxh / 2,
@@ -190,7 +196,7 @@ ped_to_plotdf <- function(
     }
 
     ## Children to parents lines
-    for (gen in 1:maxlev) {
+    for (gen in seq_len(maxlev)) {
         zed <- unique(plist$fam[gen, ])
         zed <- zed[zed > 0]  # list of family ids
         for (fam in zed) {
@@ -204,7 +210,7 @@ ped_to_plotdf <- function(
                 target <- plist$pos[gen, who]
             } else {
                 # If twins, use the midpoint of the twins
-                twin_to_left <- (c(0, plist$twins[gen, who])[1:sum(who)])
+                twin_to_left <- (c(0, plist$twins[gen, who])[seq_len(sum(who))])
                 # increment if no twin to the left
                 temp <- cumsum(twin_to_left == 0)
                 # 5 sibs, middle 3 are triplets gives 1,2,2,2,3 twin, twin,

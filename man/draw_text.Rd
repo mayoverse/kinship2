@@ -41,3 +41,4 @@ Plot the text or add it to a ggplot object
 \description{
 Draw text for a pedigree
 }
+\keyword{internal}

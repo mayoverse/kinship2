@@ -19,13 +19,14 @@ Introduction
 
 The plotting function for pedigrees has 5 tasks
 
-  1. Gather information and check the data.  An important step is the call to align.
-  2. Set up the plot region and size the symbols.  The program wants to plot circles
-   and squares, so needs to understand the geometry of the paper, pedigree size,
-    and text size to get the right shape and size symbols.
-  3. Set up the plot and add the symbols for each subject
-  4. Add connecting lines between spouses, and children with parents
-  5. Create an invisible return value containing the locations.
+    1. Gather information and check the data. An important step is the call
+        to align.
+    2. Set up the plot region and size the symbols. The program wants to plot
+        circles and squares, so needs to understand the geometry of the paper,
+        pedigree size, and text size to get the right shape and size symbols.
+    3. Set up the plot and add the symbols for each subject
+    4. Add connecting lines between spouses, and children with parents
+    5. Create an invisible return value containing the locations.
 
 Another task, not yet completely understood, and certainly not implemented,
 is how we might break a plot across multiple pages.
@@ -35,24 +36,23 @@ Setup
 
 The new version of the plotting pedigree function works in two step.
 
-  - **ped_to_plotdf()** create a dataframe from a pedigree given containing
-  all the necessary information to plot all the elements of the pedigree:
-  "polygons", "text", "segments", "arcs"
-  - **plot_from_df()** use a given dataframe and plot all the element given
+    - **ped_to_plotdf()** create a dataframe from a pedigree given containing
+    all the necessary information to plot all the elements of the pedigree:
+    "polygons", "text", "segments", "arcs"
+    - **plot_from_df()** use a given dataframe and plot all the element given
 
-The advantage of this two step method, is that all the plotting can be parralelised,
-each element can be customised by the user if necessary and additional elements can
-also be added to the plot by just adding a new row.
+The advantage of this two step method, is that all the plotting can be
+parralelised, each element can be customised by the user if necessary and
+additional elements can also be added to the plot by just adding a new row.
 
-If multiple families are present in the pedigree object, then one dataframe per family will
-be produced and the first one will be plotted.
+If multiple families are present in the pedigree object, then one dataframe per
+family will be produced and the first one will be plotted.
 
 For more informations about those two functions, see the help page.
 
 ```{r, help}
 help(ped_to_plotdf)
 help(plot_fromdf)
-```
 ```
 
 Sizing
@@ -78,16 +78,16 @@ We should have at least 1/2 of `stemp2` space above and `stemp2` space below.
 The `stemp3` variable is the height of labels: users may use multi-line ones.
 Our constraints then are
 
-  1. $(box height + label height) \times maxlev \le height$ : the boxes and labels have
-    to fit vertically
-  2. $(box height) \times (maxlev + (maxlev-1)/2) \le height$ : at least 1/2 a box of
-    space between each row of boxes
-  3. $(box width) \le stemp1$ in inches 
-  4. $(box width) \le 0.8$ unit in user coordinates, otherwise they appear 
-    to touch
-  5. User coordinates go from $min(xrange)- 1/2 box width$ to 
-    $max(xrange) + 1/2 box width$.
-  6. the box is square (in inches)
+    1. $(box height + label height) \times maxlev \le height$ : the boxes and
+        labels have to fit vertically
+    2. $(box height) \times (maxlev + (maxlev-1)/2) \le height$ : at least 1/2
+        a box of space between each row of boxes
+    3. $(box width) \le stemp1$ in inches 
+    4. $(box width) \le 0.8$ unit in user coordinates, otherwise they appear 
+        to touch
+    5. User coordinates go from $min(xrange)- 1/2 box width$ to 
+        $max(xrange) + 1/2 box width$.
+    6. the box is square (in inches)
 
 The first 3 of these are easy. The fourth comes into play only for very packed
 pedigrees. Assume that the box were the maximum size of .8 units, i.e., minimal
@@ -124,7 +124,8 @@ and fix up parentage for the line below.
 ped_to_plotdf()
 ==================
 
-This first function create the dataframe with the necessary plotting information from a pedigree object.
+This first function create the dataframe with the necessary plotting
+information from a pedigree object.
 The steps are: 
 
 1. Add boxes (depend on affection and sex) and marks.
@@ -136,8 +137,9 @@ The steps are:
 
 ## Details on the polygon filling and border
 
-Each polygon is named based on its shape ("square", "circle", "diamond", "triangle"), the
-total number of division of the whole shape, and the position of the division to plot.
+Each polygon is named based on its shape ("square", "circle","diamond",
+"triangle"), the total number of division of the whole shape, and the
+position of the division to plot.
 
 ```{r, polygons, eval = FALSE}
 types <- c(
@@ -156,14 +158,15 @@ df <- plot_df <- data.frame(
 plot_fromdf(df, usr = c(0, 8, 0, 2))
 ```
 
-The number of division will depend on the number of affection register in the $fill$ slot of
-the $scale$ slot of the pedigree.
-The filling will depend on the color given by the corresponding modality for each individual,
-it is the same for the border of the polygon.
+The number of division will depend on the number of affection register in the
+$fill$ slot of the $scale$ slot of the pedigree.
+The filling will depend on the color given by the corresponding modality for
+each individual, it is the same for the border of the polygon.
 
 ## Details on connecting children to parents.
 
-First there are lines up from each child, which would be trivial except for twins, triplets, etc.
+First there are lines up from each child, which would be trivial except for
+twins, triplets, etc.
 Then we draw the horizontal bar across siblings and finally the connector from
 the parent.  For twins, the *vertical* lines are angled towards a 
 common point, the variable is called $target$ below.
@@ -178,7 +181,7 @@ a subject on the same line.  These instances may or may not be on the
 same line.
 The arrcconect function draws a quadratic arc between locations $(x1, y1)$
 and $(x2, y2$) whose height is 1/2 unit above a straight line connection.
-               
+
 plot_fromdf()
 ==================
 
@@ -202,8 +205,8 @@ will make up the symbol.  These are then used again and again.
 The collection is kept as a list with the four elements square, circle,
 diamond and triangle.
 
-Each of these is in turn a list with `max(ped$scales$fill$order)` elements, and each
-of those in turn a list of x and y coordinates.
+Each of these is in turn a list with `max(ped$scales$fill$order)` elements,
+and each of those in turn a list of x and y coordinates.
 
 ### Circfun
 
@@ -221,8 +224,8 @@ Instead we use the alternate formulation in terms of a dummy variable
 $z$.
 
 \begin{eqnarray*}
-  x &=& a + bz \\
-  y &=& c + dz \\
+    x &=& a + bz \\
+    y &=& c + dz \\
 \end{eqnarray*}
 
 Furthermore, we choose the constants $a$, $b$, $c$, and $d$ so that 
@@ -231,8 +234,8 @@ The intersection of a particular ray at angle theta with a
 particular side will satisfy
 
 \begin{eqnarray}
-  theta &=& y/x = \frac{a + bz}{c+dz} \nonumber \\
-  z &=& \frac{a\theta -c}{b - d\theta} \\
+    theta &=& y/x = \frac{a + bz}{c+dz} \nonumber \\
+    z &=& \frac{a\theta -c}{b - d\theta} \\
 \end{eqnarray}
 
 Equation $z$ will lead to a division by zero if the ray from the
@@ -246,13 +249,22 @@ Final output
 ==========================
 
 The pedigree is plotted in a new frame or added to the current device.
-If `ggplot_gen = TRUE`, then a ggplot object is create with the same informations
-and available in the invisible object given back by *plot_fromdf()* 
+If `ggplot_gen = TRUE`, then a ggplot object is create with the same
+informations and available in the invisible object given back by
+*plot_fromdf()* 
 
     Notes:
         Remind the user of subjects who did not get
         plotted; these are ususally subjects who are married in but without
         children.  Unless the pedigree contains spousal information the
         routine does not know who is the spouse.
-        Then restore the plot parameters.  This would only not be done if someone
-        wants to further annotate the plot.
+        Then restore the plot parameters.
+        This would only not be done if someone wants to further annotate
+        the plot.
+
+Session information
+===================
+
+```{r}
+sessionInfo()
+```

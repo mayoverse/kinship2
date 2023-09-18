@@ -63,8 +63,10 @@ generate_fill <- function(
         # last of aff
         fill_to_use <- c(colors_unaff[1], colors_aff[-1], "grey")
         names(fill_to_use) <- c("FALSE", "TRUE", NA)
-        fill <- suppressMessages(revalue(affected, fill_to_use))
-        mods <- suppressMessages(revalue(affected, c("FALSE" = 0, "TRUE" = 1)))
+        fill <- revalue(affected, fill_to_use, warn_missing = FALSE)
+        mods <- revalue(affected, c("FALSE" = 0, "TRUE" = 1),
+            warn_missing = FALSE
+        )
     } else {
         fct_scale_unaff <- grDevices::colorRampPalette(colors_unaff)
         fct_scale_aff <- grDevices::colorRampPalette(colors_aff)
@@ -107,21 +109,21 @@ generate_fill <- function(
 
         # Set fill depending on the corresponding color for aff and unaff
         fill[affected == TRUE & !is.na(affected)] <-
-            suppressMessages(as.character(revalue(levs_aff, fill_scale)))
+            as.character(revalue(levs_aff, fill_scale, warn_missing = FALSE))
 
         fill[affected == FALSE & !is.na(affected)] <-
-            suppressMessages(as.character(revalue(levs_unaff, fill_scale)))
+            as.character(revalue(levs_unaff, fill_scale, warn_missing = FALSE))
 
         # Set modalities as factor levels
         mods[affected == TRUE & !is.na(affected)] <- as.character(levs_aff)
         mods[affected == FALSE & !is.na(affected)] <- as.character(levs_unaff)
         mods_to_use <- seq_along(fill_scale)
         names(mods_to_use) <- names(fill_scale)
-        mods <- suppressMessages(revalue(mods, mods_to_use))
+        mods <- revalue(mods, mods_to_use, warn_missing = FALSE)
         rev_fill_scale <- names(fill_scale)
         names(rev_fill_scale) <- unlist(fill_scale)
         labels <- paste(labels, ":",
-            suppressMessages(revalue(fill, rev_fill_scale))
+            revalue(fill, rev_fill_scale, warn_missing = FALSE)
         )
     }
     # Set to grey color individual with no informations
@@ -204,7 +206,7 @@ generate_border <- function(avail, colors_avail = c("green", "black")) {
 #' ## When used with a pedigree object
 #' The pedigree object with the `affected` and `avail` columns
 #' processed accordingly.
-#' 
+#'
 #' The pedigree scales slots are updated
 #'
 #' @examples

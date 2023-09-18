@@ -28,9 +28,11 @@ unavailable terminal nodes.
 }
 \details{
 Originally written as pedTrim by Steve Iturria, modified by Dan Schaid 2007,
-and now split into the two separate functions: \code{find_unavailable()}, and
-\code{trim()} to do the tasks separately.  \code{find_unavailable()}
-calls \code{\link[=exclude_stray_marryin]{exclude_stray_marryin()}} to find stray available marry-ins who are
+and now split into the two separate functions:
+\code{find_unavailable()}, and \code{trim()} to do the tasks separately.
+\code{find_unavailable()} calls
+\code{\link[=exclude_stray_marryin]{exclude_stray_marryin()}}
+to find stray available marry-ins who are
 isolated after trimming their unavailable offspring, and
 \code{\link[=exclude_unavail_founders]{exclude_unavail_founders()}}.
 If the subject ids are character, make sure none of the characters in the
@@ -42,6 +44,12 @@ used to concatenate and split subjects within the utility.
 special relations that include the subjects to trim.
 }
 
+\examples{
+data(sampleped)
+ped1 <- pedigree(sampleped[sampleped$family == "1",])
+find_unavailable(ped1)
+
+}
 \seealso{
 \code{\link[=shrink]{shrink()}}
 }

@@ -76,8 +76,9 @@ individuals}
 but available or reverse should be kept}
 
 \item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the pedigree (i.e. \code{dadid} and \code{momid} equal to
-the value of this variable).  The default for \code{missid} is \code{"0"}.}
+no father and no mother in the pedigree
+(i.e. \code{dadid} and \code{momid} equal to the value of this variable).
+The default for \code{missid} is \code{"0"}.}
 
 \item{reset}{Boolean to indicate if the \code{useful} column should be reset}
 }
@@ -101,4 +102,10 @@ Check for the informativeness of the individuals based on the
 informative parameter given, the number of children and the usefulness
 of their parents. A \code{useful} column is added to the dataframe with the
 usefulness of the individual. This boolean is hereditary.
+}
+\examples{
+data(sampleped)
+ped1 <- pedigree(sampleped[sampleped$family == "1",])
+ped1 <- num_child(ped1)
+useful_inds(ped1, informative = "AvAf")$ped
 }

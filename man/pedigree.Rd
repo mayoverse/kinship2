@@ -120,8 +120,9 @@ If \code{famid} is given in the call to create pedigrees, then
 \code{famid} needs to be in the last column of \code{relation}.}
 
 \item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the pedigree (i.e. \code{dadid} and \code{momid} equal to
-the value of this variable).  The default for \code{missid} is \code{"0"}.}
+no father and no mother in the pedigree
+(i.e. \code{dadid} and \code{momid} equal to the value of this variable).
+The default for \code{missid} is \code{"0"}.}
 
 \item{col_aff}{A string with the column name to use for the affection status.}
 
@@ -163,4 +164,8 @@ different \code{data.frame} or a set of vectors.
 If any errors are found in the data, the function will return
 the data.frame with the errors for the pedigree and the relationship
 data.frame.
+}
+\examples{
+data(sampleped)
+ped1 <- pedigree(sampleped[sampleped$family == "1",])
 }

@@ -2,8 +2,6 @@
 #' @importFrom graphics polygon frame segments
 NULL
 
-## Doc: Subregions and subsetting
-
 #' Routine to subset a pedigree
 #'
 #' @param subreg 4-element vector for (min x, max x, min depth, max depth),
@@ -13,8 +11,7 @@ NULL
 #' @inheritParams findspouse
 #'
 #' @return a pedigree list
-#'
-#' @export
+#' @keywords internal
 subregion <- function(plist, subreg) {
     if (subreg[3] < 1 || subreg[4] > length(plist$n)) {
         stop("Invalid depth indices in subreg")
@@ -24,7 +21,7 @@ subregion <- function(plist, subreg) {
         if (!any(plist$pos[i, ] >= subreg[1] &
                     plist$pos[i, ] <= subreg[2]
             )) {
-            stop(paste("No subjects retained on level", i))
+            stop("No subjects retained on level", i)
         }
     }
 
@@ -40,12 +37,12 @@ subregion <- function(plist, subreg) {
         keep <- which(pos2[i, ] >= subreg[1] & pos2[i, ] <= subreg[2])
         nkeep <- length(keep)
         n2[i] <- nkeep
-        nid2[i, 1:nkeep] <- nid2[i, keep]
-        pos2[i, 1:nkeep] <- pos2[i, keep]
-        spouse2[i, 1:nkeep] <- spouse2[i, keep]
-        fam2[i, 1:nkeep] <- fam2[i, keep]
+        nid2[i, seq_len(nkeep)] <- nid2[i, keep]
+        pos2[i, seq_len(nkeep)] <- pos2[i, keep]
+        spouse2[i, seq_len(nkeep)] <- spouse2[i, keep]
+        fam2[i, seq_len(nkeep)] <- fam2[i, keep]
         if (!is.null(plist$twins))
-            twin2[i, 1:nkeep] <- twin2[i, keep]
+            twin2[i, seq_len(nkeep)] <- twin2[i, keep]
 
         if (i < nrow(nid2)) {
             # look ahead
@@ -58,13 +55,13 @@ subregion <- function(plist, subreg) {
     }
 
     n <- max(n2)
-    out <- list(n = n2[1:n], nid = nid2[, 1:n, drop = FALSE],
-        pos = pos2[, 1:n, drop = FALSE],
-        spouse = spouse2[, 1:n, drop = FALSE],
-        fam = fam2[, 1:n, drop = FALSE]
+    out <- list(n = n2[seq_len(n)], nid = nid2[, seq_len(n), drop = FALSE],
+        pos = pos2[, seq_len(n), drop = FALSE],
+        spouse = spouse2[, seq_len(n), drop = FALSE],
+        fam = fam2[, seq_len(n), drop = FALSE]
     )
     if (!is.null(plist$twins)) {
-        out$twins <- twin2[, 1:n, drop = FALSE]
+        out$twins <- twin2[, seq_len(n), drop = FALSE]
     }
     out
 }  # end subregion()
@@ -76,14 +73,13 @@ subregion <- function(plist, subreg) {
 #' @param n Total number of points in the circle
 #'
 #' @return a list of x and y coordinates
-#'
-#' @export
+#' @keywords internal
 circfun <- function(nslice, n = 50) {
     nseg <- ceiling(n / nslice)  # segments of arc per slice
 
     theta <- -pi / 2 - seq(0, 2 * pi, length = nslice + 1)
     out <- vector("list", nslice)
-    for (i in 1:nslice) {
+    for (i in seq_len(nslice)) {
         theta2 <- seq(theta[i], theta[i + 1], length = nseg)
         out[[i]] <- list(x = c(0, cos(theta2) / 2),
             y = c(0, sin(theta2) / 2) + 0.5
@@ -101,8 +97,7 @@ circfun <- function(nslice, n = 50) {
 #' containing x and y coordinates and theta
 #'
 #' @return a list of x and y coordinates
-#'
-#' @export
+#' @keywords internal
 polyfun <- function(nslice, coor) {
     # make the indirect segments view
     zmat <- matrix(0, ncol = 4, nrow = length(coor$x))
@@ -117,7 +112,7 @@ polyfun <- function(nslice, coor) {
     ns1 <- nslice + 1
     theta <- -pi / 2 - seq(0, 2 * pi, length = ns1)
     x <- y <- double(ns1)
-    for (i in 1:ns1) {
+    for (i in seq_len(ns1)) {
         z <- (tan(theta[i]) * zmat[, 1] - zmat[, 3]) /
             (zmat[, 4] - tan(theta[i]) * zmat[, 2])
         tx <- zmat[, 1] + z * zmat[, 2]
@@ -129,13 +124,13 @@ polyfun <- function(nslice, coor) {
     }
     nvertex <- length(coor$x)
     temp <- data.frame(
-        indx = c(1:ns1, rep(0, nvertex)),
+        indx = c(seq_len(ns1), rep(0, nvertex)),
         theta = c(theta, coor$theta),
         x = c(x, coor$x), y = c(y, coor$y)
     )
     temp <- temp[order(-temp$theta), ]
     out <- vector("list", nslice)
-    for (i in 1:nslice) {
+    for (i in seq_len(nslice)) {
         rows <- which(temp$indx == i):which(temp$indx == (i + 1))
         out[[i]] <- list(
             x = c(0, temp$x[rows]),
@@ -151,8 +146,7 @@ polyfun <- function(nslice, coor) {
 #'
 #' @return a list of polygonal elements with x, y coordinates
 #' and theta
-#'
-#' @export
+#' @keywords internal
 polygons <- function(nslice = 1) {
     if (nslice == 1) {
         polylist <- list(
@@ -183,7 +177,7 @@ polygons <- function(nslice = 1) {
         diamond <- polyfun(nslice, list(
             x = c(0, -0.5, 0, 0.5),
             y = c(-0.5, 0, 0.5, 0),
-            theta = -(1:4) * pi / 2
+            theta = -(seq_len(4)) * pi / 2
         ))
         triangle <- polyfun(nslice, list(
             x = c(-0.56, 0, 0.56),
@@ -214,8 +208,7 @@ NULL
 #' @param lty line type
 #'
 #' @return Plot the segments or add it to a ggplot object
-#'
-#' @export
+#' @keywords internal
 draw_segment <- function(
     x0, y0, x1, y1,
     p, ggplot_gen,
@@ -241,7 +234,7 @@ draw_segment <- function(
 #' @inheritParams draw_segment
 #'
 #' @return Plot the polygon or add it to a ggplot object
-#' @export
+#' @keywords internal
 draw_polygon <- function(
     x, y, p, ggplot_gen = FALSE,
     fill = "grey", border = NULL, density = NULL, angle = 45
@@ -266,8 +259,7 @@ draw_polygon <- function(
 #' @inheritParams draw_polygon
 #'
 #' @return Plot the text or add it to a ggplot object
-#'
-#' @export
+#' @keywords internal
 draw_text <- function(x, y, label, p, ggplot_gen = FALSE,
     cex = 1, col = NULL, adjx = 0, adjy = 0
 ) {
@@ -286,8 +278,7 @@ draw_text <- function(x, y, label, p, ggplot_gen = FALSE,
 #' @inheritParams draw_segment
 #'
 #' @return Plot the arcs or add it to a ggplot object
-#'
-#' @export
+#' @keywords internal
 draw_arc <- function(x0, y0, x1, y1, p, ggplot_gen = FALSE, lwd = 1,
     col = "black"
 ) {
@@ -298,20 +289,6 @@ draw_arc <- function(x0, y0, x1, y1, p, ggplot_gen = FALSE, lwd = 1,
         p <- p + annotate("line", xx, yy, linetype = "dashed")
     }
     return(p)
-}
-
-#' @importFrom gridGraphics grid.echo
-#' @importFrom grid grid.grab
-NULL
-
-#' Register the plot
-#'
-#' Use the grid.echo() and grid.grab() functions to register the plot.
-#'
-#' @export
-grab_grob <- function() {
-    grid.echo()
-    grid.grab()
 }
 
 #' Set plotting area
@@ -326,7 +303,6 @@ grab_grob <- function() {
 #' @return a list of user coordinates, old par, box width, box height,
 #' label height and leg height
 #' @keywords internal
-#' @export
 set_plot_area <- function(cex, id, maxlev, xrange, symbolsize, ...) {
     old_par <- par(xpd = TRUE, ...)  ## took out mar=mar
     psize <- par("pin")  # plot region in inches

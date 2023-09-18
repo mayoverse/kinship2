@@ -39,6 +39,12 @@ NULL
 #' @inheritParams draw_segment
 #' @inheritParams ped_to_plotdf
 #' @include plot_fct.R
+#' @examples
+#' data(sampleped)
+#' ped <- pedigree(ped)
+#' df <- ped_to_plotdf(ped)
+#' plot_fromdf(df)
+#' @return an invisible ggplot object and a plot on the current plotting device
 #' @export
 plot_fromdf <- function(
     df, usr = NULL, title = NULL, ggplot_gen = FALSE, boxw = 1,

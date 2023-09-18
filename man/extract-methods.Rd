@@ -4,7 +4,7 @@
 \alias{show,Pedigree-method}
 \alias{summary,Pedigree-method}
 \alias{[[,Pedigree,ANY,missing-method}
-\alias{[[<-,Pedigree,ANY,missing-method}
+\alias{[[<-,Pedigree,ANY,missing,ANY-method}
 \alias{$,Pedigree-method}
 \alias{$<-,Pedigree-method}
 \alias{sub_sel_hints}
@@ -20,7 +20,7 @@
 
 \S4method{[[}{Pedigree,ANY,missing}(x, i, j, ..., drop = TRUE)
 
-\S4method{[[}{Pedigree,ANY,missing}(x, i, j, ...) <- value
+\S4method{[[}{Pedigree,ANY,missing,ANY}(x, i, j, ...) <- value
 
 \S4method{$}{Pedigree}(x, name)
 

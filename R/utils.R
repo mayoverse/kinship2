@@ -41,7 +41,7 @@ NULL
 #' tryCatch(check_columns(df, c('ColN1', 'ColN2'), c('ColU1', 'ColU2'),
 #'  c('ColTU1', 'ColTU2')), error = function(e) print(e))
 #'
-#' @export
+#' @keywords internal
 check_columns <- function(
     df, cols_needed = NULL, cols_used = NULL, cols_to_use = NULL,
     others_cols = FALSE, cols_used_init = FALSE, cols_to_use_init = FALSE,
@@ -143,7 +143,7 @@ NULL
 #' check_num_na(var)
 #' check_num_na(var, na_as_num = FALSE)
 #'
-#' @export
+#' @keywords internal
 check_num_na <- function(var, na_as_num = TRUE) {
     # Should the NA value considered as numeric values
     is_num <- str_detect(var, "^\\-*[:digit:]+\\.*[:digit:]*$")
@@ -166,13 +166,14 @@ check_num_na <- function(var, na_as_num = TRUE) {
 #' @param momid  vector containing for each subject, the identifiers of the
 #' biologicals mothers.
 #' @param missid The missing identifier value. Founders are the individuals with
-#' no father and no mother in the pedigree (i.e. `dadid` and `momid` equal to
-#' the value of this variable).  The default for `missid` is `"0"`.
+#' no father and no mother in the pedigree
+#' (i.e. `dadid` and `momid` equal to the value of this variable).
+#' The default for `missid` is `"0"`.
 #'
 #' @return A vector of boolean of the same size as `id`
 #' with TRUE if the individual is a parent and FALSE otherwise
 #'
-#' @export
+#' @keywords internal
 is_parent <- function(id, dadid, momid, missid = "0") {
     # determine subjects who are parents assume input of dadid/momid indices,
     # not ids
@@ -196,7 +197,7 @@ is_parent <- function(id, dadid, momid, missid = "0") {
 #' with TRUE if the individual has no parents (i.e is a founder) and FALSE
 #' otherwise.
 #'
-#' @export
+#' @keywords internal
 is_founder <- function(momid, dadid, missid = "0") {
     (dadid == missid) & (momid == missid)
 }
@@ -214,7 +215,7 @@ is_founder <- function(momid, dadid, missid = "0") {
 #' with TRUE if the individual is disconnected and FALSE otherwise
 #'
 #' @include kinship.R
-#' @export
+#' @keywords internal
 is_disconnected <- function(id, dadid, momid) {
     # check to see if any subjects are disconnected in pedigree by checking for
     # kinship = 0 for all subjects excluding self
@@ -236,6 +237,8 @@ NULL
 #'
 #' @return an ordered factor vector containing the transformed variable
 #' "male" < "female" < "unknown" < "terminated"
+#' @examples
+#' sex_to_factor(c(1, 2, 3, 4, "f", "m", "man", "female"))
 #' @export
 sex_to_factor <- function(sex) {
     if (is.factor(sex) || is.numeric(sex)) {
@@ -247,9 +250,9 @@ sex_to_factor <- function(sex) {
         female = "female", male = "male", `2` = "female", `1` = "male",
         `3` = "unknown", `4` = "terminated"
     )
-    sex <- suppressMessages(as.character(revalue(as.factor(
+    sex <- as.character(revalue(as.factor(
         casefold(sex, upper = FALSE)
-    ), sex_equiv)))
+    ), sex_equiv, warn_missing = FALSE))
     sex_codes <- c("male", "female", "unknown", "terminated")
     sex[!sex %in% sex_codes] <- "unknown"
 
@@ -275,6 +278,8 @@ NULL
 #'
 #' @return an ordered factor vector containing the transformed variable
 #' "MZ twin" < "DZ twin" < "UZ twin" < "Spouse"
+#' @examples
+#' rel_code_to_factor(c(1, 2, 3, 4, "MZ twin", "DZ twin", "UZ twin", "Spouse"))
 #' @export
 rel_code_to_factor <- function(rel_code) {
     if (is.factor(rel_code) || is.numeric(rel_code)) {
@@ -287,12 +292,12 @@ rel_code_to_factor <- function(rel_code) {
         `1` = "MZ twin", `2` = "DZ twin", `3` = "UZ twin", `4` = "Spouse"
     )
     codes <- c("MZ twin", "DZ twin", "UZ twin", "Spouse")
-    rel_code <- suppressMessages(as.character(revalue(as.factor(
+    rel_code <- as.character(revalue(as.factor(
         str_remove_all(
             casefold(as.character(rel_code), upper = FALSE),
             " "
         )
-    ), code_equiv)))
+    ), code_equiv, warn_missing = FALSE))
     rel_code <- factor(rel_code, codes, ordered = TRUE)
     rel_code
 }

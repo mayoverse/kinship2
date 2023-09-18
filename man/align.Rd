@@ -26,8 +26,9 @@ inches.}
 \item{align}{for a packed pedigree, align children under parents \code{TRUE}, to
 the extent possible given the page width, or align to to the left margin
 \code{FALSE}. This argument can be a two element vector, giving the alignment
-parameters, or a logical value.  If \code{TRUE}, the default is \code{c(1.5, 2)}, or
-numeric the routine \code{alignped4()} will be called.}
+parameters, or a logical value.
+If \code{TRUE}, the default is \code{c(1.5, 2)}, or numeric the routine
+\code{alignped4()} will be called.}
 
 \item{hints}{Plotting hints for the pedigree.
 This is a list with components \code{order} and \code{spouse}, the second one is
@@ -46,8 +47,9 @@ Children will preferentially appear under the parents of the anchored spouse.
 }}
 
 \item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the pedigree (i.e. \code{dadid} and \code{momid} equal to
-the value of this variable).  The default for \code{missid} is \code{"0"}.}
+no father and no mother in the pedigree
+(i.e. \code{dadid} and \code{momid} equal to the value of this variable).
+The default for \code{missid} is \code{"0"}.}
 }
 \value{
 A list with components
@@ -83,11 +85,12 @@ layout of a plot of the pedigree.
 }
 \details{
 This is an internal routine, used almost exclusively by
-\code{ped_to_plotdf()}.  The subservient functions \code{auto_hint()}, \code{alignped1()},
-\code{alignped2()}, \code{alignped3()}, and \code{alignped4()} contain the bulk of
-the computation.
-If the \strong{hints} are missing the \code{auto_hint()} routine is called to supply an
-initial guess.
+\code{ped_to_plotdf()}.  The subservient functions \code{auto_hint()},
+\code{alignped1()}, \code{alignped2()},
+\code{alignped3()}, and \code{alignped4()}
+contain the bulk of the computation.
+If the \strong{hints} are missing the \code{auto_hint()} routine is called to
+supply an initial guess.
 If multiple families are present in the pedigree, this routine is called
 once for each family, and the results are combined in the list returned.
 For more information you can read the associated vignette:align
@@ -100,6 +103,9 @@ align(ped)
 
 }
 \seealso{
-\code{\link[=alignped1]{alignped1()}}, \code{\link[=alignped2]{alignped2()}}, \code{\link[=alignped3]{alignped3()}},
-\code{\link[=alignped4]{alignped4()}}, \code{\link[=auto_hint]{auto_hint()}}
+\code{\link[=alignped1]{alignped1()}},
+\code{\link[=alignped2]{alignped2()}},
+\code{\link[=alignped3]{alignped3()}},
+\code{\link[=alignped4]{alignped4()}},
+\code{\link[=auto_hint]{auto_hint()}}
 }

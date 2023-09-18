@@ -107,7 +107,7 @@ setMethod("family_check", "character",
 
         out <- data.frame(family = dimnames(xtab)[[1]],
             n = as.vector(table(family)), unrelated = as.vector(unrelated),
-            split = as.vector(splits), join = temp, row.names = 1:nfam
+            split = as.vector(splits), join = temp, row.names = seq_len(nfam)
         )
         if (any(joins > 1)) {
             tab1 <- xtab[temp > 0, ]  # families with multiple outcomes

@@ -18,8 +18,9 @@ find_avail_noninform(ped, avail = ped$ped$avail, missid = "0")
 }}
 
 \item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the pedigree (i.e. \code{dadid} and \code{momid} equal to
-the value of this variable).  The default for \code{missid} is \code{"0"}.}
+no father and no mother in the pedigree
+(i.e. \code{dadid} and \code{momid} equal to the value of this variable).
+The default for \code{missid} is \code{"0"}.}
 }
 \value{
 Vector of subject ids who can be removed by having lowest

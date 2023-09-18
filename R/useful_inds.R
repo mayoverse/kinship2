@@ -23,7 +23,11 @@
 #' ## When obj is a Pedigree
 #' The Pedigree object with a new column named 'useful' containing 1 for
 #' useful individuals and 0 otherwise.
-#'
+#' @examples
+#' data(sampleped)
+#' ped1 <- pedigree(sampleped[sampleped$family == "1",])
+#' ped1 <- num_child(ped1)
+#' useful_inds(ped1, informative = "AvAf")$ped
 #' @export
 setGeneric("useful_inds", signature = "obj",
     function(obj, ...) standardGeneric("useful_inds")

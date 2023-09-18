@@ -51,8 +51,17 @@ and \code{arc}.
 \item{add_to_existing}{If \code{TRUE}, the plot will be added to the current
 plot.}
 }
+\value{
+an invisible ggplot object and a plot on the current plotting device
+}
 \description{
 This function is used to create a plot from a data.frame. If ggplot_gen is
 set to TRUE, the plot will be generated with ggplot2 and will be returned
 invisibly.
+}
+\examples{
+data(sampleped)
+ped <- pedigree(ped)
+df <- ped_to_plotdf(ped)
+plot_fromdf(df)
 }

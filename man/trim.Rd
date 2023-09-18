@@ -12,12 +12,18 @@ trim(ped, id_rm, missid = "0")
 \item{id_rm}{Vector of ids to remove}
 
 \item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the pedigree (i.e. \code{dadid} and \code{momid} equal to
-the value of this variable).  The default for \code{missid} is \code{"0"}.}
+no father and no mother in the pedigree
+(i.e. \code{dadid} and \code{momid} equal to the value of this variable).
+The default for \code{missid} is \code{"0"}.}
 }
 \value{
 A Pedigree object with the subjects removed
 }
 \description{
 Carries out the removal of the subjects identified from a pedigree object.
+}
+\examples{
+data(sampleped)
+ped1 <- pedigree(sampleped[sampleped$family == "1",])
+trim(ped1, "1_101")
 }

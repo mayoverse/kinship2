@@ -17,3 +17,4 @@ a list of x and y coordinates
 \description{
 Generate a circular element
 }
+\keyword{internal}

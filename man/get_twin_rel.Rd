@@ -30,3 +30,4 @@ It is used by \code{auto_hint()}.
 \seealso{
 \code{\link[=auto_hint]{auto_hint()}}
 }
+\keyword{internal}

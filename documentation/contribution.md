@@ -71,3 +71,10 @@ If you have `R.exe` in your path you can run:
 R.exe CMD build .
 R.exe CMD check kinship2_2.0.0.tar.gz
 ```
+
+## Submit to BioConductor
+
+```R
+BiocCheck::BiocCheckGitClone()
+BiocCheck::BiocCheck('kinship2'=TRUE)
+```

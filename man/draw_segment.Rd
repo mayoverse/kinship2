@@ -41,3 +41,4 @@ Plot the segments or add it to a ggplot object
 \description{
 Draw segments for a pedigree
 }
+\keyword{internal}

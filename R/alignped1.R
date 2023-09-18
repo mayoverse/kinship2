@@ -17,11 +17,12 @@
 #' 2. Create the set of 3 return structures, which will be matrices
 #'    with `1 + nspouse` columns.
 #'    If there are children then other routines will widen the result.
-#' 3. Create the two complimentary lists **lspouse** and **rspouse** to
-#'    denote those plotted on the left and on the right. For someone with lots
-#'    of spouses we try to split them evenly. If the number of spouses is odd,
-#'    then men should have more on the right than on the left, women more on the
-#'    right. Any hints in the spouselist matrix override.
+#' 3. Create the two complimentary lists **lspouse** and **rspouse**
+#'    to denote those plotted on the left and on the right.
+#'    For someone with lots of spouses we try to split them evenly.
+#'    If the number of spouses is odd, then men should have more on
+#'    the right than on the left, women more on the right.
+#'    Any hints in the spouselist matrix override.
 #'    We put the undecided marriages closest to **idx**, then add
 #'    predetermined ones to the left and right. The majority of marriages will
 #'    be undetermined singletons, for which **nleft** will be `1` for female
@@ -31,17 +32,17 @@
 #'    A fix was to not let **indx** to be indexed beyond its length,
 #'    fix by JPS 5/2013.
 #' 4. For each spouse get the list of children. If there are any we
-#'    call [alignped2()] to generate their tree and then mark the connection to
-#'    their parent.
+#'    call [alignped2()] to generate their tree and
+#'    then mark the connection to their parent.
 #'    If multiple marriages have children we need to join the trees.
 #' 5. To finish up we need to splice together the tree made up from
 #'    all the kids, which only has data from `lev + 1` down, with the data here.
 #'    There are 3 cases:
 #'
-#'        1. No children were found.
-#'        2. The tree below is wider than the tree here, in which case we add
-#'           the data from this level onto theirs.
-#'        3. The tree below is narrower, for instance an only child.
+#'    1. No children were found.
+#'    2. The tree below is wider than the tree here, in which case we add
+#'       the data from this level onto theirs.
+#'    3. The tree below is narrower, for instance an only child.
 #'
 #' @param level Vector of the level of each subject
 #' @param horder Vector of the horizontal order of each subject
@@ -145,13 +146,13 @@ alignped1 <- function(idx, dadx, momx, level, horder, packed, spouselist) {
     }
 
     nid[lev, ] <- c(lspouse, idx, rspouse)
-    nid[lev, 1:nspouse] <- nid[lev, 1:nspouse] + 0.5  # marriages
+    nid[lev, seq_len(nspouse)] <- nid[lev, seq_len(nspouse)] + 0.5  # marriages
 
     spouselist <- spouselist[-sprows, , drop = FALSE]
     ## Doc: alignped1 - part4
     nokids <- TRUE  # haven't found any kids yet
     spouse <- c(lspouse, rspouse)  # reorder
-    for (i in 1:nspouse) {
+    for (i in seq_len(nspouse)) {
         ispouse <- spouse[i]
         children <- which((dadx == idx & momx == ispouse) |
                 (dadx == ispouse & momx == idx)
@@ -183,7 +184,9 @@ alignped1 <- function(idx, dadx, momx, level, horder, packed, spouselist) {
                     for (j in (lev + 1):maxlev) {
                         jn <- rval1$n[j]
                         if (jn > 0) {
-                            rval1$pos[j, 1:jn] <- rval1$pos[j, 1:jn] + shift
+                            rval1$pos[j, seq_len(jn)] <- rval1$pos[j,
+                                seq_len(jn)
+                            ] + shift
                         }
                     }
                 }
@@ -206,7 +209,7 @@ alignped1 <- function(idx, dadx, momx, level, horder, packed, spouselist) {
     if (ncol(rval$nid) >= 1 + nspouse) {
         # The rval list has room for me!
         rval$n[lev] <- n[lev]
-        indx <- 1:(nspouse + 1)
+        indx <- seq_len(nspouse + 1)
         rval$nid[lev, indx] <- nid[lev, ]
         rval$pos[lev, indx] <- pos[lev, ]
     } else {

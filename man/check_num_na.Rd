@@ -28,3 +28,4 @@ check_num_na(var)
 check_num_na(var, na_as_num = FALSE)
 
 }
+\keyword{internal}

@@ -54,8 +54,9 @@ width for the plot.}
 \item{align}{for a packed pedigree, align children under parents \code{TRUE}, to
 the extent possible given the page width, or align to to the left margin
 \code{FALSE}. This argument can be a two element vector, giving the alignment
-parameters, or a logical value.  If \code{TRUE}, the default is \code{c(1.5, 2)}, or
-numeric the routine \code{alignped4()} will be called.}
+parameters, or a logical value.
+If \code{TRUE}, the default is \code{c(1.5, 2)}, or numeric the routine
+\code{alignped4()} will be called.}
 
 \item{width}{for a packed output, the minimum width of the plot, in
 inches.}

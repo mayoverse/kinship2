@@ -31,6 +31,9 @@ the gender of the individuals. The following values are recognized:
 \item numeric() : 1 = "male", 2 = "female", 3 = "unknown", 4 = "terminated"
 }}
 }
+\value{
+Nothing, but will stop if there is a problem.
+}
 \description{
 This routine tries to detect inconsistencies in spousal hints.
 }

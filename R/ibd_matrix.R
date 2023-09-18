@@ -16,10 +16,10 @@ NULL
 #' by descent.  Fractional values occur if the IBD fraction must be imputed.
 #' The diagonal will be 1.  Since a large fraction of the values will be zero,
 #' programs such as Solar return a data set containing only the non-zero
-#' elements.  As well, Solar will have renumbered the subjects as 1:n in such a
-#' way that families are grouped together in the matrix; a separate index file
-#' contains the mapping between this new id and the original one.  The final
-#' matrix should be labeled with the original identifiers.
+#' elements.  As well, Solar will have renumbered the subjects as seq_len(n)
+#' in such a way that families are grouped together in the matrix; a separate
+#' index file contains the mapping between this new id and the original one.
+#' The final matrix should be labeled with the original identifiers.
 #'
 #' @param id1 First subject identifiers
 #' @param id2 Second subject identifiers
@@ -41,19 +41,19 @@ ibd_matrix <- function(id1, id2, ibd, idmap, diagonal) {
     if (!is.null(ncol(id1))) {
         # can be a matrix or a data frame
         if (ncol(id1) != 3) {
-            stop(paste("Argument id1 is a matrix or dataframe",
+            stop("Argument id1 is a matrix or dataframe",
                 "but does not have 3 columns"
-            ))
+            )
         }
         if (!missing(id2)) {
-            stop(paste("First argument is a matrix or dataframe,",
+            stop("First argument is a matrix or dataframe,",
                 "but id2 argument is present"
-            ))
+            )
         }
         if (!missing(ibd)) {
-            stop(paste("First argument is a matrix or dataframe,",
+            stop("First argument is a matrix or dataframe,",
                 "but ibd argument is present"
-            ))
+            )
         }
         id2 <- id1[, 2]
         ibd <- id1[, 3]
@@ -89,14 +89,14 @@ ibd_matrix <- function(id1, id2, ibd, idmap, diagonal) {
     maxid <- max(id1, id2)
     if (maxid != as.integer(maxid) ||
             length(temp) != maxid ||
-            any(is.na(match(temp, 1:maxid)))
+            any(is.na(match(temp, seq_len(maxid))))
     ) {
         # drat, need to figure out family blocks
         idlist <- sort(unique(c(id1, id2)))
         nid <- length(idlist)
         id1 <- match(id1, idlist)
         id2 <- match(id2, idlist)
-        famid <- 1:nid  # everyone a singleton
+        famid <- seq_len(nid)  # everyone a singleton
         indx1 <- sort(unique(id2))  # the result vector for remap1 below
         indx2 <- sort(unique(id1))
         while (1) {
@@ -107,12 +107,12 @@ ibd_matrix <- function(id1, id2, ibd, idmap, diagonal) {
             remap2 <- tapply(famid[id2], id1, min)
             famid[indx2] <- remap2
         }
-        remap <- (1:nid)[order(famid)]  # reordering of subjects
+        remap <- (seq_len(nid))[order(famid)]  # reordering of subjects
         id1 <- match(id1, remap)
         id2 <- match(id2, remap)
         idlist <- idlist[remap]
     } else {
-        idlist <- 1:maxid
+        idlist <- seq_len(maxid)
     }
 
     # dimid will be the dimnames

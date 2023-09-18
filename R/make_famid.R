@@ -21,6 +21,10 @@
 #' An updated pedigree object with the family id added
 #'
 #' @seealso [kinship()]
+#' @examples
+#' data(sampleped)
+#' ped <- pedigree(sampleped[,-1])
+#' make_famid(ped1)
 #' @export
 setGeneric("make_famid", signature = "obj",
     function(obj, ...) standardGeneric("make_famid")
@@ -38,7 +42,7 @@ setMethod("make_famid", "character",
         did <- c(match(dadid, id, nomatch = n + 1), n + 1)
         mid2 <- sort(unique(mid))
         did2 <- sort(unique(did))
-        famid <- 1:(n + 1)
+        famid <- seq_len(n + 1)
         # The key idea of the algorithm: 1. iteratively set the family id of
         # parent/child sets to the minimum value of the set 2.
         # Add a subject 'n+1', who is the parent of all orphans, and also of
@@ -56,7 +60,7 @@ setMethod("make_famid", "character",
         # ...).
         # However, at each iteration the final number must get propogated to at
         # least one child or at least 2 parents, giving a limit of n-1
-        for (i in 1:n) {
+        for (i in seq_len(n)) {
             # set children = min(self, parents)
             newid <- pmin(famid, famid[mid], famid[did])
             # mom = min(mon, children) dad = min(dad, children)
@@ -74,7 +78,7 @@ setMethod("make_famid", "character",
 
         if (all(newid == famid)) {
             # renumber the results : family 0 for uniques, else small integers
-            famid <- famid[1:n]  # toss the 'n+1' obs
+            famid <- famid[seq_len(n)]  # toss the 'n+1' obs
             xx <- table(famid)
             if (any(xx == 1)) {
                 singles <- as.integer(names(xx[xx == 1]))  # famid of singletons
@@ -109,9 +113,9 @@ setMethod("make_famid", "Pedigree",
         fam_id2 <- family[match(rel_df$id2, ped$ped$id)]
 
         if (any(fam_id1 != fam_id2)) {
-            stop(paste0("The two individuals in the relationship",
+            stop("The two individuals in the relationship",
                 "are not in the same family"
-            ))
+            )
         }
 
         rel_df$family <- fam_id1

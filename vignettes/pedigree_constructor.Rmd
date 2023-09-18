@@ -38,35 +38,45 @@ Pedigree Constructor
 
 ## Arguments
 
-The pedigree function is the first step, creating an object of class pedigree.  
+The pedigree function is the first step, creating an object of class
+pedigree.  
 It accepts the following input
 
 - **ped_df** A dataframe containing the columns
     - $indId$ A numeric or character vector of subject identifiers.
     - $fatherId$ The identifier of the father.
     - $motherId$ The identifier of the mother.
-    - $gender$ The gender of the individual.  This can be a numeric variable
-    with codes of 1=male, 2=female, 3=unknown, 4=terminated, or NA=unknown.
+    - $gender$ The gender of the individual.  This can be a numeric
+    variable with codes of 1=male, 2=female, 3=unknown, 4=terminated,
+    or NA=unknown.
     A character or factor variable can also be supplied containing
     the above; the string may be truncated and of arbitrary case.
-    - $available$ Optional, a numeric variable with 0 = unavailable and 1 = available.
-    - $affected$ Optional, a numeric variable with 0 = unaffected and 1 = affected.
-    - $status$ Optional, a numeric variable with 0 = censored and 1 = dead.
-    - $family$ Optional, a numeric or character vector of family identifiers.
-    - $steril$ Optional, a numeric variable with 0 = not steril and 1 = steril.
+    - $available$ Optional, a numeric variable with 0 = unavailable
+    and 1 = available.
+    - $affected$ Optional, a numeric variable with 0 = unaffected
+    and 1 = affected.
+    - $status$ Optional, a numeric variable with 0 = censored and
+    1 = dead.
+    - $family$ Optional, a numeric or character vector of family
+    identifiers.
+    - $steril$ Optional, a numeric variable with 0 = not steril and
+    1 = steril.
 - **rel_df** Optional, a data frame with three columns or four columns.
     - $indId1$ identifier values of the subject pairs
     - $indId2$ identifier values of the subject pairs
-    - $code$ relationship codification : 1 = Monozygotic twin, 2=Dizygotic twin,
-    3= twin of unknown zygosity, 4 = Spouse.
-    - $family$ Optional, a numeric or character vector of family identifiers.
-- **cols_ren_ped** Optional, a named list for the renaming of the **ped_df** dataframe
-- **cols_ren_rel** Optional, a named list for the renaming of the **rel_df** dataframe
+    - $code$ relationship codification : 1 = Monozygotic twin,
+    2=Dizygotic twin, 3= twin of unknown zygosity, 4 = Spouse.
+    - $family$ Optional, a numeric or character vector of family
+    identifiers.
+- **cols_ren_ped** Optional, a named list for the renaming of the
+**ped_df** dataframe
+- **cols_ren_rel** Optional, a named list for the renaming of the
+**rel_df** dataframe
 - **scales** Optional, a list of two dataframe with the scales to use for the
     affection status and the other one for the border color (e.g availability).
 - **normalize** Optional, a logical to know if the data should be normalised.
-- **hints** Optional, a list containing the order in which to plot the individuals and the
-    matrix of the spouse.
+- **hints** Optional, a list containing the order in which to plot the
+individuals and the matrix of the spouse.
 
 ## Notes
 
@@ -94,26 +104,29 @@ Status follows the pattern of the survival routines and remains an integer.
 
 ## Column renaming
 
-Based on the dataframe given for **ped_df** and **rel_df** and their corresponding
-named list, the columns are renamed for them to be used correctly.
+Based on the dataframe given for **ped_df** and **rel_df** and their
+corresponding named list, the columns are renamed for them to be used
+correctly.
 
 ## Normalisation
 
-If the normalisation process is selected `normalize = TRUE`, then both dataframe will
-be checked by their dedicated normalization function. It will ensure that all modalities
-are written correctly and set up the right way.
-If a $family$ column is present in the dataframe, then it will be aggregated to the id
-of each individual and separated by an ''_'' to ensure the uniqueness of the individuals identifiers.
+If the normalisation process is selected `normalize = TRUE`, then both
+dataframe will be checked by their dedicated normalization function.
+It will ensure that all modalities are written correctly and set up the
+right way. If a $family$ column is present in the dataframe, then it will
+be aggregated to the id of each individual and separated by an ''_'' to
+ensure the uniqueness of the individuals identifiers.
 
 ### Errors present after the normalisation process
 
-If any error is detected after the normalisation process, then the normalised dataframe
-is gave back to the user with errors column added describing the encountered problems.
+If any error is detected after the normalisation process, then the normalised
+dataframe is gave back to the user with errors column added describing the
+encountered problems.
 
 ## Validation
 
-Now that the data for the pedigree object creation are ready, they are given to a new $Pedigree$
-object, trigerring the $validation$ process.
+Now that the data for the pedigree object creation are ready, they are
+given to a new $Pedigree$ object, trigerring the $validation$ process.
 
 This validation step will check up for many errors such as:
 
@@ -129,25 +142,31 @@ Pedigree S4 slots
 ========================
 
 After validation an $S4$ object is generated.
-This new concept make it possible to easily setup methods for this new type of object.
+This new concept make it possible to easily setup methods for this new
+type of object.
 The controls of the parameters is also more precise.
 
 The $Pedigree$ object contains 4 slots:
 
-- $ped$ the pedigree information as a dataframe with at least the following columns:
+- $ped$ the pedigree information as a dataframe with at least the
+following columns:
     - $id$ the identifiers of the individuals
     - $dadid$ the identifiers of the fathers
     - $momid$ the identifiers of the mothers
     - $sex$ the gender of each individuals
-- $rel$ the relationship dataframe describing all special relationship beetween individuals
-that can't be descibed in the $ped$ slot. The minimal columns needed are :
+- $rel$ the relationship dataframe describing all special relationship
+beetween individuals that can't be descibed in the $ped$ slot.
+The minimal columns needed are :
     - $id1$ the identifiers of the 1st individuals
     - $id2$ the identifiers of the 2nd individuals
-    - $code$ factor describing the type of relationship ("MZ twin", "DZ twin", "UZ twin", "Spouse")
+    - $code$ factor describing the type of relationship
+    ("MZ twin", "DZ twin", "UZ twin", "Spouse")
 - $scales$ a list of two elements
-    - $fill$ a dataframe describing which modalities in which columns correspond to an affected individuals.
+    - $fill$ a dataframe describing which modalities in which columns correspond
+    to an affected individuals.
     Plotting information such as colour, angle and density are also provided
-    - $border$ a dataframe describing which modalities in which columns to use to plot the border of the plot elements.
+    - $border$ a dataframe describing which modalities in which columns to
+    use to plot the border of the plot elements.
 - $hints$ a list of two elements
     - $order$ numeric vector for the ordering of the individuals plotting
     - $spouse$ a matrix of the spouses
@@ -180,3 +199,9 @@ With this new S4 object comes multiple methods to ease the use of it:
 - unrelated()
 - useful_inds()
 
+Session information
+===================
+
+```{r}
+sessionInfo()
+```

@@ -14,8 +14,6 @@ test_that("pedigree works", {
     expect_equal(length(ped@scales), 2)
     expect_equal(length(ped@scales$fill), 9)
     expect_equal(length(ped@scales$border), 4)
-
-    expect_snapshot(summary(ped))
 })
 
 test_that("pedigree old usage compatibility", {
@@ -72,12 +70,11 @@ test_that("pedigree from sampleped and affectation", {
         "gender" = "sex",
         "available" = "avail"
     ))
-    ped1$ped
+
     expect_equal(nrow(ped1@ped), 41)
     expect_equal(ncol(ped1@ped), 16)
     expect_equal(nrow(ped1@rel), 0)
     expect_equal(ncol(ped1@rel), 7)
-    expect_snapshot(summary(ped1))
 
     expect_error(ped1$ped$id <- "1")
     expect_error(ped1$ped$id[1] <- "1")

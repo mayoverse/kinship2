@@ -39,6 +39,9 @@
 #' @param normalize A logical to know if the data should be normalised.
 #' @param ... Other arguments to pass to the function `generate_colors`.
 #' @return A Pedigree object.
+#' @examples
+#' data(sampleped)
+#' ped1 <- pedigree(sampleped[sampleped$family == "1",])
 #' @export
 setGeneric("pedigree", signature = "obj",
     function(obj, ...) standardGeneric("pedigree")
@@ -109,7 +112,6 @@ setMethod("pedigree", "character", function(obj, dadid, momid,
             family = character()
         )
     }
-
     pedigree(ped_df, relation = relation,
         missid = missid, col_aff = col_aff, ...
     )
@@ -179,7 +181,6 @@ setMethod("pedigree", "data.frame",  function(
     }
 
     if (is.matrix(relation)) {
-        print(dim(relation)[2])
         rel_df <- data.frame(
             id1 = relation[, 1],
             id2 = relation[, 2],
@@ -231,14 +232,15 @@ setMethod("pedigree", "data.frame",  function(
         )
     }
     if (any(!is.na(ped_df$error))) {
-        warning("The pedigree informations are not valid.")
-        message("Here is the normalised pedigree informations with the errors")
+        warning("The pedigree informations are not valid.",
+            "Here is the normalised pedigree informations with the errors"
+        )
         return(ped_df)
     }
 
     if (any(!is.na(rel_df$error))) {
-        warning("The relationship informations are not valid.")
-        message("Here is the normalised relationship informations",
+        warning("The relationship informations are not valid.",
+            "Here is the normalised relationship informations",
             "with the errors"
         )
         return(rel_df)

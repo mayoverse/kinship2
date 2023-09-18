@@ -23,6 +23,10 @@
 #' @author Terry Therneau
 #' @seealso [align()]
 #' @include pedigreeClass.R
+#' @examples
+#' data(sampleped)
+#' ped1 <- pedigree(sampleped[sampleped$family == "1",])
+#' kindepth(ped1)
 #' @export
 setGeneric("kindepth", signature = "obj",
     function(obj, ...) standardGeneric("kindepth")
@@ -55,16 +59,14 @@ setMethod("kindepth", "character", function(obj, dadid, momid,
     child_old <- rep(0, n)
     # At each iteration below, all children of the current 'parents' are
     # labeled with depth 'i', and become the parents of the next iteration
-    for (i in 1:n) {
+    for (i in seq_len(n)) {
         child <- match(midx, parents, nomatch = 0) +
             match(didx, parents, nomatch = 0)  # Index of parent's childs
 
         ## version 1.8.5 did not have this check with child_old.
         ## Keeping it here because it was not the issue being fixed in 9/2023.
         if (all(child == child_old)) {
-            stop(paste("Impossible pedigree: no progress made at iteration",
-                i
-            ))
+            stop("Impossible pedigree: no progress made at iteration", i)
         }
         if (all(child == 0)) {
             break
@@ -185,7 +187,9 @@ setMethod("kindepth", "character", function(obj, dadid, momid,
                 temp <- unique(c(agood, spouse))
                 temp <- unique(chaseup(temp, midx, didx))  # parents
                 kids <- (!is.na(match(midx, temp)) | !is.na(match(didx, temp)))
-                temp <- unique(c(temp, (1:n)[kids & depth <= depth[good]]))
+                temp <- unique(c(temp, (seq_len(n))[
+                    kids & depth <= depth[good]
+                ]))
                 if (length(temp) == length(agood)) {
                     break
                 } else {

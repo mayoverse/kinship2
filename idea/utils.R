@@ -97,3 +97,17 @@ test_that("df_cont_table", {
     expect_error(df_cont_table(df, "var3"))
     expect_error(df_cont_table(df, "var1", 0.5, "var3"))
 })
+
+#' @importFrom gridGraphics grid.echo
+#' @importFrom grid grid.grab
+NULL
+
+#' Register the plot
+#'
+#' Use the grid.echo() and grid.grab() functions to register the plot.
+#'
+#' @export
+grab_grob <- function() {
+    grid.echo()
+    grid.grab()
+}

@@ -36,10 +36,10 @@ indicator of whether 0, 1/2 or 2/2 of the alleles for i and j are identical
 by descent.  Fractional values occur if the IBD fraction must be imputed.
 The diagonal will be 1.  Since a large fraction of the values will be zero,
 programs such as Solar return a data set containing only the non-zero
-elements.  As well, Solar will have renumbered the subjects as 1:n in such a
-way that families are grouped together in the matrix; a separate index file
-contains the mapping between this new id and the original one.  The final
-matrix should be labeled with the original identifiers.
+elements.  As well, Solar will have renumbered the subjects as seq_len(n)
+in such a way that families are grouped together in the matrix; a separate
+index file contains the mapping between this new id and the original one.
+The final matrix should be labeled with the original identifiers.
 }
 \seealso{
 \code{\link[=kinship]{kinship()}}

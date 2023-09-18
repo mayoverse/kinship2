@@ -62,17 +62,17 @@ alignped3 <- function(alt1, alt2, packed, space = 1) {
     n <- alt1$n + alt2$n
 
     nid <- matrix(0, maxlev, maxcol)
-    nid[, 1:n1] <- alt1$nid
+    nid[, seq_len(n1)] <- alt1$nid
     pos <- matrix(0, maxlev, maxcol)
-    pos[, 1:n1] <- alt1$pos
+    pos[, seq_len(n1)] <- alt1$pos
 
     fam <- matrix(0, maxlev, maxcol)
-    fam[, 1:n1] <- alt1$fam
+    fam[, seq_len(n1)] <- alt1$fam
     fam2 <- alt2$fam
     if (!packed) {
         ## Doc: alignped3: slide
         slide <- 0
-        for (i in 1:maxlev) {
+        for (i in seq_len(maxlev)) {
             n1 <- alt1$n[i]
             n2 <- alt2$n[i]
             if (n1 > 0 && n2 > 0) {
@@ -87,7 +87,7 @@ alignped3 <- function(alt1, alt2, packed, space = 1) {
         }
     }
     ## Doc: alignped3-merge
-    for (i in 1:maxlev) {
+    for (i in seq_len(maxlev)) {
         n1 <- alt1$n[i]
         n2 <- alt2$n[i]
         if (n2 > 0) {
@@ -135,9 +135,9 @@ alignped3 <- function(alt1, alt2, packed, space = 1) {
     ## Doc: rest of alignped3
     if (max(n) < maxcol) {
         maxcol <- max(n)
-        nid <- nid[, 1:maxcol]
-        pos <- pos[, 1:maxcol]
-        fam <- fam[, 1:maxcol]
+        nid <- nid[, seq_len(maxcol)]
+        pos <- pos[, seq_len(maxcol)]
+        fam <- fam[, seq_len(maxcol)]
     }
 
     list(n = n, nid = nid, pos = pos, fam = fam)

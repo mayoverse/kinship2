@@ -38,11 +38,12 @@ ancestors <- function(idx, momx, dadx) {
 #'
 #' @details
 #' This is an internal routine, used almost exclusively by
-#' `ped_to_plotdf()`.  The subservient functions `auto_hint()`, `alignped1()`,
-#' `alignped2()`, `alignped3()`, and `alignped4()` contain the bulk of
-#' the computation.
-#' If the **hints** are missing the `auto_hint()` routine is called to supply an
-#' initial guess.
+#' `ped_to_plotdf()`.  The subservient functions `auto_hint()`,
+#' `alignped1()`, `alignped2()`,
+#' `alignped3()`, and `alignped4()`
+#' contain the bulk of the computation.
+#' If the **hints** are missing the `auto_hint()` routine is called to
+#' supply an initial guess.
 #' If multiple families are present in the pedigree, this routine is called
 #' once for each family, and the results are combined in the list returned.
 #' For more information you can read the associated vignette:align
@@ -57,8 +58,9 @@ ancestors <- function(idx, momx, dadx) {
 #' @param align for a packed pedigree, align children under parents `TRUE`, to
 #' the extent possible given the page width, or align to to the left margin
 #' `FALSE`. This argument can be a two element vector, giving the alignment
-#' parameters, or a logical value.  If `TRUE`, the default is `c(1.5, 2)`, or
-#' numeric the routine `alignped4()` will be called.
+#' parameters, or a logical value.
+#' If `TRUE`, the default is `c(1.5, 2)`, or numeric the routine
+#' `alignped4()` will be called.
 #' @param hints Plotting hints for the pedigree.
 #' This is a list with components `order` and `spouse`, the second one is
 #' optional.
@@ -76,20 +78,20 @@ ancestors <- function(idx, momx, dadx) {
 #'
 #' @return A list with components
 #' - n A vector giving the number of subjects on each horizonal level of the
-#'     plot
+#' plot
 #' - nid A matrix with one row for each level, giving the numeric id of
-#'       each subject plotted.
-#'       (A value of `17` means the 17th subject in the pedigree).
+#' each subject plotted.
+#' (A value of `17` means the 17th subject in the pedigree).
 #' - pos A matrix giving the horizontal position of each plot point
 #' - fam A matrix giving the family id of each plot point.
-#'       A value of `3` would mean that the two subjects in positions 3 and 4,
-#'       in the row above, are this subject's parents.
+#' A value of `3` would mean that the two subjects in positions 3 and 4,
+#' in the row above, are this subject's parents.
 #' - spouse A matrix with values
 #'     - `0` = not a spouse
 #'     - `1` = subject plotted to the immediate right is a spouse
 #'     - `2` = subject plotted to the immediate right is an inbred spouse
 #' - twins Optional matrix which will only be present if the pedigree
-#'         contains twins :
+#' contains twins :
 #'     - `0` = not a twin
 #'     - `1` = sibling to the right is a monozygotic twin
 #'     - `2` = sibling to the right is a dizygotic twin
@@ -100,8 +102,11 @@ ancestors <- function(idx, momx, dadx) {
 #' ped <- pedigree(sampleped)
 #' align(ped)
 #'
-#' @seealso [alignped1()], [alignped2()], [alignped3()],
-#' [alignped4()], [auto_hint()]
+#' @seealso [alignped1()],
+#' [alignped2()],
+#' [alignped3()],
+#' [alignped4()],
+#' [auto_hint()]
 #' @export
 #' @include auto_hint.R
 #' @include kindepth.R
@@ -164,7 +169,7 @@ align <- function(ped, packed = TRUE, width = 10,
         trel$id1 <- match(trel$id1, ped$ped$id)
         trel$id2 <- match(trel$id2, ped$ped$id)
         tsex <- ped$ped$sex[trel[, 1]]
-        trel[tsex != "male", 1:2] <- trel[tsex != "male", 2:1]
+        trel[tsex != "male", seq_len(2)] <- trel[tsex != "male", 2:1]
         spouselist <- rbind(spouselist, cbind(trel[, 1], trel[, 2], 0, 0))
     }
     dad <- match(ped$ped$dadid, ped$ped$id, nomatch = 0)

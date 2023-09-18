@@ -21,8 +21,9 @@ of the individuals. The values recognized for those columns are \code{1} or
 \item{na_strings}{Vector of strings to be considered as NA values}
 
 \item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the pedigree (i.e. \code{dadid} and \code{momid} equal to
-the value of this variable).  The default for \code{missid} is \code{"0"}.}
+no father and no mother in the pedigree
+(i.e. \code{dadid} and \code{momid} equal to the value of this variable).
+The default for \code{missid} is \code{"0"}.}
 
 \item{try_num}{Boolean defining if the function should try to convert
 all the columns to numeric.}

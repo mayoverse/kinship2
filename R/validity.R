@@ -7,11 +7,10 @@
 #' @param ... Additional arguments passed to print0
 #'
 #' @return The character vector aggregated until the maximum is reached.
-#' @export
 #' @keywords internal
 paste0max <- function(x, max = 5, ...) {
     if (length(x) > max) {
-        paste(paste0(unique(x[1:max]), collapse = ", ", ...), "...")
+        paste(paste0(unique(x[seq_len(max)]), collapse = ", ", ...), "...")
     } else {
         paste0(unique(x), collapse = ", ", ...)
     }
@@ -24,7 +23,6 @@ paste0max <- function(x, max = 5, ...) {
 #' @param fields A character vector with the fields to check.
 #'
 #' @return A character vector with the errors if any.
-#' @export
 #' @keywords internal
 check_slot_fd <- function(obj, slot = NULL, fields = character()) {
     if (is.object(obj)) {

@@ -22,3 +22,6 @@ an ordered factor vector containing the transformed variable
 \description{
 Transform a gender variable to an ordered factor
 }
+\examples{
+sex_to_factor(c(1, 2, 3, 4, "f", "m", "man", "female"))
+}

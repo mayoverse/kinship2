@@ -26,3 +26,4 @@ Check which individuals are disconnected.
 An individuals is considered disconnected if the kinship with
 all the other individuals is 0.
 }
+\keyword{internal}

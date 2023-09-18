@@ -65,11 +65,12 @@ it is the husband who is the anchor (just write out the possibilities).
 \item Create the set of 3 return structures, which will be matrices
 with \code{1 + nspouse} columns.
 If there are children then other routines will widen the result.
-\item Create the two complimentary lists \strong{lspouse} and \strong{rspouse} to
-denote those plotted on the left and on the right. For someone with lots
-of spouses we try to split them evenly. If the number of spouses is odd,
-then men should have more on the right than on the left, women more on the
-right. Any hints in the spouselist matrix override.
+\item Create the two complimentary lists \strong{lspouse} and \strong{rspouse}
+to denote those plotted on the left and on the right.
+For someone with lots of spouses we try to split them evenly.
+If the number of spouses is odd, then men should have more on
+the right than on the left, women more on the right.
+Any hints in the spouselist matrix override.
 We put the undecided marriages closest to \strong{idx}, then add
 predetermined ones to the left and right. The majority of marriages will
 be undetermined singletons, for which \strong{nleft} will be \code{1} for female
@@ -79,18 +80,18 @@ plotting canine data, lspouse could initially be empty but
 A fix was to not let \strong{indx} to be indexed beyond its length,
 fix by JPS 5/2013.
 \item For each spouse get the list of children. If there are any we
-call \code{\link[=alignped2]{alignped2()}} to generate their tree and then mark the connection to
-their parent.
+call \code{\link[=alignped2]{alignped2()}} to generate their tree and
+then mark the connection to their parent.
 If multiple marriages have children we need to join the trees.
 \item To finish up we need to splice together the tree made up from
 all the kids, which only has data from \code{lev + 1} down, with the data here.
 There are 3 cases:
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{1. No children were found.
-2. The tree below is wider than the tree here, in which case we add
-   the data from this level onto theirs.
-3. The tree below is narrower, for instance an only child.
-}\if{html}{\out{</div>}}
+\enumerate{
+\item No children were found.
+\item The tree below is wider than the tree here, in which case we add
+the data from this level onto theirs.
+\item The tree below is narrower, for instance an only child.
+}
 }
 }
 \examples{

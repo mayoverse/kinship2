@@ -69,3 +69,4 @@ tryCatch(check_columns(df, c('ColN1', 'ColN2'), c('ColU1', 'ColU2'),
  c('ColTU1', 'ColTU2')), error = function(e) print(e))
 
 }
+\keyword{internal}

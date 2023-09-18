@@ -20,7 +20,6 @@
 #' @return The updated hint vector
 #' @seealso [auto_hint()]
 #' @keywords internal
-#' @export
 shift <- function(id, sibs, goleft, hint, twinrel, twinset) {
     if (twinset[id] > 0) {
         # enough to avoid overlap
@@ -46,7 +45,7 @@ shift <- function(id, sibs, goleft, hint, twinrel, twinset) {
             #  take (#twins -1) iterations to get us all
             #
             monoset <- id
-            rel2 <- twinrel[twinrel[, 3] == 1, 1:2, drop = FALSE]
+            rel2 <- twinrel[twinrel[, 3] == 1, seq_len(2), drop = FALSE]
             for (i in 2:length(twins)) {
                 newid1 <- rel2[
                     match(monoset, rel2[, 1], nomatch = 0), 2
@@ -89,14 +88,16 @@ shift <- function(id, sibs, goleft, hint, twinrel, twinset) {
 #' - nid Matrix of the subjects indexes
 #' - pos Matrix of the subjects positions
 #' - fam Matrix of the siblings family identifiers
-#' - spouse Matrix of the left spouses `1` = spouse, `0` = not spouse,
-#' `2` = inbred spouse.
+#' - spouse Matrix of the left spouses
+#'     - `0` = not spouse
+#'     - `1` = spouse
+#'     - `2` = inbred spouse.
 #' @param lev The generation level of the subject
 #' @inheritParams align
 #'
 #' @return The position of the spouse
 #' @seealso [auto_hint()]
-#' @export
+#' @keywords internal
 findspouse <- function(idpos, plist, lev, ped) {
     lpos <- idpos
     while (lpos > 1 && plist$spouse[lev, lpos - 1]) {
@@ -130,7 +131,7 @@ findspouse <- function(idpos, plist, lev, ped) {
 #'
 #' @return The positions of the siblings
 #' @seealso [auto_hint()]
-#' @export
+#' @keywords internal
 findsibs <- function(idpos, plist, lev) {
     family <- plist$fam[lev, idpos]
     if (family == 0) {
@@ -151,7 +152,7 @@ findsibs <- function(idpos, plist, lev) {
 #'
 #' @return A matrix of duplicate pairs
 #' @seealso [auto_hint()]
-#' @export
+#' @keywords internal
 duporder <- function(idlist, plist, lev, ped) {
     temp <- table(idlist)
     if (all(temp == 1)) {
@@ -163,13 +164,13 @@ duporder <- function(idlist, plist, lev, ped) {
     npair <- sum(temp - 1)
     dmat <- matrix(0L, nrow = npair, ncol = 3)
     dmat[, 3] <- 2
-    dmat[1:(npair / 2), 3] <- 1
+    dmat[seq_len(npair / 2), 3] <- 1
     i <- 0
     for (id in unique(idlist[duplicated(idlist)])) {
         j <- which(idlist == id)
         for (k in 2:length(j)) {
             i <- i + 1
-            dmat[i, 1:2] <- j[k + -1:0]
+            dmat[i, seq_len(2)] <- j[k + -1:0]
         }
     }
     if (nrow(dmat) == 1) {
@@ -178,7 +179,7 @@ duporder <- function(idlist, plist, lev, ped) {
 
     ## Does families touch?
     famtouch <- logical(npair)
-    for (i in 1:npair) {
+    for (i in seq_len(npair)) {
         if (plist$fam[lev, dmat[i, 1]] > 0) {
             sib1 <- max(findsibs(dmat[i, 1], plist, lev))
         } else {
@@ -218,13 +219,12 @@ duporder <- function(idlist, plist, lev, ped) {
 #' It is used by `auto_hint()`.
 #'
 #' @inheritParams align
-#'
+#' @keywords internal
 #' @return A list containing components
 #'  1. `twinset` the set of twins
 #'  2. `twinrel` the twins relationships
 #'  3. `twinord` the order of the twins
 #' @seealso [auto_hint()]
-#' @export
 get_twin_rel <- function(ped) {
     if (is.null(ped$rel)) {
         relation <- NULL
@@ -241,7 +241,7 @@ get_twin_rel <- function(ped) {
     if (!is.null(relation) && any(relation[, 3] < 4)) {
         ## Select only siblings relationships
         temp <- (relation[, 3] < 4)
-        twinlist <- unique(c(relation[temp, 1:2])) # list of twin id's
+        twinlist <- unique(c(relation[temp, seq_len(2)])) # list of twin id's
         twinrel <- relation[temp, , drop = FALSE]
         for (i in 2:length(twinlist)) {
             # Now, for any pair of twins on a line of twinrel, give both
@@ -340,7 +340,7 @@ auto_hint <- function(
         who <- (depth == i & horder == 0)
         # screwy input - overwrite it
         if (any(who)) {
-            horder[who] <- 1:sum(who)
+            horder[who] <- seq_len(sum(who))
         }
     }
 
@@ -381,15 +381,15 @@ auto_hint <- function(
     ## Doc: fixup-2
     ## Fix if duplicate individuales present
     maxlev <- nrow(plist$nid)
-    for (lev in 1:maxlev) {
+    for (lev in seq_len(maxlev)) {
         # subjects on this level
-        idlist <- plist$nid[lev, 1:plist$n[lev]]
+        idlist <- plist$nid[lev, seq_len(plist$n[lev])]
         # duplicates to be dealt with
         dpairs <- duporder(idlist, plist, lev, ped)
         if (nrow(dpairs) == 0) next
         for (i in seq_len(nrow(dpairs))) {
             anchor <- spouse <- rep(0, 2)
-            for (j in 1:2) {
+            for (j in seq_len(2)) {
                 direction <- c(FALSE, TRUE)[j]
                 idpos <- dpairs[i, j]
                 if (plist$fam[lev, idpos] > 0) {
@@ -439,7 +439,7 @@ auto_hint <- function(
                 warning("Unexpected result in auto_hint,",
                     "please contact developer"
                 )
-                return(list(order = 1:n)) # punt
+                return(list(order = seq_len(n))) # punt
             } else {
                 sptemp <- rbind(sptemp, temp)
             }

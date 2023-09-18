@@ -18,3 +18,4 @@ a list of x and y coordinates
 \description{
 Generate a polygonal element
 }
+\keyword{internal}

@@ -89,8 +89,8 @@ setMethod("kinship", "character",
             kmat <- diag(c(rep(0.5, n), 0))  # founders
             ## When all unrelateds, pdepth all=0.  Put c(1,) to make guard from
             ## iter 1:0
-            for (depth in 1:max(c(1, pdepth))) {
-                for (j in (1:n)[pdepth == depth]) {
+            for (depth in seq_len(max(c(1, pdepth)))) {
+                for (j in (seq_len(n))[pdepth == depth]) {
                     kmatv <- (kmat[mom_row[j], ] + kmat[dad_row[j], ]) / 2
                     kmat[, j] <- kmat[j, ] <- kmatv
                     kmat[j, j] <- (1 + kmat[mom_row[j], dad_row[j]]) / 2
@@ -110,8 +110,8 @@ setMethod("kinship", "character",
                 )
             }
             kmat <- diag(ifelse(sex > 2, NA, c((3 - sex) / 2, 0)))
-            for (depth in 1:max(c(1, pdepth))) {
-                for (j in (1:n)[pdepth == depth]) {
+            for (depth in seq_len(max(c(1, pdepth)))) {
+                for (j in (seq_len(n))[pdepth == depth]) {
                     if (sex[j] == 1) {
                         kmat[, j] <- kmat[j, ] <- kmat[mom_row[j], ]
                         kmat[j, j] <- 1
@@ -126,7 +126,7 @@ setMethod("kinship", "character",
                 }
             }
         }
-        kmat <- kmat[1:n, 1:n]
+        kmat <- kmat[seq_len(n), seq_len(n)]
         dimnames(kmat) <- list(id, id)
         as(kmat, "CsparseMatrix")
     }
@@ -175,7 +175,8 @@ setMethod("kinship", "Pedigree",
                     mzmat <- matrix(
                         c(id1x, id2x), ncol = 2
                     )[temp, , drop = FALSE]
-                    mzgrp <- 1:max(mzmat)  # everyone starts in their own group
+                    ## everyone starts in their own group
+                    mzgrp <- seq_len(max(mzmat))
                     ## The loop below will take k-1 iterations for a set labeled
                     ## as (k-1):k, ..., 4:3, 3:2, 2:1; this is the worst case.
                     while (1) {
@@ -212,7 +213,7 @@ setMethod("kinship", "Pedigree",
                         )
                     } else {
                         kmat <- diag(c(rep(0.5, n), 0))  # founders
-                        for (depth in 1:max(pdepth)) {
+                        for (depth in seq_len(max(pdepth))) {
                             indx <- which(pdepth == depth)
                             kmat[indx, ] <- (
                                 kmat[mom_row[indx], ] + kmat[dad_row[indx], ]
@@ -239,8 +240,8 @@ setMethod("kinship", "Pedigree",
                     } else {
                         ## 1 for males, 1/2 for females
                         kmat <- diag(c((3 - sex) / 2, 0))
-                        for (depth in 1:max(pdepth)) {
-                            for (j in (1:n)[pdepth == depth]) {
+                        for (depth in seq_len(max(pdepth))) {
+                            for (j in (seq_len(n))[pdepth == depth]) {
                                 if (sex[j] == 1) {
                                     kmat[, j] <- kmat[j, ] <- kmat[mom_row[j], ]
                                     kmat[j, j] <- 1
@@ -263,13 +264,13 @@ setMethod("kinship", "Pedigree",
                     }
                 }
                 if (n > 1) {
-                    kmat <- kmat[1:n, 1:n]
+                    kmat <- kmat[seq_len(n), seq_len(n)]
                     dimnames(kmat) <- list(tped$ped$id, tped$ped$id)
                 }
                 kmat
             }, silent = TRUE)
             if ("try-error" %in% class(temp)) {
-                stop(paste("In family", famlist[i_fam], ":", temp))
+                stop("In family", famlist[i_fam], ":", temp)
             } else {
                 matlist[[i_fam]] <- temp
             }

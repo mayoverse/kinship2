@@ -46,6 +46,11 @@ Mark each person as to their depth in a pedigree; 0 for a founder, otherwise
 In the case of an inbred pedigree a perfect alignment obeying
 \code{extra=TRUE} may not exist.
 }
+\examples{
+data(sampleped)
+ped1 <- pedigree(sampleped[sampleped$family == "1",])
+kindepth(ped1)
+}
 \seealso{
 \code{\link[=align]{align()}}
 }

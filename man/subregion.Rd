@@ -16,8 +16,12 @@ It contains the following components:
 \item nid Matrix of the subjects indexes
 \item pos Matrix of the subjects positions
 \item fam Matrix of the siblings family identifiers
-\item spouse Matrix of the left spouses \code{1} = spouse, \code{0} = not spouse,
-\code{2} = inbred spouse.
+\item spouse Matrix of the left spouses
+\itemize{
+\item \code{0} = not spouse
+\item \code{1} = spouse
+\item \code{2} = inbred spouse.
+}
 }}
 
 \item{subreg}{4-element vector for (min x, max x, min depth, max depth),
@@ -31,3 +35,4 @@ a pedigree list
 \description{
 Routine to subset a pedigree
 }
+\keyword{internal}

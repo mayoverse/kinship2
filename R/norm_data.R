@@ -11,9 +11,8 @@ NULL
 #' @param family_id The family id
 #' @param ind_id The individual id
 #' @inheritParams is_parent
-#'
+#' @keywords internal
 #' @return The id with the family id merged
-#' @export
 prefix_famid <- function(family_id, ind_id, missid = "0") {
     if (length(family_id) > 1 && length(family_id) != length(ind_id)) {
         stop("family_id and ind_id must have the same length.")
@@ -58,7 +57,6 @@ prefix_famid <- function(family_id, ind_id, missid = "0") {
 #' @inheritParams is_parent
 #'
 #' @return A dataframe with the errors identified in the `error` column
-#'
 #' @export
 #' @include utils.R
 norm_ped <- function(
@@ -208,7 +206,7 @@ norm_ped <- function(
                     c(cols_need, cols_to_use)
             ]
             for (i in col_to_num) {
-                is_num <- sapply(ped_df[[i]], check_num_na, na_as_num = TRUE)
+                is_num <- lapply(ped_df[[i]], check_num_na, na_as_num = TRUE)
                 if (all(is_num)) {
                     ped_df[i] <- as.numeric(ped_df[[i]])
                 }

@@ -63,10 +63,10 @@ best_hint <- function(ped, wt = c(1000, 10, 1), tolerance = 0) {
     permute <- function(x) {
         n <- length(x)
         if (n == 3) {
-            rbind(x[1:3], x[c(2, 1, 3)], x[c(3, 1, 2)])
+            rbind(x[seq_len(3)], x[c(2, 1, 3)], x[c(3, 1, 2)])
         } else {
             temp <- paste(
-                "cbind(x[", 1:n, "], permute(x[-", 1:n, "]))",
+                "cbind(x[", seq_len(n), "], permute(x[-", seq_len(n), "]))",
                 collapse = ","
             )
             temp <- paste("rbind(", temp, ")")
@@ -82,7 +82,7 @@ best_hint <- function(ped, wt = c(1000, 10, 1), tolerance = 0) {
 
     n <- length(ped$ped$id)
     for (perm in seq_len(nrow(pmat))) {
-        hint <- cbind(1:n, rep(0, n))
+        hint <- cbind(seq_len(n), rep(0, n))
         hint[fmom, 1] <- pmat[perm, ]
         # this fixes up marriages and such
         newhint <- auto_hint(ped, hints = hint[, 1])
@@ -93,8 +93,8 @@ best_hint <- function(ped, wt = c(1000, 10, 1), tolerance = 0) {
         # Compute the error measures
         err <- rep(0, 3)
         maxlev <- nrow(plist$nid)
-        for (lev in 1:maxlev) {
-            idlist <- plist$nid[lev, 1:plist$n[lev]]
+        for (lev in seq_len(maxlev)) {
+            idlist <- plist$nid[lev, seq_len(plist$n[lev])]
             dups <- duplicated(idlist)
             if (any(dups)) {
                 err[1] <- err[1] + sum(dups)

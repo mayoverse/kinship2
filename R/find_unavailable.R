@@ -9,9 +9,11 @@
 #'
 #' @details
 #' Originally written as pedTrim by Steve Iturria, modified by Dan Schaid 2007,
-#' and now split into the two separate functions: `find_unavailable()`, and
-#' `trim()` to do the tasks separately.  `find_unavailable()`
-#' calls [exclude_stray_marryin()] to find stray available marry-ins who are
+#' and now split into the two separate functions:
+#' `find_unavailable()`, and `trim()` to do the tasks separately.
+#' `find_unavailable()` calls
+#' [exclude_stray_marryin()]
+#' to find stray available marry-ins who are
 #' isolated after trimming their unavailable offspring, and
 #' [exclude_unavail_founders()].
 #' If the subject ids are character, make sure none of the characters in the
@@ -25,6 +27,11 @@
 #'
 #' @section Side Effects: relation matrix from `trim` is trimmed of any
 #' special relations that include the subjects to trim.
+#'
+#' @examples
+#' data(sampleped)
+#' ped1 <- pedigree(sampleped[sampleped$family == "1",])
+#' find_unavailable(ped1)
 #'
 #' @seealso [shrink()]
 #' @include utils.R
@@ -83,7 +90,6 @@ find_unavailable <- function(ped, avail = ped$ped$avail) {
 #' The data frame is trimmed of any founders who are not parents.
 #'
 #' @keywords internal
-#' @export
 exclude_stray_marryin <- function(id, dadid, momid) {
     # get rid of founders who are not parents (stray available marryins
     # who are isolated after trimming their unavailable offspring)
@@ -118,7 +124,6 @@ exclude_stray_marryin <- function(id, dadid, momid) {
 #' - id Vector of subject identifiers
 #' - dadid Vector of father identifiers
 #' - momid Vector of mother identifiers
-#' @export
 exclude_unavail_founders <- function(id, dadid, momid, avail, missid = "0") {
     n_old <- length(id)
 
@@ -175,7 +180,7 @@ exclude_unavail_founders <- function(id, dadid, momid, avail, missid = "0") {
         # dad and mom are the parents of sibships of size 1
         dad <- dad[zed]
         mom <- mom[zed]
-        for (i in 1:n) {
+        for (i in seq_len(n)) {
             ## check if mom and dad are founders (where their parents = 0)
             dad_f <- (dadid[id == dad[i]] == 0) & (momid[id == dad[i]] == 0)
             mom_f <- (dadid[id == mom[i]] == 0) & (momid[id == mom[i]] == 0)

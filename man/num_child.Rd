@@ -42,8 +42,9 @@ The value relation code recognized by the function are the one defined
 by the \code{\link[=rel_code_to_factor]{rel_code_to_factor()}} function.}
 
 \item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the pedigree (i.e. \code{dadid} and \code{momid} equal to
-the value of this variable).  The default for \code{missid} is \code{"0"}.}
+no father and no mother in the pedigree
+(i.e. \code{dadid} and \code{momid} equal to the value of this variable).
+The default for \code{missid} is \code{"0"}.}
 
 \item{reset}{If TRUE, the \code{num_child_tot}, \code{num_child_ind} and
 the \code{num_child_dir} columns are reset.}
@@ -70,4 +71,10 @@ Compute the number of direct child but also the number
 of indirect child given by the ones related with the linked spouses.
 If a relation ship matrix is given, then even if no children is present
 between 2 spouses, the indirect childs will still be added.
+}
+\examples{
+data(sampleped)
+ped1 <- pedigree(sampleped[sampleped$family == "1",])
+ped1 <- num_child(ped1)
+summary(ped1$ped)
 }

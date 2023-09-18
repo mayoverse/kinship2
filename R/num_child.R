@@ -24,7 +24,11 @@ NULL
 #' ## When obj is a pedigree object
 #' An updated pedigree object with the columns `num_child_dir`, `num_child_ind`
 #' and `num_child_tot` added to the pedigree `ped` slot.
-#'
+#' @examples
+#' data(sampleped)
+#' ped1 <- pedigree(sampleped[sampleped$family == "1",])
+#' ped1 <- num_child(ped1)
+#' summary(ped1$ped)
 #' @include pedigreeClass.R
 #' @export
 setGeneric("num_child", signature = "obj",

@@ -44,7 +44,7 @@ pedigree.  It consists of 3 parts:
 - The left to right order in which founders should be processed.
 - The order in which siblings should be listed within a family.
 - For selected spouse pairs, who is on the left/right, and which of the
-  two should be the anchor, i.e., determine where the marriage is plotted.
+two should be the anchor, i.e., determine where the marriage is plotted.
   
 The default starting values for all of these are simple: founders are 
 processed in the order in which they appear in the data set, 
@@ -82,12 +82,12 @@ The basic algorithm is trial and error.
 - Call align to see how this works out
 - Fix any spouses that are not next to each other but could be.
 - Any fix on the top level mixes up everything below, so we do the
-    fixes one level at a time.
+fixes one level at a time.
 
-The routine makes no attempt to reorder founders.  It just is not smart enough
+The routine makes no attempt to reorder founders. It just is not smart enough
 to figure that out.
 
-The first thing to be done is to check on twins.  They increase the complexity, since
+The first thing to be done is to check on twins. They increase the complexity, since
 twins need to move together.  The `ped$rel$code` object is a factor, so first turn that into numeric.
 We create 3 vectors:
 
@@ -215,18 +215,19 @@ are connected to their parents.
 # The second, more complex test pedigree
 #
 test2 <- data.frame(id = c(1:13, 21:41),
-                    dadid = c(0, 0, 1, 1, 1, 0, 0, 6, 6, 6, 0, 11, 11,
-                        0, 0, 0, 0, 0, 0, 21, 21, 21, 23, 23, 25, 28,
-                        28, 28, 28, 32, 32, 32, 32, 33
-                    ),
-                    momid = c(0, 0, 2, 2, 2, 0, 0, 7, 7, 7, 0, 5, 9,
-                        0, 0, 0, 0, 0, 0, 22, 22, 22, 24, 24, 26, 31,
-                        31, 31, 31, 29, 29, 29, 29, 13
-                    ),
-                    sex = c(1, 2, 1, 2, 2, 1, 2, 1, 2, 1, 1, 1, 2, 1,
-                        2, 1, 2, 1, 2, 1, 1, 2, 2, 2, 1, 1, 1, 2, 2,
-                        1, 2, 1, 1, 2
-                    ))
+    dadid = c(0, 0, 1, 1, 1, 0, 0, 6, 6, 6, 0, 11, 11,
+        0, 0, 0, 0, 0, 0, 21, 21, 21, 23, 23, 25, 28,
+        28, 28, 28, 32, 32, 32, 32, 33
+    ),
+    momid = c(0, 0, 2, 2, 2, 0, 0, 7, 7, 7, 0, 5, 9,
+        0, 0, 0, 0, 0, 0, 22, 22, 22, 24, 24, 26, 31,
+        31, 31, 31, 29, 29, 29, 29, 13
+    ),
+    sex = c(1, 2, 1, 2, 2, 1, 2, 1, 2, 1, 1, 1, 2, 1,
+        2, 1, 2, 1, 2, 1, 1, 2, 2, 2, 1, 1, 1, 2, 2,
+        1, 2, 1, 1, 2
+    )
+)
 ped2 <- pedigree(test2)
 ped2a <- pedigree(test2, hints = list(
     order = seq_along(test2$id)
@@ -300,26 +301,28 @@ This will cause the common spouse to be plotted in the middle.
 # A simple pedigree to illustrate autohint's code
 #
 test3 <- data.frame(id = 1:14,
-                    sex = c("m", "f")[c(2, 1, 1, 1, 1, 1, 2,
-                        2, 1, 2, 1, 2, 2, 1
-                    )],
-                    dadid = c(0, 6, 2, 2, 2, 0, 0, 11, 0, 9, 6, 0, 6, 11),
-                    momid = c(0, 7, 1, 1, 1, 0, 0, 12, 0, 1, 7, 0, 7, 12),
-                    affected = c(0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0))
+    sex = c("m", "f")[c(2, 1, 1, 1, 1, 1, 2,
+        2, 1, 2, 1, 2, 2, 1
+    )],
+    dadid = c(0, 6, 2, 2, 2, 0, 0, 11, 0, 9, 6, 0, 6, 11),
+    momid = c(0, 7, 1, 1, 1, 0, 0, 12, 0, 1, 7, 0, 7, 12),
+    affected = c(0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0)
+)
 ped3 <- pedigree(test3, hints = list(
     order = 1:14
 ))
 
 test4 <- data.frame(id = 1:17,
-                    sex = c("m", "f")[c(2, 1, 1, 2, 2, 1, 2, 1,
-                        2, 2, 1, 2, 2, 1, 1, 2, 2
-                    )],
-                    dadid = c(0, 8, 6, 6, 0, 0, 0, 0, 11,
-                        0, 0, 6, 0, 0, 0, 11, 14
-                    ),
-                    momid = c(0, 9, 5, 5, 0, 0, 0, 0, 10,
-                        0, 0, 7, 0, 0, 0, 12, 5
-                    ))
+    sex = c("m", "f")[c(2, 1, 1, 2, 2, 1, 2, 1,
+        2, 2, 1, 2, 2, 1, 1, 2, 2
+    )],
+    dadid = c(0, 8, 6, 6, 0, 0, 0, 0, 11,
+        0, 0, 6, 0, 0, 0, 11, 14
+    ),
+    momid = c(0, 9, 5, 5, 0, 0, 0, 0, 10,
+        0, 0, 7, 0, 0, 0, 12, 5
+    )
+)
 
 ped4 <- pedigree(test4, hints = list(
     order = 1:17
@@ -354,28 +357,28 @@ Align
 The top level routine for alignment has 5 arguments
 
 - $ped$ a pedigree or pedigreeList object. In the case of
-    the latter we loop over each family separately.
+the latter we loop over each family separately.
 - $packed$ do we allow branches of the tree to overlap?  
-    If FALSE the drawing is much easier, but final drawing can
-    take up a huge amount of space.  
+If FALSE the drawing is much easier, but final drawing can
+take up a huge amount of space.  
 - $width$ the minimum width for a packed pedigree. This
-    affects only small pedigrees, since the minimum possible
-    width for a pedigree is the largest number of individiuals in
-    one of the generations.
+affects only small pedigrees, since the minimum possible
+width for a pedigree is the largest number of individiuals in
+one of the generations.
 - $align$ should the final step of alignment be done?  This
-    tries to center children under parents, to the degree possible.
+tries to center children under parents, to the degree possible.
 - $hints$ object.  This is normally blank and auto_hint
-      is invoked. 
+is invoked. 
 
 The result coming back from align is a set of vectors and
 matrices:
 
 - $n$ vector, number of entries per level
 - $nid$ matrix, one row per level, numeric id of the subject plotted
-    here
+here
 - $pos$ the horizontal position for plotting
 - $spouse$ integer matrix, one row per level, subject directly to my
-    right is my spouse (1), a double marriage (2), or neither (0).
+right is my spouse (1), a double marriage (2), or neither (0).
 - $fam$ matrix, link upward to my parents, or 0 if no link.
 
 ## Setup1 -align
@@ -387,10 +390,10 @@ subject id (ignoring the actual id label).
 - Verify that the hints are correct.
 - The relation data frame, if present, has a factor, convert to numeric.
 - Create the $spouselist$ array.  This has 4 columns
-  - Husband index (4 = 4th person in the pedigree structure)
-  - Wife index
-  - Plot order: 1 = husband left, 2 = wife left
-  - Anchor: 1 = left member, 2 = right member, 0 = not yet determined
+    - Husband index (4 = 4th person in the pedigree structure)
+    - Wife index
+    - Plot order: 1 = husband left, 2 = wife left
+    - Anchor: 1 = left member, 2 = right member, 0 = not yet determined
 
 As the routine proceeds a spousal pair can be encountered
 multiple times; we take them out of this list when the ``connected''
@@ -413,12 +416,12 @@ might modify the output, the spouselist format easier for the code.
 The [align] routine does the alignment using 3 co-routines:
 
 - $alignped1$ called with a single subject, returns the subtree
-    founded on this subject, as though it were the only tree
+founded on this subject, as though it were the only tree
 - $alignped2$ called with a set of sibs, calls alignped1 and 
-    alignped3 multiple times to create a joint pedigree
+alignped3 multiple times to create a joint pedigree
 - $alignped3$ given two side by side plotting structures, merge them
-    into a single one
- 
+into a single one
+
 Call [alignped1] sequentially with each founder pair and merge the
 results.  
 A founder pair is a married pair, neither of which has a father.
@@ -430,11 +433,11 @@ Now finish up.
 There are 4 tasks to do:
 
 - For convenience the lower level routines kept the spouse
-    and nid arrays as a single object -- unpack them
+and nid arrays as a single object -- unpack them
 - In the spouse array a 1 in position i indicates that subject
-    i and i+1 are joined as a marriage.  If these two have a common
-    ancestor change this to a 2, which indicates that a double line
-    should be used in the plot.
+i and i+1 are joined as a marriage.  If these two have a common
+ancestor change this to a 2, which indicates that a double line
+should be used in the plot.
 - Add twins data to the output.
 - Do final alignment
 
@@ -623,7 +626,7 @@ parameters $a$ and $b$. For each set of siblings $x$ with parents at $p_1$
 and $p_2$ the alignment penalty is
 
 $$
-   (1/k^a)\sum{i=1}{k} (x_i - (p_1 + p_2)^2
+    (1/k^a)\sum{i=1}{k} (x_i - (p_1 + p_2)^2
 $$
 
 where $k$ is the number of siblings in the set.
@@ -657,3 +660,10 @@ Next come the constraints.  If there are $k$ subjects on a line there will
 be $k+1$ constraints for that line.  The first point must be $\ge 0$, each
 subesquent one must be at least 1 unit to the right, and the final point
 must be $\le$ the max width.
+
+Session information
+===================
+
+```{r}
+sessionInfo()
+```

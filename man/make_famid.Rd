@@ -46,6 +46,11 @@ subject.  If the pedigree is totally connected, then everyone will end up in
 tree 1, otherwise the tree numbers represent the disconnected subfamilies.
 Singleton subjects give a zero for family number.
 }
+\examples{
+data(sampleped)
+ped <- pedigree(sampleped[,-1])
+make_famid(ped1)
+}
 \seealso{
 \code{\link[=kinship]{kinship()}}
 }

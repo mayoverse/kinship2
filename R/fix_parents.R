@@ -65,7 +65,8 @@ setGeneric("fix_parents", signature = "obj",
 #' @rdname fix_parents
 #' @aliases fix_parents,character
 setMethod("fix_parents", "character", function(
-        obj, dadid, momid, sex, family = NULL, missid = "0") {
+    obj, dadid, momid, sex, family = NULL, missid = "0"
+) {
     ## fix sex of parents add parents that are missing
     n <- length(obj)
     id <- obj
@@ -84,9 +85,9 @@ setMethod("fix_parents", "character", function(
 
     sex <- as.numeric(sex_to_factor(sex))
     if (min(sex) == 0) {
-        warning(paste0("Sex values contain 0, but expected codes 1-4.\n",
+        warning("Sex values contain 0, but expected codes 1-4.\n",
             "Setting 0=male, 1=female, 2=unknown, 3=terminated. \n"
-        ))
+        )
         sex <- sex + 1
     }
     sex <- ifelse(sex < 1 | sex > 4, 3, sex)
@@ -112,7 +113,7 @@ setMethod("fix_parents", "character", function(
     if (any(duplicated(id))) {
         duplist <- id[duplicated(id)]
         msg_nb <- min(length(duplist), 6)
-        stop(paste("Duplicate subject id:", duplist[1:msg_nb]))
+        stop("Duplicate subject id:", duplist[seq_len(msg_nb)])
     }
     findex <- match(dadid, id, nomatch = 0)
     mindex <- match(momid, id, nomatch = 0)

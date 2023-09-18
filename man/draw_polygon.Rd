@@ -38,3 +38,4 @@ Plot the polygon or add it to a ggplot object
 \description{
 Draw a polygon for a pedigree
 }
+\keyword{internal}

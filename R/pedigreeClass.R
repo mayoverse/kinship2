@@ -31,6 +31,8 @@ NULL
 #' the plot order of a husband/wife pair. Each row contains the index of the
 #' left spouse, the right hand spouse, and the anchor
 #' (i.e : `1` = left, `2` = right, `0` = either).
+#'
+#' @return A Pedigree object.
 #' @seealso [pedigree()]
 #' @docType class
 #' @name Pedigree-class
@@ -75,8 +77,12 @@ setMethod("summary", signature(object = "Pedigree"), function(object) {
     print(summary(object@ped, maxsum = 5))
     cat("and", nrow(object@rel), "special relationships.", fill = TRUE)
     print(summary(object@rel))
-    cat("The filling scales columns are:", levels(as.factor(object@scales$fill$column_values)), fill = TRUE)
-    cat("The border scale column are:", levels(as.factor(object@scales$border$column)), fill = TRUE)
+    cat("The filling scales columns are:",
+        levels(as.factor(object@scales$fill$column_values)), fill = TRUE
+    )
+    cat("The border scale column are:",
+        levels(as.factor(object@scales$border$column)), fill = TRUE
+    )
 })
 
 #' Extract parts of a Pedigree object

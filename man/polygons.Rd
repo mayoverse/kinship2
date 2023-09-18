@@ -16,3 +16,4 @@ and theta
 \description{
 Create a list of the different polygonal elements
 }
+\keyword{internal}

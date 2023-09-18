@@ -77,8 +77,8 @@ generate_aff_inds <- function(values, mods_aff = NULL,
     aff_to_use <- c(TRUE, FALSE)
     names(aff_to_use) <- c(aff_lab, healthy_lab)
 
-    labels <- suppressMessages(revalue(as.character(mods), labels_to_use))
-    affected <- suppressMessages(revalue(labels, aff_to_use))
+    labels <- revalue(as.character(mods), labels_to_use, warn_missing = FALSE)
+    affected <- revalue(labels, aff_to_use, warn_missing = FALSE)
     as.data.frame(list(mods = mods, labels = labels, affected = affected))
 }
 TRUE

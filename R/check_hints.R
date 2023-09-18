@@ -14,6 +14,7 @@
 #' @inheritParams sex_to_factor
 #' @inheritParams align
 #'
+#' @return Nothing, but will stop if there is a problem.
 #' @examples
 #' data(sampleped)
 #' ped1 <- pedigree(sampleped[sampleped$family == "1",])

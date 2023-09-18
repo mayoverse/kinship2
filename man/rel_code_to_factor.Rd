@@ -27,3 +27,6 @@ an ordered factor vector containing the transformed variable
 \description{
 Transform a relationship code variable to an ordered factor
 }
+\examples{
+rel_code_to_factor(c(1, 2, 3, 4, "MZ twin", "DZ twin", "UZ twin", "Spouse"))
+}
