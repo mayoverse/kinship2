@@ -194,7 +194,7 @@ setMethod("fix_parents", "data.frame", function(
         if (is.logical(df[[filter]])) {
             df <- df[df[[filter]], ]
         } else {
-            stop("Error, filtering column must me only TRUE or FALSE")
+            stop("Filtering column must me only TRUE or FALSE")
         }
     }
     if (nrow(df) > 2) {

@@ -149,10 +149,10 @@ alignped4 <- function(rval, spouse, level, width, align) {
     fit <- tryCatch({
         solve.QP(pp, rep(0, n), t(cmat), dvec)
     }, warning = function(w) {
-        message("Solve QP ended with a warning", w)
+        message("Solve QP ended with", w)
         return(NA)
     }, error = function(e) {
-        message("Solve QP ended with an error", e)
+        message("Solve QP ended with", e)
         return(NA)
     })
 

@@ -45,7 +45,7 @@ pedigree.  It consists of 3 parts:
 - The order in which siblings should be listed within a family.
 - For selected spouse pairs, who is on the left/right, and which of the
 two should be the anchor, i.e., determine where the marriage is plotted.
-  
+
 The default starting values for all of these are simple: founders are 
 processed in the order in which they appear in the data set, 
 children appear in the order they are found in the data set,
@@ -568,8 +568,9 @@ in the rval structure for this level. (Where did Curt Olswold. find these famili
 alignped3
 ==========================
 
-The third alignment co-routine merges two pedigree trees which are side by side into a
-single object. The primary special case is when the rightmost person in the left
+The third alignment co-routine merges two pedigree trees which are side by side
+into a single object.
+The primary special case is when the rightmost person in the left
 tree is the same as the leftmost person in the right tree; we  need not plot two
 copies of the same person side by side. (When initializing the output structures
 do not  worry about this - there is no harm if they are a column bigger than

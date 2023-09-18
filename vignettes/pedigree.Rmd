@@ -82,8 +82,9 @@ Two datasets are provided within the kinship2 package:
 + sampleped: two samplepedigrees, with 41 and 14 subjects
 
 
-This vignette uses the two pedigrees in ~sampleped~. For more information on these
-datasets, see help(minnbreast) and help(sampleped).
+This vignette uses the two pedigrees in ~sampleped~.
+For more information on these  datasets, see
+`help(minnbreast)` and `help(sampleped)`.
 
 ## Pedigree
 
