@@ -21,22 +21,25 @@ pedigree(obj, ...)
   momid,
   sex,
   family = NA,
-  avail = NA,
-  affected = NA,
-  status = NA,
+  avail = NULL,
+  affected = NULL,
+  status = NULL,
+  steril = NULL,
   relation = NULL,
   missid = "0",
-  col_aff = "affected",
+  col_aff = "affection",
+  normalize = TRUE,
   ...
 )
 
 \S4method{pedigree}{data.frame}(
   obj = data.frame(id = character(), dadid = character(), momid = character(), sex =
-    numeric(), family = character(), available = numeric(), affected = numeric()),
+    numeric(), family = character(), available = numeric(), affection = numeric()),
   relation = data.frame(id1 = character(), id2 = character(), code = numeric(), family =
     character()),
   cols_ren_ped = list(indId = "id", fatherId = "dadid", motherId = "momid", gender =
-    "sex"),
+    "sex", family = "family", sterilisation = "steril", vitalStatus = "status", affection
+    = "affected"),
   cols_ren_rel = list(indId1 = "id1", indId2 = "id2"),
   scales = list(fill = data.frame(order = numeric(), column_values = character(),
     column_mods = character(), mods = numeric(), labels = character(), affected =
@@ -46,20 +49,25 @@ pedigree(obj, ...)
   hints = list(order = NULL, spouse = NULL),
   normalize = TRUE,
   missid = "0",
-  col_aff = "affected",
+  col_aff = "affection",
   ...
 )
 }
 \arguments{
 \item{obj}{A vector of the individuals identifiers or a data.frame
 with the individuals informations.
-The minimum columns required are \code{id}, \code{dadid}, \code{momid} and
-\code{sex}.
+The minimum columns required are \code{indID}, \code{fatherId}, \code{motherId} and
+\code{gender}.
 The \code{family} column can also be used to specify the family of the
 individuals and will be merge to the \code{id} field separated by an
 underscore.
-The following columns are also recognize \code{steril}, \code{avail},
-\code{status}, \code{affected}.
+The following columns are also recognize \code{sterilisation}, \code{available},
+\code{vitalStatus}, \code{affection}. The four of them will be transformed with the
+\code{\link[=vect_to_binary]{vect_to_binary()}} function when the normalisation is selected and will
+be set respectively to \code{steril}, \code{avail},
+\code{status} and \code{affected}.
+If you do not use the normalisation, the columns will be checked to
+be \code{0} or \code{1}.
 They respectively correspond to the sterilisation status,
 the availability status, the death status and the affection status
 of the individuals. The values recognized for those columns are \code{1} or
@@ -107,6 +115,14 @@ the gender of the individuals. The following values are recognized:
 \item \code{NA} : vital status not known
 }}
 
+\item{steril}{A numeric vector of sterilisation status of each individual
+(e.g., genotyped). The values are:
+\itemize{
+\item \code{0}  : not sterilised
+\item \code{1}  : sterilised
+\item \code{NA} : sterilisation status not known
+}}
+
 \item{relation}{A matrix or a data.frame with 3 required columns
 (i.e. id1, id2, code) specifying special relationship between pairs
 of individuals.
@@ -127,6 +143,8 @@ no father and no mother in the pedigree
 The default for \code{missid} is \code{"0"}.}
 
 \item{col_aff}{A string with the column name to use for the affection status.}
+
+\item{normalize}{A logical to know if the data should be normalised.}
 
 \item{cols_ren_ped}{A named list with the columns to rename for the
 pedigree dataframe.}
@@ -153,8 +171,6 @@ index of the left spouse, the right hand spouse, and the anchor
 Children will preferentially appear under the parents of the anchored
 spouse.
 }}
-
-\item{normalize}{A logical to know if the data should be normalised.}
 }
 \value{
 A Pedigree object.

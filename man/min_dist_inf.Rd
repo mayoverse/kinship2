@@ -109,7 +109,7 @@ by 2, the minimum distance is increased by 1.
 \examples{
 data(sampleped)
 ped <- pedigree(sampleped)
-min_dist_inf(ped, col_aff = "affected_aff")$ped
+min_dist_inf(ped, col_aff = "affection_aff")$ped
 
 }
 \seealso{

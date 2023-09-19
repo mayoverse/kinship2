@@ -10,13 +10,18 @@
 #' @inheritParams align
 #' @param obj A vector of the individuals identifiers or a data.frame
 #' with the individuals informations.
-#' The minimum columns required are `id`, `dadid`, `momid` and
-#' `sex`.
+#' The minimum columns required are `indID`, `fatherId`, `motherId` and
+#' `gender`.
 #' The `family` column can also be used to specify the family of the
 #' individuals and will be merge to the `id` field separated by an
 #' underscore.
-#' The following columns are also recognize `steril`, `avail`,
-#' `status`, `affected`.
+#' The following columns are also recognize `sterilisation`, `available`,
+#' `vitalStatus`, `affection`. The four of them will be transformed with the
+#' [vect_to_binary()] function when the normalisation is selected and will
+#' be set respectively to `steril`, `avail`,
+#' `status` and `affected`.
+#' If you do not use the normalisation, the columns will be checked to
+#' be `0` or `1`.
 #' They respectively correspond to the sterilisation status,
 #' the availability status, the death status and the affection status
 #' of the individuals. The values recognized for those columns are `1` or
@@ -71,10 +76,15 @@ setMethod("pedigree", "numeric", function(obj, ...
 #' - `0`  : alive
 #' - `1`  : dead
 #' - `NA` : vital status not known
+#' @param steril A numeric vector of sterilisation status of each individual
+#' (e.g., genotyped). The values are:
+#' - `0`  : not sterilised
+#' - `1`  : sterilised
+#' - `NA` : sterilisation status not known
 setMethod("pedigree", "character", function(obj, dadid, momid,
-    sex, family = NA, avail = NA, affected = NA, status = NA,
-    relation =  NULL,
-    missid = "0", col_aff = "affected", ...
+    sex, family = NA, avail = NULL, affected = NULL, status = NULL,
+    steril = NULL, relation =  NULL,
+    missid = "0", col_aff = "affection", normalize = TRUE, ...
 ) {
     n <- length(obj)
     ## Code transferred from noweb to markdown vignette.
@@ -84,6 +94,17 @@ setMethod("pedigree", "character", function(obj, dadid, momid,
     if (length(momid) != n) stop("Mismatched lengths, id and momid")
     if (length(dadid) != n) stop("Mismatched lengths, id and momid")
     if (length(sex) != n) stop("Mismatched lengths, id and sex")
+    if (length(steril) != n & !is.null(steril)) {
+        stop("Mismatched lengths, id and steril")
+    }
+
+    if (length(avail) != n & !is.null(avail)) {
+        stop("Mismatched lengths, id and avail")
+    }
+    if (length(status) != n & !is.null(status)) {
+        stop("Mismatched lengths, id and status")
+    }
+
 
     ped_df <- data.frame(
         family = family,
@@ -94,7 +115,7 @@ setMethod("pedigree", "character", function(obj, dadid, momid,
     )
     if (any(!is.na(affected))) {
         if (is.vector(affected)) {
-            ped_df$affected <- affected
+            ped_df$affection <- affected
         } else {
             ped_df <- cbind(ped_df, affected)
             col_aff <- colnames(affected)
@@ -104,7 +125,10 @@ setMethod("pedigree", "character", function(obj, dadid, momid,
         ped_df$available <- avail
     }
     if (any(!is.na(status))) {
-        ped_df$status <- status
+        ped_df$vitalStatus <- status
+    }
+    if (any(!is.na(steril))) {
+        ped_df$sterilisation <- steril
     }
     if (is.null(relation)) {
         relation <- data.frame(
@@ -131,7 +155,7 @@ setMethod("pedigree", "data.frame",  function(
         sex = numeric(),
         family = character(),
         available = numeric(),
-        affected = numeric()
+        affection = numeric()
     ),
     relation = data.frame(
         id1 = character(),
@@ -143,7 +167,11 @@ setMethod("pedigree", "data.frame",  function(
         "indId" = "id",
         "fatherId" = "dadid",
         "motherId" = "momid",
-        "gender" = "sex"
+        "gender" = "sex",
+        "family" = "family",
+        "sterilisation" = "steril",
+        "vitalStatus" = "status",
+        "affection" = "affected"
     ),
     cols_ren_rel = list(
         "indId1" = "id1",
@@ -174,7 +202,7 @@ setMethod("pedigree", "data.frame",  function(
     ),
     normalize = TRUE,
     missid = "0",
-    col_aff = "affected",
+    col_aff = "affection",
     ...
 ) {
     ped_df <- obj

@@ -74,7 +74,7 @@ Other contributors:
 \itemize{
   \item Daniel Schaid [contributor]
   \item Elizabeth Atkinson [contributor]
-  \item Carly Mester [contributor]
+  \item Louis Le Nezet [contributor]
 }
 
 }

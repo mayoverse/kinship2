@@ -43,9 +43,9 @@ NULL
 #' @include plot_fct.R
 #' @examples
 #' data(sampleped)
-#' ped <- pedigree(ped)
-#' df <- ped_to_plotdf(ped)
-#' plot_fromdf(df)
+#' ped1 <- pedigree(sampleped[sampleped$family == 1,])
+#' lst <- ped_to_plotdf(ped1)
+#' #plot_fromdf(lst$df, lst$usr)
 #' @return an invisible ggplot object and a plot on the current plotting device
 #' @export
 plot_fromdf <- function(

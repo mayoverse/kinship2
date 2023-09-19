@@ -91,6 +91,6 @@ columns.
 \examples{
 data("sampleped")
 ped <- pedigree(sampleped)
-is_informative(ped, col_aff = "affected_aff")
+is_informative(ped, col_aff = "affection_aff")
 
 }

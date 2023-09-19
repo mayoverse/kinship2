@@ -21,7 +21,6 @@ test_that("pedigree old usage compatibility", {
     ped1 <- with(sampleped,
         pedigree(id, dadid, momid, sex, family, available, affected)
     )
-
     expect_equal(ped1, pedigree(sampleped))
 
     ped2mat <- matrix(c(
@@ -68,11 +67,12 @@ test_that("pedigree from sampleped and affectation", {
         "fatherId" = "dadid",
         "motherId" = "momid",
         "gender" = "sex",
-        "available" = "avail"
+        "available" = "avail",
+        "affection" = "affected"
     ))
 
     expect_equal(nrow(ped1@ped), 41)
-    expect_equal(ncol(ped1@ped), 16)
+    expect_equal(ncol(ped1@ped), 19)
     expect_equal(nrow(ped1@rel), 0)
     expect_equal(ncol(ped1@rel), 7)
 
@@ -93,13 +93,14 @@ test_that("pedigree subscripting", {
     data(minnbreast)
     minnped <- pedigree(minnbreast, cols_ren_ped = list(
         "indId" = "id", "fatherId" = "fatherid",
-        "motherId" = "motherid", "gender" = "sex", "family" = "famid"
+        "motherId" = "motherid", "gender" = "sex", "family" = "famid",
+        "affection" = "cancer"
     ))
     expect_equal(nrow(minnped$ped), 28081)
-    expect_equal(ncol(minnped[["ped"]]), 26)
+    expect_equal(ncol(minnped[["ped"]]), 28)
 
     ped8 <- minnped[minnped$ped$family == "8",
-        c("id", "dadid", "momid", "sex", "cancer")
+        c("id", "dadid", "momid", "sex", "affection")
     ]
 
     expect_equal(nrow(ped8$ped), 40)
@@ -123,17 +124,17 @@ test_that("pedigree subscripting", {
     expect_equal(test1, test3)
     expect_equal(test1, test4)
 
-    pedcol <- minnped[, c("id", "dadid", "momid", "sex", "cancer")]
+    pedcol <- minnped[, c("id", "dadid", "momid", "sex", "affection")]
     expect_equal(nrow(pedcol$ped), 28081)
     expect_equal(ncol(pedcol$ped), 11)
 
     pedrow <- minnped[c("8_150", "8_163", "8_145", "8_135", "8_136")]
     expect_equal(nrow(pedrow$ped), 5)
-    expect_equal(ncol(pedrow$ped), 26)
+    expect_equal(ncol(pedrow$ped), 28)
 })
 
 test_that("pedigree to dataframe", {
     data("sampleped")
     ped <- pedigree(sampleped)
-    expect_equal(dim(as.data.frame(ped)), c(55, 16))
+    expect_equal(dim(as.data.frame(ped)), c(55, 19))
 })

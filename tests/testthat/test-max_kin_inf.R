@@ -25,11 +25,11 @@ test_that("min_dist_inf works", {
 test_that("min_dist_inf works with pedigree", {
     data("sampleped")
     ped <- pedigree(sampleped)
-    ped <- generate_colors(ped, col_aff = "affected",
+    ped <- generate_colors(ped, col_aff = "affection",
         threshold = 0.5, sup_thres_aff = TRUE
     )
 
-    mxkin <- min_dist_inf(ped, col_aff = "affected_aff", informative = "Av")
+    mxkin <- min_dist_inf(ped, col_aff = "affection_aff", informative = "Av")
     expect_s4_class(mxkin, "Pedigree")
     expect_equal(sum(mxkin$ped$kin, na.rm = TRUE), 90)
 })

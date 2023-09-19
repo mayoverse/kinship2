@@ -69,3 +69,12 @@ A list containing the data frame and the user coordinates.
 \description{
 Convert a pedigree to a data frame of element to plot
 }
+\examples{
+data(sampleped)
+ped1 <- pedigree(sampleped[sampleped$family == 1,])
+ped_to_plotdf(ped1)
+}
+\seealso{
+\code{\link[=plot_fromdf]{plot_fromdf()}}
+\code{\link[=ped_to_legdf]{ped_to_legdf()}}
+}

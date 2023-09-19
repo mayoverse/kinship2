@@ -8,7 +8,7 @@ rel_code_to_factor(rel_code)
 }
 \arguments{
 \item{rel_code}{A character, factor or numeric vector corresponding to
-the realtion code of the individuals:
+the relation code of the individuals:
 \itemize{
 \item MZ twin = Monozygotic twin
 \item DZ twin = Dizygotic twin

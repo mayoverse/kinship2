@@ -16,13 +16,13 @@ test_that("pedigree other test", {
     withr::local_options(width = 50)
     ped2df <- as.data.frame(ped2mat)
     names(ped2df) <- c("family", "indId", "fatherId", "motherId",
-        "gender", "affected", "available"
+        "gender", "affection", "available"
     )
 
     ped2df$disease <- c(NA, NA, 1, 0, 0, 0, 0, 1, 1, 1)
     ped2df$smoker <- c(0, NA, 0, 0, 1, 1, 1, 0, 0, 0)
     ped2df$availability <- c(0, 0, 1, 1, 0, 1, 1, 1, 1, 1)
-    ped2df$status <- c(1, 1, 1, 0, 1, 0, 0, 8, 0, 0)
+    ped2df$vitalStatus <- c(1, 1, 1, 0, 1, 0, 0, 8, 0, 0)
 
     rel_df <- data.frame(indId1 = 8, indId2 = 9, code = 3, family = 1)
     ped <- pedigree(ped2df, rel_df)
@@ -42,7 +42,7 @@ test_that("pedigree other test", {
 
     lst <- ped_to_plotdf(ped)
     expect_equal(length(lst), 2)
-    expect_equal(dim(lst$df), c(90, 15))
+    expect_equal(dim(lst$df), c(88, 15))
     expect_snapshot(lst)
     p <- plot(ped, title = "Pedigree", ggplot_gen = TRUE)
     vdiffr::expect_doppelganger("Ped 2 affections ggplot",

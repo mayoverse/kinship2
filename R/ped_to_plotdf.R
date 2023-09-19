@@ -19,6 +19,13 @@ NULL
 #' @inheritParams subregion
 #'
 #' @return A list containing the data frame and the user coordinates.
+#' @examples
+#' data(sampleped)
+#' ped1 <- pedigree(sampleped[sampleped$family == 1,])
+#' ped_to_plotdf(ped1)
+#' @seealso [plot_fromdf()]
+#' [ped_to_legdf()]
+#' @export
 ped_to_plotdf <- function(
     ped, packed = FALSE, width = 10, align = c(1.5, 2),
     subreg = NULL, cex = 0.5, symbolsize = cex, pconnect = 0.5, branch = 0.6,
@@ -129,7 +136,7 @@ ped_to_plotdf <- function(
 
     ## Add status
     status <- ped$ped[id[idx], "status"]
-    idx_dead <- idx[status == 1]
+    idx_dead <- idx[status == 1 & !is.na(status)]
 
     if (length(idx_dead) > 0) {
         dead_df <- data.frame(

@@ -22,10 +22,4 @@ Check if a variable given is numeric or NA
 Check if the values in \code{var} are numeric or if they are
 NA in the case that \code{na_as_num} is set to TRUE.
 }
-\examples{
-var <- c(45, 'NA', 'Test', '46.2', -2, '-46', '2NA', NA)
-check_num_na(var)
-check_num_na(var, na_as_num = FALSE)
-
-}
 \keyword{internal}

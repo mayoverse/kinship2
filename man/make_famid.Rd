@@ -48,7 +48,7 @@ Singleton subjects give a zero for family number.
 }
 \examples{
 data(sampleped)
-ped <- pedigree(sampleped[,-1])
+ped1 <- pedigree(sampleped[,-1])
 make_famid(ped1)
 }
 \seealso{

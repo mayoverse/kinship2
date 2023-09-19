@@ -53,13 +53,13 @@ test_that("is_informative works with Pedigree", {
     data("sampleped")
 
     ped <- pedigree(sampleped[1:7])
-    ped <- generate_colors(ped, col_aff = "affected",
+    ped <- generate_colors(ped, col_aff = "affection",
         threshold = 0.5, sup_thres_aff = TRUE,
         add_to_scale = FALSE
     )
 
 
-    df <- is_informative(ped, col_aff = "affected_aff",
+    df <- is_informative(ped, col_aff = "affection_aff",
         informative = "AvAf"
     )$ped
     expect_equal(

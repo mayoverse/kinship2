@@ -42,13 +42,14 @@ prefix_famid <- function(family_id, ind_id, missid = "0") {
 #' be transfered to the error dataframe.
 #'
 #' @param ped_df A data.frame with the individuals informations.
-#' The minimum columns required are `id`, `dadid`, `momid` and
-#' `sex`.
+#' The minimum columns required are `indID`, `fatherId`, `motherId` and
+#' `gender`.
 #' The `family` column can also be used to specify the family of the
 #' individuals and will be merge to the `id` field separated by an
 #' underscore.
-#' The following columns are also recognize `steril`, `avail`,
-#' `status`, `affected`.
+#' The following columns are also recognize `sterilisation`, `available`,
+#' `vitalStatus`, `affection`. The four of them will be transformed with the
+#' [vect_to_binary()] function.
 #' They respectively correspond to the sterilisation status,
 #' the availability status, the death status and the affection status
 #' of the individuals. The values recognized for those columns are `1` or
@@ -59,8 +60,22 @@ prefix_famid <- function(family_id, ind_id, missid = "0") {
 #' @inheritParams is_parent
 #'
 #' @return A dataframe with the errors identified in the `error` column
-#' @export
+#'
 #' @include utils.R
+#' @examples
+#' df <- data.frame(
+#'     indId = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+#'     fatherId = c("A", 0, 1, 3, 0, 4, 1, 0, 6, 6),
+#'     motherId = c(0, 0, 2, 2, 0, 5, 2, 0, 8, 8),
+#'     gender = c(1, 2, "m", "man", "f", "male", "m", "m", "f", "f"),
+#'     available = c("A", "1", 0, NA, 1, 0, 1, 0, 1, 0),
+#'     family = c(1, 1, 1, 1, 1, 1, 1, 2, 2, 2),
+#'     sterilisation = c("TRUE", "FALSE", TRUE, FALSE, 1, 0, 1, 0, 1, "TRUE"),
+#'     vitalStatus = c("TRUE", "FALSE", TRUE, FALSE, 1, 0, 1, 0, 1, 0),
+#'     affection = c("TRUE", "FALSE", TRUE, FALSE, 1, 0, 1, 0, 1, 0)
+#' )
+#' norm_ped(df)
+#' @export
 norm_ped <- function(
     ped_df, na_strings = c("NA", ""), missid = "0", try_num = FALSE
 ) {
@@ -72,9 +87,12 @@ norm_ped <- function(
     err <- data.frame(matrix(NA, nrow = nrow(ped_df), ncol = length(err_cols)))
     colnames(err) <- err_cols
     cols_need <- c("indId", "fatherId", "motherId", "gender")
-    cols_used <- c("sex", "avail", "id", "dadid", "momid", "error")
-    cols_to_use <- c("steril", "available", "family", "status", "affected")
-
+    cols_used <- c("sex", "steril", "avail", "id", "dadid", "momid", "error",
+        "affected", "status"
+    )
+    cols_to_use <- c("sterilisation", "available", "family",
+        "vitalStatus", "affection"
+    )
     ped_df <- check_columns(
         ped_df, cols_need, cols_used, cols_to_use,
         others_cols = TRUE, cols_to_use_init = TRUE, cols_used_init = TRUE
@@ -117,15 +135,15 @@ norm_ped <- function(
         ped_df$sex[is.na(ped_df$gender) & is_mother] <- "female"
 
         ## Add terminated for sterilized individuals that is neither dad nor mom
-        if ("steril" %in% colnames(ped_df)) {
-            ped_df$steril <- as.logical(ped_df$steril)
+        if ("sterilisation" %in% colnames(ped_df)) {
+            ped_df$steril <- vect_to_binary(ped_df$sterilisation)
             ped_df$sex[
-                ped_df$steril == "TRUE" & !is.na(ped_df$steril) &
+                ped_df$steril == 1 & !is.na(ped_df$steril) &
                     !is_father & !is_mother
             ] <- "terminated"
             err$sexErrTer[
                 (ped_df$sex == "terminated" |
-                        ped_df$steril == "TRUE" & !is.na(ped_df$steril)
+                        ped_df$steril == 1 & !is.na(ped_df$steril)
                 )  & (is_father | is_mother)
             ] <- "isSterilButIsParent"
             nb_steril_parent <- sum(!is.na(err$sexErrTer))
@@ -191,14 +209,16 @@ norm_ped <- function(
 
         #### Available ####
         if ("available" %in% colnames(ped_df)) {
-            ped_df$avail <- as.numeric(ped_df$available)
-            ped_df$avail[!is.na(ped_df$available) & ped_df$available != 0] <- 1
-            ped_df$avail[!is.na(ped_df$available) & ped_df$available == 0] <- 0
+            ped_df$avail <- vect_to_binary(ped_df$available)
         }
         #### Status ####
-        if ("status" %in% colnames(ped_df)) {
-            ped_df$status[!is.na(ped_df$status) & ped_df$status != 0] <- 1
-            ped_df$status[is.na(ped_df$status) | ped_df$status == 0] <- 0
+        if ("vitalStatus" %in% colnames(ped_df)) {
+            ped_df$status <- vect_to_binary(ped_df$vitalStatus)
+        }
+
+        #### Affected ####
+        if ("affection" %in% colnames(ped_df)) {
+            ped_df$affected <- vect_to_binary(ped_df$affection)
         }
 
         #### Convert to num ####
@@ -243,6 +263,16 @@ norm_ped <- function(
 #' The value relation code recognized by the function are the one defined
 #' by the [rel_code_to_factor()] function.
 #' @inheritParams is_parent
+#'
+#' @examples
+#' df <- data.frame(
+#'    indId1 = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+#'    indId2 = c(2, 3, 4, 5, 6, 7, 8, 9, 10, 1),
+#'    code = c("MZ twin", "DZ twin", "UZ twin", "Spouse", 1, 2,
+#'       3, 4, "MzTwin", "sp oUse"),
+#'    family = c(1, 1, 1, 1, 1, 1, 1, 2, 2, 2)
+#' )
+#' norm_rel(df)
 #'
 #' @return A dataframe with the errors identified
 #' @export

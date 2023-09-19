@@ -23,7 +23,7 @@
 #' @seealso [kinship()]
 #' @examples
 #' data(sampleped)
-#' ped <- pedigree(sampleped[,-1])
+#' ped1 <- pedigree(sampleped[,-1])
 #' make_famid(ped1)
 #' @export
 setGeneric("make_famid", signature = "obj",

@@ -137,12 +137,6 @@ NULL
 #' considered as numerical values
 #'
 #' @return A vector of boolean of the same size as `var`
-#'
-#' @examples
-#' var <- c(45, 'NA', 'Test', '46.2', -2, '-46', '2NA', NA)
-#' check_num_na(var)
-#' check_num_na(var, na_as_num = FALSE)
-#'
 #' @keywords internal
 check_num_na <- function(var, na_as_num = TRUE) {
     # Should the NA value considered as numeric values
@@ -266,7 +260,7 @@ NULL
 #' Transform a relationship code variable to an ordered factor
 #'
 #' @param rel_code A character, factor or numeric vector corresponding to
-#' the realtion code of the individuals:
+#' the relation code of the individuals:
 #' - MZ twin = Monozygotic twin
 #' - DZ twin = Dizygotic twin
 #' - UZ twin = twin of unknown zygosity
@@ -300,5 +294,42 @@ rel_code_to_factor <- function(rel_code) {
     ), code_equiv, warn_missing = FALSE))
     rel_code <- factor(rel_code, codes, ordered = TRUE)
     rel_code
+}
+TRUE
+
+#' Transform a vector variable to binary vector
+#'
+#' @param vect A character, factor, logical or numeric vector corresponding to
+#' a binary variable (i.e. 0 or 1).
+#' The following values are recognized:
+#' - character() or factor() : "TRUE", "FALSE", "0", "1", "NA" will be
+#' respectively transformed to 1, 0, 0, 1, NA.
+#' Spaces and case are ignored.
+#' All other values will be transformed to NA.
+#' - numeric() : 0 and 1 are kept, all other values are transformed to NA.
+#' - logical() : TRUE and FALSE are tansformed to 1 and 0.
+#'
+#' @return numeric binary vector of the same size as `vect` with 0 and 1
+#' @examples
+#' vect_to_binary(
+#'    c(0, 1, 2, 3.6, "TRUE", "FALSE", "0", "1", "NA", "B", TRUE, FALSE, NA)
+#' )
+#' @export
+vect_to_binary <- function(vect) {
+    if (is.factor(vect) || is.numeric(vect) || is.logical(vect)) {
+        vect <- as.character(vect)
+    }
+    ## Normalized difference notations for code
+    code_equiv <- c(
+        "0" = 0, "1" = 1, "true" = 1, "false" = 0,
+        "na" = NA
+    )
+    vect <- as.numeric(revalue(str_remove_all(
+        casefold(vect, upper = FALSE),
+        " "
+    ), code_equiv, warn_missing = FALSE
+    ))
+    vect[!vect %in% c(0, 1)] <- NA
+    vect
 }
 TRUE

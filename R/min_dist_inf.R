@@ -37,7 +37,7 @@ NULL
 #' @examples
 #' data(sampleped)
 #' ped <- pedigree(sampleped)
-#' min_dist_inf(ped, col_aff = "affected_aff")$ped
+#' min_dist_inf(ped, col_aff = "affection_aff")$ped
 #'
 #' @seealso [kinship()]
 #' @include is_informative.R

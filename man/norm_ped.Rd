@@ -8,13 +8,14 @@ norm_ped(ped_df, na_strings = c("NA", ""), missid = "0", try_num = FALSE)
 }
 \arguments{
 \item{ped_df}{A data.frame with the individuals informations.
-The minimum columns required are \code{id}, \code{dadid}, \code{momid} and
-\code{sex}.
+The minimum columns required are \code{indID}, \code{fatherId}, \code{motherId} and
+\code{gender}.
 The \code{family} column can also be used to specify the family of the
 individuals and will be merge to the \code{id} field separated by an
 underscore.
-The following columns are also recognize \code{steril}, \code{avail},
-\code{status}, \code{affected}.
+The following columns are also recognize \code{sterilisation}, \code{available},
+\code{vitalStatus}, \code{affection}. The four of them will be transformed with the
+\code{\link[=vect_to_binary]{vect_to_binary()}} function.
 They respectively correspond to the sterilisation status,
 the availability status, the death status and the affection status
 of the individuals. The values recognized for those columns are \code{1} or
@@ -48,4 +49,18 @@ Will be considered available any individual with no 'NA' values in the
 Duplicated \code{indId} will nullify the relationship of the individual.
 All individuals with errors will be remove from the dataframe and will
 be transfered to the error dataframe.
+}
+\examples{
+df <- data.frame(
+    indId = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+    fatherId = c("A", 0, 1, 3, 0, 4, 1, 0, 6, 6),
+    motherId = c(0, 0, 2, 2, 0, 5, 2, 0, 8, 8),
+    gender = c(1, 2, "m", "man", "f", "male", "m", "m", "f", "f"),
+    available = c("A", "1", 0, NA, 1, 0, 1, 0, 1, 0),
+    family = c(1, 1, 1, 1, 1, 1, 1, 2, 2, 2),
+    sterilisation = c("TRUE", "FALSE", TRUE, FALSE, 1, 0, 1, 0, 1, "TRUE"),
+    vitalStatus = c("TRUE", "FALSE", TRUE, FALSE, 1, 0, 1, 0, 1, 0),
+    affection = c("TRUE", "FALSE", TRUE, FALSE, 1, 0, 1, 0, 1, 0)
+)
+norm_ped(df)
 }
