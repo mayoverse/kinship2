@@ -1,6 +1,6 @@
 Package: kinship2
 Version: 2.1.0
-Date: 2023-07-30
+Date: 2023-09-19
 Title: Pedigree Functions
 Authors@R: c(
     person("Louis", "Le Nézet", email="louislenezet@gmail.com",
@@ -9,7 +9,7 @@ Authors@R: c(
 	person("Terry", "Therneau", role="aut"),
 	person("Daniel", "Schaid", role="ctb"),
 	person("Elizabeth", "Atkinson", role="ctb"),
-	person("Carly", "Mester", role='ctb'))
+	person("Louis", "Le Nezet", role='ctb'))
 Depends: 
 	 R (>= 4.3.0)
 Imports: 

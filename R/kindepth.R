@@ -153,7 +153,6 @@ setMethod("kindepth", "character", function(obj, dadid, momid,
         dads <- dads[!dups]
         moms <- moms[!dups]
     }
-
     npair <- length(dads)
     done <- rep(FALSE, npair)  # couples that are taken care of
     while (TRUE) {
