@@ -1,22 +1,30 @@
 Package: kinship2
-Version: 1.9.7
-Date: 2022-10-11
+Version: 2.1.0
+Date: 2023-07-30
 Title: Pedigree Functions
 Authors@R: c(
-	person("Jason", "Sinnwell", email="sinnwell.jason@mayo.edu", role=c("aut","cre")),
+    person("Louis", "Le Nézet", email="louislenezet@gmail.com",
+        role=c("aut","cre"), comment = c(ORCID = "0009-0000-0202-2703")),
+	person("Jason", "Sinnwell", email="sinnwell.jason@mayo.edu", role="aut"),
 	person("Terry", "Therneau", role="aut"),
 	person("Daniel", "Schaid", role="ctb"),
 	person("Elizabeth", "Atkinson", role="ctb"),
 	person("Carly", "Mester", role='ctb'))
 Depends: 
-	 R (>= 3.6.0),
-	 Matrix,
-	 quadprog
+	 R (>= 4.3.0)
 Imports: 
-	 graphics,
-	 stats,
-	 methods,
-	 knitr
+    graphics,
+    stats,
+    methods,
+    ggplot2,
+    utils,
+    grDevices,
+    stringr,
+    plyr,
+    dplyr,
+    tidyr,
+    quadprog,
+    Matrix
 Description: Routines to handle family data with a pedigree object. The initial purpose
 	     was to create correlation structures that describe family relationships such 
 	     as kinship and identity-by-descent, which can be used to model family data 
@@ -24,10 +32,63 @@ Description: Routines to handle family data with a pedigree object. The initial 
 	     for pedigree drawing which is focused on producing compact layouts without 
 	     intervention. Recent additions include utilities to trim the pedigree object
 	     with various criteria, and kinship for the X chromosome.
-License: GPL (>= 2)
+License: Artistic-2.0
 URL: https://cran.r-project.org/package=kinship2
+Encoding: UTF-8
 RoxygenNote: 7.2.3
+Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
 Suggests: 
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    diffviewer,
+	vdiffr,
+	rmarkdown,
+    BiocStyle,
+    knitr,
+    withr
 Config/testthat/edition: 3
+biocViews: Software, DataRepresentation, Genetics, Alignment
+BugReports: https://github.com/LouisLeLezet/kinship2/issues
+url: https://github.com/LouisLeNezet/kinship2
+BiocType: Software
+Collate: 
+    'alignped4.R'
+    'alignped3.R'
+    'alignped2.R'
+    'alignped1.R'
+    'pedigree.R'
+    'validity.R'
+    'pedigreeClass.R'
+    'check_hints.R'
+    'kindepth.R'
+    'auto_hint.R'
+    'align.R'
+    'best_hint.R'
+    'bit_size.R'
+    'data.R'
+    'descendants.R'
+    'make_famid.R'
+    'family_check.R'
+    'kinship.R'
+    'utils.R'
+    'find_unavailable.R'
+    'find_avail_affected.R'
+    'find_avail_noninform.R'
+    'fix_parents.R'
+    'generate_aff_inds.R'
+    'generate_colors.R'
+    'ibd_matrix.R'
+    'is_informative.R'
+    'kinship2-package.R'
+    'min_dist_inf.R'
+    'norm_data.R'
+    'num_child.R'
+    'ped_to_legdf.R'
+    'ped_to_plotdf.R'
+    'plot_fct.R'
+    'plot_fromdf.R'
+    'plot.R'
+    'shrink.R'
+    'trim.R'
+    'unrelated.R'
+    'useful_inds.R'

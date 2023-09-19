@@ -564,7 +564,7 @@ print.pedigree <- function(x, ...) {
     cat("Pedigree object with", length(x$id), "subjects")
     if (!is.null(x$famid)) cat(", family id=", x$famid[1], "\n")
     else cat("\n")
-    cat("Bit size=", bitSize(x)$bitSize, "\n")
+    cat("Bit size=", bit_size(x)$bit_size, "\n")
     }
 
 print.pedigreeList <- function(x, ...) {
@@ -878,7 +878,7 @@ kinship.pedigreeList <- function(id, chrtype="autosome", ...) {
 The older [[makekinship]] function,
 from before the creation of pedigreeList objects,
 accepts the raw identifier data, along with a special family code
-for unrelated subjects, as produced by the [[makefamid]] function.
+for unrelated subjects, as produced by the [[make_famid]] function.
 All the unrelated subjects are put at the front of the kinship matrix
 in this case rather than within the family.
 Because unrelateds get put into a fake family, we cannot create a
@@ -3200,7 +3200,7 @@ pedigree.shrink <- function(ped, avail, affected=NULL, seed=NULL, maxBits = 16){
   idList <- list()
   nOriginal <- length(ped$id)
  
-  bitSizeOriginal <- bitSize(ped)$bitSize
+  bit_sizeOriginal <- bit_size(ped)$bit_size
   
   ## first find unavailable subjects to remove anyone who is not 
   ## available and does not have an available descendant
@@ -3251,19 +3251,19 @@ pedigree.shrink <- function(ped, avail, affected=NULL, seed=NULL, maxBits = 16){
     
   }
   
-  ##  Determine number of subjects & bitSize after initial trimming
+  ##  Determine number of subjects & bit_size after initial trimming
   nIntermed <- length(pedTrimmed$id)
   
-  bitSize <- bitSize(pedTrimmed)$bitSize
+  bit_size <- bit_size(pedTrimmed)$bit_size
     
-  ## Now sequentially shrink to fit bitSize <= maxBits
+  ## Now sequentially shrink to fit bit_size <= maxBits
     
-  bitVec <- c(bitSizeOriginal,bitSize)
+  bitVec <- c(bit_sizeOriginal,bit_size)
   
   isTrimmed <- TRUE
   idList$affect=NULL 
   
-  while(isTrimmed & (bitSize > maxBits))
+  while(isTrimmed & (bit_size > maxBits))
     {  
         
       ## First, try trimming by unknown status
@@ -3289,15 +3289,15 @@ pedigree.shrink <- function(ped, avail, affected=NULL, seed=NULL, maxBits = 16){
       if(isTrimmed)  {
         pedTrimmed <- save$ped
         avail <- save$newAvail
-        bitSize <- save$bitSize
-        bitVec <- c(bitVec, bitSize)          
+        bit_size <- save$bit_size
+        bitVec <- c(bitVec, bit_size)          
         idTrimmed <- c(idTrimmed, save$idTrimmed)
         idList$affect = paste(c(idList$affect, save$idTrimmed), 
           collapse=' ')
       }
       
       
-    } # end while (isTrimmed) & (bitSize > maxBits)
+    } # end while (isTrimmed) & (bit_size > maxBits)
   
   
   nFinal <- length(pedTrimmed$id)
@@ -3305,7 +3305,7 @@ pedigree.shrink <- function(ped, avail, affected=NULL, seed=NULL, maxBits = 16){
   obj <- list(pedObj = pedTrimmed,
               idTrimmed = idTrimmed,
               idList = idList,
-              bitSize = bitVec,
+              bit_size = bitVec,
               avail=avail,
               pedSizeOriginal = nOriginal,
               pedSizeIntermed = nIntermed,
@@ -3349,7 +3349,7 @@ What was previously pedTrim is now split into two functions, pedigree.trim and f
 
 pedigree.trim : remove subjects from pedigree object given their id. 
 Update for version 1.2.8 (9/27/11) Allow creation of an empty pedigree 
-if all IDs are removed. This allows bitSize and 
+if all IDs are removed. This allows bit_size and 
 pedigree.shrink to still complete with an empty pedigree. 
 
 findUnavail: identify subjects are not available and who do not have 
@@ -3612,11 +3612,11 @@ the likelihood of the observed genotypes given the pedigree structure.
 The Lander-Green handles smaller pedigrees and many markers
 The Elston-Stewart handles larger pedigrees and fewer markers.
 
-<<bitSize>>=
+<<bit_size>>=
  
 ## renamed from pedBits, part of pedigree.shrink functions
 
-bitSize <- function(ped) {
+bit_size <- function(ped) {
   ## calculate bit size of a pedigree
   
   if(class(ped) != "pedigree")
@@ -3630,8 +3630,8 @@ bitSize <- function(ped) {
   pedSize <- length(father)
   nFounder <- sum(founder)
   nNonFounder <- pedSize - nFounder
-  bitSize <- 2*nNonFounder - nFounder
-  return(list(bitSize=bitSize,
+  bit_size <- 2*nNonFounder - nFounder
+  return(list(bit_size=bit_size,
               nFounder = nFounder,
               nNonFounder = nNonFounder))
 }
@@ -3713,7 +3713,7 @@ findAvailAffected <- function(ped, avail, affstatus)
         return(list(ped=ped,
                     idTrimmed = NA,
                     isTrimmed = FALSE,
-                    bitSize = bitSize(ped)$bitSize))
+                    bit_size = bit_size(ped)$bit_size))
       }
     
     trimDat <- NULL
@@ -3726,7 +3726,7 @@ findAvailAffected <- function(ped, avail, affstatus)
       id.rm <- findUnavailable(ped, avail.try)
       newPed <- pedigree.trim(id.rm, ped)
       trimDat <- rbind(trimDat,
-                  c(id=idTrim, bitSize=bitSize(newPed)$bitSize))
+                  c(id=idTrim, bit_size=bit_size(newPed)$bit_size))
     }
 
     bits <- trimDat[,2]
@@ -3747,14 +3747,14 @@ findAvailAffected <- function(ped, avail, affstatus)
     avail[ped$id==idTrim] <- FALSE
     id.rm <- findUnavailable(ped, avail)
     newPed <- pedigree.trim(id.rm, ped)
-    pedSize <- bitSize(newPed)$bitSize
+    pedSize <- bit_size(newPed)$bit_size
     avail <- avail[!(ped$id %in% id.rm)]
 
     return(list(ped=newPed,
                 newAvail = avail,
                 idTrimmed = idTrim,
                 isTrimmed = TRUE,
-                bitSize = pedSize))
+                bit_size = pedSize))
   }
 
 @ 
@@ -3843,11 +3843,11 @@ print.pedigree.shrink <- function(x, ...){
   if(length(x$idTrimmed) > 2)
     {
       n <- c(x$pedSizeOriginal, x$pedSizeIntermed, x$pedSizeFinal)
-      b <- c(x$bitSize[1], x$bitSize[2], x$bitSize[length(x$bitSize)])
+      b <- c(x$bit_size[1], x$bit_size[2], x$bit_size[length(x$bit_size)])
       row.nms <- c("Original","Only Informative","Trimmed")
     } else {
       n <- c(x$pedSizeOriginal, x$pedSizeIntermed)
-      b <- c(x$bitSize[1], x$bitSize[2])
+      b <- c(x$bit_size[1], x$bit_size[2])
       row.nms <- c("Original","Trimmed")
     }
 
@@ -3866,7 +3866,7 @@ print.pedigree.shrink <- function(x, ...){
     cat("\n Informative subjects trimmed:\n", x$idList$affect, "\n")
   
   
-  ##cat("\n Pedigree after trimming:", x$bitSize, "\n")
+  ##cat("\n Pedigree after trimming:", x$bit_size, "\n")
   
   invisible()
 }
@@ -4007,7 +4007,7 @@ plot.pedigree.shrink <- function(x, bigped=FALSE, title="",
   
   legend(x = xlegend, legend = c("DNA Available", "UnAvailable"), 
          pch = c(1, 1), col = c(2, 1), bty = "n", cex=.5)
-  title(paste(title, "\nbits = ", x$bitSize[length(x$bitSize)]),cex.main=.9)
+  title(paste(title, "\nbits = ", x$bit_size[length(x$bit_size)]),cex.main=.9)
   invisible(tmp)
 } 
 
@@ -4304,8 +4304,8 @@ if (all(depth>0)) stop("You found a bug in kindepth's alignment code!")
 depth
 @ 
 
-\subsection{familycheck}
-The familycheck routine checks out a family id, by trying to construct its own
+\subsection{family_check}
+The family_check routine checks out a family id, by trying to construct its own
 and comparing the results.
 The input argument "newfam" is optional: if you've already created this
 vector for other reasons, then putting the arg in saves time.
@@ -4315,7 +4315,7 @@ vector for other reasons, then putting the arg in saves time.
    a matrix with famid as row labels, new-family-id as the columns, and
    the number of subjects as entries.  
 
-<<familycheck>>=
+<<family_check>>=
 # This routine checks out a family id, by trying to construct its own
 #  and comparing the results
 #
@@ -4341,12 +4341,12 @@ vector for other reasons, then putting the arg in saves time.
 #   a matrix with famid as row labels, new-family-id as the columns, and
 #   the number of subjects as entries.  
 #
-familycheck <- function(famid, id, father.id, mother.id, newfam) {
+family_check <- function(famid, id, father.id, mother.id, newfam) {
     if (is.numeric(famid) && any(is.na(famid)))
         stop ("Family id of missing not allowed")
     nfam <- length(unique(famid))
 
-    if (missing(newfam)) newfam <- makefamid(id, father.id, mother.id)
+    if (missing(newfam)) newfam <- make_famid(id, father.id, mother.id)
     else if (length(newfam) != length(famid))
         stop("Invalid length for newfam")
 

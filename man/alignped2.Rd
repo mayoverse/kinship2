@@ -4,25 +4,60 @@
 \alias{alignped2}
 \title{Second routine alignement}
 \usage{
-alignped2(x, dad, mom, level, horder, packed, spouselist)
+alignped2(idx, dadx, momx, level, horder, packed, spouselist)
 }
 \arguments{
-\item{spouselist}{}
+\item{idx}{Indexes of the subjects}
+
+\item{dadx}{Indexes of the fathers}
+
+\item{momx}{Indexes of the mothers}
+
+\item{level}{Vector of the level of each subject}
+
+\item{horder}{Vector of the horizontal order of each subject}
+
+\item{packed}{Should the pedigree be compressed, i.e., allow diagonal
+lines connecting parents to children in order to have a smaller overall
+width for the plot.}
+
+\item{spouselist}{Matrix of the spouses with one row per hinted marriage,
+usually only a few marriages in a pedigree will need an added hint, for
+instance reverse the plot order of a husband/wife pair.
+Each row contains the index of the left spouse, the right hand spouse
+and the anchor (i.e : \code{1} = left, \code{2} = right, \code{0} = either).}
 }
 \value{
-A set of matrices along with the spouselist matrix.
+A list containing the elements to plot the pedigree.
+It contains a set of matrices along with the spouselist matrix.
 The latter has marriages removed as they are processed.
+\itemize{
+\item n A vector giving the number of subjects on each horizonal level of the
+plot
+\item nid A matrix with one row for each level, giving the numeric id of
+each subject plotted.
+(A value of \code{17} means the 17th subject in the pedigree).
+\item pos A matrix giving the horizontal position of each plot point
+\item fam A matrix giving the family id of each plot point.
+A value of \code{3} would mean that the two subjects in positions 3 and 4,
+in the row above, are this subject's parents.
+\item spouse A matrix with values
+\itemize{
+\item \code{0} = not a spouse
+\item \code{1} = subject plotted to the immediate right is a spouse
+\item \code{2} = subject plotted to the immediate right is an inbred spouse
+}
+}
 }
 \description{
-This is the second of the four co-routines.
+Second of the four co-routines which takes a collection of siblings,
+grows the tree for each, and appends them side by side into a single tree.
 }
 \details{
-This routine takes a collection of siblings, grows the tree for each,
-and appends them side by side into a single tree.
-The input arguments are the same as those to \code{alignped1} with the
-exception that \code{[[x]]} will be a vector. This routine does nothing
+The input arguments are the same as those to \code{alignped1()} with the
+exception that \strong{idx} will be a vector. This routine does nothing
 to the spouselist matrix, but needs to pass it down the tree and back
-since one of the routines called by \code{alignped2} might change the matrix.
+since one of the routines called by \code{alignped2()} might change the matrix.
 
 The code below has one non-obvious special case. Suppose that two sibs marry.
 When the first sib is processed by \code{alignped1} then both partners
@@ -30,15 +65,14 @@ When the first sib is processed by \code{alignped1} then both partners
 When the second sib is processed they will come back as a 1 element tree
 (the marriage will no longer be on the spouselist), which should be added
 onto rval. The rule thus is to not add any 1 element tree whose value
-(which must be \code{x[i]}) is already in the rval structure for this level.
+(which must be \code{idx[i]} is already in the rval structure for this level.
 }
 \examples{
-data(sample.ped)
-ped <- with(sample.ped,pedigree(id, father, mother, sex, affected))
-align.pedigree(ped)
+data(sampleped)
+ped <- pedigree(sampleped)
+align(ped)
 
 }
 \seealso{
-\code{\link{plot.pedigree}}, \code{\link{autohint}}
+\code{\link[=align]{align()}}, \code{\link[=alignped1]{alignped1()}}
 }
-\keyword{dplot}
