@@ -2,8 +2,9 @@
 
 #### minnbreast ####
 
+
 #### sampleped ####
-sampleped <- read.delim("data-raw/sampleped.tab",
+sampleped <- read.delim("inst/extdata/sampleped.tab",
     header = TRUE, sep = " ", stringsAsFactors = FALSE
 )
 sampleped[c("family", "id", "dadid", "momid")] <- as.data.frame(

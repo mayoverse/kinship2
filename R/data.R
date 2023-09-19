@@ -4,16 +4,18 @@
 #' This contains extended pedigrees from 426 families, each identified by
 #' a single proband in 1945-52, with follow up for incident breast cancer.
 #'
-#' @details The original study was conducted by Dr. Elving Anderson at the Dight
-#' Institute for Human Genetics at the University of Minnesota. From 1944 to
-#' 1952, 544 sequential breast cancer cases seen at the University Hospital were
-#' enrolled, and information gathered on parents, siblings, offspring, aunts /
-#' uncles, and grandparents with the goal of understanding possible familial
-#' aspects of brest cancer. In 1991 the study was resurrected by Dr Tom Sellers.
-#' Of the original 544 he excluded 58 prevalent cases, along with another 19 who
-#' had less than 2 living relatives at the time of Dr Anderson's survey. Of the
-#' remaining 462 families 10 had no living members, 23 could not be located and
-#' 8 refused, leaving 426 families on whom updated pedigrees were obtained.
+#' @details The original study was conducted by Dr. Elving Anderson at the
+#' Dight Institute for Human Genetics at the University of Minnesota.
+#' From 1944 to 1952, 544 sequential breast cancer cases seen at the
+#' University Hospital were enrolled, and information gathered on parents,
+#' siblings, offspring, aunts / uncles, and grandparents with the goal of
+#' understanding possible familial aspects of brest cancer. In 1991 the
+#' study was resurrected by Dr Tom Sellers.
+#' Of the original 544 he excluded 58 prevalent cases, along with another 19
+#' who had less than 2 living relatives at the time of Dr Anderson's survey.
+#' Of the remaining 462 families 10 had no living members, 23 could not be
+#' located and 8 refused, leaving 426 families on whom updated pedigrees
+#' were obtained.
 #' This gave a study with 13351 males and 12699 females (5183 marry-ins).
 #' Primary questions were the relationship of early life exposures, breast
 #' density, and pharmacogenomics on incident breast cancer risk.

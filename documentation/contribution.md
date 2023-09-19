@@ -74,7 +74,8 @@ To build the package you need to have installed:
 
 If you have `R.exe` in your path you can run:
 
-```R
+```powershell
+set R_CHECK_ENVIRON = ./documentation/check.Renviron
 R.exe CMD build .
 R.exe CMD check kinship2_2.0.0.tar.gz
 ```
@@ -84,4 +85,10 @@ R.exe CMD check kinship2_2.0.0.tar.gz
 ```R
 BiocCheck::BiocCheckGitClone()
 BiocCheck::BiocCheck('kinship2'=TRUE)
+```
+
+## To check up
+
+```R
+readCitationFile("inst/CITATION")
 ```

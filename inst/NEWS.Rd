@@ -1,16 +1,20 @@
 \name{NEWS}
 \title{NEWS file for the kinship2 package}
-\section{Changes in version 2.0.0}{
+\section{Changes in version 2.1.0}{
   \itemize{
-    \item Pedigree is now a S4 object, all functions are updated to work with the new class
-    \item pedigree constructor now takes a data.frame as input for the pedigree informations
-    and for the special relationship. The two data.fram are normalized before being used.
-    \item plot.pedigree support ggplot generation, mark and label can be added to the plot.
-    The plot is now generated in two steps ped_to_plotdf() and plot_fromdf(). This allows
-    the user to modify the plot before it is generated.
+    \item Pedigree is now a S4 object, all functions are updated to work with
+    the new class
+    \item pedigree constructor now takes a data.frame as input for the pedigree
+    informations
+    and for the special relationship. The two data.fram are normalized before
+    being used.
+    \item plot.pedigree support ggplot generation, mark and label can be added
+    to the plot.
+    The plot is now generated in two steps ped_to_plotdf() and plot_fromdf().
+    This allows the user to modify the plot before it is generated.
     \item All documentation are now generated with Roxygen
-    \item New function available: generate_aff_inds, generate_colors, is_informative, min_dist_inf,
-    normData, num_child, useful_inds
+    \item New function available: generate_aff_inds, generate_colors,
+    is_informative, min_dist_inf, normData, num_child, useful_inds
     \item All functions renamed to follow the snake\_case convention
     \item All parameters renamed to follow the snake\_case convention
     \item All test now use testthat files
@@ -22,10 +26,6 @@
     \item Make all functions extracted into R/, no longer from noweb files
     \item All documentation from pedigree.shrink.Rnw moved into Rd and R
     files
-  }
-}
-\section{Changes in version 1.8.0}{
-  \itemize{
     \item legendPlot: added function to make a plot with a legend at
     the bottom, which is a separate sibship, whose parents are plotted
     over by the pedigree of interest.
