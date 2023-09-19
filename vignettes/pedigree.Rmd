@@ -138,8 +138,9 @@ Within id $203$, then locate in the *sex* column.
 Assign this subset to the incorrect value of *2* (female) to change the
 original/correct value of *1* (male).
 
-To further break the pedigree, we can delete subjects who seem irrelevant to the
-pedigree (in this example, we delete $209$ because he is a married-in father). 
+To further break the pedigree, we can delete subjects who seem irrelevant to
+the pedigree (in this example, we delete $209$ because he is a married-in
+father). 
 To do this, we subset ~datped2~ and use the *-which()* function to locate and
 delete the specified subject (in this case, $209$). Reassign this code to
 ~datped22~ to drop the specified subject entirely.
@@ -169,8 +170,8 @@ plot(ped2)
 If the fix is straightforward (changing one sex value based on either being
 a mother or father), *fix_parents()* will resolve the issue. If the issue is 
 more complicated, say if $203$ is coded to be both a father *and* a mother, 
-*fix_parents()* will not know which one is correct and therefore the issue will 
-not be resolved.
+*fix_parents()* will not know which one is correct and therefore the issue
+will not be resolved.
 
 Kinship
 ==============
@@ -347,11 +348,14 @@ This results in subjects $201$ and $202$ being first cousins, and therefore
 inbred.
 
 ```{r, inbreeding}
-indId <- 195:202
-fatherId <- c(0, 0, 0, 196, 196, 0, 197, 199)
-motherId <- c(0, 0, 0, 195, 195, 0, 198, 200)
-gender <- c(2, 1, 1, 2, 1, 2, 1, 2)
-ped3 <- data.frame(indId, fatherId, motherId, gender)
+indid <- 195:202
+dadid <- c(0, 0, 0, 196, 196, 0, 197, 199)
+momid <- c(0, 0, 0, 195, 195, 0, 198, 200)
+sex <- c(2, 1, 1, 2, 1, 2, 1, 2)
+ped3 <- data.frame(
+    indId = indid, fatherId = dadid,
+    motherId = momid, gender = sex
+)
 ped4df <- rbind.data.frame(ped2$ped[-c(1, 2), 2:5], ped3)
 ped4 <- pedigree(ped4df)
 plot(ped4)
@@ -359,10 +363,10 @@ plot(ped4)
 
 ### Marry-ins
 
-Spouse with no child can also be specified with the $rel_df$ argument by setting
-the code value to "Spouse" or "4".
-If we use the pedigree 2 from earlier and add a new spouse relationship between
-the individuals $212$ and $211$ we get the following plot.
+Spouse with no child can also be specified with the $rel_df$ argument by
+setting the code value to "Spouse" or "4".
+If we use the pedigree 2 from earlier and add a new spouse relationship
+between the individuals $212$ and $211$ we get the following plot.
 
 ```{r, spouse}
 ## create twin relationships

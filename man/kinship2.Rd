@@ -20,25 +20,32 @@ in arsenal:
 \code{\link[=pedigree]{pedigree()}}: Contstructor of the pedigree class,
 given identifiers, sex, affection status(es), and special relationships
 
-\code{\link[=kinship]{kinship()}}: Calculates the kinship matrix, the probability
-having an allele sampled from two individuals be the same via IBD.
+\code{\link[=kinship]{kinship()}}: Calculates the kinship matrix, the
+probability having an allele sampled from two individuals
+be the same via IBD.
 
-\code{\link[=ped_to_plotdf]{ped_to_plotdf()}} and \code{\link[=plot_fromdf]{plot_fromdf()}}: Plot method for a pedigree object.
+\code{\link[=ped_to_plotdf]{ped_to_plotdf()}} : Method to transform a pedigree
+object into a dataframe of graphical elements.
 Allows extra information to be included in the id under the plot symbol
+
+\code{\link[=plot_fromdf]{plot_fromdf()}} : Method to plot a pedigree from a
+dataframe of graphical elements.
 
 \code{\link[=shrink]{shrink()}}: Shrink a pedigree to a specific bit size,
 removing non-informative members first.
 
-\code{\link[=bit_size]{bit_size()}}: Approximate the output from SAS's \verb{PROC FREQ}
-procedure when using the \verb{/list} option of the \code{TABLE} statement.
+\code{\link[=bit_size]{bit_size()}}: Approximate the output from SAS's
+\verb{PROC FREQ} procedure when using the \verb{/list}
+option of the \code{TABLE} statement.
 }
 
 \section{Data}{
 
 \itemize{
-\item \code{\link[=sampleped]{sampleped()}}: Pedigree example data sets with two pedigrees
-\item \code{\link[=minnbreast]{minnbreast()}}: Larger cohort of pedigrees from MN breast cancer
-study
+\item \code{\link[=sampleped]{sampleped()}}: Pedigree example data sets
+with two pedigrees
+\item \code{\link[=minnbreast]{minnbreast()}}: Larger cohort of pedigrees
+from MN breast cancer study
 }
 }
 

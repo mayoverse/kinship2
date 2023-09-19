@@ -6,8 +6,8 @@ NULL
 #'
 #' @param subreg 4-element vector for (min x, max x, min depth, max depth),
 #' used to edit away portions of the plot coordinates returned by
-#' [align()]. This is useful for zooming in on a particular region of the
-#' pedigree.
+#' [align()].
+#' This is useful for zooming in on a particular region of the pedigree.
 #' @inheritParams findspouse
 #'
 #' @return a pedigree list

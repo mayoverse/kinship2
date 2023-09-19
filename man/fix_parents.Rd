@@ -15,8 +15,8 @@ fix_parents(obj, ...)
 }
 \arguments{
 \item{obj}{A data.frame or a vector of the individuals identifiers. If a
-dataframe is given it must contain the columns \code{id}, \code{dadid}, \code{momid},
-\code{sex} and \code{family}. Family is optional.}
+dataframe is given it must contain the columns \code{id}, \code{dadid},
+\code{momid}, \code{sex} and \code{family}. Family is optional.}
 
 \item{...}{Additional arguments passed to methods}
 

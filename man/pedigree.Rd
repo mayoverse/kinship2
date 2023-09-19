@@ -53,12 +53,14 @@ pedigree(obj, ...)
 \arguments{
 \item{obj}{A vector of the individuals identifiers or a data.frame
 with the individuals informations.
-The minimum columns required are \code{id}, \code{dadid}, \code{momid} and \code{sex}.
+The minimum columns required are \code{id}, \code{dadid}, \code{momid} and
+\code{sex}.
 The \code{family} column can also be used to specify the family of the
 individuals and will be merge to the \code{id} field separated by an
 underscore.
-The following columns are also recognize \code{steril}, \code{avail}, \code{status},
-\code{affected}. They respectively correspond to the sterilisation status,
+The following columns are also recognize \code{steril}, \code{avail},
+\code{status}, \code{affected}.
+They respectively correspond to the sterilisation status,
 the availability status, the death status and the affection status
 of the individuals. The values recognized for those columns are \code{1} or
 \code{0}.}
@@ -136,19 +138,20 @@ relationship matrix.}
 affection status and the other one for the border color (e.g availability).}
 
 \item{hints}{Plotting hints for the pedigree.
-This is a list with components \code{order} and \code{spouse}, the second one is
-optional.
+This is a list with components \code{order} and \code{spouse}, the second one
+is optional.
 \itemize{
 \item \strong{order} is a numeric vector with one element per subject in the
 pedigree.  It determines the relative order of subjects within a sibship, as
 well as the relative order of processing for the founder couples. (For this
 latter, the female founders are ordered as though they were sisters).
-\item \strong{spouse} is a matrix with one row per hinted marriage, usually only
-a few marriages in a pedigree will need an added hint, for instance reverse
-the plot order of a husband/wife pair. Each row contains the index of the
-left spouse, the right hand spouse, and the anchor
+\item \strong{spouse} is a matrix with one row per hinted marriage, usually
+only a few marriages in a pedigree will need an added hint, for instance
+reverse the plot order of a husband/wife pair. Each row contains the
+index of the left spouse, the right hand spouse, and the anchor
 (i.e : \code{1} = left, \code{2} = right, \code{0} = either).
-Children will preferentially appear under the parents of the anchored spouse.
+Children will preferentially appear under the parents of the anchored
+spouse.
 }}
 
 \item{normalize}{A logical to know if the data should be normalised.}

@@ -75,7 +75,8 @@ Auto_hint
 ==========================
 
 This routine is used to create an initial hints list. It is a part of
-the general intention to make the routine do pretty good drawings automatically.
+the general intention to make the routine do pretty good drawings
+automatically.
 The basic algorithm is trial and error. 
 
 - Start with the simplest possible hints (user input is accepted)
@@ -87,8 +88,9 @@ fixes one level at a time.
 The routine makes no attempt to reorder founders. It just is not smart enough
 to figure that out.
 
-The first thing to be done is to check on twins. They increase the complexity, since
-twins need to move together.  The `ped$rel$code` object is a factor, so first turn that into numeric.
+The first thing to be done is to check on twins. They increase the complexity,
+since twins need to move together.
+The `ped$rel$code` object is a factor, so first turn that into numeric.
 We create 3 vectors:
 
 - $twinrel$ is a matrix containing pairs of twins and
@@ -119,10 +121,11 @@ left, then move the subject himself to the left.
 
 Now, get an ordering of the pedigree to use as the starting point.  
 The numbers start at 1 on each level. We do not need the final *prettify* step,
-hence `align = FALSE`. If there is a hints structure entered, we retain its non-zero entries,
-otherwise people are put into the order of the data set.
+hence `align = FALSE`. If there is a hints structure entered, we retain its
+non-zero entries, otherwise people are put into the order of the data set.
 
-We allow the hints input to be only an order vector. twins are then further reordered.
+We allow the hints input to be only an order vector. twins are then further
+reordered.
 
 ## Fixup auto_hint
 
@@ -189,10 +192,11 @@ The basic logic is
         (At least I think so.)
 
 This logic works 9 times out of 10, at least for human pedigrees.
-We'll look at more complex cases below when looking at the $duporder$ (order the duplicates)
-function, which returns a matrix with columns 1 and 2 being a pair of duplicates, and 3 a
-direction. Note that in the following code $idlist$ refers to the row numbers of
-each subject in the pedigree, not to their label `ped$ped$id`.
+We'll look at more complex cases below when looking at the $duporder$ (order
+the duplicates) function, which returns a matrix with columns 1 and 2 being a
+pair of duplicates, and 3 a direction. Note that in the following code
+$idlist$ refers to the row numbers of each subject in the pedigree, not to
+their label `ped$ped$id`.
 
 ## duporder
 
@@ -529,9 +533,9 @@ indx to be indexed beyond its length, fix by JPS 5/2013.
 ### alignped1 - part4
 
 The spouses are in the pedigree, now look below. For each spouse get the
-list of children. If there are any we call [alignped2] to generate their tree and
-then mark the connection to their parent. If multiple marriages have children
-we need to join the trees.
+list of children. If there are any we call [alignped2] to generate their tree
+and then mark the connection to their parent. If multiple marriages have
+children we need to join the trees.
 
 ### alignped1 - part5
 
@@ -557,13 +561,14 @@ This routine does nothing to the spouselist matrix, but needs
 to pass it down the tree and back since one of the routines
 called by [alignped2] might change the matrix.
 
-The code below has one non-obvious special case.  Suppose that two sibs marry.  
+The code below has one non-obvious special case.  Suppose that two sibs marry.
 When the first sib is processed by [alignped1] then both partners (and any
 children) will be added to the rval structure below.  When the second sib is
 processed they will come back as a 1 element tree (the marriage will no longer
 be on the spouselist), which should **not** be added onto rval. The rule
-thus is to not add any 1 element tree whose value (which must be `x[i]`) is already
-in the rval structure for this level. (Where did Curt Olswold. find these families?)
+thus is to not add any 1 element tree whose value (which must be `x[i]`) is
+already in the rval structure for this level. (Where did Curt Olswold. find
+these families?)
 
 alignped3
 ==========================
@@ -571,10 +576,10 @@ alignped3
 The third alignment co-routine merges two pedigree trees which are side by side
 into a single object.
 The primary special case is when the rightmost person in the left
-tree is the same as the leftmost person in the right tree; we  need not plot two
-copies of the same person side by side. (When initializing the output structures
-do not  worry about this - there is no harm if they are a column bigger than
-finally needed.) Beyond that the work is simple bookkeeping.
+tree is the same as the leftmost person in the right tree; we  need not plot
+two copies of the same person side by side. (When initializing the output
+structures do not  worry about this - there is no harm if they are a column
+bigger than finally needed.) Beyond that the work is simple bookkeeping.
 
 
 ## alignped3 - slide
@@ -622,9 +627,9 @@ true in this problem.
 There are two important parameters for the function.  One is the user specified
 maximum width.  The smallest possible width is the maximum number of subjects
 on a line, if the user suggestion is too low it is increased to that 1+ that
-amount (to give just a little wiggle room). The other is a vector of 2 alignment
-parameters $a$ and $b$. For each set of siblings $x$ with parents at $p_1$
-and $p_2$ the alignment penalty is
+amount (to give just a little wiggle room). The other is a vector of 2
+alignment parameters $a$ and $b$. For each set of siblings $x$ with parents
+at $p_1$ and $p_2$ the alignment penalty is
 
 $$
     (1/k^a)\sum{i=1}{k} (x_i - (p_1 + p_2)^2

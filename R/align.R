@@ -55,25 +55,27 @@ ancestors <- function(idx, momx, dadx) {
 #' width for the plot.
 #' @param width for a packed output, the minimum width of the plot, in
 #' inches.
-#' @param align for a packed pedigree, align children under parents `TRUE`, to
-#' the extent possible given the page width, or align to to the left margin
-#' `FALSE`. This argument can be a two element vector, giving the alignment
+#' @param align for a packed pedigree, align children under parents `TRUE`,
+#' to the extent possible given the page width, or align to to the left
+#' margin `FALSE`.
+#' This argument can be a two element vector, giving the alignment
 #' parameters, or a logical value.
 #' If `TRUE`, the default is `c(1.5, 2)`, or numeric the routine
 #' `alignped4()` will be called.
 #' @param hints Plotting hints for the pedigree.
-#' This is a list with components `order` and `spouse`, the second one is
-#' optional.
+#' This is a list with components `order` and `spouse`, the second one
+#' is optional.
 #' - **order** is a numeric vector with one element per subject in the
 #' pedigree.  It determines the relative order of subjects within a sibship, as
 #' well as the relative order of processing for the founder couples. (For this
 #' latter, the female founders are ordered as though they were sisters).
-#' - **spouse** is a matrix with one row per hinted marriage, usually only
-#' a few marriages in a pedigree will need an added hint, for instance reverse
-#' the plot order of a husband/wife pair. Each row contains the index of the
-#' left spouse, the right hand spouse, and the anchor
+#' - **spouse** is a matrix with one row per hinted marriage, usually
+#' only a few marriages in a pedigree will need an added hint, for instance
+#' reverse the plot order of a husband/wife pair. Each row contains the
+#' index of the left spouse, the right hand spouse, and the anchor
 #' (i.e : `1` = left, `2` = right, `0` = either).
-#' Children will preferentially appear under the parents of the anchored spouse.
+#' Children will preferentially appear under the parents of the anchored
+#' spouse.
 #' @inheritParams is_parent
 #'
 #' @return A list with components
@@ -193,7 +195,8 @@ align <- function(ped, packed = TRUE, width = 10,
         noparents & !(spouselist[, 1] %in% c(dupmom, dupdad)), 2
     ]  # founding mothers
     founders <- unique(c(dupmom, dupdad, foundmom))
-    founders <- founders[order(horder[founders])]  # use the hints to order them
+    # use the hints to order them
+    founders <- founders[order(horder[founders])]
     rval <- alignped1(founders[1], dad, mom, level, horder, packed, spouselist)
     if (length(founders) > 1) {
         spouselist <- rval$spouselist

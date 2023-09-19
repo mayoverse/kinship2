@@ -22,8 +22,9 @@ NULL
 #' of child.
 #'
 #' ## When obj is a pedigree object
-#' An updated pedigree object with the columns `num_child_dir`, `num_child_ind`
-#' and `num_child_tot` added to the pedigree `ped` slot.
+#' An updated pedigree object with the columns `num_child_dir`,
+#' `num_child_ind` and `num_child_tot` added to the
+#' pedigree `ped` slot.
 #' @examples
 #' data(sampleped)
 #' ped1 <- pedigree(sampleped[sampleped$family == "1",])

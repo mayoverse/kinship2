@@ -28,8 +28,9 @@ biologicals mothers.}
 
 \item{rel_df}{A data.frame with the special relationships between
 individuals.
-The minimum columns required are \code{id1}, \code{id2} and \code{code}. The \code{family}
-column can also be used to specify the family of the individuals.
+The minimum columns required are \code{id1}, \code{id2} and \code{code}.
+The \code{family} column can also be used to specify the family
+of the individuals.
 The code values are:
 \itemize{
 \item \code{1} = Monozygotic twin
@@ -59,8 +60,9 @@ of child.
 
 \subsection{When obj is a pedigree object}{
 
-An updated pedigree object with the columns \code{num_child_dir}, \code{num_child_ind}
-and \code{num_child_tot} added to the pedigree \code{ped} slot.
+An updated pedigree object with the columns \code{num_child_dir},
+\code{num_child_ind} and \code{num_child_tot} added to the
+pedigree \code{ped} slot.
 }
 }
 \description{

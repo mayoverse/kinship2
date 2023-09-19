@@ -170,7 +170,7 @@ duporder <- function(idlist, plist, lev, ped) {
         j <- which(idlist == id)
         for (k in 2:length(j)) {
             i <- i + 1
-            dmat[i, seq_len(2)] <- j[k + -1:0]
+            dmat[i, seq_len(2)] <- j[k + c(-1, 0)]
         }
     }
     if (nrow(dmat) == 1) {

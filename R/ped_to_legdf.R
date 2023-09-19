@@ -36,9 +36,8 @@ ped_to_legdf <- function(ped,
     all_aff <- lapply(unique(ped$scales$fill$order), function(x) {
         ped$scales$fill$labels[ped$scales$fill$order == x]
     })
-    lapply(all_aff, function(x) {
-        all_lab[[length(all_lab) + 1]] <<- x
-    })
+
+    all_lab <- c(all_lab, all_aff)
 
     max_lab <- lapply(lapply(
         all_lab, strwidth,

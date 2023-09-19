@@ -21,10 +21,11 @@ where the \code{values} is a factor.}
 in the case where the \code{values} is numeric.}
 
 \item{sup_thres_aff}{Boolean defining if the affected individual are above
-the threshold or not. If TRUE, the individuals will be considered affected
-if the value of \code{values} is stricly above the \code{threshold}. If FALSE, the
-individuals will be considered affected if the value is stricly under the
-\code{threshold}.}
+the threshold or not.
+If \code{TRUE}, the individuals will be considered affected
+if the value of \code{values} is stricly above the \code{threshold}.
+If \code{FALSE}, the individuals will be considered affected if the
+value is stricly under the \code{threshold}.}
 }
 \value{
 A dataframe with the \code{affected} column processed accordingly.

@@ -17,17 +17,19 @@ plot_fromdf(
 \arguments{
 \item{df}{A data.frame with the following columns:
 \itemize{
-\item \code{type}: The type of element to plot. Can be \code{text}, \code{segments}, \code{arc} or
-other polygons. For polygons, the name of the polygon must be in the form
-\verb{poly_*_*} where poly is one of the type given by \code{\link[=polygons]{polygons()}}, the first
-\code{*} is the number of slice in the polygon and the second \code{*} is the
+\item \code{type}: The type of element to plot. Can be \code{text},
+\code{segments}, \code{arc} or other polygons.
+For polygons, the name of the polygon must be in the form
+\verb{poly_*_*} where poly is one of the type given by
+\code{\link[=polygons]{polygons()}}, the first \code{*} is the number
+of slice in the polygon and the second \code{*} is the
 position of the division of the polygon.
 \item \code{x0}: The x coordinate of the center of the element.
 \item \code{y0}: The y coordinate of the center of the element.
-\item \code{x1}: The x coordinate of the end of the element. Only used for \code{segments}
-and \code{arc}.
-\item \code{y1}: The y coordinate of the end of the element. Only used for \code{segments}
-and \code{arc}.
+\item \code{x1}: The x coordinate of the end of the element.
+Only used for \code{segments} and \code{arc}.
+\item \code{y1}: The y coordinate of the end of the element.
+Only used for \code{segments} and \code{arc}.
 \item \code{fill}: The fill color of the element.
 \item \code{border}: The border color of the element.
 \item \code{density}: The density of the element.

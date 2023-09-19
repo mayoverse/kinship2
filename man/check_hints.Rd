@@ -8,19 +8,20 @@ check_hints(hints, sex)
 }
 \arguments{
 \item{hints}{Plotting hints for the pedigree.
-This is a list with components \code{order} and \code{spouse}, the second one is
-optional.
+This is a list with components \code{order} and \code{spouse}, the second one
+is optional.
 \itemize{
 \item \strong{order} is a numeric vector with one element per subject in the
 pedigree.  It determines the relative order of subjects within a sibship, as
 well as the relative order of processing for the founder couples. (For this
 latter, the female founders are ordered as though they were sisters).
-\item \strong{spouse} is a matrix with one row per hinted marriage, usually only
-a few marriages in a pedigree will need an added hint, for instance reverse
-the plot order of a husband/wife pair. Each row contains the index of the
-left spouse, the right hand spouse, and the anchor
+\item \strong{spouse} is a matrix with one row per hinted marriage, usually
+only a few marriages in a pedigree will need an added hint, for instance
+reverse the plot order of a husband/wife pair. Each row contains the
+index of the left spouse, the right hand spouse, and the anchor
 (i.e : \code{1} = left, \code{2} = right, \code{0} = either).
-Children will preferentially appear under the parents of the anchored spouse.
+Children will preferentially appear under the parents of the anchored
+spouse.
 }}
 
 \item{sex}{A character, factor or numeric vector corresponding to

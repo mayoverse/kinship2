@@ -26,8 +26,8 @@ It contains the following components:
 
 \item{subreg}{4-element vector for (min x, max x, min depth, max depth),
 used to edit away portions of the plot coordinates returned by
-\code{\link[=align]{align()}}. This is useful for zooming in on a particular region of the
-pedigree.}
+\code{\link[=align]{align()}}.
+This is useful for zooming in on a particular region of the pedigree.}
 }
 \value{
 a pedigree list

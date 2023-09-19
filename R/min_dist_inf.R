@@ -52,8 +52,8 @@ setGeneric("min_dist_inf", signature = "obj",
 #' @rdname min_dist_inf
 #' @aliases min_dist_inf,character
 #' @docType methods
-setMethod("min_dist_inf", "character", function(
-    obj, dadid, momid, sex, avail, affected, informative = "AvAf"
+setMethod("min_dist_inf", "character", function(obj,
+    dadid, momid, sex, avail, affected, informative = "AvAf"
 ) {
     id <- obj
     # Selection of all informative individuals depending of the informative

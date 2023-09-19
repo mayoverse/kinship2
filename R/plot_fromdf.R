@@ -11,17 +11,19 @@ NULL
 #' invisibly.
 #'
 #' @param df A data.frame with the following columns:
-#' - `type`: The type of element to plot. Can be `text`, `segments`, `arc` or
-#' other polygons. For polygons, the name of the polygon must be in the form
-#' `poly_*_*` where poly is one of the type given by [polygons()], the first
-#' `*` is the number of slice in the polygon and the second `*` is the
+#' - `type`: The type of element to plot. Can be `text`,
+#' `segments`, `arc` or other polygons.
+#' For polygons, the name of the polygon must be in the form
+#' `poly_*_*` where poly is one of the type given by
+#' [polygons()], the first `*` is the number
+#' of slice in the polygon and the second `*` is the
 #' position of the division of the polygon.
 #' - `x0`: The x coordinate of the center of the element.
 #' - `y0`: The y coordinate of the center of the element.
-#' - `x1`: The x coordinate of the end of the element. Only used for `segments`
-#' and `arc`.
-#' - `y1`: The y coordinate of the end of the element. Only used for `segments`
-#' and `arc`.
+#' - `x1`: The x coordinate of the end of the element.
+#' Only used for `segments` and `arc`.
+#' - `y1`: The y coordinate of the end of the element.
+#' Only used for `segments` and `arc`.
 #' - `fill`: The fill color of the element.
 #' - `border`: The border color of the element.
 #' - `density`: The density of the element.

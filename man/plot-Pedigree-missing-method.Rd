@@ -51,9 +51,10 @@ nuclear families.}
 lines connecting parents to children in order to have a smaller overall
 width for the plot.}
 
-\item{align}{for a packed pedigree, align children under parents \code{TRUE}, to
-the extent possible given the page width, or align to to the left margin
-\code{FALSE}. This argument can be a two element vector, giving the alignment
+\item{align}{for a packed pedigree, align children under parents \code{TRUE},
+to the extent possible given the page width, or align to to the left
+margin \code{FALSE}.
+This argument can be a two element vector, giving the alignment
 parameters, or a logical value.
 If \code{TRUE}, the default is \code{c(1.5, 2)}, or numeric the routine
 \code{alignped4()} will be called.}
@@ -65,8 +66,8 @@ inches.}
 
 \item{subreg}{4-element vector for (min x, max x, min depth, max depth),
 used to edit away portions of the plot coordinates returned by
-\code{\link[=align]{align()}}. This is useful for zooming in on a particular region of the
-pedigree.}
+\code{\link[=align]{align()}}.
+This is useful for zooming in on a particular region of the pedigree.}
 
 \item{pconnect}{when connecting parent to children the program will try to
 make the connecting line as close to vertical as possible, subject to it
@@ -111,14 +112,17 @@ increased to 1 + that amount (to give just a little wiggle room). To make a
 pedigree where all children are centered under parents simply make the width
 large enough, however, the symbols may get very small.
 
-The second is \code{align}, a vector of 2 alignment parameters \code{a} and \code{b}.
+The second is \code{align}, a vector of 2 alignment parameters \code{a} and
+\code{b}.
 For each set of siblings at a set of locations \code{x} and with parents at
 \code{p=c(p1,p2)} the alignment penalty is \deqn{(1/k^a)\sum{i=1}{k} [(x_i -
 (p1+p2)/2)]^2} sum(x- mean(p))^2/(k^a) where k is the number of siblings in
-the set. when \code{a = 1} moving a sibship with \code{k} sibs one unit to the left or
-right of optimal will incur the same cost as moving one with only 1 or two
-sibs out of place.  If \code{a=0} then large sibships are harder to move than
-small ones, with the default value \code{a = 1.5} they are slightly easier to move
+the set.
+When \code{a = 1} moving a sibship with \code{k} sibs one unit to the
+left or right of optimal will incur the same cost as moving one with
+only 1 or two sibs out of place.
+If \code{a=0} then large sibships are harder to move than small ones,
+with the default value \code{a = 1.5} they are slightly easier to move
 than small ones.  The rationale for the default is as long as the parents
 are somewhere between the first and last siblings the result looks fairly
 good, so we are more flexible with the spacing of a large family. By

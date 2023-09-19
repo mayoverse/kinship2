@@ -73,9 +73,9 @@ the right than on the left, women more on the right.
 Any hints in the spouselist matrix override.
 We put the undecided marriages closest to \strong{idx}, then add
 predetermined ones to the left and right. The majority of marriages will
-be undetermined singletons, for which \strong{nleft} will be \code{1} for female
-(put my husband to the left) and \code{0} for male. In one bug found by
-plotting canine data, lspouse could initially be empty but
+be undetermined singletons, for which \strong{nleft} will be \code{1} for
+female (put my husband to the left) and \code{0} for male. In one bug found
+by plotting canine data, lspouse could initially be empty but
 \code{length(rspouse) > 1}. This caused \code{nleft > length(indx)}.
 A fix was to not let \strong{indx} to be indexed beyond its length,
 fix by JPS 5/2013.

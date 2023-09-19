@@ -18,14 +18,17 @@ NULL
 #' pedigree where all children are centered under parents simply make the width
 #' large enough, however, the symbols may get very small.
 #'
-#' The second is `align`, a vector of 2 alignment parameters `a` and `b`.
+#' The second is `align`, a vector of 2 alignment parameters `a` and
+#' `b`.
 #' For each set of siblings at a set of locations `x` and with parents at
 #' `p=c(p1,p2)` the alignment penalty is \deqn{(1/k^a)\sum{i=1}{k} [(x_i -
 #' (p1+p2)/2)]^2} sum(x- mean(p))^2/(k^a) where k is the number of siblings in
-#' the set. when `a = 1` moving a sibship with `k` sibs one unit to the left or
-#' right of optimal will incur the same cost as moving one with only 1 or two
-#' sibs out of place.  If `a=0` then large sibships are harder to move than
-#' small ones, with the default value `a = 1.5` they are slightly easier to move
+#' the set.
+#' When `a = 1` moving a sibship with `k` sibs one unit to the
+#' left or right of optimal will incur the same cost as moving one with
+#' only 1 or two sibs out of place.
+#' If `a=0` then large sibships are harder to move than small ones,
+#' with the default value `a = 1.5` they are slightly easier to move
 #' than small ones.  The rationale for the default is as long as the parents
 #' are somewhere between the first and last siblings the result looks fairly
 #' good, so we are more flexible with the spacing of a large family. By

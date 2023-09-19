@@ -13,10 +13,11 @@ NULL
 #' @param threshold Numeric value separating the affected and healthy subject
 #' in the case where the `values` is numeric.
 #' @param sup_thres_aff Boolean defining if the affected individual are above
-#' the threshold or not. If TRUE, the individuals will be considered affected
-#' if the value of `values` is stricly above the `threshold`. If FALSE, the
-#' individuals will be considered affected if the value is stricly under the
-#' `threshold`.
+#' the threshold or not.
+#' If `TRUE`, the individuals will be considered affected
+#' if the value of `values` is stricly above the `threshold`.
+#' If `FALSE`, the individuals will be considered affected if the
+#' value is stricly under the `threshold`.
 #'
 #' @return A dataframe with the `affected` column processed accordingly.
 #' The different columns are:

@@ -57,40 +57,38 @@ setGeneric("is_informative", signature = "obj",
 #' @rdname is_informative
 #' @aliases is_informative,character
 #' @docType methods
-setMethod("is_informative", "character",
-    function(
-        obj, avail, affected, informative = "AvAf", missid = "0"
-    ) {
-        id <- obj
-        # Selection of all informative individuals depending of the informative
-        # parameter
-        if (is.numeric(informative)) {
-            id_inf <- id[match(id, informative, nomatch = 0) != 0]
-        } else if (is.logical(informative)) {
-            id_inf <- ifelse(informative, id, NA)
-            id_inf <- id_inf[!is.na(id_inf)]
+setMethod("is_informative", "character", function(
+    obj, avail, affected, informative = "AvAf", missid = "0"
+) {
+    id <- obj
+    # Selection of all informative individuals depending of the informative
+    # parameter
+    if (is.numeric(informative)) {
+        id_inf <- id[match(id, informative, nomatch = 0) != 0]
+    } else if (is.logical(informative)) {
+        id_inf <- ifelse(informative, id, NA)
+        id_inf <- id_inf[!is.na(id_inf)]
+    } else {
+        if (informative == "AvOrAf") {
+            id_inf <- id[(avail == 1 & !is.na(avail)) |
+                    (affected == 1 & !is.na(affected))
+            ]
+        } else if (informative == "Av") {
+            id_inf <- id[avail == 1 & !is.na(avail)]
+        } else if (informative == "Af") {
+            id_inf <- id[affected == 1 & !is.na(affected)]
+        } else if (informative == "AvAf") {
+            id_inf <- id[(avail == 1 & !is.na(avail)) &
+                    (affected == 1 & !is.na(affected))
+            ]
+        } else if (informative == "All") {
+            id_inf <- id
         } else {
-            if (informative == "AvOrAf") {
-                id_inf <- id[(avail == 1 & !is.na(avail)) |
-                        (affected == 1 & !is.na(affected))
-                ]
-            } else if (informative == "Av") {
-                id_inf <- id[avail == 1 & !is.na(avail)]
-            } else if (informative == "Af") {
-                id_inf <- id[affected == 1 & !is.na(affected)]
-            } else if (informative == "AvAf") {
-                id_inf <- id[(avail == 1 & !is.na(avail)) &
-                        (affected == 1 & !is.na(affected))
-                ]
-            } else if (informative == "All") {
-                id_inf <- id
-            } else {
-                id_inf <- id[match(id, informative, nomatch = 0) != 0]
-            }
+            id_inf <- id[match(id, informative, nomatch = 0) != 0]
         }
-        unique(id_inf)
     }
-)
+    unique(id_inf)
+})
 
 #' @export
 #' @rdname is_informative

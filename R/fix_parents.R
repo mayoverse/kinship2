@@ -28,8 +28,8 @@ NULL
 #' @inheritParams is_parent
 #' @inheritParams sex_to_factor
 #' @param obj A data.frame or a vector of the individuals identifiers. If a
-#' dataframe is given it must contain the columns `id`, `dadid`, `momid`,
-#' `sex` and `family`. Family is optional.
+#' dataframe is given it must contain the columns `id`, `dadid`,
+#' `momid`, `sex` and `family`. Family is optional.
 #'
 #' @return A data.frame with id, dadid, momid, sex as columns with the
 #' relationships fixed.

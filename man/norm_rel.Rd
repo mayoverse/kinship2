@@ -9,8 +9,9 @@ norm_rel(rel_df, na_strings = c("NA", ""), missid = "0")
 \arguments{
 \item{rel_df}{A data.frame with the special relationships between
 individuals.
-The minimum columns required are \code{id1}, \code{id2} and \code{code}. The \code{family}
-column can also be used to specify the family of the individuals.
+The minimum columns required are \code{id1}, \code{id2} and \code{code}.
+The \code{family} column can also be used to specify the family
+of the individuals.
 The code values are:
 \itemize{
 \item \code{1} = Monozygotic twin

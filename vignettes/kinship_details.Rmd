@@ -16,7 +16,7 @@ vignette: |
 
 Introduction
 =====================
-The kinship matrix is foundational for random effects models with family data.  
+The kinship matrix is foundational for random effects models with family data.
 For $n$ subjects it is an $n \times n$ matrix whose $i$, $j$ elements contains
 the expected fraction of alleles that would be identical by descent
 if we sampled one from subject $i$ and another from subject $j$.

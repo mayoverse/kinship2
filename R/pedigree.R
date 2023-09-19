@@ -10,12 +10,14 @@
 #' @inheritParams align
 #' @param obj A vector of the individuals identifiers or a data.frame
 #' with the individuals informations.
-#' The minimum columns required are `id`, `dadid`, `momid` and `sex`.
+#' The minimum columns required are `id`, `dadid`, `momid` and
+#' `sex`.
 #' The `family` column can also be used to specify the family of the
 #' individuals and will be merge to the `id` field separated by an
 #' underscore.
-#' The following columns are also recognize `steril`, `avail`, `status`,
-#' `affected`. They respectively correspond to the sterilisation status,
+#' The following columns are also recognize `steril`, `avail`,
+#' `status`, `affected`.
+#' They respectively correspond to the sterilisation status,
 #' the availability status, the death status and the affection status
 #' of the individuals. The values recognized for those columns are `1` or
 #' `0`.
