@@ -103,7 +103,7 @@ setMethod("[[", c(x = "Pedigree", i = "ANY", j = "missing"),
     }
 )
 
-#' Replace parts of a Pedigree object
+#' Replace a specific slot of a Pedigree object
 #'
 #' @param x A Pedigree object.
 #' @param i A vector of individuals id or a vector of index.

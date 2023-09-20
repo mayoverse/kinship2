@@ -4,7 +4,7 @@
 \alias{show,Pedigree-method}
 \alias{summary,Pedigree-method}
 \alias{[[,Pedigree,ANY,missing-method}
-\alias{[[<-,Pedigree,ANY,missing,ANY-method}
+\alias{[[<-,Pedigree,ANY,missing-method}
 \alias{$,Pedigree-method}
 \alias{$<-,Pedigree-method}
 \alias{sub_sel_hints}
@@ -20,9 +20,7 @@
 
 \S4method{[[}{Pedigree,ANY,missing}(x, i, j, ..., drop = TRUE)
 
-\S4method{[[}{Pedigree,ANY,missing,ANY}(x, i, j, ...) <- value
-
-\S4method{[[}{Pedigree,ANY,missing,ANY}(x, i, j, ...) <- value
+\S4method{[[}{Pedigree,ANY,missing}(x, i, j, ...) <- value
 
 \S4method{$}{Pedigree}(x, name)
 
@@ -66,8 +64,6 @@ The slot \code{i} present in the pedigree object.
 
 The pedigree object with the slot \code{i} replaced by \code{value}.
 
-The pedigree object with the slot \code{i} replaced by \code{value}.
-
 The slot \code{name} present in the pedigree object.
 
 The pedigree object with the slot \code{name} replaced by \code{value}.
@@ -86,8 +82,6 @@ Pedigree show method.
 Pedigree summary method.
 
 Extract parts of a Pedigree object
-
-Replace parts of a Pedigree object
 
 Replace parts of a Pedigree object
 
