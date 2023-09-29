@@ -31,7 +31,7 @@ test_that("pedigree other test", {
         function() plot(ped)
     )
 
-    lst <- plot(ped, label = "smoker", mark = FALSE, ggplot_gen = TRUE)
+    lst <- plot(ped, label = "smoker", aff_mark = FALSE, ggplot_gen = TRUE)
     vdiffr::expect_doppelganger("Ped simple affection ggplot",
         function() plot(lst$ggplot)
     )
