@@ -14,7 +14,7 @@ vignette: |
 ---
 
 ```{r, library_charge}
-library(kinship2)
+library(Pedigree)
 ```
     
 Pedigree alignment

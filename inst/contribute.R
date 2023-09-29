@@ -36,9 +36,9 @@ devtools::check_man()
 devtools::test()
 devtools::check()
 withr::with_libpaths(c("../testinstalls/", .libPaths()), devtools::install(build_vignettes = TRUE, dependencies = FALSE))
-devtools::build("../kinship2/")
+devtools::build("../Pedigree/")
 ## < restart R >
-library(kinship2, lib.loc = "../testinstalls/")
+library(Pedigree, lib.loc = "../testinstalls/")
 
 #### to upload to CRAN
 ## Update DESCRIPTION, README.md, NEWS.md, and cran-comments.md

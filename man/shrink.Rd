@@ -70,5 +70,5 @@ shrink(ped1, max_bits = 12)
 \code{\link[=pedigree]{pedigree()}}, \code{\link[=bit_size]{bit_size()}}
 }
 \author{
-Original by Dan Schaid, updated to kinship2 by Jason Sinnwell
+Original by Dan Schaid, updated by Jason Sinnwell
 }

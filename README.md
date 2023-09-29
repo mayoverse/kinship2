@@ -1,4 +1,4 @@
-# The `kinship2` Package <img src="./inst/figures/icon_kinship2.png" align="right" height="139" />
+# The `Pedigree` Package <img src="./inst/figures/icon_Pedigree.png" align="right" height="139" />
 
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/kinship2)](https://CRAN.R-project.org/package=kinship2)
 [![Downloads](http://cranlogs.r-pkg.org/badges/kinship2)](https://CRAN.R-project.org/package=kinship2)
@@ -20,7 +20,7 @@ To install this package from Github you can use the following R script:
 if (!require("remotes", quietly = TRUE))
     install.packages("remotes")
 
-remotes::install_github("louislenezet/kinship2@dev_newclass",
+remotes::install_github("louislenezet/Pedigree@dev_newclass",
     build_vignettes=TRUE
 )
 ````
@@ -33,7 +33,7 @@ To install this package you can use the following R script:
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
-BiocManager::install("kinship2")
+BiocManager::install("Pedigree")
 ```
 
 ## Documentation
@@ -42,7 +42,7 @@ To view documentation for the version of this package installed in your system,
 start R and enter:
 
 ```R
-browseVignettes("kinship2")
+browseVignettes("Pedigree")
 ```
 
 ## News
@@ -50,7 +50,7 @@ browseVignettes("kinship2")
 To see the new functions / modification please use:
 
 ```R
-utils::news(package="kinship2")
+utils::news(package="Pedigree")
 ```
 
 ## The main functions
@@ -108,7 +108,7 @@ object.
 The diagrams below show the main functions of the package and how they are
 related.
 
-![kinship2 Diagram](./inst/figures/kinship2_diagram.png)
+![Pedigree Diagram](./inst/figures/Pedigree_diagram.png)
 
 ### Details
 

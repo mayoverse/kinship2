@@ -1,8 +1,13 @@
 ## Created: 2/24/2020 Author: Jason Sinnwell
 
-#' The kinship2 package for pedigree data
+#' The Pedigree package for pedigree data
 #'
-#' The kinship2 package for pedigree data
+#' The Pedigree package for pedigree data an updated package of the
+#' \code{kinship2} package. The \code{kinship2} package was originally
+#' written by Terry Therneau and Jason Sinnwell.
+#' The \code{Pedigree} package is a fork of the
+#' \code{kinship2} package with
+#' additional functionality and bug fixes.
 #'
 #' The package download, NEWS, and README are available on CRAN:
 #' \\url{https://cran.r-project.org/package=kinship2}

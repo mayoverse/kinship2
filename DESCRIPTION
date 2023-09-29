@@ -1,4 +1,4 @@
-Package: kinship2
+Package: Pedigree
 Version: 1.99.0
 Date: 2023-09-19
 Title: Pedigree Functions
@@ -48,10 +48,11 @@ Suggests:
     withr
 Config/testthat/edition: 3
 biocViews: Software, DataRepresentation, Genetics, Alignment
-BugReports: https://github.com/LouisLeLezet/kinship2/issues
-url: https://github.com/LouisLeNezet/kinship2
+BugReports: https://github.com/LouisLeLezet/Pedigree/issues
+url: https://github.com/LouisLeNezet/Pedigree
 BiocType: Software
 Collate: 
+    'Pedigree-package.R'
     'alignped4.R'
     'alignped3.R'
     'alignped2.R'
@@ -79,7 +80,6 @@ Collate:
     'generate_colors.R'
     'ibd_matrix.R'
     'is_informative.R'
-    'kinship2-package.R'
     'min_dist_inf.R'
     'norm_data.R'
     'num_child.R'

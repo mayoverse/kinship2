@@ -164,7 +164,7 @@ test_that("Kinship with 2 different family", {
     ped2df <- as.data.frame(ped2mat)
     names(ped2df) <- c("family", "id", "dadid", "momid", "sex")
 
-    ## testing kinship2 on pedigreeList when only one subject in a family
+    ## testing when only one subject in a family
     peddf <- rbind(ped2df, c(2, 1, 0, 0, 1))
 
     peds <- pedigree(peddf)

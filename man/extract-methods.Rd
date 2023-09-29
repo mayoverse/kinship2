@@ -83,7 +83,7 @@ Pedigree summary method.
 
 Extract parts of a Pedigree object
 
-Replace parts of a Pedigree object
+Replace a specific slot of a Pedigree object
 
 Extract parts of a Pedigree object
 

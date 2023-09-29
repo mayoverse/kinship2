@@ -37,7 +37,7 @@
 #' ped1 <- pedigree(sampleped[sampleped$family == '1',])
 #' shrink(ped1, max_bits = 12)
 #'
-#' @author Original by Dan Schaid, updated to kinship2 by Jason Sinnwell
+#' @author Original by Dan Schaid, updated by Jason Sinnwell
 #' @seealso [pedigree()], [bit_size()]
 #' @export
 shrink <- function(

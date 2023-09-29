@@ -8,8 +8,8 @@
 
 library(withr)
 library(testthat)
-library(kinship2)
+library(Pedigree)
 library(vdiffr)
 
-test_check("kinship2")
+test_check("Pedigree")
 TRUE

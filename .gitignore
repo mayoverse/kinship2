@@ -3,4 +3,4 @@
 *.Rproj
 *.so
 *.Rprofile
-kinship2.Rcheck
+Pedigree.Rcheck
