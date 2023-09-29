@@ -9,7 +9,7 @@
 \usage{
 \S4method{plot}{Pedigree,missing}(
   x,
-  mark = TRUE,
+  aff_mark = TRUE,
   label = NULL,
   ggplot_gen = FALSE,
   cex = 1,
@@ -32,7 +32,7 @@
 \arguments{
 \item{x}{A pedigree object.}
 
-\item{mark}{if TRUE, add a mark to each box corresponding to the value of
+\item{aff_mark}{if TRUE, add a aff_mark to each box corresponding to the value of
 the affection column for each filling scale.}
 
 \item{label}{if not NULL, add a label to each box corresponding to the

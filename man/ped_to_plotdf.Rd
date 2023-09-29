@@ -14,7 +14,7 @@ ped_to_plotdf(
   symbolsize = cex,
   pconnect = 0.5,
   branch = 0.6,
-  mark = TRUE,
+  aff_mark = TRUE,
   label = NULL,
   ...
 )
@@ -55,7 +55,7 @@ force the line to connect at the midpoint of the children.}
 \item{branch}{defines how much angle is used to connect various levels of
 nuclear families.}
 
-\item{mark}{if TRUE, add a mark to each box corresponding to the value of
+\item{aff_mark}{if TRUE, add a aff_mark to each box corresponding to the value of
 the affection column for each filling scale.}
 
 \item{label}{if not NULL, add a label to each box corresponding to the
