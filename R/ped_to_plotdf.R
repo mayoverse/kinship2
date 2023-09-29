@@ -11,7 +11,7 @@ NULL
 #' force the line to connect at the midpoint of the children.
 #' @param branch defines how much angle is used to connect various levels of
 #' nuclear families.
-#' @param mark if TRUE, add a mark to each box corresponding to the value of
+#' @param aff_mark if TRUE, add a aff_mark to each box corresponding to the value of
 #' the affection column for each filling scale.
 #' @param label if not NULL, add a label to each box corresponding to the
 #' value of the column given.
@@ -29,7 +29,7 @@ NULL
 ped_to_plotdf <- function(
     ped, packed = FALSE, width = 10, align = c(1.5, 2),
     subreg = NULL, cex = 0.5, symbolsize = cex, pconnect = 0.5, branch = 0.6,
-    mark = TRUE, label = NULL, ...
+    aff_mark = TRUE, label = NULL, ...
 ) {
 
     famlist <- unique(ped$ped$family)
@@ -120,17 +120,16 @@ ped_to_plotdf <- function(
             id = "polygon"
         )
         plot_df <- rbind.fill(plot_df, ind)
-
-        if (mark) {
-            mark_df <- data.frame(
+        if (aff_mark) {
+            aff_mark_df <- data.frame(
                 x0 = pos[idx] + poly_aff_x_mr[sex],
                 y0 = i[idx] + boxh / 2,
                 label = ped$ped[id[idx], unique(aff_df[["column_values"]])],
                 fill = "black",
                 type = "text", cex = cex,
-                id = "mark"
+                id = "aff_mark"
             )
-            plot_df <- rbind.fill(plot_df, mark_df)
+            plot_df <- rbind.fill(plot_df, aff_mark_df)
         }
     }
 
@@ -252,7 +251,7 @@ ped_to_plotdf <- function(
                 plot_df <- rbind.fill(plot_df, twin_l)
             }
 
-            # Add a question mark for those of unknown zygosity
+            # Add a question aff_mark for those of unknown zygosity
             if (any(plist$twins[gen, who] == 3)) {
                 who2 <- which(plist$twins[gen, who] == 3)
                 temp1 <- (pos[gen, who][who2] + target[who2]) / 2

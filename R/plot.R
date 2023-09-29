@@ -78,7 +78,7 @@ NULL
 #' @export
 #' @docType methods
 setMethod("plot", c(x = "Pedigree", y = "missing"),
-    function(x, mark = TRUE,
+    function(x, aff_mark = TRUE,
         label = NULL, ggplot_gen = FALSE, cex = 1, symbolsize = 1, branch = 0.6,
         packed = TRUE, align = c(1.5, 2), width = 6,
         title = NULL, subreg = NULL, pconnect = 0.5, fam_to_plot = 1,
@@ -86,7 +86,7 @@ setMethod("plot", c(x = "Pedigree", y = "missing"),
         leg_loc = NULL, ...
     ) {
         lst <- ped_to_plotdf(x, packed, width, align, subreg,
-            cex, symbolsize, pconnect, branch, mark, label, ...
+            cex, symbolsize, pconnect, branch, aff_mark, label, ...
         )
         famlist <- unique(x$ped$family)
         if (length(famlist) > 1) {
