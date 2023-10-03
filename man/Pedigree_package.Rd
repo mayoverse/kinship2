@@ -55,7 +55,7 @@ from MN breast cancer study
 }
 
 \examples{
-library(kinship2)
+library(Pedigree)
 
 }
 \seealso{

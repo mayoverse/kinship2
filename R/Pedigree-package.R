@@ -44,9 +44,9 @@
 #' from MN breast cancer study
 #'
 #' @examples
-#' library(kinship2)
+#' library(Pedigree)
 #'
 #' @docType package
-#' @rdname kinship2
+#' @rdname Pedigree_package
 #' @keywords internal
 "_PACKAGE"
