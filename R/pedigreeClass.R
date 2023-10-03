@@ -58,7 +58,8 @@ setValidity("Pedigree", is_valid)
 
 #### S4 methods ####
 
-#' Pedigree show method.
+#' @title Pedigree methods
+#' @description Pedigree show method
 #' @param object A Pedigree object.
 #' @return A character vector with the informations about the object.
 #' @rdname extract-methods
@@ -70,7 +71,7 @@ setMethod("show", signature(object = "Pedigree"), function(object) {
         fill = TRUE)
 })
 
-#' Pedigree summary method.
+#' @description Pedigree summary method.
 #' @param object A Pedigree object.
 #' @return A character vector with the summary of the object.
 #' @rdname extract-methods
@@ -88,8 +89,7 @@ setMethod("summary", signature(object = "Pedigree"), function(object) {
     )
 })
 
-#' Extract parts of a Pedigree object
-#'
+#' @description Extract parts of a Pedigree object
 #' @param x A Pedigree object.
 #' @param i A vector of individuals id or a vector of index.
 #' @param j A vector of columns names.
@@ -103,25 +103,24 @@ setMethod("[[", c(x = "Pedigree", i = "ANY", j = "missing"),
     }
 )
 
-#' Replace a specific slot of a Pedigree object
-#'
+#' @description Replace a specific slot of a Pedigree object
 #' @param x A Pedigree object.
 #' @param i A vector of individuals id or a vector of index.
 #' @param j A vector of columns names.
 #' @param value A vector of values to replace.
-#' @param ... Other arguments.
 #' @rdname extract-methods
 #' @return The pedigree object with the slot `i` replaced by `value`.
-setMethod("[[<-", c(x = "Pedigree", i = "ANY", j = "missing"),
-    function(x, i, j, value) {
+setMethod(
+    "[[<-",
+    c(x = "Pedigree", i = "ANY", j = "missing"),
+    function(x, i, j, ..., value) {
         slot(x, i) <- value
         validObject(x)
         x
     }
 )
 
-#' Extract parts of a Pedigree object
-#'
+#' @description Extract parts of a Pedigree object
 #' @param x A Pedigree object.
 #' @param name A slot name.
 #' @rdname extract-methods
@@ -133,8 +132,7 @@ setMethod("$", c(x = "Pedigree"),
     }
 )
 
-#' Replace parts of a Pedigree object
-#'
+#' @description Replace parts of a Pedigree object
 #' @param x A Pedigree object.
 #' @param name A slot name.
 #' @param value A vector of values to replace.
@@ -148,8 +146,7 @@ setMethod("$<-", c(x = "Pedigree"),
     }
 )
 
-#' Subset the hints list based on the index given
-#'
+#' @description Subset the hints list based on the index given
 #' @param hints A list of hints
 #' @param index A vector of index
 #' @return A list of hints subsetted
@@ -178,8 +175,7 @@ sub_sel_hints <- function(hints, index) {
     temp
 }
 
-#' Extract parts of a Pedigree object
-#'
+#' @description Extract parts of a Pedigree object
 #' @param x A Pedigree object.
 #' @param i A vector of individuals id or a vector of index.
 #' @param j A vector of columns names.
@@ -211,8 +207,7 @@ setMethod("[", c(x = "Pedigree", i = "ANY", j = "ANY"),
     }
 )
 
-#' Extract parts of a Pedigree object
-#'
+#' @description Extract parts of a Pedigree object
 #' @param x A Pedigree object.
 #' @param i A vector of individuals id or a vector of index.
 #' @param j A vector of columns names.
@@ -230,8 +225,7 @@ setMethod("[", c(x = "Pedigree", i = "missing", j = "ANY"),
     }
 )
 
-#' Extract parts of a Pedigree object
-#'
+#' @description Extract parts of a Pedigree object
 #' @param x A Pedigree object.
 #' @param i A vector of individuals id or a vector of index.
 #' @param j A vector of columns names.
@@ -260,7 +254,6 @@ setMethod("[", c(x = "Pedigree", i = "ANY", j = "missing"),
 )
 
 #' Convert a Pedigree object to a data.frame
-#'
 #' @param x A Pedigree object.
 #' @return A data.frame with the individuals informations.
 #' @docType methods

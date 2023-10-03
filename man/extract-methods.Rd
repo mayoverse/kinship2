@@ -12,7 +12,7 @@
 \alias{[,Pedigree,ANY,ANY,ANY-method}
 \alias{[,Pedigree,missing,ANY,ANY-method}
 \alias{[,Pedigree,ANY,missing,ANY-method}
-\title{Pedigree show method.}
+\title{Pedigree methods}
 \usage{
 \S4method{show}{Pedigree}(object)
 
@@ -20,7 +20,7 @@
 
 \S4method{[[}{Pedigree,ANY,missing}(x, i, j, ..., drop = TRUE)
 
-\S4method{[[}{Pedigree,ANY,missing,ANY}(x, i, j) <- value
+\S4method{[[}{Pedigree,ANY,missing,ANY}(x, i, j, ...) <- value
 
 \S4method{$}{Pedigree}(x, name)
 
@@ -77,7 +77,7 @@ A Pedigree object subsetted.
 A Pedigree object subsetted.
 }
 \description{
-Pedigree show method.
+Pedigree show method
 
 Pedigree summary method.
 

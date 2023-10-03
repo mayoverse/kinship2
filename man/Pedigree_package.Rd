@@ -7,7 +7,8 @@
 \title{The Pedigree package for pedigree data}
 \description{
 The Pedigree package for pedigree data an updated package of the
-\code{kinship2} package. The \code{kinship2} package was originally
+\code{kinship2} package.
+The \code{kinship2} package was originally
 written by Terry Therneau and Jason Sinnwell.
 The \code{Pedigree} package is a fork of the
 \code{kinship2} package with

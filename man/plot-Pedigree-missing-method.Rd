@@ -32,8 +32,8 @@
 \arguments{
 \item{x}{A pedigree object.}
 
-\item{aff_mark}{if TRUE, add a aff_mark to each box corresponding to the value of
-the affection column for each filling scale.}
+\item{aff_mark}{if TRUE, add a aff_mark to each box corresponding to the
+value of the affection column for each filling scale.}
 
 \item{label}{if not NULL, add a label to each box corresponding to the
 value of the column given.}
