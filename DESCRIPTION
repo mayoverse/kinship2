@@ -33,7 +33,6 @@ Description: Routines to handle family data with a pedigree object. The initial 
 	     intervention. Recent additions include utilities to trim the pedigree object
 	     with various criteria, and kinship for the X chromosome.
 License: Artistic-2.0
-URL: https://cran.r-project.org/package=kinship2
 Encoding: UTF-8
 RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)

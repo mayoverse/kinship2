@@ -62,7 +62,6 @@ library(Pedigree)
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://cran.r-project.org/package=kinship2}
   \item Report bugs at \url{https://github.com/LouisLeLezet/Pedigree/issues}
 }
 
