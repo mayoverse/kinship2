@@ -112,8 +112,8 @@ setMethod("[[", c(x = "Pedigree", i = "ANY", j = "missing"),
 #' @param ... Other arguments.
 #' @rdname extract-methods
 #' @return The pedigree object with the slot `i` replaced by `value`.
-setMethod("[[<-", c(x = "Pedigree", i = "ANY", j = "missing", value = "ANY"),
-    function(x, i, j, ..., value) {
+setMethod("[[<-", c(x = "Pedigree", i = "ANY", j = "missing"),
+    function(x, i, j, value) {
         slot(x, i) <- value
         validObject(x)
         x

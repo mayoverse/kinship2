@@ -11,8 +11,8 @@ NULL
 #' force the line to connect at the midpoint of the children.
 #' @param branch defines how much angle is used to connect various levels of
 #' nuclear families.
-#' @param aff_mark if TRUE, add a aff_mark to each box corresponding to the value of
-#' the affection column for each filling scale.
+#' @param aff_mark if TRUE, add a aff_mark to each box corresponding to the
+#' value of the affection column for each filling scale.
 #' @param label if not NULL, add a label to each box corresponding to the
 #' value of the column given.
 #' @inheritParams set_plot_area

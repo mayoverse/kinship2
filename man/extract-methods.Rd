@@ -20,7 +20,7 @@
 
 \S4method{[[}{Pedigree,ANY,missing}(x, i, j, ..., drop = TRUE)
 
-\S4method{[[}{Pedigree,ANY,missing,ANY}(x, i, j, ...) <- value
+\S4method{[[}{Pedigree,ANY,missing,ANY}(x, i, j) <- value
 
 \S4method{$}{Pedigree}(x, name)
 
