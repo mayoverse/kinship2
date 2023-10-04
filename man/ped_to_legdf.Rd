@@ -5,7 +5,7 @@
 \alias{ped_to_legdf}
 \title{Convert a pedigree to a legend data frame of element to plot}
 \usage{
-ped_to_legdf(ped, boxh = 1, boxw = 1, cex = 1)
+ped_to_legdf(ped, boxh = 1, boxw = 1, cex = 1, adjx = 0, adjy = 0)
 }
 \arguments{
 \item{ped}{A pedigree object}
@@ -15,6 +15,12 @@ ped_to_legdf(ped, boxh = 1, boxw = 1, cex = 1)
 \item{boxw}{Width of the legend boxes}
 
 \item{cex}{character expansion of the text}
+
+\item{adjx}{default=0.  Controls the horizontal text adjustment of
+the labels in the legend.}
+
+\item{adjy}{default=0.  Controls the vertical text adjustment
+of the labels in the legend.}
 }
 \value{
 A list containing the legend data frame and the user coordinates.

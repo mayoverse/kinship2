@@ -7,9 +7,9 @@
 #' @inheritParams align
 #' @inheritParams set_plot_area
 #' @inheritParams plot_fromdf
-#' @adjx default=0.  Controls the horizontal text adjustment of
+#' @param adjx default=0.  Controls the horizontal text adjustment of
 #' the labels in the legend.
-#' @adjy default=0.  Controls the vertical text adjustment
+#' @param adjy default=0.  Controls the vertical text adjustment
 #' of the labels in the legend.
 #'
 #' @return

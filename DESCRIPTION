@@ -1,5 +1,5 @@
 Package: Pedixplorer
-Version: 0.99.2
+Version: 0.99.0
 Date: 2023-09-19
 Title: Pedigree Functions
 Authors@R: c(
@@ -11,7 +11,7 @@ Authors@R: c(
 	person("Elizabeth", "Atkinson", role="ctb"),
 	person("Louis", "Le Nezet", role='ctb'))
 Depends: 
-	 R (>= 4.3.0)
+	R (>= 4.3.0)
 Imports: 
     graphics,
     stats,
@@ -26,12 +26,12 @@ Imports:
     quadprog,
     Matrix
 Description: Routines to handle family data with a pedigree object. The initial purpose
-	     was to create correlation structures that describe family relationships such 
-	     as kinship and identity-by-descent, which can be used to model family data 
-	     in mixed effects models, such as in the coxme function. Also includes a tool
-	     for pedigree drawing which is focused on producing compact layouts without 
-	     intervention. Recent additions include utilities to trim the pedigree object
-	     with various criteria, and kinship for the X chromosome.
+    was to create correlation structures that describe family relationships such 
+    as kinship and identity-by-descent, which can be used to model family data 
+    in mixed effects models, such as in the coxme function. Also includes a tool
+    for pedigree drawing which is focused on producing compact layouts without 
+    intervention. Recent additions include utilities to trim the pedigree object
+    with various criteria, and kinship for the X chromosome.
 License: Artistic-2.0
 Encoding: UTF-8
 RoxygenNote: 7.2.3

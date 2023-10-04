@@ -26,6 +26,8 @@
   leg_cex = 0.8,
   leg_symbolsize = 0.5,
   leg_loc = NULL,
+  leg_adjx = 0,
+  leg_adjy = 0,
   ...
 )
 }
@@ -90,6 +92,12 @@ If character, it is the family id to plot.}
 \item{leg_loc}{default=NULL.  If NULL, the legend will be placed in the
 upper right corner of the plot.  Otherwise, a 4-element vector of the form
 (x0, x1, y0, y1) can be used to specify the location of the legend.}
+
+\item{leg_adjx}{default=0.  Controls the horizontal labels adjustment of
+the legend.}
+
+\item{leg_adjy}{default=0.  Controls the vertical labels adjustment
+of the legend.}
 
 \item{...}{Extra options that feed into the plot function.}
 }

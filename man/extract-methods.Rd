@@ -4,7 +4,6 @@
 \alias{show,Pedigree-method}
 \alias{summary,Pedigree-method}
 \alias{[[,Pedigree,ANY,missing-method}
-\alias{[[<-,Pedigree,ANY,missing-method}
 \alias{$,Pedigree-method}
 \alias{$<-,Pedigree-method}
 \alias{sub_sel_hints}
@@ -19,8 +18,6 @@
 \S4method{summary}{Pedigree}(object)
 
 \S4method{[[}{Pedigree,ANY,missing}(x, i, j, ..., drop = TRUE)
-
-\S4method{[[}{Pedigree,ANY,missing}(x, i, j) <- value
 
 \S4method{$}{Pedigree}(x, name)
 
@@ -47,9 +44,9 @@ sub_sel_hints(hints, index)
 
 \item{drop}{A logical value indicating if the dimensions should be dropped.}
 
-\item{value}{A vector of values to replace.}
-
 \item{name}{A slot name.}
+
+\item{value}{A vector of values to replace.}
 
 \item{hints}{A list of hints}
 
@@ -61,8 +58,6 @@ A character vector with the informations about the object.
 A character vector with the summary of the object.
 
 The slot \code{i} present in the pedigree object.
-
-The pedigree object with the slot \code{i} replaced by \code{value}.
 
 The slot \code{name} present in the pedigree object.
 
@@ -82,8 +77,6 @@ Pedigree show method
 Pedigree summary method.
 
 Extract parts of a Pedigree object
-
-Replace a specific slot of a Pedigree object
 
 Extract parts of a Pedigree object
 
