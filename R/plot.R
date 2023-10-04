@@ -54,6 +54,10 @@ NULL
 #' @param leg_loc default=NULL.  If NULL, the legend will be placed in the
 #' upper right corner of the plot.  Otherwise, a 4-element vector of the form
 #' (x0, x1, y0, y1) can be used to specify the location of the legend.
+#' @param leg_adjx default=0.  Controls the horizontal labels adjustment of
+#' the legend.
+#' @param leg_adjy default=0.  Controls the vertical labels adjustment
+#' of the legend.
 #' @param ... Extra options that feed into the plot function.
 #'
 #' @return an invisible list containing
@@ -83,7 +87,7 @@ setMethod("plot", c(x = "Pedigree", y = "missing"),
         packed = TRUE, align = c(1.5, 2), width = 6,
         title = NULL, subreg = NULL, pconnect = 0.5, fam_to_plot = 1,
         legend = FALSE, leg_cex = 0.8, leg_symbolsize = 0.5,
-        leg_loc = NULL, ...
+        leg_loc = NULL, leg_adjx = 0, leg_adjy = 0, ...
     ) {
         lst <- ped_to_plotdf(x, packed, width, align, subreg,
             cex, symbolsize, pconnect, branch, aff_mark, label, ...
@@ -107,7 +111,8 @@ setMethod("plot", c(x = "Pedigree", y = "missing"),
         if (legend) {
             leg <- ped_to_legdf(x, cex = leg_cex,
                 boxw = lst$par_usr$boxw * leg_symbolsize,
-                boxh = lst$par_usr$boxh * leg_symbolsize
+                boxh = lst$par_usr$boxh * leg_symbolsize,
+                adjx = leg_adjx, adjy = leg_adjy
             )
             if (is.null(leg_loc)) {
                 wh_fr <- lst$par_usr$usr

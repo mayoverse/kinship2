@@ -7,6 +7,10 @@
 #' @inheritParams align
 #' @inheritParams set_plot_area
 #' @inheritParams plot_fromdf
+#' @adjx default=0.  Controls the horizontal text adjustment of
+#' the labels in the legend.
+#' @adjy default=0.  Controls the vertical text adjustment
+#' of the labels in the legend.
 #'
 #' @return
 #' A list containing the legend data frame and the user coordinates.
@@ -20,7 +24,8 @@
 #' @export
 #' @docType methods
 ped_to_legdf <- function(ped,
-    boxh = 1, boxw = 1, cex = 1
+    boxh = 1, boxw = 1, cex = 1,
+    adjx = 0, adjy = 0
 ) {
     par_usr <- list(boxh = boxh, boxw = boxw, cex = cex)
     plot_df <- data.frame(
@@ -82,7 +87,8 @@ ped_to_legdf <- function(ped,
     )
 
     sex_label <- data.frame(
-        x0 = posx[2], y0 = posy[all_sex] + boxh / 2,
+        x0 = posx[2] + adjx,
+        y0 = posy[all_sex] + boxh / 2 + adjy,
         label = sex_equiv[all_sex], cex = cex,
         type = "text",
         fill = "black",
@@ -104,7 +110,8 @@ ped_to_legdf <- function(ped,
     lab <- bord_df$labels[match(border_mods, bord_df$mods)]
     lab[is.na(lab)] <- "NA"
     border_label <- data.frame(
-        x0 = posx[4], y0 = posy[seq_along(border_mods)] + boxh / 2,
+        x0 = posx[4] + adjx,
+        y0 = posy[seq_along(border_mods)] + boxh / 2  + adjy,
         label = lab, cex = cex,
         type = "text",
         fill = "black",
@@ -140,7 +147,8 @@ ped_to_legdf <- function(ped,
         lab <- aff_df$labels[match(aff_mods, aff_df$mods)]
         lab[is.na(lab)] <- "NA"
         affected_label <- data.frame(
-            x0 = posx[4 + aff * 2], y0 = posy[seq_along(aff_mods)] + boxh / 2,
+            x0 = posx[4 + aff * 2] + adjx,
+            y0 = posy[seq_along(aff_mods)] + boxh / 2 + adjy,
             label = lab, cex = cex,
             type = "text",
             fill = "black",
