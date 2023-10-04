@@ -1,8 +1,8 @@
 ---
-title: "Kinship2 Pedigree object"
+title: "Pedixplorer Pedigree object"
 author: "Louis Le Nézet"
 date: "31/08/2023"
-url: "https://github.com/LouisLeNezet/Pedigree"
+url: "https://github.com/LouisLeNezet/Pedixplorer"
 output:
   BiocStyle::html_document:
     toc: true
@@ -29,10 +29,10 @@ Table of Contents
 Introduction
 ===============
 
-This document is a tutorial for the `Pedigree package`, with examples of
+This document is a tutorial for the `Pedixplorer` package, with examples of
 creating pedigree objects and kinship matrices and other pedigree utilities.
 
-The `Pedigree package` contains the outines to handle family data with a
+The `Pedixplorer` package contains the outines to handle family data with a
 pedigree object.
 The initial purpose was to create correlation structures that describe family
 relationships such as kinship and identity-by-descent, which can be used to
@@ -44,20 +44,20 @@ various criteria, and kinship for the X chromosome.
 
 Installation
 ===============
-The `Pedigree package` is available on Bioconductor and can be installed
+The `Pedixplorer` package is available on Bioconductor and can be installed
 with the following command:
 
 ```{r BiocManager_install, eval = FALSE}
 if (!requireNamespace("BiocManager", quietly = TRUE)) {
     install.packages("BiocManager")
 }
-BiocManager::install("Pedigree")
+BiocManager::install("Pedixplorer")
 ```
 
 The package can then be loaded with the following command:
 
 ```{r, library_charge}
-library(Pedigree)
+library(Pedixplorer)
 ```
 
 The pedigree S4 object
@@ -77,7 +77,7 @@ Basic Usage
 =============
 
 ## Example Data
-Two datasets are provided within the Pedigree package: 
+Two datasets are provided within the Pedixplorer package: 
 + minnbreast: 17 families from a breast cancer study
 + sampleped: two samplepedigrees, with 41 and 14 subjects
 
@@ -440,7 +440,7 @@ dfped2
 ## Subsetting and Trimming
 
 Pedigrees with large size can be a bottleneck for programs that run 
-calculations on them. The Pedigree package contains some routines to 
+calculations on them. The Pedixplorer package contains some routines to 
 identify which subjects to remove.  We show how a subject 
 (e.g. subject 210) can be removed from 
 ~ped2~, and how the pedigree object is changed by verifying that the
@@ -472,7 +472,7 @@ ped2_trim_more$rel
 Shrinking
 ==============
 
-An additional function in Pedigree is *shrink()*, which shrinks a pedigree
+An additional function in Pedixplorer is *shrink()*, which shrinks a pedigree
 to a specified bit size while maintaining the maximal amount of 
 information for genetic linkage and association studies.  Using an indicator 
 for availability and affected status, it removes subjects in this order:

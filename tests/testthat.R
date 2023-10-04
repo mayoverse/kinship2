@@ -8,8 +8,8 @@
 
 library(withr)
 library(testthat)
-library(Pedigree)
+library(Pedixplorer)
 library(vdiffr)
 
-test_check("Pedigree")
+test_check("Pedixplorer")
 TRUE

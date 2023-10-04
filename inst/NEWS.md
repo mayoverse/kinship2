@@ -1,10 +1,10 @@
 # NEWS
 
-NEWS file for the Pedigree package
+NEWS file for the Pedixplorer package
 
 ## Changes in version 0.99.0
 
-- Kinship2 is renamed to Pedigree and hosted on Bioconductor.
+- Kinship2 is renamed to Pedixplorer and hosted on Bioconductor.
 - Pedigree is now a S4 object, all functions are updated to work with
 the new class
 - pedigree constructor now takes a data.frame as input for the pedigree

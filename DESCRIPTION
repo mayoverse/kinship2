@@ -1,4 +1,4 @@
-Package: Pedigree
+Package: Pedixplorer
 Version: 0.99.2
 Date: 2023-09-19
 Title: Pedigree Functions
@@ -47,11 +47,11 @@ Suggests:
     withr
 Config/testthat/edition: 3
 biocViews: Software, DataRepresentation, Genetics, Alignment
-BugReports: https://github.com/LouisLeLezet/Pedigree/issues
-url: https://github.com/LouisLeNezet/Pedigree
+BugReports: https://github.com/LouisLeLezet/Pedixplorer/issues
+url: https://github.com/LouisLeNezet/Pedixplorer
 BiocType: Software
 Collate: 
-    'Pedigree-package.R'
+    'Pedixplorer-package.R'
     'alignped4.R'
     'alignped3.R'
     'alignped2.R'
