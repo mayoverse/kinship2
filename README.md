@@ -5,6 +5,7 @@
 [![Total-Downloads](https://cranlogs.r-pkg.org/badges/grand-total/kinship2)](https://CRAN.R-project.org/package=kinship2)
 
 This is a fork and the new version of the [**kinship2**](https://github.com/mayoverse/kinship2) package.
+
 Initially a set of functions to view pedigrees while developing models that use
 kinship matrices, the functions were useful enough to put into a package of its
 own.
