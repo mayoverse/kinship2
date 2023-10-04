@@ -103,23 +103,6 @@ setMethod("[[", c(x = "Pedigree", i = "ANY", j = "missing"),
     }
 )
 
-#' @description Replace a specific slot of a Pedigree object
-#' @param x A Pedigree object.
-#' @param i A vector of individuals id or a vector of index.
-#' @param j A vector of columns names.
-#' @param value A vector of values to replace.
-#' @rdname extract-methods
-#' @return The pedigree object with the slot `i` replaced by `value`.
-setMethod(
-    "[[<-",
-    c(x = "Pedigree", i = "ANY", j = "missing", value = "ANY"),
-    function(x, i, j, value) {
-        slot(x, i) <- value
-        validObject(x)
-        x
-    }
-)
-
 #' @description Extract parts of a Pedigree object
 #' @param x A Pedigree object.
 #' @param name A slot name.
