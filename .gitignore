@@ -3,4 +3,5 @@
 *.Rproj
 *.so
 *.Rprofile
+devel/*
 Pedixplorer.Rcheck
