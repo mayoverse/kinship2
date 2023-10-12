@@ -43,6 +43,6 @@ test_that("Num child", {
 
     ped <- Pedigree(df, relation)
     ped <- num_child(ped)
-    expect_equal(ped$ped[colnames(df_num)], df_num)
+    expect_equal(ped(ped)[colnames(df_num)], df_num)
 })
 TRUE

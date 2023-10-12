@@ -30,7 +30,7 @@ NULL
 
 #' @examples
 #' data(sampleped)
-#' fam1 <- sampleped[sampleped$ped == 1, ]
+#' fam1 <- sampleped[sampleped$family == 1, ]
 #'
 #'
 #' ped1 <- Pedigree(fam1)
@@ -46,7 +46,7 @@ NULL
 #' ## [1] '110' '113' '116' '109'
 #' ## [1] '113' '133' '141' '109'
 #' @export
-unrelated <- function(ped, avail = ped$ped$avail) {
+unrelated <- function(ped, avail = ped(ped)$avail) {
     # Requires: kinship function
 
     # Given vectors id, father, and mother for a Pedigree structure, and avail
@@ -62,7 +62,7 @@ unrelated <- function(ped, avail = ped$ped$avail) {
     # count of zeros for rows, a random choice is made. Hence, running this
     # function multiple times can return different sets of unrelated subjects.
 
-    id <- ped$ped$id
+    id <- ped(ped)$id
 
     kin <- kinship(ped)
 

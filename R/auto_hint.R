@@ -111,8 +111,8 @@ findspouse <- function(idpos, plist, lev, ped) {
         stop("auto_hint bug 3")
     }
 
-    opposite <- ped$ped$sex[plist$nid[lev, lpos:rpos]] !=
-        ped$ped$sex[plist$nid[lev, idpos]]
+    opposite <- ped(ped)$sex[plist$nid[lev, lpos:rpos]] !=
+        ped(ped)$sex[plist$nid[lev, idpos]]
 
     ## Can happen with a triple marriage
     if (!any(opposite)) {
@@ -226,15 +226,15 @@ duporder <- function(idlist, plist, lev, ped) {
 #'  3. `twinord` the order of the twins
 #' @seealso [auto_hint()]
 get_twin_rel <- function(ped) {
-    if (is.null(ped$rel)) {
+    if (is.null(rel(ped))) {
         relation <- NULL
     } else {
         relation <- cbind(
-            as.matrix(ped$rel[, c("id1", "id2")]),
-            as.numeric(ped$rel[, "code"])
+            as.matrix(rel(ped)[, c("id1", "id2")]),
+            as.numeric(rel(ped)[, "code"])
         )
     }
-    n <- length(ped$ped$id)
+    n <- length(ped(ped)$id)
     twinset <- rep(0, n)
     twinord <- rep(1, n)
     twinrel <- NULL
@@ -305,18 +305,18 @@ auto_hint <- function(
     ## full documentation now in vignette: align_code_details.Rmd
     ## References to those sections appear here as:
     ## Doc: auto_hint
-    if ((!is.null(ped$hints$order) ||
-                !is.null(ped$hints$spouse)
+    if ((!is.null(hints(ped)$order) ||
+                !is.null(hints(ped)$spouse)
         ) && !reset
     ) {
-        return(ped$hints)
+        return(hints(ped))
     } # nothing to do
 
-    if (length(unique(ped$ped$family)) > 1) {
+    if (length(unique(ped(ped)$family)) > 1) {
         stop("auto_hint only works on Pedigrees with a single family")
     }
 
-    n <- length(ped$ped$id)
+    n <- length(ped(ped)$id)
     depth <- kindepth(ped, align_parents = TRUE)
 
     ## Doc: init-auto_hint

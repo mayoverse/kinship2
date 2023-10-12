@@ -37,9 +37,9 @@ ped_to_legdf <- function(ped,
         adjy = numeric()
     )
     sex_equiv <- c("Male", "Female", "Terminated", "Unknown")
-    all_lab <- list(sex_equiv, ped$scales$border$labels)
-    all_aff <- lapply(unique(ped$scales$fill$order), function(x) {
-        ped$scales$fill$labels[ped$scales$fill$order == x]
+    all_lab <- list(sex_equiv, scales(ped)$border$labels)
+    all_aff <- lapply(unique(scales(ped)$fill$order), function(x) {
+        scales(ped)$fill$labels[scales(ped)$fill$order == x]
     })
 
     all_lab <- c(all_lab, all_aff)
@@ -63,7 +63,7 @@ ped_to_legdf <- function(ped,
     posy <- cumsum(posy) - boxh
     posy <- posy[seq_along(posy) %% 2 == 0]
 
-    all_aff <- ped$scales$fill
+    all_aff <- scales(ped)$fill
     n_aff <- length(unique(all_aff$order))
 
     lab_title <- c("Sex", "Border", unique(all_aff$column_values))
@@ -77,7 +77,7 @@ ped_to_legdf <- function(ped,
 
     # Sex
     poly1 <- polygons(1)
-    all_sex <- unique(as.numeric(ped$ped$sex))
+    all_sex <- unique(as.numeric(ped(ped)$sex))
     sex <- data.frame(
         x0 = posx[1], y0 = posy[all_sex],
         type = paste(names(poly1)[all_sex], 1, 1, sep = "_"),
@@ -98,8 +98,8 @@ ped_to_legdf <- function(ped,
     plot_df <- rbind.fill(plot_df, sex, sex_label)
 
     # Border
-    bord_df <- ped$scales$border
-    border_mods <- unique(ped$ped[, unique(bord_df[["column"]])])
+    bord_df <- scales(ped)$border
+    border_mods <- unique(ped(ped)[, unique(bord_df[["column"]])])
     border <- data.frame(
         x0 = posx[3], y0 = posy[seq_along(border_mods)],
         type = rep("square_1_1", length(border_mods)),
@@ -123,7 +123,7 @@ ped_to_legdf <- function(ped,
     ## Affected
     for (aff in seq_len(n_aff)) {
         aff_df <- all_aff[all_aff$order == aff, ]
-        aff_mods <- unique(ped$ped[, unique(aff_df[["column_mods"]])])
+        aff_mods <- unique(ped(ped)[, unique(aff_df[["column_mods"]])])
         aff_bkg <- data.frame(
             x0 = posx[3 + aff * 2], y0 = posy[seq_along(aff_mods)],
             type = rep(paste("square", 1, 1, sep = "_"),

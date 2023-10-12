@@ -4,7 +4,12 @@
 \alias{shrink}
 \title{Shrink Pedigree object}
 \usage{
-shrink(ped, avail = ped$ped$avail, affected = ped$ped$affected, max_bits = 16)
+shrink(
+  ped,
+  avail = ped(ped)$avail,
+  affected = ped(ped)$affected,
+  max_bits = 16
+)
 }
 \arguments{
 \item{ped}{A Pedigree object}

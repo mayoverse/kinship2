@@ -4,7 +4,7 @@
 \alias{find_avail_affected}
 \title{Find a single person to trim from a Pedigree whose is available}
 \usage{
-find_avail_affected(ped, avail = ped$ped$avail, affstatus = NA)
+find_avail_affected(ped, avail = ped(ped)$avail, affstatus = NA)
 }
 \arguments{
 \item{ped}{A Pedigree object}

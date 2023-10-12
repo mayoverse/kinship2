@@ -49,15 +49,15 @@
 best_hint <- function(ped, wt = c(1000, 10, 1), tolerance = 0) {
     # find founders married to founders the female of such pairs
     # determines the plot order of founders
-    mom <- match(ped$ped$momid, ped$ped$id)
-    dad <- match(ped$ped$dadid, ped$ped$id)
+    mom <- match(ped(ped)$momid, ped(ped)$id)
+    dad <- match(ped(ped)$dadid, ped(ped)$id)
     # founders and marry-ins
-    founders <- ped$ped$id[is.na(mom) & is.na(dad)]
-    fpair <- !(is.na(match(ped$ped$momid, founders)) |
-            is.na(match(ped$ped$dadid, founders))
+    founders <- ped(ped)$id[is.na(mom) & is.na(dad)]
+    fpair <- !(is.na(match(ped(ped)$momid, founders)) |
+            is.na(match(ped(ped)$dadid, founders))
     )
     # row num of founding moms
-    fmom <- unique(match(ped$ped$momid[fpair], ped$ped$id))
+    fmom <- unique(match(ped(ped)$momid[fpair], ped(ped)$id))
 
     # This function generates the permutations one after the other
     permute <- function(x) {
@@ -80,7 +80,7 @@ best_hint <- function(ped, wt = c(1000, 10, 1), tolerance = 0) {
     # This way we should hit one of them soon.
     pmat <- pmat[order(runif(nrow(pmat))), ]
 
-    n <- length(ped$ped$id)
+    n <- length(ped(ped)$id)
     for (perm in seq_len(nrow(pmat))) {
         hint <- cbind(seq_len(n), rep(0, n))
         hint[fmom, 1] <- pmat[perm, ]

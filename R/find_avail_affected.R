@@ -31,8 +31,8 @@
 #' @include utils.R
 #' @include find_unavailable.R
 #' @export
-find_avail_affected <- function(ped, avail = ped$ped$avail, affstatus = NA) {
-    ped_df <- ped$ped
+find_avail_affected <- function(ped, avail = ped(ped)$avail, affstatus = NA) {
+    ped_df <- ped(ped)
     ped_df$avail <- avail
     not_parent <- !is_parent(ped_df$id, ped_df$dadid, ped_df$momid)
 

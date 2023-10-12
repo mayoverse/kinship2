@@ -16,7 +16,7 @@ kinship(obj, ...)
 \S4method{kinship}{Pedigree}(obj, chrtype = "autosome")
 }
 \arguments{
-\item{obj}{A Pedigree object or a vector of subject identifiers.}
+\item{obj}{A pedigree object or a vector of subject identifiers.}
 
 \item{...}{Additional arguments passed to methods}
 
@@ -43,10 +43,10 @@ the gender of the individuals. The following values are recognized:
 A matrix of kinship coefficients.
 }
 
-\subsection{When obj is a Pedigree}{
+\subsection{When obj is a pedigree}{
 
 A matrix of kinship coefficients ordered by families present
-in the Pedigree.
+in the pedigree.
 }
 }
 \description{
@@ -61,7 +61,7 @@ of the library that was less capable.  The first argument is named \code{id}
 for the same reason.  Note that when using the third form any information on
 twins is not available to the function.
 
-When called with a Pedigree, the routine
+When called with a pedigree, the routine
 will create a block-diagonal-symmetric sparse matrix object of class
 \code{dsCMatrix}.  Since the \verb{[i, j]} value of the result is 0 for any two
 unrelated individuals i and j and a \code{Matrix} utilizes sparse

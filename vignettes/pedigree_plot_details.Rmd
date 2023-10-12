@@ -205,7 +205,7 @@ will make up the symbol.  These are then used again and again.
 The collection is kept as a list with the four elements square, circle,
 diamond and triangle.
 
-Each of these is in turn a list with `max(ped$scales$fill$order)` elements,
+Each of these is in turn a list with `max(scales(ped)$fill$order)` elements,
 and each of those in turn a list of x and y coordinates.
 
 ### Circfun

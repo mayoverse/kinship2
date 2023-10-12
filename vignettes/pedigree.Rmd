@@ -116,7 +116,7 @@ The summary method prints a more detailed summary of the Pedigree.
 Finally the plot method displays the Pedigree.
 
 ```{r, ped1}
-ped1 <- ped[ped$ped$family == "1", ]
+ped1 <- ped[ped(ped)$family == "1", ]
 print(ped1)
 summary(ped1)
 plot(ped1)

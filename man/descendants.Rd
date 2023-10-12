@@ -18,7 +18,7 @@ descendants(idlist, obj, ...)
 \arguments{
 \item{idlist}{List of individuals identifiers to be considered}
 
-\item{obj}{A Pedigree object or a vector of subject identifiers.}
+\item{obj}{A pedigree object or a vector of subject identifiers.}
 
 \item{...}{Additional arguments passed to methods}
 

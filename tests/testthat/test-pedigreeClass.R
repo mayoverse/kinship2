@@ -96,10 +96,10 @@ test_that("Pedigree subscripting", {
         "motherId" = "motherid", "gender" = "sex", "family" = "famid",
         "affection" = "cancer"
     ))
-    expect_equal(nrow(minnped$ped), 28081)
+    expect_equal(nrow(ped(minnped)), 28081)
     expect_equal(ncol(minnped[["ped"]]), 28)
 
-    ped8 <- minnped[minnped$ped$family == "8",
+    ped8 <- minnped[ped(minnped)$family == "8",
         c("id", "dadid", "momid", "sex", "affection")
     ]
 
@@ -145,11 +145,21 @@ test_that("Pedigree length", {
     expect_equal(length(ped), 55)
 })
 
-test_that("Pedigree accessors", {
+test_that("Pedigree getters", {
     data("sampleped")
     ped <- Pedigree(sampleped)
     expect_equal(ped$ped, ped(ped))
     expect_equal(ped$rel, rel(ped))
     expect_equal(ped$scales, scales(ped))
     expect_equal(ped$hints, hints(ped))
+    scales(ped)$fill
+})
+
+test_that("Pedigree setters", {
+    data("sampleped")
+    ped <- Pedigree(sampleped)
+    peddf <- ped(ped)
+    peddf[1, "family"] <- "2"
+    ped(ped) <- peddf
+    expect_equal(ped(ped)[1, "family"], "2")
 })

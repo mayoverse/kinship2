@@ -90,7 +90,7 @@ to figure that out.
 
 The first thing to be done is to check on twins. They increase the complexity,
 since twins need to move together.
-The `ped$rel$code` object is a factor, so first turn that into numeric.
+The `rel(ped)$code` object is a factor, so first turn that into numeric.
 We create 3 vectors:
 
 - $twinrel$ is a matrix containing pairs of twins and
@@ -196,7 +196,7 @@ We'll look at more complex cases below when looking at the $duporder$ (order
 the duplicates) function, which returns a matrix with columns 1 and 2 being a
 pair of duplicates, and 3 a direction. Note that in the following code
 $idlist$ refers to the row numbers of each subject in the Pedigree, not to
-their label `ped$ped$id`.
+their label `ped(ped)$id`.
 
 ## duporder
 

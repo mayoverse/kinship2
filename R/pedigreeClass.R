@@ -64,9 +64,23 @@ setValidity("Pedigree", is_valid)
 #' @rdname extract-methods
 #' @aliases ped,Pedigree-method
 #' @export
-ped <- function(object) {
+setGeneric("ped", function(object){
+    standardGeneric("ped")
+})
+
+setMethod("ped", signature(object = "Pedigree"), function(object) {
     object@ped
-}
+})
+
+setGeneric("ped<-", function(object, value) {
+    standardGeneric("ped<-")
+})
+
+setMethod("ped<-", signature(object = "Pedigree", value = "ANY"), function(object, value) {
+    object@ped <- value
+    validObject(object)
+    object
+})
 
 #' @description Pedigree rel accessors
 #' @param object A Pedigree object.
@@ -74,9 +88,23 @@ ped <- function(object) {
 #' @rdname extract-methods
 #' @aliases rel,Pedigree-method
 #' @export
-rel <- function(object) {
+setGeneric("rel", function(object){
+    standardGeneric("rel")
+})
+
+setMethod("rel", signature(object = "Pedigree"), function(object) {
     object@rel
-}
+})
+
+setGeneric("rel<-", function(object, value) {
+    standardGeneric("rel<-")
+})
+
+setMethod("rel<-", signature(object = "Pedigree", value = "ANY"), function(object, value) {
+    object@rel <- value
+    validObject(object)
+    object
+})
 
 #' @description Pedigree scales accessors
 #' @param object A Pedigree object.
@@ -84,9 +112,23 @@ rel <- function(object) {
 #' @rdname extract-methods
 #' @aliases scales,Pedigree-method
 #' @export
-scales <- function(object) {
+setGeneric("scales", function(object){
+    standardGeneric("scales")
+})
+
+setMethod("scales", signature(object = "Pedigree"), function(object) {
     object@scales
-}
+})
+
+setGeneric("scales<-", function(object, value) {
+    standardGeneric("scales<-")
+})
+
+setMethod("scales<-", signature(object = "Pedigree", value = "ANY"), function(object, value) {
+    object@scales <- value
+    validObject(object)
+    object
+})
 
 #' @description Pedigree hints accessors
 #' @param object A Pedigree object.
@@ -94,9 +136,23 @@ scales <- function(object) {
 #' @rdname extract-methods
 #' @aliases hints,Pedigree-method
 #' @export
-hints <- function(object) {
+setGeneric("hints", function(object){
+    standardGeneric("hints")
+})
+
+setMethod("hints", signature(object = "Pedigree"), function(object) {
     object@hints
-}
+})
+
+setGeneric("hints<-", function(object, value) {
+    standardGeneric("hints<-")
+})
+
+setMethod("hints<-", signature(object = "Pedigree", value = "ANY"), function(object, value) {
+    object@hints <- value
+    validObject(object)
+    object
+})
 
 
 #### S4 methods ####

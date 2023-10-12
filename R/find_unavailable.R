@@ -36,7 +36,7 @@
 #' @seealso [shrink()]
 #' @include utils.R
 #' @export
-find_unavailable <- function(ped, avail = ped$ped$avail) {
+find_unavailable <- function(ped, avail = ped(ped)$avail) {
     ## find id within Pedigree anyone who is not available and
     ## does not have an available descendant
 
@@ -45,7 +45,7 @@ find_unavailable <- function(ped, avail = ped$ped$avail) {
     ## will do this iteratively by successively removing unavailable
     ## terminal nodes
     ## Steve Iturria, PhD, modified by Dan Schaid
-    df <- ped$ped
+    df <- ped(ped)
     df$avail <- avail
     cont <- TRUE # flag for whether to keep iterating
 
@@ -74,7 +74,7 @@ find_unavailable <- function(ped, avail = ped$ped$avail) {
     ## remove stray marry-ins
     tmp_ped <- exclude_stray_marryin(tmp_ped$id, tmp_ped$dadid, tmp_ped$momid)
 
-    ped$ped$id[is.na(match(ped$ped$id, tmp_ped$id))]
+    ped(ped)$id[is.na(match(ped(ped)$id, tmp_ped$id))]
 }
 
 #' Exclude stray marry-ins

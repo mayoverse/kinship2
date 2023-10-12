@@ -23,7 +23,7 @@ min_dist_inf(obj, ...)
 )
 }
 \arguments{
-\item{obj}{A Pedigree object or a vector of subject identifiers.}
+\item{obj}{A pedigree object or a vector of subject identifiers.}
 
 \item{...}{Additional arguments passed to methods}
 

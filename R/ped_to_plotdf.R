@@ -32,12 +32,12 @@ ped_to_plotdf <- function(
     aff_mark = TRUE, label = NULL, ...
 ) {
 
-    famlist <- unique(ped$ped$family)
+    famlist <- unique(ped(ped)$family)
     if (length(famlist) > 1) {
         nfam <- length(famlist)
         all_df <- vector("list", nfam)
         for (i_fam in famlist) {
-            ped_fam <- ped[ped$ped$family == i_fam]
+            ped_fam <- ped[ped(ped)$family == i_fam]
             all_df[[i_fam]] <- ped_to_plotdf(ped_fam, packed, width, align,
                 subreg, cex, symbolsize, ...
             )
@@ -62,7 +62,7 @@ ped_to_plotdf <- function(
     maxlev <- nrow(plist$pos)
 
     params_plot <- set_plot_area(
-        cex, ped$ped$id, maxlev, xrange, symbolsize, ...
+        cex, ped(ped)$id, maxlev, xrange, symbolsize, ...
     )
 
     boxw <- params_plot$boxw
@@ -80,20 +80,20 @@ ped_to_plotdf <- function(
     # y position
     i <- (seq_len(length(plist$nid)) - 1) %% length(plist$n) + 1
     # sex of each box
-    sex <- as.numeric(ped$ped$sex)[id[idx]]
+    sex <- as.numeric(ped(ped)$sex)[id[idx]]
 
-    all_aff <- ped$scales$fill
-    bord_df <- ped$scales$border
+    all_aff <- scales(ped)$fill
+    bord_df <- scales(ped)$border
     n_aff <- length(unique(all_aff$order))
     polylist <- polygons(max(1, n_aff))
 
     # border mods of each box
-    border_mods <- ped$ped[id[idx], unique(bord_df[["column"]])]
+    border_mods <- ped(ped)[id[idx], unique(bord_df[["column"]])]
     border_idx <- match(border_mods, bord_df[["mods"]])
 
     for (aff in seq_len(n_aff)) {
         aff_df <- all_aff[all_aff$order == aff, ]
-        aff_mods <- ped$ped[id[idx], unique(aff_df[["column_mods"]])]
+        aff_mods <- ped(ped)[id[idx], unique(aff_df[["column_mods"]])]
         aff_idx <- match(aff_mods, aff_df[["mods"]])
 
 
@@ -124,7 +124,7 @@ ped_to_plotdf <- function(
             aff_mark_df <- data.frame(
                 x0 = pos[idx] + poly_aff_x_mr[sex],
                 y0 = i[idx] + boxh / 2,
-                label = ped$ped[id[idx], unique(aff_df[["column_values"]])],
+                label = ped(ped)[id[idx], unique(aff_df[["column_values"]])],
                 fill = "black",
                 type = "text", cex = cex,
                 id = "aff_mark"
@@ -134,7 +134,7 @@ ped_to_plotdf <- function(
     }
 
     ## Add status
-    status <- ped$ped[id[idx], "status"]
+    status <- ped(ped)[id[idx], "status"]
     idx_dead <- idx[status == 1 & !is.na(status)]
 
     if (length(idx_dead) > 0) {
@@ -151,7 +151,7 @@ ped_to_plotdf <- function(
     ## Add ids
     id_df <- data.frame(
         x0 = pos[idx], y0 = i[idx] + boxh + labh * 1.2,
-        label = ped$ped[id[idx], "id"], fill = "black",
+        label = ped(ped)[id[idx], "id"], fill = "black",
         type = "text", cex = cex,
         id = "id"
     )
@@ -160,10 +160,10 @@ ped_to_plotdf <- function(
 
     ## Add a label if given
     if (!is.null(label)) {
-        check_columns(ped$ped, label)
+        check_columns(ped(ped), label)
         label <- data.frame(
             x0 = pos[idx], y0 = i[idx] + boxh + labh * 2.8,
-            label = ped$ped[id[idx], label],
+            label = ped(ped)[id[idx], label],
             fill = "black",
             type = "text", cex = cex,
             id = "label"

@@ -4,7 +4,7 @@
 \alias{unrelated}
 \title{Get unrelated subjects}
 \usage{
-unrelated(ped, avail = ped$ped$avail)
+unrelated(ped, avail = ped(ped)$avail)
 }
 \arguments{
 \item{ped}{A Pedigree object}
@@ -39,7 +39,7 @@ multiple times can return different sets of unrelated subjects.
 }
 \examples{
 data(sampleped)
-fam1 <- sampleped[sampleped$ped == 1, ]
+fam1 <- sampleped[sampleped$family == 1, ]
 
 
 ped1 <- Pedigree(fam1)
