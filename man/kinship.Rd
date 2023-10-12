@@ -16,7 +16,7 @@ kinship(obj, ...)
 \S4method{kinship}{Pedigree}(obj, chrtype = "autosome")
 }
 \arguments{
-\item{obj}{A pedigree object or a vector of subject identifiers.}
+\item{obj}{A Pedigree object or a vector of subject identifiers.}
 
 \item{...}{Additional arguments passed to methods}
 
@@ -43,25 +43,25 @@ the gender of the individuals. The following values are recognized:
 A matrix of kinship coefficients.
 }
 
-\subsection{When obj is a pedigree}{
+\subsection{When obj is a Pedigree}{
 
 A matrix of kinship coefficients ordered by families present
-in the pedigree.
+in the Pedigree.
 }
 }
 \description{
 Compute the kinship matrix for a set of related autosomal subjects.  The
-function is generic, and can accept a pedigree, pedigreeList, or vector as
+function is generic, and can accept a Pedigree,  vector as
 the first argument.
 }
 \details{
-The function will usually be called with a pedigree or pedigreeList; the
-third form is provided for backwards compatability with an earlier release
+The function will usually be called with a Pedigree the
+third form is provided for backwards compatibility with an earlier release
 of the library that was less capable.  The first argument is named \code{id}
 for the same reason.  Note that when using the third form any information on
 twins is not available to the function.
 
-When called with a pedigree, the routine
+When called with a Pedigree, the routine
 will create a block-diagonal-symmetric sparse matrix object of class
 \code{dsCMatrix}.  Since the \verb{[i, j]} value of the result is 0 for any two
 unrelated individuals i and j and a \code{Matrix} utilizes sparse
@@ -89,7 +89,7 @@ Genetic Analysis, Springer-Verlag, New York, 1997.
 
 \examples{
 data(sampleped)
-ped <- pedigree(sampleped)
+ped <- Pedigree(sampleped)
 kinship(ped)
 
 }

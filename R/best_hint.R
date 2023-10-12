@@ -1,7 +1,7 @@
 #' Best hint for alignement
 #'
 #' @description
-#' When computer time is cheap, use this routine to get a 'best' pedigree.
+#' When computer time is cheap, use this routine to get a 'best' Pedigree.
 #' This routine will try all possible founder orders, and return the one
 #' with the least 'stress'.
 #'
@@ -42,7 +42,7 @@
 #' @export
 #' @examples
 #' data(sampleped)
-#' ped <- pedigree(sampleped[sampleped$family == 1,])
+#' ped <- Pedigree(sampleped[sampleped$family == 1,])
 #' best_hint(ped)
 #' @include auto_hint.R
 #' @include align.R
@@ -74,7 +74,7 @@ best_hint <- function(ped, wt = c(1000, 10, 1), tolerance = 0) {
         }
     }
     pmat <- permute(seq_along(fmom))
-    # Put the subsets into a random order For most pedigrees,
+    # Put the subsets into a random order For most Pedigrees,
     # there are several permutations that will give a tolerance
     # or near tolerance plot.
     # This way we should hit one of them soon.

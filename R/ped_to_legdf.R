@@ -1,7 +1,7 @@
-#' Convert a pedigree to a legend data frame of element to plot
+#' Convert a Pedigree to a legend data frame of element to plot
 #'
 #' @description
-#' Convert a pedigree to a legend data frame for it to
+#' Convert a Pedigree to a legend data frame for it to
 #' be plotted with afterwards with [plot_fromdf()].
 #'
 #' @inheritParams align
@@ -17,7 +17,7 @@
 #'
 #' @examples
 #' data("sampleped")
-#' ped <- pedigree(sampleped)
+#' ped <- Pedigree(sampleped)
 #' leg_df <- ped_to_legdf(ped)
 #' summary(leg_df$leg_df)
 #' plot_fromdf(leg_df$leg_df)

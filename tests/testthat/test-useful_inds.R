@@ -20,9 +20,9 @@ test_that("useful_inds works", {
     )
 })
 
-test_that("useful_inds works with pedigree", {
+test_that("useful_inds works with Pedigree", {
     data("sampleped")
-    ped <- pedigree(sampleped)
+    ped <- Pedigree(sampleped)
     ped <- num_child(ped)
     ped <- useful_inds(ped, informative = "Av")
     expect_equal(ped$ped$id[!ped$ped$useful],

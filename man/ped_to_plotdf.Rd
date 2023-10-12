@@ -2,7 +2,7 @@
 % Please edit documentation in R/ped_to_plotdf.R
 \name{ped_to_plotdf}
 \alias{ped_to_plotdf}
-\title{Convert a pedigree to a data frame of element to plot}
+\title{Convert a Pedigree to a data frame of element to plot}
 \usage{
 ped_to_plotdf(
   ped,
@@ -20,16 +20,16 @@ ped_to_plotdf(
 )
 }
 \arguments{
-\item{ped}{A pedigree object}
+\item{ped}{A Pedigree object}
 
-\item{packed}{Should the pedigree be compressed, i.e., allow diagonal
+\item{packed}{Should the Pedigree be compressed, i.e., allow diagonal
 lines connecting parents to children in order to have a smaller overall
 width for the plot.}
 
 \item{width}{for a packed output, the minimum width of the plot, in
 inches.}
 
-\item{align}{for a packed pedigree, align children under parents \code{TRUE},
+\item{align}{for a packed Pedigree, align children under parents \code{TRUE},
 to the extent possible given the page width, or align to to the left
 margin \code{FALSE}.
 This argument can be a two element vector, giving the alignment
@@ -40,7 +40,7 @@ If \code{TRUE}, the default is \code{c(1.5, 2)}, or numeric the routine
 \item{subreg}{4-element vector for (min x, max x, min depth, max depth),
 used to edit away portions of the plot coordinates returned by
 \code{\link[=align]{align()}}.
-This is useful for zooming in on a particular region of the pedigree.}
+This is useful for zooming in on a particular region of the Pedigree.}
 
 \item{cex}{character expansion of the text}
 
@@ -67,11 +67,11 @@ value of the column given.}
 A list containing the data frame and the user coordinates.
 }
 \description{
-Convert a pedigree to a data frame of element to plot
+Convert a Pedigree to a data frame of element to plot
 }
 \examples{
 data(sampleped)
-ped1 <- pedigree(sampleped[sampleped$family == 1,])
+ped1 <- Pedigree(sampleped[sampleped$family == 1,])
 ped_to_plotdf(ped1)
 }
 \seealso{

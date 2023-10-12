@@ -1,7 +1,7 @@
 #' @importFrom plyr rbind.fill
 NULL
 
-#' Convert a pedigree to a data frame of element to plot
+#' Convert a Pedigree to a data frame of element to plot
 #'
 #' @inheritParams align
 #' @param pconnect when connecting parent to children the program will try to
@@ -21,7 +21,7 @@ NULL
 #' @return A list containing the data frame and the user coordinates.
 #' @examples
 #' data(sampleped)
-#' ped1 <- pedigree(sampleped[sampleped$family == 1,])
+#' ped1 <- Pedigree(sampleped[sampleped$family == 1,])
 #' ped_to_plotdf(ped1)
 #' @seealso [plot_fromdf()]
 #' [ped_to_legdf()]

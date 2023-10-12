@@ -23,14 +23,14 @@
 #' @inheritParams align
 #' @inheritParams alignped1
 #'
-#' @return A list containing the elements to plot the pedigree.
+#' @return A list containing the elements to plot the Pedigree.
 #' It contains a set of matrices along with the spouselist matrix.
 #' The latter has marriages removed as they are processed.
 #' - n A vector giving the number of subjects on each horizonal level of the
 #'     plot
 #' - nid A matrix with one row for each level, giving the numeric id of
 #'       each subject plotted.
-#'       (A value of `17` means the 17th subject in the pedigree).
+#'       (A value of `17` means the 17th subject in the Pedigree).
 #' - pos A matrix giving the horizontal position of each plot point
 #' - fam A matrix giving the family id of each plot point.
 #'       A value of `3` would mean that the two subjects in positions 3 and 4,
@@ -42,7 +42,7 @@
 #'
 #' @examples
 #' data(sampleped)
-#' ped <- pedigree(sampleped)
+#' ped <- Pedigree(sampleped)
 #' align(ped)
 #'
 #' @seealso [align()], [alignped1()]

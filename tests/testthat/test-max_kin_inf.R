@@ -22,9 +22,9 @@ test_that("min_dist_inf works", {
     expect_equal(sum(mxkin, na.rm = TRUE), 76)
 })
 
-test_that("min_dist_inf works with pedigree", {
+test_that("min_dist_inf works with Pedigree", {
     data("sampleped")
-    ped <- pedigree(sampleped)
+    ped <- Pedigree(sampleped)
     ped <- generate_colors(ped, col_aff = "affection",
         threshold = 0.5, sup_thres_aff = TRUE
     )

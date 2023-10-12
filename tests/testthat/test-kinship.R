@@ -39,19 +39,19 @@ test_that("kinship works", {
 
     ## Test with no special relationship
     kmat_char <- with(twindat, kinship(id, dadid, momid))
-    tped <- pedigree(twindat)
+    tped <- Pedigree(twindat)
     kmat_ped <- kinship(tped)
 
     expect_equal(kmat_char, kmat_ped)
 
     ## Test with no special relationship with chr_type to X
     kmat_char <- with(twindat, kinship(id, dadid, momid, sex, chrtype = "X"))
-    tped <- pedigree(twindat)
+    tped <- Pedigree(twindat)
     kmat_ped <- kinship(tped, chrtype = "X")
     expect_equal(kmat_char, kmat_ped)
 
     ## Test with monozygotic relationship
-    tped <- pedigree(twindat, relate)
+    tped <- Pedigree(twindat, relate)
     kmat <- kinship(tped)
 
     ## should show kinship coeff of 0.5 for where MZ twins are
@@ -70,8 +70,8 @@ test_that("kinship works", {
     relate$id1 <- match(relate$id1, indx) - 1
     relate$id2 <- match(relate$id2, indx) - 1
 
-    # Build the pedigree and kinship
-    tped <- pedigree(twindat, relate)
+    # Build the Pedigree and kinship
+    tped <- Pedigree(twindat, relate)
     kmat <- kinship(tped)
 
     truth <- matrix(
@@ -103,14 +103,14 @@ test_that("Kinship Claus Ekstrom 09/2012", {
     )
     relation <- data.frame(id1 = c(3), id2 = c(4), famid = c(1), code = c(1))
 
-    ped <- pedigree(mydata, relation)
+    ped <- Pedigree(mydata, relation)
 
     kmat <- kinship(ped)
     expect_true(all(kmat[3:4, 3:4] == 0.5))
 })
 
 test_that("kinship works with X chromosoms", {
-    ## test pedigree from bioinformatics manuscript
+    ## test Pedigree from bioinformatics manuscript
     ## try x-chrom kinship
     ## also has inbreeding and twins, for quick check
     ped2mat <- matrix(c(
@@ -130,7 +130,7 @@ test_that("kinship works with X chromosoms", {
     names(ped2df) <- c("fam", "id", "dadid", "momid", "sex")
     rel_df <- as.data.frame(matrix(c(8, 9, 1), ncol = 3))
     names(rel_df) <- c("id1", "id2", "code")
-    ped2 <- pedigree(ped2df, rel_df)
+    ped2 <- Pedigree(ped2df, rel_df)
 
     ## regular kinship matrix
     expect_snapshot(kinship(ped2))
@@ -167,7 +167,7 @@ test_that("Kinship with 2 different family", {
     ## testing when only one subject in a family
     peddf <- rbind(ped2df, c(2, 1, 0, 0, 1))
 
-    peds <- pedigree(peddf)
+    peds <- Pedigree(peddf)
     kinfam <- kinship(peds)
     expect_true(all(kinfam["2_1", 1:10] == 0))
 
@@ -176,7 +176,7 @@ test_that("Kinship with 2 different family", {
         c(2, 2, 0, 0, 2),
         c(2, 3, 1, 2, 1)
     )
-    peds <- pedigree(peddf)
+    peds <- Pedigree(peddf)
     kin2fam <- kinship(peds)
     expect_true(all(kin2fam[11:13, 1:10] == 0))
 })

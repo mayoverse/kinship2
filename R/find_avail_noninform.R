@@ -3,12 +3,12 @@
 #' Find uninformative but available subject
 #'
 #' @details
-#' Find subjects from a pedigree who are available and uninformative
+#' Find subjects from a Pedigree who are available and uninformative
 #'
 #' @details
-#' Identify subjects to remove from a pedigree who are available but
+#' Identify subjects to remove from a Pedigree who are available but
 #' non-informative.  This is the second step to remove subjects in
-#' pedigree.shrink if the pedigree does not meet the desired bit size.
+#' pedigree.shrink if the Pedigree does not meet the desired bit size.
 #'
 #' @inheritParams align
 #' @inheritParams is_informative
@@ -16,7 +16,7 @@
 #'
 #' @examples
 #' data(sampleped)
-#' ped <- pedigree(sampleped)
+#' ped <- Pedigree(sampleped)
 #' find_avail_noninform(ped)
 #'
 #' @return Vector of subject ids who can be removed by having lowest

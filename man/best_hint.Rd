@@ -7,7 +7,7 @@
 best_hint(ped, wt = c(1000, 10, 1), tolerance = 0)
 }
 \arguments{
-\item{ped}{A pedigree object}
+\item{ped}{A Pedigree object}
 
 \item{wt}{A vector of three weights for the three error measures
 \itemize{
@@ -25,7 +25,7 @@ Default is \code{c(1000, 10, 1)}.
 The best hint object out of all the permutations
 }
 \description{
-When computer time is cheap, use this routine to get a 'best' pedigree.
+When computer time is cheap, use this routine to get a 'best' Pedigree.
 This routine will try all possible founder orders, and return the one
 with the least 'stress'.
 }
@@ -53,7 +53,7 @@ If during the search, a plot is found with a stress level less than
 }
 \examples{
 data(sampleped)
-ped <- pedigree(sampleped[sampleped$family == 1,])
+ped <- Pedigree(sampleped[sampleped$family == 1,])
 best_hint(ped)
 }
 \seealso{

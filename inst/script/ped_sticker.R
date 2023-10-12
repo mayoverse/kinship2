@@ -8,10 +8,10 @@ library(Pedixplorer)
 # Charge necessary data
 data(sampleped)
 
-# Create pedigree object
-ped1 <- pedigree(sampleped[sampleped$family == "1", -1])
+# Create Pedigree object
+ped1 <- Pedigree(sampleped[sampleped$family == "1", -1])
 
-# Shrink pedigree
+# Shrink Pedigree
 ped1trim <- shrink(ped1, max_bits = 12)
 
 # Export plot to png

@@ -22,7 +22,7 @@ is_informative(obj, ...)
 )
 }
 \arguments{
-\item{obj}{A pedigree object or a vector of subject identifiers.}
+\item{obj}{A Pedigree object or a vector of subject identifiers.}
 
 \item{...}{Additional arguments passed to methods}
 
@@ -54,7 +54,7 @@ is_informative(obj, ...)
 }}
 
 \item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the pedigree
+no father and no mother in the Pedigree
 (i.e. \code{dadid} and \code{momid} equal to the value of this variable).
 The default for \code{missid} is \code{"0"}.}
 
@@ -90,7 +90,7 @@ columns.
 }
 \examples{
 data("sampleped")
-ped <- pedigree(sampleped)
+ped <- Pedigree(sampleped)
 is_informative(ped, col_aff = "affection_aff")
 
 }

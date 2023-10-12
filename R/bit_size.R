@@ -1,7 +1,7 @@
-#' Get pedigree bit_size
+#' Get Pedigree bit_size
 #'
 #' @description
-#' Calculate pedigree bit_size, defined as :
+#' Calculate Pedigree bit_size, defined as :
 #'
 #' \eqn{
 #'   2 \times NbNonFounders - NbFounders
@@ -9,24 +9,24 @@
 #'
 #' @details
 #' This is a utility function used in `shrink()`
-#' to calculate the bit_size of a pedigree.
+#' to calculate the bit_size of a Pedigree.
 #'
 #' @inheritParams kinship
 #' @inheritParams is_parent
-#' @param obj A pedigree object or a vector of fathers identifierss
+#' @param obj A Pedigree object or a vector of fathers identifierss
 #'
 #' @return A list with the following components:
 #'
-#' - bit_size The bit_size of input pedigree
-#' - nFounder The number of founders in the pedigree
-#' - nNonFounder The number of nonfounders in the pedigree
+#' - bit_size The bit_size of input Pedigree
+#' - nFounder The number of founders in the Pedigree
+#' - nNonFounder The number of nonfounders in the Pedigree
 #'
 #' @seealso [shrink()]
 #' @include pedigreeClass.R
 #' @docType methods
 #' @examples
 #' data(sampleped)
-#' ped <- pedigree(sampleped)
+#' ped <- Pedigree(sampleped)
 #' bit_size(ped)
 #' @export
 #' @keywords internal

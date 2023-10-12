@@ -7,7 +7,7 @@
 get_twin_rel(ped)
 }
 \arguments{
-\item{ped}{A pedigree object}
+\item{ped}{A Pedigree object}
 }
 \value{
 A list containing components
@@ -22,9 +22,9 @@ Routine to get twin relationships
 }
 \details{
 This routine function determine the twin relationships
-in a pedigree. It complete the missing twin relationships for
+in a Pedigree. It complete the missing twin relationships for
 triplets, quads, etc. It also determine the order of the twins
-in the pedigree.
+in the Pedigree.
 It is used by \code{auto_hint()}.
 }
 \seealso{

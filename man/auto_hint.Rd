@@ -2,19 +2,19 @@
 % Please edit documentation in R/auto_hint.R
 \name{auto_hint}
 \alias{auto_hint}
-\title{First initial guess for the alignment of a pedigree}
+\title{First initial guess for the alignment of a Pedigree}
 \usage{
 auto_hint(ped, hints = NULL, packed = TRUE, align = FALSE, reset = FALSE)
 }
 \arguments{
-\item{ped}{A pedigree object}
+\item{ped}{A Pedigree object}
 
-\item{hints}{Plotting hints for the pedigree.
+\item{hints}{Plotting hints for the Pedigree.
 This is a list with components \code{order} and \code{spouse}, the second one
 is optional.
 \itemize{
 \item \strong{order} is a numeric vector with one element per subject in the
-pedigree.  It determines the relative order of subjects within a sibship, as
+Pedigree.  It determines the relative order of subjects within a sibship, as
 well as the relative order of processing for the founder couples. (For this
 latter, the female founders are ordered as though they were sisters).
 \item \strong{spouse} is a matrix with one row per hinted marriage, usually
@@ -26,11 +26,11 @@ Children will preferentially appear under the parents of the anchored
 spouse.
 }}
 
-\item{packed}{Should the pedigree be compressed, i.e., allow diagonal
+\item{packed}{Should the Pedigree be compressed, i.e., allow diagonal
 lines connecting parents to children in order to have a smaller overall
 width for the plot.}
 
-\item{align}{for a packed pedigree, align children under parents \code{TRUE},
+\item{align}{for a packed Pedigree, align children under parents \code{TRUE},
 to the extent possible given the page width, or align to to the left
 margin \code{FALSE}.
 This argument can be a two element vector, giving the alignment
@@ -45,11 +45,11 @@ them to the initial values}
 The \strong{hints} list containing components \code{order} and \code{spouse}
 }
 \description{
-Compute an initial guess for the alignment of a pedigree
+Compute an initial guess for the alignment of a Pedigree
 }
 \details{
-A pedigree structure can contain a \code{hints} object which helps to
-reorder the pedigree (e.g. left-to-right order of children within family) so
+A Pedigree structure can contain a \code{hints} object which helps to
+reorder the Pedigree (e.g. left-to-right order of children within family) so
 as to plot with minimal distortion. This routine is used to create an
 initial version of the hints. They can then be modified if desired.
 
@@ -59,7 +59,7 @@ closest to the spouse. For pedigrees that have only a single connection
 between two families this simple-minded approach works surprisingly well.
 For more complex structures hand-tuning of the hints matrix may be required.
 
-The pedigree in the example below is one where rearranging the founders
+The Pedigree in the example below is one where rearranging the founders
 greatly decreases the number of extra connections. When \code{auto_hint()} is
 called with a a vector of numbers as the second argument, the values for the
 founder females are used to order the founder families left to right across
@@ -70,7 +70,7 @@ not important, only their order.
 }
 \examples{
 data(sampleped)
-ped <- pedigree(sampleped[sampleped$family == 1, ])
+ped <- Pedigree(sampleped[sampleped$family == 1, ])
 auto_hint(ped)
 }
 \seealso{

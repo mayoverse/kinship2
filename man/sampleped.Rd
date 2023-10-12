@@ -32,7 +32,7 @@ The aim was to create a data set with a variety of pedigree structures.
 }
 \examples{
 data("sampleped")
-ped <- pedigree(sampleped)
+ped <- Pedigree(sampleped)
 summary(ped)
 #plot(ped)
 }

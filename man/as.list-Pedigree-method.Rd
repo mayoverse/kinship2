@@ -11,7 +11,7 @@
 \item{x}{A Pedigree object.}
 }
 \value{
-A list with all the slots of the pedigree object.
+A list with all the slots of the Pedigree object.
 }
 \description{
 Convert a Pedigree object to a list

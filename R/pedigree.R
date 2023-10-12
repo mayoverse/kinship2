@@ -4,7 +4,7 @@
 #' different `data.frame` or a set of vectors.
 #'
 #' If any errors are found in the data, the function will return
-#' the data.frame with the errors for the pedigree and the relationship
+#' the data.frame with the errors for the Pedigree and the relationship
 #' data.frame.
 #'
 #' @inheritParams align
@@ -35,7 +35,7 @@
 #' - `3` = twin of unknown zygosity
 #' - `4` = Spouse
 #'
-#' If `famid` is given in the call to create pedigrees, then
+#' If `famid` is given in the call to create Pedigrees, then
 #' `famid` needs to be in the last column of `relation`.
 #' @param cols_ren_ped A named list with the columns to rename for the
 #' pedigree dataframe.
@@ -48,24 +48,24 @@
 #' @return A Pedigree object.
 #' @examples
 #' data(sampleped)
-#' ped1 <- pedigree(sampleped[sampleped$family == "1",])
+#' ped1 <- Pedigree(sampleped[sampleped$family == "1",])
 #' @export
-setGeneric("pedigree", signature = "obj",
-    function(obj, ...) standardGeneric("pedigree")
+setGeneric("Pedigree", signature = "obj",
+    function(obj, ...) standardGeneric("Pedigree")
 )
 
 #' @export
-#' @rdname pedigree
-#' @aliases pedigree,numeric
+#' @rdname Pedigree
+#' @aliases Pedigree,numeric
 #' @docType methods
-setMethod("pedigree", "numeric", function(obj, ...
+setMethod("Pedigree", "numeric", function(obj, ...
 ) {
-    pedigree(as.character(obj), ...)
+    Pedigree(as.character(obj), ...)
 })
 
 #' @export
-#' @rdname pedigree
-#' @aliases pedigree,character
+#' @rdname Pedigree
+#' @aliases Pedigree,character
 #' @docType methods
 #' @inheritParams is_parent
 #' @inheritParams sex_to_factor
@@ -81,7 +81,7 @@ setMethod("pedigree", "numeric", function(obj, ...
 #' - `0`  : not sterilised
 #' - `1`  : sterilised
 #' - `NA` : sterilisation status not known
-setMethod("pedigree", "character", function(obj, dadid, momid,
+setMethod("Pedigree", "character", function(obj, dadid, momid,
     sex, family = NA, avail = NULL, affected = NULL, status = NULL,
     steril = NULL, relation =  NULL,
     missid = "0", col_aff = "affection", normalize = TRUE, ...
@@ -138,16 +138,16 @@ setMethod("pedigree", "character", function(obj, dadid, momid,
             family = character()
         )
     }
-    pedigree(ped_df, relation = relation,
+    Pedigree(ped_df, relation = relation,
         missid = missid, col_aff = col_aff, ...
     )
 })
 
 #' @export
-#' @rdname pedigree
-#' @aliases pedigree,data.frame
+#' @rdname Pedigree
+#' @aliases Pedigree,data.frame
 #' @docType methods
-setMethod("pedigree", "data.frame",  function(
+setMethod("Pedigree", "data.frame",  function(
     obj = data.frame(
         id = character(),
         dadid = character(),
@@ -262,8 +262,8 @@ setMethod("pedigree", "data.frame",  function(
         )
     }
     if (any(!is.na(ped_df$error))) {
-        warning("The pedigree informations are not valid.",
-            "Here is the normalised pedigree informations",
+        warning("The Pedigree informations are not valid.",
+            "Here is the normalised Pedigree informations",
             "with the identified problems"
         )
         return(ped_df)

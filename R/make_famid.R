@@ -3,11 +3,11 @@
 #' Get family id
 #'
 #' @description
-#' Construct a family id from pedigree information
+#' Construct a family id from Pedigree information
 #'
 #' @details
 #' Create a vector of length n, giving the family 'tree' number of each
-#' subject.  If the pedigree is totally connected, then everyone will end up in
+#' subject.  If the Pedigree is totally connected, then everyone will end up in
 #' tree 1, otherwise the tree numbers represent the disconnected subfamilies.
 #' Singleton subjects give a zero for family number.
 #'
@@ -17,13 +17,13 @@
 #' ## When used with a character vector
 #' An integer vector giving family groupings
 #'
-#' ## When used with a pedigree object
-#' An updated pedigree object with the family id added
+#' ## When used with a Pedigree object
+#' An updated Pedigree object with the family id added
 #'
 #' @seealso [kinship()]
 #' @examples
 #' data(sampleped)
-#' ped1 <- pedigree(sampleped[,-1])
+#' ped1 <- Pedigree(sampleped[,-1])
 #' make_famid(ped1)
 #' @export
 setGeneric("make_famid", signature = "obj",
@@ -119,7 +119,7 @@ setMethod("make_famid", "Pedigree",
         }
 
         rel_df$family <- fam_id1
-        pedigree(ped_df, rel_df,
+        Pedigree(ped_df, rel_df,
             scales = ped$scales, normalize = TRUE
         )
     }

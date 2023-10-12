@@ -2,15 +2,15 @@
 #' @importFrom graphics polygon frame segments
 NULL
 
-#' Routine to subset a pedigree
+#' Routine to subset a Pedigree
 #'
 #' @param subreg 4-element vector for (min x, max x, min depth, max depth),
 #' used to edit away portions of the plot coordinates returned by
 #' [align()].
-#' This is useful for zooming in on a particular region of the pedigree.
+#' This is useful for zooming in on a particular region of the Pedigree.
 #' @inheritParams findspouse
 #'
-#' @return a pedigree list
+#' @return a Pedigree
 #' @keywords internal
 subregion <- function(plist, subreg) {
     if (subreg[3] < 1 || subreg[4] > length(plist$n)) {
@@ -195,7 +195,7 @@ polygons <- function(nslice = 1) {
 #'@importFrom ggplot2 geom_polygon aes annotate
 NULL
 
-#' Draw segments for a pedigree
+#' Draw segments for a Pedigree
 #'
 #' @param x0 x coordinate of the first point
 #' @param y0 y coordinate of the first point
@@ -223,7 +223,7 @@ draw_segment <- function(
     p
 }
 
-#' Draw a polygon for a pedigree
+#' Draw a polygon for a Pedigree
 #'
 #' @param x x coordinates
 #' @param y y coordinates
@@ -248,7 +248,7 @@ draw_polygon <- function(
     p
 }
 
-#' Draw text for a pedigree
+#' Draw text for a Pedigree
 #'
 #' @param label text to be displayed
 #' @param cex character expansion of the text

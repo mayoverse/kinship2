@@ -9,9 +9,9 @@ findsibs(idpos, plist, lev)
 \arguments{
 \item{idpos}{The position of the subject}
 
-\item{plist}{The alignment structure representing the pedigree layout.
+\item{plist}{The alignment structure representing the Pedigree layout.
 For the differents matrices present in the list, each row represents a
-level of the pedigree and each column a potential subject.
+level of the Pedigree and each column a potential subject.
 It contains the following components:
 \itemize{
 \item n Vector of the number of subjects per level

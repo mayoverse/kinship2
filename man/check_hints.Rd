@@ -7,12 +7,12 @@
 check_hints(hints, sex)
 }
 \arguments{
-\item{hints}{Plotting hints for the pedigree.
+\item{hints}{Plotting hints for the Pedigree.
 This is a list with components \code{order} and \code{spouse}, the second one
 is optional.
 \itemize{
 \item \strong{order} is a numeric vector with one element per subject in the
-pedigree.  It determines the relative order of subjects within a sibship, as
+Pedigree.  It determines the relative order of subjects within a sibship, as
 well as the relative order of processing for the founder couples. (For this
 latter, the female founders are ordered as though they were sisters).
 \item \strong{spouse} is a matrix with one row per hinted marriage, usually
@@ -39,14 +39,14 @@ Nothing, but will stop if there is a problem.
 This routine tries to detect inconsistencies in spousal hints.
 }
 \details{
-These arise in \code{auto_hint()} with complex pedigrees.
+These arise in \code{auto_hint()} with complex Pedigrees.
 One can have ABA (subject A is on both the left and the right of B),
 cycles, etc.
 Users can introduce problems as well if they modify the hints.
 }
 \examples{
 data(sampleped)
-ped1 <- pedigree(sampleped[sampleped$family == "1",])
+ped1 <- Pedigree(sampleped[sampleped$family == "1",])
 ht1 <- auto_hint(ped1)
 check_hints(ht1, ped1$ped$sex)
 

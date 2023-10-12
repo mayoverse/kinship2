@@ -1,9 +1,9 @@
 # Automatically generated from all.nw using noweb
 
-#' Find unavailable subjects in a pedigree
+#' Find unavailable subjects in a Pedigree
 #'
 #' @description
-#' Find the ID of subjects in a pedigree iteratively, as anyone who is not
+#' Find the ID of subjects in a Pedigree iteratively, as anyone who is not
 #' available and does not have an available descendant by successively removing
 #' unavailable terminal nodes.
 #'
@@ -30,14 +30,14 @@
 #'
 #' @examples
 #' data(sampleped)
-#' ped1 <- pedigree(sampleped[sampleped$family == "1",])
+#' ped1 <- Pedigree(sampleped[sampleped$family == "1",])
 #' find_unavailable(ped1)
 #'
 #' @seealso [shrink()]
 #' @include utils.R
 #' @export
 find_unavailable <- function(ped, avail = ped$ped$avail) {
-    ## find id within pedigree anyone who is not available and
+    ## find id within Pedigree anyone who is not available and
     ## does not have an available descendant
 
     ## avail = TRUE/1 if available, FALSE/0 if not
@@ -80,7 +80,7 @@ find_unavailable <- function(ped, avail = ped$ped$avail) {
 #' Exclude stray marry-ins
 #'
 #' @description
-#' Exclude from a pedigree any founders who are not parents.
+#' Exclude from a Pedigree any founders who are not parents.
 #'
 #' @param id Vector of subject identifiers
 #' @inheritParams descendants
@@ -108,7 +108,7 @@ exclude_stray_marryin <- function(id, dadid, momid) {
 #' Exclude unavailable founders
 #'
 #' @description
-#' Exclude from a pedigree any unavailable founders.
+#' Exclude from a Pedigree any unavailable founders.
 #'
 #' @param id Vector of subject identifiers
 #' @inheritParams descendants

@@ -1,14 +1,14 @@
-#' Compute the depth of each subject in a pedigree
+#' Compute the depth of each subject in a Pedigree
 #'
 #' @description
-#' Computes the depth of each subject in the pedigree.
+#' Computes the depth of each subject in the Pedigree.
 #'
 #' @details
-#' Mark each person as to their depth in a pedigree; 0 for a founder, otherwise
+#' Mark each person as to their depth in a Pedigree; 0 for a founder, otherwise
 #'
 #' \eqn{depth = 1 + \max(fatherDepth, motherDepth)}
 #'
-#' In the case of an inbred pedigree a perfect alignment obeying
+#' In the case of an inbred Pedigree a perfect alignment obeying
 #' `extra=TRUE` may not exist.
 #'
 #' @inheritParams kinship
@@ -25,7 +25,7 @@
 #' @include pedigreeClass.R
 #' @examples
 #' data(sampleped)
-#' ped1 <- pedigree(sampleped[sampleped$family == "1",])
+#' ped1 <- Pedigree(sampleped[sampleped$family == "1",])
 #' kindepth(ped1)
 #' @export
 setGeneric("kindepth", signature = "obj",
@@ -66,13 +66,13 @@ setMethod("kindepth", "character", function(obj, dadid, momid,
         ## version 1.8.5 did not have this check with child_old.
         ## Keeping it here because it was not the issue being fixed in 9/2023.
         if (all(child == child_old)) {
-            stop("Impossible pedigree: no progress made at iteration", i)
+            stop("Impossible Pedigree: no progress made at iteration", i)
         }
         if (all(child == 0)) {
             break
         }
         if (i == n) {
-            stop("Impossible pedigree: someone is their own ancestor")
+            stop("Impossible Pedigree: someone is their own ancestor")
         }
         # Old child are parents of the next generation
         parents <- which(child > 0)
@@ -89,7 +89,7 @@ setMethod("kindepth", "character", function(obj, dadid, momid,
     ## If we add +1 to the depth of B and all her ancestors, then A and B
     ## will be the same depth, and will plot on the same line.
     ## Founders who marry in are also aligned. However, if an inbred
-    ## pedigree, may not be a simple fix of this sort.
+    ## Pedigree, may not be a simple fix of this sort.
 
     ## The algorithm is 1 First deal with founders. If a founder marries in
     ## multiple times at multiple deaths (animal pedigrees), given that
@@ -109,7 +109,7 @@ setMethod("kindepth", "character", function(obj, dadid, momid,
     ## pushdown algorithm to repair any descendents --- you may have pulled
     ## down a grandparent but not the sibs of that grandparent.
 
-    ## It may be possible to do better alignment when the pedigree has loops,
+    ## It may be possible to do better alignment when the Pedigree has loops,
     ## but it is definitely beyond this program, perhaps in auto_hint one day.
 
     chaseup <- function(x, midx, didx) {

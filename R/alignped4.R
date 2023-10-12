@@ -73,7 +73,7 @@ NULL
 #'
 #' @examples
 #' data(sampleped)
-#' ped <- pedigree(sampleped)
+#' ped <- Pedigree(sampleped)
 #' align(ped)
 #'
 #' @seealso [align()]

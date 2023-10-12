@@ -18,7 +18,7 @@ the subject is a spouse or not.}
 \item{width}{for a packed output, the minimum width of the plot, in
 inches.}
 
-\item{align}{for a packed pedigree, align children under parents \code{TRUE},
+\item{align}{for a packed Pedigree, align children under parents \code{TRUE},
 to the extent possible given the page width, or align to to the left
 margin \code{FALSE}.
 This argument can be a two element vector, giving the alignment
@@ -92,7 +92,7 @@ and the final point must be \eqn{\le} the max width.
 }
 \examples{
 data(sampleped)
-ped <- pedigree(sampleped)
+ped <- Pedigree(sampleped)
 align(ped)
 
 }

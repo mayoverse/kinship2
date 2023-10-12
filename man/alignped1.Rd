@@ -17,7 +17,7 @@ alignped1(idx, dadx, momx, level, horder, packed, spouselist)
 
 \item{horder}{Vector of the horizontal order of each subject}
 
-\item{packed}{Should the pedigree be compressed, i.e., allow diagonal
+\item{packed}{Should the Pedigree be compressed, i.e., allow diagonal
 lines connecting parents to children in order to have a smaller overall
 width for the plot.}
 
@@ -28,7 +28,7 @@ Each row contains the index of the left spouse, the right hand spouse
 and the anchor (i.e : \code{1} = left, \code{2} = right, \code{0} = either).}
 }
 \value{
-A list containing the elements to plot the pedigree.
+A list containing the elements to plot the Pedigree.
 It contains a set of matrices along with the spouselist matrix.
 The latter has marriages removed as they are processed.
 \itemize{
@@ -36,7 +36,7 @@ The latter has marriages removed as they are processed.
 plot
 \item nid A matrix with one row for each level, giving the numeric id of
 each subject plotted.
-(A value of \code{17} means the 17th subject in the pedigree).
+(A value of \code{17} means the 17th subject in the Pedigree).
 \item pos A matrix giving the horizontal position of each plot point
 \item fam A matrix giving the family id of each plot point.
 A value of \code{3} would mean that the two subjects in positions 3 and 4,
@@ -96,7 +96,7 @@ the data from this level onto theirs.
 }
 \examples{
 data(sampleped)
-ped <- pedigree(sampleped)
+ped <- Pedigree(sampleped)
 align(ped)
 
 }

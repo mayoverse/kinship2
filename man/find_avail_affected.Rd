@@ -2,12 +2,12 @@
 % Please edit documentation in R/find_avail_affected.R
 \name{find_avail_affected}
 \alias{find_avail_affected}
-\title{Find a single person to trim from a pedigree whose is available}
+\title{Find a single person to trim from a Pedigree whose is available}
 \usage{
 find_avail_affected(ped, avail = ped$ped$avail, affstatus = NA)
 }
 \arguments{
-\item{ped}{A pedigree object}
+\item{ped}{A Pedigree object}
 
 \item{avail}{A numeric vector of availability status of each individual
 (e.g., genotyped). The values are:
@@ -22,11 +22,11 @@ find_avail_affected(ped, avail = ped$ped$avail, affstatus = NA)
 \value{
 A list is returned with the following components
 \itemize{
-\item ped The new pedigree object
+\item ped The new Pedigree object
 \item newAvail Vector of availability status of trimmed individuals
 \item idTrimmed Vector of IDs of trimmed individuals
-\item isTrimmed logical value indicating whether pedigree has been trimmed
-\item bit_size Bit size of the trimmed pedigree
+\item isTrimmed logical value indicating whether Pedigree has been trimmed
+\item bit_size Bit size of the trimmed Pedigree
 }
 }
 \description{
@@ -35,12 +35,12 @@ status.
 }
 \details{
 When used within pedigree.shrink, this function is called with the first
-affected indicator, if the affected item in the pedigree is a matrix of
+affected indicator, if the affected item in the Pedigree is a matrix of
 multiple affected indicators.
 }
 \examples{
 data(sampleped)
-ped <- pedigree(sampleped)
+ped <- Pedigree(sampleped)
 find_avail_affected(ped, affstatus = 1)
 }
 \seealso{

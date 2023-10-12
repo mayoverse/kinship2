@@ -27,10 +27,10 @@ prefix_famid <- function(family_id, ind_id, missid = "0") {
 
 #' Normalise dataframe
 #'
-#' @description Normalise dataframe for pedigree object
+#' @description Normalise dataframe for Pedigree object
 #'
 #' @details Normalise a dataframe and check for columns correspondance
-#' to be able to use it as an input to create pedigree object.
+#' to be able to use it as an input to create Pedigree object.
 #' Multiple test are done and errors are checked.
 #' Sex is calculated based in the `gender` column the following notations
 #' are accepted: f, woman, female, 2 and m, man, male, 1.
@@ -246,7 +246,7 @@ norm_ped <- function(
 
 #' Normalise relationship dataframe
 #'
-#' @description Normalise relationship dataframe for pedigree object
+#' @description Normalise relationship dataframe for Pedigree object
 #'
 #' @inheritParams norm_ped
 #' @param rel_df A data.frame with the special relationships between

@@ -32,7 +32,7 @@ useful_inds(obj, ...)
 )
 }
 \arguments{
-\item{obj}{A pedigree object or a vector of subject identifiers.}
+\item{obj}{A Pedigree object or a vector of subject identifiers.}
 
 \item{...}{Additional arguments passed to methods}
 
@@ -76,7 +76,7 @@ individuals}
 but available or reverse should be kept}
 
 \item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the pedigree
+no father and no mother in the Pedigree
 (i.e. \code{dadid} and \code{momid} equal to the value of this variable).
 The default for \code{missid} is \code{"0"}.}
 
@@ -105,7 +105,7 @@ usefulness of the individual. This boolean is hereditary.
 }
 \examples{
 data(sampleped)
-ped1 <- pedigree(sampleped[sampleped$family == "1",])
+ped1 <- Pedigree(sampleped[sampleped$family == "1",])
 ped1 <- num_child(ped1)
 useful_inds(ped1, informative = "AvAf")$ped
 }

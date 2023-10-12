@@ -30,11 +30,11 @@ ancestors <- function(idx, momx, dadx) {
 }
 
 
-#' Generate plotting information for a pedigree
+#' Generate plotting information for a Pedigree
 #'
 #' @description
-#' Given a pedigree, this function creates helper matrices that describe the
-#' layout of a plot of the pedigree.
+#' Given a Pedigree, this function creates helper matrices that describe the
+#' layout of a plot of the Pedigree.
 #'
 #' @details
 #' This is an internal routine, used almost exclusively by
@@ -44,29 +44,29 @@ ancestors <- function(idx, momx, dadx) {
 #' contain the bulk of the computation.
 #' If the **hints** are missing the `auto_hint()` routine is called to
 #' supply an initial guess.
-#' If multiple families are present in the pedigree, this routine is called
+#' If multiple families are present in the Pedigree, this routine is called
 #' once for each family, and the results are combined in the list returned.
 #' For more information you can read the associated vignette:align
 #' `vignette("alignement_details")`.
 #'
-#' @param ped A pedigree object
-#' @param packed Should the pedigree be compressed, i.e., allow diagonal
+#' @param ped A Pedigree object
+#' @param packed Should the Pedigree be compressed, i.e., allow diagonal
 #' lines connecting parents to children in order to have a smaller overall
 #' width for the plot.
 #' @param width for a packed output, the minimum width of the plot, in
 #' inches.
-#' @param align for a packed pedigree, align children under parents `TRUE`,
+#' @param align for a packed Pedigree, align children under parents `TRUE`,
 #' to the extent possible given the page width, or align to to the left
 #' margin `FALSE`.
 #' This argument can be a two element vector, giving the alignment
 #' parameters, or a logical value.
 #' If `TRUE`, the default is `c(1.5, 2)`, or numeric the routine
 #' `alignped4()` will be called.
-#' @param hints Plotting hints for the pedigree.
+#' @param hints Plotting hints for the Pedigree.
 #' This is a list with components `order` and `spouse`, the second one
 #' is optional.
 #' - **order** is a numeric vector with one element per subject in the
-#' pedigree.  It determines the relative order of subjects within a sibship, as
+#' Pedigree.  It determines the relative order of subjects within a sibship, as
 #' well as the relative order of processing for the founder couples. (For this
 #' latter, the female founders are ordered as though they were sisters).
 #' - **spouse** is a matrix with one row per hinted marriage, usually
@@ -83,7 +83,7 @@ ancestors <- function(idx, momx, dadx) {
 #' plot
 #' - nid A matrix with one row for each level, giving the numeric id of
 #' each subject plotted.
-#' (A value of `17` means the 17th subject in the pedigree).
+#' (A value of `17` means the 17th subject in the Pedigree).
 #' - pos A matrix giving the horizontal position of each plot point
 #' - fam A matrix giving the family id of each plot point.
 #' A value of `3` would mean that the two subjects in positions 3 and 4,
@@ -92,7 +92,7 @@ ancestors <- function(idx, momx, dadx) {
 #'     - `0` = not a spouse
 #'     - `1` = subject plotted to the immediate right is a spouse
 #'     - `2` = subject plotted to the immediate right is an inbred spouse
-#' - twins Optional matrix which will only be present if the pedigree
+#' - twins Optional matrix which will only be present if the Pedigree
 #' contains twins :
 #'     - `0` = not a twin
 #'     - `1` = sibling to the right is a monozygotic twin
@@ -101,7 +101,7 @@ ancestors <- function(idx, momx, dadx) {
 #'
 #' @examples
 #' data(sampleped)
-#' ped <- pedigree(sampleped)
+#' ped <- Pedigree(sampleped)
 #' align(ped)
 #'
 #' @seealso [alignped1()],

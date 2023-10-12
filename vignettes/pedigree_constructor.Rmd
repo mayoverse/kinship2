@@ -17,7 +17,7 @@ Introduction
 ===============
 
 The pedigree routines came out of a simple need -- to quickly draw a
-pedigree structure on the screen, within R, that was "good enough" to
+Pedigree structure on the screen, within R, that was "good enough" to
 help with debugging the actual routines of interest, which were those for
 fitting mixed effecs Cox models to large family data.  As such the routine
 had compactness and automation as primary goals; complete annotation
@@ -38,8 +38,8 @@ Pedigree Constructor
 
 ## Arguments
 
-The pedigree function is the first step, creating an object of class
-pedigree.  
+The Pedigree function is the first step, creating an object of class
+Pedigree.  
 It accepts the following input
 
 - **ped_df** A dataframe containing the columns
@@ -125,7 +125,7 @@ encountered problems.
 
 ## Validation
 
-Now that the data for the pedigree object creation are ready, they are
+Now that the data for the Pedigree object creation are ready, they are
 given to a new $Pedigree$ object, trigerring the $validation$ process.
 
 This validation step will check up for many errors such as:
@@ -148,7 +148,7 @@ The controls of the parameters is also more precise.
 
 The $Pedigree$ object contains 4 slots:
 
-- $ped$ the pedigree information as a dataframe with at least the
+- $ped$ the Pedigree information as a dataframe with at least the
 following columns:
     - $id$ the identifiers of the individuals
     - $dadid$ the identifiers of the fathers

@@ -127,7 +127,7 @@ to figure this out.  The unfortunate truth is that for this code
 it hardly makes a difference, and for the X chromosome calculation leads to
 impenetrable if-then-else logic.
 
-The program can be called with a pedigree, or
+The program can be called with a Pedigree, or
 raw data.  The first argument is $id$ instead of the more generic $x$
 for backwards compatability with an older version of the routine.
 We give founders a fake parent of subject $n+1$ who is not related to
@@ -135,7 +135,7 @@ anybody (even themself); it avoids some if-then-else constructions.
 
 ## Pedigree Object
 
-The method for a pedigree object is an almost trivial modification. Since the
+The method for a Pedigree object is an almost trivial modification. Since the
 mother and father are already indexed into the id list it has 
 two lines that are different, those that create mrow and drow.
 The other change is that now we potentially have information available
@@ -182,7 +182,7 @@ family/subject.
 ## MakeKinship
 
 The older $makekinship$ function,
-from before the creation of pedigreeList objects,
+from before the creation of PedigreeList objects,
 accepts the raw identifier data, along with a special family code
 for unrelated subjects, as produced by the `make_famid()` function.
 All the unrelated subjects are put at the front of the kinship matrix
@@ -198,7 +198,7 @@ Like most routines, this starts out with a collection of error checks.
 ## Monozygotic twins, for Pedigree object
 
 Return now to the question of monzygotic sets, used specifically in the
-kinship for pedigree objects.
+kinship for Pedigree objects.
 Consider the following rather difficult example:
 
 | id1|id2|

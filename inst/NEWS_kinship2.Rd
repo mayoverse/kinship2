@@ -150,7 +150,7 @@
     
     \item Fixed a minor indexing bug in "[.pedigree"
     
-    \item Fixed typing and grammatical problems in error messages in pedigree()
+    \item Fixed typing and grammatical problems in error messages in Pedigree()
     
     \item Fixed row/column names in kinship function (Shannon/Terry, please 
     give more details)

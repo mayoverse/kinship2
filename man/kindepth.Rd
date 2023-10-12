@@ -7,7 +7,7 @@
 \alias{kindepth,character}
 \alias{kindepth,Pedigree-method}
 \alias{kindepth,Pedigree}
-\title{Compute the depth of each subject in a pedigree}
+\title{Compute the depth of each subject in a Pedigree}
 \usage{
 kindepth(obj, ...)
 
@@ -16,7 +16,7 @@ kindepth(obj, ...)
 \S4method{kindepth}{Pedigree}(obj, align_parents = FALSE)
 }
 \arguments{
-\item{obj}{A pedigree object or a vector of subject identifiers.}
+\item{obj}{A Pedigree object or a vector of subject identifiers.}
 
 \item{...}{Additional arguments passed to methods}
 
@@ -36,19 +36,19 @@ via a marriage.}
 an integer vector containing the depth for each subject
 }
 \description{
-Computes the depth of each subject in the pedigree.
+Computes the depth of each subject in the Pedigree.
 }
 \details{
-Mark each person as to their depth in a pedigree; 0 for a founder, otherwise
+Mark each person as to their depth in a Pedigree; 0 for a founder, otherwise
 
 \eqn{depth = 1 + \max(fatherDepth, motherDepth)}
 
-In the case of an inbred pedigree a perfect alignment obeying
+In the case of an inbred Pedigree a perfect alignment obeying
 \code{extra=TRUE} may not exist.
 }
 \examples{
 data(sampleped)
-ped1 <- pedigree(sampleped[sampleped$family == "1",])
+ped1 <- Pedigree(sampleped[sampleped$family == "1",])
 kindepth(ped1)
 }
 \seealso{

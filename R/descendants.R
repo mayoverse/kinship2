@@ -2,7 +2,7 @@
 #'
 #' @description
 #' Find all the descendants of a particular list of individuals
-#' given a pedigree
+#' given a Pedigree
 #'
 #' @inheritParams duporder
 #' @inheritParams kinship
@@ -13,7 +13,7 @@
 #'
 #' @examples
 #' data("sampleped")
-#' ped <- pedigree(sampleped)
+#' ped <- Pedigree(sampleped)
 #' descendants(c("1_101", "2_208"), ped)
 #' @include pedigreeClass.R
 #' @export

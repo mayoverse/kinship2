@@ -18,7 +18,7 @@ descendants(idlist, obj, ...)
 \arguments{
 \item{idlist}{List of individuals identifiers to be considered}
 
-\item{obj}{A pedigree object or a vector of subject identifiers.}
+\item{obj}{A Pedigree object or a vector of subject identifiers.}
 
 \item{...}{Additional arguments passed to methods}
 
@@ -34,11 +34,11 @@ The list is not ordered.
 }
 \description{
 Find all the descendants of a particular list of individuals
-given a pedigree
+given a Pedigree
 }
 \examples{
 data("sampleped")
-ped <- pedigree(sampleped)
+ped <- Pedigree(sampleped)
 descendants(c("1_101", "2_208"), ped)
 }
 \keyword{internal}

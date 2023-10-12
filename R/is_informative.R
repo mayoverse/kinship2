@@ -44,7 +44,7 @@
 #'
 #' @examples
 #' data("sampleped")
-#' ped <- pedigree(sampleped)
+#' ped <- Pedigree(sampleped)
 #' is_informative(ped, col_aff = "affection_aff")
 #'
 #' @export

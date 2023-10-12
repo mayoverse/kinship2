@@ -7,7 +7,7 @@ NEWS file for the Pedixplorer package
 - Kinship2 is renamed to Pedixplorer and hosted on Bioconductor.
 - Pedigree is now a S4 object, all functions are updated to work with
 the new class
-- pedigree constructor now takes a data.frame as input for the pedigree
+- Pedigree constructor now takes a data.frame as input for the Pedigree
 informations and for the special relationship.
 The two data.fram are normalized before being used.
 - plot.pedigree support ggplot generation, mark and label can be added

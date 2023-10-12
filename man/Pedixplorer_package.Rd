@@ -23,21 +23,21 @@ The package download, NEWS, and README are available on CRAN:
 Below are listed some of the most widely used functions available
 in arsenal:
 
-\code{\link[=pedigree]{pedigree()}}: Contstructor of the pedigree class,
+\code{\link[=Pedigree]{Pedigree()}}: Contstructor of the Pedigree class,
 given identifiers, sex, affection status(es), and special relationships
 
 \code{\link[=kinship]{kinship()}}: Calculates the kinship matrix, the
 probability having an allele sampled from two individuals
 be the same via IBD.
 
-\code{\link[=ped_to_plotdf]{ped_to_plotdf()}} : Method to transform a pedigree
+\code{\link[=ped_to_plotdf]{ped_to_plotdf()}} : Method to transform a Pedigree
 object into a dataframe of graphical elements.
 Allows extra information to be included in the id under the plot symbol
 
-\code{\link[=plot_fromdf]{plot_fromdf()}} : Method to plot a pedigree from a
+\code{\link[=plot_fromdf]{plot_fromdf()}} : Method to plot a Pedigree from a
 dataframe of graphical elements.
 
-\code{\link[=shrink]{shrink()}}: Shrink a pedigree to a specific bit size,
+\code{\link[=shrink]{shrink()}}: Shrink a Pedigree to a specific bit size,
 removing non-informative members first.
 
 \code{\link[=bit_size]{bit_size()}}: Approximate the output from SAS's

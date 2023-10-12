@@ -5,7 +5,7 @@
 \alias{fix_parents,character-method}
 \alias{fix_parents,character}
 \alias{fix_parents,data.frame-method}
-\title{Fix details on the parents for children of the pedigree}
+\title{Fix details on the parents for children of the Pedigree}
 \usage{
 fix_parents(obj, ...)
 
@@ -38,7 +38,7 @@ the gender of the individuals. The following values are recognized:
 If used it will modify the ids of the individuals by pasting it with an _.}
 
 \item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the pedigree
+no father and no mother in the Pedigree
 (i.e. \code{dadid} and \code{momid} equal to the value of this variable).
 The default for \code{missid} is \code{"0"}.}
 
@@ -56,7 +56,7 @@ A data.frame with id, dadid, momid, sex as columns with the
 relationships fixed.
 }
 \description{
-Fix the sex of parents, add parents that are missing from the pedigree
+Fix the sex of parents, add parents that are missing from the Pedigree
 Can be used with a dataframe or a vector of the
 different individuals informations.
 }
@@ -95,7 +95,7 @@ test1newmom <- with(test1char, fix_parents(id, father, mother,
   sex,
   missid = '0'
 ))
-newped <- pedigree(test1newmom)
+newped <- Pedigree(test1newmom)
 as.data.frame(newped)
 
 }

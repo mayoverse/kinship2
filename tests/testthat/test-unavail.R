@@ -1,6 +1,6 @@
 test_that("unavailable detection works", {
     data("sampleped")
-    ped <- pedigree(sampleped)
+    ped <- Pedigree(sampleped)
     expect_equal(find_unavailable(ped),
         c(paste("1", c(
             101, 102, 107, 108, 111, 113, 121, 122, 123, 131, 132, 134, 139
@@ -19,7 +19,7 @@ test_that("unavailable detection works", {
 test_that("Unrelated detection works", {
     data("sampleped")
 
-    ped <- pedigree(sampleped)
+    ped <- Pedigree(sampleped)
 
     ped1 <- ped[ped$ped$family == 1, ]
     ped2 <- ped[ped$ped$family == 2, ]

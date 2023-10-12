@@ -6,17 +6,17 @@ NULL
 #'
 #' @description
 #' Compute the kinship matrix for a set of related autosomal subjects.  The
-#' function is generic, and can accept a pedigree, pedigreeList, or vector as
+#' function is generic, and can accept a Pedigree,  vector as
 #' the first argument.
 #'
 #' @details
-#' The function will usually be called with a pedigree or pedigreeList; the
-#' third form is provided for backwards compatability with an earlier release
+#' The function will usually be called with a Pedigree the
+#' third form is provided for backwards compatibility with an earlier release
 #' of the library that was less capable.  The first argument is named `id`
 #' for the same reason.  Note that when using the third form any information on
 #' twins is not available to the function.
 #'
-#' When called with a pedigree, the routine
+#' When called with a Pedigree, the routine
 #' will create a block-diagonal-symmetric sparse matrix object of class
 #' `dsCMatrix`.  Since the `[i, j]` value of the result is 0 for any two
 #' unrelated individuals i and j and a `Matrix` utilizes sparse
@@ -37,7 +37,7 @@ NULL
 #' The computation is based on a recursive algorithm described in Lange, which
 #' assumes that the founder alleles are all independent.
 #'
-#' @param obj A pedigree object or a vector of subject identifiers.
+#' @param obj A Pedigree object or a vector of subject identifiers.
 #' @param chrtype chromosome type.  The currently supported types are
 #' 'autosome' and 'X' or 'x'.
 #' @param ... Additional arguments passed to methods
@@ -47,13 +47,13 @@ NULL
 #' @return
 #' ## When obj is a vector
 #' A matrix of kinship coefficients.
-#' ## When obj is a pedigree
+#' ## When obj is a Pedigree
 #' A matrix of kinship coefficients ordered by families present
-#' in the pedigree.
+#' in the Pedigree.
 #'
 #' @examples
 #' data(sampleped)
-#' ped <- pedigree(sampleped)
+#' ped <- Pedigree(sampleped)
 #' kinship(ped)
 #'
 #' @section References: K Lange, Mathematical and Statistical Methods for
@@ -169,7 +169,7 @@ setMethod("kinship", "Pedigree",
                     id2x <- match(tped$rel$id2, tped$ped$id, nomatch = NA)
                     if (any(is.na(id1x)) | any(is.na(id2x))) {
                         stop("All individuals in relationship matrix",
-                            "should be present in the pedigree informations"
+                            "should be present in the Pedigree informations"
                         )
                     }
                     mzmat <- matrix(

@@ -1,7 +1,7 @@
 # Automatically generated from all.nw using noweb TODO add documentation
-#' Trim a pedigree
+#' Trim a Pedigree
 #'
-#' Carries out the removal of the subjects identified from a pedigree object.
+#' Carries out the removal of the subjects identified from a Pedigree object.
 #'
 #' @inheritParams align
 #' @inheritParams is_parent
@@ -11,11 +11,11 @@
 #'
 #' @examples
 #' data(sampleped)
-#' ped1 <- pedigree(sampleped[sampleped$family == "1",])
+#' ped1 <- Pedigree(sampleped[sampleped$family == "1",])
 #' trim(ped1, "1_101")
 #' @export
 trim <- function(ped, id_rm, missid = "0") {
-    ## trim subjects from a pedigree who match the removeID trim relation
+    ## trim subjects from a Pedigree who match the removeID trim relation
     ## matrix as well
     rmidx <- match(id_rm, ped$ped$id)
     if (length(rmidx) > 0) {

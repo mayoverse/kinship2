@@ -2,9 +2,9 @@ test_that("fix_parents works with number", {
     materdf <- data.frame(id = 1:5, momid = c(0, 1, 1, 2, 2), sex = "female")
     materdf$dadid <- materdf$momid * 100
     materdf <- as.data.frame(lapply(materdf, as.character))
-    expect_error(pedigree(materdf))
+    expect_error(Pedigree(materdf))
     peddf <- with(materdf, fix_parents(id, dadid, momid, sex, missid = "0"))
-    expect_no_error(pedigree(peddf))
+    expect_no_error(Pedigree(peddf))
 })
 
 test_that("fix_parents works with character", {
@@ -17,11 +17,11 @@ test_that("fix_parents works with character", {
             "fam107", "fam107", "fam107", "fam112"
         )
     )
-    expect_error(pedigree(test1char))
+    expect_error(Pedigree(test1char))
     test1newmom <- with(test1char,
         fix_parents(id, dadid, momid, sex, missid = "0")
     )
-    expect_no_error(pedigree(test1newmom))
+    expect_no_error(Pedigree(test1newmom))
 })
 
 test_that("fix_parents works with sex errors", {
@@ -31,14 +31,14 @@ test_that("fix_parents works with sex errors", {
     datped2 <- datped2[-which(datped2$id %in% 209), ]
 
     ## this gets an error
-    expect_warning(pedigree(datped2))
+    expect_warning(Pedigree(datped2))
 
     ## This fix the error
     datped2[, c("id", "momid", "dadid")] <- as.data.frame(lapply(
         datped2[, c("id", "momid", "dadid")], as.character
     ))
     fixped2 <- with(datped2, fix_parents(id, dadid, momid, sex, missid = "0"))
-    expect_no_error(pedigree(fixped2))
+    expect_no_error(Pedigree(fixped2))
 })
 
 
@@ -51,17 +51,17 @@ test_that("fix_parents_df works with sex errors and with family", {
     datped2 <- datped2[-which(datped2$id %in% 209), ]
 
     ## this gets an error
-    expect_warning(pedigree(datped2))
+    expect_warning(Pedigree(datped2))
 
     ## This fix the error and keep the dataframe dimensions
     datped2[, c("id", "momid", "dadid")] <- as.data.frame(lapply(
         datped2[, c("id", "momid", "dadid")], as.character
     ))
     fixped2 <- fix_parents(datped2, delete = TRUE)
-    expect_no_error(pedigree(fixped2))
+    expect_no_error(Pedigree(fixped2))
     expect_equal(dim(fixped2), c(13, 7))
 
     fixped2 <- fix_parents(datped2, delete = FALSE)
-    expect_no_error(pedigree(fixped2))
+    expect_no_error(Pedigree(fixped2))
     expect_equal(dim(fixped2), c(14, 7))
 })

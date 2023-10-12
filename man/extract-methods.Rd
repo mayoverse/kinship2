@@ -57,11 +57,11 @@ A character vector with the informations about the object.
 
 A character vector with the summary of the object.
 
-The slot \code{i} present in the pedigree object.
+The slot \code{i} present in the Pedigree object.
 
-The slot \code{name} present in the pedigree object.
+The slot \code{name} present in the Pedigree object.
 
-The pedigree object with the slot \code{name} replaced by \code{value}.
+The Pedigree object with the slot \code{name} replaced by \code{value}.
 
 A list of hints subsetted
 

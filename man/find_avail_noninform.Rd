@@ -7,7 +7,7 @@
 find_avail_noninform(ped, avail = ped$ped$avail, missid = "0")
 }
 \arguments{
-\item{ped}{A pedigree object}
+\item{ped}{A Pedigree object}
 
 \item{avail}{A numeric vector of availability status of each individual
 (e.g., genotyped). The values are:
@@ -18,7 +18,7 @@ find_avail_noninform(ped, avail = ped$ped$avail, missid = "0")
 }}
 
 \item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the pedigree
+no father and no mother in the Pedigree
 (i.e. \code{dadid} and \code{momid} equal to the value of this variable).
 The default for \code{missid} is \code{"0"}.}
 }
@@ -30,15 +30,15 @@ informativeness.
 Find uninformative but available subject
 }
 \details{
-Find subjects from a pedigree who are available and uninformative
+Find subjects from a Pedigree who are available and uninformative
 
-Identify subjects to remove from a pedigree who are available but
+Identify subjects to remove from a Pedigree who are available but
 non-informative.  This is the second step to remove subjects in
-pedigree.shrink if the pedigree does not meet the desired bit size.
+pedigree.shrink if the Pedigree does not meet the desired bit size.
 }
 \examples{
 data(sampleped)
-ped <- pedigree(sampleped)
+ped <- Pedigree(sampleped)
 find_avail_noninform(ped)
 
 }

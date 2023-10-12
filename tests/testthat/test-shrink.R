@@ -1,9 +1,9 @@
-## example data and test steps from pedigree.shrink
+## example data and test steps from Pedigree.shrink
 ## Jason Sinnwell
 
 test_that("Pedigree shrink works", {
     data(minnbreast)
-    ped_mb <- pedigree(minnbreast,
+    ped_mb <- Pedigree(minnbreast,
         cols_ren_ped = list(fatherId = "fatherid", motherId = "motherid",
             indId = "id", gender = "sex", family = "famid"
         )
@@ -12,12 +12,12 @@ test_that("Pedigree shrink works", {
     mn2 <- ped_mb[ped_mb$ped$family == "5", ]
 
 
-    ## this pedigree as one person with cancer. The pedigree is not informative
-    ## if they are the only available, so pedigree.shrink trims all.
-    ## This caused an error in pedigree.shrink before kinship2. v1.2.8.
+    ## this Pedigree as one person with cancer. The Pedigree is not informative
+    ## if they are the only available, so Pedigree.shrink trims all.
+    ## This caused an error in Pedigree.shrink before kinship2. v1.2.8.
     ## Now fixed
 
-    vdiffr::expect_doppelganger("pedigree shrink 1",
+    vdiffr::expect_doppelganger("Pedigree shrink 1",
         function() plot(mn2)
     )
 
@@ -36,7 +36,7 @@ test_that("Pedigree shrink works", {
     )
 
     mn8 <- ped_mb[ped_mb$ped$family == "8", ]
-    vdiffr::expect_doppelganger("pedigree shrink 2",
+    vdiffr::expect_doppelganger("Pedigree shrink 2",
         function() plot(mn8)
     )
 
@@ -58,7 +58,7 @@ test_that("Pedigree shrink works", {
 test_that("Pedigree shrink error if missing info", {
     ## use sampleped from the package
     data("sampleped")
-    ped <- pedigree(sampleped)
+    ped <- Pedigree(sampleped)
     ped2 <- ped[ped$ped$family == "2", ]
     ped2$ped$sex[c(13, 12)] <- c("unknown", "terminated")
 
@@ -70,7 +70,7 @@ test_that("Pedigree shrink error if missing info", {
 test_that("Pedigree shrink avail test", {
     ## use sampleped from the package
     data("sampleped")
-    ped <- pedigree(sampleped)
+    ped <- Pedigree(sampleped)
     ped1 <- ped[ped$ped$family == "1", ]
 
     set.seed(10)
@@ -98,7 +98,7 @@ test_that("Pedigree shrink with character", {
     ## use sampleped from the package
     data("sampleped")
     sampleped$family[sampleped$family == 1] <- "A"
-    ped <- pedigree(sampleped)
+    ped <- Pedigree(sampleped)
     ped1 <- ped[ped$ped$family == "A", ]
 
     set.seed(100)
@@ -121,7 +121,7 @@ test_that("Pedigree shrink with character", {
 
 test_that("Shrink works", {
     data("sampleped")
-    ped <- pedigree(sampleped)
+    ped <- Pedigree(sampleped)
     ped2 <- ped[ped$ped$family == "2", ]
     ped2_s <- shrink(ped2)
 

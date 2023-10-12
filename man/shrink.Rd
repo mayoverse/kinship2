@@ -2,12 +2,12 @@
 % Please edit documentation in R/shrink.R
 \name{shrink}
 \alias{shrink}
-\title{Shrink pedigree object}
+\title{Shrink Pedigree object}
 \usage{
 shrink(ped, avail = ped$ped$avail, affected = ped$ped$affected, max_bits = 16)
 }
 \arguments{
-\item{ped}{A pedigree object}
+\item{ped}{A Pedigree object}
 
 \item{avail}{A numeric vector of availability status of each individual
 (e.g., genotyped). The values are:
@@ -25,34 +25,34 @@ shrink(ped, avail = ped$ped$avail, affected = ped$ped$affected, max_bits = 16)
 \item \code{NA} : affection status not known
 }}
 
-\item{max_bits}{Optional, the bit size for which to shrink the pedigree}
+\item{max_bits}{Optional, the bit size for which to shrink the Pedigree}
 }
 \value{
 A list containing the following elements:
 \itemize{
 \item pedObj: Pedigree object after trimming
-\item id_trim: Vector of ids trimmed from pedigree
+\item id_trim: Vector of ids trimmed from Pedigree
 \item id_lst: List of ids trimmed by category
 \item bit_size: Vector of bit sizes after each trimming step
 \item avail: Vector of availability status after trimming
-\item pedSizeOriginal: Number of subjects in original pedigree
+\item pedSizeOriginal: Number of subjects in original Pedigree
 \item pedSizeIntermed: Number of subjects after initial trimming
 \item pedSizeFinal: Number of subjects after final trimming
 }
 }
 \description{
-Shrink pedigree object to specified bit size with priority placed on
+Shrink Pedigree object to specified bit size with priority placed on
 trimming uninformative subjects. The algorithm is useful for getting a
-pedigree condensed to a minimally informative size for algorithms or testing
-that are limited by size of the pedigree.
+Pedigree condensed to a minimally informative size for algorithms or testing
+that are limited by size of the Pedigree.
 }
 \details{
-Iteratively remove subjects from the pedigree. The random removal of members
+Iteratively remove subjects from the Pedigree. The random removal of members
 was previously controlled by a seed argument, but we remove this, forcing
 users to control randomness outside the function. First remove uninformative
 subjects, i.e., unavailable (not genotyped) with no available descendants.
 Next, available terminal subjects with unknown phenotype if both parents
-available. Last, iteratively shrinks pedigrees by preferentially removing
+available. Last, iteratively shrinks Pedigrees by preferentially removing
 individuals (chosen at random if there are multiple of the same status):
 \enumerate{
 \item Subjects with unknown affected status
@@ -62,12 +62,12 @@ individuals (chosen at random if there are multiple of the same status):
 }
 \examples{
 data(sampleped)
-ped1 <- pedigree(sampleped[sampleped$family == '1',])
+ped1 <- Pedigree(sampleped[sampleped$family == '1',])
 shrink(ped1, max_bits = 12)
 
 }
 \seealso{
-\code{\link[=pedigree]{pedigree()}}, \code{\link[=bit_size]{bit_size()}}
+\code{\link[=Pedigree]{Pedigree()}}, \code{\link[=bit_size]{bit_size()}}
 }
 \author{
 Original by Dan Schaid, updated by Jason Sinnwell

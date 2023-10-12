@@ -23,7 +23,7 @@ min_dist_inf(obj, ...)
 )
 }
 \arguments{
-\item{obj}{A pedigree object or a vector of subject identifiers.}
+\item{obj}{A Pedigree object or a vector of subject identifiers.}
 
 \item{...}{Additional arguments passed to methods}
 
@@ -71,7 +71,7 @@ the gender of the individuals. The following values are recognized:
 \item{col_aff}{A string with the column name to use for the affection status.}
 
 \item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the pedigree
+no father and no mother in the Pedigree
 (i.e. \code{dadid} and \code{momid} equal to the value of this variable).
 The default for \code{missid} is \code{"0"}.}
 
@@ -108,7 +108,7 @@ by 2, the minimum distance is increased by 1.
 }
 \examples{
 data(sampleped)
-ped <- pedigree(sampleped)
+ped <- Pedigree(sampleped)
 min_dist_inf(ped, col_aff = "affection_aff")$ped
 
 }

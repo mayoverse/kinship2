@@ -1,7 +1,7 @@
 test_that("descendants works", {
     data("sampleped")
     idlist <- c("1_101", "2_208")
-    ped <- pedigree(sampleped)
+    ped <- Pedigree(sampleped)
     desc <- descendants(idlist, ped)
     expect_equal(desc, c(
         "1_109", "2_212", "2_213", "2_214",
