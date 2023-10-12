@@ -138,3 +138,18 @@ test_that("Pedigree to dataframe", {
     ped <- Pedigree(sampleped)
     expect_equal(dim(as.data.frame(ped)), c(55, 19))
 })
+
+test_that("Pedigree length", {
+    data("sampleped")
+    ped <- Pedigree(sampleped)
+    expect_equal(length(ped), 55)
+})
+
+test_that("Pedigree accessors", {
+    data("sampleped")
+    ped <- Pedigree(sampleped)
+    expect_equal(ped$ped, ped(ped))
+    expect_equal(ped$rel, rel(ped))
+    expect_equal(ped$scales, scales(ped))
+    expect_equal(ped$hints, hints(ped))
+})

@@ -56,6 +56,49 @@ setClass(
 
 setValidity("Pedigree", is_valid)
 
+#### S4 Accessors ####
+
+#' @title Pedigree ped accessors
+#' @param object A Pedigree object.
+#' @return The slot `ped` present in the Pedigree object.
+#' @rdname extract-methods
+#' @aliases ped,Pedigree-method
+#' @export
+ped <- function(object) {
+    object@ped
+}
+
+#' @description Pedigree rel accessors
+#' @param object A Pedigree object.
+#' @return The slot `rel` present in the Pedigree object.
+#' @rdname extract-methods
+#' @aliases rel,Pedigree-method
+#' @export
+rel <- function(object) {
+    object@rel
+}
+
+#' @description Pedigree scales accessors
+#' @param object A Pedigree object.
+#' @return The slot `scales` present in the Pedigree object.
+#' @rdname extract-methods
+#' @aliases scales,Pedigree-method
+#' @export
+scales <- function(object) {
+    object@scales
+}
+
+#' @description Pedigree hints accessors
+#' @param object A Pedigree object.
+#' @return The slot `hints` present in the Pedigree object.
+#' @rdname extract-methods
+#' @aliases hints,Pedigree-method
+#' @export
+hints <- function(object) {
+    object@hints
+}
+
+
 #### S4 methods ####
 
 #' @title Pedigree methods
@@ -262,5 +305,17 @@ setMethod("as.list", c(x = "Pedigree"),
             scales = x$scales,
             hints = x$hints
         )
+    }
+)
+
+#' Compute the length of a Pedigree object
+#' @param x A Pedigree object.
+#' @return The number of individuals in the Pedigree object.
+#' @docType methods
+#' @aliases length,Pedigree-method
+#' @export
+setMethod("length", c(x = "Pedigree"),
+    function(x) {
+        nrow(x$ped)
     }
 )
