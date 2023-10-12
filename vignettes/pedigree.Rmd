@@ -1,5 +1,5 @@
 ---
-title: "Pedixplorer Pedigree object"
+title: "Pedixplorer Pedigree"
 author: "Louis Le Nézet"
 date: "31/08/2023"
 url: "https://github.com/LouisLeNezet/Pedixplorer"
@@ -9,7 +9,7 @@ output:
     toc_depth: 2
 header-includes: \usepackage{tabularx}
 vignette: |
-  %\VignetteIndexEntry{Pedigree_Examples}
+  %\VignetteIndexEntry{Pedixplorer Pedigree}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---
@@ -17,14 +17,6 @@ vignette: |
 ```{r width_control, echo = FALSE}
 options(width = 100)
 ```
-
-Table of Contents
-=================
-
-- [Introduction](#introduction)
-- [Installation](#installation)
-- [The pedigree S4 object](#the-pedigree-s4-object)
-- [Session information](#session-information)
 
 Introduction
 ===============
@@ -41,6 +33,15 @@ It also includes tools for pedigree drawing and filtering which is focused
 on producing compact layouts without intervention.
 Recent additions include utilities to trim the pedigree object with 
 various criteria, and kinship for the X chromosome.
+
+Suplementary vignettes are available to explain:
+
+- The [Pedigree() constructor]("pedigree_constructor.html") used to plot the pedigree `vignette("Pedigree() constructor", package = "Pedixplorer")`
+- The [alignment algorithm]("alignement_details.html") used to plot the pedigree `vignette("Pedigree alignement details", package = "Pedixplorer")`
+- The [kinship() algorithm]("kinship_details.html") `vignette("Pedigree kinship() details", package = "Pedixplorer")`
+- The [plotting algorithm]("pedigree_plot_details.html") used to plot the pedigree `vignette("Pedigree plotting details", package = "Pedixplorer")`
+
+
 
 Installation
 ===============

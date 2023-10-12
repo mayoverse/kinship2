@@ -1,5 +1,5 @@
 ---
-title: Kinship_Matrix_Code_Details
+title: Pedigree kinship() details
 author: TM Therneau
 date: '`r format(Sys.time(),"%d %B, %Y")`'
 output:
@@ -8,7 +8,7 @@ output:
     toc_depth: 2
 header-includes: \usepackage{tabularx}
 vignette: |
-  %\VignetteIndexEntry{Kinship_Matrix_Code_Details}
+  %\VignetteIndexEntry{Pedigree kinship() details}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---
