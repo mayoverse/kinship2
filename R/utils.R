@@ -160,7 +160,7 @@ check_num_na <- function(var, na_as_num = TRUE) {
 #' @param momid  vector containing for each subject, the identifiers of the
 #' biologicals mothers.
 #' @param missid The missing identifier value. Founders are the individuals with
-#' no father and no mother in the pedigree
+#' no father and no mother in the Pedigree
 #' (i.e. `dadid` and `momid` equal to the value of this variable).
 #' The default for `missid` is `"0"`.
 #'
@@ -211,7 +211,7 @@ is_founder <- function(momid, dadid, missid = "0") {
 #' @include kinship.R
 #' @keywords internal
 is_disconnected <- function(id, dadid, momid) {
-    # check to see if any subjects are disconnected in pedigree by checking for
+    # check to see if any subjects are disconnected in Pedigree by checking for
     # kinship = 0 for all subjects excluding self
     kin_mat <- kinship(id, dadid, momid)
     diag(kin_mat) <- 0

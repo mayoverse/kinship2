@@ -21,13 +21,13 @@ NULL
 #' `num_child_tot` giving respectively the direct, indirect and total number
 #' of child.
 #'
-#' ## When obj is a pedigree object
-#' An updated pedigree object with the columns `num_child_dir`,
+#' ## When obj is a Pedigree object
+#' An updated Pedigree object with the columns `num_child_dir`,
 #' `num_child_ind` and `num_child_tot` added to the
-#' pedigree `ped` slot.
+#' Pedigree `ped` slot.
 #' @examples
 #' data(sampleped)
-#' ped1 <- pedigree(sampleped[sampleped$family == "1",])
+#' ped1 <- Pedigree(sampleped[sampleped$family == "1",])
 #' ped1 <- num_child(ped1)
 #' summary(ped1$ped)
 #' @include pedigreeClass.R

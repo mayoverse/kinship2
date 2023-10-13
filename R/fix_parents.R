@@ -1,10 +1,10 @@
 #' @importFrom stringr str_split_i
 NULL
 
-#' Fix details on the parents for children of the pedigree
+#' Fix details on the parents for children of the Pedigree
 #'
 #' @description
-#' Fix the sex of parents, add parents that are missing from the pedigree
+#' Fix the sex of parents, add parents that are missing from the Pedigree
 #' Can be used with a dataframe or a vector of the
 #' different individuals informations.
 #'
@@ -52,7 +52,7 @@ NULL
 #'   sex,
 #'   missid = '0'
 #' ))
-#' newped <- pedigree(test1newmom)
+#' newped <- Pedigree(test1newmom)
 #' as.data.frame(newped)
 #'
 #' @author Jason Sinnwell
@@ -144,7 +144,7 @@ setMethod("fix_parents", "character", function(
     mindex <- match(momid, id, nomatch = 0)
     addids <- addids[!(addids %in% id)]
 
-    ## children with mom in pedigree, dad missing
+    ## children with mom in Pedigree, dad missing
     if (any(findex == 0 & mindex != 0)) {
         nodad_idx <- which(findex == 0 & mindex != 0)
         dadid[nodad_idx] <- addids[seq_along(nodad_idx)]

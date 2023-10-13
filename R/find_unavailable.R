@@ -1,9 +1,9 @@
 # Automatically generated from all.nw using noweb
 
-#' Find unavailable subjects in a pedigree
+#' Find unavailable subjects in a Pedigree
 #'
 #' @description
-#' Find the ID of subjects in a pedigree iteratively, as anyone who is not
+#' Find the ID of subjects in a Pedigree iteratively, as anyone who is not
 #' available and does not have an available descendant by successively removing
 #' unavailable terminal nodes.
 #'
@@ -30,14 +30,14 @@
 #'
 #' @examples
 #' data(sampleped)
-#' ped1 <- pedigree(sampleped[sampleped$family == "1",])
+#' ped1 <- Pedigree(sampleped[sampleped$family == "1",])
 #' find_unavailable(ped1)
 #'
 #' @seealso [shrink()]
 #' @include utils.R
 #' @export
-find_unavailable <- function(ped, avail = ped$ped$avail) {
-    ## find id within pedigree anyone who is not available and
+find_unavailable <- function(ped, avail = ped(ped)$avail) {
+    ## find id within Pedigree anyone who is not available and
     ## does not have an available descendant
 
     ## avail = TRUE/1 if available, FALSE/0 if not
@@ -45,7 +45,7 @@ find_unavailable <- function(ped, avail = ped$ped$avail) {
     ## will do this iteratively by successively removing unavailable
     ## terminal nodes
     ## Steve Iturria, PhD, modified by Dan Schaid
-    df <- ped$ped
+    df <- ped(ped)
     df$avail <- avail
     cont <- TRUE # flag for whether to keep iterating
 
@@ -74,13 +74,13 @@ find_unavailable <- function(ped, avail = ped$ped$avail) {
     ## remove stray marry-ins
     tmp_ped <- exclude_stray_marryin(tmp_ped$id, tmp_ped$dadid, tmp_ped$momid)
 
-    ped$ped$id[is.na(match(ped$ped$id, tmp_ped$id))]
+    ped(ped)$id[is.na(match(ped(ped)$id, tmp_ped$id))]
 }
 
 #' Exclude stray marry-ins
 #'
 #' @description
-#' Exclude from a pedigree any founders who are not parents.
+#' Exclude from a Pedigree any founders who are not parents.
 #'
 #' @param id Vector of subject identifiers
 #' @inheritParams descendants
@@ -108,7 +108,7 @@ exclude_stray_marryin <- function(id, dadid, momid) {
 #' Exclude unavailable founders
 #'
 #' @description
-#' Exclude from a pedigree any unavailable founders.
+#' Exclude from a Pedigree any unavailable founders.
 #'
 #' @param id Vector of subject identifiers
 #' @inheritParams descendants

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_fct.R
 \name{draw_polygon}
 \alias{draw_polygon}
-\title{Draw a polygon for a pedigree}
+\title{Draw a polygon for a Pedigree}
 \usage{
 draw_polygon(
   x,
@@ -36,6 +36,6 @@ draw_polygon(
 Plot the polygon or add it to a ggplot object
 }
 \description{
-Draw a polygon for a pedigree
+Draw a polygon for a Pedigree
 }
 \keyword{internal}

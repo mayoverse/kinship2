@@ -2,7 +2,7 @@
 % Please edit documentation in R/align.R
 \name{align}
 \alias{align}
-\title{Generate plotting information for a pedigree}
+\title{Generate plotting information for a Pedigree}
 \usage{
 align(
   ped,
@@ -14,16 +14,16 @@ align(
 )
 }
 \arguments{
-\item{ped}{A pedigree object}
+\item{ped}{A Pedigree object}
 
-\item{packed}{Should the pedigree be compressed, i.e., allow diagonal
+\item{packed}{Should the Pedigree be compressed, i.e., allow diagonal
 lines connecting parents to children in order to have a smaller overall
 width for the plot.}
 
 \item{width}{for a packed output, the minimum width of the plot, in
 inches.}
 
-\item{align}{for a packed pedigree, align children under parents \code{TRUE},
+\item{align}{for a packed Pedigree, align children under parents \code{TRUE},
 to the extent possible given the page width, or align to to the left
 margin \code{FALSE}.
 This argument can be a two element vector, giving the alignment
@@ -31,12 +31,12 @@ parameters, or a logical value.
 If \code{TRUE}, the default is \code{c(1.5, 2)}, or numeric the routine
 \code{alignped4()} will be called.}
 
-\item{hints}{Plotting hints for the pedigree.
+\item{hints}{Plotting hints for the Pedigree.
 This is a list with components \code{order} and \code{spouse}, the second one
 is optional.
 \itemize{
 \item \strong{order} is a numeric vector with one element per subject in the
-pedigree.  It determines the relative order of subjects within a sibship, as
+Pedigree.  It determines the relative order of subjects within a sibship, as
 well as the relative order of processing for the founder couples. (For this
 latter, the female founders are ordered as though they were sisters).
 \item \strong{spouse} is a matrix with one row per hinted marriage, usually
@@ -49,7 +49,7 @@ spouse.
 }}
 
 \item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the pedigree
+no father and no mother in the Pedigree
 (i.e. \code{dadid} and \code{momid} equal to the value of this variable).
 The default for \code{missid} is \code{"0"}.}
 }
@@ -60,7 +60,7 @@ A list with components
 plot
 \item nid A matrix with one row for each level, giving the numeric id of
 each subject plotted.
-(A value of \code{17} means the 17th subject in the pedigree).
+(A value of \code{17} means the 17th subject in the Pedigree).
 \item pos A matrix giving the horizontal position of each plot point
 \item fam A matrix giving the family id of each plot point.
 A value of \code{3} would mean that the two subjects in positions 3 and 4,
@@ -71,7 +71,7 @@ in the row above, are this subject's parents.
 \item \code{1} = subject plotted to the immediate right is a spouse
 \item \code{2} = subject plotted to the immediate right is an inbred spouse
 }
-\item twins Optional matrix which will only be present if the pedigree
+\item twins Optional matrix which will only be present if the Pedigree
 contains twins :
 \itemize{
 \item \code{0} = not a twin
@@ -82,8 +82,8 @@ contains twins :
 }
 }
 \description{
-Given a pedigree, this function creates helper matrices that describe the
-layout of a plot of the pedigree.
+Given a Pedigree, this function creates helper matrices that describe the
+layout of a plot of the Pedigree.
 }
 \details{
 This is an internal routine, used almost exclusively by
@@ -93,14 +93,14 @@ This is an internal routine, used almost exclusively by
 contain the bulk of the computation.
 If the \strong{hints} are missing the \code{auto_hint()} routine is called to
 supply an initial guess.
-If multiple families are present in the pedigree, this routine is called
+If multiple families are present in the Pedigree, this routine is called
 once for each family, and the results are combined in the list returned.
 For more information you can read the associated vignette:align
 \code{vignette("alignement_details")}.
 }
 \examples{
 data(sampleped)
-ped <- pedigree(sampleped)
+ped <- Pedigree(sampleped)
 align(ped)
 
 }

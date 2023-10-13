@@ -1,6 +1,6 @@
 # Automatically generated from all.nw using noweb
 
-#' Find a single person to trim from a pedigree whose is available
+#' Find a single person to trim from a Pedigree whose is available
 #'
 #' @description
 #' Finds one subject from among available non-parents with indicated affection
@@ -8,7 +8,7 @@
 #'
 #' @details
 #' When used within pedigree.shrink, this function is called with the first
-#' affected indicator, if the affected item in the pedigree is a matrix of
+#' affected indicator, if the affected item in the Pedigree is a matrix of
 #' multiple affected indicators.
 #'
 #' @param affstatus Affection status to search for.
@@ -16,23 +16,23 @@
 #' @inheritParams is_informative
 #'
 #' @return A list is returned with the following components
-#' - ped The new pedigree object
+#' - ped The new Pedigree object
 #' - newAvail Vector of availability status of trimmed individuals
 #' - idTrimmed Vector of IDs of trimmed individuals
-#' - isTrimmed logical value indicating whether pedigree has been trimmed
-#' - bit_size Bit size of the trimmed pedigree
+#' - isTrimmed logical value indicating whether Pedigree has been trimmed
+#' - bit_size Bit size of the trimmed Pedigree
 #'
 #' @examples
 #' data(sampleped)
-#' ped <- pedigree(sampleped)
+#' ped <- Pedigree(sampleped)
 #' find_avail_affected(ped, affstatus = 1)
 #' @seealso [shrink()]
 #' @include bit_size.R
 #' @include utils.R
 #' @include find_unavailable.R
 #' @export
-find_avail_affected <- function(ped, avail = ped$ped$avail, affstatus = NA) {
-    ped_df <- ped$ped
+find_avail_affected <- function(ped, avail = ped(ped)$avail, affstatus = NA) {
+    ped_df <- ped(ped)
     ped_df$avail <- avail
     not_parent <- !is_parent(ped_df$id, ped_df$dadid, ped_df$momid)
 

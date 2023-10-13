@@ -1,5 +1,5 @@
 Package: Pedixplorer
-Version: 0.99.0
+Version: 0.99.1
 Date: 2023-09-19
 Title: Pedigree Functions
 Authors@R: c(
@@ -25,12 +25,12 @@ Imports:
     tidyr,
     quadprog,
     Matrix
-Description: Routines to handle family data with a pedigree object. The initial purpose
+Description: Routines to handle family data with a Pedigree object. The initial purpose
     was to create correlation structures that describe family relationships such 
     as kinship and identity-by-descent, which can be used to model family data 
     in mixed effects models, such as in the coxme function. Also includes a tool
-    for pedigree drawing which is focused on producing compact layouts without 
-    intervention. Recent additions include utilities to trim the pedigree object
+    for Pedigree drawing which is focused on producing compact layouts without 
+    intervention. Recent additions include utilities to trim the Pedigree object
     with various criteria, and kinship for the X chromosome.
 License: Artistic-2.0
 Encoding: UTF-8
@@ -51,12 +51,12 @@ BugReports: https://github.com/LouisLeLezet/Pedixplorer/issues
 url: https://github.com/LouisLeNezet/Pedixplorer
 BiocType: Software
 Collate: 
+    'Pedigree.R'
     'Pedixplorer-package.R'
     'alignped4.R'
     'alignped3.R'
     'alignped2.R'
     'alignped1.R'
-    'pedigree.R'
     'validity.R'
     'pedigreeClass.R'
     'check_hints.R'

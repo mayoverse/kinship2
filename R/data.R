@@ -85,7 +85,7 @@
 #'
 #' @examples
 #' data(minnbreast)
-#' breastped <- pedigree(minnbreast,
+#' breastped <- Pedigree(minnbreast,
 #'    cols_ren_ped = list(
 #'        "indId" = "id", "fatherId" = "fatherid",
 #'        "motherId" = "motherid", "gender" = "sex", "family" = "famid"
@@ -120,7 +120,7 @@
 #'
 #' @examples
 #' data("sampleped")
-#' ped <- pedigree(sampleped)
+#' ped <- Pedigree(sampleped)
 #' summary(ped)
 #' #plot(ped)
 "sampleped"

@@ -7,7 +7,7 @@
 \alias{bit_size,character}
 \alias{bit_size,Pedigree-method}
 \alias{bit_size,Pedigree}
-\title{Get pedigree bit_size}
+\title{Get Pedigree bit_size}
 \usage{
 bit_size(obj, ...)
 
@@ -16,7 +16,7 @@ bit_size(obj, ...)
 \S4method{bit_size}{Pedigree}(obj, missid = "0")
 }
 \arguments{
-\item{obj}{A pedigree object or a vector of fathers identifierss}
+\item{obj}{A Pedigree object or a vector of fathers identifierss}
 
 \item{...}{Additional arguments passed to methods}
 
@@ -24,20 +24,20 @@ bit_size(obj, ...)
 biologicals mothers.}
 
 \item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the pedigree
+no father and no mother in the Pedigree
 (i.e. \code{dadid} and \code{momid} equal to the value of this variable).
 The default for \code{missid} is \code{"0"}.}
 }
 \value{
 A list with the following components:
 \itemize{
-\item bit_size The bit_size of input pedigree
-\item nFounder The number of founders in the pedigree
-\item nNonFounder The number of nonfounders in the pedigree
+\item bit_size The bit_size of input Pedigree
+\item nFounder The number of founders in the Pedigree
+\item nNonFounder The number of nonfounders in the Pedigree
 }
 }
 \description{
-Calculate pedigree bit_size, defined as :
+Calculate Pedigree bit_size, defined as :
 
 \eqn{
   2 \times NbNonFounders - NbFounders
@@ -45,11 +45,11 @@ Calculate pedigree bit_size, defined as :
 }
 \details{
 This is a utility function used in \code{shrink()}
-to calculate the bit_size of a pedigree.
+to calculate the bit_size of a Pedigree.
 }
 \examples{
 data(sampleped)
-ped <- pedigree(sampleped)
+ped <- Pedigree(sampleped)
 bit_size(ped)
 }
 \seealso{

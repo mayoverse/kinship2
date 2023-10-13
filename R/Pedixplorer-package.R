@@ -17,21 +17,21 @@
 #' Below are listed some of the most widely used functions available
 #' in arsenal:
 #'
-#' [pedigree()]: Contstructor of the pedigree class,
+#' [Pedigree()]: Contstructor of the Pedigree class,
 #' given identifiers, sex, affection status(es), and special relationships
 #'
 #' [kinship()]: Calculates the kinship matrix, the
 #' probability having an allele sampled from two individuals
 #' be the same via IBD.
 #'
-#' [ped_to_plotdf()] : Method to transform a pedigree
+#' [ped_to_plotdf()] : Method to transform a Pedigree
 #' object into a dataframe of graphical elements.
 #' Allows extra information to be included in the id under the plot symbol
 #'
-#' [plot_fromdf()] : Method to plot a pedigree from a
+#' [plot_fromdf()] : Method to plot a Pedigree from a
 #' dataframe of graphical elements.
 #'
-#' [shrink()]: Shrink a pedigree to a specific bit size,
+#' [shrink()]: Shrink a Pedigree to a specific bit size,
 #' removing non-informative members first.
 #'
 #' [bit_size()]: Approximate the output from SAS's

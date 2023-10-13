@@ -32,23 +32,23 @@ biologicals mothers.}
 An integer vector giving family groupings
 }
 
-\subsection{When used with a pedigree object}{
+\subsection{When used with a Pedigree object}{
 
-An updated pedigree object with the family id added
+An updated Pedigree object with the family id added
 }
 }
 \description{
-Construct a family id from pedigree information
+Construct a family id from Pedigree information
 }
 \details{
 Create a vector of length n, giving the family 'tree' number of each
-subject.  If the pedigree is totally connected, then everyone will end up in
+subject.  If the Pedigree is totally connected, then everyone will end up in
 tree 1, otherwise the tree numbers represent the disconnected subfamilies.
 Singleton subjects give a zero for family number.
 }
 \examples{
 data(sampleped)
-ped1 <- pedigree(sampleped[,-1])
+ped1 <- Pedigree(sampleped[,-1])
 make_famid(ped1)
 }
 \seealso{

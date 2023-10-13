@@ -3,12 +3,12 @@
 \docType{methods}
 \name{ped_to_legdf}
 \alias{ped_to_legdf}
-\title{Convert a pedigree to a legend data frame of element to plot}
+\title{Convert a Pedigree to a legend data frame of element to plot}
 \usage{
 ped_to_legdf(ped, boxh = 1, boxw = 1, cex = 1, adjx = 0, adjy = 0)
 }
 \arguments{
-\item{ped}{A pedigree object}
+\item{ped}{A Pedigree object}
 
 \item{boxh}{Height of the legend boxes}
 
@@ -26,12 +26,12 @@ of the labels in the legend.}
 A list containing the legend data frame and the user coordinates.
 }
 \description{
-Convert a pedigree to a legend data frame for it to
+Convert a Pedigree to a legend data frame for it to
 be plotted with afterwards with \code{\link[=plot_fromdf]{plot_fromdf()}}.
 }
 \examples{
 data("sampleped")
-ped <- pedigree(sampleped)
+ped <- Pedigree(sampleped)
 leg_df <- ped_to_legdf(ped)
 summary(leg_df$leg_df)
 plot_fromdf(leg_df$leg_df)

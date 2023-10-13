@@ -1,18 +1,18 @@
-#' Shrink pedigree object
+#' Shrink Pedigree object
 #'
 #' @description
-#' Shrink pedigree object to specified bit size with priority placed on
+#' Shrink Pedigree object to specified bit size with priority placed on
 #' trimming uninformative subjects. The algorithm is useful for getting a
-#' pedigree condensed to a minimally informative size for algorithms or testing
-#' that are limited by size of the pedigree.
+#' Pedigree condensed to a minimally informative size for algorithms or testing
+#' that are limited by size of the Pedigree.
 #'
 #' @details
-#' Iteratively remove subjects from the pedigree. The random removal of members
+#' Iteratively remove subjects from the Pedigree. The random removal of members
 #' was previously controlled by a seed argument, but we remove this, forcing
 #' users to control randomness outside the function. First remove uninformative
 #' subjects, i.e., unavailable (not genotyped) with no available descendants.
 #' Next, available terminal subjects with unknown phenotype if both parents
-#' available. Last, iteratively shrinks pedigrees by preferentially removing
+#' available. Last, iteratively shrinks Pedigrees by preferentially removing
 #' individuals (chosen at random if there are multiple of the same status):
 #' 1. Subjects with unknown affected status
 #' 2. Subjects with unaffected affected status
@@ -20,28 +20,28 @@
 #'
 #' @inheritParams align
 #' @inheritParams is_informative
-#' @param max_bits Optional, the bit size for which to shrink the pedigree
+#' @param max_bits Optional, the bit size for which to shrink the Pedigree
 #'
 #' @return A list containing the following elements:
 #' - pedObj: Pedigree object after trimming
-#' - id_trim: Vector of ids trimmed from pedigree
+#' - id_trim: Vector of ids trimmed from Pedigree
 #' - id_lst: List of ids trimmed by category
 #' - bit_size: Vector of bit sizes after each trimming step
 #' - avail: Vector of availability status after trimming
-#' - pedSizeOriginal: Number of subjects in original pedigree
+#' - pedSizeOriginal: Number of subjects in original Pedigree
 #' - pedSizeIntermed: Number of subjects after initial trimming
 #' - pedSizeFinal: Number of subjects after final trimming
 #'
 #' @examples
 #' data(sampleped)
-#' ped1 <- pedigree(sampleped[sampleped$family == '1',])
+#' ped1 <- Pedigree(sampleped[sampleped$family == '1',])
 #' shrink(ped1, max_bits = 12)
 #'
 #' @author Original by Dan Schaid, updated by Jason Sinnwell
-#' @seealso [pedigree()], [bit_size()]
+#' @seealso [Pedigree()], [bit_size()]
 #' @export
 shrink <- function(
-    ped, avail = ped$ped$avail, affected = ped$ped$affected, max_bits = 16
+    ped, avail = ped(ped)$avail, affected = ped(ped)$affected, max_bits = 16
 ) {
     if (any(is.na(avail))) {
         stop("NA values not allowed in avail vector.")
@@ -49,7 +49,7 @@ shrink <- function(
 
     id_trim <- numeric()
     id_lst <- list()
-    n_origin <- length(ped$ped$id)
+    n_origin <- length(ped(ped)$id)
 
     bitsize_old <- bit_size(ped)$bit_size
 
@@ -60,7 +60,7 @@ shrink <- function(
 
     if (length(id_trim_unav)) {
         ped_trim <- trim(ped, id_trim_unav)
-        avail <- avail[match(ped_trim$ped$id, ped$ped$id)]
+        avail <- avail[match(ped_trim$ped$id, ped(ped)$id)]
         id_trim <- c(id_trim, id_trim_unav)
         id_lst$unavail <- id_trim_unav
 

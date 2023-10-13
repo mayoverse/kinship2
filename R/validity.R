@@ -41,7 +41,7 @@ check_slot_fd <- function(obj, slot = NULL, fields = character()) {
     if (length(array_names) == 0) {
         paste0(
             "Missing fields in ", slot,
-            " slot. See pedigree documentation."
+            " slot. See Pedigree documentation."
         )
     } else if (any(!fields %in% array_names)) {
         paste0(

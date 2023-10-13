@@ -51,12 +51,12 @@ in the pedigree.
 }
 \description{
 Compute the kinship matrix for a set of related autosomal subjects.  The
-function is generic, and can accept a pedigree, pedigreeList, or vector as
+function is generic, and can accept a Pedigree,  vector as
 the first argument.
 }
 \details{
-The function will usually be called with a pedigree or pedigreeList; the
-third form is provided for backwards compatability with an earlier release
+The function will usually be called with a Pedigree the
+third form is provided for backwards compatibility with an earlier release
 of the library that was less capable.  The first argument is named \code{id}
 for the same reason.  Note that when using the third form any information on
 twins is not available to the function.
@@ -89,7 +89,7 @@ Genetic Analysis, Springer-Verlag, New York, 1997.
 
 \examples{
 data(sampleped)
-ped <- pedigree(sampleped)
+ped <- Pedigree(sampleped)
 kinship(ped)
 
 }

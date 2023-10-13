@@ -4,10 +4,10 @@
 \alias{unrelated}
 \title{Get unrelated subjects}
 \usage{
-unrelated(ped, avail = ped$ped$avail)
+unrelated(ped, avail = ped(ped)$avail)
 }
 \arguments{
-\item{ped}{A pedigree object}
+\item{ped}{A Pedigree object}
 
 \item{avail}{A numeric vector of availability status of each individual
 (e.g., genotyped). The values are:
@@ -22,11 +22,11 @@ A vector of the ids of subjects that are unrelated.
 }
 \description{
 Determine set of maximum number of unrelated available subjects from a
-pedigree
+Pedigree.
 }
 \details{
 Determine set of maximum number of unrelated available subjects from a
-pedigree, given vectors id, father, and mother for a pedigree structure, and
+Pedigree, given vectors id, father, and mother for a Pedigree structure, and
 status vector of T/F for whether each subject is available (e.g. has DNA)
 
 This is a greedy algorithm that uses the kinship matrix, sequentially
@@ -39,10 +39,10 @@ multiple times can return different sets of unrelated subjects.
 }
 \examples{
 data(sampleped)
-fam1 <- sampleped[sampleped$ped == 1, ]
+fam1 <- sampleped[sampleped$family == 1, ]
 
 
-ped1 <- pedigree(fam1)
+ped1 <- Pedigree(fam1)
 
 ## to see plot:
 id1 <- unrelated(ped1)

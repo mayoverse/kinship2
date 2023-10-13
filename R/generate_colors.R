@@ -188,7 +188,7 @@ generate_border <- function(avail, colors_avail = c("green", "black")) {
 #' the colors for the filling and the border of the individuals based
 #' on the affection and availability status.
 #'
-#' @param obj A pedigree object or a vector containing the affection status for
+#' @param obj A Pedigree object or a vector containing the affection status for
 #' each individuals. The affection status can be numeric, logical or character.
 #' @param col_avail The name of the column containing the availability status.
 #' @inheritParams is_informative
@@ -203,15 +203,15 @@ generate_border <- function(avail, colors_avail = c("green", "black")) {
 #' - A dataframe containing the description of each filling modalities
 #' - A dataframe containing the description of the border modalities
 #'
-#' ## When used with a pedigree object
-#' The pedigree object with the `affected` and `avail` columns
+#' ## When used with a Pedigree object
+#' The Pedigree object with the `affected` and `avail` columns
 #' processed accordingly.
 #'
-#' The pedigree scales slots are updated
+#' The Pedigree scales slots are updated
 #'
 #' @examples
 #' data("sampleped")
-#' ped <- pedigree(sampleped)
+#' ped <- Pedigree(sampleped)
 #' generate_colors(ped, "affected", add_to_scale=FALSE)$scales
 #' @export
 setGeneric("generate_colors", signature = "obj",

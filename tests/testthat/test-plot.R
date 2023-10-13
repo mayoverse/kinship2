@@ -1,4 +1,4 @@
-test_that("pedigree other test", {
+test_that("Pedigree other test", {
     ped2mat <- matrix(
         c(
             1, 1, 0, 0, 1, 1, 0,
@@ -25,7 +25,7 @@ test_that("pedigree other test", {
     ped2df$vitalStatus <- c(1, 1, 1, 0, 1, 0, 0, 8, 0, 0)
 
     rel_df <- data.frame(indId1 = 8, indId2 = 9, code = 3, family = 1)
-    ped <- pedigree(ped2df, rel_df)
+    ped <- Pedigree(ped2df, rel_df)
 
     vdiffr::expect_doppelganger("Ped simple affection",
         function() plot(ped)
@@ -50,17 +50,17 @@ test_that("pedigree other test", {
     )
 })
 
-test_that("pedigree fails to line up", {
+test_that("Pedigree fails to line up", {
     # Here is a case where the levels fail to line up properly
     data(sampleped)
     df1 <- sampleped[sampleped$family == "1", ]
-    ped1 <- pedigree(df1)
+    ped1 <- Pedigree(df1)
     vdiffr::expect_doppelganger("ped1",
         function() plot(ped1)
     )
     # With reordering it's better
     df1reord <- df1[c(35:41, 1:34), ]
-    ped1reord <- pedigree(df1reord)
+    ped1reord <- Pedigree(df1reord)
     vdiffr::expect_doppelganger("ped1reorder",
         function() plot(ped1reord)
     )

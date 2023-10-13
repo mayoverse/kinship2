@@ -3,9 +3,9 @@
 \docType{methods}
 \name{plot,Pedigree,missing-method}
 \alias{plot,Pedigree,missing-method}
-\alias{plot.pedigree}
+\alias{plot.Pedigree}
 \alias{plot,Pedigree}
-\title{Plot pedigrees}
+\title{Plot Pedigrees}
 \usage{
 \S4method{plot}{Pedigree,missing}(
   x,
@@ -32,7 +32,7 @@
 )
 }
 \arguments{
-\item{x}{A pedigree object.}
+\item{x}{A Pedigree object.}
 
 \item{aff_mark}{if TRUE, add a aff_mark to each box corresponding to the
 value of the affection column for each filling scale.}
@@ -49,11 +49,11 @@ value of the column given.}
 \item{branch}{defines how much angle is used to connect various levels of
 nuclear families.}
 
-\item{packed}{Should the pedigree be compressed, i.e., allow diagonal
+\item{packed}{Should the Pedigree be compressed, i.e., allow diagonal
 lines connecting parents to children in order to have a smaller overall
 width for the plot.}
 
-\item{align}{for a packed pedigree, align children under parents \code{TRUE},
+\item{align}{for a packed Pedigree, align children under parents \code{TRUE},
 to the extent possible given the page width, or align to to the left
 margin \code{FALSE}.
 This argument can be a two element vector, giving the alignment
@@ -69,7 +69,7 @@ inches.}
 \item{subreg}{4-element vector for (min x, max x, min depth, max depth),
 used to edit away portions of the plot coordinates returned by
 \code{\link[=align]{align()}}.
-This is useful for zooming in on a particular region of the pedigree.}
+This is useful for zooming in on a particular region of the Pedigree.}
 
 \item{pconnect}{when connecting parent to children the program will try to
 make the connecting line as close to vertical as possible, subject to it
@@ -77,7 +77,7 @@ lying inside the endpoints of the line that connects the children by at
 least \code{pconnect} people.  Setting this option to a large number will
 force the line to connect at the midpoint of the children.}
 
-\item{fam_to_plot}{default=1.  If the pedigree contains multiple families,
+\item{fam_to_plot}{default=1.  If the Pedigree contains multiple families,
 this parameter can be used to select which family to plot.
 It can be a numeric value or a character value. If numeric, it is the
 index of the family to plot returned by \code{unique(x$ped$family)}.
@@ -104,20 +104,20 @@ of the legend.}
 \value{
 an invisible list containing
 \itemize{
-\item df : the data.frame used to plot the pedigree
-\item par_usr : the user coordinates used to plot the pedigree
+\item df : the data.frame used to plot the Pedigree
+\item par_usr : the user coordinates used to plot the Pedigree
 \item ggplot : the ggplot object if ggplot_gen = TRUE
 }
 }
 \description{
-plot objects created with the pedigree function
+plot objects created with the Pedigree function
 }
 \details{
 Two important parameters control the looks of the result.  One is the user
 specified maximum width.  The smallest possible width is the maximum number
 of subjects on a line, if the user's suggestion is too low it is
 increased to 1 + that amount (to give just a little wiggle room). To make a
-pedigree where all children are centered under parents simply make the width
+Pedigree where all children are centered under parents simply make the width
 large enough, however, the symbols may get very small.
 
 The second is \code{align}, a vector of 2 alignment parameters \code{a} and
@@ -145,10 +145,10 @@ importance of sib-parent and spouse-spouse closeness.
 
 \examples{
 data(sampleped)
-pedAll <- pedigree(sampleped)
+pedAll <- Pedigree(sampleped)
 #plot(pedAll)
 
 }
 \seealso{
-\code{\link[=pedigree]{pedigree()}}
+\code{\link[=Pedigree]{Pedigree()}}
 }

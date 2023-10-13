@@ -20,6 +20,6 @@ Returns a data frame of subject identifiers and their parents.
 The data frame is trimmed of any founders who are not parents.
 }
 \description{
-Exclude from a pedigree any founders who are not parents.
+Exclude from a Pedigree any founders who are not parents.
 }
 \keyword{internal}

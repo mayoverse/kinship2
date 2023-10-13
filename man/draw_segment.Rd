@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_fct.R
 \name{draw_segment}
 \alias{draw_segment}
-\title{Draw segments for a pedigree}
+\title{Draw segments for a Pedigree}
 \usage{
 draw_segment(
   x0,
@@ -39,6 +39,6 @@ draw_segment(
 Plot the segments or add it to a ggplot object
 }
 \description{
-Draw segments for a pedigree
+Draw segments for a Pedigree
 }
 \keyword{internal}

@@ -1,6 +1,6 @@
 test_that("bit_size works", {
     data(minnbreast)
-    minnped <- pedigree(minnbreast, cols_ren_ped = list(
+    minnped <- Pedigree(minnbreast, cols_ren_ped = list(
         "indId" = "id", "fatherId" = "fatherid",
         "motherId" = "motherid", "gender" = "sex", "family" = "famid"
     ))

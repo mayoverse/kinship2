@@ -2,12 +2,12 @@
 % Please edit documentation in R/find_unavailable.R
 \name{find_unavailable}
 \alias{find_unavailable}
-\title{Find unavailable subjects in a pedigree}
+\title{Find unavailable subjects in a Pedigree}
 \usage{
-find_unavailable(ped, avail = ped$ped$avail)
+find_unavailable(ped, avail = ped(ped)$avail)
 }
 \arguments{
-\item{ped}{A pedigree object}
+\item{ped}{A Pedigree object}
 
 \item{avail}{A numeric vector of availability status of each individual
 (e.g., genotyped). The values are:
@@ -22,7 +22,7 @@ Returns a vector of subject ids for who can be
 removed.
 }
 \description{
-Find the ID of subjects in a pedigree iteratively, as anyone who is not
+Find the ID of subjects in a Pedigree iteratively, as anyone who is not
 available and does not have an available descendant by successively removing
 unavailable terminal nodes.
 }
@@ -46,7 +46,7 @@ special relations that include the subjects to trim.
 
 \examples{
 data(sampleped)
-ped1 <- pedigree(sampleped[sampleped$family == "1",])
+ped1 <- Pedigree(sampleped[sampleped$family == "1",])
 find_unavailable(ped1)
 
 }

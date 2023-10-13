@@ -86,10 +86,10 @@ test_that("generate fill full scale on", {
     ))
 })
 
-test_that("generate colors works on pedigree object", {
+test_that("generate colors works on Pedigree object", {
     data("sampleped")
-    ped <- pedigree(sampleped[sampleped$family == "1", -1])
-    ped$ped$id <- as.numeric(ped$ped$id)
+    ped <- Pedigree(sampleped[sampleped$family == "1", -1])
+    ped(ped)$id <- as.numeric(ped(ped)$id)
     ped_aff <- generate_colors(ped, col_aff = "id",
         threshold = 120, sup_thres_aff = TRUE, add_to_scale = FALSE
     )
@@ -104,15 +104,15 @@ test_that("generate colors works on pedigree object", {
 
 test_that("generate with full scale", {
     data("sampleped")
-    ped <- pedigree(sampleped)
-    ped <- ped[ped$ped$family == "1", ]
-    ped$ped$indId <- as.numeric(ped$ped$indId)
+    ped <- Pedigree(sampleped)
+    ped <- ped[ped(ped)$family == "1", ]
+    ped(ped)$indId <- as.numeric(ped(ped)$indId)
     ped <- generate_colors(ped, add_to_scale = FALSE, "indId", threshold = 115,
         colors_aff = c("pink", "purple"), keep_full_scale = TRUE
     )
-    expect_equal(ped$scales$fill$labels[c(1, 4)],
+    expect_equal(scales(ped)$fill$labels[c(1, 4)],
         c("Healthy <= to 115 : [101,106]", "Affected > to 115 : [116,124]")
     )
-    expect(nrow(ped$scales$fill), 6)
+    expect(nrow(scales(ped)$fill), 6)
 })
 TRUE

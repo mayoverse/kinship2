@@ -71,7 +71,7 @@ generate_colors(obj, ...)
 )
 }
 \arguments{
-\item{obj}{A pedigree object or a vector containing the affection status for
+\item{obj}{A Pedigree object or a vector containing the affection status for
 each individuals. The affection status can be numeric, logical or character.}
 
 \item{...}{Other parameters to pass to the \code{generate_colors} function}
@@ -137,12 +137,12 @@ A list of three elements
 }
 }
 
-\subsection{When used with a pedigree object}{
+\subsection{When used with a Pedigree object}{
 
-The pedigree object with the \code{affected} and \code{avail} columns
+The Pedigree object with the \code{affected} and \code{avail} columns
 processed accordingly.
 
-The pedigree scales slots are updated
+The Pedigree scales slots are updated
 }
 }
 \description{
@@ -155,6 +155,6 @@ on the affection and availability status.
 }
 \examples{
 data("sampleped")
-ped <- pedigree(sampleped)
+ped <- Pedigree(sampleped)
 generate_colors(ped, "affected", add_to_scale=FALSE)$scales
 }

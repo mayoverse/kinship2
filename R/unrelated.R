@@ -8,11 +8,11 @@ NULL
 #'
 #' @description
 #' Determine set of maximum number of unrelated available subjects from a
-#' pedigree
+#' Pedigree.
 #'
 #' @details
 #' Determine set of maximum number of unrelated available subjects from a
-#' pedigree, given vectors id, father, and mother for a pedigree structure, and
+#' Pedigree, given vectors id, father, and mother for a Pedigree structure, and
 #' status vector of T/F for whether each subject is available (e.g. has DNA)
 #'
 #' This is a greedy algorithm that uses the kinship matrix, sequentially
@@ -30,10 +30,10 @@ NULL
 
 #' @examples
 #' data(sampleped)
-#' fam1 <- sampleped[sampleped$ped == 1, ]
+#' fam1 <- sampleped[sampleped$family == 1, ]
 #'
 #'
-#' ped1 <- pedigree(fam1)
+#' ped1 <- Pedigree(fam1)
 #'
 #' ## to see plot:
 #' id1 <- unrelated(ped1)
@@ -46,13 +46,13 @@ NULL
 #' ## [1] '110' '113' '116' '109'
 #' ## [1] '113' '133' '141' '109'
 #' @export
-unrelated <- function(ped, avail = ped$ped$avail) {
+unrelated <- function(ped, avail = ped(ped)$avail) {
     # Requires: kinship function
 
-    # Given vectors id, father, and mother for a pedigree structure, and avail
+    # Given vectors id, father, and mother for a Pedigree structure, and avail
     # = vector of T/F or 1/0 for whether each subject (corresponding to id
     # vector) is available (e.g., has DNA available), determine set of maximum
-    # number of unrelated available subjects from a pedigree.
+    # number of unrelated available subjects from a Pedigree.
 
     # This is a greedy algorithm that uses the kinship matrix, sequentially
     # removing rows/cols that are non-zero for subjects that have the most
@@ -62,7 +62,7 @@ unrelated <- function(ped, avail = ped$ped$avail) {
     # count of zeros for rows, a random choice is made. Hence, running this
     # function multiple times can return different sets of unrelated subjects.
 
-    id <- ped$ped$id
+    id <- ped(ped)$id
 
     kin <- kinship(ped)
 

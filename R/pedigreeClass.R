@@ -10,7 +10,7 @@ NULL
 #' and a relation ship data.frame for the special links between individuals.
 #' A list of scales can be provided to create a legend.
 #' To create a Pedigree object, use the function
-#' [pedigree()].
+#' [Pedigree()].
 #'
 #' @slot ped A data.frame with the individuals informations. The minimum
 #' columns required are 'id', 'dadid', 'momid' and 'sex'. Other columns can be
@@ -26,23 +26,23 @@ NULL
 #' [generate_colors()].
 #' @slot hints List of two elements.
 #' - **order** is a numeric vector with one element per subject in the
-#' pedigree.  It determines the relative order of subjects within a sibship, as
+#' Pedigree.  It determines the relative order of subjects within a sibship, as
 #' well as the relative order of processing for the founder couples. (For this
 #' latter, the female founders are ordered as though they were sisters).
 #' - **spouse** is a matrix with one row per hinted marriage, usually
-#' only a few marriages in a pedigree will need an added hint, for
+#' only a few marriages in a Pedigree will need an added hint, for
 #' instance reverse the plot order of a husband/wife pair.
 #' Each row contains the index of the left spouse, the right hand spouse,
 #' and the anchor (i.e : `1` = left, `2` = right, `0` = either).
 #'
 #' @return A Pedigree object.
-#' @seealso [pedigree()]
+#' @seealso [Pedigree()]
 #' @docType class
 #' @name Pedigree-class
 #' @rdname Pedigree-class
 #' @aliases Pedigree-class
 #' @include validity.R
-#' @include pedigree.R
+#' @include Pedigree.R
 #' @export
 setClass(
     "Pedigree",
@@ -55,6 +55,105 @@ setClass(
 )
 
 setValidity("Pedigree", is_valid)
+
+#### S4 Accessors ####
+
+#' @title Pedigree ped accessors
+#' @param object A Pedigree object.
+#' @return The slot `ped` present in the Pedigree object.
+#' @rdname extract-methods
+#' @aliases ped,Pedigree-method
+#' @export
+setGeneric("ped", function(object){
+    standardGeneric("ped")
+})
+
+setMethod("ped", signature(object = "Pedigree"), function(object) {
+    object@ped
+})
+
+setGeneric("ped<-", function(object, value) {
+    standardGeneric("ped<-")
+})
+
+setMethod("ped<-", signature(object = "Pedigree", value = "ANY"), function(object, value) {
+    object@ped <- value
+    validObject(object)
+    object
+})
+
+#' @description Pedigree rel accessors
+#' @param object A Pedigree object.
+#' @return The slot `rel` present in the Pedigree object.
+#' @rdname extract-methods
+#' @aliases rel,Pedigree-method
+#' @export
+setGeneric("rel", function(object){
+    standardGeneric("rel")
+})
+
+setMethod("rel", signature(object = "Pedigree"), function(object) {
+    object@rel
+})
+
+setGeneric("rel<-", function(object, value) {
+    standardGeneric("rel<-")
+})
+
+setMethod("rel<-", signature(object = "Pedigree", value = "ANY"), function(object, value) {
+    object@rel <- value
+    validObject(object)
+    object
+})
+
+#' @description Pedigree scales accessors
+#' @param object A Pedigree object.
+#' @return The slot `scales` present in the Pedigree object.
+#' @rdname extract-methods
+#' @aliases scales,Pedigree-method
+#' @export
+setGeneric("scales", function(object){
+    standardGeneric("scales")
+})
+
+setMethod("scales", signature(object = "Pedigree"), function(object) {
+    object@scales
+})
+
+setGeneric("scales<-", function(object, value) {
+    standardGeneric("scales<-")
+})
+
+setMethod("scales<-", signature(object = "Pedigree", value = "ANY"), function(object, value) {
+    object@scales <- value
+    validObject(object)
+    object
+})
+
+#' @description Pedigree hints accessors
+#' @param object A Pedigree object.
+#' @return The slot `hints` present in the Pedigree object.
+#' @rdname extract-methods
+#' @aliases hints,Pedigree-method
+#' @export
+setGeneric("hints", function(object){
+    standardGeneric("hints")
+})
+
+setMethod("hints", signature(object = "Pedigree"), function(object) {
+    object@hints
+})
+
+setGeneric("hints<-", function(object, value) {
+    standardGeneric("hints<-")
+})
+
+setMethod("hints<-", signature(object = "Pedigree", value = "ANY"), function(object, value) {
+    object@hints <- value
+    validObject(object)
+    object
+})
+
 
 #### S4 methods ####
 
@@ -96,7 +195,7 @@ setMethod("summary", signature(object = "Pedigree"), function(object) {
 #' @param drop A logical value indicating if the dimensions should be dropped.
 #' @param ... Other arguments.
 #' @rdname extract-methods
-#' @return The slot `i` present in the pedigree object.
+#' @return The slot `i` present in the Pedigree object.
 setMethod("[[", c(x = "Pedigree", i = "ANY", j = "missing"),
     function(x, i, j, ..., drop = TRUE) {
         slot(x, i)
@@ -107,7 +206,7 @@ setMethod("[[", c(x = "Pedigree", i = "ANY", j = "missing"),
 #' @param x A Pedigree object.
 #' @param name A slot name.
 #' @rdname extract-methods
-#' @return The slot `name` present in the pedigree object.
+#' @return The slot `name` present in the Pedigree object.
 #'
 setMethod("$", c(x = "Pedigree"),
     function(x, name) {
@@ -120,7 +219,7 @@ setMethod("$", c(x = "Pedigree"),
 #' @param name A slot name.
 #' @param value A vector of values to replace.
 #' @rdname extract-methods
-#' @return The pedigree object with the slot `name` replaced by `value`.
+#' @return The Pedigree object with the slot `name` replaced by `value`.
 setMethod("$<-", c(x = "Pedigree"),
     function(x, name, value) {
         slot(x, name) <- value
@@ -182,7 +281,7 @@ setMethod("[", c(x = "Pedigree", i = "ANY", j = "ANY"),
         border <- x$scales$border[x$scales$border$column %in% names(ped_df),]
         scales <- list(fill = fill, border = border)
 
-        new_ped <- pedigree(ped_df, rel_df, scales,
+        new_ped <- Pedigree(ped_df, rel_df, scales,
             hints = sub_hints, cols_ren_ped = NULL, normalize = FALSE
         )
         validObject(new_ped)
@@ -200,7 +299,7 @@ setMethod("[", c(x = "Pedigree", i = "ANY", j = "ANY"),
 setMethod("[", c(x = "Pedigree", i = "missing", j = "ANY"),
     function(x, i, j, drop = TRUE) {
         ped_df <- x$ped[, j, drop = drop]
-        new_ped <- pedigree(ped_df, x$rel, x$scales,
+        new_ped <- Pedigree(ped_df, x$rel, x$scales,
             cols_ren_ped = NULL, normalize = FALSE
         )
         validObject(new_ped)
@@ -228,7 +327,7 @@ setMethod("[", c(x = "Pedigree", i = "ANY", j = "missing"),
         rel_df <- x$rel[x$rel$id1 %in% allId & x$rel$id2 %in% allId, ]
         idx <- match(allId, ped_df$id, nomatch = 0)
         sub_hints <- sub_sel_hints(x$hints, idx)
-        new_ped <- pedigree(ped_df, rel_df, x$scales,
+        new_ped <- Pedigree(ped_df, rel_df, x$scales,
             hints = sub_hints, cols_ren_ped = NULL, normalize = FALSE
         )
         validObject(new_ped)
@@ -250,7 +349,7 @@ setMethod("as.data.frame", c(x = "Pedigree"),
 
 #' Convert a Pedigree object to a list
 #' @param x A Pedigree object.
-#' @return A list with all the slots of the pedigree object.
+#' @return A list with all the slots of the Pedigree object.
 #' @docType methods
 #' @aliases as.list,Pedigree-method
 #' @export
@@ -262,5 +361,17 @@ setMethod("as.list", c(x = "Pedigree"),
             scales = x$scales,
             hints = x$hints
         )
+    }
+)
+
+#' Compute the length of a Pedigree object
+#' @param x A Pedigree object.
+#' @return The number of individuals in the Pedigree object.
+#' @docType methods
+#' @aliases length,Pedigree-method
+#' @export
+setMethod("length", c(x = "Pedigree"),
+    function(x) {
+        nrow(x$ped)
     }
 )

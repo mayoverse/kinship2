@@ -1,5 +1,5 @@
 ---
-title: Pedigree_plot_alignment_details
+title: Pedigree alignement details
 author: TM Therneau
 date: '`r format(Sys.time(),"%d %B, %Y")`'
 output:
@@ -8,7 +8,7 @@ output:
     toc_depth: 2
 header-includes: \usepackage{tabularx}
 vignette: |
-  %\VignetteIndexEntry{Pedigree_plot_alignment_details}
+  %\VignetteIndexEntry{Pedigree alignement details}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---
@@ -20,7 +20,7 @@ library(Pedixplorer)
 Pedigree alignment
 ==========================
 
-An **aligned** pedigree is an object that contains a pedigree along
+An **aligned** Pedigree is an object that contains a Pedigree along
 with a set of information that allows for pretty plotting.
 This information consists of two parts: 
 a set of vertical and horizontal plotting coordinates along with the
@@ -33,13 +33,13 @@ of the project, and is the area where significant further work could be
 done.  
 
 All the routines in this section completely ignore the $id$ component
-of a pedigree; everyone is indexed solely by their row number in the object.
+of a Pedigree; everyone is indexed solely by their row number in the object.
 
 Hints
 ==========================
 
 The first part of the work has to do with a **hints** list for each
-pedigree.  It consists of 3 parts:
+Pedigree.  It consists of 3 parts:
 
 - The left to right order in which founders should be processed.
 - The order in which siblings should be listed within a family.
@@ -52,17 +52,17 @@ children appear in the order they are found in the data set,
 husbands are to the left of their wives, and a marriage is plotted
 at the leftmost spouse.
 A simple example where we want to bend these rules is when two families
-marry, and the pedigrees for both extend above the wedded pair.  
-In the joint pedigree the
+marry, and the Pedigrees for both extend above the wedded pair.  
+In the joint Pedigree the
 pair should appear as the right-most child in the left hand family, and
 as the left-most child in the right hand family.
 With respect to founders, assume that a family has three lineages with
 a marriage between 1 and 2, and another between 2 and 3.  In the joint
-pedigree the sets should be 1, 2, 3 from left to right.  
+Pedigree the sets should be 1, 2, 3 from left to right.  
 
 The hints consist of a list with two components.
 
-1. A vector of numbers of the same length as the pedigree,
+1. A vector of numbers of the same length as the Pedigree,
 used to order the female founders and to order siblings within
 family.  For subjects not part of either of these the value can be 
 arbitrary.  
@@ -90,7 +90,7 @@ to figure that out.
 
 The first thing to be done is to check on twins. They increase the complexity,
 since twins need to move together.
-The `ped$rel$code` object is a factor, so first turn that into numeric.
+The `rel(ped)$code` object is a factor, so first turn that into numeric.
 We create 3 vectors:
 
 - $twinrel$ is a matrix containing pairs of twins and
@@ -119,7 +119,7 @@ left, then move the subject himself to the left.
 
 ## Init auto_hint
 
-Now, get an ordering of the pedigree to use as the starting point.  
+Now, get an ordering of the Pedigree to use as the starting point.  
 The numbers start at 1 on each level. We do not need the final *prettify* step,
 hence `align = FALSE`. If there is a hints structure entered, we retain its
 non-zero entries, otherwise people are put into the order of the data set.
@@ -140,16 +140,16 @@ right is my spouse (1), a double marriage (2), or neither (0).
 
 ```{r, auto_hint1, echo = FALSE, fig.dim = c(10, 8)}
 #
-# A simple pedigree to illustrate autohint's code
+# A simple Pedigree to illustrate autohint's code
 #
 test1 <- data.frame(id = 1:11,
     sex = c("m", "f")[c(1, 2, 1, 2, 1, 1, 2, 2, 1, 2, 1)],
     dadid = c(0, 0, 1, 1, 1, 0, 0, 6, 6, 6, 9),
     momid = c(0, 0, 2, 2, 2, 0, 0, 7, 7, 7, 4)
 )
-ped1 <- pedigree(test1)
+ped1 <- Pedigree(test1)
 
-temp2 <- pedigree(test1, hints = list(
+temp2 <- Pedigree(test1, hints = list(
     order = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)
 ))
 
@@ -195,8 +195,8 @@ This logic works 9 times out of 10, at least for human pedigrees.
 We'll look at more complex cases below when looking at the $duporder$ (order
 the duplicates) function, which returns a matrix with columns 1 and 2 being a
 pair of duplicates, and 3 a direction. Note that in the following code
-$idlist$ refers to the row numbers of each subject in the pedigree, not to
-their label `ped$ped$id`.
+$idlist$ refers to the row numbers of each subject in the Pedigree, not to
+their label `ped(ped)$id`.
 
 ## duporder
 
@@ -216,7 +216,7 @@ are connected to their parents.
 
 ```{r, align2, echo = FALSE, fig.dim = c(10, 8)}
 #
-# The second, more complex test pedigree
+# The second, more complex test Pedigree
 #
 test2 <- data.frame(id = c(1:13, 21:41),
     dadid = c(0, 0, 1, 1, 1, 0, 0, 6, 6, 6, 0, 11, 11,
@@ -232,8 +232,8 @@ test2 <- data.frame(id = c(1:13, 21:41),
         1, 2, 1, 1, 2
     )
 )
-ped2 <- pedigree(test2)
-ped2a <- pedigree(test2, hints = list(
+ped2 <- Pedigree(test2)
+ped2a <- Pedigree(test2, hints = list(
     order = seq_along(test2$id)
 ))
 par(mfrow = c(1, 2))
@@ -289,7 +289,7 @@ left hand copy of subject 9 is connected to an anchored spouse and the
 right hand copy is himself anchored.  The proper addition to the
 spouselist is `(4, 9, dpairs)`, where the last is the hint from the
 dpairs routine as to which of the parents is the one to follow further when
-drawing the entire pedigree.  (When drawing a pedigree and there is a
+drawing the entire Pedigree.  (When drawing a Pedigree and there is a
 child who can be reached from multiple founders, we only want to find
 the child once.) 
 
@@ -312,7 +312,7 @@ test3 <- data.frame(id = 1:14,
     momid = c(0, 7, 1, 1, 1, 0, 0, 12, 0, 1, 7, 0, 7, 12),
     affected = c(0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0)
 )
-ped3 <- pedigree(test3, hints = list(
+ped3 <- Pedigree(test3, hints = list(
     order = 1:14
 ))
 
@@ -328,7 +328,7 @@ test4 <- data.frame(id = 1:17,
     )
 )
 
-ped4 <- pedigree(test4, hints = list(
+ped4 <- Pedigree(test4, hints = list(
     order = 1:17
 ))
 
@@ -346,7 +346,7 @@ in the correct left-right order; the 14-4 one is correct by default
 but it is easier to output a line than check sex orders.  
 
 The left panel of the figure above shows a case where
-subject 11 marries into the pedigree but also has a second spouse.
+subject 11 marries into the Pedigree but also has a second spouse.
 The $anchor$ variable for
 this case will be `(2, 0)`; the first instance of 11 has a spouse tied
 into the tree above, the second instance has no upward connections.
@@ -360,14 +360,14 @@ Align
 
 The top level routine for alignment has 5 arguments
 
-- $ped$ a pedigree or pedigreeList object. In the case of
-the latter we loop over each family separately.
+- $ped$ a Pedigree. In the case of
+multiple families we loop over each family separately.
 - $packed$ do we allow branches of the tree to overlap?  
 If FALSE the drawing is much easier, but final drawing can
 take up a huge amount of space.  
-- $width$ the minimum width for a packed pedigree. This
+- $width$ the minimum width for a packed Pedigree. This
 affects only small pedigrees, since the minimum possible
-width for a pedigree is the largest number of individiuals in
+width for a Pedigree is the largest number of individiuals in
 one of the generations.
 - $align$ should the final step of alignment be done?  This
 tries to center children under parents, to the degree possible.
@@ -394,14 +394,14 @@ subject id (ignoring the actual id label).
 - Verify that the hints are correct.
 - The relation data frame, if present, has a factor, convert to numeric.
 - Create the $spouselist$ array.  This has 4 columns
-    - Husband index (4 = 4th person in the pedigree structure)
+    - Husband index (4 = 4th person in the Pedigree structure)
     - Wife index
     - Plot order: 1 = husband left, 2 = wife left
     - Anchor: 1 = left member, 2 = right member, 0 = not yet determined
 
 As the routine proceeds a spousal pair can be encountered
 multiple times; we take them out of this list when the ``connected''
-member is added to the pedigree so that no marriage gets added
+member is added to the Pedigree so that no marriage gets added
 twice.
 
 - To detect duplicates on the spouselist we need to create a
@@ -422,7 +422,7 @@ The [align] routine does the alignment using 3 co-routines:
 - $alignped1$ called with a single subject, returns the subtree
 founded on this subject, as though it were the only tree
 - $alignped2$ called with a set of sibs, calls alignped1 and 
-alignped3 multiple times to create a joint pedigree
+alignped3 multiple times to create a joint Pedigree
 - $alignped3$ given two side by side plotting structures, merge them
 into a single one
 
@@ -457,9 +457,9 @@ In this case they are
 
 ### Finish align(3)
 
-At this point the pedigree has been arranged, with the positions
+At this point the Pedigree has been arranged, with the positions
 in each row going from 1 to (number of subjects in the row).
-(For a packed pedigree, which is the usual case).
+(For a packed Pedigree, which is the usual case).
 Having everything pushed to the left margin is not very
 pretty, now we fix that.
 Note that [alignped4] wants a T/F spouse matrix: it does not care
@@ -471,18 +471,18 @@ alignped1
 This is the first of the three co-routines.
 It is called with a single subject, and returns the subtree founded
 on said subject, as though it were the only tree.  
-We only go down the pedigree, not up.
+We only go down the Pedigree, not up.
 Input arguments are
 
 - $nid$ the numeric id of the subject in question
-- $dad$ points to the row of the father, 0=no father in pedigree
+- $dad$ points to the row of the father, 0=no father in Pedigree
 - $mom$ points to the row of the mother
 - $level$ the plotting depth of each subject
 - $horder$ orders the kids within a sibship
 - $packed$ if true, everything is slid to the left
 - $spouselist$ a matrix of spouses
-    - col 1 = pedigree index of the husband
-    - col 2 = pedigree index of the wife
+    - col 1 = Pedigree index of the husband
+    - col 2 = Pedigree index of the wife
     - col 3 = 1 : plot husband to the left, 2 = wife to the left
     - col 4 = 1 : left member is rooted here, 2 = right member, 0 = either
 
@@ -532,7 +532,7 @@ indx to be indexed beyond its length, fix by JPS 5/2013.
 
 ### alignped1 - part4
 
-The spouses are in the pedigree, now look below. For each spouse get the
+The spouses are in the Pedigree, now look below. For each spouse get the
 list of children. If there are any we call [alignped2] to generate their tree
 and then mark the connection to their parent. If multiple marriages have
 children we need to join the trees.
@@ -584,7 +584,7 @@ bigger than finally needed.) Beyond that the work is simple bookkeeping.
 
 ## alignped3 - slide
 
-For the unpacked case, which is the traditional way to draw a pedigree when
+For the unpacked case, which is the traditional way to draw a Pedigree when
 we can assume the paper is infinitely wide, all parents are centered over their
 children. In this case we think if the two trees to be merged as solid blocks.
 On input they both have a left margin of 0. Compute how far over we have to
@@ -602,10 +602,10 @@ Now merge the two trees.  Start at the top level and work down.
     - If not packed, set the position.  Choose the one connected
         to a parent, or midway for a double marriage.
 - If `packed = TRUE` determine the amount of slide for this row. It
-    will be $space$ over from the last element in the left pedigree,
+    will be $space$ over from the last element in the left Pedigree,
     less overlap.
 - Move everything over
-- Fix all the children of this level, right hand pedigree, to
+- Fix all the children of this level, right hand Pedigree, to
     point to the correct parental position.
 
 alignped4

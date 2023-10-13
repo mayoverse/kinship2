@@ -1,11 +1,11 @@
 test_that("align works", {
     data("sampleped")
-    ped <- pedigree(sampleped)
-    ped1 <- ped[ped$ped$family == 1]
+    ped <- Pedigree(sampleped)
+    ped1 <- ped[ped(ped)$family == 1]
     plist1 <- align(ped1)
     expect_equal(plist1$n, c(6, 12, 17, 8))
 
-    ped2 <- ped[ped$ped$family == 2]
+    ped2 <- ped[ped(ped)$family == 2]
     withr::local_options(width = 50)
     plist2 <- align(ped2)
     expect_equal(plist2$n, c(2, 7, 5))
@@ -18,11 +18,11 @@ test_that("align works", {
 
 test_that("test auto_hint works", {
     data("sampleped")
-    ped <- pedigree(sampleped)
+    ped <- Pedigree(sampleped)
     expect_equal(sum(kindepth(ped)), 73)
     expect_error(auto_hint(ped))  #this fixes up marriages and such
 
-    ped <- pedigree(sampleped[-1])
+    ped <- Pedigree(sampleped[-1])
     newhint <- auto_hint(ped)
     plist <- align(ped, packed = TRUE,
         align = TRUE, width = 8, hints = newhint
@@ -37,10 +37,10 @@ test_that("test alignement with inbreeding and relationship matrix", {
         id2 = c(110, 114, 132, 109),
         code = c(1, 4, 4, 4)
     )
-    ped <- pedigree(sampleped[-1], rel_df)
+    ped <- Pedigree(sampleped[-1], rel_df)
     plist <- align(ped)
 
-    ped_sr <- pedigree(sampleped[-1])
+    ped_sr <- Pedigree(sampleped[-1])
     plist_sr <- align(ped_sr)
 
     expect_equal(plist$nid[1, ],
@@ -53,10 +53,10 @@ test_that("test alignement with inbreeding and relationship matrix", {
 
 test_that("besthint works", {
     data("sampleped")
-    ped <- pedigree(sampleped)
+    ped <- Pedigree(sampleped)
     expect_error(best_hint(ped))  #this fixes up marriages and such
 
-    ped1 <- pedigree(sampleped[-1])
+    ped1 <- Pedigree(sampleped[-1])
     newhint1 <- best_hint(ped1)
     plist <- align(ped1, packed = TRUE,
         align = TRUE, width = 8, hints = newhint1
@@ -73,7 +73,7 @@ test_that("Alignement with spouse", {
         code = 4,
         family = 1
     )
-    ped1 <- pedigree(df1, relate1)
+    ped1 <- Pedigree(df1, relate1)
     hints <- auto_hint(ped1)
     expect_equal(as.vector(hints$spouse), c(9, 10, 2))
     expect_equal(hints$order,
@@ -96,7 +96,7 @@ test_that("Double wife", {
         id = 1:7, dadid = c(0, 0, 0, 1, 3, 0, 3),
         momid = c(0, 0, 0, 2, 4, 0, 6), sex = c(1, 2, 1, 2, 1, 2, 1)
     )
-    ped <- pedigree(df)
+    ped <- Pedigree(df)
     vdiffr::expect_doppelganger("double_wife",
         function() plot(ped)
     )

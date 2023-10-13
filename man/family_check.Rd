@@ -34,14 +34,14 @@ time somewhat.}
 }
 \value{
 a data frame with one row for each unique family id in the
-\code{family} argument or the one detected in the pedigree object.
+\code{family} argument or the one detected in the Pedigree object.
 Components of the output are:
 \itemize{
 \item \code{family} : The family id, as entered into the data set
 \item \code{n} : Number of subjects in the family
 \item \code{unrelated} : Number of them that appear to be unrelated to
-anyone else in the entire pedigree set.  This is usually marry-ins with no
-children (in the pedigree), and if so are not a problem.
+anyone else in the entire Pedigree.  This is usually marry-ins with no
+children (in the Pedigree), and if so are not a problem.
 \item \code{split} : Number of unique 'new' family ids.
 \itemize{
 \item \code{0} = no one in this 'family' is related to anyone else (not good)
@@ -71,7 +71,7 @@ and the number of subjects as entries.
 
 # use 2 samplepeds
 data(sampleped)
-pedAll <- pedigree(sampleped)
+pedAll <- Pedigree(sampleped)
 
 ## check them giving separate ped ids
 fcheck.sep <- family_check(pedAll)

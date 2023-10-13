@@ -12,7 +12,7 @@ prefix_famid(family_id, ind_id, missid = "0")
 \item{ind_id}{The individual id}
 
 \item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the pedigree
+no father and no mother in the Pedigree
 (i.e. \code{dadid} and \code{momid} equal to the value of this variable).
 The default for \code{missid} is \code{"0"}.}
 }

@@ -24,7 +24,7 @@ of the individuals. The values recognized for those columns are \code{1} or
 \item{na_strings}{Vector of strings to be considered as NA values}
 
 \item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the pedigree
+no father and no mother in the Pedigree
 (i.e. \code{dadid} and \code{momid} equal to the value of this variable).
 The default for \code{missid} is \code{"0"}.}
 
@@ -35,11 +35,11 @@ all the columns to numeric.}
 A dataframe with the errors identified in the \code{error} column
 }
 \description{
-Normalise dataframe for pedigree object
+Normalise dataframe for Pedigree object
 }
 \details{
 Normalise a dataframe and check for columns correspondance
-to be able to use it as an input to create pedigree object.
+to be able to use it as an input to create Pedigree object.
 Multiple test are done and errors are checked.
 Sex is calculated based in the \code{gender} column the following notations
 are accepted: f, woman, female, 2 and m, man, male, 1.

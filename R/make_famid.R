@@ -3,11 +3,11 @@
 #' Get family id
 #'
 #' @description
-#' Construct a family id from pedigree information
+#' Construct a family id from Pedigree information
 #'
 #' @details
 #' Create a vector of length n, giving the family 'tree' number of each
-#' subject.  If the pedigree is totally connected, then everyone will end up in
+#' subject.  If the Pedigree is totally connected, then everyone will end up in
 #' tree 1, otherwise the tree numbers represent the disconnected subfamilies.
 #' Singleton subjects give a zero for family number.
 #'
@@ -17,13 +17,13 @@
 #' ## When used with a character vector
 #' An integer vector giving family groupings
 #'
-#' ## When used with a pedigree object
-#' An updated pedigree object with the family id added
+#' ## When used with a Pedigree object
+#' An updated Pedigree object with the family id added
 #'
 #' @seealso [kinship()]
 #' @examples
 #' data(sampleped)
-#' ped1 <- pedigree(sampleped[,-1])
+#' ped1 <- Pedigree(sampleped[,-1])
 #' make_famid(ped1)
 #' @export
 setGeneric("make_famid", signature = "obj",
@@ -101,16 +101,16 @@ setMethod("make_famid", "character",
 setMethod("make_famid", "Pedigree",
     function(obj) {
         ped <- obj
-        family <- make_famid(ped$ped$id, ped$ped$dadid, ped$ped$momid)
+        family <- make_famid(ped(ped)$id, ped(ped)$dadid, ped(ped)$momid)
         col_ped_compute <- c("sex", "avail", "id", "dadid", "momid",
             "family", "momid", "error", "steril", "status"
         )
-        ped_df <- ped$ped[! colnames(ped$ped) %in% col_ped_compute]
+        ped_df <- ped(ped)[! colnames(ped(ped)) %in% col_ped_compute]
         ped_df$family <- family
         col_rel_compute <- c("family", "error")
-        rel_df <- ped$rel[! colnames(ped$rel) %in% col_rel_compute]
-        fam_id1 <- family[match(rel_df$id1, ped$ped$id)]
-        fam_id2 <- family[match(rel_df$id2, ped$ped$id)]
+        rel_df <- rel(ped)[! colnames(rel(ped)) %in% col_rel_compute]
+        fam_id1 <- family[match(rel_df$id1, ped(ped)$id)]
+        fam_id2 <- family[match(rel_df$id2, ped(ped)$id)]
 
         if (any(fam_id1 != fam_id2)) {
             stop("The two individuals in the relationship",
@@ -119,8 +119,8 @@ setMethod("make_famid", "Pedigree",
         }
 
         rel_df$family <- fam_id1
-        pedigree(ped_df, rel_df,
-            scales = ped$scales, normalize = TRUE
+        Pedigree(ped_df, rel_df,
+            scales = scales(ped), normalize = TRUE
         )
     }
 )

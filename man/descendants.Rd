@@ -34,11 +34,11 @@ The list is not ordered.
 }
 \description{
 Find all the descendants of a particular list of individuals
-given a pedigree
+given a Pedigree
 }
 \examples{
 data("sampleped")
-ped <- pedigree(sampleped)
+ped <- Pedigree(sampleped)
 descendants(c("1_101", "2_208"), ped)
 }
 \keyword{internal}

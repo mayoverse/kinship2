@@ -36,7 +36,7 @@ NULL
 #'
 #' @examples
 #' data(sampleped)
-#' ped <- pedigree(sampleped)
+#' ped <- Pedigree(sampleped)
 #' min_dist_inf(ped, col_aff = "affection_aff")$ped
 #'
 #' @seealso [kinship()]
@@ -86,17 +86,17 @@ setMethod("min_dist_inf", "Pedigree", function(obj,
     )
 
     cols_needed <- c("avail", "affected")
-    check_columns(ped$ped, cols_needed, NULL, NULL, others_cols = TRUE)
+    check_columns(ped(ped), cols_needed, NULL, NULL, others_cols = TRUE)
 
     kin <- min_dist_inf(
-        ped$ped$id, ped$ped$dadid, ped$ped$momid, ped$ped$sex,
-        ped$ped$avail, ped$ped$affected, informative
+        ped(ped)$id, ped(ped)$dadid, ped(ped)$momid, ped(ped)$sex,
+        ped(ped)$avail, ped(ped)$affected, informative
     )
 
     if (!reset) {
-        check_columns(ped$ped, NULL, "kin", NULL)
+        check_columns(ped(ped), NULL, "kin", NULL)
     }
 
-    ped$ped$kin <- kin
+    ped(ped)$kin <- kin
     ped
 })

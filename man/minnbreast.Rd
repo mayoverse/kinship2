@@ -73,7 +73,7 @@ gathered by questionnaire.
 }
 \examples{
 data(minnbreast)
-breastped <- pedigree(minnbreast,
+breastped <- Pedigree(minnbreast,
    cols_ren_ped = list(
        "indId" = "id", "fatherId" = "fatherid",
        "motherId" = "motherid", "gender" = "sex", "family" = "famid"

@@ -52,7 +52,7 @@ test_that("is_informative works", {
 test_that("is_informative works with Pedigree", {
     data("sampleped")
 
-    ped <- pedigree(sampleped[1:7])
+    ped <- Pedigree(sampleped[1:7])
     ped <- generate_colors(ped, col_aff = "affection",
         threshold = 0.5, sup_thres_aff = TRUE,
         add_to_scale = FALSE
@@ -69,7 +69,7 @@ test_that("is_informative works with Pedigree", {
             "1_128", "2_201", "2_203", "2_206", "2_207", "2_214"
         )
     )
-    ped <- pedigree(sampleped[c(2:5, 7)])
+    ped <- Pedigree(sampleped[c(2:5, 7)])
     expect_error(is_informative(ped, informative = "AvAf"))
     expect_error(is_informative(ped, column = "test", informative = "AvAf"))
 
@@ -80,12 +80,12 @@ test_that("is_informative works with Pedigree", {
         sum(is_informative(ped, col_aff = "sex_aff",
             informative = "Af"
         )$ped$id_inf),
-        length(ped$ped[ped$ped$sex == "male", "id"])
+        length(ped(ped)[ped(ped)$sex == "male", "id"])
     )
 
     data(minnbreast)
     summary(minnbreast)
-    ped <- pedigree(minnbreast, cols_ren_ped = list(
+    ped <- Pedigree(minnbreast, cols_ren_ped = list(
         "indId" = "id",
         "fatherId" = "fatherid",
         "motherId" = "motherid",

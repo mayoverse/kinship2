@@ -2,14 +2,14 @@
 % Please edit documentation in R/plot_fct.R
 \name{subregion}
 \alias{subregion}
-\title{Routine to subset a pedigree}
+\title{Routine to subset a Pedigree}
 \usage{
 subregion(plist, subreg)
 }
 \arguments{
-\item{plist}{The alignment structure representing the pedigree layout.
+\item{plist}{The alignment structure representing the Pedigree layout.
 For the differents matrices present in the list, each row represents a
-level of the pedigree and each column a potential subject.
+level of the Pedigree and each column a potential subject.
 It contains the following components:
 \itemize{
 \item n Vector of the number of subjects per level
@@ -27,12 +27,12 @@ It contains the following components:
 \item{subreg}{4-element vector for (min x, max x, min depth, max depth),
 used to edit away portions of the plot coordinates returned by
 \code{\link[=align]{align()}}.
-This is useful for zooming in on a particular region of the pedigree.}
+This is useful for zooming in on a particular region of the Pedigree.}
 }
 \value{
-a pedigree list
+a Pedigree
 }
 \description{
-Routine to subset a pedigree
+Routine to subset a Pedigree
 }
 \keyword{internal}

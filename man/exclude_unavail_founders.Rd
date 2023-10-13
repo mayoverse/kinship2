@@ -36,6 +36,6 @@ Returns a list with the following components:
 }
 }
 \description{
-Exclude from a pedigree any unavailable founders.
+Exclude from a Pedigree any unavailable founders.
 }
 \keyword{internal}

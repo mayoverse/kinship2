@@ -5,17 +5,17 @@
 #' @importFrom graphics clip
 NULL
 
-#' Plot pedigrees
+#' Plot Pedigrees
 #'
 #' @description
-#' plot objects created with the pedigree function
+#' plot objects created with the Pedigree function
 #'
 #' @details
 #' Two important parameters control the looks of the result.  One is the user
 #' specified maximum width.  The smallest possible width is the maximum number
 #' of subjects on a line, if the user's suggestion is too low it is
 #' increased to 1 + that amount (to give just a little wiggle room). To make a
-#' pedigree where all children are centered under parents simply make the width
+#' Pedigree where all children are centered under parents simply make the width
 #' large enough, however, the symbols may get very small.
 #'
 #' The second is `align`, a vector of 2 alignment parameters `a` and
@@ -37,13 +37,13 @@ NULL
 #' which tends to keep them together.  The size of `b` controls the relative
 #' importance of sib-parent and spouse-spouse closeness.
 #'
-#' @param x A pedigree object.
+#' @param x A Pedigree object.
 #' @inheritParams ped_to_plotdf
 #' @inheritParams plot_fromdf
 #' @inheritParams set_plot_area
 #' @inheritParams subregion
 #' @inheritParams align
-#' @param fam_to_plot default=1.  If the pedigree contains multiple families,
+#' @param fam_to_plot default=1.  If the Pedigree contains multiple families,
 #' this parameter can be used to select which family to plot.
 #' It can be a numeric value or a character value. If numeric, it is the
 #' index of the family to plot returned by `unique(x$ped$family)`.
@@ -61,23 +61,23 @@ NULL
 #' @param ... Extra options that feed into the plot function.
 #'
 #' @return an invisible list containing
-#' - df : the data.frame used to plot the pedigree
-#' - par_usr : the user coordinates used to plot the pedigree
+#' - df : the data.frame used to plot the Pedigree
+#' - par_usr : the user coordinates used to plot the Pedigree
 #' - ggplot : the ggplot object if ggplot_gen = TRUE
 #'
 #' @examples
 #' data(sampleped)
-#' pedAll <- pedigree(sampleped)
+#' pedAll <- Pedigree(sampleped)
 #' #plot(pedAll)
 #'
 #' @section Side Effects: Creates plot on current plotting device.
-#' @seealso [pedigree()]
+#' @seealso [Pedigree()]
 #' @include align.R
 #' @include plot_fct.R
 #' @include ped_to_plotdf.R
 #' @include ped_to_legdf.R
 #' @include plot_fromdf.R
-#' @aliases plot.pedigree
+#' @aliases plot.Pedigree
 #' @aliases plot,Pedigree
 #' @export
 #' @docType methods

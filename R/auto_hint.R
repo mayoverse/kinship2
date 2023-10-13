@@ -80,9 +80,9 @@ shift <- function(id, sibs, goleft, hint, twinrel, twinset) {
 #' It finds the spouse of a subject.
 #'
 #' @param idpos The position of the subject
-#' @param plist The alignment structure representing the pedigree layout.
+#' @param plist The alignment structure representing the Pedigree layout.
 #' For the differents matrices present in the list, each row represents a
-#' level of the pedigree and each column a potential subject.
+#' level of the Pedigree and each column a potential subject.
 #' It contains the following components:
 #' - n Vector of the number of subjects per level
 #' - nid Matrix of the subjects indexes
@@ -111,8 +111,8 @@ findspouse <- function(idpos, plist, lev, ped) {
         stop("auto_hint bug 3")
     }
 
-    opposite <- ped$ped$sex[plist$nid[lev, lpos:rpos]] !=
-        ped$ped$sex[plist$nid[lev, idpos]]
+    opposite <- ped(ped)$sex[plist$nid[lev, lpos:rpos]] !=
+        ped(ped)$sex[plist$nid[lev, idpos]]
 
     ## Can happen with a triple marriage
     if (!any(opposite)) {
@@ -213,9 +213,9 @@ duporder <- function(idlist, plist, lev, ped) {
 #' Routine to get twin relationships
 #'
 #' @details This routine function determine the twin relationships
-#' in a pedigree. It complete the missing twin relationships for
+#' in a Pedigree. It complete the missing twin relationships for
 #' triplets, quads, etc. It also determine the order of the twins
-#' in the pedigree.
+#' in the Pedigree.
 #' It is used by `auto_hint()`.
 #'
 #' @inheritParams align
@@ -226,15 +226,15 @@ duporder <- function(idlist, plist, lev, ped) {
 #'  3. `twinord` the order of the twins
 #' @seealso [auto_hint()]
 get_twin_rel <- function(ped) {
-    if (is.null(ped$rel)) {
+    if (is.null(rel(ped))) {
         relation <- NULL
     } else {
         relation <- cbind(
-            as.matrix(ped$rel[, c("id1", "id2")]),
-            as.numeric(ped$rel[, "code"])
+            as.matrix(rel(ped)[, c("id1", "id2")]),
+            as.numeric(rel(ped)[, "code"])
         )
     }
-    n <- length(ped$ped$id)
+    n <- length(ped(ped)$id)
     twinset <- rep(0, n)
     twinord <- rep(1, n)
     twinrel <- NULL
@@ -261,14 +261,14 @@ get_twin_rel <- function(ped) {
     list(twinset = twinset, twinrel = twinrel, twinord = twinord)
 }
 
-#' First initial guess for the alignment of a pedigree
+#' First initial guess for the alignment of a Pedigree
 #'
 #' @description
-#' Compute an initial guess for the alignment of a pedigree
+#' Compute an initial guess for the alignment of a Pedigree
 #'
 #' @details
-#' A pedigree structure can contain a `hints` object which helps to
-#' reorder the pedigree (e.g. left-to-right order of children within family) so
+#' A Pedigree structure can contain a `hints` object which helps to
+#' reorder the Pedigree (e.g. left-to-right order of children within family) so
 #' as to plot with minimal distortion. This routine is used to create an
 #' initial version of the hints. They can then be modified if desired.
 #'
@@ -278,7 +278,7 @@ get_twin_rel <- function(ped) {
 #' between two families this simple-minded approach works surprisingly well.
 #' For more complex structures hand-tuning of the hints matrix may be required.
 #'
-#' The pedigree in the example below is one where rearranging the founders
+#' The Pedigree in the example below is one where rearranging the founders
 #' greatly decreases the number of extra connections. When `auto_hint()` is
 #' called with a a vector of numbers as the second argument, the values for the
 #' founder females are used to order the founder families left to right across
@@ -296,7 +296,7 @@ get_twin_rel <- function(ped) {
 #' @seealso [align()], [best_hint()]
 #' @examples
 #' data(sampleped)
-#' ped <- pedigree(sampleped[sampleped$family == 1, ])
+#' ped <- Pedigree(sampleped[sampleped$family == 1, ])
 #' auto_hint(ped)
 #' @export
 auto_hint <- function(
@@ -305,18 +305,18 @@ auto_hint <- function(
     ## full documentation now in vignette: align_code_details.Rmd
     ## References to those sections appear here as:
     ## Doc: auto_hint
-    if ((!is.null(ped$hints$order) ||
-                !is.null(ped$hints$spouse)
+    if ((!is.null(hints(ped)$order) ||
+                !is.null(hints(ped)$spouse)
         ) && !reset
     ) {
-        return(ped$hints)
+        return(hints(ped))
     } # nothing to do
 
-    if (length(unique(ped$ped$family)) > 1) {
-        stop("auto_hint only works on pedigrees with a single family")
+    if (length(unique(ped(ped)$family)) > 1) {
+        stop("auto_hint only works on Pedigrees with a single family")
     }
 
-    n <- length(ped$ped$id)
+    n <- length(ped(ped)$id)
     depth <- kindepth(ped, align_parents = TRUE)
 
     ## Doc: init-auto_hint

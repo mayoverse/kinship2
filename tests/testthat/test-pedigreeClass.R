@@ -1,5 +1,5 @@
-test_that("pedigree works", {
-    ped <- pedigree(data.frame(
+test_that("Pedigree works", {
+    ped <- Pedigree(data.frame(
         id = character(),
         dadid = character(),
         momid = character(),
@@ -16,12 +16,12 @@ test_that("pedigree works", {
     expect_equal(length(ped@scales$border), 4)
 })
 
-test_that("pedigree old usage compatibility", {
+test_that("Pedigree old usage compatibility", {
     data(sampleped)
     ped1 <- with(sampleped,
-        pedigree(id, dadid, momid, sex, family, available, affected)
+        Pedigree(id, dadid, momid, sex, family, available, affected)
     )
-    expect_equal(ped1, pedigree(sampleped))
+    expect_equal(ped1, Pedigree(sampleped))
 
     ped2mat <- matrix(c(
         1, 1, 0, 0, 1,
@@ -44,25 +44,25 @@ test_that("pedigree old usage compatibility", {
     ped2df$available <- c(0, 0, 1, 1, 0, 1, 1, 1, 1, 1)
     ped2df$status <- c(1, 1, 1, 0, 1, 0, 0, 0, 0, 0)
 
-    ped2 <- with(ped2df, pedigree(id, dadid, momid, sex, family,
+    ped2 <- with(ped2df, Pedigree(id, dadid, momid, sex, family,
         available, status, affected = cbind(disease, smoker, available),
         relation = matrix(c(8, 9, 1, 1), ncol = 4)
     ))
     rel_df <- data.frame(id1 = 8, id2 = 9, code = 1, family = 1)
 
     expect_equal(ped2,
-        pedigree(ped2df, col_aff = c("disease", "smoker", "available"),
+        Pedigree(ped2df, col_aff = c("disease", "smoker", "available"),
             rel_df
         )
     )
 })
 
-test_that("pedigree from sampleped and affectation", {
+test_that("Pedigree from sampleped and affectation", {
     # Here is a case where the levels fail to line up properly
     data("sampleped")
     df1 <- sampleped[sampleped$family == 1, ]
     colnames(df1)
-    ped1 <- pedigree(df1, cols_ren_ped = list(
+    ped1 <- Pedigree(df1, cols_ren_ped = list(
         "indId" = "id",
         "fatherId" = "dadid",
         "motherId" = "momid",
@@ -89,17 +89,17 @@ test_that("pedigree from sampleped and affectation", {
     expect_equal(as.data.frame(ped1), ped1$ped)
 })
 
-test_that("pedigree subscripting", {
+test_that("Pedigree subscripting", {
     data(minnbreast)
-    minnped <- pedigree(minnbreast, cols_ren_ped = list(
+    minnped <- Pedigree(minnbreast, cols_ren_ped = list(
         "indId" = "id", "fatherId" = "fatherid",
         "motherId" = "motherid", "gender" = "sex", "family" = "famid",
         "affection" = "cancer"
     ))
-    expect_equal(nrow(minnped$ped), 28081)
+    expect_equal(nrow(ped(minnped)), 28081)
     expect_equal(ncol(minnped[["ped"]]), 28)
 
-    ped8 <- minnped[minnped$ped$family == "8",
+    ped8 <- minnped[ped(minnped)$family == "8",
         c("id", "dadid", "momid", "sex", "affection")
     ]
 
@@ -133,8 +133,33 @@ test_that("pedigree subscripting", {
     expect_equal(ncol(pedrow$ped), 28)
 })
 
-test_that("pedigree to dataframe", {
+test_that("Pedigree to dataframe", {
     data("sampleped")
-    ped <- pedigree(sampleped)
+    ped <- Pedigree(sampleped)
     expect_equal(dim(as.data.frame(ped)), c(55, 19))
+})
+
+test_that("Pedigree length", {
+    data("sampleped")
+    ped <- Pedigree(sampleped)
+    expect_equal(length(ped), 55)
+})
+
+test_that("Pedigree getters", {
+    data("sampleped")
+    ped <- Pedigree(sampleped)
+    expect_equal(ped$ped, ped(ped))
+    expect_equal(ped$rel, rel(ped))
+    expect_equal(ped$scales, scales(ped))
+    expect_equal(ped$hints, hints(ped))
+    scales(ped)$fill
+})
+
+test_that("Pedigree setters", {
+    data("sampleped")
+    ped <- Pedigree(sampleped)
+    peddf <- ped(ped)
+    peddf[1, "family"] <- "2"
+    ped(ped) <- peddf
+    expect_equal(ped(ped)[1, "family"], "2")
 })

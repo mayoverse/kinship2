@@ -1,6 +1,6 @@
 
 ---
-title: Pedigree_Plot_Details
+title: Pedigree plotting details
 author: TM Therneau, JP Sinnwell
 date: '`r format(Sys.time(),"%d %B, %Y")`'
 output:
@@ -9,7 +9,7 @@ output:
     toc_depth: 3
 header-includes: \usepackage{tabularx}
 vignette: |
-  %\VignetteIndexEntry{Pedigree_Plot_Details}
+  %\VignetteIndexEntry{Pedigree plotting details}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---
@@ -17,13 +17,13 @@ vignette: |
 Introduction
 ==============
 
-The plotting function for pedigrees has 5 tasks
+The plotting function for Pedigrees has 5 tasks
 
     1. Gather information and check the data. An important step is the call
         to align.
     2. Set up the plot region and size the symbols. The program wants to plot
         circles and squares, so needs to understand the geometry of the paper,
-        pedigree size, and text size to get the right shape and size symbols.
+        Pedigree size, and text size to get the right shape and size symbols.
     3. Set up the plot and add the symbols for each subject
     4. Add connecting lines between spouses, and children with parents
     5. Create an invisible return value containing the locations.
@@ -34,10 +34,10 @@ is how we might break a plot across multiple pages.
 Setup
 ===========
 
-The new version of the plotting pedigree function works in two step.
+The new version of the plotting Pedigree function works in two step.
 
-    - **ped_to_plotdf()** create a dataframe from a pedigree given containing
-    all the necessary information to plot all the elements of the pedigree:
+    - **ped_to_plotdf()** create a dataframe from a Pedigree given containing
+    all the necessary information to plot all the elements of the Pedigree:
     "polygons", "text", "segments", "arcs"
     - **plot_from_df()** use a given dataframe and plot all the element given
 
@@ -45,7 +45,7 @@ The advantage of this two step method, is that all the plotting can be
 parralelised, each element can be customised by the user if necessary and
 additional elements can also be added to the plot by just adding a new row.
 
-If multiple families are present in the pedigree object, then one dataframe per
+If multiple families are present in the Pedigree object, then one dataframe per
 family will be produced and the first one will be plotted.
 
 For more informations about those two functions, see the help page.
@@ -61,7 +61,7 @@ Sizing
 Now we need to set the sizes. 
 From `align()` we will get the maximum width and depth. 
 There is one plotted row for each row of the returned matrices.
-The number of columns of the matrices is the max width of the pedigree,
+The number of columns of the matrices is the max width of the Pedigree,
 so there are unused positions in shorter rows, these can be identifed
 by having an nid value of 0.
 Horizontal locations for each point go from 0 to xmax, subjects are at
@@ -107,10 +107,10 @@ of the usr parameter.
 This section is still experimental and might change. Also, in the original
 documentation by TM Therneau, it is within the sizing section above.
 
-Sometimes a pedigree is too large to fit comfortably on one page.
+Sometimes a Pedigree is too large to fit comfortably on one page.
 The $subregion$ argument allows one to plot only a portion of the
-pedigree based on the plot region.  Along with other tools to
-select portions of the pedigree based on relatedness, such as all
+Pedigree based on the plot region.  Along with other tools to
+select portions of the Pedigree based on relatedness, such as all
 the descendents of a particular marriage, it gives a tool for
 addressing this. This breaks our original goal of completely
 automatic plots, but users keep asking for more.
@@ -125,7 +125,7 @@ ped_to_plotdf()
 ==================
 
 This first function create the dataframe with the necessary plotting
-information from a pedigree object.
+information from a Pedigree object.
 The steps are: 
 
 1. Add boxes (depend on affection and sex) and marks.
@@ -159,7 +159,7 @@ plot_fromdf(df, usr = c(0, 8, 0, 2))
 ```
 
 The number of division will depend on the number of affection register in the
-$fill$ slot of the $scale$ slot of the pedigree.
+$fill$ slot of the $scale$ slot of the Pedigree.
 The filling will depend on the color given by the corresponding modality for
 each individual, it is the same for the border of the polygon.
 
@@ -205,7 +205,7 @@ will make up the symbol.  These are then used again and again.
 The collection is kept as a list with the four elements square, circle,
 diamond and triangle.
 
-Each of these is in turn a list with `max(ped$scales$fill$order)` elements,
+Each of these is in turn a list with `max(scales(ped)$fill$order)` elements,
 and each of those in turn a list of x and y coordinates.
 
 ### Circfun
@@ -248,7 +248,7 @@ Exactly one of the polygon sides will satisfy both conditions.
 Final output
 ==========================
 
-The pedigree is plotted in a new frame or added to the current device.
+The Pedigree is plotted in a new frame or added to the current device.
 If `ggplot_gen = TRUE`, then a ggplot object is create with the same
 informations and available in the invisible object given back by
 *plot_fromdf()* 
@@ -256,7 +256,7 @@ informations and available in the invisible object given back by
     Notes:
         Remind the user of subjects who did not get
         plotted; these are ususally subjects who are married in but without
-        children.  Unless the pedigree contains spousal information the
+        children.  Unless the Pedigree contains spousal information the
         routine does not know who is the spouse.
         Then restore the plot parameters.
         This would only not be done if someone wants to further annotate

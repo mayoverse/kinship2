@@ -2,7 +2,7 @@ test_that("fix_parents_df works with sex errors and with family", {
     data("sampleped")
     datped2 <- sampleped[sampleped$family %in% 2, ]
     ## this gets an error
-    ped <- pedigree(datped2)
+    ped <- Pedigree(datped2)
 
     expect_equal(
         kindepth(ped, align = TRUE),
@@ -14,7 +14,7 @@ test_that("fix_parents_df works with sex errors and with family", {
     )
 
     data(minnbreast)
-    ped <- pedigree(minnbreast, cols_ren_ped = list(
+    ped <- Pedigree(minnbreast, cols_ren_ped = list(
         "indId" = "id", "fatherId" = "fatherid",
         "motherId" = "motherid", "gender" = "sex", "family" = "famid"
     ))

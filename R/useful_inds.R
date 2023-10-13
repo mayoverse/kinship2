@@ -25,7 +25,7 @@
 #' useful individuals and 0 otherwise.
 #' @examples
 #' data(sampleped)
-#' ped1 <- pedigree(sampleped[sampleped$family == "1",])
+#' ped1 <- Pedigree(sampleped[sampleped$family == "1",])
 #' ped1 <- num_child(ped1)
 #' useful_inds(ped1, informative = "AvAf")$ped
 #' @export
@@ -57,7 +57,7 @@ setMethod("useful_inds", "character",
                 (!is.na(avail) & avail == 1)
         }
 
-        # Check if parents participate to the pedigree structure
+        # Check if parents participate to the Pedigree structure
         ped_part <- num_child_tot > 1
         to_kept <- is_inf | ped_part
 

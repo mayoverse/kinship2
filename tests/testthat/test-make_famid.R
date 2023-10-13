@@ -18,31 +18,31 @@ rel_df <- matrix(rel_df, ncol = 4, byrow = TRUE)
 dimnames(rel_df) <- list(NULL, c("id1", "id2", "code", "family"))
 rel_df <- data.frame(rel_df)
 
-test_that("make_famid works with pedigree", {
+test_that("make_famid works with Pedigree", {
     ## Simple case with no family id
     data("sampleped")
-    ped <- pedigree(sampleped[-1], rel_df[c(1:3)])
+    ped <- Pedigree(sampleped[-1], rel_df[c(1:3)])
     ped <- make_famid(ped)
 
     ## Expected values
     fam <- sampleped$family
     fam[sampleped$id == "113"] <- 0 # singleton
     id <- paste(fam, c(101:141, 201:214), sep = "_")
-    expect_equal(ped$ped$id, id)
-    expect_equal(ped$rel$id1, c("2_213", "2_210", "1_140", "1_133"))
+    expect_equal(ped(ped)$id, id)
+    expect_equal(rel(ped)$id1, c("2_213", "2_210", "1_140", "1_133"))
 
     ## Updating already present family id
     data("sampleped")
     sampleped$family[sampleped$family == "2"] <- 3
-    ped <- pedigree(sampleped, rel_df)
+    ped <- Pedigree(sampleped, rel_df)
     ped <- make_famid(ped)
-    expect_equal(ped$ped$id, id)
-    expect_equal(ped$rel$id1, c("2_213", "2_210", "1_140", "1_133"))
+    expect_equal(ped(ped)$id, id)
+    expect_equal(rel(ped)$id1, c("2_213", "2_210", "1_140", "1_133"))
 })
 
 test_that("Family check works", {
     data("sampleped")
-    ped <- pedigree(sampleped)
+    ped <- Pedigree(sampleped)
 
     ## check them giving separate ped ids
     fcheck_df_sep <- with(sampleped,
@@ -57,7 +57,7 @@ test_that("Family check works", {
         as.character(id), dadid, momid, rep(1, nrow(sampleped))
     ))
     sampleped$family[sampleped$family == "2"] <- 1
-    ped <- pedigree(sampleped)
+    ped <- Pedigree(sampleped)
     fcheck_ped_combined <- family_check(ped)
     expect_equal(as.numeric(as.vector(fcheck_df_combined[1, ])),
         c(1, 55, 1, 2, 0)

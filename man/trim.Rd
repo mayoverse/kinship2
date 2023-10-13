@@ -2,17 +2,17 @@
 % Please edit documentation in R/trim.R
 \name{trim}
 \alias{trim}
-\title{Trim a pedigree}
+\title{Trim a Pedigree}
 \usage{
 trim(ped, id_rm, missid = "0")
 }
 \arguments{
-\item{ped}{A pedigree object}
+\item{ped}{A Pedigree object}
 
 \item{id_rm}{Vector of ids to remove}
 
 \item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the pedigree
+no father and no mother in the Pedigree
 (i.e. \code{dadid} and \code{momid} equal to the value of this variable).
 The default for \code{missid} is \code{"0"}.}
 }
@@ -20,10 +20,10 @@ The default for \code{missid} is \code{"0"}.}
 A Pedigree object with the subjects removed
 }
 \description{
-Carries out the removal of the subjects identified from a pedigree object.
+Carries out the removal of the subjects identified from a Pedigree object.
 }
 \examples{
 data(sampleped)
-ped1 <- pedigree(sampleped[sampleped$family == "1",])
+ped1 <- Pedigree(sampleped[sampleped$family == "1",])
 trim(ped1, "1_101")
 }
