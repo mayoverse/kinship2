@@ -429,7 +429,7 @@ plot(ped1reord)
 Pedigree Utility Functions
 =================================
 
-## Pedigree as a Data.Frame
+## Pedigree as a data.frame
 
 A main features of a Pedigree object are vectors with an element
 for each subject. It is sometimes useful to extract these vectors from 
