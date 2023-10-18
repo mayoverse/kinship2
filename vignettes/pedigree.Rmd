@@ -111,7 +111,7 @@ print(ped)
 
 For more information on the *Pedigree()* function, see `help(Pedigree)`.
 
-The {\em Pedigree} object can be subset to individual pedigrees 
+The Pedigree object can be subset to individual pedigrees 
 by their family id.  The Pedigree object has a print, summary and plot method,
 which we show below.
 The print method prints a short summary of the Pedigree.
@@ -189,7 +189,8 @@ alleles with replacement from our own DNA has only $p=0.50$ probability of
 getting the same allele twice.  
 
 ## Kinship for Pedigree object
-We use {\em kinship} to calculate the kinship matrix for $ped2$. The 
+
+We use `kinship()` to calculate the kinship matrix for $ped2$. The 
 result is a special symmetrix matrix class from the
 [Matrix R package](https://CRAN.R-project.org/package=Matrix/),
 which is stored efficiently to avoid repeating elements.
