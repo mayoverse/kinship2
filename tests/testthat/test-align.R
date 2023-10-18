@@ -30,7 +30,7 @@ test_that("test auto_hint works", {
     expect_snapshot(plist)
 })
 
-test_that("test alignement with inbreeding and relationship matrix", {
+test_that("test alignment with inbreeding and relationship matrix", {
     data("sampleped")
     rel_df <- data.frame(
         id1 = c(112, 113, 133, 209),

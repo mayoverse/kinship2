@@ -1,6 +1,6 @@
 # Automatically generated from all.nw using noweb
 
-#' Third routine alignement
+#' Third routine alignment
 #'
 #' @description
 #' Third of the four co-routines to merges two pedigree trees which

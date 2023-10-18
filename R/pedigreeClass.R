@@ -171,19 +171,53 @@ setMethod(
 )
 
 
-col_id <- function(ped, col = NULL) {
-    col_id <- c("id", "dadid", "momid", "sex")
-    if (is.null(col)) {
-        col <- col_id
-    } else if (!all(col %in% col_id)) {
-        stop(
-            "Col selected: ",
-            col[!col %in% col_id],
-            " is not an identity column"
-        )
+#' @description Pedigree hints accessors
+#' @param object A Pedigree object.
+#' @return The slot `hints` present in the Pedigree object.
+#' @rdname extract-methods
+#' @aliases hints,Pedigree-method
+#' @export
+setGeneric("col_id", function(object, col) {
+    standardGeneric("col_id")
+})
+
+setMethod(
+    "col_id",
+    signature(object = "Pedigree", col = "ANY"),
+    function(object, col) {
+        col_id <- c("id", "dadid", "momid", "sex")
+        if (is.null(col)) {
+            col <- col_id
+        } else if (!all(col %in% col_id)) {
+            stop(
+                "Col selected: ",
+                col[!col %in% col_id],
+                " is not an identity column"
+            )
+        }
+        ped(ped)[col]
     }
-    ped(ped)[col]
-}
+)
+
+setGeneric("col_id<-", function(object, value) {
+    standardGeneric("col_id<-")
+})
+
+setMethod(
+    "col_id<-",
+    signature(object = "Pedigree", col = "ANY", value = "ANY"),
+    function(object, value) {
+        if (! length(value) %in% c(1, length(object))) {
+            stop(
+                "The length of the new value should be:",
+                "1 or equal to the length of the pedigree"
+            )
+        }
+        ped(ped)[col] <- value
+        validObject(object)
+        object
+    }
+)
 
 #### S4 methods ####
 

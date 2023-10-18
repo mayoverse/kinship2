@@ -1,4 +1,4 @@
-#' Best hint for alignement
+#' Best hint for alignment
 #'
 #' @description
 #' When computer time is cheap, use this routine to get a 'best' Pedigree.

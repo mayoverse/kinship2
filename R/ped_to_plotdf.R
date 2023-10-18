@@ -71,7 +71,7 @@ ped_to_plotdf <- function(
     legh <- params_plot$legh
 
     ## Get all boxes to plot
-    # idx is the index of the boxes in the alignement
+    # idx is the index of the boxes in the alignment
     idx <- which(plist$nid > 0)
     # index value in the ped of each box
     id <- plist$nid

@@ -1,9 +1,9 @@
 # Automatically generated from all.nw using noweb
 
-#' First routine alignement
+#' First routine alignment
 #'
 #' @description
-#' First alignement routine which create the subtree founded on a single
+#' First alignment routine which create the subtree founded on a single
 #' subject as though it were the only tree.
 #'
 #' @details

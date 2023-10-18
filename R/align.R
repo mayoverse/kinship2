@@ -47,7 +47,7 @@ ancestors <- function(idx, momx, dadx) {
 #' If multiple families are present in the Pedigree, this routine is called
 #' once for each family, and the results are combined in the list returned.
 #' For more information you can read the associated vignette:align
-#' `vignette("alignement_details")`.
+#' `vignette("alignment_details")`.
 #'
 #' @param ped A Pedigree object
 #' @param packed Should the Pedigree be compressed, i.e., allow diagonal

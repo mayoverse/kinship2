@@ -1,6 +1,6 @@
 # Automatically generated from all.nw using noweb
 
-#' Second routine alignement
+#' Second routine alignment
 #'
 #' @description
 #' Second of the four co-routines which takes a collection of siblings,

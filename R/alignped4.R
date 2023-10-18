@@ -2,7 +2,7 @@
 #' @importFrom quadprog solve.QP
 NULL
 
-#' Fourth and last routine alignement
+#' Fourth and last routine alignment
 #'
 #' @description
 #' Last routines which attempts to line up children under parents and put
