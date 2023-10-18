@@ -24,8 +24,11 @@ Introduction
 This document is a tutorial for the `Pedixplorer` package, with examples of
 creating Pedigree objects and kinship matrices and other Pedigree utilities.
 
-The `Pedixplorer` package contains the outines to handle family data with a
-Pedigree object.
+The `Pedixplorer` package is an updated version of the [`Kinship2`](https://github.com/mayoverse/kinship2) package,
+featuring a change in maintainer and repository from CRAN to Bioconductor
+for continued development and support.
+
+It contains the outines to handle family data with a Pedigree object.
 The initial purpose was to create correlation structures that describe family
 relationships such as kinship and identity-by-descent, which can be used to
 model family data in mixed effects models, such as in the coxme function.
@@ -37,7 +40,7 @@ various criteria, and kinship for the X chromosome.
 Suplementary vignettes are available to explain:
 
 - The [Pedigree() constructor]("pedigree_constructor.html") used to create a Pedigree object `vignette("Pedigree() constructor", package = "Pedixplorer")`
-- The [alignment algorithm]("alignement_details.html") used create the Pedigree structure `vignette("Pedigree alignement details", package = "Pedixplorer")`
+- The [alignment algorithm]("alignment_details.html") used create the Pedigree structure `vignette("Pedigree alignment details", package = "Pedixplorer")`
 - The [kinship() algorithm]("kinship_details.html") `vignette("Pedigree kinship() details", package = "Pedixplorer")`
 - The [plotting algorithm]("pedigree_plot_details.html") used to plot the Pedigree `vignette("Pedigree plotting details", package = "Pedixplorer")`
 
