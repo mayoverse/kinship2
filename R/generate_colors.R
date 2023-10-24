@@ -313,7 +313,7 @@ setMethod("generate_colors", "logical",
 setMethod("generate_colors", "Pedigree",
     function(obj,
         col_aff = "affected", add_to_scale = TRUE,
-        col_avail = "avail",
+        col_avail = "available",
         mods_aff = NULL, threshold = 0.5, sup_thres_aff = TRUE,
         keep_full_scale = FALSE, breaks = 3,
         colors_aff = c("yellow2", "red"),
@@ -338,7 +338,7 @@ setMethod("generate_colors", "Pedigree",
         }
 
         new_col <- paste0(col_aff, "_aff")
-        df <- check_columns(obj$ped, c(col_aff, col_avail),
+        df <- check_columns(meta(obj), c(col_aff, col_avail),
             "", new_col, others_cols = TRUE
         )
 
@@ -348,7 +348,7 @@ setMethod("generate_colors", "Pedigree",
             colors_aff, colors_unaff, colors_avail
         )
 
-        df[new_col] <- lst_sc$mods
+        deriv(obj, new_col) <- lst_sc$mods
         if (nrow(lst_sc$fill_scale) > 0) {
             lst_sc$fill_scale$column_mods <- new_col
             lst_sc$fill_scale$column_values <- col_aff
@@ -358,8 +358,6 @@ setMethod("generate_colors", "Pedigree",
             fill = lst_sc$fill_scale,
             border = lst_sc$border_scale
         )
-
-        obj$ped <- df
 
         if (add_to_scale) {
             if (col_aff %in% obj$scales$fill$column_values &

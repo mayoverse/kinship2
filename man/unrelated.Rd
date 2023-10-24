@@ -4,7 +4,7 @@
 \alias{unrelated}
 \title{Get unrelated subjects}
 \usage{
-unrelated(ped, avail = ped(ped)$avail)
+unrelated(ped, avail = ped(ped, "avail"))
 }
 \arguments{
 \item{ped}{A Pedigree object}

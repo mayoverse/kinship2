@@ -37,9 +37,9 @@ ped_to_legdf <- function(ped,
         adjy = numeric()
     )
     sex_equiv <- c("Male", "Female", "Terminated", "Unknown")
-    all_lab <- list(sex_equiv, scales(ped)$border$labels)
-    all_aff <- lapply(unique(scales(ped)$fill$order), function(x) {
-        scales(ped)$fill$labels[scales(ped)$fill$order == x]
+    all_lab <- list(sex_equiv, border(ped, "labels"))
+    all_aff <- lapply(unique(fill(ped, "order")), function(x) {
+        fill(ped, "labels")[fill(ped, "order") == x]
     })
 
     all_lab <- c(all_lab, all_aff)
@@ -63,7 +63,7 @@ ped_to_legdf <- function(ped,
     posy <- cumsum(posy) - boxh
     posy <- posy[seq_along(posy) %% 2 == 0]
 
-    all_aff <- scales(ped)$fill
+    all_aff <- fill(ped)
     n_aff <- length(unique(all_aff$order))
 
     lab_title <- c("Sex", "Border", unique(all_aff$column_values))
@@ -77,7 +77,7 @@ ped_to_legdf <- function(ped,
 
     # Sex
     poly1 <- polygons(1)
-    all_sex <- unique(as.numeric(ped(ped)$sex))
+    all_sex <- unique(as.numeric(ped(ped, "sex")))
     sex <- data.frame(
         x0 = posx[1], y0 = posy[all_sex],
         type = paste(names(poly1)[all_sex], 1, 1, sep = "_"),
@@ -98,16 +98,15 @@ ped_to_legdf <- function(ped,
     plot_df <- rbind.fill(plot_df, sex, sex_label)
 
     # Border
-    bord_df <- scales(ped)$border
-    border_mods <- unique(ped(ped)[, unique(bord_df[["column"]])])
+    border_mods <- unique(ped(ped)[, unique(border(ped, "column"))])
     border <- data.frame(
         x0 = posx[3], y0 = posy[seq_along(border_mods)],
         type = rep("square_1_1", length(border_mods)),
-        border = bord_df$border[match(border_mods, bord_df$mods)],
+        border = border(ped, "border")[match(border_mods, border(ped, "mods"))],
         fill = "white",
         id = "border"
     )
-    lab <- bord_df$labels[match(border_mods, bord_df$mods)]
+    lab <- border(ped, "labels")[match(border_mods, border(ped, "mods"))]
     lab[is.na(lab)] <- "NA"
     border_label <- data.frame(
         x0 = posx[4] + adjx,

@@ -38,8 +38,8 @@ Normalise relationship dataframe for Pedigree object
 }
 \examples{
 df <- data.frame(
-   indId1 = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
-   indId2 = c(2, 3, 4, 5, 6, 7, 8, 9, 10, 1),
+   id1 = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+   id2 = c(2, 3, 4, 5, 6, 7, 8, 9, 10, 1),
    code = c("MZ twin", "DZ twin", "UZ twin", "Spouse", 1, 2,
       3, 4, "MzTwin", "sp oUse"),
    family = c(1, 1, 1, 1, 1, 1, 1, 2, 2, 2)

@@ -36,7 +36,7 @@
 #' @seealso [shrink()]
 #' @include utils.R
 #' @export
-find_unavailable <- function(ped, avail = ped(ped)$avail) {
+find_unavailable <- function(ped, avail = ped(ped, "avail")) {
     ## find id within Pedigree anyone who is not available and
     ## does not have an available descendant
 
@@ -45,19 +45,19 @@ find_unavailable <- function(ped, avail = ped(ped)$avail) {
     ## will do this iteratively by successively removing unavailable
     ## terminal nodes
     ## Steve Iturria, PhD, modified by Dan Schaid
-    df <- ped(ped)
-    df$avail <- avail
+    ped_df <- ped(ped)
+    ped_df$avail <- avail
     cont <- TRUE # flag for whether to keep iterating
 
-    df$is_terminal <- (is_parent(df$id, df$dadid, df$momid) == FALSE)
+    ped_df$is_terminal <- (is_parent(ped_df$id, ped_df$dadid, ped_df$momid) == FALSE)
     ## JPS 3/10/14 add strings check in case of char ids
     while (cont) {
-        id_to_remove <- df$id[df$is_terminal & df$avail == 0]
+        id_to_remove <- ped_df$id[ped_df$is_terminal & ped_df$avail == 0]
         if (length(id_to_remove) > 0) {
-            idx_to_remove <- match(id_to_remove, df$id)
-            df <- df[-idx_to_remove, ]
-            df$is_terminal <-
-                (is_parent(df$id, df$dadid, df$momid) == FALSE)
+            idx_to_remove <- match(id_to_remove, ped_df$id)
+            ped_df <- ped_df[-idx_to_remove, ]
+            ped_df$is_terminal <-
+                (is_parent(ped_df$id, ped_df$dadid, ped_df$momid) == FALSE)
         } else {
             cont <- FALSE
         }
@@ -67,14 +67,14 @@ find_unavailable <- function(ped, avail = ped(ped)$avail) {
 
     ## remove unavailable founders
     tmp_ped <- exclude_unavail_founders(
-        df$id,
-        df$dadid, df$momid, df$avail
+        ped_df$id,
+        ped_df$dadid, ped_df$momid, ped_df$avail
     )
 
     ## remove stray marry-ins
     tmp_ped <- exclude_stray_marryin(tmp_ped$id, tmp_ped$dadid, tmp_ped$momid)
 
-    ped(ped)$id[is.na(match(ped(ped)$id, tmp_ped$id))]
+    ped(ped, "id")[is.na(match(ped(ped, "id"), tmp_ped$id))]
 }
 
 #' Exclude stray marry-ins

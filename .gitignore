@@ -4,5 +4,4 @@
 *.so
 *.Rprofile
 *.lintr
-devel
 Pedixplorer.Rcheck

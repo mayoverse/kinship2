@@ -101,16 +101,13 @@ setMethod("make_famid", "character",
 setMethod("make_famid", "Pedigree",
     function(obj) {
         ped <- obj
-        family <- make_famid(ped(ped)$id, ped(ped)$dadid, ped(ped)$momid)
-        col_ped_compute <- c("sex", "avail", "id", "dadid", "momid",
-            "family", "momid", "error", "steril", "status"
+        family <- make_famid(
+            ped(ped, "id"), ped(ped, "dadid"), ped(ped, "momid")
         )
-        ped_df <- ped(ped)[! colnames(ped(ped)) %in% col_ped_compute]
-        ped_df$family <- family
-        col_rel_compute <- c("family", "error")
-        rel_df <- rel(ped)[! colnames(rel(ped)) %in% col_rel_compute]
-        fam_id1 <- family[match(rel_df$id1, ped(ped)$id)]
-        fam_id2 <- family[match(rel_df$id2, ped(ped)$id)]
+        ped(obj, "family") <- family
+
+        fam_id1 <- family[match(rel(ped, "id1"), ped(ped, "id"))]
+        fam_id2 <- family[match(rel(ped, "id2"), ped(ped, "id"))]
 
         if (any(fam_id1 != fam_id2)) {
             stop("The two individuals in the relationship",
@@ -118,9 +115,8 @@ setMethod("make_famid", "Pedigree",
             )
         }
 
-        rel_df$family <- fam_id1
-        Pedigree(ped_df, rel_df,
-            scales = scales(ped), normalize = TRUE
-        )
+        rel(ped, "family") <- fam_id1
+        validObject(ped)
+        ped
     }
 )

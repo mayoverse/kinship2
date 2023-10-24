@@ -249,6 +249,7 @@ sex_to_factor <- function(sex) {
     ), sex_equiv, warn_missing = FALSE))
     sex_codes <- c("male", "female", "unknown", "terminated")
     sex[!sex %in% sex_codes] <- "unknown"
+    
 
     sex <- factor(sex, sex_codes, ordered = TRUE)
     sex

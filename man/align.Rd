@@ -96,7 +96,7 @@ supply an initial guess.
 If multiple families are present in the Pedigree, this routine is called
 once for each family, and the results are combined in the list returned.
 For more information you can read the associated vignette:align
-\code{vignette("alignement_details")}.
+\code{vignette("alignment_details")}.
 }
 \examples{
 data(sampleped)

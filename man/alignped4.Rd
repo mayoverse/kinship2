@@ -2,7 +2,7 @@
 % Please edit documentation in R/alignped4.R
 \name{alignped4}
 \alias{alignped4}
-\title{Fourth and last routine alignement}
+\title{Fourth and last routine alignment}
 \usage{
 alignped4(rval, spouse, level, width, align)
 }

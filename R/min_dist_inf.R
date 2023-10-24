@@ -85,18 +85,18 @@ setMethod("min_dist_inf", "Pedigree", function(obj,
         missid, reset
     )
 
-    cols_needed <- c("avail", "affected")
-    check_columns(ped(ped), cols_needed, NULL, NULL, others_cols = TRUE)
-
     kin <- min_dist_inf(
-        ped(ped)$id, ped(ped)$dadid, ped(ped)$momid, ped(ped)$sex,
-        ped(ped)$avail, ped(ped)$affected, informative
+        ped(ped, "id"), ped(ped, "dadid"), ped(ped, "momid"), ped(ped, "sex"),
+        ped(ped, "avail"), deriv(ped, "affected"), informative
     )
 
-    if (!reset) {
-        check_columns(ped(ped), NULL, "kin", NULL)
+    if (!reset & deriv(ped, "kin") != NULL) {
+        stop(
+            "The kin column already exists in the Pedigree object",
+            " and reset is set to FALSE"
+        )
     }
 
-    ped(ped)$kin <- kin
+    deriv(ped, "kin") <- kin
     ped
 })

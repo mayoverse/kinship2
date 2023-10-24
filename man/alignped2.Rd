@@ -2,7 +2,7 @@
 % Please edit documentation in R/alignped2.R
 \name{alignped2}
 \alias{alignped2}
-\title{Second routine alignement}
+\title{Second routine alignment}
 \usage{
 alignped2(idx, dadx, momx, level, horder, packed, spouselist)
 }

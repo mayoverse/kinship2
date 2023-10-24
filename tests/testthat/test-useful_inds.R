@@ -25,13 +25,13 @@ test_that("useful_inds works with Pedigree", {
     ped <- Pedigree(sampleped)
     ped <- num_child(ped)
     ped <- useful_inds(ped, informative = "Av")
-    expect_equal(ped(ped)$id[!ped(ped)$useful],
+    expect_equal(ped(ped, "id")[!deriv(ped, "useful")],
         c("1_101", "1_102", "1_107", "1_108", "1_117")
     )
 
     expect_error(useful_inds(ped, informative = "AvOrAf"))
 
     ped <- useful_inds(ped, informative = "AvOrAf", reset = TRUE)
-    expect_equal(ped(ped)$id[!ped(ped)$useful], c("1_101", "1_108"))
+    expect_equal(ped(ped, "id")[!deriv(ped, "useful")], c("1_101", "1_108"))
 })
 TRUE

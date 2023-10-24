@@ -41,7 +41,7 @@
 #' @seealso [Pedigree()], [bit_size()]
 #' @export
 shrink <- function(
-    ped, avail = ped(ped)$avail, affected = ped(ped)$affected, max_bits = 16
+    ped, avail = ped(ped, "avail"), affected = deriv(ped, "affected"), max_bits = 16
 ) {
     if (any(is.na(avail))) {
         stop("NA values not allowed in avail vector.")
@@ -49,7 +49,7 @@ shrink <- function(
 
     id_trim <- numeric()
     id_lst <- list()
-    n_origin <- length(ped(ped)$id)
+    n_origin <- length(ped)
 
     bitsize_old <- bit_size(ped)$bit_size
 
@@ -60,7 +60,7 @@ shrink <- function(
 
     if (length(id_trim_unav)) {
         ped_trim <- trim(ped, id_trim_unav)
-        avail <- avail[match(ped_trim$ped$id, ped(ped)$id)]
+        avail <- avail[match(ped_trim$ped$id, ped(ped, "id"))]
         id_trim <- c(id_trim, id_trim_unav)
         id_lst$unavail <- id_trim_unav
 

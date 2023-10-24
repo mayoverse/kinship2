@@ -24,7 +24,8 @@ Imports:
     dplyr,
     tidyr,
     quadprog,
-    Matrix
+    Matrix,
+    testthat
 Description: Routines to handle family data with a Pedigree object. The initial purpose
     was to create correlation structures that describe family relationships such 
     as kinship and identity-by-descent, which can be used to model family data 
@@ -38,10 +39,9 @@ RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
 Suggests: 
-    testthat (>= 3.0.0),
     diffviewer,
-	vdiffr,
-	rmarkdown,
+    vdiffr,
+    rmarkdown,
     BiocStyle,
     knitr,
     withr
@@ -57,7 +57,7 @@ Collate:
     'alignped3.R'
     'alignped2.R'
     'alignped1.R'
-    'validity.R'
+    'pedigreeValidity.R'
     'pedigreeClass.R'
     'check_hints.R'
     'kindepth.R'
@@ -84,6 +84,7 @@ Collate:
     'num_child.R'
     'ped_to_legdf.R'
     'ped_to_plotdf.R'
+    'pedigreeAccessors.R'
     'plot_fct.R'
     'plot_fromdf.R'
     'plot.R'
@@ -91,3 +92,4 @@ Collate:
     'trim.R'
     'unrelated.R'
     'useful_inds.R'
+LazyData: true

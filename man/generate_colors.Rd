@@ -58,7 +58,7 @@ generate_colors(obj, ...)
   obj,
   col_aff = "affected",
   add_to_scale = TRUE,
-  col_avail = "avail",
+  col_avail = "available",
   mods_aff = NULL,
   threshold = 0.5,
   sup_thres_aff = TRUE,

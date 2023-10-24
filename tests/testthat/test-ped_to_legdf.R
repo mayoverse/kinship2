@@ -15,12 +15,12 @@ new_par <- list(
 
 test_that("Pedigree legend works", {
     data("sampleped")
+    sampleped$val_num <- as.numeric(sampleped$id)
     ped <- Pedigree(sampleped)
-    ped <- ped[ped(ped)$family == "1", ]
+    ped <- ped[ped(ped, "family") == "1", ]
     ped <- generate_colors(ped, add_to_scale = TRUE, "avail")
-    ped(ped)$indId <- as.numeric(ped(ped)$indId)
     ped <- generate_colors(ped,
-        add_to_scale = TRUE, "indId", threshold = 115,
+        add_to_scale = TRUE, "val_num", threshold = 115,
         colors_aff = c("pink", "purple"), keep_full_scale = TRUE
     )
 

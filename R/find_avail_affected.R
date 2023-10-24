@@ -31,18 +31,20 @@
 #' @include utils.R
 #' @include find_unavailable.R
 #' @export
-find_avail_affected <- function(ped, avail = ped(ped)$avail, affstatus = NA) {
+find_avail_affected <- function(
+    ped, avail = ped(ped, "avail"), affstatus = NA
+) {
     ped_df <- ped(ped)
     ped_df$avail <- avail
     not_parent <- !is_parent(ped_df$id, ped_df$dadid, ped_df$momid)
 
     if (is.na(affstatus)) {
         possibl_trim <- ped_df$id[not_parent & avail == 1 &
-                is.na(ped_df$affected)
+                is.na(deriv(ped, "affected"))
         ]
     } else {
         possibl_trim <- ped_df$id[not_parent & avail == 1 &
-                ped_df$affected == affstatus
+                deriv(ped, "affected") == affstatus
         ]
     }
     n_trim <- length(possibl_trim)

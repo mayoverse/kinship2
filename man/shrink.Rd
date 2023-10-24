@@ -6,8 +6,8 @@
 \usage{
 shrink(
   ped,
-  avail = ped(ped)$avail,
-  affected = ped(ped)$affected,
+  avail = ped(ped, "avail"),
+  affected = deriv(ped, "affected"),
   max_bits = 16
 )
 }

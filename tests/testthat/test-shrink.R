@@ -59,7 +59,7 @@ test_that("Pedigree shrink error if missing info", {
     ## use sampleped from the package
     data("sampleped")
     ped <- Pedigree(sampleped)
-    ped2 <- ped[ped(ped)$family == "2", ]
+    ped2 <- ped[ped(ped, "family") == "2", ]
     ped2$ped$sex[c(13, 12)] <- c("unknown", "terminated")
 
     ## set 2nd col of affected to NA
@@ -71,7 +71,7 @@ test_that("Pedigree shrink avail test", {
     ## use sampleped from the package
     data("sampleped")
     ped <- Pedigree(sampleped)
-    ped1 <- ped[ped(ped)$family == "1", ]
+    ped1 <- ped[ped(ped, "family") == "1", ]
 
     set.seed(10)
     ped1_s_av_32 <- shrink(ped = ped1, max_bits = 32)
@@ -99,7 +99,7 @@ test_that("Pedigree shrink with character", {
     data("sampleped")
     sampleped$family[sampleped$family == 1] <- "A"
     ped <- Pedigree(sampleped)
-    ped1 <- ped[ped(ped)$family == "A", ]
+    ped1 <- ped[ped(ped, "family") == "A", ]
 
     set.seed(100)
     ped1_s_av_32 <- shrink(ped = ped1, max_bits = 32)
@@ -122,7 +122,7 @@ test_that("Pedigree shrink with character", {
 test_that("Shrink works", {
     data("sampleped")
     ped <- Pedigree(sampleped)
-    ped2 <- ped[ped(ped)$family == "2", ]
+    ped2 <- ped[ped(ped, "family") == "2", ]
     ped2_s <- shrink(ped2)
 
     vdiffr::expect_doppelganger("Whole ped",

@@ -32,12 +32,12 @@ ped_to_plotdf <- function(
     aff_mark = TRUE, label = NULL, ...
 ) {
 
-    famlist <- unique(ped(ped)$family)
+    famlist <- unique(ped(ped, "family"))
     if (length(famlist) > 1) {
         nfam <- length(famlist)
         all_df <- vector("list", nfam)
         for (i_fam in famlist) {
-            ped_fam <- ped[ped(ped)$family == i_fam]
+            ped_fam <- ped[ped(ped, "family") == i_fam]
             all_df[[i_fam]] <- ped_to_plotdf(ped_fam, packed, width, align,
                 subreg, cex, symbolsize, ...
             )
@@ -62,7 +62,7 @@ ped_to_plotdf <- function(
     maxlev <- nrow(plist$pos)
 
     params_plot <- set_plot_area(
-        cex, ped(ped)$id, maxlev, xrange, symbolsize, ...
+        cex, ped(ped, "id"), maxlev, xrange, symbolsize, ...
     )
 
     boxw <- params_plot$boxw
@@ -80,16 +80,15 @@ ped_to_plotdf <- function(
     # y position
     i <- (seq_len(length(plist$nid)) - 1) %% length(plist$n) + 1
     # sex of each box
-    sex <- as.numeric(ped(ped)$sex)[id[idx]]
+    sex <- as.numeric(ped(ped, "sex"))[id[idx]]
 
-    all_aff <- scales(ped)$fill
-    bord_df <- scales(ped)$border
-    n_aff <- length(unique(all_aff$order))
+    all_aff <- fill(ped)
+    n_aff <- length(unique(fill(ped, "order")))
     polylist <- polygons(max(1, n_aff))
 
     # border mods of each box
-    border_mods <- ped(ped)[id[idx], unique(bord_df[["column"]])]
-    border_idx <- match(border_mods, bord_df[["mods"]])
+    border_mods <- ped(ped)[id[idx], unique(border(ped, "column"))]
+    border_idx <- match(border_mods, border(ped, "mods"))
 
     for (aff in seq_len(n_aff)) {
         aff_df <- all_aff[all_aff$order == aff, ]
@@ -116,7 +115,7 @@ ped_to_plotdf <- function(
             fill = aff_df[aff_idx, "fill"],
             density = aff_df[aff_idx, "density"],
             angle = aff_df[aff_idx, "angle"],
-            border = bord_df[border_idx, "border"],
+            border = border(ped, "border")[border_idx],
             id = "polygon"
         )
         plot_df <- rbind.fill(plot_df, ind)

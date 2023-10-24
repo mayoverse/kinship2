@@ -28,16 +28,16 @@ test_that("make_famid works with Pedigree", {
     fam <- sampleped$family
     fam[sampleped$id == "113"] <- 0 # singleton
     id <- paste(fam, c(101:141, 201:214), sep = "_")
-    expect_equal(ped(ped)$id, id)
-    expect_equal(rel(ped)$id1, c("2_213", "2_210", "1_140", "1_133"))
+    expect_equal(ped(ped, "id"), id)
+    expect_equal(rel(ped, "id1"), c("2_213", "2_210", "1_140", "1_133"))
 
     ## Updating already present family id
     data("sampleped")
     sampleped$family[sampleped$family == "2"] <- 3
     ped <- Pedigree(sampleped, rel_df)
     ped <- make_famid(ped)
-    expect_equal(ped(ped)$id, id)
-    expect_equal(rel(ped)$id1, c("2_213", "2_210", "1_140", "1_133"))
+    expect_equal(ped(ped, "id"), id)
+    expect_equal(rel(ped, "id1"), c("2_213", "2_210", "1_140", "1_133"))
 })
 
 test_that("Family check works", {

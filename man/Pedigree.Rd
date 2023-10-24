@@ -33,14 +33,15 @@ Pedigree(obj, ...)
 )
 
 \S4method{Pedigree}{data.frame}(
-  obj = data.frame(id = character(), dadid = character(), momid = character(), sex =
-    numeric(), family = character(), available = numeric(), affection = numeric()),
+  obj = data.frame(indId = character(), fatherId = character(), motherId = character(),
+    gender = numeric(), family = character(), available = numeric(), vitalstatus =
+    numeric(), affection = numeric(), sterilisation = numeric()),
   relation = data.frame(id1 = character(), id2 = character(), code = numeric(), family =
     character()),
   cols_ren_ped = list(indId = "id", fatherId = "dadid", motherId = "momid", gender =
-    "sex", family = "family", sterilisation = "steril", vitalStatus = "status", affection
-    = "affected"),
-  cols_ren_rel = list(indId1 = "id1", indId2 = "id2"),
+    "sex", sterilisation = "steril", affection = "affected", available = "avail",
+    vitalstatus = "status"),
+  cols_ren_rel = list(id1 = "indId1", id2 = "indId2"),
   scales = list(fill = data.frame(order = numeric(), column_values = character(),
     column_mods = character(), mods = numeric(), labels = character(), affected =
     logical(), fill = character(), density = numeric(), angle = numeric()), border =

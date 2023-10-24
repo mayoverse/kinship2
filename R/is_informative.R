@@ -98,8 +98,9 @@ setMethod("is_informative", "character", function(
 setMethod("is_informative", "Pedigree", function(
     obj, col_aff = NULL, informative = "AvAf", missid = "0", reset = FALSE
 ) {
-    obj$ped$affected <- NA
-    aff_scl <- obj$scales$fill
+    ped <- obj
+    deriv(ped, "affected") <- NA
+    aff_scl <- fill(ped)
     if (is.null(col_aff)) {
         stop("The col_aff argument is required")
     }

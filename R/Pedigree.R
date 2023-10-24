@@ -108,24 +108,29 @@ setMethod("Pedigree", "character", function(obj, dadid, momid,
 
     ped_df <- data.frame(
         family = family,
-        id = obj,
-        dadid = dadid,
-        momid = momid,
-        sex = sex
+        indId = obj,
+        fatherId = dadid,
+        motherId = momid,
+        gender = sex
     )
-    if (any(!is.na(affected))) {
+
+    if (is.null(affected)) {
+        ped_df$affection <- NA
+    } else if (any(!is.na(affected))) {
         if (is.vector(affected)) {
             ped_df$affection <- affected
-        } else {
+        } else if (is.data.frame(affected)) {
             ped_df <- cbind(ped_df, affected)
             col_aff <- colnames(affected)
+        } else {
+            stop("Affected must be a vector or a data.frame")
         }
     }
     if (any(!is.na(avail))) {
         ped_df$available <- avail
     }
     if (any(!is.na(status))) {
-        ped_df$vitalStatus <- status
+        ped_df$vitalstatus <- status
     }
     if (any(!is.na(steril))) {
         ped_df$sterilisation <- steril
@@ -149,13 +154,15 @@ setMethod("Pedigree", "character", function(obj, dadid, momid,
 #' @docType methods
 setMethod("Pedigree", "data.frame",  function(
     obj = data.frame(
-        id = character(),
-        dadid = character(),
-        momid = character(),
-        sex = numeric(),
+        indId = character(),
+        fatherId = character(),
+        motherId = character(),
+        gender = numeric(),
         family = character(),
         available = numeric(),
-        affection = numeric()
+        vitalstatus = numeric(),
+        affection = numeric(),
+        sterilisation = numeric()
     ),
     relation = data.frame(
         id1 = character(),
@@ -168,14 +175,14 @@ setMethod("Pedigree", "data.frame",  function(
         "fatherId" = "dadid",
         "motherId" = "momid",
         "gender" = "sex",
-        "family" = "family",
         "sterilisation" = "steril",
-        "vitalStatus" = "status",
-        "affection" = "affected"
+        "affection" = "affected",
+        "available" = "avail",
+        "vitalstatus" = "status"
     ),
     cols_ren_rel = list(
-        "indId1" = "id1",
-        "indId2" = "id2"
+        "id1" = "indId1",
+        "id2" = "indId2"
     ),
     scales = list(
         fill = data.frame(
@@ -277,9 +284,23 @@ setMethod("Pedigree", "data.frame",  function(
         return(rel_df)
     }
 
-    rownames(ped_df) <- ped_df$id
+    cols <- colnames(ped_df)
+    col_ped <- c("id", "dadid", "momid", "sex", "family")
+    col_deriv <- c("affected", "kin", "useful", "avail", "steril", "status")
+    col_rel <- c("id1", "id2", "code", "family")
+    col_meta <- cols[!(cols %in% c(col_ped, col_deriv))]
+    ped <- ped_df[, col_ped]
+    deriv <- ped_df[, col_deriv]
+    meta <- ped_df[, col_meta]
+    rel <- rel_df[, col_rel]
+
+    rownames(ped) <- ped_df$id
+    rownames(deriv) <- ped_df$id
+    rownames(meta) <- ped_df$id
+
     ## Create the object
-    ped <- new("Pedigree", ped = ped_df, rel = rel_df,
+    ped <- new("Pedigree",
+        ped = ped, deriv = deriv, meta = meta, rel = rel,
         scales = scales, hints = hints
     )
 

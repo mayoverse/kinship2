@@ -2,7 +2,7 @@
 % Please edit documentation in R/alignped3.R
 \name{alignped3}
 \alias{alignped3}
-\title{Third routine alignement}
+\title{Third routine alignment}
 \usage{
 alignped3(alt1, alt2, packed, space = 1)
 }

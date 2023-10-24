@@ -80,7 +80,7 @@ test_that("is_informative works with Pedigree", {
         sum(is_informative(ped, col_aff = "sex_aff",
             informative = "Af"
         )$ped$id_inf),
-        length(ped(ped)[ped(ped)$sex == "male", "id"])
+        length(ped(ped, "id")[ped(ped, "sex") == "male"])
     )
 
     data(minnbreast)

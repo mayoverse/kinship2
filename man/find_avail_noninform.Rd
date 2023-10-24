@@ -4,7 +4,7 @@
 \alias{find_avail_noninform}
 \title{Find uninformative but available subject}
 \usage{
-find_avail_noninform(ped, avail = ped(ped)$avail, missid = "0")
+find_avail_noninform(ped, avail = ped(ped, "avail"), missid = "0")
 }
 \arguments{
 \item{ped}{A Pedigree object}

@@ -26,15 +26,17 @@ paste0max <- function(x, max = 5, ...) {
 #' @keywords internal
 check_slot_fd <- function(obj, slot = NULL, fields = character()) {
     if (is.object(obj)) {
-        obj <- as.list(obj)
+        obj <- as(obj, "list")
     }
-    if (is.data.frame(obj[[slot]])) {
+    if (is.null(slot)) {
+        array_names <- names(obj)
+    } else if (is.data.frame(obj[[slot]])) {
         array_names <- colnames(obj[[slot]])
     } else if (is.list(obj[[slot]])) {
         array_names <- names(obj[[slot]])
     } else {
         stop(
-            "Slot ", slot, " is not a data.frame or a list.",
+            "Slot ", slot, " is not a data.frame or a list. ",
             class(obj[[slot]]), " found."
         )
     }
@@ -100,10 +102,8 @@ is_valid <- function(object) {
     errors <- c()
 
     #### Check that the slots have the right columns ####
-    ped_cols <- c(
-        "id", "dadid", "momid", "family",
-        "sex", "steril", "status", "avail", "affected"
-    )
+    ped_cols <- c("id", "dadid", "momid", "family", "sex")
+    deriv_cols <- c("affected", "kin", "useful", "avail", "steril", "status")
     rel_cols <- c("id1", "id2", "code", "family")
     fill_cols <- c(
         "order", "column_values", "column_mods", "mods",
@@ -111,11 +111,11 @@ is_valid <- function(object) {
     )
     border_cols <- c("column", "mods", "labels", "border")
     errors <- c(errors, check_slot_fd(object, "ped", ped_cols))
+    errors <- c(errors, check_slot_fd(object, "deriv", deriv_cols))
     errors <- c(errors, check_slot_fd(object, "rel", rel_cols))
     errors <- c(errors, check_slot_fd(object, "scales", c("fill", "border")))
     errors <- c(errors, check_slot_fd(object$scales, "fill", fill_cols))
     errors <- c(errors, check_slot_fd(object$scales, "border", border_cols))
-
 
     #### Check that the ped columns have the right values ####
     # Check for ped$id uniqueness
@@ -194,13 +194,13 @@ is_valid <- function(object) {
 
     # Check that the scales columns have the right values
     errors <- c(errors, check_values(
-        object$scales$fill$column_values, colnames(object$ped)
+        object$scales$fill$column_values, colnames(mcols(object))
     ))
     errors <- c(errors, check_values(
-        object$scales$fill$column_mods, colnames(object$ped)
+        object$scales$fill$column_mods, colnames(mcols(object))
     ))
     errors <- c(errors, check_values(
-        object$scales$border$column, colnames(object$ped)
+        object$scales$border$column, colnames(mcols(object))
     ))
 
     # Check that all modalities are present in the scales

@@ -20,9 +20,9 @@ test_that("Norm ped", {
     ped_df <- suppressWarnings(norm_ped(
         ped_df, na_strings = c("None", "NA")
     ))
-    expect_equal(dim(ped_df), c(10, 20))
+    expect_equal(dim(ped_df), c(10, 22))
     expect_snapshot(ped_df)
-    expect_equal(sum(is.na(ped_df$error)), 3)
+    expect_equal(sum(is.na(ped_df$error)), 4)
 })
 
 test_that("Norm rel", {

@@ -121,12 +121,12 @@ ancestors <- function(idx, momx, dadx) {
 align <- function(ped, packed = TRUE, width = 10,
     align = TRUE, hints = ped$hints, missid = "0"
 ) {
-    famlist <- unique(ped(ped)$family)
+    famlist <- unique(ped(ped, "family"))
     if (length(famlist) > 1) {
         nfam <- length(famlist)
         alignment <- vector("list", nfam)
         for (i_fam in famlist) {
-            ped_fam <- ped[ped(ped)$family == i_fam]
+            ped_fam <- ped[ped(ped, "family") == i_fam]
             alignment[[i_fam]] <- align(ped_fam, packed, width, align)
         }
         return(alignment)
@@ -141,17 +141,17 @@ align <- function(ped, packed = TRUE, width = 10,
             hints <- list(order = seq_len(max(1, dim(ped))))
         }
     } else {
-        check_hints(hints, ped(ped)$sex)
+        check_hints(hints, ped(ped, "sex"))
     }
     ## Doc: Setup-align
-    n <- length(ped(ped)$id)
+    n <- length(ped(ped, "id"))
 
     level <- 1 + kindepth(ped, align = TRUE)
     horder <- hints$order  # relative order of siblings within a family
 
     if (!is.null(hints$spouse)) {
         # start with the hints list
-        tsex <- ped(ped)$sex[hints$spouse[, 1]]  # sex of the left member
+        tsex <- ped(ped, "sex")[hints$spouse[, 1]]  # sex of the left member
         spouselist <- cbind(0, 0, 1 + (tsex != "male"), hints$spouse[, 3])
         spouselist[, 1] <- ifelse(tsex == "male", hints$spouse[, 1],
             hints$spouse[, 2]
@@ -163,19 +163,19 @@ align <- function(ped, packed = TRUE, width = 10,
         spouselist <- matrix(0L, nrow = 0, ncol = 4)
     }
 
-    if (nrow(rel(ped)) > 0 && any(rel(ped)$code == "Spouse")) {
+    if (nrow(rel(ped)) > 0 && any(rel(ped, "code") == "Spouse")) {
         # Add spouses from the relationship matrix
-        trel <- rel(ped)[
-            rel(ped)$code == "Spouse", c("id1", "id2"), drop = FALSE
+        trel <- rel(ped, c("id1", "id2"))[
+            rel(ped, "code") == "Spouse", drop = FALSE
         ]
-        trel$id1 <- match(trel$id1, ped(ped)$id)
-        trel$id2 <- match(trel$id2, ped(ped)$id)
-        tsex <- ped(ped)$sex[trel[, 1]]
+        trel$id1 <- match(trel$id1, ped(ped, "id"))
+        trel$id2 <- match(trel$id2, ped(ped, "id"))
+        tsex <- ped(ped, "sex")[trel[, 1]]
         trel[tsex != "male", seq_len(2)] <- trel[tsex != "male", 2:1]
         spouselist <- rbind(spouselist, cbind(trel[, 1], trel[, 2], 0, 0))
     }
-    dad <- match(ped(ped)$dadid, ped(ped)$id, nomatch = 0)
-    mom <- match(ped(ped)$momid, ped(ped)$id, nomatch = 0)
+    dad <- match(ped(ped, "dadid"), ped(ped, "id"), nomatch = 0)
+    mom <- match(ped(ped, "momid"), ped(ped, "id"), nomatch = 0)
     is_child <- dad > 0 & mom > 0
     if (any(is_child)) {
         # add parents
@@ -222,12 +222,12 @@ align <- function(ped, packed = TRUE, width = 10,
         }
     }
     ## Doc: finish align(2)
-    if (nrow(rel(ped)) > 0 && any(rel(ped)$code != "Spouse")) {
+    if (nrow(rel(ped)) > 0 && any(rel(ped, "code") != "Spouse")) {
         twins <- 0 * nid
-        who <- (rel(ped)$code != "Spouse")
-        ltwin <- match(rel(ped)[who, "id1"], ped(ped)$id, nomatch = 0)
-        rtwin <- match(rel(ped)[who, "id2"], ped(ped)$id, nomatch = 0)
-        ttype <- rel(ped)[who, "code"]
+        who <- (rel(ped, "code") != "Spouse")
+        ltwin <- match(rel(ped, "id1")[who], ped(ped, "id"), nomatch = 0)
+        rtwin <- match(rel(ped, "id2")[who], ped(ped, "id"), nomatch = 0)
+        ttype <- rel(ped, "code")[who]
         # find where each of them is plotted (any twin only appears once with a
         # family id, i.e., under their parents)
         # matrix of connected-to-parent ids

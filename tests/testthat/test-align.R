@@ -1,11 +1,11 @@
 test_that("align works", {
     data("sampleped")
     ped <- Pedigree(sampleped)
-    ped1 <- ped[ped(ped)$family == 1]
+    ped1 <- ped[ped(ped, "family") == 1]
     plist1 <- align(ped1)
     expect_equal(plist1$n, c(6, 12, 17, 8))
 
-    ped2 <- ped[ped(ped)$family == 2]
+    ped2 <- ped[ped(ped, "family") == 2]
     withr::local_options(width = 50)
     plist2 <- align(ped2)
     expect_equal(plist2$n, c(2, 7, 5))

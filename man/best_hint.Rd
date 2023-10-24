@@ -2,7 +2,7 @@
 % Please edit documentation in R/best_hint.R
 \name{best_hint}
 \alias{best_hint}
-\title{Best hint for alignement}
+\title{Best hint for alignment}
 \usage{
 best_hint(ped, wt = c(1000, 10, 1), tolerance = 0)
 }

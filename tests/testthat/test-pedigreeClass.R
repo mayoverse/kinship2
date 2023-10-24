@@ -5,12 +5,14 @@ test_that("Pedigree works", {
         momid = character(),
         sex = numeric(),
         family = character(),
-        available = numeric(),
-        affected = numeric()
+        avail = numeric(),
+        affection = numeric()
     ))
     expect_s4_class(ped, "Pedigree")
     expect_equal(nrow(ped@ped), 0)
     expect_equal(nrow(ped@rel), 0)
+    expect_equal(nrow(ped@meta), 0)
+    expect_equal(nrow(ped@deriv), 0)
     expect_equal(length(ped@scales), 2)
     expect_equal(length(ped@scales$fill), 9)
     expect_equal(length(ped@scales$border), 4)
@@ -19,7 +21,7 @@ test_that("Pedigree works", {
 test_that("Pedigree old usage compatibility", {
     data(sampleped)
     ped1 <- with(sampleped,
-        Pedigree(id, dadid, momid, sex, family, available, affected)
+        Pedigree(id, dadid, momid, sex, family, avail, affection)
     )
     expect_equal(ped1, Pedigree(sampleped))
 
@@ -150,9 +152,11 @@ test_that("Pedigree getters", {
     ped <- Pedigree(sampleped)
     expect_equal(ped$ped, ped(ped))
     expect_equal(ped$rel, rel(ped))
-    expect_equal(ped$scales, scales(ped))
     expect_equal(ped$hints, hints(ped))
-    scales(ped)$fill
+    expect_equal(ped$hints$order, order(ped))
+    expect_equal(ped$hints$spouse, spouse(ped))
+    expect_equal(ped$scales$fill, fill(ped))
+    expect_equal(ped$scales$border, border(ped))
 })
 
 test_that("Pedigree setters", {

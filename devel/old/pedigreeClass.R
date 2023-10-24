@@ -41,13 +41,15 @@ NULL
 #' @name Pedigree-class
 #' @rdname Pedigree-class
 #' @aliases Pedigree-class
-#' @include validity.R
+#' @include pedigreeValidity.R
 #' @include Pedigree.R
 #' @export
 setClass(
     "Pedigree",
-    slots = c(
+    representation(
         ped = "data.frame",
+        deriv = "data.frame",
+        meta = "data.frame",
         rel = "data.frame",
         scales = "list",
         hints = "list"
@@ -55,169 +57,6 @@ setClass(
 )
 
 setValidity("Pedigree", is_valid)
-
-#### S4 Accessors ####
-
-#' @title Pedigree ped accessors
-#' @param object A Pedigree object.
-#' @return The slot `ped` present in the Pedigree object.
-#' @rdname extract-methods
-#' @aliases ped,Pedigree-method
-#' @export
-setGeneric("ped", function(object) {
-    standardGeneric("ped")
-})
-
-setMethod("ped", signature(object = "Pedigree"), function(object) {
-    object@ped
-})
-
-setGeneric("ped<-", function(object, value) {
-    standardGeneric("ped<-")
-})
-
-setMethod(
-    "ped<-",
-    signature(object = "Pedigree", value = "ANY"),
-    function(object, value) {
-        object@ped <- value
-        validObject(object)
-        object
-    }
-)
-
-#' @description Pedigree rel accessors
-#' @param object A Pedigree object.
-#' @return The slot `rel` present in the Pedigree object.
-#' @rdname extract-methods
-#' @aliases rel,Pedigree-method
-#' @export
-setGeneric("rel", function(object) {
-    standardGeneric("rel")
-})
-
-setMethod("rel", signature(object = "Pedigree"), function(object) {
-    object@rel
-})
-
-setGeneric("rel<-", function(object, value) {
-    standardGeneric("rel<-")
-})
-
-setMethod(
-    "rel<-",
-    signature(object = "Pedigree", value = "ANY"),
-    function(object, value) {
-        object@rel <- value
-        validObject(object)
-        object
-    }
-)
-
-#' @description Pedigree scales accessors
-#' @param object A Pedigree object.
-#' @return The slot `scales` present in the Pedigree object.
-#' @rdname extract-methods
-#' @aliases scales,Pedigree-method
-#' @export
-setGeneric("scales", function(object) {
-    standardGeneric("scales")
-})
-
-setMethod("scales", signature(object = "Pedigree"), function(object) {
-    object@scales
-})
-
-setGeneric("scales<-", function(object, value) {
-    standardGeneric("scales<-")
-})
-
-setMethod(
-    "scales<-",
-    signature(object = "Pedigree", value = "ANY"),
-    function(object, value) {
-        object@scales <- value
-        validObject(object)
-        object
-    }
-)
-
-#' @description Pedigree hints accessors
-#' @param object A Pedigree object.
-#' @return The slot `hints` present in the Pedigree object.
-#' @rdname extract-methods
-#' @aliases hints,Pedigree-method
-#' @export
-setGeneric("hints", function(object) {
-    standardGeneric("hints")
-})
-
-setMethod("hints", signature(object = "Pedigree"), function(object) {
-    object@hints
-})
-
-setGeneric("hints<-", function(object, value) {
-    standardGeneric("hints<-")
-})
-
-setMethod(
-    "hints<-",
-    signature(object = "Pedigree", value = "ANY"),
-    function(object, value) {
-        object@hints <- value
-        validObject(object)
-        object
-    }
-)
-
-
-#' @description Pedigree hints accessors
-#' @param object A Pedigree object.
-#' @return The slot `hints` present in the Pedigree object.
-#' @rdname extract-methods
-#' @aliases hints,Pedigree-method
-#' @export
-setGeneric("col_id", function(object, col) {
-    standardGeneric("col_id")
-})
-
-setMethod(
-    "col_id",
-    signature(object = "Pedigree", col = "ANY"),
-    function(object, col) {
-        col_id <- c("id", "dadid", "momid", "sex")
-        if (is.null(col)) {
-            col <- col_id
-        } else if (!all(col %in% col_id)) {
-            stop(
-                "Col selected: ",
-                col[!col %in% col_id],
-                " is not an identity column"
-            )
-        }
-        ped(ped)[col]
-    }
-)
-
-setGeneric("col_id<-", function(object, value) {
-    standardGeneric("col_id<-")
-})
-
-setMethod(
-    "col_id<-",
-    signature(object = "Pedigree", col = "ANY", value = "ANY"),
-    function(object, value) {
-        if (! length(value) %in% c(1, length(object))) {
-            stop(
-                "The length of the new value should be:",
-                "1 or equal to the length of the pedigree"
-            )
-        }
-        ped(ped)[col] <- value
-        validObject(object)
-        object
-    }
-)
 
 #### S4 methods ####
 
@@ -390,7 +229,7 @@ setMethod("[", c(x = "Pedigree", i = "ANY", j = "missing"),
         allId <- unique(c(ped_df$id, ped_df$dadid, ped_df$momid))
         rel_df <- x$rel[x$rel$id1 %in% allId & x$rel$id2 %in% allId, ]
         idx <- match(allId, ped_df$id, nomatch = 0)
-        sub_hints <- sub_sel_hints(x$hints, idx)
+        sub_hints <- sub_sel_hints(hints(x), idx)
         new_ped <- Pedigree(ped_df, rel_df, x$scales,
             hints = sub_hints, cols_ren_ped = NULL, normalize = FALSE
         )
@@ -404,6 +243,7 @@ setMethod("[", c(x = "Pedigree", i = "ANY", j = "missing"),
 #' @return A data.frame with the individuals informations.
 #' @docType methods
 #' @aliases as.data.frame,Pedigree-method
+#' @rdname extract-methods
 #' @export
 setMethod("as.data.frame", c(x = "Pedigree"),
     function(x) {
@@ -412,18 +252,21 @@ setMethod("as.data.frame", c(x = "Pedigree"),
 )
 
 #' Convert a Pedigree object to a list
-#' @param x A Pedigree object.
+#' @param from A Pedigree object.
 #' @return A list with all the slots of the Pedigree object.
 #' @docType methods
 #' @aliases as.list,Pedigree-method
+#' @rdname extract-methods
 #' @export
-setMethod("as.list", c(x = "Pedigree"),
-    function(x) {
+setAs("Pedigree", "list",
+    function(from) {
         list(
-            ped = x$ped,
-            rel = x$rel,
-            scales = x$scales,
-            hints = x$hints
+            ped = ped(from),
+            meta = meta(from),
+            deriv = deriv(from),
+            rel = rel(from),
+            scales = scales(from),
+            hints = hints(from)
         )
     }
 )

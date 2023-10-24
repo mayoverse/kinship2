@@ -2,7 +2,7 @@
 % Please edit documentation in R/alignped1.R
 \name{alignped1}
 \alias{alignped1}
-\title{First routine alignement}
+\title{First routine alignment}
 \usage{
 alignped1(idx, dadx, momx, level, horder, packed, spouselist)
 }
@@ -50,7 +50,7 @@ in the row above, are this subject's parents.
 }
 }
 \description{
-First alignement routine which create the subtree founded on a single
+First alignment routine which create the subtree founded on a single
 subject as though it were the only tree.
 }
 \details{

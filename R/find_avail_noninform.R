@@ -24,7 +24,7 @@
 #'
 #' @seealso [shrink()]
 #' @export
-find_avail_noninform <- function(ped, avail = ped(ped)$avail, missid = "0") {
+find_avail_noninform <- function(ped, avail = ped(ped, "avail"), missid = "0") {
     ## trim persons who are available but not informative b/c not parent by
     ## setting their availability to FALSE, then call find_unavailable() JPS
     ## 3/10/14 add strings check in case of char ids

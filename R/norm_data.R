@@ -87,11 +87,12 @@ norm_ped <- function(
     err <- data.frame(matrix(NA, nrow = nrow(ped_df), ncol = length(err_cols)))
     colnames(err) <- err_cols
     cols_need <- c("indId", "fatherId", "motherId", "gender")
-    cols_used <- c("sex", "steril", "avail", "id", "dadid", "momid", "error",
-        "affected", "status"
+    cols_used <- c(
+        "sex", "steril", "status", "avail", "id", "dadid", "momid",
+        "error", "affected", "kin", "useful"
     )
-    cols_to_use <- c("sterilisation", "available", "family",
-        "vitalStatus", "affection"
+    cols_to_use <- c(
+        "available", "family", "sterilisation", "vitalstatus", "affection"
     )
     ped_df <- check_columns(
         ped_df, cols_need, cols_used, cols_to_use,
@@ -131,8 +132,8 @@ norm_ped <- function(
         is_mother <- ped_df$id %in% ped_df$momid & !is.na(ped_df$id)
 
         ## Add missing sex due to parenthood
-        ped_df$sex[is.na(ped_df$gender) & is_father] <- "male"
-        ped_df$sex[is.na(ped_df$gender) & is_mother] <- "female"
+        ped_df$sex[is_father] <- "male"
+        ped_df$sex[is_mother] <- "female"
 
         ## Add terminated for sterilized individuals that is neither dad nor mom
         if ("sterilisation" %in% colnames(ped_df)) {
@@ -212,10 +213,9 @@ norm_ped <- function(
             ped_df$avail <- vect_to_binary(ped_df$available)
         }
         #### Status ####
-        if ("vitalStatus" %in% colnames(ped_df)) {
-            ped_df$status <- vect_to_binary(ped_df$vitalStatus)
+        if ("vitalstatus" %in% colnames(ped_df)) {
+            ped_df$status <- vect_to_binary(ped_df$vitalstatus)
         }
-
         #### Affected ####
         if ("affection" %in% colnames(ped_df)) {
             ped_df$affected <- vect_to_binary(ped_df$affection)
@@ -266,8 +266,8 @@ norm_ped <- function(
 #'
 #' @examples
 #' df <- data.frame(
-#'    indId1 = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
-#'    indId2 = c(2, 3, 4, 5, 6, 7, 8, 9, 10, 1),
+#'    id1 = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+#'    id2 = c(2, 3, 4, 5, 6, 7, 8, 9, 10, 1),
 #'    code = c("MZ twin", "DZ twin", "UZ twin", "Spouse", 1, 2,
 #'       3, 4, "MzTwin", "sp oUse"),
 #'    family = c(1, 1, 1, 1, 1, 1, 1, 2, 2, 2)
@@ -281,8 +281,8 @@ norm_rel <- function(rel_df, na_strings = c("NA", ""), missid = "0") {
     err_cols <- c("codeErr", "sameIdErr", "id1Err", "id2Err", "error")
     err <- data.frame(matrix(NA, nrow = nrow(rel_df), ncol = length(err_cols)))
     colnames(err) <- err_cols
-    cols_needed <- c("indId1", "indId2", "code")
-    cols_used <- c("id1", "id2", "error")
+    cols_needed <- c("id1", "id2", "code")
+    cols_used <- c("error")
     cols_to_use <- c("family")
     rel_df <- check_columns(
         rel_df, cols_needed, cols_used, cols_to_use,
@@ -302,17 +302,17 @@ norm_rel <- function(rel_df, na_strings = c("NA", ""), missid = "0") {
 
         #### Check for id errors #### Set ids as characters
         rel_df <- rel_df %>%
-            mutate(across(c("indId1", "indId2"), as.character))
+            mutate(across(c("id1", "id2"), as.character))
 
         ## Check for non null ids
-        len1 <- nchar(rel_df$indId1)
-        len2 <- nchar(rel_df$indId2)
+        len1 <- nchar(rel_df$id1)
+        len2 <- nchar(rel_df$id2)
         err$id1Err[is.na(len1) | len1 == missid] <- "indId1length0"
         err$id2Err[is.na(len2) | len2 == missid] <- "indId2length0"
 
         ## Compute id with family id
-        rel_df$id1 <- prefix_famid(rel_df$family, rel_df$indId1, missid)
-        rel_df$id2 <- prefix_famid(rel_df$family, rel_df$indId2, missid)
+        rel_df$id1 <- prefix_famid(rel_df$family, rel_df$id1, missid)
+        rel_df$id2 <- prefix_famid(rel_df$family, rel_df$id2, missid)
 
         err$sameIdErr[rel_df$id1 == rel_df$id2] <- "SameId"
 

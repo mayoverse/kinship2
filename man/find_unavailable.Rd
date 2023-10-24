@@ -4,7 +4,7 @@
 \alias{find_unavailable}
 \title{Find unavailable subjects in a Pedigree}
 \usage{
-find_unavailable(ped, avail = ped(ped)$avail)
+find_unavailable(ped, avail = ped(ped, "avail"))
 }
 \arguments{
 \item{ped}{A Pedigree object}
