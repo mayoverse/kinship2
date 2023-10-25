@@ -300,7 +300,7 @@ setMethod("generate_colors", "logical",
 )
 
 #' @importFrom plyr rbind.fill
-#' @include pedigreeClass.R
+#' @include AllClass.R
 #' @docType methods
 #' @aliases generate_colors,Pedigree
 #' @param add_to_scale Boolean defining if the scales need to be added to the

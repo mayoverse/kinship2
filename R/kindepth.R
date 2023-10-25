@@ -22,7 +22,7 @@
 #'
 #' @author Terry Therneau
 #' @seealso [align()]
-#' @include pedigreeClass.R
+#' @include AllClass.R
 #' @examples
 #' data(sampleped)
 #' ped1 <- Pedigree(sampleped[sampleped$family == "1",])

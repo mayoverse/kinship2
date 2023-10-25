@@ -1,3 +1,55 @@
+#### Generic for Ped object ####
+
+#' Show function of Ped object
+#'
+#' @description Convert the Ped object to a data.frame
+#' and print it
+#'
+#' @param object A Ped object.
+#'
+#' @return A data.frame with the individuals informations.
+#'
+#' @export
+setMethod("show", signature(object = "Ped"),
+    function(object) {
+        print(as.data.frame(object))
+    }
+)
+
+#' @title Ped to data.frame
+#' @description Convert a Pedigree object to a data.frame
+#' @param from A Pedigree object.
+#' @return A data.frame with the individuals informations.
+#' @rdname extract-methods
+#' @aliases as.list,Ped-method
+#' @export
+setMethod("as.list", "Ped", function(x) {
+    to <- list()
+    for (slot in slotNames(x)) {
+        if (slot %in% c("metadata", "elementMetadata")) {
+            next
+        } else {
+            to[[slot]] <- slot(x, slot)
+        }
+    }
+    to
+})
+
+#' @title Ped to data.frame
+#' @description Convert a Pedigree object to a data.frame
+#' @param from A Pedigree object.
+#' @return A data.frame with the individuals informations.
+#' @rdname extract-methods
+#' @aliases as.data.frame,Ped-method
+#' @export
+setMethod("as.data.frame", "Ped", function(x) {
+    lst <- as.list(x)
+    if (length(unique(lapply(lst, length))) != 1) {
+        stop("All slots should have the same length")
+    }
+    data.frame(lst)
+})
+
 #' Compute the length of a Pedigree object
 #' @param x A Pedigree object.
 #' @return The number of individuals in the Pedigree object.
@@ -10,16 +62,6 @@ setMethod("length", c(x = "Pedigree"),
     }
 )
 
-#' Convert a Pedigree object to a data.frame
-#' @param x A Pedigree object.
-#' @return A data.frame with the individuals informations.
-#' @docType methods
-#' @aliases as.data.frame,Pedigree-method
-#' @rdname extract-methods
-#' @export
-setAs("ped", "data.frame", function(object) {
-    data.frame(as.list(object))
-})
 
 #' @title Pedigree methods
 #' @description Pedigree show method

@@ -22,7 +22,7 @@
 #' - nNonFounder The number of nonfounders in the Pedigree
 #'
 #' @seealso [shrink()]
-#' @include pedigreeClass.R
+#' @include AllClass.R
 #' @docType methods
 #' @examples
 #' data(sampleped)

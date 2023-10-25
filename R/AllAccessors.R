@@ -1,8 +1,51 @@
 #### S4 Accessors ####
 #' @include Pedigree.R
 #' @include AllClass.R
+#' @importFrom S4Vectors mcols
+NULL
 
-#### S4 ped Accessors ####
+#### S4 Ped Accessors ####
+## metadata Accessors ##
+#' @title Pedigree metadata accessors
+#' @param object A Pedigree object.
+#' @return The metadata present in the Pedigree object.
+#' @rdname extract-methods
+#' @aliases mcols,Pedigree-method
+#' @export
+setMethod(
+    "mcols",
+    signature(x = "Ped"),
+    function(x) {
+        ped@elementMetadata
+    }
+)
+
+#' @importFrom S4Vectors 'mcols<-'
+setMethod(
+    "mcols<-",
+    signature(x = "Pedigree", value = "ANY"),
+    function(x, value) {
+        if (is.data.frame(value)) {
+            if (nrow(value) != length(x)) {
+                stop(
+                    "The number of rows of the new value should be: ",
+                    "equal to the length of the pedigree"
+                )
+            }
+        } else if (is.list(value)) {
+            if (length(value) != length(x)) {
+                stop(
+                    "The length of the new value should be: ",
+                    "equal to the length of the pedigree"
+                )
+            }
+            value <- as.data.frame(value)
+        } 
+        mcols(ped) <- value
+    }
+)
+
+#### S4 Pedigree Accessors ####
 #' @title Pedigree ped accessors
 #' @param object A Pedigree object.
 #' @param slot A slot in the Ped object of the Pedigree.
@@ -69,17 +112,18 @@ setMethod(
 #' @export
 setMethod(
     "mcols",
-    signature(object = "Pedigree"),
-    function(object) {
-        mcols(object@ped)
+    signature(x = "Pedigree"),
+    function(x) {
+        mcols(x@ped)
     }
 )
 
+#' @importFrom S4Vectors 'mcols<-'
 setMethod(
     "mcols<-",
-    signature(object = "Pedigree", value = "ANY"),
-    function(object) {
-        mcols(object@ped) <- value
+    signature(x = "Pedigree", value = "ANY"),
+    function(x, value) {
+        mcols(x@ped) <- value
     }
 )
 
@@ -245,7 +289,8 @@ setMethod("hints", signature(object = "Pedigree"), function(object) {
 #### S4 order Accessors ####
 #' @description Pedigree order accessors
 #' @param object A Pedigree object.
-#' @return The slot `order` present in the Pedigree object.
+#' @return The slot `order` present in the `Hints` slot of
+#' a Pedigree object.
 #' @rdname extract-methods
 #' @aliases order,Pedigree-method
 #' @export
@@ -254,7 +299,7 @@ setGeneric("order", function(object) {
 })
 
 setMethod("order", signature(object = "Pedigree"), function(object) {
-    object@hints$order
+    object@hints@order
 })
 
 setGeneric("order<-", function(object, value) {
@@ -271,15 +316,17 @@ setMethod(
                 "equal to the length of the pedigree"
             )
         }
-        object@hints$order <- value
+        object@hints@order <- value
         validObject(object)
         object
     }
 )
+
 #### S4 spouse Accessors ####
 #' @description Pedigree spouse accessors
 #' @param object A Pedigree object.
-#' @return The slot `spouse` present in the Pedigree object.
+#' @return The slot `spouse` present in the `Hints` slot of
+#' a Pedigree object.
 #' @rdname extract-methods
 #' @aliases spouse,Pedigree-method
 #' @export
@@ -288,7 +335,7 @@ setGeneric("spouse", function(object) {
 })
 
 setMethod("spouse", signature(object = "Pedigree"), function(object) {
-    object@hints$spouse
+    object@hints@spouse
 })
 
 setGeneric("spouse<-", function(object, value) {
@@ -300,7 +347,7 @@ setMethod(
     signature(object = "Pedigree", value = "ANY"),
     function(object, value) {
         # TODO: Check that the spouse matrix is valid
-        object@hints$spouse <- value
+        object@hints@spouse <- value
         validObject(object)
         object
     }

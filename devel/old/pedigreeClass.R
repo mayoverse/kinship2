@@ -41,7 +41,7 @@ NULL
 #' @name Pedigree-class
 #' @rdname Pedigree-class
 #' @aliases Pedigree-class
-#' @include pedigreeValidity.R
+#' @include AllValidity.R
 #' @include Pedigree.R
 #' @export
 setClass(

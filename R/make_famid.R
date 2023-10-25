@@ -97,7 +97,7 @@ setMethod("make_famid", "character",
 #' @rdname make_famid
 #' @aliases make_famid,Pedigree
 #' @docType methods
-#' @include pedigreeClass.R
+#' @include AllClass.R
 setMethod("make_famid", "Pedigree",
     function(obj) {
         ped <- obj

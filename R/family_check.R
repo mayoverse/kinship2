@@ -65,7 +65,7 @@
 #' ## fcheck1.bad is a try-error
 #'
 #' @seealso [make_famid()], [kinship()]
-#' @include pedigreeClass.R
+#' @include AllClass.R
 #' @keywords internal
 #' @docType methods
 #' @export

@@ -59,7 +59,7 @@ NULL
 #' @section References: K Lange, Mathematical and Statistical Methods for
 #' Genetic Analysis, Springer-Verlag, New York, 1997.
 #' @seealso [make_famid()], [kindepth()]
-#' @include pedigreeClass.R
+#' @include AllClass.R
 #' @include utils.R
 #' @export
 #' @docType methods

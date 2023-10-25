@@ -81,8 +81,8 @@ norm_ped <- function(
 ) {
     err_cols <- c(
         "sexErrMoFa", "sexErrFa", "sexErrMo", "sexErrTer", "sexNA",
-        "sexError", "idErrFa", "idErrMo", "idErrSelf", "idErrOwnParent",
-        "idErrBothParent", "idError", "error"
+        "sexError", "idErr", "idErrFa", "idErrMo", "idErrSelf",
+        "idErrOwnParent", "idErrBothParent", "idError", "error"
     )
     err <- data.frame(matrix(NA, nrow = nrow(ped_df), ncol = length(err_cols)))
     colnames(err) <- err_cols
@@ -105,17 +105,20 @@ norm_ped <- function(
 
         #### Id #### Check id type
         for (id in c("indId", "fatherId", "motherId", "family")) {
-            if (!is.numeric(ped_df[[id]])) {
-                ped_df[[id]] <- as.character(ped_df[[id]])
-                if (length(grep("^ *$", ped_df[[id]])) > 0) {
-                    stop(
-                        "A blank or empty string is not allowed as the ",
-                        id, " variable"
-                    )
+            ped_df[[id]] <- as.character(ped_df[[id]])
+        }
+        err$idErr <- lapply(
+            as.data.frame(t(ped_df[, c(
+                "indId", "fatherId", "motherId", "family"
+            )])),
+            function(x) {
+                if (any(x == "" & !is.na(x))) {
+                    "One id is Empty"
+                } else {
+                    NA_character_
                 }
             }
-        }
-
+        )
         ## Make a new id from the family and subject pair
         ped_df$id <- prefix_famid(ped_df$family, ped_df$indId, missid)
         ped_df$dadid <- prefix_famid(ped_df$family, ped_df$fatherId, missid)
@@ -202,7 +205,7 @@ norm_ped <- function(
         ## Unite all id errors in one column
         err <- unite(
             err, "idError", c(
-                "idErrFa", "idErrMo", "idErrSelf",
+                "idErr", "idErrFa", "idErrMo", "idErrSelf",
                 "idErrOwnParent", "idErrBothParent"
             ), na.rm = TRUE, sep = "_", remove = TRUE
         )

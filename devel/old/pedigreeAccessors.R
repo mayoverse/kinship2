@@ -1,6 +1,6 @@
 #### S4 Accessors ####
 #' @include Pedigree.R
-#' @include pedigreeClass.R
+#' @include AllClass.R
 NULL
 
 #### S4 ped Accessors ####

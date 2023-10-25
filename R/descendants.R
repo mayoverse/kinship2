@@ -15,7 +15,7 @@
 #' data("sampleped")
 #' ped <- Pedigree(sampleped)
 #' descendants(c("1_101", "2_208"), ped)
-#' @include pedigreeClass.R
+#' @include AllClass.R
 #' @export
 #' @keywords internal
 #' @docType methods

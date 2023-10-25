@@ -1,3 +1,8 @@
+#' @importFrom S4Vectors parallel_slot_names
+NULL
+
+#### Hints Class ####
+
 #' S4 class to represent a hints object.
 #'
 #' A hints object is a list of two elements used
@@ -28,6 +33,8 @@ setClass("Hints",
 
 setValidity("Hints", is_valid_hints)
 
+#### Scale Class ####
+
 #' S4 class to represent the scales of a Pedigree.
 #'
 #' A scales object is a list of two data.frame used
@@ -53,6 +60,8 @@ setClass("Scales",
 )
 
 setValidity("Scales", is_valid_scales)
+
+#### Ped Class ####
 
 #' S4 class to represent the identity informations in a Pedigree.
 #'
@@ -96,11 +105,10 @@ setValidity("Scales", is_valid_scales)
 #' @docType class
 #' @name Ped-class
 #' @rdname Ped-class
-#'
+#' @importClassesFrom S4Vectors Vector
 #' @export
 setClass("Ped",
-    contains = c("Vector"),
-    representation(
+    slots = c(
         id = "character",
         dadid = "character",
         momid = "character",
@@ -114,7 +122,8 @@ setClass("Ped",
         kin = "numeric",
         num_child_total = "numeric",
         num_child_direct = "numeric",
-        num_child_indirect = "numeric"
+        num_child_indirect = "numeric",
+        elementMetadata = "data.frame"
     )
 )
 
@@ -132,7 +141,7 @@ setMethod("parallel_slot_names", "Ped",
 
 setValidity("Ped", is_valid_ped)
 
-
+#### Rel Class ####
 #' S4 class to represent the special relationships in a Pedigree.
 #'
 #' A Rel object is a list of special relationships
@@ -153,14 +162,15 @@ setValidity("Ped", is_valid_ped)
 #' @docType class
 #' @name Rel-class
 #' @rdname Rel-class
+#' @importClassesFrom S4Vectors Vector
 #' @export
 setClass("Rel",
-    contains = c("Vector"),
     representation(
         id1 = "character",
         id2 = "character",
         code = "character",
-        family = "character"
+        family = "character",
+        elementMetadata = "data.frame"
     )
 )
 
@@ -214,11 +224,10 @@ setMethod("parallel_slot_names", "Rel",
 #' @docType class
 #' @name Pedigree-class
 #' @rdname Pedigree-class
-#' @include pedigreeValidity.R
+#' @include AllValidity.R
 #' @include Pedigree.R
 #' @export
 setClass("Pedigree",
-    contains = c("RectangularData"),
     representation(
         ped = "Ped",              # identity data
         rel = "Rel",              # special relationships

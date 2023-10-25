@@ -30,7 +30,7 @@ NULL
 #' ped1 <- Pedigree(sampleped[sampleped$family == "1",])
 #' ped1 <- num_child(ped1)
 #' summary(ped1$ped)
-#' @include pedigreeClass.R
+#' @include AllClass.R
 #' @export
 setGeneric("num_child", signature = "obj",
     function(obj, ...) standardGeneric("num_child")
@@ -44,6 +44,13 @@ setMethod("num_child", "character", function(obj, dadid, momid,
     rel_df = NULL, missid = "0"
 ) {
     id <- obj
+
+    if (length(dadid) != length(id)) {
+        stop("The length of dadid should be equal to the length of id")
+    }
+    if (length(momid) != length(id)) {
+        stop("The length of momid should be equal to the length of id")
+    }
 
     # Create dummy vectors for the check() function
     child <- NULL

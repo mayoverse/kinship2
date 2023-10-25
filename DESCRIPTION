@@ -25,6 +25,7 @@ Imports:
     tidyr,
     quadprog,
     Matrix,
+    S4Vectors,
     testthat
 Description: Routines to handle family data with a Pedigree object. The initial purpose
     was to create correlation structures that describe family relationships such 
@@ -52,13 +53,16 @@ url: https://github.com/LouisLeNezet/Pedixplorer
 BiocType: Software
 Collate: 
     'Pedigree.R'
+    'AllValidity.R'
+    'AllClass.R'
+    'AllAccessors.R'
+    'AllConstructor.R'
+    'AllGeneric.R'
     'Pedixplorer-package.R'
     'alignped4.R'
     'alignped3.R'
     'alignped2.R'
     'alignped1.R'
-    'pedigreeValidity.R'
-    'pedigreeClass.R'
     'check_hints.R'
     'kindepth.R'
     'auto_hint.R'
@@ -84,7 +88,6 @@ Collate:
     'num_child.R'
     'ped_to_legdf.R'
     'ped_to_plotdf.R'
-    'pedigreeAccessors.R'
     'plot_fct.R'
     'plot_fromdf.R'
     'plot.R'

@@ -113,7 +113,7 @@ ancestors <- function(idx, momx, dadx) {
 #' @include auto_hint.R
 #' @include kindepth.R
 #' @include check_hints.R
-#' @include pedigreeClass.R
+#' @include AllClass.R
 #' @include alignped1.R
 #' @include alignped2.R
 #' @include alignped3.R

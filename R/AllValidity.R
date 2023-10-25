@@ -1,3 +1,105 @@
+#' Print0 to max
+#'
+#' Print0 the elements inside a vector until a maximum is reached.
+#'
+#' @param x A vector.
+#' @param max The maximum number of elements to print.
+#' @param ... Additional arguments passed to print0
+#'
+#' @return The character vector aggregated until the maximum is reached.
+#' @keywords internal
+paste0max <- function(x, max = 5, sep = "", ...) {
+    lgt <- min(length(x), max)
+    ext <- ifelse(length(x) > max, "...", "")
+    paste(
+        "'", paste0(x[seq_len(lgt)], collapse = "', '"),
+        "'", ext, sep = sep, ...
+    )
+}
+
+#' Check if the fields are present in an object slot
+#'
+#' @param obj An object.
+#' @param slot A slot of object.
+#' @param fields A character vector with the fields to check.
+#'
+#' @return A character vector with the errors if any.
+#' @keywords internal
+check_slot_fd <- function(obj, slot = NULL, fields = character()) {
+    if (is.object(obj)) {
+        obj <- as(obj, "list")
+    }
+    if (is.null(slot)) {
+        array_names <- names(obj)
+    } else if (is.data.frame(obj[[slot]])) {
+        array_names <- colnames(obj[[slot]])
+    } else if (is.list(obj[[slot]])) {
+        array_names <- names(obj[[slot]])
+    } else {
+        stop(
+            "Slot ", slot, " is not a data.frame or a list. ",
+            class(obj[[slot]]), " found."
+        )
+    }
+    if (length(array_names) == 0) {
+        paste0(
+            "Missing fields in ", slot,
+            " slot. See Pedigree documentation."
+        )
+    } else if (any(!fields %in% array_names)) {
+        paste0(
+            "`", paste0max(fields[!fields %in% array_names]),
+            "`", " column(s) is not present in slot ", slot, "."
+        )
+    }
+}
+
+#' Check values in a slot
+#'
+#' Check if the all the values in a slot are in a vector of values.
+#'
+#' @param obj An object.
+#' @param slot A slot of the object.
+#' @param column A column of the slot.
+#' @param values A vector of values to check.
+#' @param present A logical value indicating if the values should be present
+#' or not
+#'
+#' @return A character vector with the errors if any.
+#' @keywords internal
+check_values <- function(val, ref, name = NULL, present = TRUE) {
+    if (length(dim(val)) > 1) {
+        stop("val must be a vector")
+    }
+
+    if (present) {
+        val_abs <- !val %in% ref
+        should <- " should be in "
+    } else {
+        val_abs <- val %in% ref
+        should <- " should not be in "
+    }
+
+    val_name <- ifelse(is.null(name), "Values ", paste(name, "values "))
+
+    if (any(val_abs)) {
+        paste0(
+            val_name, paste0max(val[val_abs]), should,
+            paste0max(ref)
+        )
+    }
+}
+
+#' Check if the Hints are valid
+#'
+#' Check if order and spouse slots are valid (i.e. order is numeric and
+#' spouse is a matrix with 3 columns).
+#' Check if the spouse matrix is valid (i.e. only numeric values).
+#' @param object A Hints object.
+#'
+#' @return A character vector with the errors or `TRUE` if no errors.
+#' @keywords internal
+#'
 is_valid_hints <- function(object) {
     errors <- c()
 
@@ -18,6 +120,17 @@ is_valid_hints <- function(object) {
     return(errors)
 }
 
+#' Check if the Scales are valid
+#'
+#' Check if the fill and border slots are valid (i.e. they have the right
+#' columns).
+#'
+#' @param object A Scales object.
+#'
+#' @return A character vector with the errors or `TRUE` if no errors.
+#' @keywords internal
+#'
+#' @export
 is_valid_scales <- function(object) {
     errors <- c()
 
@@ -39,7 +152,21 @@ is_valid_scales <- function(object) {
     return(errors)
 }
 
-
+#' Check if the Ped is valid
+#'
+#' Multiple checks are done here
+#'
+#' 1. Check that the ped ids slots have the right values
+#' 2. Check that the sex, steril, status, avail and affected slots have the
+#' right values
+#' 3. Check that dad are male and mom are female
+#' 4. Check that individuals have both parents or none
+#' 
+#' @param object A Ped object.
+#'
+#' @return A character vector with the errors or `TRUE` if no errors.
+#'
+#' @keywords internal
 is_valid_ped <- function(object) {
     missid <- NA
     errors <- c()
@@ -50,14 +177,28 @@ is_valid_ped <- function(object) {
         errors <- c(errors, "Id in ped slot must be unique")
     }
 
-    # Control values for ped
-    errors <- c(errors, check_values(object@id, missid, present = FALSE))
+    # Control values for ids
+    famid <- unique(object@family)
+    errors <- c(errors, check_values(
+        famid, c("", missid), "family", present = FALSE
+    ))
+    errors <- c(errors, check_values(
+        object@id,
+        c(
+            missid, "",
+            paste(missid, famid, sep = "_"),
+            paste("", famid, sep = "_")
+        ),
+        "id", present = FALSE
+    ))
     errors <- c(errors, check_values(
         object@dadid, c(object@id, missid)
     ))
     errors <- c(errors, check_values(
         object@momid, c(object@id, missid)
     ))
+
+    # Control values for sex, steril, status, avail and affected
     sex_code <- c("male", "female", "unknown", "terminated")
     errors <- c(errors, check_values(object@sex, sex_code))
     errors <- c(errors, check_values(object@steril, c(0, 1, NA)))
