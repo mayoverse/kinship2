@@ -104,11 +104,10 @@ setValidity("Scales", is_valid_scales)
 #' @seealso [Pedigree()]
 #' @docType class
 #' @name Ped-class
-#' @rdname Ped-class
-#' @importClassesFrom S4Vectors Vector
+#' @rdname Ped
 #' @export
 setClass("Ped",
-    slots = c(
+    representation(
         id = "character",
         dadid = "character",
         momid = "character",
@@ -118,8 +117,6 @@ setClass("Ped",
         status = "numeric",
         avail = "numeric",
         affected = "numeric",
-        useful = "numeric",
-        kin = "numeric",
         num_child_total = "numeric",
         num_child_direct = "numeric",
         num_child_indirect = "numeric",
@@ -127,13 +124,13 @@ setClass("Ped",
     )
 )
 
+#' @importFrom S4Vectors parallel_slot_names
 setMethod("parallel_slot_names", "Ped",
     function(x) {
         c(
             "id", "momid", "dadid", "sex", "family",
             "steril", "status", "avail", "affected",
-            "kin", "useful", "num_child_total",
-            "num_child_direct", "num_child_indirect",
+            "num_child_total", "num_child_direct", "num_child_indirect",
             callNextMethod()
         )
     }
@@ -153,24 +150,22 @@ setValidity("Ped", is_valid_ped)
 #'
 #' @slot id1 A character vector with the id of the first individual.
 #' @slot id2 A character vector with the id of the second individual.
-#' @slot code A character vector with the code of the special relationship.
-#' (i.e. `MZ twin`, `DZ twin`, `UZ twin` or `Spouse`).
+#' @slot code An ordered factor vector with the code of the special
+#' relationship. (i.e. `MZ twin` < `DZ twin` < `UZ twin` < `Spouse`).
 #' @slot family A character vector with the family of the individuals.
 #'
 #' @return A Rel object.
 #' @seealso [Pedigree()]
 #' @docType class
 #' @name Rel-class
-#' @rdname Rel-class
-#' @importClassesFrom S4Vectors Vector
+#' @rdname Rel
 #' @export
 setClass("Rel",
     representation(
         id1 = "character",
         id2 = "character",
-        code = "character",
-        family = "character",
-        elementMetadata = "data.frame"
+        code = "factor",
+        family = "character"
     )
 )
 

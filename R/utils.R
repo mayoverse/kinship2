@@ -284,7 +284,7 @@ rel_code_to_factor <- function(rel_code) {
     code_equiv <- c(
         mztwin = "MZ twin", dztwin = "DZ twin", uztwin = "UZ twin",
         spouse = "Spouse",
-        `1` = "MZ twin", `2` = "DZ twin", `3` = "UZ twin", `4` = "Spouse"
+        "1" = "MZ twin", "2" = "DZ twin", "3" = "UZ twin", "4" = "Spouse"
     )
     codes <- c("MZ twin", "DZ twin", "UZ twin", "Spouse")
     rel_code <- as.character(revalue(as.factor(

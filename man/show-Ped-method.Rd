@@ -10,9 +10,9 @@
 \item{object}{A Ped object.}
 }
 \value{
-A data.frame with the individuals informations.
+The Ped object with the individuals informations.
 }
 \description{
 Convert the Ped object to a data.frame
-and print it
+and print it with its summary.
 }

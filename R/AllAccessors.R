@@ -10,20 +10,26 @@ NULL
 #' @param object A Pedigree object.
 #' @return The metadata present in the Pedigree object.
 #' @rdname extract-methods
-#' @aliases mcols,Pedigree-method
+#' @aliases mcols,Ped-method
 #' @export
 setMethod(
     "mcols",
     signature(x = "Ped"),
     function(x) {
-        ped@elementMetadata
+        x@elementMetadata
     }
 )
 
+#' @title Pedigree metadata accessors
+#' @param object A Pedigree object.
+#' @return The metadata present in the Pedigree object.
+#' @rdname extract-methods
+#' @aliases mcols<-,Ped-method
+#' @export
 #' @importFrom S4Vectors 'mcols<-'
 setMethod(
     "mcols<-",
-    signature(x = "Pedigree", value = "ANY"),
+    signature(x = "Ped", value = "ANY"),
     function(x, value) {
         if (is.data.frame(value)) {
             if (nrow(value) != length(x)) {
@@ -33,15 +39,19 @@ setMethod(
                 )
             }
         } else if (is.list(value)) {
-            if (length(value) != length(x)) {
+            lglst <- lapply(value, length)
+            if (any(lglst != length(x))) {
                 stop(
-                    "The length of the new value should be: ",
+                    "The length of the element(s) '",
+                    names(lglst[lglst != length(x)]),
+                    "' should be: ",
                     "equal to the length of the pedigree"
                 )
             }
             value <- as.data.frame(value)
-        } 
-        mcols(ped) <- value
+        }
+        x@elementMetadata <- value
+        x
     }
 )
 

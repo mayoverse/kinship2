@@ -27,7 +27,7 @@ paste0max <- function(x, max = 5, sep = "", ...) {
 #' @keywords internal
 check_slot_fd <- function(obj, slot = NULL, fields = character()) {
     if (is.object(obj)) {
-        obj <- as(obj, "list")
+        obj <- as.list(obj)
     }
     if (is.null(slot)) {
         array_names <- names(obj)
@@ -168,7 +168,7 @@ is_valid_scales <- function(object) {
 #'
 #' @keywords internal
 is_valid_ped <- function(object) {
-    missid <- NA
+    missid <- NA_character_
     errors <- c()
 
     #### Check that the ped columns have the right values ####
@@ -180,7 +180,7 @@ is_valid_ped <- function(object) {
     # Control values for ids
     famid <- unique(object@family)
     errors <- c(errors, check_values(
-        famid, c("", missid), "family", present = FALSE
+        famid, c(""), "family", present = FALSE
     ))
     errors <- c(errors, check_values(
         object@id,
@@ -244,14 +244,13 @@ is_valid_rel <- function(object) {
 
     #### Check that the rel columns have the right values ####
     codes <- c("MZ twin", "DZ twin", "UZ twin", "Spouse")
-    errors <- c(errors, check_values(object@rel@code, codes))
+    errors <- c(errors, check_values(object@code, codes))
 
     if (length(errors) == 0) {
         TRUE
     } else {
         errors
     }
-
     return(errors)
 }
 
