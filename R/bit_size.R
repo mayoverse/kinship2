@@ -37,12 +37,12 @@ setGeneric("bit_size", signature = "obj",
 #' @docType methods
 #' @aliases bit_size,character
 #' @rdname bit_size
-setMethod("bit_size", "character", function(obj, momid, missid = "0") {
+setMethod("bit_size", "character_OR_integer", function(obj, momid, missid = "0") {
     dadid <- obj
     if (length(dadid) != length(momid)) {
         stop("dadid and momid should have the same length")
     }
-    founder <- dadid == missid & momid == missid
+    founder <- dadid %in% missid & momid %in% missid
     ped_size <- length(dadid)
     n_founder <- sum(founder)
     n_non_founder <- ped_size - n_founder
@@ -66,7 +66,8 @@ setMethod("bit_size", "Pedigree",
 #' @aliases bit_size,Ped
 #' @rdname bit_size
 setMethod("bit_size", "Ped",
-    function(obj, missid = "0") {
-        bit_size(obj@dadid, obj@momid, missid)
+    function(obj, missid = NA_character_) {
+        print(summary(obj))
+        bit_size(dadid(obj), momid(obj), missid)
     }
 )
