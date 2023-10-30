@@ -204,7 +204,7 @@ setMethod("Pedigree", "data.frame",  function(
         )
     ),
     hints = list(
-        order = NULL,
+        horder = NULL,
         spouse = NULL
     ),
     normalize = TRUE,

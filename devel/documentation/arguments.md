@@ -81,7 +81,7 @@
 #' @param dadx Indexes of the fathers
 #' @param momx Indexes of the mothers
 #' @param level Vector of the level of each subject
-#' @param horder Vector of the horizontal order of each subject
+#' @param horder Vector of the horizontal horder of each subject
 #' @param spouselist Matrix of the spouses with one row per hinted marriage,
 #' usually only a few marriages in a pedigree will need an added hint, for 
 #' instance reverse the plot order of a husband/wife pair.
@@ -111,10 +111,10 @@
 #' parameters, or a logical value.  If `TRUE`, the default is `c(1.5, 2)`, or
 #' numeric the routine `alignped4()` will be called.
 #' @param hints Plotting hints for the pedigree.
-#' This is a list with components `order` and `spouse`, the second one is
+#' This is a list with components `horder` and `spouse`, the second one is
 #' optional.
-#' - **order** is a numeric vector with one element per subject in the
-#' pedigree.  It determines the relative order of subjects within a sibship, as
+#' - **horder** is a numeric vector with one element per subject in the
+#' pedigree.  It determines the relative horizonal order of subjects within a sibship, as
 #' well as the relative order of processing for the founder couples. (For this
 #' latter, the female founders are ordered as though they were sisters).
 #' - **spouse** is a matrix with one row per hinted marriage, usually only

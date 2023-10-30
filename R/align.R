@@ -63,10 +63,10 @@ ancestors <- function(idx, momx, dadx) {
 #' If `TRUE`, the default is `c(1.5, 2)`, or numeric the routine
 #' `alignped4()` will be called.
 #' @param hints Plotting hints for the Pedigree.
-#' This is a list with components `order` and `spouse`, the second one
+#' This is a list with components `horder` and `spouse`, the second one
 #' is optional.
-#' - **order** is a numeric vector with one element per subject in the
-#' Pedigree.  It determines the relative order of subjects within a sibship, as
+#' - **horder** is a numeric vector with one element per subject in the
+#' Pedigree.  It determines the relative horizontal order of subjects within a sibship, as
 #' well as the relative order of processing for the founder couples. (For this
 #' latter, the female founders are ordered as though they were sisters).
 #' - **spouse** is a matrix with one row per hinted marriage, usually
@@ -131,14 +131,14 @@ align <- function(ped, packed = TRUE, width = 10,
         }
         return(alignment)
     }
-    if (is.null(hints$order)) {
+    if (is.null(hints$horder)) {
         hints <- try({
             auto_hint(ped)
         }, silent = TRUE)
         ## sometimes appears dim(ped) is empty (ped is NULL), so try fix here:
         ## (JPS 6/6/17
         if ("try-error" %in% class(hints)) {
-            hints <- list(order = seq_len(max(1, dim(ped))))
+            hints <- list(horder = seq_len(max(1, dim(ped))))
         }
     } else {
         check_hints(hints, ped(ped, "sex"))
@@ -147,7 +147,7 @@ align <- function(ped, packed = TRUE, width = 10,
     n <- length(ped(ped, "id"))
 
     level <- 1 + kindepth(ped, align = TRUE)
-    horder <- hints$order  # relative order of siblings within a family
+    horder <- hints$horder  # relative order of siblings within a family
 
     if (!is.null(hints$spouse)) {
         # start with the hints list

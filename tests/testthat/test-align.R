@@ -76,7 +76,7 @@ test_that("Alignement with spouse", {
     ped1 <- Pedigree(df1, relate1)
     hints <- auto_hint(ped1)
     expect_equal(as.vector(hints$spouse), c(9, 10, 2))
-    expect_equal(hints$order,
+    expect_equal(hints$horder,
         c(
             1, 2, 3, 4, 1, 2, 3, 4, 1, 1,
             2, 3, 5, 4, 5, 6, 7, 8, 9, 10,

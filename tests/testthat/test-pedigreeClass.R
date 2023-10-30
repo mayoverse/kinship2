@@ -153,7 +153,7 @@ test_that("Pedigree getters", {
     expect_equal(ped$ped, ped(ped))
     expect_equal(ped$rel, rel(ped))
     expect_equal(ped$hints, hints(ped))
-    expect_equal(ped$hints$order, order(ped))
+    expect_equal(ped$hints$horder, order(ped))
     expect_equal(ped$hints$spouse, spouse(ped))
     expect_equal(ped$scales$fill, fill(ped))
     expect_equal(ped$scales$border, border(ped))

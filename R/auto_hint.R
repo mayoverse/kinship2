@@ -291,7 +291,7 @@ get_twin_rel <- function(ped) {
 #' them to the initial values
 #' @inheritParams align
 #'
-#' @return The **hints** list containing components `order` and `spouse`
+#' @return The **hints** list containing components `horder` and `spouse`
 #'
 #' @seealso [align()], [best_hint()]
 #' @examples
@@ -322,15 +322,15 @@ auto_hint <- function(
     ## Doc: init-auto_hint
     if (!is.null(hints)) {
         if (is.vector(hints)) {
-            hints <- list(order = hints)
+            hints <- list(horder = hints)
         }
         if (is.matrix(hints)) {
             hints <- list(spouse = hints)
         }
-        if (is.null(hints$order)) {
+        if (is.null(hints$horder)) {
             horder <- integer(n)
         } else {
-            horder <- hints$order
+            horder <- hints$horder
         }
     } else {
         horder <- integer(n)
@@ -374,7 +374,7 @@ auto_hint <- function(
 
     plist <- align(ped,
         packed = packed, align = align,
-        hints = list(order = horder, spouse = sptemp)
+        hints = list(horder = horder, spouse = sptemp)
     )
 
 
@@ -439,7 +439,7 @@ auto_hint <- function(
                 warning("Unexpected result in auto_hint,",
                     "please contact developer"
                 )
-                return(list(order = seq_len(n))) # punt
+                return(list(horder = seq_len(n))) # punt
             } else {
                 sptemp <- rbind(sptemp, temp)
             }
@@ -449,8 +449,8 @@ auto_hint <- function(
         #
         plist <- align(ped,
             packed = packed, align = align,
-            hints = list(order = horder, spouse = sptemp)
+            hints = list(horder = horder, spouse = sptemp)
         )
     }
-    list(order = horder, spouse = sptemp)
+    list(horder = horder, spouse = sptemp)
 }

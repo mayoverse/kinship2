@@ -150,7 +150,7 @@ test1 <- data.frame(id = 1:11,
 ped1 <- Pedigree(test1)
 
 temp2 <- Pedigree(test1, hints = list(
-    order = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)
+    horder = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)
 ))
 
 par(mfrow = c(1, 2))
@@ -234,7 +234,7 @@ test2 <- data.frame(id = c(1:13, 21:41),
 )
 ped2 <- Pedigree(test2)
 ped2a <- Pedigree(test2, hints = list(
-    order = seq_along(test2$id)
+    horder = seq_along(test2$id)
 ))
 par(mfrow = c(1, 2))
 plot(ped2a, title = "Before auto_hint")
@@ -313,7 +313,7 @@ test3 <- data.frame(id = 1:14,
     affected = c(0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0)
 )
 ped3 <- Pedigree(test3, hints = list(
-    order = 1:14
+    horder = 1:14
 ))
 
 test4 <- data.frame(id = 1:17,
@@ -329,7 +329,7 @@ test4 <- data.frame(id = 1:17,
 )
 
 ped4 <- Pedigree(test4, hints = list(
-    order = 1:17
+    horder = 1:17
 ))
 
 par(mfrow = c(1, 2))

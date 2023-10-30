@@ -274,40 +274,29 @@ setMethod("hints", signature(object = "Pedigree"), function(object) {
     object@hints
 })
 
-#### S4 order Accessors ####
-#' @title Pedigree order accessors
-#' @description Pedigree order accessors
+#### S4 horder Accessors ####
+#' @title Pedigree horder accessors
+#' @description Pedigree horder accessors
 #' @param object A Pedigree object.
-#' @return The slot `order` present in the `Hints` slot of
+#' @return The slot `horder` present in the `Hints` slot of
 #' a Pedigree object.
 #' @rdname Pedigree
-#' @aliases order,Pedigree-method
-#' @exportMethod order Pedigree
-setGeneric("order", function(object) {
-    standardGeneric("order")
+#' @aliases horder,Pedigree-method
+#' @export
+setGeneric("horder", function(object) {
+    standardGeneric("horder")
 })
 
-#' @docType methods
-#' @aliases order,Pedigree-method
-#' @rdname Pedigree
-#' @exportMethod order Pedigree
-setMethod("order", "Pedigree", function(object) {
-    object@hints@order
+setMethod("horder", "Pedigree", function(object) {
+    object@hints@horder
 })
 
-#' @docType methods
-#' @aliases order<-,Pedigree-method
-#' @rdname Pedigree
-setGeneric("order<-", function(object, value) {
-    standardGeneric("order<-")
+setGeneric("horder<-", function(object, value) {
+    standardGeneric("horder<-")
 })
 
-#' @docType methods
-#' @aliases order<-,Pedigree-method
-#' @rdname Pedigree
-#' @exportMethod order<- Pedigree
 setMethod(
-    "order<-",
+    "horder<-",
     signature(object = "Pedigree", value = "ANY"),
     function(object, value) {
         if (length(value) != length(object)) {
@@ -316,7 +305,7 @@ setMethod(
                 "equal to the length of the pedigree"
             )
         }
-        object@hints@order <- value
+        object@hints@horder <- value
         validObject(object)
         object
     }

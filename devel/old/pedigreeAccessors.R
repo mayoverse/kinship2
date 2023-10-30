@@ -231,20 +231,20 @@ setMethod("hints", signature(object = "Pedigree"), function(object) {
 #' @rdname extract-methods
 #' @aliases order,Pedigree-method
 #' @export
-setGeneric("order", function(object) {
-    standardGeneric("order")
+setGeneric("horder", function(object) {
+    standardGeneric("horder")
 })
 
-setMethod("order", signature(object = "Pedigree"), function(object) {
-    object@hints$order
+setMethod("horder", signature(object = "Pedigree"), function(object) {
+    object@hints$horder
 })
 
-setGeneric("order<-", function(object, value) {
-    standardGeneric("order<-")
+setGeneric("horder<-", function(object, value) {
+    standardGeneric("horder<-")
 })
 
 setMethod(
-    "order<-",
+    "horder<-",
     signature(object = "Pedigree", value = "ANY"),
     function(object, value) {
         if (length(value) != length(object)) {
@@ -253,7 +253,7 @@ setMethod(
                 "equal to the length of the pedigree"
             )
         }
-        object@hints$order <- value
+        object@hints$horder <- value
         validObject(object)
         object
     }

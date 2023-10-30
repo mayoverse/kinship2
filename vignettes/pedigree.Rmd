@@ -74,7 +74,7 @@ It contains the following components:
 - rel: a dataframe with the relationship information
 - scales: a list of 2 dataframe with the filling and borders
 informations for the plot
-- hints: a list of 2 elements indicating the order and the spouse to
+- hints: a list of 2 elements indicating the horder and the spouse to
 organise the Pedigree structure
 
 Basic Usage

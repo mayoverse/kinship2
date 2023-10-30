@@ -54,3 +54,12 @@ setMethod("descendants", signature(idlist = "character", obj = "Pedigree"),
         descendants(idlist, obj$ped$id, obj$ped$dadid, obj$ped$momid)
     }
 )
+
+#' @rdname descendants
+#' @docType methods
+#' @aliases descendants,Pedigree
+setMethod("descendants", signature(idlist = "character", obj = "Ped"),
+    function(idlist, obj) {
+        descendants(idlist, obj$id, obj$dadid, obj$momid)
+    }
+)

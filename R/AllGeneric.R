@@ -245,10 +245,10 @@ setMethod("summary", signature(object = "Pedigree"), function(object) {
 #' @aliases sub_sel_hints,Pedigree-method
 #' @keywords internal
 sub_sel_hints <- function(hints, index) {
-    if (!is.null(hints$order)) {
-        temp <- list(order = hints$order[index])
+    if (!is.null(hints$horder)) {
+        temp <- list(horder = hints$horder[index])
     } else {
-        temp <- list(order = NULL)
+        temp <- list(horder = NULL)
     }
 
     if (!is.null(hints$spouse)) {

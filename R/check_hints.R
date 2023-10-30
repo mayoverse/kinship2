@@ -25,15 +25,15 @@
 #' @keywords internal
 #' @export
 check_hints <- function(hints, sex) {
-    if (is.null(hints$order)) {
-        stop("Order component must be present in hints")
+    if (is.null(hints$horder)) {
+        stop("horder component must be present in hints")
     }
-    if (!is.numeric(hints$order)) {
-        stop("Order component must be numeric")
+    if (!is.numeric(hints$horder)) {
+        stop("horder component must be numeric")
     }
     n <- length(sex)
-    if (length(hints$order) != n) {
-        stop("Length for order component should be equal to sex length")
+    if (length(hints$horder) != n) {
+        stop("Length for horder component should be equal to sex length")
     }
     sex <- as.character(sex_to_factor(sex))
     spouse <- hints$spouse

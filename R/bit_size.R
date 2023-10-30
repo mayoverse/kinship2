@@ -58,6 +58,15 @@ setMethod("bit_size", "character", function(obj, momid, missid = "0") {
 #' @rdname bit_size
 setMethod("bit_size", "Pedigree",
     function(obj, missid = "0") {
-        bit_size(obj$ped$dadid, obj$ped$momid, missid)
+        bit_size(ped(obj), missid)
+    }
+)
+
+#' @docType methods
+#' @aliases bit_size,Ped
+#' @rdname bit_size
+setMethod("bit_size", "Ped",
+    function(obj, missid = "0") {
+        bit_size(obj@dadid, obj@momid, missid)
     }
 )

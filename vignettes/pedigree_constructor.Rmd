@@ -75,7 +75,7 @@ It accepts the following input
 - **scales** Optional, a list of two dataframe with the scales to use for the
     affection status and the other one for the border color (e.g availability).
 - **normalize** Optional, a logical to know if the data should be normalised.
-- **hints** Optional, a list containing the order in which to plot the
+- **hints** Optional, a list containing the horder in which to plot the
 individuals and the matrix of the spouse.
 
 ## Notes
@@ -168,7 +168,7 @@ The minimal columns needed are :
     - $border$ a dataframe describing which modalities in which columns to
     use to plot the border of the plot elements.
 - $hints$ a list of two elements
-    - $order$ numeric vector for the ordering of the individuals plotting
+    - $horder$ numeric vector for the ordering of the individuals plotting
     - $spouse$ a matrix of the spouses
 
 Pedigree methods

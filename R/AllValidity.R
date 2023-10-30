@@ -92,7 +92,7 @@ check_values <- function(val, ref, name = NULL, present = TRUE) {
 
 #' Check if the Hints are valid
 #'
-#' Check if order and spouse slots are valid (i.e. order is numeric and
+#' Check if horder and spouse slots are valid (i.e. horder is numeric and
 #' spouse is a matrix with 3 columns).
 #' Check if the spouse matrix is valid (i.e. only numeric values).
 #' @param object A Hints object.
@@ -104,7 +104,7 @@ is_valid_hints <- function(object) {
     errors <- c()
 
     #### Check that the slots have the right columns ####
-    errors <- c(errors, check_slot_fd(object, "order", "numeric"))
+    errors <- c(errors, check_slot_fd(object, "horder", "numeric"))
     errors <- c(errors, check_slot_fd(object, "spouse", "matrix"))
 
     #### Check that the hints spouse matrix is valid ####

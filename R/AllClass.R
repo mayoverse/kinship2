@@ -8,8 +8,8 @@ NULL
 #' A hints object is a list of two elements used
 #' to order the individuals in the pedigree plot.
 #'
-#' @slot order A numeric vector with one element per subject in the
-#' Pedigree.  It determines the relative order of subjects within a sibship, as
+#' @slot horder A numeric vector with one element per subject in the
+#' Pedigree.  It determines the relative horizontal order of subjects within a sibship, as
 #' well as the relative order of processing for the founder couples. (For this
 #' latter, the female founders are ordered as though they were sisters).
 #' @slot spouse A matrix with one row per hinted marriage, usually
@@ -26,7 +26,7 @@ NULL
 #' @export
 setClass("Hints",
     representation(
-        order = "numeric",
+        horder = "numeric",
         spouse = "matrix"
     )
 )
@@ -205,8 +205,8 @@ setValidity("Rel", is_valid_rel)
 #' [generate_aff_inds()] followed by
 #' [generate_colors()].
 #' @slot hints List of two elements.
-#' - **order** is a numeric vector with one element per subject in the
-#' Pedigree.  It determines the relative order of subjects within a sibship, as
+#' - **horder** is a numeric vector with one element per subject in the
+#' Pedigree.  It determines the relative horizontal order of subjects within a sibship, as
 #' well as the relative order of processing for the founder couples. (For this
 #' latter, the female founders are ordered as though they were sisters).
 #' - **spouse** is a matrix with one row per hinted marriage, usually
