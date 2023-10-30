@@ -124,14 +124,14 @@ setGeneric("align", signature = "obj",
 
 setMethod("align", "Pedigree",
     function(obj, packed = TRUE, width = 10,
-    align = TRUE, hints = obj@hints, missid = "0"
+    align = TRUE, hints = obj@hints, missid = "NA_character_"
 ) {
     align(ped(obj), packed, width, align, hints, missid)
 })
 
 
 align <- function(ped, packed = TRUE, width = 10,
-    align = TRUE, hints = NULL, missid = "0"
+    align = TRUE, hints = NULL, missid = "NA_character_"
 ) {
     famlist <- unique(ped(ped, "famid"))
     if (length(famlist) > 1) {

@@ -162,13 +162,13 @@ check_num_na <- function(var, na_as_num = TRUE) {
 #' @param missid The missing identifier value. Founders are the individuals with
 #' no father and no mother in the Pedigree
 #' (i.e. `dadid` and `momid` equal to the value of this variable).
-#' The default for `missid` is `"0"`.
+#' The default for `missid` is `NA_character_`.
 #'
 #' @return A vector of boolean of the same size as `id`
 #' with TRUE if the individual is a parent and FALSE otherwise
 #'
 #' @keywords internal
-is_parent <- function(id, dadid, momid, missid = "0") {
+is_parent <- function(id, dadid, momid, missid = NA_character_) {
     # determine subjects who are parents assume input of dadid/momid indices,
     # not ids
 
@@ -176,8 +176,8 @@ is_parent <- function(id, dadid, momid, missid = "0") {
         stop("The length of the vectors are not the same")
     }
 
-    is_father <- !is.na(match(id, unique(dadid[dadid != missid])))
-    is_mother <- !is.na(match(id, unique(momid[momid != missid])))
+    is_father <- !is.na(match(id, unique(dadid[!dadid %in% missid])))
+    is_mother <- !is.na(match(id, unique(momid[!momid %in% missid])))
     is_father | is_mother
 }
 
@@ -192,8 +192,8 @@ is_parent <- function(id, dadid, momid, missid = "0") {
 #' otherwise.
 #'
 #' @keywords internal
-is_founder <- function(momid, dadid, missid = "0") {
-    (dadid == missid) & (momid == missid)
+is_founder <- function(momid, dadid, missid = NA_character_) {
+    (dadid %in% missid) & (momid %in% missid)
 }
 
 #' Check wich individuals are disconnected

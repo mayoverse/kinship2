@@ -3,7 +3,7 @@ test_that("fix_parents works with number", {
     materdf$dadid <- materdf$momid * 100
     materdf <- as.data.frame(lapply(materdf, as.character))
     expect_error(Pedigree(materdf))
-    peddf <- with(materdf, fix_parents(id, dadid, momid, sex, missid = "0"))
+    peddf <- with(materdf, fix_parents(id, dadid, momid, sex, missid = NA_character_))
     expect_no_error(Pedigree(peddf))
 })
 
@@ -19,7 +19,7 @@ test_that("fix_parents works with character", {
     )
     expect_error(Pedigree(test1char))
     test1newmom <- with(test1char,
-        fix_parents(id, dadid, momid, sex, missid = "0")
+        fix_parents(id, dadid, momid, sex, missid = NA_character_)
     )
     expect_no_error(Pedigree(test1newmom))
 })
@@ -37,7 +37,7 @@ test_that("fix_parents works with sex errors", {
     datped2[, c("id", "momid", "dadid")] <- as.data.frame(lapply(
         datped2[, c("id", "momid", "dadid")], as.character
     ))
-    fixped2 <- with(datped2, fix_parents(id, dadid, momid, sex, missid = "0"))
+    fixped2 <- with(datped2, fix_parents(id, dadid, momid, sex, missid = NA_character_))
     expect_no_error(Pedigree(fixped2))
 })
 

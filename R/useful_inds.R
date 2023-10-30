@@ -40,7 +40,7 @@ setGeneric("useful_inds", signature = "obj",
 #' @aliases useful_inds,character
 setMethod("useful_inds", "character",
     function(obj, dadid, momid, avail, affected, num_child_tot,
-        informative = "AvAf", keep_infos = FALSE, missid = "0"
+        informative = "AvAf", keep_infos = FALSE, missid = NA_character_
     ) {
         id <- obj
 
@@ -87,7 +87,7 @@ setMethod("useful_inds", "character",
 #' @param reset Boolean to indicate if the `useful` column should be reset
 setMethod("useful_inds", "Pedigree", function(obj,
     informative = "AvAf", keep_infos = FALSE,
-    missid = "0", reset = FALSE
+    missid = NA_character_, reset = FALSE
 ) {
     cols_needed <- c(
         "avail", "affected", "num_child_tot"

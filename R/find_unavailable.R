@@ -124,11 +124,11 @@ exclude_stray_marryin <- function(id, dadid, momid) {
 #' - id Vector of subject identifiers
 #' - dadid Vector of father identifiers
 #' - momid Vector of mother identifiers
-exclude_unavail_founders <- function(id, dadid, momid, avail, missid = "0") {
+exclude_unavail_founders <- function(id, dadid, momid, avail, missid = NA_character_) {
     n_old <- length(id)
 
     ## zed = TRUE if both parents are present
-    zed <- dadid != missid & momid != missid
+    zed <- (!dadid %in% missid) & (!momid %in% missid)
     ## concat ids to represent marriages.
     ## Bug if there is ":" in char subj ids
     marriage <- paste(dadid[zed], momid[zed], sep = ":")

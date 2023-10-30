@@ -189,7 +189,7 @@ is_valid_ped <- function(object) {
         object@id,
         c(
             missid, "",
-            paste(missid, famid, sep = "_"),
+            paste(as.character(missid), famid, sep = "_"),
             paste("", famid, sep = "_")
         ),
         "id", present = FALSE

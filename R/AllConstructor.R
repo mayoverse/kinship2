@@ -279,7 +279,7 @@ setMethod("Pedigree", "numeric", function(obj, ...
 setMethod("Pedigree", "character", function(obj, dadid, momid,
     sex, famid = NA, avail = NULL, affected = NULL, status = NULL,
     steril = NULL, relation =  NULL,
-    missid = "0", col_aff = "affection", normalize = TRUE, ...
+    missid = NA_character_, col_aff = "affection", normalize = TRUE, ...
 ) {
     n <- length(obj)
     ## Code transferred from noweb to markdown vignette.
@@ -404,7 +404,7 @@ setMethod("Pedigree", "data.frame",  function(
         spouse = NULL
     ),
     normalize = TRUE,
-    missid = "0",
+    missid = NA_character_,
     col_aff = "affection",
     ...
 ) {

@@ -51,7 +51,7 @@ test_that("Norm rel", {
 test_that("prefix_famid works", {
     family_id <- NULL
     ind_id <- c("A", "B", "0", NA)
-    missid <- "0"
+    missid <- NA_character_
 
     a <- prefix_famid(family_id, ind_id, missid)
     expect_equal(a, ind_id)

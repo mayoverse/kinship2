@@ -79,7 +79,7 @@ setMethod("min_dist_inf", "character", function(obj,
 #' @docType methods
 #' @param reset If TRUE, the `kin` and if `id_inf` columns is reset
 setMethod("min_dist_inf", "Pedigree", function(obj,
-    col_aff = NULL, informative = "AvAf", missid = "0", reset = FALSE, ...
+    col_aff = NULL, informative = "AvAf", missid = NA_character_, reset = FALSE, ...
 ) {
     ped <- is_informative(obj, col_aff, informative = informative,
         missid, reset

@@ -37,7 +37,7 @@ setGeneric("bit_size", signature = "obj",
 #' @docType methods
 #' @aliases bit_size,character
 #' @rdname bit_size
-setMethod("bit_size", "character_OR_integer", function(obj, momid, missid = "0") {
+setMethod("bit_size", "character_OR_integer", function(obj, momid, missid = NA_character_) {
     dadid <- obj
     if (length(dadid) != length(momid)) {
         stop("dadid and momid should have the same length")
@@ -57,7 +57,7 @@ setMethod("bit_size", "character_OR_integer", function(obj, momid, missid = "0")
 #' @aliases bit_size,Pedigree
 #' @rdname bit_size
 setMethod("bit_size", "Pedigree",
-    function(obj, missid = "0") {
+    function(obj, missid = NA_character_) {
         bit_size(ped(obj), missid)
     }
 )

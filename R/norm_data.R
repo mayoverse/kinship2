@@ -13,7 +13,7 @@ NULL
 #' @inheritParams is_parent
 #' @keywords internal
 #' @return The id with the family id merged
-prefix_famid <- function(famid, id, missid = "0") {
+prefix_famid <- function(famid, id, missid = NA_character_) {
     if (length(famid) > 1 && length(famid) != length(id)) {
         stop("famid and id must have the same length.")
     }
@@ -22,7 +22,7 @@ prefix_famid <- function(famid, id, missid = "0") {
         is.na(famid) | is.null(famid),
         "", paste0(as.character(famid), "_")
     )
-    ifelse(id == missid, missid, paste0(pre_famid, as.character(id)))
+    ifelse(id %in% missid, missid, paste0(pre_famid, as.character(id)))
 }
 
 #' Normalise dataframe
@@ -77,7 +77,7 @@ prefix_famid <- function(famid, id, missid = "0") {
 #' norm_ped(df)
 #' @export
 norm_ped <- function(
-    ped_df, na_strings = c("NA", ""), missid = "0", try_num = FALSE
+    ped_df, na_strings = c("NA", ""), missid = NA_character_, try_num = FALSE
 ) {
     err_cols <- c(
         "sexErrMoFa", "sexErrFa", "sexErrMo", "sexErrTer", "sexNA",
@@ -199,8 +199,8 @@ norm_ped <- function(
         ] <- "selfIdDuplicated"
         err$idErrOwnParent[ped_df$id %in% id_own_parent] <- "isItsOwnParent"
         err$idErrBothParent[
-            (ped_df$dadid == missid & ped_df$momid != missid) |
-                (ped_df$dadid != missid & ped_df$momid == missid)
+            (ped_df$dadid %in% missid & (!ped_df$momid %in% missid)) |
+                ((!ped_df$dadid %in% missid) & ped_df$momid %in% missid)
         ] <- "oneParentMissing"
 
         ## Unite all id errors in one column
@@ -280,7 +280,7 @@ norm_ped <- function(
 #'
 #' @return A dataframe with the errors identified
 #' @export
-norm_rel <- function(rel_df, na_strings = c("NA", ""), missid = "0") {
+norm_rel <- function(rel_df, na_strings = c("NA", ""), missid = NA_character_) {
     #### Check columns ####
     err_cols <- c("codeErr", "sameIdErr", "id1Err", "id2Err", "error")
     err <- data.frame(matrix(NA, nrow = nrow(rel_df), ncol = length(err_cols)))
@@ -311,8 +311,8 @@ norm_rel <- function(rel_df, na_strings = c("NA", ""), missid = "0") {
         ## Check for non null ids
         len1 <- nchar(rel_df$id1)
         len2 <- nchar(rel_df$id2)
-        err$id1Err[is.na(len1) | len1 == missid] <- "indId1length0"
-        err$id2Err[is.na(len2) | len2 == missid] <- "indId2length0"
+        err$id1Err[is.na(len1) | len1 %in% missid] <- "indId1length0"
+        err$id2Err[is.na(len2) | len2 %in% missid] <- "indId2length0"
 
         ## Compute id with family id
         rel_df$famid <- rel_df$family

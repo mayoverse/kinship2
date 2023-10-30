@@ -14,7 +14,7 @@
 #' ped1 <- Pedigree(sampleped[sampleped$famid == "1",])
 #' trim(ped1, "1_101")
 #' @export
-trim <- function(ped, id_rm, missid = "0") {
+trim <- function(ped, id_rm, missid = NA_character_) {
     ## trim subjects from a Pedigree who match the removeID trim relation
     ## matrix as well
     rmidx <- match(id_rm, ped(ped, "id"))

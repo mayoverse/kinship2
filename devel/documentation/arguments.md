@@ -21,7 +21,7 @@
 #' biologicals mothers.
 #' @param missid The missing identifier value. Founders are the individuals with
 #' no father and no mother in the pedigree (i.e. `dadid` and `momid` equal to the
-#' value of this variable).  The default for `missid` is `"0"`.
+#' value of this variable).  The default for `missid` is `"NA_character_"`.
 
 ## Argument of is_informative
 #' @param avail A numeric vector of availability status of each individual
@@ -231,9 +231,9 @@ setGeneric("myfunction", signature = "obj",
 #' @param momid A character vector
 #' @param missid Character defining the missing ids
 #' @usage ## S4 method for signature 'character'
-#' @usage myfunction(dadid, momid, missid = "0")
+#' @usage myfunction(dadid, momid, missid = "NA_character_")
 #' @return A character vector with the parents ids
-setMethod("myfunction", "character", function(dadid, momid, missid = "0") {
+setMethod("myfunction", "character", function(dadid, momid, missid = "NA_character_") {
     paste(dadid, momid, sep = missid)
 })
 
@@ -242,10 +242,10 @@ setMethod("myfunction", "character", function(dadid, momid, missid = "0") {
 #' @param ped A pedigree object
 #' @param missid Character defining the missing ids
 #' @usage ## S4 method for signature 'Pedigree'
-#' @usage myfunction(dadid, momid, missid = "0")
+#' @usage myfunction(dadid, momid, missid = "NA_character_")
 #' @return A pedigree with the parents ids
 setMethod("myfunction", "Pedigree",
-    function(ped, missid = "0") {
+    function(ped, missid = "NA_character_") {
         ped$par <- myfunction(ped$dadid, ped$momid, missid)
         ped
     }

@@ -50,7 +50,7 @@ NULL
 #' )
 #' test1newmom <- with(test1char, fix_parents(id, father, mother,
 #'   sex,
-#'   missid = '0'
+#'   missid = NA_character_
 #' ))
 #' newped <- Pedigree(test1newmom)
 #' as.data.frame(newped)
@@ -65,7 +65,7 @@ setGeneric("fix_parents", signature = "obj",
 #' @rdname fix_parents
 #' @aliases fix_parents,character
 setMethod("fix_parents", "character", function(
-    obj, dadid, momid, sex, famid = NULL, missid = "0"
+    obj, dadid, momid, sex, famid = NULL, missid = NA_character_
 ) {
     ## fix sex of parents add parents that are missing
     n <- length(obj)
@@ -96,7 +96,7 @@ setMethod("fix_parents", "character", function(
     } else if (mean(sex == 3) > 0.25) {
         warning("More than 25% of the gender values are 'unknown'")
     }
-    if (any(is.na(id) | id == missid)) {
+    if (any(is.na(id) | id %in% missid)) {
         stop("Missing value for the id variable")
     }
 
@@ -108,8 +108,8 @@ setMethod("fix_parents", "character", function(
         stop("A blank or empty string is not allowed as the id variable")
     }
 
-    nofather <- (is.na(dadid) | dadid == missid)
-    nomother <- (is.na(momid) | momid == missid)
+    nofather <- (is.na(dadid) | dadid %in% missid)
+    nomother <- (is.na(momid) | momid %in% missid)
     if (any(duplicated(id))) {
         duplist <- id[duplicated(id)]
         msg_nb <- min(length(duplist), 6)
@@ -183,7 +183,7 @@ setMethod("fix_parents", "character", function(
 #' @export
 #' @rdname fix_parents
 setMethod("fix_parents", "data.frame", function(
-    obj, delete = FALSE, filter = NULL, missid = "0"
+    obj, delete = FALSE, filter = NULL, missid = NA_character_
 ) {
     cols_needed <- c("id", "dadid", "momid", "sex", filter)
     df <- check_columns(obj, cols_needed, NULL, "famid", others_cols = TRUE,
@@ -202,8 +202,8 @@ setMethod("fix_parents", "data.frame", function(
             # One of the parents doesn't not have a line in id
             dad_present <- match(df$dadid, df$id, nomatch = missid)
             mom_present <- match(df$momid, df$id, nomatch = missid)
-            df[dad_present == missid |
-                    mom_present == missid, c("momid", "dadid")
+            df[dad_present %in% missid |
+                    mom_present %in% missid, c("momid", "dadid")
             ] <- missid
         }
         df_fix <- fix_parents(

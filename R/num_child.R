@@ -41,7 +41,7 @@ setGeneric("num_child", signature = "obj",
 #' @aliases num_child,character
 #' @docType methods
 setMethod("num_child", "character", function(obj, dadid, momid,
-    rel_df = NULL, missid = "0"
+    rel_df = NULL, missid = NA_character_
 ) {
     id <- obj
 
@@ -65,8 +65,8 @@ setMethod("num_child", "character", function(obj, dadid, momid,
 
     df <- data.frame(id, dadid, momid, stringsAsFactors = FALSE)
 
-    spouse_rel <- unique(df[df$dadid != missid &
-                df$momid != missid, c("dadid", "momid")
+    spouse_rel <- unique(df[(!df$dadid %in% missid) &
+                (!df$momid %in% missid), c("dadid", "momid")
         ]
     )
     colnames(spouse_rel) <- c("id1", "id2")
@@ -84,12 +84,12 @@ setMethod("num_child", "character", function(obj, dadid, momid,
     spouse_rel$idmax <- pmax(spouse_rel$id1, spouse_rel$id2)
     spouse_rel <- unique(spouse_rel[c("idmin", "idmax")])
 
-    dad_child <- df[df$dadid != missid, c("dadid", "id")] %>%
+    dad_child <- df[(!df$dadid %in% missid), c("dadid", "id")] %>%
         group_by(dadid) %>%
         summarise(child = list(id)) %>%
         mutate(num_child_dir = lengths(child)) %>%
         rename(id = dadid)
-    mom_child <- df[df$momid != missid, c("id", "momid")] %>%
+    mom_child <- df[(!df$momid %in% missid), c("id", "momid")] %>%
         group_by(momid) %>%
         summarise(child = list(id)) %>%
         mutate(num_child_dir = lengths(child)) %>%

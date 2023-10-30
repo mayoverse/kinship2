@@ -58,7 +58,7 @@ setGeneric("is_informative", signature = "obj",
 #' @aliases is_informative,character
 #' @docType methods
 setMethod("is_informative", "character", function(
-    obj, avail, affected, informative = "AvAf", missid = "0"
+    obj, avail, affected, informative = "AvAf", missid = NA_character_
 ) {
     id <- obj
     # Selection of all informative individuals depending of the informative
@@ -96,7 +96,7 @@ setMethod("is_informative", "character", function(
 #' @docType methods
 #' @param reset If `TRUE`, the `id_inf` column is reset
 setMethod("is_informative", "Pedigree", function(
-    obj, col_aff = NULL, informative = "AvAf", missid = "0", reset = FALSE
+    obj, col_aff = NULL, informative = "AvAf", missid = NA_character_, reset = FALSE
 ) {
     ped <- obj
     deriv(ped, "affected") <- NA
