@@ -5,55 +5,32 @@
 NULL
 
 #### S4 Ped Accessors ####
-## metadata Accessors ##
-#' @title Pedigree metadata accessors
-#' @param object A Pedigree object.
-#' @return The metadata present in the Pedigree object.
-#' @rdname extract-methods
-#' @aliases mcols,Ped-method
-#' @export
-setMethod(
-    "mcols",
-    signature(x = "Ped"),
-    function(x) {
-        x@elementMetadata
-    }
-)
 
-#' @title Pedigree metadata accessors
-#' @param object A Pedigree object.
-#' @return The metadata present in the Pedigree object.
-#' @rdname extract-methods
-#' @aliases mcols<-,Ped-method
-#' @export
-#' @importFrom S4Vectors 'mcols<-'
-setMethod(
-    "mcols<-",
-    signature(x = "Ped", value = "ANY"),
-    function(x, value) {
-        if (is.data.frame(value)) {
-            if (nrow(value) != length(x)) {
-                stop(
-                    "The number of rows of the new value should be: ",
-                    "equal to the length of the pedigree"
-                )
-            }
-        } else if (is.list(value)) {
-            lglst <- lapply(value, length)
-            if (any(lglst != length(x))) {
-                stop(
-                    "The length of the element(s) '",
-                    names(lglst[lglst != length(x)]),
-                    "' should be: ",
-                    "equal to the length of the pedigree"
-                )
-            }
-            value <- as.data.frame(value)
-        }
-        x@elementMetadata <- value
-        x
-    }
-)
+#' Metadata setters of Ped object from a list
+#' 
+#' @param x A Ped object.
+#' @param value A list with the metadata.
+#' 
+#' @return A Ped object with the metadata set.
+#' 
+#' @rdname Ped
+setMethod("mcols<-", signature(x = "Ped", value = "list"), function(x, value) {
+    mcols(x) <- as(value, "DataFrame")
+    x
+})
+
+#' Metadata setters of Ped object from a data.frame
+#' 
+#' @param x A Ped object.
+#' @param value A data.frame with the metadata.
+#' 
+#' @return A Ped object with the metadata set.
+#' 
+#' @rdname Ped
+setMethod("mcols<-", signature(x = "Ped", value = "data.frame"), function(x, value) {
+    mcols(x) <- as(value, "DataFrame")
+    x
+})
 
 #### S4 Pedigree Accessors ####
 #' @title Pedigree ped accessors
@@ -296,26 +273,39 @@ setGeneric("hints", function(object) {
 setMethod("hints", signature(object = "Pedigree"), function(object) {
     object@hints
 })
+
 #### S4 order Accessors ####
+#' @title Pedigree order accessors
 #' @description Pedigree order accessors
 #' @param object A Pedigree object.
 #' @return The slot `order` present in the `Hints` slot of
 #' a Pedigree object.
-#' @rdname extract-methods
+#' @rdname Pedigree
 #' @aliases order,Pedigree-method
-#' @export
+#' @exportMethod order Pedigree
 setGeneric("order", function(object) {
     standardGeneric("order")
 })
 
-setMethod("order", signature(object = "Pedigree"), function(object) {
+#' @docType methods
+#' @aliases order,Pedigree-method
+#' @rdname Pedigree
+#' @exportMethod order Pedigree
+setMethod("order", "Pedigree", function(object) {
     object@hints@order
 })
 
+#' @docType methods
+#' @aliases order<-,Pedigree-method
+#' @rdname Pedigree
 setGeneric("order<-", function(object, value) {
     standardGeneric("order<-")
 })
 
+#' @docType methods
+#' @aliases order<-,Pedigree-method
+#' @rdname Pedigree
+#' @exportMethod order<- Pedigree
 setMethod(
     "order<-",
     signature(object = "Pedigree", value = "ANY"),

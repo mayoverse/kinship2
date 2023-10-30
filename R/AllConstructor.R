@@ -170,11 +170,18 @@ setMethod("Rel", "character",
         family <- na_to_length(family, obj, NA_character_)
         id1 <- as.character(obj)
         id2 <- as.character(id2)
+
+        ## Reorder id1 and id2
+        ## id1 is the first in the alphabetic order
+        ## id2 is the second in the alphabetic order
+        id1o <- pmin(id1, id2)
+        id2o <- pmax(id1, id2)
+
         code <- rel_code_to_factor(code)
 
         rel <- new(
             "Rel",
-            id1 = id1, id2 = id2, code = code, family = family
+            id1 = id1o, id2 = id2o, code = code, family = family
         )
         rel
     }

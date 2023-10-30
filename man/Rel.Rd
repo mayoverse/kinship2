@@ -12,7 +12,6 @@
 \alias{show,Rel-method}
 \alias{as.list,Rel-method}
 \alias{as.data.frame,Rel-method}
-\alias{length,Rel-method}
 \title{S4 class to represent the special relationships in a Pedigree.}
 \usage{
 Rel(obj, ...)
@@ -28,8 +27,6 @@ Rel(obj, ...)
 \S4method{as.list}{Rel}(x)
 
 \S4method{as.data.frame}{Rel}(x)
-
-\S4method{length}{Rel}(x)
 }
 \arguments{
 \item{obj}{A character vector with the id of the first individuals of each
@@ -45,8 +42,6 @@ relationship (i.e. \verb{MZ twin} < \verb{DZ twin} < \verb{UZ twin} < \code{Spou
 
 \item{object}{A Rel object.}
 
-\item{x}{A Rel object.}
-
 \item{from}{A Rel object.}
 }
 \value{
@@ -61,8 +56,6 @@ The Rel object with the relationship informations.
 A list with the relationship informations.
 
 A data.frame with the relationship informations.
-
-The number of relationships in the Rel object.
 }
 \description{
 A Rel object is a list of special relationships

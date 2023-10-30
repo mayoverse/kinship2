@@ -1,4 +1,4 @@
-#### Generic for Ped object ####
+#### S4 Ped generics ####
 
 #' Summary function of Ped object
 #'
@@ -94,49 +94,6 @@ setMethod("as.data.frame", "Ped", function(x) {
     ped_df
 })
 
-#' Compute the length of a Ped object
-#' @param x A Ped object.
-#' @return The number of individuals in the Ped object.
-#' @docType methods
-#' @aliases length,Ped-method
-#' @export
-setMethod("length", "Ped",
-    function(x) {
-        length(x@id)
-    }
-)
-
-#' Bind two Ped objects
-#'
-#' @description Bind two Ped objects by row.
-#' The metadata need to be the same.
-#'
-#' @param x A Ped object.
-#' @param y A Ped object.
-#'
-#' @return A Ped object containing the individuals of x and y.
-#'
-#' @export
-setMethod(c, "Ped",
-    function(x, y) {
-        if (any(!names(mcols(x)) %in% names(mcols(y))) |
-                any(!names(mcols(y)) %in% names(mcols(x)))
-        ) {
-            warning(
-                "Some of the metadata are not the same",
-                "Missing information will be filled with NA"
-            )
-        }
-        ped_df <- unique(merge.data.frame(
-            as.data.frame(x), as.data.frame(y), all = TRUE
-        ))
-        new_ped <- Ped(ped_df, cols_used_init = TRUE, cols_used_del = TRUE)
-        validObject(new_ped)
-        new_ped
-    }
-)
-
-
 #### S4 Rel generics ####
 #' Summary function of Rel object
 #'
@@ -164,7 +121,7 @@ setMethod("summary", "Rel",
         }
         paste0(object_class, " object with ", object_len, " ",
             ifelse(object_len == 1L, "relationship", "relationships"),
-            ifelse(sum_codes == 0L, "", paste0("with ", sum_codes, "."))
+            ifelse(sum_codes == 0L, "", paste0("with ", sum_codes))
         )
     }
 )
@@ -186,9 +143,14 @@ setMethod("show", signature(object = "Rel"),
     function(object) {
         cat(summary(object), ":\n", sep = "")
         df <- as.data.frame(object)
-        class_df <- lapply(df, function(x) { paste0("<", class(x), ">") })
-        stopifnot(identical(names(class_df), colnames(df)))
-        out <- rbind(class_df, df)
+        df <- df[, !colnames(df) %in% colnames(mcols(object))]
+        out <- S4Vectors::cbind_mcols_for_display(df, object)
+        class_df <- lapply(df, class)
+        classinfo <- S4Vectors::makeClassinfoRowForCompactPrinting(
+            object, class_df
+        )
+        stopifnot(identical(colnames(classinfo), colnames(out)))
+        out <- rbind(classinfo, out)
         print(out, quote = FALSE, right = TRUE)
     }
 )
@@ -204,9 +166,14 @@ setMethod("show", signature(object = "Rel"),
 setMethod("as.list", "Rel", function(x) {
     to <- list()
     for (slot in slotNames(x)) {
-        to[[slot]] <- slot(x, slot)
+        if (slot %in% c("metadata", "elementMetadata")) {
+            next
+        } else {
+            to[[slot]] <- slot(x, slot)
+        }
     }
-    to
+    # Add the metadata in separate slot
+    c(to, as.list(mcols(x)))
 })
 
 #' @title Rel to data.frame
@@ -224,41 +191,6 @@ setMethod("as.data.frame", "Rel", function(x) {
     }
     data.frame(lst)
 })
-
-#' Compute the length of a Rel object
-#' @param x A Rel object.
-#' @return The number of relationships in the Rel object.
-#' @docType methods
-#' @aliases length,Rel-method
-#' @rdname Rel
-#' @export
-setMethod("length", c(x = "Rel"),
-    function(x) {
-        length(x@id1)
-    }
-)
-
-#' Bind two Rel objects
-#'
-#' @description Bind two Rel objects by row.
-#' The metadata need to be the same.
-#'
-#' @param x A Rel object.
-#' @param y A Rel object.
-#'
-#' @return A Rel object containing the relationships of x and y.
-#'
-#' @export
-setMethod(c, "Rel",
-    function(x, y) {
-        df <- unique(merge.data.frame(
-            as.data.frame(x), as.data.frame(y), all = TRUE
-        ))
-        new_rel <- Rel(df)
-        validObject(new_rel)
-        new_rel
-    }
-)
 
 #### S4 Pedigree generics ####
 

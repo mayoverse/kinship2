@@ -171,6 +171,9 @@ is_valid_ped <- function(object) {
     missid <- NA_character_
     errors <- c()
 
+    #### Check that all slots are parallele ####
+    #errors <- c(errors, parallel_slot_names(object))
+
     #### Check that the ped columns have the right values ####
     # Check for ped@id uniqueness
     if (any(duplicated(object@id))) {
@@ -245,6 +248,38 @@ is_valid_rel <- function(object) {
     #### Check that the rel columns have the right values ####
     codes <- c("MZ twin", "DZ twin", "UZ twin", "Spouse")
     errors <- c(errors, check_values(object@code, codes))
+
+    #### Check that id1 is different from id2 ####
+    if (any(object@id1 == object@id2)) {
+        id1e <- object@id1[object@id1 == object@id2]
+        id2e <- object@id2[object@id1 == object@id2]
+        errors <- c(errors, paste(
+            "id1 '", paste0(id1e, collapse = "', '"),
+            "' should be different to id2 '", paste0(id2e, collapse = "', '"),
+            "'.", sep = ""
+        ))
+    }
+
+    #### Check that all id1 is smaller than id2 ####
+    if (any(object@id1 > object@id2)) {
+        id1b <- object@id1[object@id1 > object@id2]
+        id2b <- object@id2[object@id1 > object@id2]
+        errors <- c(errors, paste(
+            "id1 '", paste0(id1b, collapse = "', '"),
+            "' should be smaller than id2 '", paste0(id2b, collapse = "', '"),
+            "'.", sep = ""
+        ))
+    }
+
+    #### Check absence of duplicate ####
+    idr <- paste(object@id1, object@id2, sep = "_")
+    if (any(duplicated(idr))) {
+        idd <- idr[duplicated(idr)]
+        errors <- c(errors, paste(
+            "Pairs of individuals should be unique",
+            " ('", paste0(idd, collapse = "', '"), "').", sep = ""
+        ))
+    }
 
     if (length(errors) == 0) {
         TRUE

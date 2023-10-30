@@ -107,7 +107,8 @@ setValidity("Scales", is_valid_scales)
 #' @rdname Ped
 #' @export
 setClass("Ped",
-    representation(
+    contains = "Vector",
+    slots = c(
         id = "character",
         dadid = "character",
         momid = "character",
@@ -119,8 +120,7 @@ setClass("Ped",
         affected = "numeric",
         num_child_total = "numeric",
         num_child_direct = "numeric",
-        num_child_indirect = "numeric",
-        elementMetadata = "data.frame"
+        num_child_indirect = "numeric"
     )
 )
 
@@ -161,15 +161,14 @@ setValidity("Ped", is_valid_ped)
 #' @rdname Rel
 #' @export
 setClass("Rel",
-    representation(
+    contains = "Vector",
+    slots = c(
         id1 = "character",
         id2 = "character",
         code = "factor",
         family = "character"
     )
 )
-
-setValidity("Rel", is_valid_rel)
 
 setMethod("parallel_slot_names", "Rel",
     function(x) {
@@ -179,6 +178,8 @@ setMethod("parallel_slot_names", "Rel",
         )
     }
 )
+
+setValidity("Rel", is_valid_rel)
 
 #' S4 class to represent a pedigree.
 #'
