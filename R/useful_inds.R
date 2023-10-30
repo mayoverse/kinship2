@@ -25,7 +25,7 @@
 #' useful individuals and 0 otherwise.
 #' @examples
 #' data(sampleped)
-#' ped1 <- Pedigree(sampleped[sampleped$family == "1",])
+#' ped1 <- Pedigree(sampleped[sampleped$famid == "1",])
 #' ped1 <- num_child(ped1)
 #' useful_inds(ped1, informative = "AvAf")$ped
 #' @export

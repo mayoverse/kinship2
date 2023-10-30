@@ -4,7 +4,7 @@ test_that("Pedigree works", {
         dadid = character(),
         momid = character(),
         sex = numeric(),
-        family = character(),
+        famid = character(),
         avail = numeric(),
         affection = numeric()
     ))
@@ -21,7 +21,7 @@ test_that("Pedigree works", {
 test_that("Pedigree old usage compatibility", {
     data(sampleped)
     ped1 <- with(sampleped,
-        Pedigree(id, dadid, momid, sex, family, avail, affection)
+        Pedigree(id, dadid, momid, sex, famid, avail, affection)
     )
     expect_equal(ped1, Pedigree(sampleped))
 
@@ -39,18 +39,18 @@ test_that("Pedigree old usage compatibility", {
     ), ncol = 5, byrow = TRUE)
 
     ped2df <- as.data.frame(ped2mat)
-    names(ped2df) <- c("family", "id", "dadid", "momid", "sex")
+    names(ped2df) <- c("famid", "id", "dadid", "momid", "sex")
     ## 1 2  3 4 5 6 7 8 9 10,11,12,13,14,15,16
     ped2df$disease <- c(NA, NA, 1, 0, 0, 0, 0, 1, 1, 1)
     ped2df$smoker <- c(0, NA, 0, 0, 1, 1, 1, 0, 0, 0)
     ped2df$available <- c(0, 0, 1, 1, 0, 1, 1, 1, 1, 1)
     ped2df$status <- c(1, 1, 1, 0, 1, 0, 0, 0, 0, 0)
 
-    ped2 <- with(ped2df, Pedigree(id, dadid, momid, sex, family,
+    ped2 <- with(ped2df, Pedigree(id, dadid, momid, sex, famid,
         available, status, affected = cbind(disease, smoker, available),
         relation = matrix(c(8, 9, 1, 1), ncol = 4)
     ))
-    rel_df <- data.frame(id1 = 8, id2 = 9, code = 1, family = 1)
+    rel_df <- data.frame(id1 = 8, id2 = 9, code = 1, famid = 1)
 
     expect_equal(ped2,
         Pedigree(ped2df, col_aff = c("disease", "smoker", "available"),
@@ -62,7 +62,7 @@ test_that("Pedigree old usage compatibility", {
 test_that("Pedigree from sampleped and affectation", {
     # Here is a case where the levels fail to line up properly
     data("sampleped")
-    df1 <- sampleped[sampleped$family == 1, ]
+    df1 <- sampleped[sampleped$famid == 1, ]
     colnames(df1)
     ped1 <- Pedigree(df1, cols_ren_ped = list(
         "indId" = "id",
@@ -101,7 +101,7 @@ test_that("Pedigree subscripting", {
     expect_equal(nrow(ped(minnped)), 28081)
     expect_equal(ncol(minnped[["ped"]]), 28)
 
-    ped8 <- minnped[ped(minnped)$family == "8",
+    ped8 <- minnped[ped(minnped)$famid == "8",
         c("id", "dadid", "momid", "sex", "affection")
     ]
 
@@ -163,7 +163,7 @@ test_that("Pedigree setters", {
     data("sampleped")
     ped <- Pedigree(sampleped)
     peddf <- ped(ped)
-    peddf[1, "family"] <- "2"
+    peddf[1, "famid"] <- "2"
     ped(ped) <- peddf
-    expect_equal(ped(ped)[1, "family"], "2")
+    expect_equal(ped(ped)[1, "famid"], "2")
 })

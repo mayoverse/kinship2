@@ -212,7 +212,7 @@ setMethod("length", c(x = "Pedigree"),
 #' @rdname extract-methods
 #' @aliases show,Pedigree-method
 setMethod("show", signature(object = "Pedigree"), function(object) {
-    nb_fam <- length(levels(as.factor(object@ped$family)))
+    nb_fam <- length(levels(as.factor(object@ped$famid)))
     cat("Pedigree object with", nrow(object@ped), "individuals and",
         nrow(object@rel), "special relationships across", nb_fam, "families",
         fill = TRUE)

@@ -53,7 +53,7 @@ test_that("Pedigree other test", {
 test_that("Pedigree fails to line up", {
     # Here is a case where the levels fail to line up properly
     data(sampleped)
-    df1 <- sampleped[sampleped$family == "1", ]
+    df1 <- sampleped[sampleped$famid == "1", ]
     ped1 <- Pedigree(df1)
     vdiffr::expect_doppelganger("ped1",
         function() plot(ped1)

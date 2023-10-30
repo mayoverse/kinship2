@@ -25,7 +25,7 @@
 #' @include AllClass.R
 #' @examples
 #' data(sampleped)
-#' ped1 <- Pedigree(sampleped[sampleped$family == "1",])
+#' ped1 <- Pedigree(sampleped[sampleped$famid == "1",])
 #' kindepth(ped1)
 #' @export
 setGeneric("kindepth", signature = "obj",

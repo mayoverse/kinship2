@@ -34,7 +34,7 @@
 #'
 #' @examples
 #' data(sampleped)
-#' ped1 <- Pedigree(sampleped[sampleped$family == '1',])
+#' ped1 <- Pedigree(sampleped[sampleped$famid == '1',])
 #' shrink(ped1, max_bits = 12)
 #'
 #' @author Original by Dan Schaid, updated by Jason Sinnwell

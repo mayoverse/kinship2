@@ -11,7 +11,7 @@
 #'
 #' @examples
 #' data(sampleped)
-#' ped1 <- Pedigree(sampleped[sampleped$family == "1",])
+#' ped1 <- Pedigree(sampleped[sampleped$famid == "1",])
 #' trim(ped1, "1_101")
 #' @export
 trim <- function(ped, id_rm, missid = "0") {

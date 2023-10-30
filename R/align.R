@@ -118,15 +118,27 @@ ancestors <- function(idx, momx, dadx) {
 #' @include alignped2.R
 #' @include alignped3.R
 #' @include alignped4.R
-align <- function(ped, packed = TRUE, width = 10,
-    align = TRUE, hints = ped$hints, missid = "0"
+setGeneric("align", signature = "obj",
+    function(obj, ...) standardGeneric("align")
+)
+
+setMethod("align", "Pedigree",
+    function(obj, packed = TRUE, width = 10,
+    align = TRUE, hints = obj@hints, missid = "0"
 ) {
-    famlist <- unique(ped(ped, "family"))
+    align(ped(obj), packed, width, align, hints, missid)
+})
+
+
+align <- function(ped, packed = TRUE, width = 10,
+    align = TRUE, hints = NULL, missid = "0"
+) {
+    famlist <- unique(ped(ped, "famid"))
     if (length(famlist) > 1) {
         nfam <- length(famlist)
         alignment <- vector("list", nfam)
         for (i_fam in famlist) {
-            ped_fam <- ped[ped(ped, "family") == i_fam]
+            ped_fam <- ped[ped(ped, "famid") == i_fam]
             alignment[[i_fam]] <- align(ped_fam, packed, width, align)
         }
         return(alignment)

@@ -27,7 +27,7 @@ NULL
 #' Pedigree `ped` slot.
 #' @examples
 #' data(sampleped)
-#' ped1 <- Pedigree(sampleped[sampleped$family == "1",])
+#' ped1 <- Pedigree(sampleped[sampleped$famid == "1",])
 #' ped1 <- num_child(ped1)
 #' summary(ped1$ped)
 #' @include AllClass.R

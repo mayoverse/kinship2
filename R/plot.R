@@ -46,7 +46,7 @@ NULL
 #' @param fam_to_plot default=1.  If the Pedigree contains multiple families,
 #' this parameter can be used to select which family to plot.
 #' It can be a numeric value or a character value. If numeric, it is the
-#' index of the family to plot returned by `unique(x$ped$family)`.
+#' index of the family to plot returned by `unique(x$ped$famid)`.
 #' If character, it is the family id to plot.
 #' @param legend default=FALSE.  If TRUE, a legend will be added to the plot.
 #' @param leg_cex default=0.8.  Controls the size of the legend text.
@@ -92,7 +92,7 @@ setMethod("plot", c(x = "Pedigree", y = "missing"),
         lst <- ped_to_plotdf(x, packed, width, align, subreg,
             cex, symbolsize, pconnect, branch, aff_mark, label, ...
         )
-        famlist <- unique(x$ped$family)
+        famlist <- unique(x$ped$famid)
         if (length(famlist) > 1) {
             message("Multiple families present, only plotting family ",
                 fam_to_plot

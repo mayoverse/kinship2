@@ -101,13 +101,13 @@ setMethod("make_famid", "character",
 setMethod("make_famid", "Pedigree",
     function(obj) {
         ped <- obj
-        family <- make_famid(
+        famid <- make_famid(
             ped(ped, "id"), ped(ped, "dadid"), ped(ped, "momid")
         )
-        ped(obj, "family") <- family
+        ped(obj, "famid") <- famid
 
-        fam_id1 <- family[match(rel(ped, "id1"), ped(ped, "id"))]
-        fam_id2 <- family[match(rel(ped, "id2"), ped(ped, "id"))]
+        fam_id1 <- famid[match(rel(ped, "id1"), ped(ped, "id"))]
+        fam_id2 <- famid[match(rel(ped, "id2"), ped(ped, "id"))]
 
         if (any(fam_id1 != fam_id2)) {
             stop("The two individuals in the relationship",
@@ -115,7 +115,7 @@ setMethod("make_famid", "Pedigree",
             )
         }
 
-        rel(ped, "family") <- fam_id1
+        rel(ped, "famid") <- fam_id1
         validObject(ped)
         ped
     }

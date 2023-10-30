@@ -8,21 +8,21 @@ NULL
 #'
 #' @description Compute id with family id if the family id available
 #'
-#' @param family_id The family id
-#' @param ind_id The individual id
+#' @param famid The family id
+#' @param id The individual id
 #' @inheritParams is_parent
 #' @keywords internal
 #' @return The id with the family id merged
-prefix_famid <- function(family_id, ind_id, missid = "0") {
-    if (length(family_id) > 1 && length(family_id) != length(ind_id)) {
-        stop("family_id and ind_id must have the same length.")
+prefix_famid <- function(famid, id, missid = "0") {
+    if (length(famid) > 1 && length(famid) != length(id)) {
+        stop("famid and id must have the same length.")
     }
 
     pre_famid <- ifelse(
-        is.na(family_id) | is.null(family_id),
-        "", paste0(as.character(family_id), "_")
+        is.na(famid) | is.null(famid),
+        "", paste0(as.character(famid), "_")
     )
-    ifelse(ind_id == missid, missid, paste0(pre_famid, as.character(ind_id)))
+    ifelse(id == missid, missid, paste0(pre_famid, as.character(id)))
 }
 
 #' Normalise dataframe
@@ -44,7 +44,7 @@ prefix_famid <- function(family_id, ind_id, missid = "0") {
 #' @param ped_df A data.frame with the individuals informations.
 #' The minimum columns required are `indID`, `fatherId`, `motherId` and
 #' `gender`.
-#' The `family` column can also be used to specify the family of the
+#' The `famid` column can also be used to specify the family of the
 #' individuals and will be merge to the `id` field separated by an
 #' underscore.
 #' The following columns are also recognize `sterilisation`, `available`,
@@ -69,7 +69,7 @@ prefix_famid <- function(family_id, ind_id, missid = "0") {
 #'     motherId = c(0, 0, 2, 2, 0, 5, 2, 0, 8, 8),
 #'     gender = c(1, 2, "m", "man", "f", "male", "m", "m", "f", "f"),
 #'     available = c("A", "1", 0, NA, 1, 0, 1, 0, 1, 0),
-#'     family = c(1, 1, 1, 1, 1, 1, 1, 2, 2, 2),
+#'     famid = c(1, 1, 1, 1, 1, 1, 1, 2, 2, 2),
 #'     sterilisation = c("TRUE", "FALSE", TRUE, FALSE, 1, 0, 1, 0, 1, "TRUE"),
 #'     vitalStatus = c("TRUE", "FALSE", TRUE, FALSE, 1, 0, 1, 0, 1, 0),
 #'     affection = c("TRUE", "FALSE", TRUE, FALSE, 1, 0, 1, 0, 1, 0)
@@ -88,7 +88,7 @@ norm_ped <- function(
     colnames(err) <- err_cols
     cols_need <- c("indId", "fatherId", "motherId", "gender")
     cols_used <- c(
-        "sex", "steril", "status", "avail", "id", "dadid", "momid",
+        "sex", "steril", "status", "avail", "id", "dadid", "momid", "famid",
         "error", "affected", "kin", "useful"
     )
     cols_to_use <- c(
@@ -120,9 +120,10 @@ norm_ped <- function(
             }
         )
         ## Make a new id from the family and subject pair
-        ped_df$id <- prefix_famid(ped_df$family, ped_df$indId, missid)
-        ped_df$dadid <- prefix_famid(ped_df$family, ped_df$fatherId, missid)
-        ped_df$momid <- prefix_famid(ped_df$family, ped_df$motherId, missid)
+        ped_df$famid <- ped_df$family
+        ped_df$id <- prefix_famid(ped_df$famid, ped_df$indId, missid)
+        ped_df$dadid <- prefix_famid(ped_df$famid, ped_df$fatherId, missid)
+        ped_df$momid <- prefix_famid(ped_df$famid, ped_df$motherId, missid)
 
         ped_df <- mutate_at(ped_df, c("id", "dadid", "momid"),
             ~replace(., . %in% na_strings, missid)
@@ -255,7 +256,7 @@ norm_ped <- function(
 #' @param rel_df A data.frame with the special relationships between
 #' individuals.
 #' The minimum columns required are `id1`, `id2` and `code`.
-#' The `family` column can also be used to specify the family
+#' The `famid` column can also be used to specify the family
 #' of the individuals.
 #' The code values are:
 #' - `1` = Monozygotic twin
@@ -273,7 +274,7 @@ norm_ped <- function(
 #'    id2 = c(2, 3, 4, 5, 6, 7, 8, 9, 10, 1),
 #'    code = c("MZ twin", "DZ twin", "UZ twin", "Spouse", 1, 2,
 #'       3, 4, "MzTwin", "sp oUse"),
-#'    family = c(1, 1, 1, 1, 1, 1, 1, 2, 2, 2)
+#'    famid = c(1, 1, 1, 1, 1, 1, 1, 2, 2, 2)
 #' )
 #' norm_rel(df)
 #'
@@ -285,7 +286,7 @@ norm_rel <- function(rel_df, na_strings = c("NA", ""), missid = "0") {
     err <- data.frame(matrix(NA, nrow = nrow(rel_df), ncol = length(err_cols)))
     colnames(err) <- err_cols
     cols_needed <- c("id1", "id2", "code")
-    cols_used <- c("error")
+    cols_used <- c("error", "famid")
     cols_to_use <- c("family")
     rel_df <- check_columns(
         rel_df, cols_needed, cols_used, cols_to_use,
@@ -305,7 +306,7 @@ norm_rel <- function(rel_df, na_strings = c("NA", ""), missid = "0") {
 
         #### Check for id errors #### Set ids as characters
         rel_df <- rel_df %>%
-            mutate(across(c("id1", "id2"), as.character))
+            mutate(across(c("id1", "id2", "family"), as.character))
 
         ## Check for non null ids
         len1 <- nchar(rel_df$id1)
@@ -314,8 +315,9 @@ norm_rel <- function(rel_df, na_strings = c("NA", ""), missid = "0") {
         err$id2Err[is.na(len2) | len2 == missid] <- "indId2length0"
 
         ## Compute id with family id
-        rel_df$id1 <- prefix_famid(rel_df$family, rel_df$id1, missid)
-        rel_df$id2 <- prefix_famid(rel_df$family, rel_df$id2, missid)
+        rel_df$famid <- rel_df$family
+        rel_df$id1 <- prefix_famid(rel_df$famid, rel_df$id1, missid)
+        rel_df$id2 <- prefix_famid(rel_df$famid, rel_df$id2, missid)
 
         err$sameIdErr[rel_df$id1 == rel_df$id2] <- "SameId"
 

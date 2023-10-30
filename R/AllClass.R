@@ -69,8 +69,8 @@ setValidity("Scales", is_valid_scales)
 #' of the individuals in the pedigree.
 #' It is used to create a Pedigree object.
 #' The minimal needed informations are `id`, `dadid`, `momid` and `sex`.
-#' If a `family` is provided, the individuals `id` will be aggregated
-#' to the `family` character to ensure the uniqueness of the `id`.
+#' If a `famid` is provided, the individuals `id` will be aggregated
+#' to the `famid` character to ensure the uniqueness of the `id`.
 #' The other slots are used to store recognized informations.
 #' Additional columns can be added to the Ped object and will be
 #' stored in the `meta` slot of the Ped object.
@@ -80,7 +80,7 @@ setValidity("Scales", is_valid_scales)
 #' @slot momid A character vector with the id of the mother of the individuals.
 #' @slot sex A factor vector for the sex of the individuals (i.e. `male`,
 #' `female`, `unknown` or `terminated`).
-#' @slot family A character vector with the family of the individuals.
+#' @slot famid A character vector with the family identifiers of the individuals.
 #' @slot steril A numeric vector with the sterilisation status of the
 #' individuals (i.e. `0` = not sterilised, `1` = sterilised, `NA` = unknown).
 #' @slot status A numeric vector with the affection status of the
@@ -113,7 +113,7 @@ setClass("Ped",
         dadid = "character",
         momid = "character",
         sex = "factor",
-        family = "character",
+        famid = "character",
         steril = "numeric",
         status = "numeric",
         avail = "numeric",
@@ -128,7 +128,7 @@ setClass("Ped",
 setMethod("parallel_slot_names", "Ped",
     function(x) {
         c(
-            "id", "momid", "dadid", "sex", "family",
+            "id", "momid", "dadid", "sex", "famid",
             "steril", "status", "avail", "affected",
             "num_child_total", "num_child_direct", "num_child_indirect",
             callNextMethod()
@@ -145,14 +145,14 @@ setValidity("Ped", is_valid_ped)
 #' between individuals in the pedigree.
 #' It is used to create a Pedigree object.
 #' The minimal needed informations are `id1`, `id2` and `code`.
-#' If a `family` is provided, the individuals `id` will be aggregated
-#' to the `family` character to ensure the uniqueness of the `id`.
+#' If a `famid` is provided, the individuals `id` will be aggregated
+#' to the `famid` character to ensure the uniqueness of the `id`.
 #'
 #' @slot id1 A character vector with the id of the first individual.
 #' @slot id2 A character vector with the id of the second individual.
 #' @slot code An ordered factor vector with the code of the special
 #' relationship. (i.e. `MZ twin` < `DZ twin` < `UZ twin` < `Spouse`).
-#' @slot family A character vector with the family of the individuals.
+#' @slot famid A character vector with the famid of the individuals.
 #'
 #' @return A Rel object.
 #' @seealso [Pedigree()]
@@ -166,14 +166,14 @@ setClass("Rel",
         id1 = "character",
         id2 = "character",
         code = "factor",
-        family = "character"
+        famid = "character"
     )
 )
 
 setMethod("parallel_slot_names", "Rel",
     function(x) {
         c(
-            "id1", "id2", "code", "family",
+            "id1", "id2", "code", "famid",
             callNextMethod()
         )
     }

@@ -139,7 +139,7 @@ setMethod("kinship", "character",
 #' @docType methods
 setMethod("kinship", "Pedigree",
     function(obj, chrtype = "autosome") {
-        famlist <- unique(obj$ped$family)
+        famlist <- unique(obj$ped$famid)
         nfam <- length(famlist)
         matlist <- vector("list", nfam)
         ## The possibly reorderd list of id values
@@ -147,10 +147,10 @@ setMethod("kinship", "Pedigree",
 
         for (i_fam in seq_along(famlist)) {
             if (is.na(famlist[i_fam])) { # If no family provided
-                tped <- obj[is.na(obj$ped$family)]
+                tped <- obj[is.na(obj$ped$famid)]
             } else {
                 ## Pedigree for this family
-                tped <- obj[obj$ped$family == famlist[i_fam]]
+                tped <- obj[obj$ped$famid == famlist[i_fam]]
             }
             temp <- try({
                 chrtype <- match.arg(casefold(chrtype), c("autosome", "x"))

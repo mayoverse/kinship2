@@ -17,7 +17,7 @@
 #' @return Nothing, but will stop if there is a problem.
 #' @examples
 #' data(sampleped)
-#' ped1 <- Pedigree(sampleped[sampleped$family == "1",])
+#' ped1 <- Pedigree(sampleped[sampleped$famid == "1",])
 #' ht1 <- auto_hint(ped1)
 #' check_hints(ht1, ped1$ped$sex)
 #'

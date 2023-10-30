@@ -30,7 +30,7 @@ na_to_length <- function(x, temp, value) {
 #' `data.frame` with all the informations in corresponding columns.
 #' @param dadid A character vector with the id of the father of the individuals.
 #' @param momid A character vector with the id of the mother of the individuals.
-#' @param family A character vector with the family of the individuals.
+#' @param famid A character vector with the family identifiers of the individuals.
 #' @param sex A factor vector with the sex of the individuals (i.e. `male`,
 #' `female`, `unknown` or `terminated`).
 #' @param steril A numeric vector with the sterilisation status of the
@@ -54,7 +54,7 @@ setGeneric("Ped", signature = "obj", function(obj, ...) {
 setMethod("Ped", "data.frame",
     function(obj, cols_used_init = FALSE, cols_used_del = FALSE) {
         col_need <- c("id", "sex", "dadid", "momid")
-        col_to_use <- c("family", "steril", "status", "avail", "affected")
+        col_to_use <- c("famid", "steril", "status", "avail", "affected")
         col_used <- c(
             "num_child_total", "num_child_direct", "num_child_indirect",
             "elementMetadata"
@@ -71,7 +71,7 @@ setMethod("Ped", "data.frame",
 
         myped <- with(df, Ped(
             obj = id, sex = sex, dadid = dadid, momid = momid,
-            family = family,
+            famid = famid,
             steril = steril, status = status, avail = avail,
             affected = affected
         ))
@@ -88,11 +88,11 @@ setMethod("Ped", "data.frame",
 #' @rdname Ped
 setMethod("Ped", "character",
     function(
-        obj, sex, dadid, momid, family = NA,
+        obj, sex, dadid, momid, famid = NA,
         steril = NA, status = NA, avail = NA,
         affected = NA
     ) {
-        family <- na_to_length(family, obj, NA_character_)
+        famid <- na_to_length(famid, obj, NA_character_)
         id <- as.character(obj)
         dadid <- as.character(dadid)
         momid <- as.character(momid)
@@ -109,7 +109,7 @@ setMethod("Ped", "character",
 
         new(
             "Ped",
-            id = id, dadid = dadid, momid = momid, family = family,
+            id = id, dadid = dadid, momid = momid, famid = famid,
             sex = sex, steril = steril, status = status, avail = avail,
             affected = affected,
             num_child_total = df_child$num_child_tot,
@@ -130,7 +130,7 @@ setMethod("Ped", "character",
 #' pairs
 #' @param code An ordered factor vector with the code of the special
 #' relationship (i.e. `MZ twin` < `DZ twin` < `UZ twin` < `Spouse`).
-#' @param family A character vector with the family of the individuals.
+#' @param famid A character vector with the family identifiers of the individuals.
 #'
 #' @return A Rel object.
 #' @seealso [Pedigree()]
@@ -147,14 +147,14 @@ setGeneric("Rel", signature = "obj", function(obj, ...) {
 setMethod("Rel", "data.frame",
     function(obj) {
         col_need <- c("id1", "id2", "code")
-        col_to_use <- c("family")
+        col_to_use <- c("famid")
         df <- check_columns(
             obj, col_need, NULL, col_to_use,
             cols_to_use_init = TRUE
         )
 
         with(df, Rel(
-            obj = id1, id2 = id2, code = code, family = family
+            obj = id1, id2 = id2, code = code, famid = famid
         ))
     }
 )
@@ -165,9 +165,9 @@ setMethod("Rel", "data.frame",
 #' @export
 setMethod("Rel", "character",
     function(
-        obj, id2, code, family = NA
+        obj, id2, code, famid = NA
     ) {
-        family <- na_to_length(family, obj, NA_character_)
+        famid <- na_to_length(famid, obj, NA_character_)
         id1 <- as.character(obj)
         id2 <- as.character(id2)
 
@@ -181,7 +181,7 @@ setMethod("Rel", "character",
 
         rel <- new(
             "Rel",
-            id1 = id1o, id2 = id2o, code = code, family = family
+            id1 = id1o, id2 = id2o, code = code, famid = famid
         )
         rel
     }

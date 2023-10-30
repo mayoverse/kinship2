@@ -46,14 +46,14 @@ test_that("Class ped work", {
         momid = c("ID2", NA, NA),
         dadid = c("ID3", NA, NA),
         sex = c("male", "female", "male"),
-        family = c("F1", "F1", "F2")
+        famid = c("F1", "F1", "F2")
     ))
     expect_error(Ped(
         obj = c("ID3", "ID2", ""),
         momid = c("ID2", NA, NA),
         dadid = c("ID3", NA, NA),
         sex = c("male", "female", "male"),
-        family = c("F1", "F1", "F2")
+        famid = c("F1", "F1", "F2")
     ))
 
     #### Metadata ####
@@ -62,7 +62,7 @@ test_that("Class ped work", {
         momid = c("ID2", NA, NA),
         dadid = c("ID3", NA, NA),
         sex = c("male", "female", "male"),
-        family = c("F1", "F1", "F2")
+        famid = c("F1", "F1", "F2")
     )
 
     mcols(ped3) <- list(A = c("test", 1, 3), B = c("test3", 6, 8))
@@ -80,11 +80,16 @@ test_that("Class ped work", {
         momid = c("ID2", NA, NA),
         dadid = c("ID3", NA, NA),
         sex = c("male", "female", "male"),
-        family = c("F1", "F1", "F2"),
+        famid = c("F1", "F1", "F2"),
         test = c("test", 1, 3),
         test2 = c("test2", 3, 4)
     )
     ped3 <- Ped(df)
+
+    expect_equal(ped3[1]@id, "ID1")
+    expect_equal(ped3[1:2]@id, c("ID1", "ID2"))
+    famid(ped3)
+
     expect_equal(dim(as.data.frame(ped3)), c(3, 14))
     expect_equal(dim(mcols(ped3)), c(3, 2))
 

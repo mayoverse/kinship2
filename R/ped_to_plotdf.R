@@ -21,7 +21,7 @@ NULL
 #' @return A list containing the data frame and the user coordinates.
 #' @examples
 #' data(sampleped)
-#' ped1 <- Pedigree(sampleped[sampleped$family == 1,])
+#' ped1 <- Pedigree(sampleped[sampleped$famid == 1,])
 #' ped_to_plotdf(ped1)
 #' @seealso [plot_fromdf()]
 #' [ped_to_legdf()]
@@ -32,12 +32,12 @@ ped_to_plotdf <- function(
     aff_mark = TRUE, label = NULL, ...
 ) {
 
-    famlist <- unique(ped(ped, "family"))
+    famlist <- unique(ped(ped, "famid"))
     if (length(famlist) > 1) {
         nfam <- length(famlist)
         all_df <- vector("list", nfam)
         for (i_fam in famlist) {
-            ped_fam <- ped[ped(ped, "family") == i_fam]
+            ped_fam <- ped[ped(ped, "famid") == i_fam]
             all_df[[i_fam]] <- ped_to_plotdf(ped_fam, packed, width, align,
                 subreg, cex, symbolsize, ...
             )

@@ -105,7 +105,7 @@
 #'
 #' @format A data frame with 55 observations, one line per subject, on the
 #' following 7 variables.
-#' - `family` family identifier
+#' - `famid` family identifier
 #' - `id` subject identifier
 #' - `dadid` identifier of the father, if the father is part of the
 #' data set; zero otherwise

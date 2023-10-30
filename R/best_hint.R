@@ -42,7 +42,7 @@
 #' @export
 #' @examples
 #' data(sampleped)
-#' ped <- Pedigree(sampleped[sampleped$family == 1,])
+#' ped <- Pedigree(sampleped[sampleped$famid == 1,])
 #' best_hint(ped)
 #' @include auto_hint.R
 #' @include align.R

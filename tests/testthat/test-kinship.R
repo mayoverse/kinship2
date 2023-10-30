@@ -162,7 +162,7 @@ test_that("Kinship with 2 different family", {
     ), ncol = 5, byrow = TRUE)
 
     ped2df <- as.data.frame(ped2mat)
-    names(ped2df) <- c("family", "id", "dadid", "momid", "sex")
+    names(ped2df) <- c("famid", "id", "dadid", "momid", "sex")
 
     ## testing when only one subject in a family
     peddf <- rbind(ped2df, c(2, 1, 0, 0, 1))

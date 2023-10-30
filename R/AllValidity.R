@@ -181,9 +181,9 @@ is_valid_ped <- function(object) {
     }
 
     # Control values for ids
-    famid <- unique(object@family)
+    famid <- unique(object@famid)
     errors <- c(errors, check_values(
-        famid, c(""), "family", present = FALSE
+        famid, c(""), "famid", present = FALSE
     ))
     errors <- c(errors, check_values(
         object@id,
@@ -241,7 +241,7 @@ is_valid_ped <- function(object) {
 is_valid_rel <- function(object) {
     errors <- c()
 
-    rel_cols <- c("id1", "id2", "code", "family")
+    rel_cols <- c("id1", "id2", "code", "famid")
     #### Check that the slots have the right columns ####
     errors <- c(errors, check_slot_fd(object, NULL, rel_cols))
 
@@ -292,10 +292,10 @@ is_valid_rel <- function(object) {
 is_valid_pedigree <- function(object) {
     errors <- c()
 
-    #### Check that the family id and individual id present in the rel slot ####
+    #### Check that the famid id and individual id present in the rel slot ####
     #### are present in the ped slot ####
     errors <- c(errors, check_values(
-        object@rel@family, c(object@ped@family, NA)
+        object@rel@famid, c(object@ped@famid, NA)
     ))
     errors <- c(errors, check_values(object@rel@id1, object@ped@id))
     errors <- c(errors, check_values(object@rel@id2, object@ped@id))

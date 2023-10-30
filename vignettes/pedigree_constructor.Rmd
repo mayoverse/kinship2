@@ -57,7 +57,7 @@ It accepts the following input
     and 1 = affected.
     - $status$ Optional, a numeric variable with 0 = censored and
     1 = dead.
-    - $family$ Optional, a numeric or character vector of family
+    - $famid$ Optional, a numeric or character vector of family
     identifiers.
     - $steril$ Optional, a numeric variable with 0 = not steril and
     1 = steril.
@@ -66,7 +66,7 @@ It accepts the following input
     - $indId2$ identifier values of the subject pairs
     - $code$ relationship codification : 1 = Monozygotic twin,
     2=Dizygotic twin, 3= twin of unknown zygosity, 4 = Spouse.
-    - $family$ Optional, a numeric or character vector of family
+    - $famid$ Optional, a numeric or character vector of family
     identifiers.
 - **cols_ren_ped** Optional, a named list for the renaming of the
 **ped_df** dataframe
@@ -113,7 +113,7 @@ correctly.
 If the normalisation process is selected `normalize = TRUE`, then both
 dataframe will be checked by their dedicated normalization function.
 It will ensure that all modalities are written correctly and set up the
-right way. If a $family$ column is present in the dataframe, then it will
+right way. If a $famid$ column is present in the dataframe, then it will
 be aggregated to the id of each individual and separated by an ''_'' to
 ensure the uniqueness of the individuals identifiers.
 

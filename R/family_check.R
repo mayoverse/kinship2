@@ -17,15 +17,15 @@
 #' and the number of subjects as entries.
 #'
 #' @inheritParams kinship
-#' @param family A vector of family identifiers
+#' @param famid A vector of family identifiers
 #' @param newfam The result of a call to `make_famid()`. If this has already
 #' been computed by the user, adding it as an argument shortens the running
 #' time somewhat.
 #'
 #' @return a data frame with one row for each unique family id in the
-#' `family` argument or the one detected in the Pedigree object.
+#' `famid` argument or the one detected in the Pedigree object.
 #' Components of the output are:
-#' - `family` : The family id, as entered into the data set
+#' - `famid` : The family id, as entered into the data set
 #' - `n` : Number of subjects in the family
 #' - `unrelated` : Number of them that appear to be unrelated to
 #' anyone else in the entire Pedigree.  This is usually marry-ins with no
@@ -57,7 +57,7 @@
 #' sampleped[20, 3] <- 131
 #' fcheck1.bad <- try(
 #'   {
-#'     with(sampleped, family_check(id, father, mother, family))
+#'     with(sampleped, family_check(id, father, mother, famid))
 #'   },
 #'   silent = FALSE
 #' )
@@ -78,20 +78,20 @@ setGeneric("family_check", signature = "obj",
 #' @aliases family_check,character
 #' @export
 setMethod("family_check", "character",
-    function(obj, dadid, momid, family, newfam) {
+    function(obj, dadid, momid, famid, newfam) {
         id <- obj
-        if (is.numeric(family) && any(is.na(family))) {
+        if (is.numeric(famid) && any(is.na(famid))) {
             stop("Family id of missing not allowed")
         }
-        nfam <- length(unique(family))
+        nfam <- length(unique(famid))
 
         if (missing(newfam)) {
             newfam <- make_famid(id, dadid, momid)
-        } else if (length(newfam) != length(family)) {
+        } else if (length(newfam) != length(famid)) {
             stop("Invalid length for newfam")
         }
 
-        xtab <- table(family, newfam)
+        xtab <- table(famid, newfam)
         if (any(newfam == 0)) {
             unrelated <- xtab[, 1]
             xtab <- xtab[, -1, drop = FALSE]
@@ -105,8 +105,8 @@ setMethod("family_check", "character",
 
         temp <- apply((xtab > 0) * outer(rep(1, nfam), joins - 1), 1, sum)
 
-        out <- data.frame(family = dimnames(xtab)[[1]],
-            n = as.vector(table(family)), unrelated = as.vector(unrelated),
+        out <- data.frame(famid = dimnames(xtab)[[1]],
+            n = as.vector(table(famid)), unrelated = as.vector(unrelated),
             split = as.vector(splits), join = temp, row.names = seq_len(nfam)
         )
         if (any(joins > 1)) {
@@ -125,6 +125,6 @@ setMethod("family_check", "character",
 #' @aliases family_check,Pedigree
 setMethod("family_check", "Pedigree",
     function(obj) {
-        family_check(obj$ped$id, obj$ped$dadid, obj$ped$momid, obj$ped$family)
+        family_check(obj$ped$id, obj$ped$dadid, obj$ped$momid, obj$ped$famid)
     }
 )

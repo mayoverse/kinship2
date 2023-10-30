@@ -12,7 +12,7 @@
 #' with the individuals informations.
 #' The minimum columns required are `indID`, `fatherId`, `motherId` and
 #' `gender`.
-#' The `family` column can also be used to specify the family of the
+#' The `famid` column can also be used to specify the family of the
 #' individuals and will be merge to the `id` field separated by an
 #' underscore.
 #' The following columns are also recognize `sterilisation`, `available`,
@@ -82,7 +82,7 @@ setMethod("Pedigree", "numeric", function(obj, ...
 #' - `1`  : sterilised
 #' - `NA` : sterilisation status not known
 setMethod("Pedigree", "character", function(obj, dadid, momid,
-    sex, family = NA, avail = NULL, affected = NULL, status = NULL,
+    sex, famid = NA, avail = NULL, affected = NULL, status = NULL,
     steril = NULL, relation =  NULL,
     missid = "0", col_aff = "affection", normalize = TRUE, ...
 ) {
@@ -107,7 +107,7 @@ setMethod("Pedigree", "character", function(obj, dadid, momid,
 
 
     ped_df <- data.frame(
-        family = family,
+        family = famid,
         indId = obj,
         fatherId = dadid,
         motherId = momid,
@@ -285,9 +285,9 @@ setMethod("Pedigree", "data.frame",  function(
     }
 
     cols <- colnames(ped_df)
-    col_ped <- c("id", "dadid", "momid", "sex", "family")
+    col_ped <- c("id", "dadid", "momid", "sex", "famid")
     col_deriv <- c("affected", "kin", "useful", "avail", "steril", "status")
-    col_rel <- c("id1", "id2", "code", "family")
+    col_rel <- c("id1", "id2", "code", "famid")
     col_meta <- cols[!(cols %in% c(col_ped, col_deriv))]
     ped <- ped_df[, col_ped]
     deriv <- ped_df[, col_deriv]

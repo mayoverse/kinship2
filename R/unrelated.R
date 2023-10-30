@@ -30,7 +30,7 @@ NULL
 
 #' @examples
 #' data(sampleped)
-#' fam1 <- sampleped[sampleped$family == 1, ]
+#' fam1 <- sampleped[sampleped$famid == 1, ]
 #'
 #'
 #' ped1 <- Pedigree(fam1)

@@ -30,7 +30,7 @@
 #'
 #' @examples
 #' data(sampleped)
-#' ped1 <- Pedigree(sampleped[sampleped$family == "1",])
+#' ped1 <- Pedigree(sampleped[sampleped$famid == "1",])
 #' find_unavailable(ped1)
 #'
 #' @seealso [shrink()]

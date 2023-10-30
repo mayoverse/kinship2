@@ -88,7 +88,7 @@ test_that("generate fill full scale on", {
 
 test_that("generate colors works on Pedigree object", {
     data("sampleped")
-    ped <- Pedigree(sampleped[sampleped$family == "1", -1])
+    ped <- Pedigree(sampleped[sampleped$famid == "1", -1])
     ped(ped, "id") <- as.numeric(ped(ped, "id"))
     ped_aff <- generate_colors(ped, col_aff = "id",
         threshold = 120, sup_thres_aff = TRUE, add_to_scale = FALSE
@@ -106,7 +106,7 @@ test_that("generate with full scale", {
     data("sampleped")
     sampleped$val_num <- as.numeric(sampleped$id)
     ped <- Pedigree(sampleped)
-    ped <- ped[ped(ped, "family") == "1", ]
+    ped <- ped[ped(ped, "famid") == "1", ]
     ped <- generate_colors(
         ped, add_to_scale = FALSE, "val_num", threshold = 115,
         colors_aff = c("pink", "purple"), keep_full_scale = TRUE

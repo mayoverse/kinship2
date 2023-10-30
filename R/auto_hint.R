@@ -296,7 +296,7 @@ get_twin_rel <- function(ped) {
 #' @seealso [align()], [best_hint()]
 #' @examples
 #' data(sampleped)
-#' ped <- Pedigree(sampleped[sampleped$family == 1, ])
+#' ped <- Pedigree(sampleped[sampleped$famid == 1, ])
 #' auto_hint(ped)
 #' @export
 auto_hint <- function(
@@ -312,7 +312,7 @@ auto_hint <- function(
         return(hints(ped))
     } # nothing to do
 
-    if (length(unique(ped(ped, "family"))) > 1) {
+    if (length(unique(ped(ped, "famid"))) > 1) {
         stop("auto_hint only works on Pedigrees with a single family")
     }
 

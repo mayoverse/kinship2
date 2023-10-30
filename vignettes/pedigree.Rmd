@@ -98,7 +98,7 @@ in the dataset, and create a *Pedigree* object using the
 This function automaticaly detect the necessary columns in the dataframe.
 If necessary you can modify the columns names with *cols_ren*.
 To create a Pedigree object, with multiple families, the dataframe just need
-a family column in the *ped_df* dataframe. When this is the case, the family
+a family column in the *ped_df* dataframe. When this is the case, the famid
 column will be pasted to the id of each individuals separated by an
 underscore to create a unique id for each individual in the Pedigree object.
 
@@ -119,7 +119,7 @@ The summary method prints a more detailed summary of the Pedigree.
 Finally the plot method displays the Pedigree.
 
 ```{r, ped1}
-ped1 <- ped[ped(ped, "family") == "1", ]
+ped1 <- ped[ped(ped, "famid") == "1", ]
 print(ped1)
 summary(ped1)
 plot(ped1)
@@ -150,7 +150,7 @@ delete the specified subject (in this case, $209$). Reassign this code to
 ~datped22~ to drop the specified subject entirely.
 
 ```{r, datped2}
-datped2 <- sampleped[sampleped$family == 2, ]
+datped2 <- sampleped[sampleped$famid == 2, ]
 datped2[datped2$id %in% 203, "sex"] <- 2
 datped2 <- datped2[-which(datped2$id %in% 209), ]
 ```
@@ -263,7 +263,7 @@ Pedigree 2, subjects 1 and 2, are deceased. The $status$ indicator
 is used to cross out the individuals in the Pedigree plot.
 
 ```{r, status}
-df2 <- sampleped[sampleped$family == 2, ]
+df2 <- sampleped[sampleped$famid == 2, ]
 names(df2)
 df2$status <- c(1, 1, rep(0, 12))
 ped2 <- Pedigree(df2)
@@ -401,7 +401,7 @@ subject $113$ from the plot. The basic plot of Pedigree 1 is shown
 in the figure below.
 
 ```{r, plotped1}
-df1 <- sampleped[sampleped$family == 1, ]
+df1 <- sampleped[sampleped$famid == 1, ]
 relate1 <- data.frame(
     indId1 = 113,
     indId2 = 114,

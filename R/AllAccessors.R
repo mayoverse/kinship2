@@ -32,6 +32,71 @@ setMethod("mcols<-", signature(x = "Ped", value = "data.frame"), function(x, val
     x
 })
 
+#' Famid getter of Ped object
+#' 
+#' @param x A Ped object.
+#' 
+#' @return A character vector with the famid of each individual.
+#' 
+#' @rdname Ped
+#' @aliases famid,Ped-method
+#' @export
+setMethod("famid", signature(x = "Ped"), function(x) {
+    x@famid
+})
+
+#' Id getter of Ped object
+#' 
+#' @param x A Ped object.
+#' 
+#' @return A character vector with the id of each individual.
+#' 
+#' @rdname Ped
+#' @aliases id,Ped-method
+#' @export
+setMethod("id", signature(x = "Ped"), function(x) {
+    x@id
+})
+
+#' Dadid getter of Ped object
+#' 
+#' @param x A Ped object.
+#' 
+#' @return A character vector with the dadid of each individual.
+#' 
+#' @rdname Ped
+#' @aliases dadid,Ped-method
+#' @export
+setMethod("dadid", signature(x = "Ped"), function(x) {
+    x@dadid
+})
+
+#' Momid getter of Ped object
+#' 
+#' @param x A Ped object.
+#' 
+#' @return A character vector with the momid of each individual.
+#' 
+#' @rdname Ped
+#' @aliases momid,Ped-method
+#' @export
+setMethod("momid", signature(x = "Ped"), function(x) {
+    x@momid
+})
+
+#' Sex getter of Ped object
+#' 
+#' @param x A Ped object.
+#' 
+#' @return A character vector with the sex of each individual.
+#' 
+#' @rdname Ped
+#' @aliases sex,Ped-method
+#' @export
+setMethod("sex", signature(x = "Ped"), function(x) {
+    x@sex
+})
+
 #### S4 Pedigree Accessors ####
 #' @title Pedigree ped accessors
 #' @param object A Pedigree object.
@@ -70,7 +135,7 @@ setMethod(
     signature(object = "Pedigree", slot = "ANY", value = "ANY"),
     function(object, slot, value) {
         ped_slots <- c(
-            "id", "dadid", "momid", "sex", "family",
+            "id", "dadid", "momid", "sex", "famid",
             "steril", "status", "avail", "affected",
             "kin", "useful", "num_child_total",
             "num_child_direct", "num_child_indirect"
@@ -150,7 +215,7 @@ setMethod(
     "rel<-",
     signature(object = "Pedigree", slot = "ANY", value = "ANY"),
     function(object, slot, value) {
-        rel_cols <- c("id1", "id2", "code", "family")
+        rel_cols <- c("id1", "id2", "code", "famid")
         if (! slot %in% rel_cols) {
             stop("slot selected: ", slot, " is not a relationship column")
         }

@@ -12,7 +12,7 @@ NULL
 #' First look to add parents whose ids are given in momid/dadid. Second, fix
 #' sex of parents. Last look to add second parent for children for whom only
 #' one parent id is given.
-#' If a family vector is given the family id will be added to the ids of all
+#' If a famid vector is given the famid id will be added to the ids of all
 #' individuals (id, dadid, momid) separated by an underscore befor proceeding.
 #'
 #' ## Special case for dataframe
@@ -22,14 +22,14 @@ NULL
 #' in the dataframe then set availability to O for non available parents.
 #' - If FALSE then delete the id of missing parents
 #'
-#' @param family Optional family identification set it to NULL to invalidate.
+#' @param famid Optional famid identification set it to NULL to invalidate.
 #' If used it will modify the ids of the individuals by pasting it with an _.
 #' @inheritParams kinship
 #' @inheritParams is_parent
 #' @inheritParams sex_to_factor
 #' @param obj A data.frame or a vector of the individuals identifiers. If a
 #' dataframe is given it must contain the columns `id`, `dadid`,
-#' `momid`, `sex` and `family`. Family is optional.
+#' `momid`, `sex` and `famid`. famid is optional.
 #'
 #' @return A data.frame with id, dadid, momid, sex as columns with the
 #' relationships fixed.
@@ -65,7 +65,7 @@ setGeneric("fix_parents", signature = "obj",
 #' @rdname fix_parents
 #' @aliases fix_parents,character
 setMethod("fix_parents", "character", function(
-    obj, dadid, momid, sex, family = NULL, missid = "0"
+    obj, dadid, momid, sex, famid = NULL, missid = "0"
 ) {
     ## fix sex of parents add parents that are missing
     n <- length(obj)
@@ -79,7 +79,7 @@ setMethod("fix_parents", "character", function(
     if (length(sex) != n) {
         stop("Mismatched lengths, id and sex")
     }
-    if (length(family) != n & length(family) > 0) {
+    if (length(famid) != n & length(famid) > 0) {
         stop("Mismatched lengths, id and sex")
     }
 
@@ -100,9 +100,9 @@ setMethod("fix_parents", "character", function(
         stop("Missing value for the id variable")
     }
 
-    id <- prefix_famid(family, id, missid)
-    dadid <- prefix_famid(family, dadid, missid)
-    momid <- prefix_famid(family, momid, missid)
+    id <- prefix_famid(famid, id, missid)
+    dadid <- prefix_famid(famid, dadid, missid)
+    momid <- prefix_famid(famid, momid, missid)
     addids <- paste("addin", seq_along(id), sep = "-")
     if (length(grep("^ *$", id)) > 0) {
         stop("A blank or empty string is not allowed as the id variable")
@@ -163,13 +163,13 @@ setMethod("fix_parents", "character", function(
         dadid <- c(dadid, rep(0, length(nodad_idx)))
         momid <- c(momid, rep(0, length(nodad_idx)))
     }
-    if (is.null(family)) {
+    if (is.null(famid)) {
         data.frame(id = id, momid = momid, dadid = dadid, sex = sex)
     } else {
-        family <- stringr::str_split_i(id, "_", i = 1)
+        famid <- stringr::str_split_i(id, "_", i = 1)
         data.frame(
             id = id, momid = momid, dadid = dadid,
-            sex = sex, family = family
+            sex = sex, famid = famid
         )
     }
 })
@@ -186,7 +186,7 @@ setMethod("fix_parents", "data.frame", function(
     obj, delete = FALSE, filter = NULL, missid = "0"
 ) {
     cols_needed <- c("id", "dadid", "momid", "sex", filter)
-    df <- check_columns(obj, cols_needed, NULL, "family", others_cols = TRUE,
+    df <- check_columns(obj, cols_needed, NULL, "famid", others_cols = TRUE,
         cols_to_use_init = TRUE
     )
     df_old <- df
@@ -208,12 +208,12 @@ setMethod("fix_parents", "data.frame", function(
         }
         df_fix <- fix_parents(
             df$id, df$dadid, df$momid,
-            df$sex, missid = missid, family = df$family
+            df$sex, missid = missid, famid = df$famid
         )
         col_used <- which(names(df_old) == "momid" |
                 names(df_old) == "dadid" |
                 names(df_old) == "sex" |
-                names(df_old) == "family"
+                names(df_old) == "famid"
         )
         df <- merge(df_old[, -col_used], df_fix, by = "id",
             all.y = TRUE, all.x = FALSE
