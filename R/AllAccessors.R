@@ -41,7 +41,13 @@ setMethod("mcols<-", signature(x = "Ped", value = "data.frame"), function(x, val
 #' @rdname Ped
 #' @aliases famid,Ped-method
 #' @export
+setGeneric("famid", function(x) {
+    standardGeneric("famid")
+})
 setMethod("famid", signature(x = "Ped"), function(x) {
+    x@famid
+})
+setMethod("famid", signature(x = "Rel"), function(x) {
     x@famid
 })
 
@@ -54,6 +60,9 @@ setMethod("famid", signature(x = "Ped"), function(x) {
 #' @rdname Ped
 #' @aliases id,Ped-method
 #' @export
+setGeneric("id", function(x) {
+    standardGeneric("id")
+})
 setMethod("id", signature(x = "Ped"), function(x) {
     x@id
 })
@@ -67,6 +76,9 @@ setMethod("id", signature(x = "Ped"), function(x) {
 #' @rdname Ped
 #' @aliases dadid,Ped-method
 #' @export
+setGeneric("dadid", function(x) {
+    standardGeneric("dadid")
+})
 setMethod("dadid", signature(x = "Ped"), function(x) {
     x@dadid
 })
@@ -80,6 +92,9 @@ setMethod("dadid", signature(x = "Ped"), function(x) {
 #' @rdname Ped
 #' @aliases momid,Ped-method
 #' @export
+setGeneric("momid", function(x) {
+    standardGeneric("momid")
+})
 setMethod("momid", signature(x = "Ped"), function(x) {
     x@momid
 })
@@ -93,6 +108,9 @@ setMethod("momid", signature(x = "Ped"), function(x) {
 #' @rdname Ped
 #' @aliases sex,Ped-method
 #' @export
+setGeneric("sex", function(x) {
+    standardGeneric("sex")
+})
 setMethod("sex", signature(x = "Ped"), function(x) {
     x@sex
 })

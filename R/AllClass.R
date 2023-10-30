@@ -1,6 +1,10 @@
 #' @importFrom S4Vectors parallel_slot_names
 NULL
 
+#### Class integer / character ####
+
+setClassUnion("character_OR_integer", c("character", "integer"))
+
 #### Hints Class ####
 
 #' S4 class to represent a hints object.
