@@ -270,37 +270,43 @@ setMethod("scales", signature(object = "Pedigree"), function(object) {
 #' @rdname extract-methods
 #' @aliases fill,Pedigree-method
 #' @export
-setGeneric("fill", function(object, slot) {
+setGeneric("fill", function(object) {
     standardGeneric("fill")
 })
 
 setMethod("fill",
-    signature(object = "Pedigree", slot = "ANY"),
-    function(object, slot) {
-        object@scales$fill[slot]
+    signature(object = "Scales"),
+    function(object) {
+        object@fill
     }
 )
 
 setMethod("fill",
-    signature(object = "Pedigree", slot = "missing"),
+    signature(object = "Pedigree"),
     function(object) {
-        object@scales$fill
+        fill(scales(object))
     }
 )
 
-setGeneric("fill<-", function(object, slot, value) {
+setGeneric("fill<-", function(object, value) {
     standardGeneric("fill<-")
 })
 
 setMethod(
     "fill<-",
-    signature(object = "Pedigree", slot = "ANY", value = "ANY"),
-    function(object, slot, value) {
-        fill_cols <- c("column", "column_values")
-        if (! slot %in% fill_cols) {
-            stop("slot selected: ", slot, " is not a fill column")
-        }
-        object@scales$fill[slot] <- value
+    signature(object = "Scales", value = "data.frame"),
+    function(object, value) {
+        object@fill <- value
+        validObject(object)
+        object
+    }
+)
+
+setMethod(
+    "fill<-",
+    signature(object = "Pedigree", value = "data.frame"),
+    function(object, value) {
+        fill(scales(object)) <- value
         validObject(object)
         object
     }
@@ -313,30 +319,43 @@ setMethod(
 #' @rdname extract-methods
 #' @aliases border,Pedigree-method
 #' @export
-setGeneric("border", function(object, slot) {
+setGeneric("border", function(object) {
     standardGeneric("border")
 })
 
 setMethod("border",
-    signature(object = "Pedigree", slot = "ANY"),
-    function(object, slot) {
-        object@scales$border[slot]
+    signature(object = "Scales"),
+    function(object) {
+        object@border
     }
 )
 
-setGeneric("border<-", function(object, slot, value) {
+setMethod("border",
+    signature(object = "Pedigree"),
+    function(object) {
+        border(scales(object))
+    }
+)
+
+setGeneric("border<-", function(object, value) {
     standardGeneric("border<-")
 })
 
 setMethod(
     "border<-",
-    signature(object = "Pedigree", slot = "ANY", value = "ANY"),
-    function(object, slot, value) {
-        fill_cols <- c("column", "column_values")
-        if (! slot %in% fill_cols) {
-            stop("slot selected: ", slot, " is not a border column")
-        }
-        object@scales$border[slot] <- value
+    signature(object = "Scales", value = "data.frame"),
+    function(object, value) {
+        object@border <- value
+        validObject(object)
+        object
+    }
+)
+
+setMethod(
+    "border<-",
+    signature(object = "Pedigree", value = "data.frame"),
+    function(object, value) {
+        border(scales(object)) <- value
         validObject(object)
         object
     }
