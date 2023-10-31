@@ -64,6 +64,15 @@ setMethod("num_child", "character_OR_integer", function(obj, dadid, momid,
     childs_all <- NULL
 
     df <- data.frame(id, dadid, momid, stringsAsFactors = FALSE)
+    if (nrow(df) == 0) {
+        df <- data.frame(id = character(),
+            num_child_dir = integer(),
+            num_child_ind = integer(),
+            num_child_tot = integer(),
+            stringsAsFactors = FALSE
+        )
+        return(df)
+    }
 
     spouse_rel <- unique(df[(!df$dadid %in% missid) &
                 (!df$momid %in% missid), c("dadid", "momid")
@@ -143,18 +152,18 @@ setMethod("num_child", "character_OR_integer", function(obj, dadid, momid,
 #' @param reset If TRUE, the `num_child_tot`, `num_child_ind` and
 #' the `num_child_dir` columns are reset.
 setMethod("num_child", "Pedigree", function(obj, reset = FALSE) {
-    df <- num_child(obj$ped$id, obj$ped$dadid, obj$ped$momid,
-        rel_df = obj$rel
+    df <- num_child(id(ped(obj)), dadid(ped(obj)), momid(ped(obj)),
+        rel_df = rel(obj)
     )
 
     if (!reset) {
-        check_columns(obj$ped, NULL,
+        check_columns(as.data.frame(ped(obj)), NULL,
             c("num_child_tot", "num_child_ind", "num_child_dir"),
             NULL, others_cols = TRUE
         )
     }
 
-    obj$ped <- merge(obj$ped,
+    ped(obj) <- merge(as.data.frame(ped(obj)),
         df[c("id", "num_child_tot", "num_child_ind", "num_child_dir")],
         by = "id", sort = FALSE
     )
