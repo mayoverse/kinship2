@@ -94,6 +94,45 @@ setMethod("as.data.frame", "Ped", function(x) {
     ped_df
 })
 
+#' Subset a Ped object
+#'
+#' @description Subset a Ped object based on the individuals
+#' identifiers given.
+#'
+#' @param x A Ped object.
+#' @param i A vector of individuals identifiers to keep.
+#'
+#' @return A Ped object subsetted.
+#'
+#' @rdname extract-methods
+#' @aliases subset,Ped-method
+#' @importFrom S4Vectors subset
+#' @export
+setMethod("subset", "Ped", function(x, i, del_parents = FALSE) {
+    if (is.factor(i)) {
+        i <- as.character(i)
+    }
+    if (is.character(i)) {
+        i <- which(x@id %in% i)
+    } else if (!is.numeric(i) & !is.logical(i)) {
+        stop("i must be a character, an integer or a logical vector")
+    }
+    col_computed <- c(
+        "num_child_total", "num_child_direct", "num_child_indirect"
+    )
+    ped_df <- as.data.frame(x)[i, ]
+    ped_df <- ped_df[, ! colnames(ped_df) %in% col_computed]
+
+    if (del_parents) {
+        ped_df$dadid[!ped_df$dadid %in% ped_df$id] <- NA_character_
+        ped_df$momid[!ped_df$momid %in% ped_df$id] <- NA_character_
+    }
+    print(ped_df)
+    new_ped <- Ped(ped_df)
+    validObject(new_ped)
+    new_ped
+})
+
 #### S4 Rel generics ####
 #' Summary function of Rel object
 #'
@@ -192,6 +231,37 @@ setMethod("as.data.frame", "Rel", function(x) {
     data.frame(lst)
 })
 
+#' Subset a Rel object
+#'
+#' @description Subset a Rel object based on the individuals
+#' identifiers given.
+#'
+#' @param x A Rel object.
+#' @param idlist A vector of individuals identifiers to keep.
+#'
+#' @return A Rel object subsetted.
+#'
+#' @rdname extract-methods
+#' @aliases subset,Rel-method
+#' @importFrom S4Vectors subset
+#' @export
+setMethod("subset", "Rel", function(x, idlist) {
+    if (is.factor(idlist)) {
+        idlist <- as.character(idlist)
+    }
+    if (! is.character(idlist)) {
+        stop("idlist must be a character")
+    }
+    rel_df <- as.data.frame(x)
+
+    id1 <- rel_df$id1 %in% idlist
+    id2 <- rel_df$id2 %in% idlist
+    rel_df <- rel_df[id1 & id2, ]
+    new_rel <- Rel(rel_df)
+    validObject(new_rel)
+    new_rel
+})
+
 #### S4 Hints generics ####
 #' Set Hints object to list
 #'
@@ -207,6 +277,56 @@ setMethod("as.data.frame", "Rel", function(x) {
 #' @export
 setMethod("as.list", "Hints", function(x) {
     list(horder = x@horder, spouse = x@spouse)
+})
+
+#' Hints subscripting
+#' @description Subset the Hints object based on the identifiers
+#' given
+#' @param hints A Hints object
+#' @param idlist A vector of identifiers to subset
+#' @return A list of Hints object subsetted
+#' @rdname extract-methods
+#' @aliases subset_hints,Hints-method
+#' @keywords internal
+setMethod("subset", "Hints", function(x, idlist) {
+    horder <- horder(x)
+    spouse <- spouse(x)
+
+    if (is.factor(idlist)) {
+        idlist <- as.character(idlist)
+    }
+    if (! is.character(idlist)) {
+        stop("idlist must be a character")
+    }
+
+    if (length(horder) > 0) {
+        horder <- horder[horder %in% idlist]
+    }
+
+    if (nrow(spouse) > 0) {
+        spouse <- spouse[spouse$idl %in% idlist & spouse$idr %in% idlist, ]
+    }
+
+    new_hints <- Hints(horder = horder, spouse = spouse)
+    validObject(new_hints)
+    new_hints
+})
+
+#### S4 Scales generics ####
+#' Set Scales object to list
+#'
+#' @description Convert a Scales object to a list
+#'
+#' @param from A Scales object.
+#'
+#' @return A list with the hints informations.
+#'
+#' @rdname Scales
+#' @aliases as.list,Scales-method
+#' @importMethodsFrom S4Vectors as.list
+#' @export
+setMethod("as.list", "Scales", function(x) {
+    list(fill = x@fill, border = x@border)
 })
 
 #### S4 Pedigree generics ####
@@ -253,35 +373,26 @@ setMethod("summary", signature(object = "Pedigree"), function(object) {
     )
 })
 
-## Subscripting
-#' @description Subset the hints list based on the index given
-#' @param hints A list of hints
-#' @param index A vector of index
-#' @return A list of hints subsetted
+#' Convert a Pedigree object to a list
+#'
+#' @description Convert a Pedigree object to a list
+#'
+#' @param from A Pedigree object.
+#'
+#' @return A list with the individuals informations.
+#'
 #' @rdname extract-methods
-#' @aliases sub_sel_hints,Pedigree-method
-#' @keywords internal
-sub_sel_hints <- function(hints, index) {
-    if (!is.null(hints$horder)) {
-        temp <- list(horder = hints$horder[index])
-    } else {
-        temp <- list(horder = NULL)
-    }
-
-    if (!is.null(hints$spouse)) {
-        indx1 <- match(hints$spouse[, 1], index, nomatch = 0)
-        indx2 <- match(hints$spouse[, 2], index, nomatch = 0)
-        keep <- (indx1 > 0 & indx2 > 0)  # keep only if both id's are kept
-        if (any(keep)) {
-            temp$spouse <- cbind(indx1[keep], indx2[keep],
-                hints$spouse[keep, 3]
-            )
-        }
-    } else {
-        temp$spouse <- NULL
-    }
-    temp
-}
+#' @aliases as.list,Pedigree-method
+#' @importMethodsFrom S4Vectors as.list
+#' @export
+setMethod("as.list", "Pedigree", function(x) {
+    list(
+        ped = as.list(ped(x)),
+        rel = as.list(rel(x)),
+        scales = as.list(scales(x)),
+        hints = as.list(hints(x))
+    )
+})
 
 #' @description Extract parts of a Pedigree object
 #' @param x A Pedigree object.

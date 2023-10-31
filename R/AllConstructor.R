@@ -30,7 +30,8 @@ na_to_length <- function(x, temp, value) {
 #' `data.frame` with all the informations in corresponding columns.
 #' @param dadid A character vector with the id of the father of the individuals.
 #' @param momid A character vector with the id of the mother of the individuals.
-#' @param famid A character vector with the family identifiers of the individuals.
+#' @param famid A character vector with the family identifiers of the
+#' individuals.
 #' @param sex A factor vector with the sex of the individuals (i.e. `male`,
 #' `female`, `unknown` or `terminated`).
 #' @param steril A numeric vector with the sterilisation status of the
@@ -68,7 +69,6 @@ setMethod("Ped", "data.frame",
         df$status <- vect_to_binary(df$status)
         df$avail <- vect_to_binary(df$avail)
         df$affected <- vect_to_binary(df$affected)
-
         myped <- with(df, Ped(
             obj = id, sex = sex, dadid = dadid, momid = momid,
             famid = famid,
@@ -110,7 +110,6 @@ setMethod("Ped", "character_OR_integer",
 
         df_child <- num_child(id, dadid, momid, rel_df = NULL)
 
-
         new(
             "Ped",
             id = id, dadid = dadid, momid = momid, famid = famid,
@@ -120,6 +119,15 @@ setMethod("Ped", "character_OR_integer",
             num_child_direct = df_child$num_child_dir,
             num_child_indirect = df_child$num_child_ind
         )
+    }
+)
+
+#' @docType methods
+#' @aliases Ped,missing
+#' @rdname Ped
+setMethod("Ped", "missing",
+    function(obj) {
+        new("Ped")
     }
 )
 
@@ -134,7 +142,8 @@ setMethod("Ped", "character_OR_integer",
 #' pairs
 #' @param code An ordered factor vector with the code of the special
 #' relationship (i.e. `MZ twin` < `DZ twin` < `UZ twin` < `Spouse`).
-#' @param famid A character vector with the family identifiers of the individuals.
+#' @param famid A character vector with the family identifiers of the
+#' individuals.
 #'
 #' @return A Rel object.
 #' @seealso [Pedigree()]
@@ -167,7 +176,7 @@ setMethod("Rel", "data.frame",
 #' @aliases Rel,character
 #' @rdname Rel
 #' @export
-setMethod("Rel", "character",
+setMethod("Rel", "character_OR_integer",
     function(
         obj, id2, code, famid = NA
     ) {
@@ -191,6 +200,14 @@ setMethod("Rel", "character",
     }
 )
 
+#' @docType methods
+#' @aliases Rel,missing
+#' @rdname Rel
+setMethod("Rel", "missing",
+    function(obj) {
+        new("Rel")
+    }
+)
 #### S4 Hints constructor ####
 #' Create a Hints object
 #'
@@ -214,7 +231,6 @@ setGeneric("Hints", function(horder, spouse) {
 })
 
 #' @docType methods
-#' @aliases Hints,list
 #' @rdname Hints
 #' @export
 setMethod("Hints",
@@ -225,7 +241,6 @@ setMethod("Hints",
 )
 
 #' @docType methods
-#' @aliases Hints,list
 #' @rdname Hints
 #' @export
 setMethod("Hints",
@@ -239,7 +254,6 @@ setMethod("Hints",
 )
 
 #' @docType methods
-#' @aliases Hints,list
 #' @rdname Hints
 #' @export
 setMethod("Hints", signature(horder = "missing", spouse = "data.frame"),
@@ -249,7 +263,6 @@ setMethod("Hints", signature(horder = "missing", spouse = "data.frame"),
 )
 
 #' @docType methods
-#' @aliases Hints,list
 #' @rdname Hints
 #' @export
 setMethod("Hints", signature(horder = "missing", spouse = "missing"),
@@ -261,6 +274,61 @@ setMethod("Hints", signature(horder = "missing", spouse = "missing"),
     }
 )
 
+#### S4 Scales constructor ####
+#' Create a Scales object
+#'
+#' @description Create a Scales object
+#'
+#' @param fill A data.frame with the informations for the affection status.
+#' The columns needed are: `column_values`, `column_mods`, `mods`, `labels`,
+#' `affected`, `fill`, `density` and `angle`.
+#' @param border A data.frame with the informations for the availability status.
+#' The columns needed are: `column`, `mods`, `labels` and `border`.
+#'
+#' @return A Scales object.
+#' @seealso [Pedigree()]
+#' @rdname Scales
+#' @export
+setGeneric("Scales", function(fill, border) {
+    standardGeneric("Scales")
+})
+
+#' @docType methods
+#' @rdname Scales
+#' @export
+setMethod("Scales",
+    signature(fill = "data.frame", border = "data.frame"),
+    function(fill, border) {
+        new("Scales", fill = fill, border = border)
+    }
+)
+
+#' @docType methods
+#' @rdname Scales
+#' @export
+setMethod("Scales",
+    signature(fill = "missing", border = "missing"),
+    function(fill, border) {
+        fill <- data.frame(
+            order = numeric(),
+            column_values = character(),
+            column_mods = character(),
+            mods = character(),
+            labels = character(),
+            affected = logical(),
+            fill = character(),
+            density = numeric(),
+            angle = numeric()
+        )
+        border <- data.frame(
+            column = character(),
+            mods = character(),
+            labels = character(),
+            border = character()
+        )
+        new("Scales", fill = fill, border = border)
+    }
+)
 #### S4 Pedigree constructor ####
 #' Create a Pedigree object
 #'
@@ -317,15 +385,6 @@ setMethod("Hints", signature(horder = "missing", spouse = "missing"),
 setGeneric("Pedigree", signature = "obj",
     function(obj, ...) standardGeneric("Pedigree")
 )
-
-#' @export
-#' @rdname Pedigree
-#' @aliases Pedigree,numeric
-#' @docType methods
-setMethod("Pedigree", "numeric", function(obj, ...
-) {
-    Pedigree(as.character(obj), ...)
-})
 
 #' @export
 #' @rdname Pedigree
@@ -533,14 +592,25 @@ setMethod("Pedigree", "data.frame",  function(
     ped <- Ped(ped_df)
     rel <- Rel(rel_df)
     hints <- Hints(hints)
-    scales <- new("Scales")
+    scales <- Scales()
 
     ## Create the object
     ped <- new("Pedigree",
         ped = ped, rel = rel,
         hints = hints, scales = scales
     )
-
     generate_colors(ped, col_aff = col_aff, ...)
 }
 )
+
+#' @export
+#' @rdname Pedigree
+#' @aliases Pedigree,missing
+#' @docType methods
+setMethod("Pedigree", "missing", function(obj) {
+    ped <- new("Pedigree",
+        ped = Ped(), rel = Rel(),
+        hints = Hints(), scales = Scales()
+    )
+    ped
+})

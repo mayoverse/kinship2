@@ -150,9 +150,49 @@ is_valid_scales <- function(object) {
         "labels", "affected", "fill", "density", "angle"
     )
     border_cols <- c("column", "mods", "labels", "border")
-    errors <- c(errors, check_slot_fd(object, "scales", c("fill", "border")))
-    errors <- c(errors, check_slot_fd(object@scales, "fill", fill_cols))
-    errors <- c(errors, check_slot_fd(object@scales, "border", border_cols))
+    errors <- c(errors, check_slot_fd(object, NULL, c("fill", "border")))
+    errors <- c(errors, check_slot_fd(object, "fill", fill_cols))
+    errors <- c(errors, check_slot_fd(object, "border", border_cols))
+
+    #### Check that the fill columns have the right values ####
+    ## Check for logical columns
+    col_log <- c("affected")
+    err_log <- col_log[!unlist(lapply(object@fill[col_log], is, "logical"))]
+    if (length(err_log) > 0) {
+        errors <- c(errors, paste(
+            err_log, " column(s) must be logical", sep = ""
+        ))
+    }
+
+    ## Check for numeric columns
+    col_num <- c("density", "angle", "order")
+    err_num <- col_num[!unlist(lapply(object@fill[col_num], is, "numeric"))]
+    if (length(err_num) > 0) {
+        errors <- c(errors, paste(
+            err_num, " column(s) must be numeric", sep = ""
+        ))
+    }
+
+    ## Check for character columns
+    col_char <- c(
+        "column_values", "column_mods", "mods", "labels", "fill"
+    )
+    err_char <- col_char[!unlist(lapply(object@fill[col_char], is, "character"))]
+    if (length(err_char) > 0) {
+        errors <- c(errors, paste(
+            err_char, " column(s) must be character", sep = ""
+        ))
+    }
+
+    #### Check that the border columns have the right values ####
+    ## Check for character columns
+    col_char <- c("column", "mods", "labels", "border")
+    err_char <- col_char[!unlist(lapply(object@border[col_char], is, "character"))]
+    if (length(err_char) > 0) {
+        errors <- c(errors, paste(
+            err_char, " column(s) must be character", sep = ""
+        ))
+    }
 
     if (length(errors) == 0) {
         TRUE
@@ -172,7 +212,7 @@ is_valid_scales <- function(object) {
 #' right values
 #' 3. Check that dad are male and mom are female
 #' 4. Check that individuals have both parents or none
-#' 
+#'
 #' @param object A Ped object.
 #'
 #' @return A character vector with the errors or `TRUE` if no errors.
@@ -181,9 +221,6 @@ is_valid_scales <- function(object) {
 is_valid_ped <- function(object) {
     missid <- NA_character_
     errors <- c()
-
-    #### Check that all slots are parallele ####
-    #errors <- c(errors, parallel_slot_names(object))
 
     #### Check that the ped columns have the right values ####
     # Check for ped@id uniqueness
@@ -206,10 +243,10 @@ is_valid_ped <- function(object) {
         "id", present = FALSE
     ))
     errors <- c(errors, check_values(
-        object@dadid, c(object@id, missid)
+        object@dadid, c(object@id, missid), "dadid"
     ))
     errors <- c(errors, check_values(
-        object@momid, c(object@id, missid)
+        object@momid, c(object@id, missid), "momid"
     ))
 
     # Control values for sex, steril, status, avail and affected

@@ -97,6 +97,15 @@ test_that("Class ped work", {
     ped5 <- suppressWarnings(c(ped3, ped2))
 
     expect_equal(dim(as.data.frame(ped5)), c(5, 14))
+
+    ## Subsetting
+    expect_error(subset(ped3, "ID1"))
+    ped1_char <- subset(ped3, "ID1", del_parents = TRUE)
+    ped1_num <- subset(ped3, 1, del_parents = TRUE)
+    ped1_log <- subset(ped3, c(TRUE, FALSE, FALSE), del_parents = TRUE)
+
+    expect_equal(ped1_char, ped1_num)
+    expect_equal(ped1_char, ped1_log)
 })
 
 test_that("Rel class works", {
@@ -132,8 +141,11 @@ test_that("Rel class works", {
     )
     expect_equal(dim(as.data.frame(c(rel3, rel2))), c(5, 5))
 
-})
+    expect_equal(length(subset(rel3, "ID6")), 0)
+    expect_equal(length(subset(rel3, c("ID2", "ID3"))), 1)
+    expect_equal(length(subset(rel3, c("ID2", "ID3", "ID6"))), 2)
 
+})
 
 test_that("Hints class works", {
     ## From scratch
@@ -170,4 +182,106 @@ test_that("Hints class works", {
     ))
     expect_equal(horder(hts_spouse), character())
     expect_equal(dim(spouse(hts_spouse)), c(2, 3))
+
+    hts1 <- subset(hts2, "ID1")
+    expect_equal(horder(hts1), c("ID1"))
+    expect_equal(dim(spouse(hts1)), c(0, 3))
+
+    hts13 <- subset(hts2, c("ID1", "ID3"))
+    expect_equal(horder(hts13), "ID1")
+    expect_equal(dim(spouse(hts13)), c(1, 3))
+})
+
+test_that("Scales class works", {
+    ## From scratch
+    scl0 <- Scales()
+    expect_equal(dim(fill(scl0)), c(0, 9))
+    expect_equal(dim(border(scl0)), c(0, 4))
+
+    expect_error(fill(scl0) <- c("ID1", "ID2"))
+    expect_error(border(scl0) <- c("ID1", "ID2"))
+
+    expect_error(fill(scl0)$column_values <- c("ID1", "ID2"))
+
+    expect_snapshot_error(fill(scl0) <- data.frame(
+        order = c("A", 3),
+        column_values = c("ID1", "ID2"),
+        column_mods = c(1, 2),
+        mods = c("ID1", "ID2"),
+        labels = c("ID1", "ID2"),
+        affected = c("A", FALSE),
+        fill = c("ID1", "ID2"),
+        density = c(1, 2),
+        angle = c("A", 60)
+    ))
+    expect_snapshot_error(border(scl0) <- data.frame(
+        column = c("ID1", "ID2"),
+        mods = c("ID1", "ID2"),
+        labels = c(1, 2),
+        border = c("ID1", "ID2")
+    ))
+
+
+    fill(scl0) <- data.frame(
+        order = c(2, 3),
+        column_values = c("ID1", "ID2"),
+        column_mods = c("ID1", "ID2"),
+        mods = c("ID1", "ID2"),
+        labels = c("ID1", "ID2"),
+        affected = c(TRUE, FALSE),
+        fill = c("ID1", "ID2"),
+        density = c(1, 2),
+        angle = c(90, 60)
+    )
+    expect_equal(dim(fill(scl0)), c(2, 9))
+    fill(scl0)$fill[1] <- "ID3"
+    expect_equal(fill(scl0)$fill[1], "ID3")
+
+    border(scl0) <- data.frame(
+        column = c("ID1", "ID2"),
+        mods = c("ID1", "ID2"),
+        labels = c("Lab1", "Lab2"),
+        border = c("ID1", "ID2")
+    )
+
+    expect_equal(dim(border(scl0)), c(2, 4))
+    expect_snapshot(scl0)
+
+    ## With constructor
+    scl2 <- Scales(
+        fill = data.frame(
+            order = c(2, 3),
+            column_values = c("ID1", "ID2"),
+            column_mods = c("ID1", "ID2"),
+            mods = c("ID1", "ID2"),
+            labels = c("ID1", "ID2"),
+            affected = c(TRUE, FALSE),
+            fill = c("ID3", "ID2"),
+            density = c(1, 2),
+            angle = c(90, 60)
+        ),
+        border = data.frame(
+            column = c("ID1", "ID2"),
+            mods = c("ID1", "ID2"),
+            labels = c("Lab1", "Lab2"),
+            border = c("ID1", "ID2")
+        )
+    )
+    expect_equal(scl2, scl0)
+})
+
+test_that("Pedigree class works", {
+    pedi <- Pedigree()
+    expect_equal(length(pedi), 0)
+    expect_equal(length(as.list(pedi)), 4)
+    expect_s4_class(scales(pedi), "Scales")
+    expect_s4_class(hints(pedi), "Hints")
+    expect_s4_class(ped(pedi), "Ped")
+    expect_s4_class(rel(pedi), "Rel")
+    expect_equal(horder(pedi), character())
+    expect_equal(dim(spouse(pedi)), c(0, 3))
+    expect_equal(dim(fill(pedi)), c(0, 9))
+    expect_equal(dim(border(pedi)), c(0, 4))
+    expect_equal(length(ped(pedi)), 0)
+    expect_equal(length(rel(pedi)), 0)
 })
