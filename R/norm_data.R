@@ -126,7 +126,7 @@ norm_ped <- function(
         ped_df$momid <- prefix_famid(ped_df$famid, ped_df$motherId, missid)
 
         ped_df <- mutate_at(ped_df, c("id", "dadid", "momid"),
-            ~replace(., . %in% na_strings, missid)
+            ~replace(., . %in% c(na_strings, missid), NA_character_)
         )
 
         #### Sex ####
@@ -286,8 +286,8 @@ norm_rel <- function(rel_df, na_strings = c("NA", ""), missid = NA_character_) {
     err <- data.frame(matrix(NA, nrow = nrow(rel_df), ncol = length(err_cols)))
     colnames(err) <- err_cols
     cols_needed <- c("id1", "id2", "code")
-    cols_used <- c("error", "famid")
-    cols_to_use <- c("family")
+    cols_used <- c("error")
+    cols_to_use <- c("famid")
     rel_df <- check_columns(
         rel_df, cols_needed, cols_used, cols_to_use,
         others_cols = FALSE, cols_to_use_init = TRUE, cols_used_init = TRUE
@@ -306,7 +306,7 @@ norm_rel <- function(rel_df, na_strings = c("NA", ""), missid = NA_character_) {
 
         #### Check for id errors #### Set ids as characters
         rel_df <- rel_df %>%
-            mutate(across(c("id1", "id2", "family"), as.character))
+            mutate(across(c("id1", "id2", "famid"), as.character))
 
         ## Check for non null ids
         len1 <- nchar(rel_df$id1)
@@ -315,7 +315,6 @@ norm_rel <- function(rel_df, na_strings = c("NA", ""), missid = NA_character_) {
         err$id2Err[is.na(len2) | len2 %in% missid] <- "indId2length0"
 
         ## Compute id with family id
-        rel_df$famid <- rel_df$family
         rel_df$id1 <- prefix_famid(rel_df$famid, rel_df$id1, missid)
         rel_df$id2 <- prefix_famid(rel_df$famid, rel_df$id2, missid)
 
