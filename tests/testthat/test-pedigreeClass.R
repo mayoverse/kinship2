@@ -9,21 +9,20 @@ test_that("Pedigree works", {
         affection = numeric()
     ))
     expect_s4_class(ped, "Pedigree")
-    expect_equal(nrow(ped@ped), 0)
-    expect_equal(nrow(ped@rel), 0)
-    expect_equal(nrow(ped@meta), 0)
-    expect_equal(nrow(ped@deriv), 0)
-    expect_equal(length(ped@scales), 2)
-    expect_equal(length(ped@scales$fill), 9)
-    expect_equal(length(ped@scales$border), 4)
+    expect_equal(length(ped@ped), 0)
+    expect_equal(length(ped@rel), 0)
+    expect_equal(dim(fill(ped)), c(0, 9))
+    expect_equal(dim(border(ped)), c(0, 4))
+    expect_equal(dim(spouse(ped)), c(0, 3))
+    expect_equal(length(horder(ped)), 0)
 })
 
 test_that("Pedigree old usage compatibility", {
     data(sampleped)
     ped1 <- with(sampleped,
-        Pedigree(id, dadid, momid, sex, famid, avail, affection)
+        Pedigree(id, dadid, momid, sex, famid, avail, affection, missid = "0")
     )
-    expect_equal(ped1, Pedigree(sampleped))
+    expect_equal(ped1, Pedigree(sampleped, missid = "0"))
 
     ped2mat <- matrix(c(
         1, 1, 0, 0, 1,
@@ -40,21 +39,21 @@ test_that("Pedigree old usage compatibility", {
 
     ped2df <- as.data.frame(ped2mat)
     names(ped2df) <- c("famid", "id", "dadid", "momid", "sex")
+    ped2df$id <- as.integer(ped2df$id)
     ## 1 2  3 4 5 6 7 8 9 10,11,12,13,14,15,16
     ped2df$disease <- c(NA, NA, 1, 0, 0, 0, 0, 1, 1, 1)
     ped2df$smoker <- c(0, NA, 0, 0, 1, 1, 1, 0, 0, 0)
     ped2df$available <- c(0, 0, 1, 1, 0, 1, 1, 1, 1, 1)
     ped2df$status <- c(1, 1, 1, 0, 1, 0, 0, 0, 0, 0)
-
     ped2 <- with(ped2df, Pedigree(id, dadid, momid, sex, famid,
         available, status, affected = cbind(disease, smoker, available),
-        relation = matrix(c(8, 9, 1, 1), ncol = 4)
+        relation = matrix(c(8, 9, 1, 1), ncol = 4), missid = "0"
     ))
     rel_df <- data.frame(id1 = 8, id2 = 9, code = 1, famid = 1)
 
     expect_equal(ped2,
         Pedigree(ped2df, col_aff = c("disease", "smoker", "available"),
-            rel_df
+            rel_df, missid = "0"
         )
     )
 })
