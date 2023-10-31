@@ -79,7 +79,7 @@ generate_aff_inds <- function(values, mods_aff = NULL,
     names(aff_to_use) <- c(aff_lab, healthy_lab)
 
     labels <- revalue(as.character(mods), labels_to_use, warn_missing = FALSE)
-    affected <- revalue(labels, aff_to_use, warn_missing = FALSE)
+    affected <- as.logical(revalue(labels, aff_to_use, warn_missing = FALSE))
     as.data.frame(list(mods = mods, labels = labels, affected = affected))
 }
 TRUE
