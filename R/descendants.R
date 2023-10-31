@@ -25,10 +25,13 @@ setGeneric("descendants",
 
 #' @rdname descendants
 #' @docType methods
-#' @aliases descendants,character
-setMethod("descendants", signature(idlist = "character", obj = "character"),
+#' @aliases descendants,character_OR_integer
+setMethod("descendants", signature(idlist = "character_OR_integer", obj = "character_OR_integer"),
     function(idlist, obj, dadid, momid) {
-        id <- obj
+        id <- as.character(obj)
+        idlist <- as.character(obj)
+        dadid <- as.character(dadid)
+        momid <- as.character(momid)
         child <- id[!(is.na(match(dadid, idlist)) &
                     is.na(match(momid, idlist))
             )
@@ -49,17 +52,17 @@ setMethod("descendants", signature(idlist = "character", obj = "character"),
 #' @rdname descendants
 #' @docType methods
 #' @aliases descendants,Pedigree
-setMethod("descendants", signature(idlist = "character", obj = "Pedigree"),
+setMethod("descendants", signature(idlist = "character_OR_integer", obj = "Pedigree"),
     function(idlist, obj) {
-        descendants(idlist, obj$ped$id, obj$ped$dadid, obj$ped$momid)
+        descendants(idlist, ped(obj))
     }
 )
 
 #' @rdname descendants
 #' @docType methods
-#' @aliases descendants,Pedigree
-setMethod("descendants", signature(idlist = "character", obj = "Ped"),
+#' @aliases descendants,Ped
+setMethod("descendants", signature(idlist = "character_OR_integer", obj = "Ped"),
     function(idlist, obj) {
-        descendants(idlist, obj$id, obj$dadid, obj$momid)
+        descendants(as.character(idlist), id(obj), dadid(obj), momid(obj))
     }
 )
