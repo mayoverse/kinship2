@@ -194,6 +194,7 @@ setMethod(
     signature(x = "Pedigree", value = "ANY"),
     function(x, value) {
         mcols(x@ped) <- value
+        x
     }
 )
 
@@ -263,6 +264,18 @@ setGeneric("scales", function(object) {
 setMethod("scales", signature(object = "Pedigree"), function(object) {
     object@scales
 })
+
+setGeneric("scales<-", function(object, value) {
+    standardGeneric("scales<-")
+})
+
+setMethod(
+    "scales<-", signature(object = "Pedigree", value = "Scales"),
+    function(object, value) {
+        object@scales <- value
+        object
+    }
+)
 #### S4 fill Accessors ####
 #' @description Pedigree fill accessors
 #' @param object A Pedigree object.
