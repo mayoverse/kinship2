@@ -4,6 +4,7 @@ NULL
 #### Class integer / character ####
 
 setClassUnion("character_OR_integer", c("character", "integer"))
+setClassUnion("missing_OR_NULL", c("missing", "NULL"))
 
 #### Hints Class ####
 

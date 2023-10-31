@@ -244,7 +244,7 @@ setMethod("Hints",
 #' @rdname Hints
 #' @export
 setMethod("Hints",
-    signature(horder = "character_OR_integer", spouse = "missing"),
+    signature(horder = "character_OR_integer", spouse = "missing_OR_NULL"),
     function(horder, spouse) {
         dfe <- data.frame("idl" = character(), "idr" = character(),
             "anchor" = factor()
@@ -256,7 +256,8 @@ setMethod("Hints",
 #' @docType methods
 #' @rdname Hints
 #' @export
-setMethod("Hints", signature(horder = "missing", spouse = "data.frame"),
+setMethod("Hints",
+    signature(horder = "missing_OR_NULL", spouse = "data.frame"),
     function(horder, spouse) {
         new("Hints", horder = character(), spouse = spouse)
     }
@@ -265,7 +266,8 @@ setMethod("Hints", signature(horder = "missing", spouse = "data.frame"),
 #' @docType methods
 #' @rdname Hints
 #' @export
-setMethod("Hints", signature(horder = "missing", spouse = "missing"),
+setMethod("Hints",
+    signature(horder = "missing_OR_NULL", spouse = "missing_OR_NULL"),
     function(horder, spouse) {
         dfe <- data.frame("idl" = character(), "idr" = character(),
             "anchor" = factor()
@@ -313,7 +315,7 @@ setMethod("Scales",
             order = numeric(),
             column_values = character(),
             column_mods = character(),
-            mods = character(),
+            mods = numeric(),
             labels = character(),
             affected = logical(),
             fill = character(),
@@ -322,7 +324,7 @@ setMethod("Scales",
         )
         border <- data.frame(
             column = character(),
-            mods = character(),
+            mods = numeric(),
             labels = character(),
             border = character()
         )
@@ -428,7 +430,6 @@ setMethod("Pedigree", "character_OR_integer", function(obj, dadid, momid,
         stop("Mismatched lengths, id and status")
     }
 
-
     ped_df <- data.frame(
         family = famid,
         indId = obj,
@@ -442,11 +443,13 @@ setMethod("Pedigree", "character_OR_integer", function(obj, dadid, momid,
     } else if (any(!is.na(affected))) {
         if (is.vector(affected)) {
             ped_df$affection <- affected
-        } else if (is.data.frame(affected)) {
+        } else if (is.data.frame(affected) | is.matrix(affected)) {
             ped_df <- cbind(ped_df, affected)
             col_aff <- colnames(affected)
         } else {
-            stop("Affected must be a vector or a data.frame")
+            stop("Affected must be a vector or a data.frame, got:",
+                class(affected)
+            )
         }
     }
     if (any(!is.na(avail))) {
@@ -506,7 +509,8 @@ setMethod("Pedigree", "data.frame",  function(
     ),
     cols_ren_rel = list(
         "id1" = "indId1",
-        "id2" = "indId2"
+        "id2" = "indId2",
+        "famid" = "family"
     ),
     hints = list(
         horder = NULL,
@@ -591,7 +595,7 @@ setMethod("Pedigree", "data.frame",  function(
 
     ped <- Ped(ped_df)
     rel <- Rel(rel_df)
-    hints <- Hints(hints)
+    hints <- Hints(hints$horder, hints$spouse)
     scales <- Scales()
 
     ## Create the object
