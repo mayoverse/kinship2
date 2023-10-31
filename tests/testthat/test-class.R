@@ -133,3 +133,8 @@ test_that("Rel class works", {
     expect_equal(dim(as.data.frame(c(rel3, rel2))), c(5, 5))
 
 })
+
+
+test_that("Hints class works", {
+    Hints()
+})

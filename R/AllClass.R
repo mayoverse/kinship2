@@ -12,10 +12,11 @@ setClassUnion("character_OR_integer", c("character", "integer"))
 #' A hints object is a list of two elements used
 #' to order the individuals in the pedigree plot.
 #'
-#' @slot horder A numeric vector with one element per subject in the
-#' Pedigree.  It determines the relative horizontal order of subjects within a sibship, as
-#' well as the relative order of processing for the founder couples. (For this
-#' latter, the female founders are ordered as though they were sisters).
+#' @slot horder A character vector with one element per subject in the
+#' Pedigree.  It determines the relative horizontal order of subjects within
+#' a sibship, as well as the relative order of processing for the founder
+#' couples. (For this latter, the female founders are ordered as though they
+#' were sisters).
 #' @slot spouse A matrix with one row per hinted marriage, usually
 #' only a few marriages in a Pedigree will need an added hint, for
 #' instance reverse the plot order of a husband/wife pair.
@@ -30,8 +31,8 @@ setClassUnion("character_OR_integer", c("character", "integer"))
 #' @export
 setClass("Hints",
     representation(
-        horder = "numeric",
-        spouse = "matrix"
+        horder = "character",
+        spouse = "data.frame"
     )
 )
 

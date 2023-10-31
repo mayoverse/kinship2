@@ -192,6 +192,23 @@ setMethod("as.data.frame", "Rel", function(x) {
     data.frame(lst)
 })
 
+#### S4 Hints generics ####
+#' Set Hints object to list
+#'
+#' @description Convert a Hints object to a list
+#'
+#' @param from A Hints object.
+#'
+#' @return A list with the hints informations.
+#'
+#' @rdname Hints
+#' @aliases as.list,Hints-method
+#' @importMethodsFrom S4Vectors as.list
+#' @export
+setMethod("as.list", "Hints", function(x) {
+    list(horder = x@horder, spouse = x@spouse)
+})
+
 #### S4 Pedigree generics ####
 
 #' Compute the length of a Pedigree object
@@ -212,9 +229,9 @@ setMethod("length", c(x = "Pedigree"),
 #' @rdname extract-methods
 #' @aliases show,Pedigree-method
 setMethod("show", signature(object = "Pedigree"), function(object) {
-    nb_fam <- length(levels(as.factor(object@ped$famid)))
-    cat("Pedigree object with", nrow(object@ped), "individuals and",
-        nrow(object@rel), "special relationships across", nb_fam, "families",
+    nb_fam <- length(levels(as.factor(famid(ped(object)))))
+    cat("Pedigree object with", length(ped(object)), "individuals and",
+        length(rel(object)), "special relationships across", nb_fam, "families",
         fill = TRUE)
 })
 

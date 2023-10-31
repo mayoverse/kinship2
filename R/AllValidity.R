@@ -43,7 +43,7 @@ check_slot_fd <- function(obj, slot = NULL, fields = character()) {
     }
     if (length(array_names) == 0) {
         paste0(
-            "Missing fields in ", slot,
+            "No fields in ", slot,
             " slot. See Pedigree documentation."
         )
     } else if (any(!fields %in% array_names)) {
@@ -58,10 +58,9 @@ check_slot_fd <- function(obj, slot = NULL, fields = character()) {
 #'
 #' Check if the all the values in a slot are in a vector of values.
 #'
-#' @param obj An object.
-#' @param slot A slot of the object.
-#' @param column A column of the slot.
-#' @param values A vector of values to check.
+#' @param val A vector of values to check.
+#' @param ref A vector of reference values.
+#' @param name A character vector with the name of the values to check.
 #' @param present A logical value indicating if the values should be present
 #' or not
 #'
@@ -104,18 +103,25 @@ is_valid_hints <- function(object) {
     errors <- c()
 
     #### Check that the slots have the right columns ####
-    errors <- c(errors, check_slot_fd(object, "horder", "numeric"))
-    errors <- c(errors, check_slot_fd(object, "spouse", "matrix"))
+    if (! is.character(object@horder)) {
+        errors <- c(errors, "horder slot must be character")
+    }
+    if (! is.data.frame(object@spouse)) {
+        errors <- c(errors, "spouse slot must be a data.frame")
+    }
 
-    #### Check that the hints spouse matrix is valid ####
-    if (dim(object@spouse) != 3) {
-        errors <- c(errors, "The spouse matrix must have 3 columns.")
+    #### Check that the hints spouse data.frame is valid ####
+    errors <- c(errors, check_slot_fd(
+        object, "spouse", c("idl", "idr", "anchor")
+    ))
+
+    if (!is.factor(object@spouse$anchor)) {
+        errors <- c(errors, "anchor column must be a factor")
     }
-    if (any(is.numeric(object@spouse[, 1:3]))) {
-        errors <- c(
-            errors, "The spouse matrix must contains only numeric values."
-        )
-    }
+
+    errors <- c(errors, check_values(
+        object@spouse$anchor, c("left", "rihgt", "either"), "anchor"
+    ))
 
     return(errors)
 }

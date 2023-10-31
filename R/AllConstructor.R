@@ -191,6 +191,75 @@ setMethod("Rel", "character",
     }
 )
 
+#### S4 Hints constructor ####
+#' Create a Hints object
+#'
+#' @description Create a Hints object
+#'
+#' @param horder A vector with the order of the individuals in the pedigree.
+#' @param spouse A data.frame with one row per hinted marriage, usually only
+#' a few marriages in a pedigree will need an added hint, for instance reverse
+#' the plot order of a husband/wife pair.
+#' Each row contains the id of the left spouse (i.e. `idl`), the id of the
+#' right hand spouse (i.e. `idr`), and the anchor (i.e : `anchor` :
+#' `1` = left, `2` = right, `0` = either).
+#' Children will preferentially appear under the parents of the anchored spouse.
+#'
+#' @return A Hints object.
+#' @seealso [Pedigree()]
+#' @rdname Hints
+#' @export
+setGeneric("Hints", function(horder, spouse) {
+    standardGeneric("Hints")
+})
+
+#' @docType methods
+#' @aliases Hints,list
+#' @rdname Hints
+#' @export
+setMethod("Hints",
+    signature(horder = "character_OR_integer", spouse = "data.frame"),
+    function(horder, spouse) {
+        new("Hints", horder = as.character(horder), spouse = spouse)
+    }
+)
+
+#' @docType methods
+#' @aliases Hints,list
+#' @rdname Hints
+#' @export
+setMethod("Hints",
+    signature(horder = "character_OR_integer", spouse = "missing"),
+    function(horder, spouse) {
+        dfe <- data.frame("idl" = character(), "idr" = character(),
+            "anchor" = factor()
+        )
+        new("Hints", horder = horder, spouse = dfe)
+    }
+)
+
+#' @docType methods
+#' @aliases Hints,list
+#' @rdname Hints
+#' @export
+setMethod("Hints", signature(horder = "missing", spouse = "data.frame"),
+    function(horder, spouse) {
+        new("Hints", horder = character(), spouse = spouse)
+    }
+)
+
+#' @docType methods
+#' @aliases Hints,list
+#' @rdname Hints
+#' @export
+setMethod("Hints", signature(horder = "missing", spouse = "missing"),
+    function(horder, spouse) {
+        dfe <- data.frame("idl" = character(), "idr" = character(),
+            "anchor" = factor()
+        )
+        new("Hints", horder = character(), spouse = dfe)
+    }
+)
 
 #### S4 Pedigree constructor ####
 #' Create a Pedigree object
@@ -276,7 +345,7 @@ setMethod("Pedigree", "numeric", function(obj, ...
 #' - `0`  : not sterilised
 #' - `1`  : sterilised
 #' - `NA` : sterilisation status not known
-setMethod("Pedigree", "character", function(obj, dadid, momid,
+setMethod("Pedigree", "character_OR_integer", function(obj, dadid, momid,
     sex, famid = NA, avail = NULL, affected = NULL, status = NULL,
     steril = NULL, relation =  NULL,
     missid = NA_character_, col_aff = "affection", normalize = TRUE, ...
@@ -380,25 +449,6 @@ setMethod("Pedigree", "data.frame",  function(
         "id1" = "indId1",
         "id2" = "indId2"
     ),
-    scales = list(
-        fill = data.frame(
-            order = numeric(),
-            column_values = character(),
-            column_mods = character(),
-            mods = numeric(),
-            labels = character(),
-            affected = logical(),
-            fill = character(),
-            density = numeric(),
-            angle = numeric()
-        ),
-        border = data.frame(
-            column = character(),
-            mods = numeric(),
-            labels = character(),
-            border = character()
-        )
-    ),
     hints = list(
         horder = NULL,
         spouse = NULL
@@ -480,13 +530,15 @@ setMethod("Pedigree", "data.frame",  function(
         return(rel_df)
     }
 
-    ped = Ped(ped_df)
-    rel = Rel(rel_df)
+    ped <- Ped(ped_df)
+    rel <- Rel(rel_df)
+    hints <- Hints(hints)
+    scales <- new("Scales")
 
     ## Create the object
     ped <- new("Pedigree",
         ped = ped, rel = rel,
-        scales = scales, hints = hints
+        hints = hints, scales = scales
     )
 
     generate_colors(ped, col_aff = col_aff, ...)
