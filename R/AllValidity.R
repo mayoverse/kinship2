@@ -165,7 +165,7 @@ is_valid_scales <- function(object) {
     }
 
     ## Check for numeric columns
-    col_num <- c("density", "angle", "order")
+    col_num <- c("density", "angle", "order", "mods")
     err_num <- col_num[!unlist(lapply(object@fill[col_num], is, "numeric"))]
     if (length(err_num) > 0) {
         errors <- c(errors, paste(
@@ -175,7 +175,7 @@ is_valid_scales <- function(object) {
 
     ## Check for character columns
     col_char <- c(
-        "column_values", "column_mods", "mods", "labels", "fill"
+        "column_values", "column_mods", "labels", "fill"
     )
     err_char <- col_char[!unlist(lapply(object@fill[col_char], is, "character"))]
     if (length(err_char) > 0) {
@@ -186,11 +186,20 @@ is_valid_scales <- function(object) {
 
     #### Check that the border columns have the right values ####
     ## Check for character columns
-    col_char <- c("column", "mods", "labels", "border")
+    col_char <- c("column", "labels", "border")
     err_char <- col_char[!unlist(lapply(object@border[col_char], is, "character"))]
     if (length(err_char) > 0) {
         errors <- c(errors, paste(
             err_char, " column(s) must be character", sep = ""
+        ))
+    }
+
+    ## Check for numeric columns
+    col_num <- c("mods")
+    err_num <- col_num[!unlist(lapply(object@border[col_num], is, "numeric"))]
+    if (length(err_num) > 0) {
+        errors <- c(errors, paste(
+            err_num, " column(s) must be numeric", sep = ""
         ))
     }
 
@@ -343,10 +352,10 @@ is_valid_pedigree <- function(object) {
     #### Check that the famid id and individual id present in the rel slot ####
     #### are present in the ped slot ####
     errors <- c(errors, check_values(
-        object@rel@famid, c(object@ped@famid, NA)
+        object@rel@famid, c(object@ped@famid, NA), "Rel famid"
     ))
-    errors <- c(errors, check_values(object@rel@id1, object@ped@id))
-    errors <- c(errors, check_values(object@rel@id2, object@ped@id))
+    errors <- c(errors, check_values(object@rel@id1, object@ped@id, "Rel id1"))
+    errors <- c(errors, check_values(object@rel@id2, object@ped@id, "Rel id2"))
 
     #### Check if twins has same parents ####
     code <- object@rel@code
@@ -378,28 +387,34 @@ is_valid_pedigree <- function(object) {
     }
 
     #### Check that the scales columns have the right values ####
+    ped <- as.data.frame(ped(object))
     errors <- c(errors, check_values(
-        object@scales@fill$column_values, colnames(object@ped)
+        fill(object)$column_values, colnames(ped),
+        "fill column_values"
     ))
     errors <- c(errors, check_values(
-        object@scales@fill$column_mods, colnames(object@ped)
+        fill(object)$column_mods, colnames(ped),
+        "fill column_mods"
     ))
     errors <- c(errors, check_values(
-        object@scales@border$column, colnames(object@ped)
+        border(object)$column, colnames(ped),
+        "border column"
     ))
 
     #### Check that all fill modalities are present in the pedigree data ####
-    for (col in unique(object@scales@fill$column)){
+    for (col in unique(fill(object)$column)){
         errors <- c(errors, check_values(
-            object@ped[[col]],
-            object@scales@fill[object@scales@fill$column_mods == col, "mods"]
+            ped[[col]],
+            fill(object)[fill(object)$column_mods == col, "mods"],
+            paste("fill column", col)
         ))
     }
     #### Check that all borders modalities are present in the pedigree data ####
-    for (col in unique(object@scales@border$column)){
+    for (col in unique(border(object)$column)){
         errors <- c(errors, check_values(
-            object@ped[[col]],
-            object@scales@border[object@scales@border$column_mods == col, "mods"]
+            ped[[col]],
+            border(object)[border(object)$column == col, "mods"],
+            paste("border column", col)
         ))
     }
 
