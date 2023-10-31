@@ -38,9 +38,9 @@ setGeneric("num_child", signature = "obj",
 
 #' @export
 #' @rdname num_child
-#' @aliases num_child,character
+#' @aliases num_child,character_OR_integer
 #' @docType methods
-setMethod("num_child", "character", function(obj, dadid, momid,
+setMethod("num_child", "character_OR_integer", function(obj, dadid, momid,
     rel_df = NULL, missid = NA_character_
 ) {
     id <- obj
@@ -84,49 +84,56 @@ setMethod("num_child", "character", function(obj, dadid, momid,
     spouse_rel$idmax <- pmax(spouse_rel$id1, spouse_rel$id2)
     spouse_rel <- unique(spouse_rel[c("idmin", "idmax")])
 
-    dad_child <- df[(!df$dadid %in% missid), c("dadid", "id")] %>%
-        group_by(dadid) %>%
-        summarise(child = list(id)) %>%
-        mutate(num_child_dir = lengths(child)) %>%
-        rename(id = dadid)
-    mom_child <- df[(!df$momid %in% missid), c("id", "momid")] %>%
-        group_by(momid) %>%
-        summarise(child = list(id)) %>%
-        mutate(num_child_dir = lengths(child)) %>%
-        rename(id = momid)
-    id_child <- rbind(dad_child, mom_child)
+    if (nrow(spouse_rel) > 0) {
+        dad_child <- df[(!df$dadid %in% missid), c("dadid", "id")] %>%
+            group_by(dadid) %>%
+            summarise(child = list(id)) %>%
+            mutate(num_child_dir = lengths(child)) %>%
+            rename(id = dadid)
+        mom_child <- df[(!df$momid %in% missid), c("id", "momid")] %>%
+            group_by(momid) %>%
+            summarise(child = list(id)) %>%
+            mutate(num_child_dir = lengths(child)) %>%
+            rename(id = momid)
+        id_child <- rbind(dad_child, mom_child)
 
-    # Number of direct child per individual
-    df$num_child_dir <- id_child$num_child_dir[match(df$id, id_child$id)]
+        # Number of direct child per individual
+        df$num_child_dir <- id_child$num_child_dir[match(df$id, id_child$id)]
 
-    # Number of total childs per individual
-    rel_child <- spouse_rel %>%
-        left_join(id_child, by = c("idmin" = "id")) %>%
-        left_join(id_child, by = c("idmax" = "id"),
-            suffix = c("_min", "_max")
-        ) %>%
-        rowwise() %>%
-        mutate(childs = list(unique(unlist(
-            list(child_min, child_max)
-        )))) %>%
-        select(c(idmin, idmax, childs)) %>%
-        tidyr::pivot_longer(cols = -childs, names_to = "order",
-            values_to = "id"
-        ) %>%
-        group_by(id) %>%
-        summarise(childs_all = list(unique(unlist(childs)))) %>%
-        mutate(num_child_tot = lengths(childs_all))
+        # Number of total childs per individual
+        rel_child <- spouse_rel %>%
+            left_join(id_child, by = c("idmin" = "id")) %>%
+            left_join(id_child, by = c("idmax" = "id"),
+                suffix = c("_min", "_max")
+            ) %>%
+            rowwise() %>%
+            mutate(childs = list(unique(unlist(
+                list(child_min, child_max)
+            )))) %>%
+            select(c(idmin, idmax, childs)) %>%
+            tidyr::pivot_longer(cols = -childs, names_to = "order",
+                values_to = "id"
+            ) %>%
+            group_by(id) %>%
+            summarise(childs_all = list(unique(unlist(childs)))) %>%
+            mutate(num_child_tot = lengths(childs_all))
 
-    df$num_child_tot <- rel_child$num_child_tot[match(df$id, rel_child$id)]
+        df$num_child_tot <- rel_child$num_child_tot[match(df$id, rel_child$id)]
 
-    df <- df %>%
-        mutate(across(c(num_child_dir, num_child_tot),
-            ~replace(., is.na(.), 0)
-        ))
+        df <- df %>%
+            mutate(across(c(num_child_dir, num_child_tot),
+                ~replace(., is.na(.), 0)
+            ))
 
-    df$num_child_ind <- df$num_child_tot - df$num_child_dir
+        df$num_child_ind <- df$num_child_tot - df$num_child_dir
 
-    df
+        df
+    } else {
+        df$num_child_dir <- 0
+        df$num_child_ind <- 0
+        df$num_child_tot <- 0
+        df
+    }
 })
 
 #' @export
@@ -154,4 +161,3 @@ setMethod("num_child", "Pedigree", function(obj, reset = FALSE) {
 
     obj
 })
-TRUE
