@@ -7,12 +7,12 @@ NULL
 #### S4 Ped Accessors ####
 
 #' Metadata setters of Ped object from a list
-#' 
+#'
 #' @param x A Ped object.
 #' @param value A list with the metadata.
-#' 
+#'
 #' @return A Ped object with the metadata set.
-#' 
+#'
 #' @rdname Ped
 setMethod("mcols<-", signature(x = "Ped", value = "list"), function(x, value) {
     mcols(x) <- as(value, "DataFrame")
@@ -20,12 +20,12 @@ setMethod("mcols<-", signature(x = "Ped", value = "list"), function(x, value) {
 })
 
 #' Metadata setters of Ped object from a data.frame
-#' 
+#'
 #' @param x A Ped object.
 #' @param value A data.frame with the metadata.
-#' 
+#'
 #' @return A Ped object with the metadata set.
-#' 
+#'
 #' @rdname Ped
 setMethod("mcols<-", signature(x = "Ped", value = "data.frame"), function(x, value) {
     mcols(x) <- as(value, "DataFrame")
@@ -33,11 +33,11 @@ setMethod("mcols<-", signature(x = "Ped", value = "data.frame"), function(x, val
 })
 
 #' Famid getter of Ped object
-#' 
+#'
 #' @param x A Ped object.
-#' 
+#'
 #' @return A character vector with the famid of each individual.
-#' 
+#'
 #' @rdname Ped
 #' @aliases famid,Ped-method
 #' @export
@@ -371,7 +371,11 @@ setGeneric("horder", function(object) {
 })
 
 setMethod("horder", "Pedigree", function(object) {
-    object@hints@horder
+    horder(hints(object))
+})
+
+setMethod("horder", "Hints", function(object) {
+    object@horder
 })
 
 setGeneric("horder<-", function(object, value) {
@@ -388,12 +392,21 @@ setMethod(
                 "equal to the length of the pedigree"
             )
         }
-        object@hints@horder <- value
+        horder(hints(object)) <- value
         validObject(object)
         object
     }
 )
 
+setMethod(
+    "horder<-",
+    signature(object = "Hints", value = "ANY"),
+    function(object, value) {
+        object@horder <- value
+        validObject(object)
+        object
+    }
+)
 #### S4 spouse Accessors ####
 #' @description Pedigree spouse accessors
 #' @param object A Pedigree object.
@@ -407,7 +420,11 @@ setGeneric("spouse", function(object) {
 })
 
 setMethod("spouse", signature(object = "Pedigree"), function(object) {
-    object@hints@spouse
+    spouse(hints(object))
+})
+
+setMethod("spouse", signature(object = "Hints"), function(object) {
+    object@spouse
 })
 
 setGeneric("spouse<-", function(object, value) {
@@ -418,8 +435,18 @@ setMethod(
     "spouse<-",
     signature(object = "Pedigree", value = "ANY"),
     function(object, value) {
+        spouse(hints(object)) <- value
+        validObject(object)
+        object
+    }
+)
+
+setMethod(
+    "spouse<-",
+    signature(object = "Hints", value = "ANY"),
+    function(object, value) {
         # TODO: Check that the spouse matrix is valid
-        object@hints@spouse <- value
+        object@spouse <- value
         validObject(object)
         object
     }

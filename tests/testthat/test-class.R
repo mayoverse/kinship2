@@ -136,5 +136,38 @@ test_that("Rel class works", {
 
 
 test_that("Hints class works", {
-    Hints()
+    ## From scratch
+    hts0 <- Hints()
+    expect_equal(horder(hts0), character())
+    horder(hts0) <- c("ID1", "ID2")
+    expect_equal(horder(hts0), c("ID1", "ID2"))
+    expect_equal(dim(spouse(hts0)), c(0, 3))
+    spouse(hts0) <- data.frame(
+        idl = c("ID1", "ID2"),
+        idr = c("ID3", "ID4"),
+        anchor = factor(c("left", "right"))
+    )
+    expect_equal(dim(spouse(hts0)), c(2, 3))
+    expect_snapshot(hts0)
+
+    ## With constructor
+    hts2 <- Hints(horder = c("ID1", "ID2"), spouse = data.frame(
+        idl = c("ID1", "ID2"),
+        idr = c("ID3", "ID4"),
+        anchor = factor(c("left", "right"))
+    ))
+    expect_equal(hts0, hts2)
+
+    ## With missing values
+    hts_horder <- Hints(horder = c("ID1", "ID2", 1, "ID3"))
+    expect_equal(horder(hts_horder), c("ID1", "ID2", "1", "ID3"))
+    expect_equal(dim(spouse(hts_horder)), c(0, 3))
+
+    hts_spouse <- Hints(spouse = data.frame(
+        idl = c("ID1", "ID2"),
+        idr = c("ID3", NA),
+        anchor = factor(c("left", "right"))
+    ))
+    expect_equal(horder(hts_spouse), character())
+    expect_equal(dim(spouse(hts_spouse)), c(2, 3))
 })

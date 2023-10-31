@@ -102,13 +102,18 @@ check_values <- function(val, ref, name = NULL, present = TRUE) {
 is_valid_hints <- function(object) {
     errors <- c()
 
-    #### Check that the slots have the right columns ####
+    #### Check that the slots are of the right class ####
     if (! is.character(object@horder)) {
         errors <- c(errors, "horder slot must be character")
     }
     if (! is.data.frame(object@spouse)) {
         errors <- c(errors, "spouse slot must be a data.frame")
     }
+
+    #### Check that the horder slot is valid ####
+    errors <- c(errors, check_values(
+        object@horder, c(NA_character_, ""), "horder", present = FALSE
+    ))
 
     #### Check that the hints spouse data.frame is valid ####
     errors <- c(errors, check_slot_fd(
@@ -120,7 +125,7 @@ is_valid_hints <- function(object) {
     }
 
     errors <- c(errors, check_values(
-        object@spouse$anchor, c("left", "rihgt", "either"), "anchor"
+        object@spouse$anchor, c("left", "right", "either"), "anchor"
     ))
 
     return(errors)
