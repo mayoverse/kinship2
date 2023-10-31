@@ -349,10 +349,9 @@ setMethod("length", c(x = "Pedigree"),
 #' @rdname extract-methods
 #' @aliases show,Pedigree-method
 setMethod("show", signature(object = "Pedigree"), function(object) {
-    nb_fam <- length(levels(as.factor(famid(ped(object)))))
-    cat("Pedigree object with", length(ped(object)), "individuals and",
-        length(rel(object)), "special relationships across", nb_fam, "families",
-        fill = TRUE)
+    cat("Pedigree object with: \n")
+    print(ped(object))
+    print(rel(object))
 })
 
 #' @description Pedigree summary method.
@@ -361,16 +360,9 @@ setMethod("show", signature(object = "Pedigree"), function(object) {
 #' @rdname extract-methods
 #' @aliases summary,Pedigree-method
 setMethod("summary", signature(object = "Pedigree"), function(object) {
-    cat("Pedigree object with", nrow(object@ped), "individuals", fill = TRUE)
-    print(summary(object@ped, maxsum = 5))
-    cat("and", nrow(object@rel), "special relationships.", fill = TRUE)
-    print(summary(object@rel))
-    cat("The filling scales columns are:",
-        levels(as.factor(object@scales$fill$column_values)), fill = TRUE
-    )
-    cat("The border scale column are:",
-        levels(as.factor(object@scales$border$column)), fill = TRUE
-    )
+    cat("Pedigree object with \n")
+    print(summary(ped(object)))
+    print(summary(rel(object)))
 })
 
 #' Convert a Pedigree object to a list
