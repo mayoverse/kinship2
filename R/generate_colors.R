@@ -48,7 +48,6 @@ generate_fill <- function(
     }
 
     mods <- fill <- rep(NA, n)
-
     # Affection modality previously used
     scale <- unique(as.data.frame(
         list(mods_aff = labels, affected = affected, fill = fill)
@@ -63,8 +62,11 @@ generate_fill <- function(
         # last of aff
         fill_to_use <- c(colors_unaff[1], colors_aff[-1], "grey")
         names(fill_to_use) <- c("FALSE", "TRUE", NA)
-        fill <- revalue(affected, fill_to_use, warn_missing = FALSE)
-        mods <- revalue(affected, c("FALSE" = 0, "TRUE" = 1),
+        fill <- revalue(
+            as.character(affected), fill_to_use, warn_missing = FALSE
+        )
+        mods <- revalue(
+            as.character(affected), c("FALSE" = 0, "TRUE" = 1),
             warn_missing = FALSE
         )
     } else {
@@ -136,7 +138,6 @@ generate_fill <- function(
             density = rep(NA, n), angle = rep(NA, n)
         )
     ))
-
     list(mods = mods, fill_scale = scale)
 }
 
@@ -262,6 +263,7 @@ setMethod("generate_colors", "numeric",
             mods_aff, threshold, sup_thres_aff
         )
         border <- generate_border(avail, colors_avail)
+
         lst_sc <- generate_fill(
             affected_val, affected$affected, affected$labels,
             keep_full_scale, breaks, colors_aff, colors_unaff
@@ -321,7 +323,7 @@ setMethod("generate_colors", "Pedigree",
         colors_avail = c("green", "black"),
         reset = TRUE
     ) {
-        if (nrow(obj$ped) == 0) {
+        if (length(obj) == 0) {
             return(obj)
         }
 
@@ -338,7 +340,7 @@ setMethod("generate_colors", "Pedigree",
         }
 
         new_col <- paste0(col_aff, "_aff")
-        df <- check_columns(meta(obj), c(col_aff, col_avail),
+        df <- check_columns(mcols(obj), c(col_aff, col_avail),
             "", new_col, others_cols = TRUE
         )
 
@@ -348,7 +350,7 @@ setMethod("generate_colors", "Pedigree",
             colors_aff, colors_unaff, colors_avail
         )
 
-        deriv(obj, new_col) <- lst_sc$mods
+        mcols(obj)[new_col] <- lst_sc$mods
         if (nrow(lst_sc$fill_scale) > 0) {
             lst_sc$fill_scale$column_mods <- new_col
             lst_sc$fill_scale$column_values <- col_aff
@@ -360,26 +362,29 @@ setMethod("generate_colors", "Pedigree",
         )
 
         if (add_to_scale) {
-            if (col_aff %in% obj$scales$fill$column_values &
-                    !reset) {
-                stop("The column ", col_aff, " is already in the scales")
-            } else if (col_aff %in% obj$scales$fill$column_values & reset) {
-                obj$scales$fill <- obj$scales$fill[
-                    obj$scales$fill$column_values != col_aff,
-                ]
+            if (col_aff %in% fill(obj)$column_values) {
+                if (!reset) {
+                    stop("The column ", col_aff, " is already in the scales")
+                } else {
+                    new_order <- unique(fill(obj)[
+                        fill(obj)$column_values == col_aff,
+                        "order"
+                    ])
+                    fill(obj) <- fill(obj)[
+                        fill(obj)$column_values != col_aff,
+                    ]
+                }
+            } else {
+                new_order <- ifelse(nrow(fill(obj)) > 0,
+                    max(fill(obj)$order) + 1, 1
+                )
             }
-            new_order <- ifelse(nrow(obj$scales$fill) > 0,
-                max(obj$scales$fill$order) + 1, 1
-            )
             scales$fill$order <- new_order
-            scales$fill <- rbind.fill(obj$scales$fill,
-                scales$fill
-            )
+            scales$fill <- rbind.fill(fill(obj), scales$fill)
         } else {
             scales$fill$order <- 1
         }
-
-        obj$scales <- scales
+        scales(obj) <- Scales(scales$fill, scales$border)
         validObject(obj)
         obj
     }
