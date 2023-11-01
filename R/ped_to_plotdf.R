@@ -26,18 +26,25 @@ NULL
 #' @seealso [plot_fromdf()]
 #' [ped_to_legdf()]
 #' @export
-ped_to_plotdf <- function(
-    ped, packed = FALSE, width = 10, align = c(1.5, 2),
+setGeneric(
+    "ped_to_plotdf", signature = "obj",
+    function(obj, ...) {
+        standardGeneric("ped_to_plotdf")
+    }
+)
+
+setMethod("ped_to_plotdf", "Pedigree", function(
+    obj, packed = FALSE, width = 10, align = c(1.5, 2),
     subreg = NULL, cex = 0.5, symbolsize = cex, pconnect = 0.5, branch = 0.6,
     aff_mark = TRUE, label = NULL, ...
 ) {
 
-    famlist <- unique(ped(ped, "famid"))
+    famlist <- unique(famid(obj))
     if (length(famlist) > 1) {
         nfam <- length(famlist)
         all_df <- vector("list", nfam)
         for (i_fam in famlist) {
-            ped_fam <- ped[ped(ped, "famid") == i_fam]
+            ped_fam <- obj[famid(obj) == i_fam]
             all_df[[i_fam]] <- ped_to_plotdf(ped_fam, packed, width, align,
                 subreg, cex, symbolsize, ...
             )
@@ -53,7 +60,7 @@ ped_to_plotdf <- function(
         label = character(), tips = character(),
         adjx = numeric(), adjy = numeric()
     )
-    plist <- align(ped, packed = packed, width = width, align = align)
+    plist <- align(obj, packed = packed, width = width, align = align)
 
     if (!is.null(subreg)) {
         plist <- subregion(plist, subreg)
@@ -62,7 +69,7 @@ ped_to_plotdf <- function(
     maxlev <- nrow(plist$pos)
 
     params_plot <- set_plot_area(
-        cex, ped(ped, "id"), maxlev, xrange, symbolsize, ...
+        cex, id(ped(obj)), maxlev, xrange, symbolsize, ...
     )
 
     boxw <- params_plot$boxw
@@ -80,19 +87,20 @@ ped_to_plotdf <- function(
     # y position
     i <- (seq_len(length(plist$nid)) - 1) %% length(plist$n) + 1
     # sex of each box
-    sex <- as.numeric(ped(ped, "sex"))[id[idx]]
+    sex <- as.numeric(sex(ped(obj)))[id[idx]]
 
-    all_aff <- fill(ped)
-    n_aff <- length(unique(fill(ped, "order")))
+    all_aff <- fill(obj)
+    n_aff <- length(unique(fill(obj)$order))
     polylist <- polygons(max(1, n_aff))
 
+    ped_df <- as.data.frame(ped(obj))
     # border mods of each box
-    border_mods <- ped(ped)[id[idx], unique(border(ped, "column"))]
-    border_idx <- match(border_mods, border(ped, "mods"))
+    border_mods <- ped_df[id[idx], unique(border(obj)$column)]
+    border_idx <- match(border_mods, border(obj)$mods)
 
     for (aff in seq_len(n_aff)) {
         aff_df <- all_aff[all_aff$order == aff, ]
-        aff_mods <- ped(ped)[id[idx], unique(aff_df[["column_mods"]])]
+        aff_mods <- ped_df[id[idx], unique(aff_df[["column_mods"]])]
         aff_idx <- match(aff_mods, aff_df[["mods"]])
 
 
@@ -115,7 +123,7 @@ ped_to_plotdf <- function(
             fill = aff_df[aff_idx, "fill"],
             density = aff_df[aff_idx, "density"],
             angle = aff_df[aff_idx, "angle"],
-            border = border(ped, "border")[border_idx],
+            border = border(obj)$border[border_idx],
             id = "polygon"
         )
         plot_df <- rbind.fill(plot_df, ind)
@@ -123,7 +131,7 @@ ped_to_plotdf <- function(
             aff_mark_df <- data.frame(
                 x0 = pos[idx] + poly_aff_x_mr[sex],
                 y0 = i[idx] + boxh / 2,
-                label = ped(ped)[id[idx], unique(aff_df[["column_values"]])],
+                label = ped_df[id[idx], unique(aff_df[["column_values"]])],
                 fill = "black",
                 type = "text", cex = cex,
                 id = "aff_mark"
@@ -133,7 +141,7 @@ ped_to_plotdf <- function(
     }
 
     ## Add status
-    status <- ped(ped)[id[idx], "status"]
+    status <- ped_df[id[idx], "status"]
     idx_dead <- idx[status == 1 & !is.na(status)]
 
     if (length(idx_dead) > 0) {
@@ -150,7 +158,7 @@ ped_to_plotdf <- function(
     ## Add ids
     id_df <- data.frame(
         x0 = pos[idx], y0 = i[idx] + boxh + labh * 1.2,
-        label = ped(ped)[id[idx], "id"], fill = "black",
+        label = ped_df[id[idx], "id"], fill = "black",
         type = "text", cex = cex,
         id = "id"
     )
@@ -159,10 +167,10 @@ ped_to_plotdf <- function(
 
     ## Add a label if given
     if (!is.null(label)) {
-        check_columns(ped(ped), label)
+        check_columns(ped_df, label)
         label <- data.frame(
             x0 = pos[idx], y0 = i[idx] + boxh + labh * 2.8,
-            label = ped(ped)[id[idx], label],
+            label = ped_df[id[idx], label],
             fill = "black",
             type = "text", cex = cex,
             id = "label"
@@ -332,4 +340,4 @@ ped_to_plotdf <- function(
         }
     }
     list(df = plot_df, par_usr = params_plot)
-}
+})

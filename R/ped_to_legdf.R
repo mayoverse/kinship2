@@ -37,9 +37,9 @@ ped_to_legdf <- function(ped,
         adjy = numeric()
     )
     sex_equiv <- c("Male", "Female", "Terminated", "Unknown")
-    all_lab <- list(sex_equiv, border(ped, "labels"))
-    all_aff <- lapply(unique(fill(ped, "order")), function(x) {
-        fill(ped, "labels")[fill(ped, "order") == x]
+    all_lab <- list(sex_equiv, border(ped)$labels)
+    all_aff <- lapply(unique(fill(ped)$order), function(x) {
+        fill(ped)$labels[fill(ped)$order == x]
     })
 
     all_lab <- c(all_lab, all_aff)

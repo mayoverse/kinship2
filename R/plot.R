@@ -92,7 +92,7 @@ setMethod("plot", c(x = "Pedigree", y = "missing"),
         lst <- ped_to_plotdf(x, packed, width, align, subreg,
             cex, symbolsize, pconnect, branch, aff_mark, label, ...
         )
-        famlist <- unique(x$ped$famid)
+        famlist <- unique(famid(x))
         if (length(famlist) > 1) {
             message("Multiple families present, only plotting family ",
                 fam_to_plot
