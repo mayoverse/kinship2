@@ -13,7 +13,7 @@ setClassUnion("missing_OR_NULL", c("missing", "NULL"))
 #' A hints object is a list of two elements used
 #' to order the individuals in the pedigree plot.
 #'
-#' @slot horder A character vector with one element per subject in the
+#' @slot horder A numeric vector with one element per subject in the
 #' Pedigree.  It determines the relative horizontal order of subjects within
 #' a sibship, as well as the relative order of processing for the founder
 #' couples. (For this latter, the female founders are ordered as though they
@@ -32,7 +32,7 @@ setClassUnion("missing_OR_NULL", c("missing", "NULL"))
 #' @export
 setClass("Hints",
     representation(
-        horder = "character",
+        horder = "numeric",
         spouse = "data.frame"
     )
 )

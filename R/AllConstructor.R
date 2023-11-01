@@ -234,9 +234,9 @@ setGeneric("Hints", function(horder, spouse) {
 #' @rdname Hints
 #' @export
 setMethod("Hints",
-    signature(horder = "character_OR_integer", spouse = "data.frame"),
+    signature(horder = "numeric", spouse = "data.frame"),
     function(horder, spouse) {
-        new("Hints", horder = as.character(horder), spouse = spouse)
+        new("Hints", horder = horder, spouse = spouse)
     }
 )
 
@@ -244,7 +244,7 @@ setMethod("Hints",
 #' @rdname Hints
 #' @export
 setMethod("Hints",
-    signature(horder = "character_OR_integer", spouse = "missing_OR_NULL"),
+    signature(horder = "numeric", spouse = "missing_OR_NULL"),
     function(horder, spouse) {
         dfe <- data.frame("idl" = character(), "idr" = character(),
             "anchor" = factor()
@@ -259,7 +259,7 @@ setMethod("Hints",
 setMethod("Hints",
     signature(horder = "missing_OR_NULL", spouse = "data.frame"),
     function(horder, spouse) {
-        new("Hints", horder = character(), spouse = spouse)
+        new("Hints", horder = numeric(), spouse = spouse)
     }
 )
 
@@ -272,7 +272,7 @@ setMethod("Hints",
         dfe <- data.frame("idl" = character(), "idr" = character(),
             "anchor" = factor()
         )
-        new("Hints", horder = character(), spouse = dfe)
+        new("Hints", horder = numeric(), spouse = dfe)
     }
 )
 

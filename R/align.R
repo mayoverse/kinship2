@@ -112,7 +112,6 @@ ancestors <- function(idx, momx, dadx) {
 #' @export
 #' @include auto_hint.R
 #' @include kindepth.R
-#' @include check_hints.R
 #' @include AllClass.R
 #' @include alignped1.R
 #' @include alignped2.R
@@ -123,144 +122,146 @@ setGeneric("align", signature = "obj",
 )
 
 setMethod("align", "Pedigree",
-    function(obj, packed = TRUE, width = 10,
-    align = TRUE, hints = obj@hints, missid = "NA_character_"
-) {
-    align(ped(obj), packed, width, align, hints, missid)
-})
-
-
-align <- function(ped, packed = TRUE, width = 10,
-    align = TRUE, hints = NULL, missid = "NA_character_"
-) {
-    famlist <- unique(ped(ped, "famid"))
-    if (length(famlist) > 1) {
-        nfam <- length(famlist)
-        alignment <- vector("list", nfam)
-        for (i_fam in famlist) {
-            ped_fam <- ped[ped(ped, "famid") == i_fam]
-            alignment[[i_fam]] <- align(ped_fam, packed, width, align)
+    function(
+        obj, packed = TRUE, width = 10,
+        align = TRUE, hints = obj@hints, missid = "NA_character_"
+    ) {
+        famlist <- unique(famid(obj))
+        if (length(famlist) > 1) {
+            nfam <- length(famlist)
+            alignment <- vector("list", nfam)
+            for (i_fam in famlist) {
+                ped_fam <- obj[famid(obj) == i_fam]
+                alignment[[i_fam]] <- align(ped_fam, packed, width, align)
+            }
+            return(alignment)
         }
-        return(alignment)
-    }
-    if (is.null(hints$horder)) {
-        hints <- try({
-            auto_hint(ped)
-        }, silent = TRUE)
-        ## sometimes appears dim(ped) is empty (ped is NULL), so try fix here:
-        ## (JPS 6/6/17
-        if ("try-error" %in% class(hints)) {
-            hints <- list(horder = seq_len(max(1, dim(ped))))
+        if (!is(hints, "Hints")) {
+            stop("hints must be a Hints object")
         }
-    } else {
-        check_hints(hints, ped(ped, "sex"))
-    }
-    ## Doc: Setup-align
-    n <- length(ped(ped, "id"))
+        if (length(horder(hints)) == 0) {
+            hints <- try({
+                auto_hint(obj)
+            }, silent = TRUE)
+            if ("try-error" %in% class(hints)) {
+                hints <- Hints(horder = seq_len(max(1, length(ped))))
+            }
+        }
+        ## Doc: Setup-align
+        n <- length(obj)
 
-    level <- 1 + kindepth(ped, align = TRUE)
-    horder <- hints$horder  # relative order of siblings within a family
+        level <- 1 + kindepth(obj, align = TRUE)
+        ## relative order of siblings within a family
+        horder <- horder(hints)
 
-    if (!is.null(hints$spouse)) {
-        # start with the hints list
-        tsex <- ped(ped, "sex")[hints$spouse[, 1]]  # sex of the left member
-        spouselist <- cbind(0, 0, 1 + (tsex != "male"), hints$spouse[, 3])
-        spouselist[, 1] <- ifelse(tsex == "male", hints$spouse[, 1],
-            hints$spouse[, 2]
+        if (nrow(spouse(hints)) > 0) {
+            # start with the hints list
+            idxl <- match(spouse(hints)$idl, id(ped(obj)))
+            idxr <- match(spouse(hints)$idr, id(ped(obj)))
+            tsex <- sex(ped(obj))[idxl]  # sex of the left member
+            spouselist <- cbind(0, 0, 1 + (tsex != "male"), spouse(hints)$anchor)
+            spouselist[, 1] <- ifelse(tsex == "male", idxl, idxr)
+            spouselist[, 2] <- ifelse(tsex == "male", idxr, idxl)
+        } else {
+            spouselist <- matrix(0L, nrow = 0, ncol = 4)
+        }
+        if (any(code(rel(obj)) == "Spouse")) {
+            # Add spouses from the relationship matrix
+            trel <- as.data.frame(rel(obj))
+            trel <- trel[trel$code == "Spouse", c("id1", "id2")]
+            trel$id1 <- match(trel$id1, id(ped(obj)))
+            trel$id2 <- match(trel$id2, id(ped(obj)))
+            tsex <- sex(ped(obj))[trel$id1]
+            trel[tsex != "male", seq_len(2)] <- trel[tsex != "male", 2:1]
+            spouselist <- rbind(spouselist, cbind(trel[, 1], trel[, 2], 0, 0))
+        }
+
+        dad <- match(dadid(ped(obj)), id(ped(obj)), nomatch = 0)
+        mom <- match(momid(ped(obj)), id(ped(obj)), nomatch = 0)
+        is_child <- dad > 0 & mom > 0
+        if (any(is_child)) {
+            # add parents
+            who <- which(is_child)
+            spouselist <- rbind(spouselist, cbind(dad[who], mom[who], 0, 0))
+        }
+
+        hash <- spouselist[, 1] * n + spouselist[, 2]
+        spouselist <- spouselist[!duplicated(hash), , drop = FALSE]
+        ## Doc: Founders -align
+        noparents <- (dad[spouselist[, 1]] == 0 & dad[spouselist[, 2]] == 0)
+        ## Take duplicated mothers and fathers, then founder mothers
+        dupmom <- spouselist[noparents, 2][duplicated(spouselist[noparents, 2])]
+        ## Founding mothers with multiple marriages
+        dupdad <- spouselist[noparents, 1][duplicated(spouselist[noparents, 1])]
+        ## Founding fathers with multiple marriages
+        foundmom <- spouselist[
+            noparents & !(spouselist[, 1] %in% c(dupmom, dupdad)), 2
+        ]  # founding mothers
+        founders <- unique(c(dupmom, dupdad, foundmom))
+        # use the hints to order them
+        founders <- founders[order(horder[founders])]
+        rval <- alignped1(
+            founders[1], dad, mom, level, horder, packed, spouselist
         )
-        spouselist[, 2] <- ifelse(tsex == "male", hints$spouse[, 2],
-            hints$spouse[, 1]
-        )
-    } else {
-        spouselist <- matrix(0L, nrow = 0, ncol = 4)
-    }
+        if (length(founders) > 1) {
+            spouselist <- rval$spouselist
+            for (i in 2:length(founders)) {
+                rval2 <- alignped1(founders[i], dad, mom, level, horder, packed,
+                    spouselist
+                )
+                spouselist <- rval2$spouselist
+                rval <- alignped3(rval, rval2, packed)
+            }
+        }
+        ## Doc: finish-align (1) Unhash out the spouse and nid arrays
+        nid <- matrix(as.integer(floor(rval$nid)), nrow = nrow(rval$nid))
+        spouse <- 1L * (rval$nid != nid)
+        maxdepth <- nrow(nid)
 
-    if (nrow(rel(ped)) > 0 && any(rel(ped, "code") == "Spouse")) {
-        # Add spouses from the relationship matrix
-        trel <- rel(ped, c("id1", "id2"))[
-            rel(ped, "code") == "Spouse", drop = FALSE
-        ]
-        trel$id1 <- match(trel$id1, ped(ped, "id"))
-        trel$id2 <- match(trel$id2, ped(ped, "id"))
-        tsex <- ped(ped, "sex")[trel[, 1]]
-        trel[tsex != "male", seq_len(2)] <- trel[tsex != "male", 2:1]
-        spouselist <- rbind(spouselist, cbind(trel[, 1], trel[, 2], 0, 0))
-    }
-    dad <- match(ped(ped, "dadid"), ped(ped, "id"), nomatch = 0)
-    mom <- match(ped(ped, "momid"), ped(ped, "id"), nomatch = 0)
-    is_child <- dad > 0 & mom > 0
-    if (any(is_child)) {
-        # add parents
-        who <- which(is_child)
-        spouselist <- rbind(spouselist, cbind(dad[who], mom[who], 0, 0))
-    }
-    hash <- spouselist[, 1] * n + spouselist[, 2]
-    spouselist <- spouselist[!duplicated(hash), , drop = FALSE]
-    ## Doc: Founders -align
-    noparents <- (dad[spouselist[, 1]] == 0 & dad[spouselist[, 2]] == 0)
-    ## Take duplicated mothers and fathers, then founder mothers
-    dupmom <- spouselist[noparents, 2][duplicated(spouselist[noparents, 2])]
-    ## Founding mothers with multiple marriages
-    dupdad <- spouselist[noparents, 1][duplicated(spouselist[noparents, 1])]
-    ## Founding fathers with multiple marriages
-    foundmom <- spouselist[
-        noparents & !(spouselist[, 1] %in% c(dupmom, dupdad)), 2
-    ]  # founding mothers
-    founders <- unique(c(dupmom, dupdad, foundmom))
-    # use the hints to order them
-    founders <- founders[order(horder[founders])]
-    rval <- alignped1(founders[1], dad, mom, level, horder, packed, spouselist)
-    if (length(founders) > 1) {
-        spouselist <- rval$spouselist
-        for (i in 2:length(founders)) {
-            rval2 <- alignped1(founders[i], dad, mom, level, horder, packed,
-                spouselist
+        for (i in (seq_along(spouse))[spouse > 0]) {
+            a1 <- ancestors(nid[i], mom, dad)
+            # matrices are in column order
+            a2 <- ancestors(nid[i + maxdepth], mom, dad)
+            if (any(duplicated(c(a1, a2)))) {
+                spouse[i] <- 2
+            }
+        }
+
+        ## Doc: finish align(2)
+        if (length(rel(obj)) > 0 && any(code(rel(obj)) != "Spouse")) {
+            twins <- 0 * nid
+            who <- (code(rel(obj)) != "Spouse")
+            ltwin <- match(id1(rel(obj))[who], id(ped(obj)), nomatch = 0)
+            rtwin <- match(id2(rel(obj))[who], id(ped(obj)), nomatch = 0)
+            ttype <- code(rel(obj))[who]
+            ## find where each of them is plotted
+            ## (any twin only appears once with a
+            ## family id, i.e., under their parents)
+            ## matrix of connected-to-parent ids
+            ntemp <- ifelse(rval$fam > 0, nid, 0)
+            ltemp <- (seq_along(ntemp))[match(ltwin, ntemp, nomatch = 0)]
+            rtemp <- (seq_along(ntemp))[match(rtwin, ntemp, nomatch = 0)]
+            twins[pmin(ltemp, rtemp)] <- ttype
+        } else {
+            twins <- NULL
+        }
+        ## Doc: finish align(3)
+        if ((is.numeric(align) || align) && max(level) > 1) {
+            pos <- alignped4(rval, spouse > 0, level, width, align)
+        } else {
+            pos <- rval$pos
+        }
+        if (is.null(twins)) {
+            list(
+                n = rval$n, nid = nid, pos = pos,
+                fam = rval$fam, spouse = spouse
             )
-            spouselist <- rval2$spouselist
-            rval <- alignped3(rval, rval2, packed)
+        } else {
+            list(
+                n = rval$n, nid = nid, pos = pos,
+                fam = rval$fam, spouse = spouse,
+                twins = twins
+            )
         }
     }
-    ## Doc: finish-align (1) Unhash out the spouse and nid arrays
-    nid <- matrix(as.integer(floor(rval$nid)), nrow = nrow(rval$nid))
-    spouse <- 1L * (rval$nid != nid)
-    maxdepth <- nrow(nid)
-
-    for (i in (seq_along(spouse))[spouse > 0]) {
-        a1 <- ancestors(nid[i], mom, dad)
-        # matrices are in column order
-        a2 <- ancestors(nid[i + maxdepth], mom, dad)
-        if (any(duplicated(c(a1, a2)))) {
-            spouse[i] <- 2
-        }
-    }
-    ## Doc: finish align(2)
-    if (nrow(rel(ped)) > 0 && any(rel(ped, "code") != "Spouse")) {
-        twins <- 0 * nid
-        who <- (rel(ped, "code") != "Spouse")
-        ltwin <- match(rel(ped, "id1")[who], ped(ped, "id"), nomatch = 0)
-        rtwin <- match(rel(ped, "id2")[who], ped(ped, "id"), nomatch = 0)
-        ttype <- rel(ped, "code")[who]
-        # find where each of them is plotted (any twin only appears once with a
-        # family id, i.e., under their parents)
-        # matrix of connected-to-parent ids
-        ntemp <- ifelse(rval$fam > 0, nid, 0)
-        ltemp <- (seq_along(ntemp))[match(ltwin, ntemp, nomatch = 0)]
-        rtemp <- (seq_along(ntemp))[match(rtwin, ntemp, nomatch = 0)]
-        twins[pmin(ltemp, rtemp)] <- ttype
-    } else {
-        twins <- NULL
-    }
-    ## Doc: finish align(3)
-    if ((is.numeric(align) || align) && max(level) > 1) {
-        pos <- alignped4(rval, spouse > 0, level, width, align)
-    } else {
-        pos <- rval$pos
-    }
-    if (is.null(twins)) {
-        list(n = rval$n, nid = nid, pos = pos, fam = rval$fam, spouse = spouse)
-    } else {
-        list(n = rval$n, nid = nid, pos = pos, fam = rval$fam, spouse = spouse,
-            twins = twins
-        )
-    }
-}
+)

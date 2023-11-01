@@ -50,13 +50,16 @@ setMethod("famid", signature(x = "Ped"), function(x) {
 setMethod("famid", signature(x = "Rel"), function(x) {
     x@famid
 })
+setMethod("famid", signature(x = "Pedigree"), function(x) {
+    famid(ped(x))
+})
 
 #' Id getter of Ped object
-#' 
+#'
 #' @param x A Ped object.
-#' 
+#'
 #' @return A character vector with the id of each individual.
-#' 
+#'
 #' @rdname Ped
 #' @aliases id,Ped-method
 #' @export
@@ -66,13 +69,33 @@ setGeneric("id", function(x) {
 setMethod("id", signature(x = "Ped"), function(x) {
     x@id
 })
+setGeneric("id<-", function(x, value) {
+    standardGeneric("id<-")
+})
+setMethod("id<-",
+    signature(x = "Ped", value = "character_OR_integer"),
+    function(x, value) {
+        if (! is.character(value) && ! is.integer(value)) {
+            stop("id must be a character or integer vector")
+        }
+        if (length(value) != length(x)) {
+            stop(
+                "The length of the new values for id should be: ",
+                "equal to the length of the Ped object"
+            )
+        }
+        x@id <- as.character(value)
+        validObject(x)
+        x
+    }
+)
 
 #' Dadid getter of Ped object
-#' 
+#'
 #' @param x A Ped object.
-#' 
+#'
 #' @return A character vector with the dadid of each individual.
-#' 
+#'
 #' @rdname Ped
 #' @aliases dadid,Ped-method
 #' @export
@@ -82,13 +105,33 @@ setGeneric("dadid", function(x) {
 setMethod("dadid", signature(x = "Ped"), function(x) {
     x@dadid
 })
+setGeneric("dadid<-", function(x, value) {
+    standardGeneric("dadid<-")
+})
+setMethod("dadid<-",
+    signature(x = "Ped", value = "character_OR_integer"),
+    function(x, value) {
+        if (! is.character(value) && ! is.integer(value)) {
+            stop("dadid must be a character or integer vector")
+        }
+        if (length(value) != length(x)) {
+            stop(
+                "The length of the new values for dadid should be: ",
+                "equal to the length of the Ped object"
+            )
+        }
+        x@dadid <- as.character(value)
+        validObject(x)
+        x
+    }
+)
 
 #' Momid getter of Ped object
-#' 
+#'
 #' @param x A Ped object.
-#' 
+#'
 #' @return A character vector with the momid of each individual.
-#' 
+#'
 #' @rdname Ped
 #' @aliases momid,Ped-method
 #' @export
@@ -98,13 +141,33 @@ setGeneric("momid", function(x) {
 setMethod("momid", signature(x = "Ped"), function(x) {
     x@momid
 })
+setGeneric("momid<-", function(x, value) {
+    standardGeneric("momid<-")
+})
+setMethod("momid<-",
+    signature(x = "Ped", value = "character_OR_integer"),
+    function(x, value) {
+        if (! is.character(value) && ! is.integer(value)) {
+            stop("momid must be a character or integer vector")
+        }
+        if (length(value) != length(x)) {
+            stop(
+                "The length of the new values for momid should be: ",
+                "equal to the length of the Ped object"
+            )
+        }
+        x@momid <- as.character(value)
+        validObject(x)
+        x
+    }
+)
 
 #' Sex getter of Ped object
-#' 
+#'
 #' @param x A Ped object.
-#' 
+#'
 #' @return A character vector with the sex of each individual.
-#' 
+#'
 #' @rdname Ped
 #' @aliases sex,Ped-method
 #' @export
@@ -113,6 +176,73 @@ setGeneric("sex", function(x) {
 })
 setMethod("sex", signature(x = "Ped"), function(x) {
     x@sex
+})
+setGeneric("sex<-", function(x, value) {
+    standardGeneric("sex<-")
+})
+setMethod("sex<-",
+    signature(x = "Ped", value = "character_OR_integer"),
+    function(x, value) {
+        if (
+            ! is.character(value) &&
+                ! is.integer(value) &&
+                ! is.factor(value)
+        ) {
+            stop("sex must be a character or integer vector")
+        }
+        if (length(value) != length(x)) {
+            stop(
+                "The length of the new values for sex should be: ",
+                "equal to the length of the Ped object"
+            )
+        }
+        x@sex <- sex_to_factor(value)
+        validObject(x)
+        x
+    }
+)
+
+#### S4 Rel Accessors ####
+#' Code accessor of Rel object
+#'
+#' @param x A Rel object.
+#'
+#' @return A character vector with the code of each relationship.
+#'
+#' @rdname Rel
+#' @aliases code,Rel-method
+#' @export
+setGeneric("code", function(x) {
+    standardGeneric("code")
+})
+setMethod("code", signature(x = "Rel"), function(x) {
+    x@code
+})
+
+#' Id1 accessor of Rel object
+#' @param x A Rel object.
+#' @return A character vector with the id1 of each relationship.
+#' @rdname Rel
+#' @aliases id1,Rel-method
+#' @export
+setGeneric("id1", function(x) {
+    standardGeneric("id1")
+})
+setMethod("id1", signature(x = "Rel"), function(x) {
+    x@id1
+})
+
+#' Id2 accessor of Rel object
+#' @param x A Rel object.
+#' @return A character vector with the id2 of each relationship.
+#' @rdname Rel
+#' @aliases id2,Rel-method
+#' @export
+setGeneric("id2", function(x) {
+    standardGeneric("id2")
+})
+setMethod("id2", signature(x = "Rel"), function(x) {
+    x@id2
 })
 
 #### S4 Pedigree Accessors ####
@@ -168,6 +298,16 @@ setMethod(
             )
         }
         slot(object@ped, slot) <- value
+        validObject(object)
+        object
+    }
+)
+
+setMethod(
+    "ped<-",
+    signature(object = "Pedigree", slot = "missing", value = "Ped"),
+    function(object, slot, value) {
+        object@ped <- value
         validObject(object)
         object
     }
@@ -387,6 +527,17 @@ setGeneric("hints", function(object) {
 
 setMethod("hints", signature(object = "Pedigree"), function(object) {
     object@hints
+})
+setGeneric("hints<-", function(object, value) {
+    standardGeneric("hints<-")
+})
+
+setMethod("hints<-", signature(object = "Pedigree", value = "Hints"), function(
+    object, value
+) {
+    object@hints <- value
+    validObject(object)
+    object
 })
 
 #### S4 horder Accessors ####

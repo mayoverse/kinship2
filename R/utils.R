@@ -249,7 +249,6 @@ sex_to_factor <- function(sex) {
     ), sex_equiv, warn_missing = FALSE))
     sex_codes <- c("male", "female", "unknown", "terminated")
     sex[!sex %in% sex_codes] <- "unknown"
-    
 
     sex <- factor(sex, sex_codes, ordered = TRUE)
     sex
@@ -333,4 +332,39 @@ vect_to_binary <- function(vect) {
     vect[!vect %in% c(0, 1)] <- NA
     vect
 }
-TRUE
+
+#' Transform a anchor variable to an ordered factor
+#'
+#' @param anchor A character, factor or numeric vector corresponding to
+#' the anchor of the individuals. The following values are recognized:
+#' - character() or factor() : "0", "1", "2", "left", "right", "either"
+#' - numeric() : 1 = "left", 2 = "right", 0 = "either"
+#'
+#' @return an ordered factor vector containing the transformed variable
+#' "either" < "left" < "right"
+#' @examples
+#' anchor_to_factor(c(1, 2, 0, "left", "right", "either"))
+#' @export
+anchor_to_factor <- function(anchor) {
+    if (is.factor(anchor) || is.numeric(anchor)) {
+        anchor <- as.character(anchor)
+    }
+    ## Normalized difference notations for anchor
+    anchor_equiv <- c(
+        "0" = "either", "1" = "left", "2" = "right",
+        "left" = "left", "right" = "right", "either" = "either"
+    )
+    anchor <- as.character(revalue(as.factor(
+        casefold(anchor, upper = FALSE)
+    ), anchor_equiv, warn_missing = FALSE))
+    anchor_codes <- c("left", "right", "either")
+    if (any(!anchor %in% anchor_codes)) {
+        stop(paste(
+            "The following values are not recognized :",
+            paste0(unique(anchor[!anchor %in% anchor_codes]), collapse = ", "),
+            ".\n"
+        ))
+    }
+
+    factor(anchor, anchor_codes, ordered = TRUE)
+}

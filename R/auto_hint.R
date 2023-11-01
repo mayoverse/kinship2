@@ -226,18 +226,17 @@ duporder <- function(idlist, plist, lev, ped) {
 #'  3. `twinord` the order of the twins
 #' @seealso [auto_hint()]
 get_twin_rel <- function(ped) {
-    if (is.null(rel(ped))) {
+    if (length(rel(ped)) == 0) {
         relation <- NULL
     } else {
-        relation <- cbind(
-            as.matrix(rel(ped, c("id1", "id2"))),
-            as.numeric(rel(ped, "code"))
-        )
+        relation <- as.data.frame(rel(ped))[, c("id1", "id2", "code")]
+        relation$code <- as.numeric(relation$code)
     }
     n <- length(ped)
     twinset <- rep(0, n)
     twinord <- rep(1, n)
     twinrel <- NULL
+
     if (!is.null(relation) && any(relation[, 3] < 4)) {
         ## Select only siblings relationships
         temp <- (relation[, 3] < 4)
@@ -299,41 +298,50 @@ get_twin_rel <- function(ped) {
 #' ped <- Pedigree(sampleped[sampleped$famid == 1, ])
 #' auto_hint(ped)
 #' @export
-auto_hint <- function(
-    ped, hints = NULL, packed = TRUE, align = FALSE, reset = FALSE
+setGeneric("auto_hint", signature = "obj",
+    function(obj, ...) standardGeneric("auto_hint")
+)
+
+setMethod("auto_hint", "Pedigree", function(obj,
+    hints = NULL, packed = TRUE, align = FALSE, reset = FALSE
 ) {
     ## full documentation now in vignette: align_code_details.Rmd
     ## References to those sections appear here as:
     ## Doc: auto_hint
-    if ((!is.null(order(ped)) ||
-                !is.null(spouse(ped))
-        ) && !reset
-    ) {
-        return(hints(ped))
+    if (!is.null(hints) && is(hints, "Hints")) {
+        if (
+            (length(horder(hints)) != 0 || length(spouse(hints)) != 0) && !reset
+        ) {
+            return(hints(obj))
+        }
     } # nothing to do
 
-    if (length(unique(ped(ped, "famid"))) > 1) {
+    if (length(unique(famid(ped(obj)))) > 1) {
         stop("auto_hint only works on Pedigrees with a single family")
     }
 
-    n <- length(ped)
-    depth <- kindepth(ped, align_parents = TRUE)
+    n <- length(obj)
+    depth <- kindepth(obj, align_parents = TRUE)
 
-    ## Doc: init-auto_hint
+    ## Doc: init-auto_hint horder
     if (!is.null(hints)) {
         if (is.vector(hints)) {
-            hints <- list(horder = hints)
+            hints <- Hints(horder = hints)
+        } else if (is.matrix(hints)) {
+            hints <- Hints(spouse = hints)
+        } else if (is.list(hints)) {
+            hints <- Hints(hints)
+        } else if (!is(hints, "Hints")) {
+            stop("hints must be a vector, matrix, list or Hints object")
         }
-        if (is.matrix(hints)) {
-            hints <- list(spouse = hints)
-        }
-        if (is.null(hints$horder)) {
+        if (is.null(horder(hints))) {
             horder <- integer(n)
         } else {
-            horder <- hints$horder
+            horder <- horder(hints)
         }
     } else {
-        horder <- integer(n)
+        hints <- Hints(horder = integer(n))
+        horder <- horder(hints)
     }
 
     for (i in unique(depth)) {
@@ -344,7 +352,7 @@ auto_hint <- function(
         }
     }
 
-    twin_rel <- get_twin_rel(ped = ped)
+    twin_rel <- get_twin_rel(ped = obj)
     twinset <- twin_rel$twinset
     twinord <- twin_rel$twinord
     twinrel <- twin_rel$twinrel
@@ -360,32 +368,32 @@ auto_hint <- function(
         }
 
         # Then reset to integers
-        for (i in unique(ped$depth)) {
-            who <- (ped$depth == i)
+        for (i in unique(depth)) {
+            who <- (depth == i)
             horder[who] <- rank(horder[who]) # there should be no ties
         }
     }
 
-    if (!is.null(hints)) {
-        sptemp <- hints$spouse
+    if (nrow(spouse(hints)) > 0) {
+        sptemp <- spouse(hints)
     } else {
         sptemp <- NULL
     }
 
-    plist <- align(ped,
+    plist <- align(obj,
         packed = packed, align = align,
-        hints = list(horder = horder, spouse = sptemp)
+        hints = Hints(horder = horder, spouse = sptemp)
     )
 
 
     ## Doc: fixup-2
-    ## Fix if duplicate individuales present
+    ## Fix if duplicate individuals present
     maxlev <- nrow(plist$nid)
     for (lev in seq_len(maxlev)) {
         # subjects on this level
         idlist <- plist$nid[lev, seq_len(plist$n[lev])]
         # duplicates to be dealt with
-        dpairs <- duporder(idlist, plist, lev, ped)
+        dpairs <- duporder(idlist, plist, lev, obj)
         if (nrow(dpairs) == 0) next
         for (i in seq_len(nrow(dpairs))) {
             anchor <- spouse <- rep(0, 2)
@@ -404,7 +412,7 @@ auto_hint <- function(
                     }
                 } else {
                     # spouse at this location connected to parents ?
-                    spouse[j] <- findspouse(idpos, plist, lev, ped)
+                    spouse[j] <- findspouse(idpos, plist, lev, obj)
                     if (plist$fam[lev, spouse[j]] > 0) { # Yes they are
                         anchor[j] <- 2 # spousal anchor
                         sibs <- idlist[findsibs(spouse[j], plist, lev)]
@@ -439,18 +447,39 @@ auto_hint <- function(
                 warning("Unexpected result in auto_hint,",
                     "please contact developer"
                 )
-                return(list(horder = seq_len(n))) # punt
+                return(Hints(horder = seq_len(n))) # punt
             } else {
+                if (is.vector(temp)) {
+                    temp <- data.frame(
+                        idl = temp[1], idr = temp[2], anchor = temp[3]
+                    )
+                } else if (is.matrix(temp)) {
+                    temp <- data.frame(
+                        idl = temp[, 1], idr = temp[, 2],
+                        anchor = temp[, 3]
+                    )
+                }
                 sptemp <- rbind(sptemp, temp)
             }
         }
         #
         # Recompute, since this shifts things on levels below
         #
-        plist <- align(ped,
+        new_spouse <- data.frame(
+            idl = id(ped(obj))[sptemp$idl],
+            idr = id(ped(obj))[sptemp$idr],
+            anchor = anchor_to_factor(sptemp$anchor)
+        )
+        plist <- align(obj,
             packed = packed, align = align,
-            hints = list(horder = horder, spouse = sptemp)
+            hints = Hints(horder = horder, spouse = new_spouse)
         )
     }
-    list(horder = horder, spouse = sptemp)
-}
+
+    new_spouse <- data.frame(
+        idl = id(ped(obj))[sptemp$idl],
+        idr = id(ped(obj))[sptemp$idr],
+        anchor = anchor_to_factor(sptemp$anchor)
+    )
+    Hints(horder = horder, spouse = new_spouse)
+})

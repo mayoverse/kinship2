@@ -127,7 +127,6 @@ setMethod("subset", "Ped", function(x, i, del_parents = FALSE) {
         ped_df$dadid[!ped_df$dadid %in% ped_df$id] <- NA_character_
         ped_df$momid[!ped_df$momid %in% ped_df$id] <- NA_character_
     }
-    print(ped_df)
     new_ped <- Ped(ped_df)
     validObject(new_ped)
     new_ped
@@ -395,21 +394,16 @@ setMethod("as.list", "Pedigree", function(x) {
 #' @rdname extract-methods
 setMethod("[", c(x = "Pedigree", i = "ANY", j = "missing"),
     function(x, i, j, drop = TRUE) {
-        if (is.factor(i)) {
-            i <- as.character(i)
-        }
-        if (is.character(i)) {
-            i <- which(x$ped$id %in% i)
-        }
-        ped_df <- x$ped[i, ]
-        allId <- unique(c(ped_df$id, ped_df$dadid, ped_df$momid))
-        rel_df <- x$rel[x$rel$id1 %in% allId & x$rel$id2 %in% allId, ]
-        idx <- match(allId, ped_df$id, nomatch = 0)
-        sub_hints <- sub_sel_hints(hints(x), idx)
-        new_ped <- Pedigree(ped_df, rel_df, x$scales,
-            hints = sub_hints, cols_ren_ped = NULL, normalize = FALSE
+        new_ped <- subset(ped(x), i)
+        all_id <- id(new_ped)
+        new_rel <- subset(rel(x), all_id)
+        new_hints <- subset(hints(x), all_id)
+
+        new_pedi <- new("Pedigree",
+            ped = new_ped, rel = new_rel,
+            hints = new_hints, scales = scales(x)
         )
-        validObject(new_ped)
-        new_ped
+        validObject(new_pedi)
+        new_pedi
     }
 )

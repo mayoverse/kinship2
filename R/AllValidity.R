@@ -103,8 +103,8 @@ is_valid_hints <- function(object) {
     errors <- c()
 
     #### Check that the slots are of the right class ####
-    if (! is.character(object@horder)) {
-        errors <- c(errors, "horder slot must be character")
+    if (! is.numeric(object@horder)) {
+        errors <- c(errors, "horder slot must be numeric")
     }
     if (! is.data.frame(object@spouse)) {
         errors <- c(errors, "spouse slot must be a data.frame")
@@ -112,7 +112,7 @@ is_valid_hints <- function(object) {
 
     #### Check that the horder slot is valid ####
     errors <- c(errors, check_values(
-        object@horder, c(NA_character_, ""), "horder", present = FALSE
+        object@horder, NA_real_, "horder", present = FALSE
     ))
 
     #### Check that the hints spouse data.frame is valid ####
@@ -127,6 +127,21 @@ is_valid_hints <- function(object) {
     errors <- c(errors, check_values(
         object@spouse$anchor, c("left", "right", "either"), "anchor"
     ))
+
+    idmin <- pmin(object@spouse$idl, object@spouse$idr)
+    idmax <- pmax(object@spouse$idl, object@spouse$idr)
+    if (any(idmin == idmax)) {
+        errors <- c(errors, "idl and idr should be different")
+    }
+    dup <- anyDuplicated(cbind(idmin, idmax))
+    if (dup) {
+        dup <- paste(idmin[dup], idmax[dup], sep = "_")
+        errors <- c(errors, paste(
+            "idl and idr should be unique:",
+            paste(dup, collapse = ", "),
+            "couples are present more than once in the spouse slot."
+        ))
+    }
 
     return(errors)
 }
@@ -418,6 +433,40 @@ is_valid_pedigree <- function(object) {
         ))
     }
 
+    #### Check that the hints are valid ####
+    if (length(horder(object)) > 0 &&
+            length(horder(object)) != length(object)
+    ) {
+        errors <- c(errors,
+            "Length for horder component should be equal to Pedigree length"
+        )
+    }
+
+    idl <- spouse(object)$idl
+    idr <- spouse(object)$idr
+
+    ## Check for presence of spouses in Ped object
+    idabs <- c(idl, idr)[!c(idl, idr) %in% id(ped(object))]
+    if (length(idabs) > 0) {
+        errors <- c(errors, paste(
+            "Hints spouse(s)",
+            paste(idabs, sep = ","),
+            "not present in the Ped object"
+        ))
+    }
+
+    ## Check for sex of spouses
+    idls <- sex(ped(object))[match(idl, id(ped(object)))]
+    idlr <- sex(ped(object))[match(idr, id(ped(object)))]
+    sps <- paste(idls, idlr, sep = "_")
+    sps <- sps %in% c("female_male", "male_female")
+    if (any(!sps)) {
+        errors <- c(errors, paste(
+            "Hints spouse(s)",
+            paste(paste(idl[!sps], idr[!sps], sep = "_"), sep = ","),
+            "not female, male"
+        ))
+    }
     if (length(errors) == 0) {
         TRUE
     } else {
