@@ -233,6 +233,16 @@ setMethod("kindepth", "character", function(obj, dadid, momid,
 #' @docType methods
 setMethod("kindepth", "Pedigree",
     function(obj, align_parents = FALSE) {
-        kindepth(obj$ped$id, obj$ped$dadid, obj$ped$momid, align_parents)
+        kindepth(ped(obj), align_parents)
+    }
+)
+
+#' @export
+#' @rdname kindepth
+#' @aliases kindepth,Ped
+#' @docType methods
+setMethod("kindepth", "Ped",
+    function(obj, align_parents = FALSE) {
+        kindepth(id(obj), dadid(obj), momid(obj), align_parents)
     }
 )

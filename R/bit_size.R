@@ -67,7 +67,6 @@ setMethod("bit_size", "Pedigree",
 #' @rdname bit_size
 setMethod("bit_size", "Ped",
     function(obj, missid = NA_character_) {
-        print(summary(obj))
         bit_size(dadid(obj), momid(obj), missid)
     }
 )
