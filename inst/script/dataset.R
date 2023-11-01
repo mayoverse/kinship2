@@ -10,5 +10,9 @@ sampleped <- read.delim("inst/extdata/sampleped.tab",
 sampleped[c("famid", "id", "dadid", "momid")] <- as.data.frame(
     lapply(sampleped[c("famid", "id", "dadid", "momid")], as.character)
 )
+sampleped <- mutate_if(
+    sampleped, is.character,
+    ~replace(., . %in% "0", NA)
+)
 summary(sampleped)
 usethis::use_data(sampleped, overwrite = TRUE)
