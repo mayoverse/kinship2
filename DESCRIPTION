@@ -52,7 +52,6 @@ BugReports: https://github.com/LouisLeLezet/Pedixplorer/issues
 url: https://github.com/LouisLeNezet/Pedixplorer
 BiocType: Software
 Collate: 
-    'Pedigree.R'
     'AllValidity.R'
     'AllClass.R'
     'AllAccessors.R'
@@ -63,7 +62,6 @@ Collate:
     'alignped3.R'
     'alignped2.R'
     'alignped1.R'
-    'check_hints.R'
     'kindepth.R'
     'auto_hint.R'
     'align.R'
