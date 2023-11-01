@@ -62,32 +62,29 @@ test_that("Pedigree from sampleped and affectation", {
     # Here is a case where the levels fail to line up properly
     data("sampleped")
     df1 <- sampleped[sampleped$famid == 1, ]
-    colnames(df1)
     ped1 <- Pedigree(df1, cols_ren_ped = list(
         "indId" = "id",
         "fatherId" = "dadid",
         "motherId" = "momid",
         "gender" = "sex",
         "available" = "avail",
-        "affection" = "affected"
-    ))
+        "affection" = "affected",
+        "family" = "famid"
+    ), missid = "0")
 
-    expect_equal(nrow(ped1@ped), 41)
-    expect_equal(ncol(ped1@ped), 19)
-    expect_equal(nrow(ped1@rel), 0)
-    expect_equal(ncol(ped1@rel), 7)
+    expect_equal(dim(as.data.frame(ped(ped1))), c(41, 25))
+    expect_equal(dim(as.data.frame(rel(ped1))), c(0, 4))
 
-    expect_error(ped1$ped$id <- "1")
-    expect_error(ped1$ped$id[1] <- "1")
-    expect_error(ped1$ped$id[1] <- "102")
-    expect_error(ped1$ped$dadid[1] <- "101")
-    expect_no_error(ped1$ped$dadid[3] <- "1_103")
-    expect_warning(expect_error(ped1$ped$sex[3] <- "103"))
-    expect_error(ped1$ped$sex[3] <- "female")
-    expect_error(ped1$ped$sex[3] <- "unknown")
-    expect_no_error(ped1$ped$sex[41] <- "unknown")
-
-    expect_equal(as.data.frame(ped1), ped1$ped)
+    expect_error(id(ped(ped1)) <- "1")
+    expect_error(id(ped(ped1))[1] <- "1")
+    expect_error(id(ped(ped1))[1] <- "102")
+    expect_no_error(id(ped(ped1))[41] <- "142")
+    expect_equal(id(ped(ped1))[41], "142")
+    expect_no_error(dadid(ped(ped1))[3] <- "1_103")
+    expect_warning(expect_error(sex(ped(ped1))[3] <- "103"))
+    expect_error(sex(ped(ped1))[3] <- "female")
+    expect_error(sex(ped(ped1))[3] <- "unknown")
+    expect_no_error(sex(ped(ped1))[41] <- "male")
 })
 
 test_that("Pedigree subscripting", {
@@ -96,73 +93,53 @@ test_that("Pedigree subscripting", {
         "indId" = "id", "fatherId" = "fatherid",
         "motherId" = "motherid", "gender" = "sex", "family" = "famid",
         "affection" = "cancer"
-    ))
-    expect_equal(nrow(ped(minnped)), 28081)
-    expect_equal(ncol(minnped[["ped"]]), 28)
+    ), missid = "0")
+    expect_equal(length(minnped), 28081)
+    expect_equal(dim(as.data.frame(ped(minnped))), c(28081, 34))
 
-    ped8 <- minnped[ped(minnped)$famid == "8",
-        c("id", "dadid", "momid", "sex", "affection")
-    ]
+    ped8 <- minnped[famid(ped(minnped)) == "8"]
 
-    expect_equal(nrow(ped8$ped), 40)
-    expect_equal(ncol(ped8$ped), 11)
+    expect_equal(dim(as.data.frame(ped(ped8))), c(40, 34))
 
     # Subjects 150, 152, 154, 158 are children,
     # and 143, 162, 149 are parents and a child
     droplist <- paste("8", c(150, 152, 154, 158, 143, 162, 149), sep = "_")
 
-    keep1 <- !(ped8$ped$id %in% droplist)  # logical
+    keep1 <- !(id(ped(ped8)) %in% droplist)  # logical
     keep2 <- which(keep1)  # numeric
-    keep3 <- as.character(ped8$ped$id[keep1])  # character
+    keep3 <- as.character(id(ped(ped8))[keep1])  # character
     keep4 <- factor(keep3)
 
-    test1 <- ped8[keep1, ]
-    test2 <- ped8[keep2, ]
-    test3 <- ped8[keep3, ]
-    test4 <- ped8[keep4, ]
+    test1 <- ped8[keep1]
+    test2 <- ped8[keep2]
+    test3 <- ped8[keep3]
+    test4 <- ped8[keep4]
 
     expect_equal(test1, test2)
     expect_equal(test1, test3)
     expect_equal(test1, test4)
 
-    pedcol <- minnped[, c("id", "dadid", "momid", "sex", "affection")]
-    expect_equal(nrow(pedcol$ped), 28081)
-    expect_equal(ncol(pedcol$ped), 11)
 
     pedrow <- minnped[c("8_150", "8_163", "8_145", "8_135", "8_136")]
-    expect_equal(nrow(pedrow$ped), 5)
-    expect_equal(ncol(pedrow$ped), 28)
+    expect_equal(length(pedrow), 5)
 })
 
-test_that("Pedigree to dataframe", {
+test_that("Pedigree generic", {
     data("sampleped")
-    ped <- Pedigree(sampleped)
-    expect_equal(dim(as.data.frame(ped)), c(55, 19))
+    pedi <- Pedigree(sampleped, missid = "0")
+    expect_equal(dim(as.data.frame(ped(pedi))), c(55, 25))
+    expect_equal(names(as.list(pedi)), c("ped", "rel", "scales", "hints"))
+    expect_equal(length(pedi), 55)
 })
 
-test_that("Pedigree length", {
+test_that("Pedigree accessors", {
     data("sampleped")
-    ped <- Pedigree(sampleped)
-    expect_equal(length(ped), 55)
-})
-
-test_that("Pedigree getters", {
-    data("sampleped")
-    ped <- Pedigree(sampleped)
-    expect_equal(ped$ped, ped(ped))
-    expect_equal(ped$rel, rel(ped))
-    expect_equal(ped$hints, hints(ped))
-    expect_equal(ped$hints$horder, order(ped))
-    expect_equal(ped$hints$spouse, spouse(ped))
-    expect_equal(ped$scales$fill, fill(ped))
-    expect_equal(ped$scales$border, border(ped))
-})
-
-test_that("Pedigree setters", {
-    data("sampleped")
-    ped <- Pedigree(sampleped)
-    peddf <- ped(ped)
-    peddf[1, "famid"] <- "2"
-    ped(ped) <- peddf
-    expect_equal(ped(ped)[1, "famid"], "2")
+    pedi <- Pedigree(sampleped, missid = "0")
+    expect_equal(pedi@ped, ped(pedi))
+    expect_equal(pedi@rel, rel(pedi))
+    expect_equal(pedi@hints, hints(pedi))
+    expect_equal(pedi@hints@horder, horder(pedi))
+    expect_equal(pedi@hints@spouse, spouse(pedi))
+    expect_equal(pedi@scales@fill, fill(pedi))
+    expect_equal(pedi@scales@border, border(pedi))
 })
