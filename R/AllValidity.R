@@ -200,8 +200,9 @@ is_valid_scales <- function(object) {
     col_log <- c("affected")
     err_log <- col_log[!unlist(lapply(object@fill[col_log], is, "logical"))]
     if (length(err_log) > 0) {
-        errors <- c(errors, paste(
-            err_log, " column(s) must be logical", sep = ""
+        errors <- c(errors, paste("Fill slot ",
+            paste(err_log, collapse = ", "),
+            " column(s) must be logical", sep = ""
         ))
     }
 
@@ -209,8 +210,9 @@ is_valid_scales <- function(object) {
     col_num <- c("density", "angle", "order", "mods")
     err_num <- col_num[!unlist(lapply(object@fill[col_num], is, "numeric"))]
     if (length(err_num) > 0) {
-        errors <- c(errors, paste(
-            err_num, " column(s) must be numeric", sep = ""
+        errors <- c(errors, paste("Fill slot ",
+            paste(err_num, collapse = ", "),
+            " column(s) must be numeric", sep = ""
         ))
     }
 
@@ -218,29 +220,38 @@ is_valid_scales <- function(object) {
     col_char <- c(
         "column_values", "column_mods", "labels", "fill"
     )
-    err_char <- col_char[!unlist(lapply(object@fill[col_char], is, "character"))]
+    err_char <- col_char[!unlist(lapply(
+        object@fill[col_char], is, "character"
+    ))]
     if (length(err_char) > 0) {
-        errors <- c(errors, paste(
-            err_char, " column(s) must be character", sep = ""
+        errors <- c(errors, paste("Fill slot ",
+            paste(err_char, collapse = ", "),
+            " column(s) must be character", sep = ""
         ))
     }
 
     #### Check that the border columns have the right values ####
     ## Check for character columns
     col_char <- c("column", "labels", "border")
-    err_char <- col_char[!unlist(lapply(object@border[col_char], is, "character"))]
+    err_char <- col_char[!unlist(lapply(
+        object@border[col_char], is, "character"
+    ))]
     if (length(err_char) > 0) {
-        errors <- c(errors, paste(
-            err_char, " column(s) must be character", sep = ""
+        errors <- c(errors, paste("Border slot ",
+            paste(err_char, collapse = ", "),
+            " column(s) must be character", sep = ""
         ))
     }
 
     ## Check for numeric columns
     col_num <- c("mods")
-    err_num <- col_num[!unlist(lapply(object@border[col_num], is, "numeric"))]
+    err_num <- col_num[!unlist(lapply(
+        object@border[col_num], is, "numeric"
+    ))]
     if (length(err_num) > 0) {
-        errors <- c(errors, paste(
-            err_num, " column(s) must be numeric", sep = ""
+        errors <- c(errors, paste("Border slot ",
+            paste(err_num, collapse = ", "),
+            " column(s) must be numeric", sep = ""
         ))
     }
 

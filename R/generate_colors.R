@@ -135,7 +135,7 @@ generate_fill <- function(
     scale <- unique(as.data.frame(
         list(
             mods = mods, labels = labels, affected = affected, fill = fill,
-            density = rep(NA, n), angle = rep(NA, n)
+            density = rep(NA_integer_, n), angle = rep(NA_integer_, n)
         )
     ))
     list(mods = mods, fill_scale = scale)
@@ -340,7 +340,7 @@ setMethod("generate_colors", "Pedigree",
         }
 
         new_col <- paste0(col_aff, "_aff")
-        df <- check_columns(mcols(obj), c(col_aff, col_avail),
+        df <- check_columns(as.data.frame(ped(obj)), c(col_aff, col_avail),
             "", new_col, others_cols = TRUE
         )
 

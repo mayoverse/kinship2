@@ -89,31 +89,30 @@ test_that("generate fill full scale on", {
 test_that("generate colors works on Pedigree object", {
     data("sampleped")
     ped <- Pedigree(sampleped[sampleped$famid == "1", -1])
-    ped(ped, "id") <- as.numeric(ped(ped, "id"))
-    ped_aff <- generate_colors(ped, col_aff = "id",
+    mcols(ped)$"id_num" <- as.numeric(id(ped(ped)))
+    ped_aff <- generate_colors(ped, col_aff = "id_num",
         threshold = 120, sup_thres_aff = TRUE, add_to_scale = FALSE
     )
-    expect_equal(ped_aff$ped$id_aff, c(rep(0, 20), rep(1, 21)))
-    expect_equal(ped_aff$scales$fill$fill, c("white", "red"))
-    expect_equal(ped_aff$scales$fill$labels,
+    expect_equal(mcols(ped_aff)$id_num_aff, c(rep(0, 20), rep(1, 21)))
+    expect_equal(fill(ped_aff)$fill, c("white", "red"))
+    expect_equal(fill(ped_aff)$labels,
         c("Healthy <= to 120", "Affected > to 120")
     )
-    expect_equal(ped_aff$scales$fill$mods,  c(0, 1))
-    expect_equal(ped_aff$scales$fill$affected,  c("FALSE", "TRUE"))
+    expect_equal(fill(ped_aff)$mods,  c(0, 1))
+    expect_equal(fill(ped_aff)$affected,  c(FALSE, TRUE))
 })
 
 test_that("generate with full scale", {
     data("sampleped")
     sampleped$val_num <- as.numeric(sampleped$id)
     ped <- Pedigree(sampleped)
-    ped <- ped[ped(ped, "famid") == "1", ]
+    ped <- ped[famid(ped) == "1"]
     ped <- generate_colors(
         ped, add_to_scale = FALSE, "val_num", threshold = 115,
         colors_aff = c("pink", "purple"), keep_full_scale = TRUE
     )
-    expect_equal(fill(ped, "labels")[c(1, 4)],
+    expect_equal(fill(ped)$labels[c(1, 4)],
         c("Healthy <= to 115 : [101,106]", "Affected > to 115 : [116,124]")
     )
     expect(nrow(fill(ped)), 6)
 })
-TRUE
