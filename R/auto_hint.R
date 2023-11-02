@@ -233,8 +233,8 @@ get_twin_rel <- function(ped) {
         relation$code <- as.numeric(relation$code)
     }
     n <- length(ped)
-    twinset <- rep(0, n)
-    twinord <- rep(1, n)
+    twinset <- setNames(rep(0, n), id(ped(ped)))
+    twinord <- setNames(rep(1, n), id(ped(ped)))
     twinrel <- NULL
 
     if (!is.null(relation) && any(relation[, 3] < 4)) {
