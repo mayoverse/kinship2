@@ -150,9 +150,16 @@ test_that("Hints class works", {
     ## From scratch
     hts0 <- Hints()
     expect_equal(horder(hts0), numeric())
-    horder(hts0) <- c(1, 2)
-    expect_equal(horder(hts0), c(1, 2))
+    expect_error(horder(hts0) <- c(1, 2))
+    horder(hts0) <- c("ID1" = 1, "ID2" = 2)
+    expect_equal(horder(hts0), c("ID1" = 1, "ID2" = 2))
     expect_equal(dim(spouse(hts0)), c(0, 3))
+    expect_error(spouse(hts0) <- data.frame(
+        idl = c("ID1", "ID2"),
+        idr = c("ID3", "ID4"),
+        anchor = factor(c("left", "right"))
+    ))
+    horder(hts0) <- c("ID1" = 1, "ID2" = 2, "ID3" = 3, "ID4" = 4)
     spouse(hts0) <- data.frame(
         idl = c("ID1", "ID2"),
         idr = c("ID3", "ID4"),
@@ -162,38 +169,34 @@ test_that("Hints class works", {
     expect_snapshot(hts0)
 
     ## With constructor
-    hts2 <- Hints(horder = c(1, 2), spouse = data.frame(
-        idl = c("ID1", "ID2"),
-        idr = c("ID3", "ID4"),
-        anchor = factor(c("left", "right"))
-    ))
+    hts2 <- Hints(
+        horder = c("ID1" = 1, "ID2" = 2, "ID3" = 3, "ID4" = 4),
+        spouse = data.frame(
+            idl = c("ID1", "ID2"),
+            idr = c("ID3", "ID4"),
+            anchor = factor(c("left", "right"))
+        )
+    )
     expect_equal(hts0, hts2)
 
     ## With missing values
-    expect_error(Hints(horder = c(1, 2, NA, 3)))
-    hts_horder <- Hints(horder = c(1, 2, 4, 3))
-    expect_equal(horder(hts_horder), c(1, 2, 4, 3))
-    expect_equal(dim(spouse(hts_horder)), c(0, 3))
+    expect_error(Hints(horder = c("ID1" = 1, "ID2" = NA, "ID3" = 3, "ID4" = 4)))
 
-    expect_error(Hints(spouse = data.frame(
-        idl = c("ID1", "ID2"),
-        idr = c("ID3", NA),
-        anchor = factor(c("left", "right"))
-    )))
-    hts_spouse <- Hints(spouse = data.frame(
-        idl = c("ID1", "ID2"),
-        idr = c("ID3", "ID4"),
-        anchor = factor(c("left", "right"))
+    expect_error(Hints(
+        horder = c("ID1" = 1, "ID2" = 2, "ID3" = 3, "ID4" = 4),
+        spouse = data.frame(
+            idl = c("ID1", "ID2"),
+            idr = c("ID3", NA),
+            anchor = factor(c("left", "right"))
+        )
     ))
-    expect_equal(horder(hts_spouse), numeric())
-    expect_equal(dim(spouse(hts_spouse)), c(2, 3))
 
     hts1 <- subset(hts2, "ID1")
-    expect_equal(horder(hts1), c("ID1"))
+    expect_equal(horder(hts1), c("ID1" = 1))
     expect_equal(dim(spouse(hts1)), c(0, 3))
 
     hts13 <- subset(hts2, c("ID1", "ID3"))
-    expect_equal(horder(hts13), "ID1")
+    expect_equal(horder(hts13), c("ID1" = 1, "ID3" = 3))
     expect_equal(dim(spouse(hts13)), c(1, 3))
 })
 
