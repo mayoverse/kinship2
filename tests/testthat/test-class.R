@@ -234,7 +234,7 @@ test_that("Scales class works", {
         order = c(2, 3),
         column_values = c("ID1", "ID2"),
         column_mods = c("ID1", "ID2"),
-        mods = c("ID1", "ID2"),
+        mods = c(1, 2),
         labels = c("ID1", "ID2"),
         affected = c(TRUE, FALSE),
         fill = c("ID1", "ID2"),
@@ -247,7 +247,7 @@ test_that("Scales class works", {
 
     border(scl0) <- data.frame(
         column = c("ID1", "ID2"),
-        mods = c("ID1", "ID2"),
+        mods = c(1, 2),
         labels = c("Lab1", "Lab2"),
         border = c("ID1", "ID2")
     )
@@ -261,7 +261,7 @@ test_that("Scales class works", {
             order = c(2, 3),
             column_values = c("ID1", "ID2"),
             column_mods = c("ID1", "ID2"),
-            mods = c("ID1", "ID2"),
+            mods = c(1, 2),
             labels = c("ID1", "ID2"),
             affected = c(TRUE, FALSE),
             fill = c("ID3", "ID2"),
@@ -270,7 +270,7 @@ test_that("Scales class works", {
         ),
         border = data.frame(
             column = c("ID1", "ID2"),
-            mods = c("ID1", "ID2"),
+            mods = c(1, 2),
             labels = c("Lab1", "Lab2"),
             border = c("ID1", "ID2")
         )
@@ -286,7 +286,7 @@ test_that("Pedigree class works", {
     expect_s4_class(hints(pedi), "Hints")
     expect_s4_class(ped(pedi), "Ped")
     expect_s4_class(rel(pedi), "Rel")
-    expect_equal(horder(pedi), character())
+    expect_equal(horder(pedi), numeric())
     expect_equal(dim(spouse(pedi)), c(0, 3))
     expect_equal(dim(fill(pedi)), c(0, 9))
     expect_equal(dim(border(pedi)), c(0, 4))

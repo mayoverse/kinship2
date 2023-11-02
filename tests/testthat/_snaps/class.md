@@ -28,6 +28,22 @@
       1         ID3         ID5                  MZ twin        <NA> |         1
       2         ID2         ID4                   Spouse        <NA> |         2
 
+# Hints class works
+
+    Code
+      hts0
+    Output
+      An object of class "Hints"
+      Slot "horder":
+      ID1 ID2 ID3 ID4 
+        1   2   3   4 
+      
+      Slot "spouse":
+        idl idr anchor
+      1 ID1 ID3   left
+      2 ID2 ID4  right
+      
+
 # Scales class works
 
     invalid class "Scales" object: 1: affected column(s) must be logical
@@ -40,4 +56,21 @@
 
     invalid class "Scales" object: 1: labels column(s) must be character
     invalid class "Scales" object: 2: mods column(s) must be numeric
+
+---
+
+    Code
+      scl0
+    Output
+      An object of class "Scales"
+      Slot "fill":
+        order column_values column_mods mods labels affected fill density angle
+      1     2           ID1         ID1    1    ID1     TRUE  ID3       1    90
+      2     3           ID2         ID2    2    ID2    FALSE  ID2       2    60
+      
+      Slot "border":
+        column mods labels border
+      1    ID1    1   Lab1    ID1
+      2    ID2    2   Lab2    ID2
+      
 
