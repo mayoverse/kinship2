@@ -53,6 +53,44 @@ setMethod("famid", signature(x = "Rel"), function(x) {
 setMethod("famid", signature(x = "Pedigree"), function(x) {
     famid(ped(x))
 })
+setGeneric("famid<-", function(x, value) {
+    standardGeneric("famid<-")
+})
+setMethod("famid<-",
+    signature(x = "Ped", value = "character_OR_integer"),
+    function(x, value) {
+        if (! is.character(value) && ! is.integer(value)) {
+            stop("famid must be a character or integer vector")
+        }
+        if (length(value) != length(x)) {
+            stop(
+                "The length of the new values for famid should be: ",
+                "equal to the length of the Ped object"
+            )
+        }
+        x@famid <- as.character(value)
+        validObject(x)
+        x
+    }
+)
+
+setMethod("famid<-",
+    signature(x = "Rel", value = "character_OR_integer"),
+    function(x, value) {
+        if (! is.character(value) && ! is.integer(value)) {
+            stop("famid must be a character or integer vector")
+        }
+        if (length(value) != length(x)) {
+            stop(
+                "The length of the new values for famid should be: ",
+                "equal to the length of the Ped object"
+            )
+        }
+        x@famid <- as.character(value)
+        validObject(x)
+        x
+    }
+)
 
 #' Id getter of Ped object
 #'
@@ -291,6 +329,7 @@ setMethod("id2", signature(x = "Rel"), function(x) {
 })
 
 #### S4 Pedigree Accessors ####
+##### S4 ped Accessors #####
 #' @title Pedigree ped accessors
 #' @param object A Pedigree object.
 #' @param slot A slot in the Ped object of the Pedigree.
@@ -358,7 +397,7 @@ setMethod(
     }
 )
 
-#### S4 metadata Accessors ####
+##### S4 mcols Accessors #####
 #' @title Pedigree metadata accessors
 #' @param object A Pedigree object.
 #' @return The metadata present in the Pedigree object.
@@ -383,7 +422,7 @@ setMethod(
     }
 )
 
-#### S4 rel Accessors ####
+##### S4 rel Accessors #####
 
 #' @description Pedigree rel accessors
 #' @param object A Pedigree object.
@@ -435,7 +474,17 @@ setMethod(
     }
 )
 
-#### S4 scales Accessors ####
+setMethod(
+    "rel<-",
+    signature(object = "Pedigree", slot = "missing", value = "Rel"),
+    function(object, slot, value) {
+        object@rel <- value
+        validObject(object)
+        object
+    }
+)
+
+##### S4 scales Accessors ####
 #' @description Pedigree scales accessors
 #' @param object A Pedigree object.
 #' @return The slot `scales` present in the Pedigree object.

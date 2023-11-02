@@ -83,9 +83,9 @@ setMethod("make_famid", "character",
             if (any(xx == 1)) {
                 singles <- as.integer(names(xx[xx == 1]))  # famid of singletons
                 famid[!is.na(match(famid, singles))] <- 0  # set singletons to 0
-                match(famid, sort(unique(famid))) - 1  # renumber
+                as.integer(match(famid, sort(unique(famid))) - 1) # renumber
             } else {
-                match(famid, sort(unique(famid)))
+                as.integer(match(famid, sort(unique(famid))))
             }  # renumber, no zeros
         } else {
             stop("Bug in routine: seem to have found an infinite loop")
@@ -100,14 +100,13 @@ setMethod("make_famid", "character",
 #' @include AllClass.R
 setMethod("make_famid", "Pedigree",
     function(obj) {
-        ped <- obj
         famid <- make_famid(
-            ped(ped, "id"), ped(ped, "dadid"), ped(ped, "momid")
+            id(ped(obj)), dadid(ped(obj)), momid(ped(obj))
         )
-        ped(obj, "famid") <- famid
+        famid(ped(obj)) <- famid
 
-        fam_id1 <- famid[match(rel(ped, "id1"), ped(ped, "id"))]
-        fam_id2 <- famid[match(rel(ped, "id2"), ped(ped, "id"))]
+        fam_id1 <- famid[match(id1(rel(obj)), id(ped(obj)))]
+        fam_id2 <- famid[match(id2(rel(obj)), id(ped(obj)))]
 
         if (any(fam_id1 != fam_id2)) {
             stop("The two individuals in the relationship",
@@ -115,8 +114,112 @@ setMethod("make_famid", "Pedigree",
             )
         }
 
-        rel(ped, "famid") <- fam_id1
-        validObject(ped)
-        ped
+        famid(rel(obj)) <- fam_id1
+        validObject(obj)
+        obj
+    }
+)
+
+#' Update family prefix in individuals id
+#'
+#' @param obj A character vector of individual ids
+#' @param famid A numeric vector of family ids
+#'
+#' @return A character vector of individual ids with family prefix
+#'
+#' @export
+setGeneric("upd_famid_id",
+    function(obj, famid, ...) standardGeneric("upd_famid_id")
+)
+
+setMethod("upd_famid_id", "character",
+    function(obj, famid, missid = NA_character_) {
+        id <- obj[!obj %in% missid]
+        famid <- famid[!obj %in% missid]
+        if (length(id) != length(famid)) {
+            stop("id and famid must have the same length")
+        }
+        if (any(is.na(famid))) {
+            stop("famid cannot contain NA")
+        }
+        if (! is.character(id)) {
+            stop("id must be a character vector")
+        }
+        id[!str_detect(id, "_")] <- paste0("_", id[!str_detect(id, "_")])
+        ids <- str_split_fixed(id, "_", 2)
+        ids[, 1] <- as.character(famid)
+        new_ids <- paste(ids[, 1], ids[, 2], sep = "_")
+        obj[!obj %in% missid] <- new_ids
+        obj
+    }
+)
+
+setMethod("upd_famid_id",
+    signature(obj = "Ped", famid = "character_OR_integer"),
+    function(obj, famid) {
+        obj@id <- upd_famid_id(id(obj), famid)
+        obj@dadid <- upd_famid_id(dadid(obj), famid)
+        obj@momid <- upd_famid_id(momid(obj), famid)
+        validObject(obj)
+        obj
+    }
+)
+
+setMethod("upd_famid_id",
+    signature(obj = "Ped", famid = "missing"),
+    function(obj) {
+        obj@id <- upd_famid_id(id(obj), famid(obj))
+        obj@dadid <- upd_famid_id(dadid(obj), famid(obj))
+        obj@momid <- upd_famid_id(momid(obj), famid(obj))
+        validObject(obj)
+        obj
+    }
+)
+
+setMethod("upd_famid_id",
+    signature(obj = "Rel", famid = "character_OR_integer"),
+    function(obj, famid) {
+        obj@id1 <- upd_famid_id(id1(obj), famid)
+        obj@id2 <- upd_famid_id(id2(obj), famid)
+        validObject(obj)
+        obj
+    }
+)
+
+setMethod("upd_famid_id",
+    signature(obj = "Rel", famid = "missing"),
+    function(obj) {
+        obj@id1 <- upd_famid_id(id1(obj), famid(obj))
+        obj@id2 <- upd_famid_id(id2(obj), famid(obj))
+        validObject(obj)
+        obj
+    }
+)
+
+setMethod("upd_famid_id",
+    signature(obj = "Pedigree", famid = "character_OR_integer"),
+    function(obj, famid) {
+        old_id <- id(ped(obj))
+        obj@ped <- upd_famid_id(ped(obj), famid)
+        fid1 <- famid[match(id1(rel(obj)), old_id)]
+        fid2 <- famid[match(id2(rel(obj)), old_id)]
+        if (any(fid1 != fid2)) {
+            stop("The two individuals in the relationship",
+                "are not in the same family"
+            )
+        }
+        obj@rel <- upd_famid_id(rel(obj), fid1)
+        validObject(obj)
+        obj
+    }
+)
+
+setMethod("upd_famid_id",
+    signature(obj = "Pedigree", famid = "missing"),
+    function(obj) {
+        obj@ped <- upd_famid_id(ped(obj))
+        obj@rel <- upd_famid_id(rel(obj))
+        validObject(obj)
+        obj
     }
 )

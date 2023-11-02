@@ -1,12 +1,3 @@
-test_that("make_famid works", {
-    id <- as.character(1:20)
-    mom <- as.character(c(0, 0, 0, 2, 2, 2, 0, 2, 0, 0, 2, 2, 0, 2, 0, 2, 7, 7, 11, 14))
-    dad <- as.character(c(0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 3, 3, 0, 3, 0, 3, 8, 8, 10, 13))
-    famid <- c(1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1)
-    temp <- make_famid(id, mom, dad)
-    expect_equal(temp, famid)
-})
-
 rel_df <- c(
     213, 214, 1, 3,
     210, 211, 2, 3,
@@ -18,6 +9,46 @@ rel_df <- matrix(rel_df, ncol = 4, byrow = TRUE)
 dimnames(rel_df) <- list(NULL, c("id1", "id2", "code", "famid"))
 rel_df <- data.frame(rel_df)
 
+test_that("upd_famid_id works", {
+    id <- c("A_1", "B_", "_3", "4", "E_5_A", "NA", NA_character_)
+    famid <- c(1, 2, 3, 4, 5, 6, 7)
+    expect_equal(
+        upd_famid_id(id, famid),
+        c("1_1", "2_", "3_3", "4_4", "5_5_A", "6_NA", NA_character_)
+    )
+
+    data("sampleped")
+
+    pedi <- Pedigree(sampleped[-1], rel_df[c(1:3)])
+    pedi <- make_famid(pedi)
+    ids_all <- paste(famid(pedi), c(101:141, 201:214), sep = "_")
+    expect_equal(
+        id(upd_famid_id(ped(pedi), famid(pedi))),
+        ids_all
+    )
+    expect_equal(
+        id(upd_famid_id(ped(pedi))),
+        ids_all
+    )
+    expect_equal(
+        id(ped(upd_famid_id(pedi, famid(pedi)))),
+        ids_all
+    )
+    expect_equal(
+        id1(rel(upd_famid_id(pedi))),
+        c("2_213", "2_210", "1_140", "1_133")
+    )
+})
+
+test_that("make_famid works", {
+    id <- as.character(1:20)
+    mom <- as.character(c(0, 0, 0, 2, 2, 2, 0, 2, 0, 0, 2, 2, 0, 2, 0, 2, 7, 7, 11, 14))
+    dad <- as.character(c(0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 3, 3, 0, 3, 0, 3, 8, 8, 10, 13))
+    famid <- c(1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1)
+    temp <- make_famid(id, mom, dad)
+    expect_equal(temp, famid)
+})
+
 test_that("make_famid works with Pedigree", {
     ## Simple case with no family id
     data("sampleped")
@@ -28,7 +59,7 @@ test_that("make_famid works with Pedigree", {
     fam <- sampleped$famid
     fam[sampleped$id == "113"] <- 0 # singleton
     id <- paste(fam, c(101:141, 201:214), sep = "_")
-    expect_equal(ped(ped, "id"), id)
+    expect_equal(id(ped(ped)), id)
     expect_equal(rel(ped, "id1"), c("2_213", "2_210", "1_140", "1_133"))
 
     ## Updating already present family id
