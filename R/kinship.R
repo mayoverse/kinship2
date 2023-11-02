@@ -139,7 +139,7 @@ setMethod("kinship", "character",
 #' @docType methods
 setMethod("kinship", "Pedigree",
     function(obj, chrtype = "autosome") {
-        famlist <- unique(obj$ped$famid)
+        famlist <- unique(famid(obj))
         nfam <- length(famlist)
         matlist <- vector("list", nfam)
         ## The possibly reorderd list of id values
@@ -147,26 +147,42 @@ setMethod("kinship", "Pedigree",
 
         for (i_fam in seq_along(famlist)) {
             if (is.na(famlist[i_fam])) { # If no family provided
-                tped <- obj[is.na(obj$ped$famid)]
+                tped <- obj[is.na(famid(obj))]
             } else {
                 ## Pedigree for this family
-                tped <- obj[obj$ped$famid == famlist[i_fam]]
+                tped <- obj[famid(obj) == famlist[i_fam]]
             }
             temp <- try({
                 chrtype <- match.arg(casefold(chrtype), c("autosome", "x"))
-                n <- length(ped(tped)$id)
+                n <- length(id(ped(tped)))
                 pdepth <- kindepth(tped)
-                mom_row <- match(ped(tped)$momid, ped(tped)$id, nomatch = n + 1)
-                dad_row <- match(ped(tped)$dadid, ped(tped)$id, nomatch = n + 1)
+                mom_row <- match(
+                    momid(ped(tped)),
+                    id(ped(tped)),
+                    nomatch = n + 1
+                )
+                dad_row <- match(
+                    dadid(ped(tped)),
+                    id(ped(tped)),
+                    nomatch = n + 1
+                )
                 # Are there any MZ twins to worry about?
                 have_mz <- FALSE
-                if (!is.null(rel(tped)) && any(rel(tped)$code == "MZ twin")) {
+                if (length(rel(tped)) > 0 && any(code(rel(tped)) == "MZ twin")) {
                     have_mz <- TRUE
                     ## Doc: MakeMZIndex
-                    temp <- which(rel(tped)$code == "MZ twin")
+                    temp <- which(code(rel(tped)) == "MZ twin")
                     ## drop=FALSE added in case only one MZ twin set
-                    id1x <- match(rel(tped)$id1, ped(tped)$id, nomatch = NA)
-                    id2x <- match(rel(tped)$id2, ped(tped)$id, nomatch = NA)
+                    id1x <- match(
+                        id1(rel(tped)),
+                        id(ped(tped)),
+                        nomatch = NA
+                    )
+                    id2x <- match(
+                        id2(rel(tped)),
+                        id(ped(tped)),
+                        nomatch = NA
+                    )
                     if (any(is.na(id1x)) | any(is.na(id2x))) {
                         stop("All individuals in relationship matrix",
                             "should be present in the pedigree informations"
@@ -209,7 +225,7 @@ setMethod("kinship", "Pedigree",
                 if (chrtype == "autosome") {
                     if (n == 1) {
                         kmat <- matrix(0.5, 1, 1,
-                            dimnames = list(ped(tped)$id, ped(tped)$id)
+                            dimnames = list(id(ped(tped)), id(ped(tped)))
                         )
                     } else {
                         kmat <- diag(c(rep(0.5, n), 0))  # founders
@@ -232,10 +248,10 @@ setMethod("kinship", "Pedigree",
                         }
                     }
                 } else if (chrtype == "x") {
-                    sex <- as.numeric(ped(tped)$sex)  # 1=female, 2=male
+                    sex <- as.numeric(sex(ped(tped)))  # 1=female, 2=male
                     if (n == 1) {
                         kmat <- matrix(sex / 2, 1, 1,
-                            dimnames = list(ped(tped)$id, ped(tped)$id)
+                            dimnames = list(id(ped(tped)), id(ped(tped)))
                         )
                     } else {
                         ## 1 for males, 1/2 for females
@@ -265,7 +281,7 @@ setMethod("kinship", "Pedigree",
                 }
                 if (n > 1) {
                     kmat <- kmat[seq_len(n), seq_len(n)]
-                    dimnames(kmat) <- list(ped(tped)$id, ped(tped)$id)
+                    dimnames(kmat) <- list(id(ped(tped)), id(ped(tped)))
                 }
                 kmat
             }, silent = TRUE)
@@ -275,7 +291,7 @@ setMethod("kinship", "Pedigree",
                 matlist[[i_fam]] <- temp
             }
             ## deprecated in Matrix: as(forceSymmetric(temp), 'dsCMatrix')
-            idlist[[i_fam]] <- ped(tped)$id
+            idlist[[i_fam]] <- id(ped(tped))
         }
         if (length(famlist) == 1) {
             as(matlist[[1]],

@@ -39,19 +39,19 @@ test_that("kinship works", {
 
     ## Test with no special relationship
     kmat_char <- with(twindat, kinship(id, dadid, momid))
-    tped <- Pedigree(twindat)
+    tped <- Pedigree(twindat, missid = "0")
     kmat_ped <- kinship(tped)
 
     expect_equal(kmat_char, kmat_ped)
 
     ## Test with no special relationship with chr_type to X
     kmat_char <- with(twindat, kinship(id, dadid, momid, sex, chrtype = "X"))
-    tped <- Pedigree(twindat)
+    tped <- Pedigree(twindat, missid = "0")
     kmat_ped <- kinship(tped, chrtype = "X")
     expect_equal(kmat_char, kmat_ped)
 
     ## Test with monozygotic relationship
-    tped <- Pedigree(twindat, relate)
+    tped <- Pedigree(twindat, relate, missid = "0")
     kmat <- kinship(tped)
 
     ## should show kinship coeff of 0.5 for where MZ twins are
@@ -71,7 +71,7 @@ test_that("kinship works", {
     relate$id2 <- match(relate$id2, indx) - 1
 
     # Build the Pedigree and kinship
-    tped <- Pedigree(twindat, relate)
+    tped <- Pedigree(twindat, relate, missid = "0")
     kmat <- kinship(tped)
 
     truth <- matrix(
