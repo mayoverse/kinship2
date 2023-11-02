@@ -83,7 +83,7 @@ check_values <- function(val, ref, name = NULL, present = TRUE) {
 
     if (any(val_abs)) {
         paste0(
-            val_name, paste0max(val[val_abs]), should,
+            val_name, paste0max(unique(val[val_abs])), should,
             paste0max(ref)
         )
     }
@@ -314,6 +314,7 @@ is_valid_ped <- function(object) {
     sex <- object@sex
     is_dad <- id %in% dadid
     is_mom <- id %in% momid
+
     if (any(sex[is_dad] != "male")) {
         errors <- c(errors, "Some dad are not male")
     }
