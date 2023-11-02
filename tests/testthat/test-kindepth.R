@@ -17,7 +17,7 @@ test_that("fix_parents_df works with sex errors and with family", {
     ped <- Pedigree(minnbreast, cols_ren_ped = list(
         "indId" = "id", "fatherId" = "fatherid",
         "motherId" = "motherid", "gender" = "sex", "family" = "famid"
-    ))
+    ), missid = "0")
     expect_equal(sum(kindepth(ped)), 33147)
     expect_equal(sum(kindepth(ped, align = TRUE)), 39087)
 })

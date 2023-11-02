@@ -96,11 +96,12 @@ setMethod("is_informative", "character", function(
 #' @docType methods
 #' @param reset If `TRUE`, the `id_inf` column is reset
 setMethod("is_informative", "Pedigree", function(
-    obj, col_aff = NULL, informative = "AvAf", missid = NA_character_, reset = FALSE
+    obj, col_aff = NULL, informative = "AvAf",
+    missid = NA_character_, reset = FALSE
 ) {
-    ped <- obj
-    deriv(ped, "affected") <- NA
-    aff_scl <- fill(ped)
+    affected(ped(obj)) <- NA
+    aff_scl <- fill(obj)
+    ped_df <- as.data.frame(ped(obj))
     if (is.null(col_aff)) {
         stop("The col_aff argument is required")
     }
@@ -111,22 +112,22 @@ setMethod("is_informative", "Pedigree", function(
         unaff <- aff_scl$mods[aff_scl$affected == FALSE &
                 aff_scl$column_mods == col_aff
         ]
-        obj$ped$affected[obj$ped[, col_aff] %in% aff] <- 1
-        obj$ped$affected[obj$ped[, col_aff] %in% unaff] <- 0
+        ped_df$affected[ped_df[, col_aff] %in% aff] <- 1
+        ped_df$affected[ped_df[, col_aff] %in% unaff] <- 0
     } else {
         stop("The column ", col_aff, " is not in the scales fill")
     }
 
     cols_needed <- c("id", "avail", "affected")
-    obj$ped <- check_columns(obj$ped, cols_needed, "", "", others_cols = TRUE)
-    id_inf <- is_informative(obj$ped$id, obj$ped$avail, obj$ped$affected,
+    check_columns(ped_df, cols_needed, "", "", others_cols = TRUE)
+    id_inf <- is_informative(ped_df$id, ped_df$avail, ped_df$affected,
         informative, missid
     )
 
     if (!reset) {
-        check_columns(obj$ped, NULL, "id_inf", NULL)
+        check_columns(ped_df, NULL, "id_inf", NULL)
     }
 
-    obj$ped$id_inf <- ifelse(obj$ped$id %in% id_inf, 1, 0)
+    mcols(obj)$id_inf <- ifelse(ped_df$id %in% id_inf, 1, 0)
     obj
 })

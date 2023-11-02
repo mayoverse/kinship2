@@ -202,6 +202,51 @@ setMethod("sex<-",
     }
 )
 
+#' Affected getter of Ped object
+#'
+#' @param x A Ped object.
+#'
+#' @return A numeric vector with the affected of each individual.
+#'
+#' @rdname Ped
+#' @aliases affected,Ped-method
+#' @export
+setGeneric("affected", function(x) {
+    standardGeneric("affected")
+})
+setMethod("affected", signature(x = "Ped"), function(x) {
+    x@affected
+})
+setGeneric("affected<-", function(x, value) {
+    standardGeneric("affected<-")
+})
+setMethod("affected<-",
+    signature(x = "Ped", value = "ANY"),
+    function(x, value) {
+        if (
+            ! is.character(value) &&
+                ! is.integer(value) &&
+                ! is.logical(value) &&
+                ! is.factor(value)
+        ) {
+            stop("Affected must be a character or integer vector")
+        }
+        if (length(value) != length(x)) {
+            if (length(value) == 1) {
+                value <- rep(value, length(x))
+            } else {
+                stop(
+                    "The length of the new values for affected should be: ",
+                    "equal to the length of the Ped object"
+                )
+            }
+        }
+        x@affected <- vect_to_binary(value)
+        validObject(x)
+        x
+    }
+)
+
 #### S4 Rel Accessors ####
 #' Code accessor of Rel object
 #'
