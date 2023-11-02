@@ -117,20 +117,21 @@ setMethod("fix_parents", "character", function(
     }
     findex <- match(dadid, id, nomatch = 0)
     mindex <- match(momid, id, nomatch = 0)
+
     ## dadid given, not found id, so add
     if (any(findex == 0 & !nofather)) {
         dadnotfound <- unique(dadid[which(findex == 0 & !nofather)])
         id <- c(id, dadnotfound)
         sex <- c(sex, rep(1, length(dadnotfound)))
-        dadid <- c(dadid, rep(0, length(dadnotfound)))
-        momid <- c(momid, rep(0, length(dadnotfound)))
+        dadid <- c(dadid, rep(missid, length(dadnotfound)))
+        momid <- c(momid, rep(missid, length(dadnotfound)))
     }
     if (any(mindex == 0 & !nomother)) {
         momnotfound <- unique(momid[which(mindex == 0 & !nomother)])
         id <- c(id, momnotfound)
         sex <- c(sex, rep(2, length(momnotfound)))
-        dadid <- c(dadid, rep(0, length(momnotfound)))
-        momid <- c(momid, rep(0, length(momnotfound)))
+        dadid <- c(dadid, rep(missid, length(momnotfound)))
+        momid <- c(momid, rep(missid, length(momnotfound)))
     }
     if (any(sex[mindex] != 1)) {
         dadnotmale <- unique((id[findex])[sex[findex] != 1])
@@ -150,8 +151,8 @@ setMethod("fix_parents", "character", function(
         dadid[nodad_idx] <- addids[seq_along(nodad_idx)]
         id <- c(id, addids[seq_along(nodad_idx)])
         sex <- c(sex, rep(1, length(nodad_idx)))
-        dadid <- c(dadid, rep(0, length(nodad_idx)))
-        momid <- c(momid, rep(0, length(nodad_idx)))
+        dadid <- c(dadid, rep(missid, length(nodad_idx)))
+        momid <- c(momid, rep(missid, length(nodad_idx)))
     }
     ## children with dad in ped, mom missing
     addids <- addids[!(addids %in% id)]
@@ -160,8 +161,8 @@ setMethod("fix_parents", "character", function(
         momid[nodad_idx] <- addids[seq_along(nodad_idx)]
         id <- c(id, addids[seq_along(nodad_idx)])
         sex <- c(sex, rep(2, length(nodad_idx)))
-        dadid <- c(dadid, rep(0, length(nodad_idx)))
-        momid <- c(momid, rep(0, length(nodad_idx)))
+        dadid <- c(dadid, rep(missid, length(nodad_idx)))
+        momid <- c(momid, rep(missid, length(nodad_idx)))
     }
     if (is.null(famid)) {
         data.frame(id = id, momid = momid, dadid = dadid, sex = sex)
