@@ -299,13 +299,12 @@ setMethod("subset", "Hints", function(x, idlist) {
     }
 
     if (length(horder) > 0) {
-        horder <- horder[horder %in% idlist]
+        horder <- horder[names(horder) %in% idlist]
     }
 
     if (nrow(spouse) > 0) {
         spouse <- spouse[spouse$idl %in% idlist & spouse$idr %in% idlist, ]
     }
-
     new_hints <- Hints(horder = horder, spouse = spouse)
     validObject(new_hints)
     new_hints

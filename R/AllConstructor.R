@@ -236,6 +236,9 @@ setGeneric("Hints", function(horder, spouse) {
 setMethod("Hints",
     signature(horder = "numeric", spouse = "data.frame"),
     function(horder, spouse) {
+        if (length(horder) > 0 && is.null(names(horder))) {
+            stop("The horder vector must be named")
+        }
         new("Hints", horder = horder, spouse = spouse)
     }
 )
@@ -246,20 +249,13 @@ setMethod("Hints",
 setMethod("Hints",
     signature(horder = "numeric", spouse = "missing_OR_NULL"),
     function(horder, spouse) {
+        if (length(horder) > 0 && is.null(names(horder))) {
+            stop("The horder vector must be named")
+        }
         dfe <- data.frame("idl" = character(), "idr" = character(),
             "anchor" = factor()
         )
         new("Hints", horder = horder, spouse = dfe)
-    }
-)
-
-#' @docType methods
-#' @rdname Hints
-#' @export
-setMethod("Hints",
-    signature(horder = "missing_OR_NULL", spouse = "data.frame"),
-    function(horder, spouse) {
-        new("Hints", horder = numeric(), spouse = spouse)
     }
 )
 

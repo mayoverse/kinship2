@@ -37,12 +37,12 @@ test_that("test auto_hint works", {
     pedi <- Pedigree(sampleped[-1], rel_df)
     newhint <- auto_hint(pedi)
     expect_equal(horder(newhint),
-        c(
+        setNames(c(
             1, 2, 3, 4, 1, 2, 3, 4, 1, 1, 3, 2, 5, 4, 5,
             6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 6, 7,
             8, 9, 10, 11, 6, 7, 11, 12, 12, 13, 14, 8, 9, 13, 14,
             15, 16, 17, 18, 19, 15, 16, 17, 18, 19
-        )
+        ), id(ped(pedi)))
     )
     expect_equal(unlist(spouse(newhint)),
         c("idl" = "109", "idr" = "110", "anchor" = "2")
@@ -63,7 +63,7 @@ test_that("test alignment with inbreeding and relationship matrix", {
     plist_sr <- align(ped_sr)
 
     expect_equal(plist$nid[1, ],
-        c(35, 36, 5, 6,  7,  8, 42, 43, rep(0, 16))
+        c(5, 6, 7, 8, 35, 36, 42, 43, rep(0, 16))
     )
     expect_equal(plist_sr$nid[1, ],
         c(5, 6, 7, 8, 35, 36, 42, 43, rep(0, 14))
@@ -99,13 +99,13 @@ test_that("Alignement with spouse", {
         anchor = anchor_to_factor("right")
     ))
     expect_equal(horder(hints),
-        c(
+        setNames(c(
             1, 2, 3, 4, 1, 2, 3, 4, 1, 1,
             2, 3, 5, 4, 5, 6, 7, 8, 9, 10,
             1, 2, 3, 4, 5, 6, 7, 8, 6, 7,
             8, 9, 10, 11, 6, 7, 11, 12, 12,
             13, 14
-        )
+        ), id(ped(ped1)))
     )
 })
 

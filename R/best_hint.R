@@ -99,7 +99,9 @@ setMethod(
             hint[fmom, 1] <- pmat[perm, ]
             # this fixes up marriages and such
             newhint <- auto_hint(
-                obj, hints = Hints(horder = hint[, 1]), reset = TRUE
+                obj, hints = Hints(
+                    horder = setNames(hint[, 1], id(ped(obj)))
+                ), reset = TRUE
             )
             plist <- align(
                 obj, packed = TRUE, align = TRUE, width = 8, hints = newhint

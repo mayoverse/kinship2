@@ -144,7 +144,9 @@ setMethod("align", "Pedigree",
                 auto_hint(obj)
             }, silent = TRUE)
             if ("try-error" %in% class(hints)) {
-                hints <- Hints(horder = seq_len(max(1, length(ped))))
+                hints <- Hints(horder = setNames(
+                    seq_len(length(ped(obj))), id(ped(obj))
+                ))
             }
         }
         ## Doc: Setup-align
@@ -159,7 +161,9 @@ setMethod("align", "Pedigree",
             idxl <- match(spouse(hints)$idl, id(ped(obj)))
             idxr <- match(spouse(hints)$idr, id(ped(obj)))
             tsex <- sex(ped(obj))[idxl]  # sex of the left member
-            spouselist <- cbind(0, 0, 1 + (tsex != "male"), spouse(hints)$anchor)
+            spouselist <- cbind(
+                0, 0, 1 + (tsex != "male"), as.numeric(spouse(hints)$anchor)
+            )
             spouselist[, 1] <- ifelse(tsex == "male", idxl, idxr)
             spouselist[, 2] <- ifelse(tsex == "male", idxr, idxl)
         } else {

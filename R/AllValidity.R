@@ -106,6 +106,9 @@ is_valid_hints <- function(object) {
     if (! is.numeric(object@horder)) {
         errors <- c(errors, "horder slot must be numeric")
     }
+    if (length(object@horder) > 0 && is.null(names(object@horder))) {
+        errors <- c(errors, "horder slot should be named")
+    }
     if (! is.data.frame(object@spouse)) {
         errors <- c(errors, "spouse slot must be a data.frame")
     }
@@ -127,20 +130,43 @@ is_valid_hints <- function(object) {
     errors <- c(errors, check_values(
         object@spouse$anchor, c("left", "right", "either"), "anchor"
     ))
+    errors <- c(errors, check_values(
+        object@spouse$idl, NA_character_, "idl", present = FALSE
+    ))
+    errors <- c(errors, check_values(
+        object@spouse$idr, NA_character_, "idr", present = FALSE
+    ))
 
-    idmin <- pmin(object@spouse$idl, object@spouse$idr)
-    idmax <- pmax(object@spouse$idl, object@spouse$idr)
-    if (any(idmin == idmax)) {
+    if (any(object@spouse$idl == object@spouse$idr, na.rm = TRUE)) {
         errors <- c(errors, "idl and idr should be different")
     }
+
+    idmin <- pmin(object@spouse$idl, object@spouse$idr, na.rm = TRUE)
+    idmax <- pmax(object@spouse$idl, object@spouse$idr, na.rm = TRUE)
     dup <- anyDuplicated(cbind(idmin, idmax))
     if (dup) {
         dup <- paste(idmin[dup], idmax[dup], sep = "_")
         errors <- c(errors, paste(
-            "idl and idr should be unique:",
+            "idl and idr couple should be unique:",
             paste(dup, collapse = ", "),
             "couples are present more than once in the spouse slot."
         ))
+    }
+
+    ## All idl and idr should be in the names of horder
+    if (length(object@horder) > 0) {
+        id <- c(object@spouse$idl, object@spouse$idr)
+        if (any(!id %in% names(object@horder))) {
+            errors <- c(errors, paste(
+                "All idl and idr should be in the names of horder"
+            ))
+        }
+    } else {
+        if (nrow(spouse(object)) > 0) {
+            errors <- c(errors, paste(
+                "horder slot should be non empty if spouse slot is non empty"
+            ))
+        }
     }
 
     return(errors)

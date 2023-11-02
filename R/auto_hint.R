@@ -324,24 +324,20 @@ setMethod("auto_hint", "Pedigree", function(obj,
     depth <- kindepth(obj, align_parents = TRUE)
 
     ## Doc: init-auto_hint horder
+    horder <- setNames(rep(0, n), id(ped(obj)))
     if (!is.null(hints)) {
         if (is.vector(hints)) {
             hints <- Hints(horder = hints)
         } else if (is.matrix(hints)) {
-            hints <- Hints(spouse = hints)
+            hints <- Hints(spouse = hints, horder = horder)
         } else if (is.list(hints)) {
             hints <- Hints(hints)
         } else if (!is(hints, "Hints")) {
             stop("hints must be a vector, matrix, list or Hints object")
         }
-        if (is.null(horder(hints))) {
-            horder <- integer(n)
-        } else {
-            horder <- horder(hints)
-        }
-    } else {
-        hints <- Hints(horder = integer(n))
         horder <- horder(hints)
+    } else {
+        hints <- Hints(horder = horder)
     }
 
     for (i in unique(depth)) {

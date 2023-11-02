@@ -585,6 +585,9 @@ setMethod(
     "horder<-",
     signature(object = "Hints", value = "ANY"),
     function(object, value) {
+        if (length(value) > 0 && is.null(names(value))) {
+            stop("horder must be named")
+        }
         object@horder <- value
         validObject(object)
         object
