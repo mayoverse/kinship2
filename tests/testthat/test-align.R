@@ -27,6 +27,26 @@ test_that("test auto_hint works", {
         align = TRUE, width = 8, hints = newhint
     )
     expect_snapshot(plist)
+
+    ## With rel matrix
+    rel_df <- data.frame(
+        id1 = c(112, 113, 133, 209),
+        id2 = c(110, 114, 132, 109),
+        code = c(1, 4, 4, 4)
+    )
+    pedi <- Pedigree(sampleped[-1], rel_df)
+    newhint <- auto_hint(pedi)
+    expect_equal(horder(newhint),
+        c(
+            1, 2, 3, 4, 1, 2, 3, 4, 1, 1, 3, 2, 5, 4, 5,
+            6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 6, 7,
+            8, 9, 10, 11, 6, 7, 11, 12, 12, 13, 14, 8, 9, 13, 14,
+            15, 16, 17, 18, 19, 15, 16, 17, 18, 19
+        )
+    )
+    expect_equal(unlist(spouse(newhint)),
+        c("idl" = "109", "idr" = "110", "anchor" = "2")
+    )
 })
 
 test_that("test alignment with inbreeding and relationship matrix", {
@@ -94,10 +114,13 @@ test_that("Double wife", {
     ## version 1.9.6 failed to plot subject 3 second marriage and kids
     ## fix in 9/2023 to revert to some version 1.8.5 version of kindepth
     df <- data.frame(
-        id = 1:7, dadid = c(0, 0, 0, 1, 3, 0, 3),
-        momid = c(0, 0, 0, 2, 4, 0, 6), sex = c(1, 2, 1, 2, 1, 2, 1)
+        id = 1:7,
+        dadid = c(0, 0, 0, 1, 3, 0, 3),
+        momid = c(0, 0, 0, 2, 4, 0, 6),
+        sex = c(1, 2, 1, 2, 1, 2, 1)
     )
     pedi <- Pedigree(df, missid = "0")
+    expect_equal(sum(kindepth(pedi)), 4)
     vdiffr::expect_doppelganger("double_wife",
         function() plot(pedi)
     )
