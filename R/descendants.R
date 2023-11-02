@@ -29,13 +29,13 @@ setGeneric("descendants",
 setMethod("descendants", signature(idlist = "character_OR_integer", obj = "character_OR_integer"),
     function(idlist, obj, dadid, momid) {
         id <- as.character(obj)
-        idlist <- as.character(obj)
+        idlist <- as.character(idlist)
         dadid <- as.character(dadid)
         momid <- as.character(momid)
-        child <- id[!(is.na(match(dadid, idlist)) &
-                    is.na(match(momid, idlist))
-            )
-        ]
+        child <- id[!(
+            is.na(match(dadid, idlist)) &
+                is.na(match(momid, idlist))
+        )]
         descend <- NULL
         while (length(child > 0)) {
             newchild <- id[!(is.na(match(dadid, child)) &
