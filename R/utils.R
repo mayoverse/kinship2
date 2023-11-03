@@ -168,18 +168,30 @@ check_num_na <- function(var, na_as_num = TRUE) {
 #' with TRUE if the individual is a parent and FALSE otherwise
 #'
 #' @keywords internal
-is_parent <- function(id, dadid, momid, missid = NA_character_) {
-    # determine subjects who are parents assume input of dadid/momid indices,
-    # not ids
+setGeneric("is_parent", signature = "obj",
+    function(obj, ...) standardGeneric("is_parent")
+)
 
-    if (length(id) != length(dadid) | length(id) != length(momid)) {
-        stop("The length of the vectors are not the same")
+setMethod("is_parent", "character_OR_integer",
+    function(obj, dadid, momid, missid = NA_character_) {
+        # determine subjects who are parents assume input of
+        # dadid/momid indices, not ids
+
+        if (length(obj) != length(dadid) | length(obj) != length(momid)) {
+            stop("The length of the vectors are not the same")
+        }
+
+        is_father <- !is.na(match(obj, unique(dadid[!dadid %in% missid])))
+        is_mother <- !is.na(match(obj, unique(momid[!momid %in% missid])))
+        is_father | is_mother
     }
+)
 
-    is_father <- !is.na(match(id, unique(dadid[!dadid %in% missid])))
-    is_mother <- !is.na(match(id, unique(momid[!momid %in% missid])))
-    is_father | is_mother
-}
+setMethod("is_parent", "Ped",
+    function(obj, missid = NA_character_) {
+        is_parent(id(obj), dadid(obj), momid(obj), missid)
+    }
+)
 
 #' Check wich individuals are founders
 #'

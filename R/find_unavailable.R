@@ -36,46 +36,54 @@
 #' @seealso [shrink()]
 #' @include utils.R
 #' @export
-find_unavailable <- function(ped, avail = ped(ped, "avail")) {
-    ## find id within Pedigree anyone who is not available and
-    ## does not have an available descendant
+setGeneric("find_unavailable", signature = "obj",
+    function(obj, ...) standardGeneric("find_unavailable")
+)
 
-    ## avail = TRUE/1 if available, FALSE/0 if not
-
-    ## will do this iteratively by successively removing unavailable
-    ## terminal nodes
-    ## Steve Iturria, PhD, modified by Dan Schaid
-    ped_df <- ped(ped)
-    ped_df$avail <- avail
-    cont <- TRUE # flag for whether to keep iterating
-
-    ped_df$is_terminal <- (is_parent(ped_df$id, ped_df$dadid, ped_df$momid) == FALSE)
-    ## JPS 3/10/14 add strings check in case of char ids
-    while (cont) {
-        id_to_remove <- ped_df$id[ped_df$is_terminal & ped_df$avail == 0]
-        if (length(id_to_remove) > 0) {
-            idx_to_remove <- match(id_to_remove, ped_df$id)
-            ped_df <- ped_df[-idx_to_remove, ]
-            ped_df$is_terminal <-
-                (is_parent(ped_df$id, ped_df$dadid, ped_df$momid) == FALSE)
-        } else {
-            cont <- FALSE
+setMethod("find_unavailable", "Ped",
+    function(obj, avail = NULL) {
+        if (is.null(avail)) {
+            avail <- avail(obj)
         }
+        ## find id within Pedigree anyone who is not available and
+        ## does not have an available descendant
+
+        ## avail = TRUE/1 if available, FALSE/0 if not
+
+        ## will do this iteratively by successively removing unavailable
+        ## terminal nodes
+        ## Steve Iturria, PhD, modified by Dan Schaid
+
+        cont <- TRUE # flag for whether to keep iterating
+
+        is_terminal <- (is_parent(obj) == FALSE)
+        ## JPS 3/10/14 add strings check in case of char ids
+        obji <- obj
+        avail(obji) <- avail
+        while (cont) {
+            id_to_remove <- id(obji)[is_terminal & avail(obji) == 0]
+            if (length(id_to_remove) > 0) {
+                obji <- subset(obji, id_to_remove, keep = FALSE)
+                is_terminal <- (is_parent(obji) == FALSE)
+            } else {
+                cont <- FALSE
+            }
+        }
+        ## A few more clean up steps
+
+        ## remove unavailable founders
+        tmp_ped <- exclude_unavail_founders(
+            id(obji), dadid(obji), momid(obji), avail(obji)
+        )
+
+        ## remove stray marry-ins
+        tmp_ped <- exclude_stray_marryin(
+            tmp_ped$id, tmp_ped$dadid, tmp_ped$momid
+        )
+
+        id(obj)[is.na(match(id(obj), tmp_ped$id))]
     }
-
-    ## A few more clean up steps
-
-    ## remove unavailable founders
-    tmp_ped <- exclude_unavail_founders(
-        ped_df$id,
-        ped_df$dadid, ped_df$momid, ped_df$avail
-    )
-
-    ## remove stray marry-ins
-    tmp_ped <- exclude_stray_marryin(tmp_ped$id, tmp_ped$dadid, tmp_ped$momid)
-
-    ped(ped, "id")[is.na(match(ped(ped, "id"), tmp_ped$id))]
-}
+)
 
 #' Exclude stray marry-ins
 #'
@@ -124,7 +132,9 @@ exclude_stray_marryin <- function(id, dadid, momid) {
 #' - id Vector of subject identifiers
 #' - dadid Vector of father identifiers
 #' - momid Vector of mother identifiers
-exclude_unavail_founders <- function(id, dadid, momid, avail, missid = NA_character_) {
+exclude_unavail_founders <- function(
+    id, dadid, momid, avail, missid = NA_character_
+) {
     n_old <- length(id)
 
     ## zed = TRUE if both parents are present
@@ -182,8 +192,10 @@ exclude_unavail_founders <- function(id, dadid, momid, avail, missid = NA_charac
         mom <- mom[zed]
         for (i in seq_len(n)) {
             ## check if mom and dad are founders (where their parents = 0)
-            dad_f <- (dadid[id == dad[i]] == 0) & (momid[id == dad[i]] == 0)
-            mom_f <- (dadid[id == mom[i]] == 0) & (momid[id == mom[i]] == 0)
+            dad_f <- (dadid[id == dad[i]] %in% missid) &
+                (momid[id == dad[i]] %in% missid)
+            mom_f <- (dadid[id == mom[i]] %in% missid) &
+                (momid[id == mom[i]] %in% missid)
             both_f <- dad_f & mom_f
 
             ## check if mom and dad have avail
@@ -191,7 +203,7 @@ exclude_unavail_founders <- function(id, dadid, momid, avail, missid = NA_charac
             mom_avail <- avail[id == mom[i]]
 
             ## define both_unavail = T if both mom & dad not avail
-            both_unavail <- (dad_avail == FALSE & mom_avail == FALSE)
+            both_unavail <- (dad_avail == 0 & mom_avail == 0)
 
             if (both_f && both_unavail) {
                 ## remove mom and dad from ped, and zero-out parent

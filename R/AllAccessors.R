@@ -269,7 +269,7 @@ setMethod("affected<-",
     function(x, value) {
         if (
             ! is.character(value) &&
-                ! is.integer(value) &&
+                ! is.numeric(value) &&
                 ! is.logical(value) &&
                 ! is.factor(value)
         ) {
@@ -315,11 +315,11 @@ setMethod("avail<-",
     function(x, value) {
         if (
             ! is.character(value) &&
-                ! is.integer(value) &&
+                ! is.numeric(value) &&
                 ! is.logical(value) &&
                 ! is.factor(value)
         ) {
-            stop("avail must be a character or integer vector")
+            stop("avail must be a character or numeric vector")
         }
         if (length(value) != length(x)) {
             if (length(value) == 1) {

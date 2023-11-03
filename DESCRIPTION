@@ -90,7 +90,6 @@ Collate:
     'plot_fromdf.R'
     'plot.R'
     'shrink.R'
-    'trim.R'
     'unrelated.R'
     'useful_inds.R'
 LazyData: true

@@ -56,10 +56,10 @@ setMethod("Ped", "data.frame",
     function(obj, cols_used_init = FALSE, cols_used_del = FALSE) {
         col_need <- c("id", "sex", "dadid", "momid")
         col_to_use <- c(
-            "famid", "steril", "status", "avail", "affected"
+            "famid", "steril", "status", "avail", "affected",
+            "kin", "id_inf", "useful"
         )
-        col_used <- c(
-            "kin", "id_inf", "useful",
+        col_used <- c( 
             "num_child_tot", "num_child_dir", "num_child_ind",
             "elementMetadata"
         )

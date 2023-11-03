@@ -101,6 +101,10 @@ setMethod("as.data.frame", "Ped", function(x) {
 #'
 #' @param x A Ped object.
 #' @param i A vector of individuals identifiers to keep.
+#' @param del_parents A logical value indicating if the parents
+#' of the individuals should be deleted.
+#' @param keep A logical value indicating if the individuals
+#' should be kept or deleted.
 #'
 #' @return A Ped object subsetted.
 #'
@@ -108,14 +112,17 @@ setMethod("as.data.frame", "Ped", function(x) {
 #' @aliases subset,Ped-method
 #' @importFrom S4Vectors subset
 #' @export
-setMethod("subset", "Ped", function(x, i, del_parents = FALSE) {
+setMethod("subset", "Ped", function(x, i, del_parents = FALSE, keep = TRUE) {
     if (is.factor(i)) {
         i <- as.character(i)
     }
     if (is.character(i)) {
-        i <- which(x@id %in% i)
+        i <- x@id %in% i
     } else if (!is.numeric(i) & !is.logical(i)) {
         stop("i must be a character, an integer or a logical vector")
+    }
+    if (!keep) {
+        i <- !i
     }
     col_computed <- c(
         "num_child_tot", "num_child_dir", "num_child_ind"
@@ -391,9 +398,9 @@ setMethod("as.list", "Pedigree", function(x) {
 #' @param drop A logical value indicating if the dimensions should be dropped.
 #' @return A Pedigree object subsetted.
 #' @rdname extract-methods
-setMethod("[", c(x = "Pedigree", i = "ANY", j = "missing"),
-    function(x, i, j, drop = TRUE) {
-        new_ped <- subset(ped(x), i)
+setMethod("subset", "Pedigree",
+    function(x, i, del_parents = FALSE) {
+        new_ped <- subset(ped(x), i, del_parents = del_parents)
         all_id <- id(new_ped)
         new_rel <- subset(rel(x), all_id)
         new_hints <- subset(hints(x), all_id)
@@ -404,5 +411,11 @@ setMethod("[", c(x = "Pedigree", i = "ANY", j = "missing"),
         )
         validObject(new_pedi)
         new_pedi
+    }
+)
+
+setMethod("[", c(x = "Pedigree", i = "ANY", j = "missing"),
+    function(x, i, j, drop = TRUE) {
+        subset(x, i)
     }
 )
