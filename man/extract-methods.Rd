@@ -18,11 +18,14 @@
 \alias{spouse,Pedigree-method}
 \alias{as.list,Ped-method}
 \alias{as.data.frame,Ped-method}
+\alias{subset,Ped-method}
+\alias{subset,Rel-method}
+\alias{subset,Hints-method}
+\alias{subset_hints,Hints-method}
 \alias{show,Pedigree-method}
 \alias{summary,Pedigree-method}
-\alias{sub_sel_hints}
-\alias{sub_sel_hints,Pedigree-method}
-\alias{[,Pedigree,ANY,missing,ANY-method}
+\alias{as.list,Pedigree-method}
+\alias{subset,Pedigree-method}
 \title{Pedigree ped accessors}
 \usage{
 ped(object, slot)
@@ -33,9 +36,9 @@ rel(object, slot)
 
 scales(object)
 
-fill(object, slot)
+fill(object)
 
-border(object, slot)
+border(object)
 
 hints(object)
 
@@ -45,13 +48,19 @@ spouse(object)
 
 \S4method{as.data.frame}{Ped}(x)
 
+\S4method{subset}{Ped}(x, i, del_parents = FALSE, keep = TRUE)
+
+\S4method{subset}{Rel}(x, idlist)
+
+\S4method{subset}{Hints}(x, idlist)
+
 \S4method{show}{Pedigree}(object)
 
 \S4method{summary}{Pedigree}(object)
 
-sub_sel_hints(hints, index)
+\S4method{as.list}{Pedigree}(x)
 
-\S4method{[}{Pedigree,ANY,missing,ANY}(x, i, j, drop = TRUE)
+\S4method{subset}{Pedigree}(x, i, del_parents = FALSE)
 }
 \arguments{
 \item{object}{A Pedigree object.}
@@ -60,17 +69,23 @@ sub_sel_hints(hints, index)
 
 \item{x}{A Pedigree object.}
 
-\item{hints}{A list of hints}
-
-\item{index}{A vector of index}
-
 \item{i}{A vector of individuals id or a vector of index.}
+
+\item{del_parents}{A logical value indicating if the parents
+of the individuals should be deleted.}
+
+\item{keep}{A logical value indicating if the individuals
+should be kept or deleted.}
+
+\item{idlist}{A vector of identifiers to subset}
+
+\item{hints}{A Hints object}
+
+\item{from}{A Pedigree object.}
 
 \item{j}{A vector of columns names.}
 
 \item{drop}{A logical value indicating if the dimensions should be dropped.}
-
-\item{from}{A Ped object.}
 }
 \value{
 The slot \code{ped} present in the Pedigree object.
@@ -97,11 +112,17 @@ The metadata are put at the end.
 A data.frame with the individuals informations.
 The metadata are put at the end.
 
+A Ped object subsetted.
+
+A Rel object subsetted.
+
+A list of Hints object subsetted
+
 A character vector with the informations about the object.
 
 A character vector with the summary of the object.
 
-A list of hints subsetted
+A list with the individuals informations.
 
 A Pedigree object subsetted.
 }
@@ -122,11 +143,20 @@ Convert a Ped object to a list
 
 Convert a Ped object to a data.frame
 
+Subset a Ped object based on the individuals
+identifiers given.
+
+Subset a Rel object based on the individuals
+identifiers given.
+
+Subset the Hints object based on the identifiers
+given
+
 Pedigree show method
 
 Pedigree summary method.
 
-Subset the hints list based on the index given
+Convert a Pedigree object to a list
 
 Extract parts of a Pedigree object
 }

@@ -49,7 +49,7 @@ ancestors <- function(idx, momx, dadx) {
 #' For more information you can read the associated vignette:align
 #' `vignette("alignment_details")`.
 #'
-#' @param ped A Pedigree object
+#' @param obj A Pedigree object
 #' @param packed Should the Pedigree be compressed, i.e., allow diagonal
 #' lines connecting parents to children in order to have a smaller overall
 #' width for the plot.
@@ -62,20 +62,8 @@ ancestors <- function(idx, momx, dadx) {
 #' parameters, or a logical value.
 #' If `TRUE`, the default is `c(1.5, 2)`, or numeric the routine
 #' `alignped4()` will be called.
-#' @param hints Plotting hints for the Pedigree.
-#' This is a list with components `horder` and `spouse`, the second one
-#' is optional.
-#' - **horder** is a numeric vector with one element per subject in the
-#' Pedigree.  It determines the relative horizontal order of subjects within a sibship, as
-#' well as the relative order of processing for the founder couples. (For this
-#' latter, the female founders are ordered as though they were sisters).
-#' - **spouse** is a matrix with one row per hinted marriage, usually
-#' only a few marriages in a pedigree will need an added hint, for instance
-#' reverse the plot order of a husband/wife pair. Each row contains the
-#' index of the left spouse, the right hand spouse, and the anchor
-#' (i.e : `1` = left, `2` = right, `0` = either).
-#' Children will preferentially appear under the parents of the anchored
-#' spouse.
+#' @param hints A Hints object, giving the relative order of the subjects.
+#' See [Hints()] for details.
 #' @inheritParams is_parent
 #'
 #' @return A list with components
@@ -120,6 +108,7 @@ ancestors <- function(idx, momx, dadx) {
 setGeneric("align", signature = "obj",
     function(obj, ...) standardGeneric("align")
 )
+
 
 setMethod("align", "Pedigree",
     function(

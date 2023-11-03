@@ -4,18 +4,12 @@
 \alias{unrelated}
 \title{Get unrelated subjects}
 \usage{
-unrelated(ped, avail = ped(ped, "avail"))
+unrelated(obj, ...)
 }
 \arguments{
-\item{ped}{A Pedigree object}
+\item{obj}{A Pedigree object}
 
-\item{avail}{A numeric vector of availability status of each individual
-(e.g., genotyped). The values are:
-\itemize{
-\item \code{0}  : unavailable
-\item \code{1}  : available
-\item \code{NA} : availability not known
-}}
+\item{...}{Additional arguments passed to methods}
 }
 \value{
 A vector of the ids of subjects that are unrelated.
@@ -39,7 +33,7 @@ multiple times can return different sets of unrelated subjects.
 }
 \examples{
 data(sampleped)
-fam1 <- sampleped[sampleped$family == 1, ]
+fam1 <- sampleped[sampleped$famid == 1, ]
 
 
 ped1 <- Pedigree(fam1)

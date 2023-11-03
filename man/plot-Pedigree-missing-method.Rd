@@ -80,7 +80,7 @@ force the line to connect at the midpoint of the children.}
 \item{fam_to_plot}{default=1.  If the Pedigree contains multiple families,
 this parameter can be used to select which family to plot.
 It can be a numeric value or a character value. If numeric, it is the
-index of the family to plot returned by \code{unique(x$ped$family)}.
+index of the family to plot returned by \code{unique(x$ped$famid)}.
 If character, it is the family id to plot.}
 
 \item{legend}{default=FALSE.  If TRUE, a legend will be added to the plot.}

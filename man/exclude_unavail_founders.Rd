@@ -4,24 +4,10 @@
 \alias{exclude_unavail_founders}
 \title{Exclude unavailable founders}
 \usage{
-exclude_unavail_founders(id, dadid, momid, avail, missid = "0")
+exclude_unavail_founders(id, dadid, momid, avail, missid = NA_character_)
 }
 \arguments{
 \item{id}{Vector of subject identifiers}
-
-\item{dadid}{A vector containing for each subject, the identifiers of the
-biologicals fathers.}
-
-\item{momid}{vector containing for each subject, the identifiers of the
-biologicals mothers.}
-
-\item{avail}{A numeric vector of availability status of each individual
-(e.g., genotyped). The values are:
-\itemize{
-\item \code{0}  : unavailable
-\item \code{1}  : available
-\item \code{NA} : availability not known
-}}
 
 \item{missid}{Character defining the missing ids}
 }

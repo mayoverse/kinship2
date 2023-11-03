@@ -1,11 +1,10 @@
 #### S4 Accessors ####
-#' @include Pedigree.R
+#' @include AllConstructor.R
 #' @include AllClass.R
 #' @importFrom S4Vectors mcols
 NULL
 
 #### S4 Ped Accessors ####
-
 ##### Mcols Accessors #####
 #' Metadata setters of Ped object from a list
 #'

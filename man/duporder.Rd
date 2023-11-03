@@ -27,8 +27,6 @@ It contains the following components:
 }}
 
 \item{lev}{The generation level of the subject}
-
-\item{ped}{A Pedigree object}
 }
 \value{
 A matrix of duplicate pairs

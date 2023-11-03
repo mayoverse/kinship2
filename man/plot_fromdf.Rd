@@ -63,7 +63,7 @@ invisibly.
 }
 \examples{
 data(sampleped)
-ped1 <- Pedigree(sampleped[sampleped$family == 1,])
+ped1 <- Pedigree(sampleped[sampleped$famid == 1,])
 lst <- ped_to_plotdf(ped1)
 #plot_fromdf(lst$df, lst$usr)
 }

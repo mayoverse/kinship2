@@ -4,47 +4,12 @@
 \alias{ped_to_plotdf}
 \title{Convert a Pedigree to a data frame of element to plot}
 \usage{
-ped_to_plotdf(
-  ped,
-  packed = FALSE,
-  width = 10,
-  align = c(1.5, 2),
-  subreg = NULL,
-  cex = 0.5,
-  symbolsize = cex,
-  pconnect = 0.5,
-  branch = 0.6,
-  aff_mark = TRUE,
-  label = NULL,
-  ...
-)
+ped_to_plotdf(obj, ...)
 }
 \arguments{
-\item{ped}{A Pedigree object}
+\item{obj}{A Pedigree object}
 
-\item{packed}{Should the Pedigree be compressed, i.e., allow diagonal
-lines connecting parents to children in order to have a smaller overall
-width for the plot.}
-
-\item{width}{for a packed output, the minimum width of the plot, in
-inches.}
-
-\item{align}{for a packed Pedigree, align children under parents \code{TRUE},
-to the extent possible given the page width, or align to to the left
-margin \code{FALSE}.
-This argument can be a two element vector, giving the alignment
-parameters, or a logical value.
-If \code{TRUE}, the default is \code{c(1.5, 2)}, or numeric the routine
-\code{alignped4()} will be called.}
-
-\item{subreg}{4-element vector for (min x, max x, min depth, max depth),
-used to edit away portions of the plot coordinates returned by
-\code{\link[=align]{align()}}.
-This is useful for zooming in on a particular region of the Pedigree.}
-
-\item{cex}{character expansion of the text}
-
-\item{symbolsize}{size of the symbols}
+\item{...}{other arguments passed to \code{\link[=par]{par()}}}
 
 \item{pconnect}{when connecting parent to children the program will try to
 make the connecting line as close to vertical as possible, subject to it
@@ -60,8 +25,6 @@ value of the affection column for each filling scale.}
 
 \item{label}{if not NULL, add a label to each box corresponding to the
 value of the column given.}
-
-\item{...}{other arguments passed to \code{\link[=par]{par()}}}
 }
 \value{
 A list containing the data frame and the user coordinates.
@@ -71,7 +34,7 @@ Convert a Pedigree to a data frame of element to plot
 }
 \examples{
 data(sampleped)
-ped1 <- Pedigree(sampleped[sampleped$family == 1,])
+ped1 <- Pedigree(sampleped[sampleped$famid == 1,])
 ped_to_plotdf(ped1)
 }
 \seealso{

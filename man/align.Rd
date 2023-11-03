@@ -4,17 +4,10 @@
 \alias{align}
 \title{Generate plotting information for a Pedigree}
 \usage{
-align(
-  ped,
-  packed = TRUE,
-  width = 10,
-  align = TRUE,
-  hints = ped$hints,
-  missid = "0"
-)
+align(obj, ...)
 }
 \arguments{
-\item{ped}{A Pedigree object}
+\item{obj}{A Pedigree object}
 
 \item{packed}{Should the Pedigree be compressed, i.e., allow diagonal
 lines connecting parents to children in order to have a smaller overall
@@ -31,27 +24,8 @@ parameters, or a logical value.
 If \code{TRUE}, the default is \code{c(1.5, 2)}, or numeric the routine
 \code{alignped4()} will be called.}
 
-\item{hints}{Plotting hints for the Pedigree.
-This is a list with components \code{order} and \code{spouse}, the second one
-is optional.
-\itemize{
-\item \strong{order} is a numeric vector with one element per subject in the
-Pedigree.  It determines the relative order of subjects within a sibship, as
-well as the relative order of processing for the founder couples. (For this
-latter, the female founders are ordered as though they were sisters).
-\item \strong{spouse} is a matrix with one row per hinted marriage, usually
-only a few marriages in a pedigree will need an added hint, for instance
-reverse the plot order of a husband/wife pair. Each row contains the
-index of the left spouse, the right hand spouse, and the anchor
-(i.e : \code{1} = left, \code{2} = right, \code{0} = either).
-Children will preferentially appear under the parents of the anchored
-spouse.
-}}
-
-\item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the Pedigree
-(i.e. \code{dadid} and \code{momid} equal to the value of this variable).
-The default for \code{missid} is \code{"0"}.}
+\item{hints}{A Hints object, giving the relative order of the subjects.
+See \code{\link[=Hints]{Hints()}} for details.}
 }
 \value{
 A list with components

@@ -4,10 +4,10 @@
 \alias{rel_code_to_factor}
 \title{Transform a relationship code variable to an ordered factor}
 \usage{
-rel_code_to_factor(rel_code)
+rel_code_to_factor(code)
 }
 \arguments{
-\item{rel_code}{A character, factor or numeric vector corresponding to
+\item{code}{A character, factor or numeric vector corresponding to
 the relation code of the individuals:
 \itemize{
 \item MZ twin = Monozygotic twin

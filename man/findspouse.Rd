@@ -27,8 +27,6 @@ It contains the following components:
 }}
 
 \item{lev}{The generation level of the subject}
-
-\item{ped}{A Pedigree object}
 }
 \value{
 The position of the spouse

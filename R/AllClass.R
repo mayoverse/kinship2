@@ -13,15 +13,15 @@ setClassUnion("missing_OR_NULL", c("missing", "NULL"))
 #' A hints object is a list of two elements used
 #' to order the individuals in the pedigree plot.
 #'
-#' @slot horder A numeric vector with one element per subject in the
+#' @slot horder A numeric named vector with one element per subject in the
 #' Pedigree.  It determines the relative horizontal order of subjects within
 #' a sibship, as well as the relative order of processing for the founder
 #' couples. (For this latter, the female founders are ordered as though they
 #' were sisters).
-#' @slot spouse A matrix with one row per hinted marriage, usually
+#' @slot spouse A data.frame with one row per hinted marriage, usually
 #' only a few marriages in a Pedigree will need an added hint, for
 #' instance reverse the plot order of a husband/wife pair.
-#' Each row contains the index of the left spouse, the right hand spouse,
+#' Each row contains the identifiers of the left spouse, the right hand spouse,
 #' and the anchor (i.e : `1` = left, `2` = right, `0` = either).
 #'
 #' @return A Hints object.
@@ -44,19 +44,35 @@ setValidity("Hints", is_valid_hints)
 #' S4 class to represent the scales of a Pedigree.
 #'
 #' A scales object is a list of two data.frame used
-#' to represent the affection and the availability status
-#' of the individuals in the pedigree plot.
+#' to represent the affection (filling) and the availability
+#' (border) status of the individuals in the pedigree plot.
 #'
 #' @slot fill A data.frame with the informations for the affection status.
-#' The columns needed are: 'column_values', 'column_mods', 'mods', 'labels',
-#' 'affected', 'fill', 'density' and 'angle'.
+#' The columns needed are:
+#' - 'order': the order of the affection to be used
+#' - 'column_values': name of the column containing the raw values in the
+#' Ped object
+#' - 'column_mods': name of the column containing the mods of the transformed
+#' affection in the Ped object
+#' - 'mods': all the different mods
+#' - 'labels': the corresponding labels of each mods
+#' - 'affected': a logical value indicating if the mod correspond to an affected
+#' individuals
+#' - 'fill': the color to use for this mods
+#' - 'density': the density of the shading
+#' - 'angle': the angle of the shading
 #' @slot border A data.frame with the informations for the availability status.
-#' The columns needed are: 'column', 'mods', 'labels' and 'border'.
-#' @return A Hints object.
+#' The columns needed are:
+#' - 'column':name of the column containing the mods to use in the
+#' Ped object
+#' - 'mods': all the different mods
+#' - 'labels': the corresponding labels of each mods
+#' - 'border': the color to use for this mods
+#' @return A Scale object.
 #' @seealso [Pedigree()]
 #' @docType class
-#' @name Hints-class
-#' @rdname Hints-class
+#' @name Scale-class
+#' @rdname Scale-class
 #' @export
 setClass("Scales",
     representation(
@@ -79,14 +95,15 @@ setValidity("Scales", is_valid_scales)
 #' to the `famid` character to ensure the uniqueness of the `id`.
 #' The other slots are used to store recognized informations.
 #' Additional columns can be added to the Ped object and will be
-#' stored in the `meta` slot of the Ped object.
+#' stored in the `elementMetadata` slot of the Ped object.
 #'
 #' @slot id A character vector with the id of the individuals.
 #' @slot dadid A character vector with the id of the father of the individuals.
 #' @slot momid A character vector with the id of the mother of the individuals.
-#' @slot sex A factor vector for the sex of the individuals (i.e. `male`,
-#' `female`, `unknown` or `terminated`).
-#' @slot famid A character vector with the family identifiers of the individuals.
+#' @slot sex An ordered factor vector for the sex of the individuals
+#' (i.e. `male` < `female` < `unknown` < `terminated`).
+#' @slot famid A character vector with the family identifiers of the
+#' individuals (optional).
 #' @slot steril A numeric vector with the sterilisation status of the
 #' individuals (i.e. `0` = not sterilised, `1` = sterilised, `NA` = unknown).
 #' @slot status A numeric vector with the affection status of the
@@ -137,7 +154,7 @@ setClass("Ped",
 setMethod("parallel_slot_names", "Ped",
     function(x) {
         c(
-            "id", "momid", "dadid", "sex", "famid",
+            "id", "dadid", "momid", "sex", "famid",
             "steril", "status", "avail", "affected",
             "useful", "kin", "id_inf",
             "num_child_tot", "num_child_dir", "num_child_ind",
@@ -191,6 +208,7 @@ setMethod("parallel_slot_names", "Rel",
 
 setValidity("Rel", is_valid_rel)
 
+#### Pedigree Class ####
 #' S4 class to represent a pedigree.
 #'
 #' A pedigree is a ensemble of individuals linked to each other into
@@ -202,36 +220,21 @@ setValidity("Rel", is_valid_rel)
 #' To create a Pedigree object, use the function
 #' [Pedigree()].
 #'
-#' @slot ped A data.frame with the individuals informations. The minimum
-#' columns required are 'id', 'dadid', 'momid' and 'sex'. Other columns can be
-#' added to the data.frame and will be recognised by the functions. Some
-#' errors can be detected by the validity function and some of them can be
-#' corrected and others will be added to a dedicated column.
-#' @slot rel A data.frame for the special relationship between
-#' individuals.
-#' The minimum columns required are 'id1', 'id2' and 'code'.
-#' @slot scales A data.frame to use for the affection status.
-#' This data.frame is generated by the function
-#' [generate_aff_inds()] followed by
-#' [generate_colors()].
-#' @slot hints List of two elements.
-#' - **horder** is a numeric vector with one element per subject in the
-#' Pedigree.  It determines the relative horizontal order of subjects within a sibship, as
-#' well as the relative order of processing for the founder couples. (For this
-#' latter, the female founders are ordered as though they were sisters).
-#' - **spouse** is a matrix with one row per hinted marriage, usually
-#' only a few marriages in a Pedigree will need an added hint, for
-#' instance reverse the plot order of a husband/wife pair.
-#' Each row contains the index of the left spouse, the right hand spouse,
-#' and the anchor (i.e : `1` = left, `2` = right, `0` = either).
+#' @slot ped A Ped object for the identity informations. See [Ped()] for
+#' more informations.
+#' @slot rel A Rel object for the special relationships. See [Rel()] for
+#' more informations.
+#' @slot scales A Scales object for the filling and bordering
+#' colors used in the plot. See [Scales()] for more informations.
+#' @slot hints A Hints object for the ordering of the
+#' individuals in the plot. See [Hints()] for more informations.
 #'
 #' @return A Pedigree object.
-#' @seealso [Pedigree()]
+#' @seealso [Pedigree()], [Ped()], [Rel()], [Scales()], [Hints()]
 #' @docType class
 #' @name Pedigree-class
 #' @rdname Pedigree-class
 #' @include AllValidity.R
-#' @include Pedigree.R
 #' @export
 setClass("Pedigree",
     representation(

@@ -19,12 +19,6 @@ make_famid(obj, ...)
 \item{obj}{A pedigree object or a vector of subject identifiers.}
 
 \item{...}{Additional arguments passed to methods}
-
-\item{dadid}{A vector containing for each subject, the identifiers of the
-biologicals fathers.}
-
-\item{momid}{vector containing for each subject, the identifiers of the
-biologicals mothers.}
 }
 \value{
 \subsection{When used with a character vector}{

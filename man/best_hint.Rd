@@ -4,10 +4,10 @@
 \alias{best_hint}
 \title{Best hint for alignment}
 \usage{
-best_hint(ped, wt = c(1000, 10, 1), tolerance = 0)
+best_hint(obj, ...)
 }
 \arguments{
-\item{ped}{A Pedigree object}
+\item{obj}{A Pedigree object}
 
 \item{wt}{A vector of three weights for the three error measures
 \itemize{
@@ -53,7 +53,7 @@ If during the search, a plot is found with a stress level less than
 }
 \examples{
 data(sampleped)
-ped <- Pedigree(sampleped[sampleped$family == 1,])
+ped <- Pedigree(sampleped[sampleped$famid == 1,])
 best_hint(ped)
 }
 \seealso{

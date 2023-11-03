@@ -8,7 +8,7 @@
 A data frame with 55 observations, one line per subject, on the
 following 7 variables.
 \itemize{
-\item \code{family} family identifier
+\item \code{famid} family identifier
 \item \code{id} subject identifier
 \item \code{dadid} identifier of the father, if the father is part of the
 data set; zero otherwise

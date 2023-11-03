@@ -45,12 +45,7 @@
 #'    3. The tree below is narrower, for instance an only child.
 #'
 #' @param level Vector of the level of each subject
-#' @param horder Vector of the horizontal order of each subject
-#' @param spouselist Matrix of the spouses with one row per hinted marriage,
-#' usually only a few marriages in a pedigree will need an added hint, for
-#' instance reverse the plot order of a husband/wife pair.
-#' Each row contains the index of the left spouse, the right hand spouse
-#' and the anchor (i.e : `1` = left, `2` = right, `0` = either).
+#' @inheritParams Hints
 #' @inheritParams align
 #' @inheritParams ancestors
 #'

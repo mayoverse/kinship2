@@ -124,7 +124,7 @@ setMethod("make_famid", "Pedigree",
 #' Update family prefix in individuals id
 #'
 #' @param obj A character vector of individual ids
-#' @param famid A numeric vector of family ids
+#' @inheritParams Ped
 #'
 #' @return A character vector of individual ids with family prefix
 #'

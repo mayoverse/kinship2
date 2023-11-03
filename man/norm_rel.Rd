@@ -4,14 +4,16 @@
 \alias{norm_rel}
 \title{Normalise relationship dataframe}
 \usage{
-norm_rel(rel_df, na_strings = c("NA", ""), missid = "0")
+norm_rel(rel_df, na_strings = c("NA", ""), missid = NA_character_)
 }
 \arguments{
 \item{rel_df}{A data.frame with the special relationships between
-individuals.
+individuals. See \code{\link[=Rel]{Rel()}} for more informations.
 The minimum columns required are \code{id1}, \code{id2} and \code{code}.
-The \code{family} column can also be used to specify the family
+The \code{famid} column can also be used to specify the family
 of the individuals.
+If a matrix is given, the columns needs to be ordered as
+\code{id1}, \code{id2}, \code{code} and \code{famid}.
 The code values are:
 \itemize{
 \item \code{1} = Monozygotic twin
@@ -28,7 +30,7 @@ by the \code{\link[=rel_code_to_factor]{rel_code_to_factor()}} function.}
 \item{missid}{The missing identifier value. Founders are the individuals with
 no father and no mother in the Pedigree
 (i.e. \code{dadid} and \code{momid} equal to the value of this variable).
-The default for \code{missid} is \code{"0"}.}
+The default for \code{missid} is \code{NA_character_}.}
 }
 \value{
 A dataframe with the errors identified
@@ -42,7 +44,7 @@ df <- data.frame(
    id2 = c(2, 3, 4, 5, 6, 7, 8, 9, 10, 1),
    code = c("MZ twin", "DZ twin", "UZ twin", "Spouse", 1, 2,
       3, 4, "MzTwin", "sp oUse"),
-   family = c(1, 1, 1, 1, 1, 1, 1, 2, 2, 2)
+   famid = c(1, 1, 1, 1, 1, 1, 1, 2, 2, 2)
 )
 norm_rel(df)
 

@@ -8,8 +8,6 @@
 ped_to_legdf(ped, boxh = 1, boxw = 1, cex = 1, adjx = 0, adjy = 0)
 }
 \arguments{
-\item{ped}{A Pedigree object}
-
 \item{boxh}{Height of the legend boxes}
 
 \item{boxw}{Width of the legend boxes}

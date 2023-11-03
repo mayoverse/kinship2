@@ -4,23 +4,12 @@
 \alias{find_avail_noninform}
 \title{Find uninformative but available subject}
 \usage{
-find_avail_noninform(ped, avail = ped(ped, "avail"), missid = "0")
+find_avail_noninform(obj, ...)
 }
 \arguments{
-\item{ped}{A Pedigree object}
+\item{obj}{A Pedigree object}
 
-\item{avail}{A numeric vector of availability status of each individual
-(e.g., genotyped). The values are:
-\itemize{
-\item \code{0}  : unavailable
-\item \code{1}  : available
-\item \code{NA} : availability not known
-}}
-
-\item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the Pedigree
-(i.e. \code{dadid} and \code{momid} equal to the value of this variable).
-The default for \code{missid} is \code{"0"}.}
+\item{...}{Additional arguments passed to methods}
 }
 \value{
 Vector of subject ids who can be removed by having lowest

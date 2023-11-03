@@ -6,41 +6,27 @@
 \title{S4 class to represent a hints object.}
 \value{
 A Hints object.
-
-A Hints object.
 }
 \description{
 A hints object is a list of two elements used
 to order the individuals in the pedigree plot.
-
-A scales object is a list of two data.frame used
-to represent the affection and the availability status
-of the individuals in the pedigree plot.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{order}}{A numeric vector with one element per subject in the
-Pedigree.  It determines the relative order of subjects within a sibship, as
-well as the relative order of processing for the founder couples. (For this
-latter, the female founders are ordered as though they were sisters).}
+\item{\code{horder}}{A numeric named vector with one element per subject in the
+Pedigree.  It determines the relative horizontal order of subjects within
+a sibship, as well as the relative order of processing for the founder
+couples. (For this latter, the female founders are ordered as though they
+were sisters).}
 
-\item{\code{spouse}}{A matrix with one row per hinted marriage, usually
+\item{\code{spouse}}{A data.frame with one row per hinted marriage, usually
 only a few marriages in a Pedigree will need an added hint, for
 instance reverse the plot order of a husband/wife pair.
-Each row contains the index of the left spouse, the right hand spouse,
+Each row contains the identifiers of the left spouse, the right hand spouse,
 and the anchor (i.e : \code{1} = left, \code{2} = right, \code{0} = either).}
-
-\item{\code{fill}}{A data.frame with the informations for the affection status.
-The columns needed are: 'column_values', 'column_mods', 'mods', 'labels',
-'affected', 'fill', 'density' and 'angle'.}
-
-\item{\code{border}}{A data.frame with the informations for the availability status.
-The columns needed are: 'column', 'mods', 'labels' and 'border'.}
 }}
 
 \seealso{
-\code{\link[=Pedigree]{Pedigree()}}
-
 \code{\link[=Pedigree]{Pedigree()}}
 }

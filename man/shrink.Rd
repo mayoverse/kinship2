@@ -4,31 +4,12 @@
 \alias{shrink}
 \title{Shrink Pedigree object}
 \usage{
-shrink(
-  ped,
-  avail = ped(ped, "avail"),
-  affected = deriv(ped, "affected"),
-  max_bits = 16
-)
+shrink(obj, ...)
 }
 \arguments{
-\item{ped}{A Pedigree object}
+\item{obj}{A Pedigree object}
 
-\item{avail}{A numeric vector of availability status of each individual
-(e.g., genotyped). The values are:
-\itemize{
-\item \code{0}  : unavailable
-\item \code{1}  : available
-\item \code{NA} : availability not known
-}}
-
-\item{affected}{A numeric vector of affection status of each individual
-(e.g., genotyped). The values are:
-\itemize{
-\item \code{0}  : unaffected
-\item \code{1}  : affected
-\item \code{NA} : affection status not known
-}}
+\item{...}{Additional arguments passed to methods}
 
 \item{max_bits}{Optional, the bit size for which to shrink the Pedigree}
 }
@@ -67,7 +48,7 @@ individuals (chosen at random if there are multiple of the same status):
 }
 \examples{
 data(sampleped)
-ped1 <- Pedigree(sampleped[sampleped$family == '1',])
+ped1 <- Pedigree(sampleped[sampleped$famid == '1',])
 shrink(ped1, max_bits = 12)
 
 }

@@ -8,12 +8,6 @@ exclude_stray_marryin(id, dadid, momid)
 }
 \arguments{
 \item{id}{Vector of subject identifiers}
-
-\item{dadid}{A vector containing for each subject, the identifiers of the
-biologicals fathers.}
-
-\item{momid}{vector containing for each subject, the identifiers of the
-biologicals mothers.}
 }
 \value{
 Returns a data frame of subject identifiers and their parents.

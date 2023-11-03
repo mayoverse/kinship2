@@ -4,21 +4,18 @@
 \alias{is_parent}
 \title{Check wich individuals are parents}
 \usage{
-is_parent(id, dadid, momid, missid = "0")
+is_parent(obj, ...)
 }
 \arguments{
+\item{obj}{A character vector with the id of the individuals or a
+\code{data.frame} with all the informations in corresponding columns.}
+
 \item{id}{A vector of each subjects identifiers}
-
-\item{dadid}{A vector containing for each subject, the identifiers of the
-biologicals fathers.}
-
-\item{momid}{vector containing for each subject, the identifiers of the
-biologicals mothers.}
 
 \item{missid}{The missing identifier value. Founders are the individuals with
 no father and no mother in the Pedigree
 (i.e. \code{dadid} and \code{momid} equal to the value of this variable).
-The default for \code{missid} is \code{"0"}.}
+The default for \code{missid} is \code{NA_character_}.}
 }
 \value{
 A vector of boolean of the same size as \code{id}

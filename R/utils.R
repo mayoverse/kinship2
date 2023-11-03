@@ -155,10 +155,6 @@ check_num_na <- function(var, na_as_num = TRUE) {
 #' @description Check which individuals are parents.
 #'
 #' @param id A vector of each subjects identifiers
-#' @param dadid A vector containing for each subject, the identifiers of the
-#' biologicals fathers.
-#' @param momid  vector containing for each subject, the identifiers of the
-#' biologicals mothers.
 #' @param missid The missing identifier value. Founders are the individuals with
 #' no father and no mother in the Pedigree
 #' (i.e. `dadid` and `momid` equal to the value of this variable).
@@ -166,7 +162,7 @@ check_num_na <- function(var, na_as_num = TRUE) {
 #'
 #' @return A vector of boolean of the same size as `id`
 #' with TRUE if the individual is a parent and FALSE otherwise
-#'
+#' @inheritParams Ped
 #' @keywords internal
 setGeneric("is_parent", signature = "obj",
     function(obj, ...) standardGeneric("is_parent")
@@ -235,11 +231,7 @@ NULL
 
 #' Transform a gender variable to an ordered factor
 #'
-#' @param sex A character, factor or numeric vector corresponding to
-#' the gender of the individuals. The following values are recognized:
-#' - character() or factor() : "f", "m", "woman", "man", "male", "female",
-#' "unknown", "terminated"
-#' - numeric() : 1 = "male", 2 = "female", 3 = "unknown", 4 = "terminated"
+#' @inheritParams Ped
 #'
 #' @return an ordered factor vector containing the transformed variable
 #' "male" < "female" < "unknown" < "terminated"
@@ -271,25 +263,16 @@ NULL
 
 #' Transform a relationship code variable to an ordered factor
 #'
-#' @param rel_code A character, factor or numeric vector corresponding to
-#' the relation code of the individuals:
-#' - MZ twin = Monozygotic twin
-#' - DZ twin = Dizygotic twin
-#' - UZ twin = twin of unknown zygosity
-#' - Spouse = Spouse
-#' The following values are recognized:
-#' - character() or factor() : "MZ twin", "DZ twin", "UZ twin", "Spouse" with
-#' of without space between the words. The case is not important.
-#' - numeric() : 1 = "MZ twin", 2 = "DZ twin", 3 = "UZ twin", 4 = "Spouse"
+#' @inheritParams Rel
 #'
 #' @return an ordered factor vector containing the transformed variable
 #' "MZ twin" < "DZ twin" < "UZ twin" < "Spouse"
 #' @examples
 #' rel_code_to_factor(c(1, 2, 3, 4, "MZ twin", "DZ twin", "UZ twin", "Spouse"))
 #' @export
-rel_code_to_factor <- function(rel_code) {
-    if (is.factor(rel_code) || is.numeric(rel_code)) {
-        rel_code <- as.character(rel_code)
+rel_code_to_factor <- function(code) {
+    if (is.factor(code) || is.numeric(code)) {
+        code <- as.character(code)
     }
     ## Normalized difference notations for code
     code_equiv <- c(
@@ -298,14 +281,14 @@ rel_code_to_factor <- function(rel_code) {
         "1" = "MZ twin", "2" = "DZ twin", "3" = "UZ twin", "4" = "Spouse"
     )
     codes <- c("MZ twin", "DZ twin", "UZ twin", "Spouse")
-    rel_code <- as.character(revalue(as.factor(
+    code <- as.character(revalue(as.factor(
         str_remove_all(
-            casefold(as.character(rel_code), upper = FALSE),
+            casefold(as.character(code), upper = FALSE),
             " "
         )
     ), code_equiv, warn_missing = FALSE))
-    rel_code <- factor(rel_code, codes, ordered = TRUE)
-    rel_code
+    code <- factor(code, codes, ordered = TRUE)
+    code
 }
 TRUE
 

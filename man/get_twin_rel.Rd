@@ -6,9 +6,6 @@
 \usage{
 get_twin_rel(ped)
 }
-\arguments{
-\item{ped}{A Pedigree object}
-}
 \value{
 A list containing components
 \enumerate{

@@ -4,13 +4,18 @@
 \alias{norm_ped}
 \title{Normalise dataframe}
 \usage{
-norm_ped(ped_df, na_strings = c("NA", ""), missid = "0", try_num = FALSE)
+norm_ped(
+  ped_df,
+  na_strings = c("NA", ""),
+  missid = NA_character_,
+  try_num = FALSE
+)
 }
 \arguments{
 \item{ped_df}{A data.frame with the individuals informations.
 The minimum columns required are \code{indID}, \code{fatherId}, \code{motherId} and
 \code{gender}.
-The \code{family} column can also be used to specify the family of the
+The \code{famid} column can also be used to specify the family of the
 individuals and will be merge to the \code{id} field separated by an
 underscore.
 The following columns are also recognize \code{sterilisation}, \code{available},
@@ -26,7 +31,7 @@ of the individuals. The values recognized for those columns are \code{1} or
 \item{missid}{The missing identifier value. Founders are the individuals with
 no father and no mother in the Pedigree
 (i.e. \code{dadid} and \code{momid} equal to the value of this variable).
-The default for \code{missid} is \code{"0"}.}
+The default for \code{missid} is \code{NA_character_}.}
 
 \item{try_num}{Boolean defining if the function should try to convert
 all the columns to numeric.}
@@ -57,7 +62,7 @@ df <- data.frame(
     motherId = c(0, 0, 2, 2, 0, 5, 2, 0, 8, 8),
     gender = c(1, 2, "m", "man", "f", "male", "m", "m", "f", "f"),
     available = c("A", "1", 0, NA, 1, 0, 1, 0, 1, 0),
-    family = c(1, 1, 1, 1, 1, 1, 1, 2, 2, 2),
+    famid = c(1, 1, 1, 1, 1, 1, 1, 2, 2, 2),
     sterilisation = c("TRUE", "FALSE", TRUE, FALSE, 1, 0, 1, 0, 1, "TRUE"),
     vitalStatus = c("TRUE", "FALSE", TRUE, FALSE, 1, 0, 1, 0, 1, 0),
     affection = c("TRUE", "FALSE", TRUE, FALSE, 1, 0, 1, 0, 1, 0)

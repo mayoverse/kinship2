@@ -10,16 +10,7 @@
 #' corresponding informative individuals based on the avail and affected
 #' columns.
 #'
-#' @param avail A numeric vector of availability status of each individual
-#' (e.g., genotyped). The values are:
-#' - `0`  : unavailable
-#' - `1`  : available
-#' - `NA` : availability not known
-#' @param affected A numeric vector of affection status of each individual
-#' (e.g., genotyped). The values are:
-#' - `0`  : unaffected
-#' - `1`  : affected
-#' - `NA` : affection status not known
+#' @inheritParams Ped
 #' @param col_aff A string with the column name to use for the affection status.
 #' @param informative Informative individuals selection can take 5 values:
 #' - 'AvAf' (available and affected),

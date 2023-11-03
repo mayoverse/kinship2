@@ -3,30 +3,31 @@
 \docType{methods}
 \name{bit_size}
 \alias{bit_size}
-\alias{bit_size,character-method}
+\alias{bit_size,character_OR_integer-method}
 \alias{bit_size,character}
 \alias{bit_size,Pedigree-method}
 \alias{bit_size,Pedigree}
+\alias{bit_size,Ped-method}
+\alias{bit_size,Ped}
 \title{Get Pedigree bit_size}
 \usage{
 bit_size(obj, ...)
 
-\S4method{bit_size}{character}(obj, momid, missid = "0")
+\S4method{bit_size}{character_OR_integer}(obj, momid, missid = NA_character_)
 
-\S4method{bit_size}{Pedigree}(obj, missid = "0")
+\S4method{bit_size}{Pedigree}(obj, missid = NA_character_)
+
+\S4method{bit_size}{Ped}(obj, missid = NA_character_)
 }
 \arguments{
 \item{obj}{A Pedigree object or a vector of fathers identifierss}
 
 \item{...}{Additional arguments passed to methods}
 
-\item{momid}{vector containing for each subject, the identifiers of the
-biologicals mothers.}
-
 \item{missid}{The missing identifier value. Founders are the individuals with
 no father and no mother in the Pedigree
 (i.e. \code{dadid} and \code{momid} equal to the value of this variable).
-The default for \code{missid} is \code{"0"}.}
+The default for \code{missid} is \code{NA_character_}.}
 }
 \value{
 A list with the following components:

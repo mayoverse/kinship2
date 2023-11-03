@@ -17,7 +17,7 @@
 #' and the number of subjects as entries.
 #'
 #' @inheritParams kinship
-#' @param famid A vector of family identifiers
+#' @inheritParams Ped
 #' @param newfam The result of a call to `make_famid()`. If this has already
 #' been computed by the user, adding it as an argument shortens the running
 #' time somewhat.

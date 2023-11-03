@@ -146,8 +146,7 @@ generate_fill <- function(
 #' @details Perform transformation uppon a column given as the one
 #' containing the availability status to compute the border color.
 #'
-#' @param avail The vector containing the availability status.
-#' The values need to be numeric and can only be 0, 1 or NA.
+#' @inheritParams Ped
 #' @param colors_avail Set of 2 colors to use for the box's border of an
 #' individual. The first color will be used for available individual (avail
 #' == 1) and the second for the unavailable individual (avail == 0).

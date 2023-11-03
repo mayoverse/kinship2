@@ -4,18 +4,12 @@
 \alias{find_unavailable}
 \title{Find unavailable subjects in a Pedigree}
 \usage{
-find_unavailable(ped, avail = ped(ped, "avail"))
+find_unavailable(obj, ...)
 }
 \arguments{
-\item{ped}{A Pedigree object}
+\item{obj}{A Pedigree object}
 
-\item{avail}{A numeric vector of availability status of each individual
-(e.g., genotyped). The values are:
-\itemize{
-\item \code{0}  : unavailable
-\item \code{1}  : available
-\item \code{NA} : availability not known
-}}
+\item{...}{Additional arguments passed to methods}
 }
 \value{
 Returns a vector of subject ids for who can be
@@ -46,7 +40,7 @@ special relations that include the subjects to trim.
 
 \examples{
 data(sampleped)
-ped1 <- Pedigree(sampleped[sampleped$family == "1",])
+ped1 <- Pedigree(sampleped[sampleped$famid == "1",])
 find_unavailable(ped1)
 
 }

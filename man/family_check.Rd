@@ -7,13 +7,17 @@
 \alias{family_check,character}
 \alias{family_check,Pedigree-method}
 \alias{family_check,Pedigree}
+\alias{family_check,Ped-method}
+\alias{family_check,Ped}
 \title{Check family}
 \usage{
 family_check(obj, ...)
 
-\S4method{family_check}{character}(obj, dadid, momid, family, newfam)
+\S4method{family_check}{character}(obj, dadid, momid, famid, newfam)
 
 \S4method{family_check}{Pedigree}(obj)
+
+\S4method{family_check}{Ped}(obj)
 }
 \arguments{
 \item{obj}{A pedigree object or a vector of subject identifiers.}
@@ -26,7 +30,8 @@ biologicals fathers.}
 \item{momid}{vector containing for each subject, the identifiers of the
 biologicals mothers.}
 
-\item{family}{A vector of family identifiers}
+\item{famid}{A character vector with the family identifiers of the
+individuals.}
 
 \item{newfam}{The result of a call to \code{make_famid()}. If this has already
 been computed by the user, adding it as an argument shortens the running
@@ -34,10 +39,10 @@ time somewhat.}
 }
 \value{
 a data frame with one row for each unique family id in the
-\code{family} argument or the one detected in the Pedigree object.
+\code{famid} argument or the one detected in the Pedigree object.
 Components of the output are:
 \itemize{
-\item \code{family} : The family id, as entered into the data set
+\item \code{famid} : The family id, as entered into the data set
 \item \code{n} : Number of subjects in the family
 \item \code{unrelated} : Number of them that appear to be unrelated to
 anyone else in the entire Pedigree.  This is usually marry-ins with no
@@ -86,7 +91,7 @@ fcheck.combined
 sampleped[20, 3] <- 131
 fcheck1.bad <- try(
   {
-    with(sampleped, family_check(id, father, mother, family))
+    with(sampleped, family_check(id, father, mother, famid))
   },
   silent = FALSE
 )

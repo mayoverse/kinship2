@@ -11,36 +11,33 @@
 \usage{
 is_informative(obj, ...)
 
-\S4method{is_informative}{character}(obj, avail, affected, informative = "AvAf", missid = "0")
+\S4method{is_informative}{character}(
+  obj,
+  avail,
+  affected,
+  informative = "AvAf",
+  missid = NA_character_
+)
 
 \S4method{is_informative}{Pedigree}(
   obj,
   col_aff = NULL,
   informative = "AvAf",
-  missid = "0",
+  missid = NA_character_,
   reset = FALSE
 )
 }
 \arguments{
-\item{obj}{A pedigree object or a vector of subject identifiers.}
+\item{obj}{A character vector with the id of the individuals or a
+\code{data.frame} with all the informations in corresponding columns.}
 
 \item{...}{Additional arguments passed to methods}
 
-\item{avail}{A numeric vector of availability status of each individual
-(e.g., genotyped). The values are:
-\itemize{
-\item \code{0}  : unavailable
-\item \code{1}  : available
-\item \code{NA} : availability not known
-}}
+\item{avail}{A numeric vector with the availability status of the
+individuals (i.e. \code{0} = not available, \code{1} = available, \code{NA} = unknown).}
 
-\item{affected}{A numeric vector of affection status of each individual
-(e.g., genotyped). The values are:
-\itemize{
-\item \code{0}  : unaffected
-\item \code{1}  : affected
-\item \code{NA} : affection status not known
-}}
+\item{affected}{A numeric vector with the affection status of the
+individuals (i.e. \code{0} = unaffected, \code{1} = affected, \code{NA} = unknown).}
 
 \item{informative}{Informative individuals selection can take 5 values:
 \itemize{
@@ -53,10 +50,9 @@ is_informative(obj, ...)
 \item A boolean
 }}
 
-\item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the Pedigree
-(i.e. \code{dadid} and \code{momid} equal to the value of this variable).
-The default for \code{missid} is \code{"0"}.}
+\item{missid}{A character vector with the missing values identifiers.
+All the id, dadid and momid corresponding to those values will be set
+to \code{NA_character_}.}
 
 \item{col_aff}{A string with the column name to use for the affection status.}
 

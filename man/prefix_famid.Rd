@@ -4,17 +4,17 @@
 \alias{prefix_famid}
 \title{Compute id with family id}
 \usage{
-prefix_famid(family_id, ind_id, missid = "0")
+prefix_famid(famid, id, missid = NA_character_)
 }
 \arguments{
-\item{family_id}{The family id}
+\item{famid}{A character vector with the family identifiers of the
+individuals.}
 
-\item{ind_id}{The individual id}
+\item{id}{A vector of each subjects identifiers}
 
-\item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the Pedigree
-(i.e. \code{dadid} and \code{momid} equal to the value of this variable).
-The default for \code{missid} is \code{"0"}.}
+\item{missid}{A character vector with the missing values identifiers.
+All the id, dadid and momid corresponding to those values will be set
+to \code{NA_character_}.}
 }
 \value{
 The id with the family id merged

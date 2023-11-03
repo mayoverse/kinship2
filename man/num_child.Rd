@@ -3,15 +3,15 @@
 \docType{methods}
 \name{num_child}
 \alias{num_child}
-\alias{num_child,character-method}
-\alias{num_child,character}
+\alias{num_child,character_OR_integer-method}
+\alias{num_child,character_OR_integer}
 \alias{num_child,Pedigree-method}
 \alias{num_child,Pedigree}
 \title{Number of child}
 \usage{
 num_child(obj, ...)
 
-\S4method{num_child}{character}(obj, dadid, momid, rel_df = NULL, missid = "0")
+\S4method{num_child}{character_OR_integer}(obj, dadid, momid, rel_df = NULL, missid = NA_character_)
 
 \S4method{num_child}{Pedigree}(obj, reset = FALSE)
 }
@@ -20,17 +20,13 @@ num_child(obj, ...)
 
 \item{...}{Additional arguments passed to methods}
 
-\item{dadid}{A vector containing for each subject, the identifiers of the
-biologicals fathers.}
-
-\item{momid}{vector containing for each subject, the identifiers of the
-biologicals mothers.}
-
 \item{rel_df}{A data.frame with the special relationships between
-individuals.
+individuals. See \code{\link[=Rel]{Rel()}} for more informations.
 The minimum columns required are \code{id1}, \code{id2} and \code{code}.
-The \code{family} column can also be used to specify the family
+The \code{famid} column can also be used to specify the family
 of the individuals.
+If a matrix is given, the columns needs to be ordered as
+\code{id1}, \code{id2}, \code{code} and \code{famid}.
 The code values are:
 \itemize{
 \item \code{1} = Monozygotic twin
@@ -45,7 +41,7 @@ by the \code{\link[=rel_code_to_factor]{rel_code_to_factor()}} function.}
 \item{missid}{The missing identifier value. Founders are the individuals with
 no father and no mother in the Pedigree
 (i.e. \code{dadid} and \code{momid} equal to the value of this variable).
-The default for \code{missid} is \code{"0"}.}
+The default for \code{missid} is \code{NA_character_}.}
 
 \item{reset}{If TRUE, the \code{num_child_tot}, \code{num_child_ind} and
 the \code{num_child_dir} columns are reset.}
@@ -76,7 +72,7 @@ between 2 spouses, the indirect childs will still be added.
 }
 \examples{
 data(sampleped)
-ped1 <- Pedigree(sampleped[sampleped$family == "1",])
+ped1 <- Pedigree(sampleped[sampleped$famid == "1",])
 ped1 <- num_child(ped1)
 summary(ped1$ped)
 }

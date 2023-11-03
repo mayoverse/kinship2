@@ -7,9 +7,11 @@
 ibd_matrix(id1, id2, ibd, idmap, diagonal)
 }
 \arguments{
-\item{id1}{First subject identifiers}
+\item{id1}{A character vector with the id of the first individuals of each
+pairs}
 
-\item{id2}{Second subject identifiers}
+\item{id2}{A character vector with the id of the second individuals of each
+pairs}
 
 \item{ibd}{the IBD value for that pair}
 

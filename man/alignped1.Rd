@@ -15,17 +15,16 @@ alignped1(idx, dadx, momx, level, horder, packed, spouselist)
 
 \item{level}{Vector of the level of each subject}
 
-\item{horder}{Vector of the horizontal order of each subject}
+\item{horder}{A named numeric vector with one element per subject in the
+Pedigree.  It determines the relative horizontal order of subjects within a
+sibship, as well as the relative order of processing for the founder couples.
+(For this latter, the female founders are ordered as though
+they were sisters).
+The names of the vector should be the individual identifiers.}
 
 \item{packed}{Should the Pedigree be compressed, i.e., allow diagonal
 lines connecting parents to children in order to have a smaller overall
 width for the plot.}
-
-\item{spouselist}{Matrix of the spouses with one row per hinted marriage,
-usually only a few marriages in a pedigree will need an added hint, for
-instance reverse the plot order of a husband/wife pair.
-Each row contains the index of the left spouse, the right hand spouse
-and the anchor (i.e : \code{1} = left, \code{2} = right, \code{0} = either).}
 }
 \value{
 A list containing the elements to plot the Pedigree.

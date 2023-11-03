@@ -76,13 +76,8 @@ each individuals. The affection status can be numeric, logical or character.}
 
 \item{...}{Other parameters to pass to the \code{generate_colors} function}
 
-\item{avail}{A numeric vector of availability status of each individual
-(e.g., genotyped). The values are:
-\itemize{
-\item \code{0}  : unavailable
-\item \code{1}  : available
-\item \code{NA} : availability not known
-}}
+\item{avail}{A numeric vector with the availability status of the
+individuals (i.e. \code{0} = not available, \code{1} = available, \code{NA} = unknown).}
 
 \item{mods_aff}{Vector of modality to consider as affected in the case
 where the \code{values} is a factor.}

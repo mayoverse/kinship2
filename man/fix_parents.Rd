@@ -9,38 +9,34 @@
 \usage{
 fix_parents(obj, ...)
 
-\S4method{fix_parents}{character}(obj, dadid, momid, sex, family = NULL, missid = "0")
+\S4method{fix_parents}{character}(obj, dadid, momid, sex, famid = NULL, missid = NA_character_)
 
-\S4method{fix_parents}{data.frame}(obj, delete = FALSE, filter = NULL, missid = "0")
+\S4method{fix_parents}{data.frame}(obj, delete = FALSE, filter = NULL, missid = NA_character_)
 }
 \arguments{
 \item{obj}{A data.frame or a vector of the individuals identifiers. If a
 dataframe is given it must contain the columns \code{id}, \code{dadid},
-\code{momid}, \code{sex} and \code{family}. Family is optional.}
+\code{momid}, \code{sex} and \code{famid}. famid is optional.}
 
 \item{...}{Additional arguments passed to methods}
 
-\item{dadid}{A vector containing for each subject, the identifiers of the
-biologicals fathers.}
-
-\item{momid}{vector containing for each subject, the identifiers of the
-biologicals mothers.}
-
 \item{sex}{A character, factor or numeric vector corresponding to
-the gender of the individuals. The following values are recognized:
+the gender of the individuals. This will be transformed to an ordered factor
+with the following levels: \code{male} < \code{female} < \code{unknown} < `terminated
+The following values are recognized:
 \itemize{
 \item character() or factor() : "f", "m", "woman", "man", "male", "female",
 "unknown", "terminated"
 \item numeric() : 1 = "male", 2 = "female", 3 = "unknown", 4 = "terminated"
 }}
 
-\item{family}{Optional family identification set it to NULL to invalidate.
+\item{famid}{Optional famid identification set it to NULL to invalidate.
 If used it will modify the ids of the individuals by pasting it with an _.}
 
 \item{missid}{The missing identifier value. Founders are the individuals with
 no father and no mother in the Pedigree
 (i.e. \code{dadid} and \code{momid} equal to the value of this variable).
-The default for \code{missid} is \code{"0"}.}
+The default for \code{missid} is \code{NA_character_}.}
 
 \item{delete}{Boolean defining if missing parents needs to be:
 \itemize{
@@ -64,7 +60,7 @@ different individuals informations.
 First look to add parents whose ids are given in momid/dadid. Second, fix
 sex of parents. Last look to add second parent for children for whom only
 one parent id is given.
-If a family vector is given the family id will be added to the ids of all
+If a famid vector is given the famid id will be added to the ids of all
 individuals (id, dadid, momid) separated by an underscore befor proceeding.
 \subsection{Special case for dataframe}{
 
@@ -93,7 +89,7 @@ test1char <- data.frame(
 )
 test1newmom <- with(test1char, fix_parents(id, father, mother,
   sex,
-  missid = '0'
+  missid = NA_character_
 ))
 newped <- Pedigree(test1newmom)
 as.data.frame(newped)

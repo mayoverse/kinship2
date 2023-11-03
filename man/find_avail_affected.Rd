@@ -4,18 +4,12 @@
 \alias{find_avail_affected}
 \title{Find a single person to trim from a Pedigree whose is available}
 \usage{
-find_avail_affected(ped, avail = ped(ped, "avail"), affstatus = NA)
+find_avail_affected(obj, ...)
 }
 \arguments{
-\item{ped}{A Pedigree object}
+\item{obj}{A Pedigree object}
 
-\item{avail}{A numeric vector of availability status of each individual
-(e.g., genotyped). The values are:
-\itemize{
-\item \code{0}  : unavailable
-\item \code{1}  : available
-\item \code{NA} : availability not known
-}}
+\item{...}{Additional arguments passed to methods}
 
 \item{affstatus}{Affection status to search for.}
 }

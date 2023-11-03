@@ -3,17 +3,21 @@
 \docType{methods}
 \name{descendants}
 \alias{descendants}
-\alias{descendants,character,character-method}
-\alias{descendants,character}
-\alias{descendants,character,Pedigree-method}
+\alias{descendants,character_OR_integer,character_OR_integer-method}
+\alias{descendants,character_OR_integer}
+\alias{descendants,character_OR_integer,Pedigree-method}
 \alias{descendants,Pedigree}
+\alias{descendants,character_OR_integer,Ped-method}
+\alias{descendants,Ped}
 \title{Find all the descendants}
 \usage{
 descendants(idlist, obj, ...)
 
-\S4method{descendants}{character,character}(idlist, obj, dadid, momid)
+\S4method{descendants}{character_OR_integer,character_OR_integer}(idlist, obj, dadid, momid)
 
-\S4method{descendants}{character,Pedigree}(idlist, obj)
+\S4method{descendants}{character_OR_integer,Pedigree}(idlist, obj)
+
+\S4method{descendants}{character_OR_integer,Ped}(idlist, obj)
 }
 \arguments{
 \item{idlist}{List of individuals identifiers to be considered}
@@ -21,12 +25,6 @@ descendants(idlist, obj, ...)
 \item{obj}{A pedigree object or a vector of subject identifiers.}
 
 \item{...}{Additional arguments passed to methods}
-
-\item{dadid}{A vector containing for each subject, the identifiers of the
-biologicals fathers.}
-
-\item{momid}{vector containing for each subject, the identifiers of the
-biologicals mothers.}
 }
 \value{
 Vector of all descendants of the individuals in idlist.

@@ -421,8 +421,8 @@ is_valid_pedigree <- function(object) {
     sex <- object@ped@sex
     temp1 <- match(id1, id, nomatch = 0)
     temp2 <- match(id2, id, nomatch = 0)
-    if (any(ncode < 3)) {
-        twins <- (ncode < 3)
+    if (any(ncode < 4)) {
+        twins <- (ncode < 4)
         if (any(momid[temp1[twins]] != momid[temp2[twins]])) {
             errors <- c(errors, "twins found with different mothers")
         }

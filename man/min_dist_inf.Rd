@@ -7,6 +7,8 @@
 \alias{min_dist_inf,character}
 \alias{min_dist_inf,Pedigree-method}
 \alias{min_dist_inf,Pedigree}
+\alias{min_dist_inf,Ped-method}
+\alias{min_dist_inf,Ped}
 \title{Minimum distance to the informative individuals}
 \usage{
 min_dist_inf(obj, ...)
@@ -17,7 +19,16 @@ min_dist_inf(obj, ...)
   obj,
   col_aff = NULL,
   informative = "AvAf",
-  missid = "0",
+  missid = NA_character_,
+  reset = FALSE,
+  ...
+)
+
+\S4method{min_dist_inf}{Ped}(
+  obj,
+  col_aff = NULL,
+  informative = "AvAf",
+  missid = NA_character_,
   reset = FALSE,
   ...
 )
@@ -27,35 +38,21 @@ min_dist_inf(obj, ...)
 
 \item{...}{Additional arguments passed to methods}
 
-\item{dadid}{A vector containing for each subject, the identifiers of the
-biologicals fathers.}
-
-\item{momid}{vector containing for each subject, the identifiers of the
-biologicals mothers.}
-
 \item{sex}{A character, factor or numeric vector corresponding to
-the gender of the individuals. The following values are recognized:
+the gender of the individuals. This will be transformed to an ordered factor
+with the following levels: \code{male} < \code{female} < \code{unknown} < `terminated
+The following values are recognized:
 \itemize{
 \item character() or factor() : "f", "m", "woman", "man", "male", "female",
 "unknown", "terminated"
 \item numeric() : 1 = "male", 2 = "female", 3 = "unknown", 4 = "terminated"
 }}
 
-\item{avail}{A numeric vector of availability status of each individual
-(e.g., genotyped). The values are:
-\itemize{
-\item \code{0}  : unavailable
-\item \code{1}  : available
-\item \code{NA} : availability not known
-}}
+\item{avail}{A numeric vector with the availability status of the
+individuals (i.e. \code{0} = not available, \code{1} = available, \code{NA} = unknown).}
 
-\item{affected}{A numeric vector of affection status of each individual
-(e.g., genotyped). The values are:
-\itemize{
-\item \code{0}  : unaffected
-\item \code{1}  : affected
-\item \code{NA} : affection status not known
-}}
+\item{affected}{A numeric vector with the affection status of the
+individuals (i.e. \code{0} = unaffected, \code{1} = affected, \code{NA} = unknown).}
 
 \item{informative}{Informative individuals selection can take 5 values:
 \itemize{
@@ -70,10 +67,9 @@ the gender of the individuals. The following values are recognized:
 
 \item{col_aff}{A string with the column name to use for the affection status.}
 
-\item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the Pedigree
-(i.e. \code{dadid} and \code{momid} equal to the value of this variable).
-The default for \code{missid} is \code{"0"}.}
+\item{missid}{A character vector with the missing values identifiers.
+All the id, dadid and momid corresponding to those values will be set
+to \code{NA_character_}.}
 
 \item{reset}{If TRUE, the \code{kin} and if \code{id_inf} columns is reset}
 }

@@ -7,8 +7,8 @@
 generate_border(avail, colors_avail = c("green", "black"))
 }
 \arguments{
-\item{avail}{The vector containing the availability status.
-The values need to be numeric and can only be 0, 1 or NA.}
+\item{avail}{A numeric vector with the availability status of the
+individuals (i.e. \code{0} = not available, \code{1} = available, \code{NA} = unknown).}
 
 \item{colors_avail}{Set of 2 colors to use for the box's border of an
 individual. The first color will be used for available individual (avail

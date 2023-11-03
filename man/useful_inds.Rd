@@ -7,6 +7,7 @@
 \alias{useful_inds,character}
 \alias{useful_inds,Pedigree-method}
 \alias{useful_inds,Pedigree}
+\alias{useful_inds,Ped-method}
 \title{Compute the usefulness of individuals}
 \usage{
 useful_inds(obj, ...)
@@ -20,43 +21,24 @@ useful_inds(obj, ...)
   num_child_tot,
   informative = "AvAf",
   keep_infos = FALSE,
-  missid = "0"
+  missid = NA_character_
 )
 
-\S4method{useful_inds}{Pedigree}(
-  obj,
-  informative = "AvAf",
-  keep_infos = FALSE,
-  missid = "0",
-  reset = FALSE
-)
+\S4method{useful_inds}{Pedigree}(obj, informative = "AvAf", keep_infos = FALSE, reset = FALSE)
+
+\S4method{useful_inds}{Ped}(obj, informative = "AvAf", keep_infos = FALSE, reset = FALSE)
 }
 \arguments{
-\item{obj}{A pedigree object or a vector of subject identifiers.}
+\item{obj}{A character vector with the id of the individuals or a
+\code{data.frame} with all the informations in corresponding columns.}
 
 \item{...}{Additional arguments passed to methods}
 
-\item{dadid}{A vector containing for each subject, the identifiers of the
-biologicals fathers.}
+\item{avail}{A numeric vector with the availability status of the
+individuals (i.e. \code{0} = not available, \code{1} = available, \code{NA} = unknown).}
 
-\item{momid}{vector containing for each subject, the identifiers of the
-biologicals mothers.}
-
-\item{avail}{A numeric vector of availability status of each individual
-(e.g., genotyped). The values are:
-\itemize{
-\item \code{0}  : unavailable
-\item \code{1}  : available
-\item \code{NA} : availability not known
-}}
-
-\item{affected}{A numeric vector of affection status of each individual
-(e.g., genotyped). The values are:
-\itemize{
-\item \code{0}  : unaffected
-\item \code{1}  : affected
-\item \code{NA} : affection status not known
-}}
+\item{affected}{A numeric vector with the affection status of the
+individuals (i.e. \code{0} = unaffected, \code{1} = affected, \code{NA} = unknown).}
 
 \item{num_child_tot}{A numeric vector of the number of children of each
 individuals}
@@ -75,10 +57,9 @@ individuals}
 \item{keep_infos}{Boolean to indicate if individuals with unknown status
 but available or reverse should be kept}
 
-\item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the Pedigree
-(i.e. \code{dadid} and \code{momid} equal to the value of this variable).
-The default for \code{missid} is \code{"0"}.}
+\item{missid}{A character vector with the missing values identifiers.
+All the id, dadid and momid corresponding to those values will be set
+to \code{NA_character_}.}
 
 \item{reset}{Boolean to indicate if the \code{useful} column should be reset}
 }
@@ -105,7 +86,7 @@ usefulness of the individual. This boolean is hereditary.
 }
 \examples{
 data(sampleped)
-ped1 <- Pedigree(sampleped[sampleped$family == "1",])
+ped1 <- Pedigree(sampleped[sampleped$famid == "1",])
 ped1 <- num_child(ped1)
 useful_inds(ped1, informative = "AvAf")$ped
 }

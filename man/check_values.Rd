@@ -7,16 +7,14 @@
 check_values(val, ref, name = NULL, present = TRUE)
 }
 \arguments{
+\item{val}{A vector of values to check.}
+
+\item{ref}{A vector of reference values.}
+
+\item{name}{A character vector with the name of the values to check.}
+
 \item{present}{A logical value indicating if the values should be present
 or not}
-
-\item{obj}{An object.}
-
-\item{slot}{A slot of the object.}
-
-\item{column}{A column of the slot.}
-
-\item{values}{A vector of values to check.}
 }
 \value{
 A character vector with the errors if any.

@@ -8,7 +8,9 @@ sex_to_factor(sex)
 }
 \arguments{
 \item{sex}{A character, factor or numeric vector corresponding to
-the gender of the individuals. The following values are recognized:
+the gender of the individuals. This will be transformed to an ordered factor
+with the following levels: \code{male} < \code{female} < \code{unknown} < `terminated
+The following values are recognized:
 \itemize{
 \item character() or factor() : "f", "m", "woman", "man", "male", "female",
 "unknown", "terminated"

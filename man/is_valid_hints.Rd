@@ -13,7 +13,7 @@ is_valid_hints(object)
 A character vector with the errors or \code{TRUE} if no errors.
 }
 \description{
-Check if order and spouse slots are valid (i.e. order is numeric and
+Check if horder and spouse slots are valid (i.e. horder is numeric and
 spouse is a matrix with 3 columns).
 Check if the spouse matrix is valid (i.e. only numeric values).
 }

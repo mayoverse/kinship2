@@ -8,8 +8,7 @@ NULL
 #'
 #' @description Compute id with family id if the family id available
 #'
-#' @param famid The family id
-#' @param id The individual id
+#' @inheritParams Ped
 #' @inheritParams is_parent
 #' @keywords internal
 #' @return The id with the family id merged
@@ -253,19 +252,7 @@ norm_ped <- function(
 #' @description Normalise relationship dataframe for Pedigree object
 #'
 #' @inheritParams norm_ped
-#' @param rel_df A data.frame with the special relationships between
-#' individuals.
-#' The minimum columns required are `id1`, `id2` and `code`.
-#' The `famid` column can also be used to specify the family
-#' of the individuals.
-#' The code values are:
-#' - `1` = Monozygotic twin
-#' - `2` = Dizygotic twin
-#' - `3` = twin of unknown zygosity
-#' - `4` = Spouse
-#'
-#' The value relation code recognized by the function are the one defined
-#' by the [rel_code_to_factor()] function.
+#' @inheritParams Pedigree
 #' @inheritParams is_parent
 #'
 #' @examples

@@ -21,8 +21,10 @@ NULL
 #' index file contains the mapping between this new id and the original one.
 #' The final matrix should be labeled with the original identifiers.
 #'
-#' @param id1 First subject identifiers
-#' @param id2 Second subject identifiers
+#' @param id1 A character vector with the id of the first individuals of each
+#' pairs
+#' @param id2 A character vector with the id of the second individuals of each
+#' pairs
 #' @param ibd the IBD value for that pair
 #' @param idmap an optional 2 column matrix or data frame whose first element
 #' is the internal value (as found in `id1` and `id2`, and whose
