@@ -138,7 +138,7 @@ generate_fill <- function(
             density = rep(NA_integer_, n), angle = rep(NA_integer_, n)
         )
     ))
-    list(mods = mods, fill_scale = scale)
+    list(mods = mods, affected = affected, fill_scale = scale)
 }
 
 #' Process the colors based on affection and availability
@@ -351,6 +351,7 @@ setMethod("generate_colors", "Pedigree",
         )
 
         mcols(obj)[new_col] <- lst_sc$mods
+        affected(ped(obj)) <- lst_sc$affected
         if (nrow(lst_sc$fill_scale) > 0) {
             lst_sc$fill_scale$column_mods <- new_col
             lst_sc$fill_scale$column_values <- col_aff
