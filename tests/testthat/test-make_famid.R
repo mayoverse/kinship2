@@ -42,8 +42,12 @@ test_that("upd_famid_id works", {
 
 test_that("make_famid works", {
     id <- as.character(1:20)
-    mom <- as.character(c(0, 0, 0, 2, 2, 2, 0, 2, 0, 0, 2, 2, 0, 2, 0, 2, 7, 7, 11, 14))
-    dad <- as.character(c(0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 3, 3, 0, 3, 0, 3, 8, 8, 10, 13))
+    mom <- as.character(c(
+        0, 0, 0, 2, 2, 2, 0, 2, 0, 0, 2, 2, 0, 2, 0, 2, 7, 7, 11, 14
+    ))
+    dad <- as.character(c(
+        0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 3, 3, 0, 3, 0, 3, 8, 8, 10, 13
+    ))
     famid <- c(1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1)
     temp <- make_famid(id, mom, dad)
     expect_equal(temp, famid)
@@ -60,15 +64,17 @@ test_that("make_famid works with Pedigree", {
     fam[sampleped$id == "113"] <- 0 # singleton
     id <- paste(fam, c(101:141, 201:214), sep = "_")
     expect_equal(id(ped(ped)), id)
-    expect_equal(rel(ped, "id1"), c("2_213", "2_210", "1_140", "1_133"))
+    expect_equal(id1(rel(ped)), c("2_213", "2_210", "1_140", "1_133"))
 
     ## Updating already present family id
     data("sampleped")
     sampleped$famid[sampleped$famid == "2"] <- 3
+    rel_df[c(1:3)]
     ped <- Pedigree(sampleped, rel_df)
+    ped
     ped <- make_famid(ped)
-    expect_equal(ped(ped, "id"), id)
-    expect_equal(rel(ped, "id1"), c("2_213", "2_210", "1_140", "1_133"))
+    expect_equal(id(ped(ped)), id)
+    expect_equal(id1(rel(ped)), c("2_213", "2_210", "1_140", "1_133"))
 })
 
 test_that("Family check works", {
@@ -111,4 +117,3 @@ test_that("Family check works", {
     )
 
 })
-

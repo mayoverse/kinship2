@@ -125,6 +125,15 @@ setMethod("family_check", "character",
 #' @aliases family_check,Pedigree
 setMethod("family_check", "Pedigree",
     function(obj) {
-        family_check(obj$ped$id, obj$ped$dadid, obj$ped$momid, obj$ped$famid)
+        family_check(ped(obj))
+    }
+)
+
+#' @rdname family_check
+#' @docType methods
+#' @aliases family_check,Ped
+setMethod("family_check", "Ped",
+    function(obj) {
+        family_check(id(obj), dadid(obj), momid(obj), famid(obj))
     }
 )

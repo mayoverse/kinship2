@@ -83,9 +83,9 @@ setMethod("make_famid", "character",
             if (any(xx == 1)) {
                 singles <- as.integer(names(xx[xx == 1]))  # famid of singletons
                 famid[!is.na(match(famid, singles))] <- 0  # set singletons to 0
-                as.integer(match(famid, sort(unique(famid))) - 1) # renumber
+                as.character(match(famid, sort(unique(famid))) - 1) # renumber
             } else {
-                as.integer(match(famid, sort(unique(famid))))
+                as.character(match(famid, sort(unique(famid))))
             }  # renumber, no zeros
         } else {
             stop("Bug in routine: seem to have found an infinite loop")
@@ -103,7 +103,7 @@ setMethod("make_famid", "Pedigree",
         famid <- make_famid(
             id(ped(obj)), dadid(ped(obj)), momid(ped(obj))
         )
-        famid(ped(obj)) <- famid
+        obj@ped@famid <- famid
 
         fam_id1 <- famid[match(id1(rel(obj)), id(ped(obj)))]
         fam_id2 <- famid[match(id2(rel(obj)), id(ped(obj)))]
@@ -114,7 +114,8 @@ setMethod("make_famid", "Pedigree",
             )
         }
 
-        famid(rel(obj)) <- fam_id1
+        obj@rel@famid <- fam_id1
+        obj <- upd_famid_id(obj)
         validObject(obj)
         obj
     }
