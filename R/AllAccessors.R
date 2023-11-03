@@ -377,7 +377,7 @@ setMethod("kin<-",
     }
 )
 
-##### id_inf Accessors #####
+##### Id_inf Accessors #####
 #' id_inf getter of Ped object
 #'
 #' @param x A Ped object.
@@ -411,6 +411,45 @@ setMethod("id_inf<-",
             }
         }
         x@id_inf <- value
+        validObject(x)
+        x
+    }
+)
+
+##### Useful Accessors #####
+#' useful getter of Ped object
+#'
+#' @param x A Ped object.
+#'
+#' @return A numeric vector with the saying if the individual
+#' is informative or not.
+#'
+#' @rdname Ped
+#' @aliases useful,Ped-method
+#' @export
+setGeneric("useful", function(x) {
+    standardGeneric("useful")
+})
+setMethod("useful", signature(x = "Ped"), function(x) {
+    x@useful
+})
+setGeneric("useful<-", function(x, value) {
+    standardGeneric("useful<-")
+})
+setMethod("useful<-",
+    signature(x = "Ped", value = "numeric"),
+    function(x, value) {
+        if (length(value) != length(x)) {
+            if (length(value) == 1) {
+                value <- rep(value, length(x))
+            } else {
+                stop(
+                    "The length of the new values for useful should be: ",
+                    "equal to the length of the Ped object"
+                )
+            }
+        }
+        x@useful <- value
         validObject(x)
         x
     }

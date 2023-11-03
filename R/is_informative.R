@@ -125,7 +125,10 @@ setMethod("is_informative", "Pedigree", function(
     )
 
     if (!reset & any(!is.na(id_inf(ped(obj))))) {
-        check_columns(ped_df, NULL, "id_inf", NULL)
+        stop(
+            "The id_inf slot already has values in the Ped object",
+            " and reset is set to FALSE"
+        )
     }
 
     id_inf(ped(obj)) <- vect_to_binary(ifelse(ped_df$id %in% id_inf, 1, 0))

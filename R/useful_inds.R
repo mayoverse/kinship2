@@ -86,20 +86,37 @@ setMethod("useful_inds", "character",
 #' @rdname useful_inds
 #' @param reset Boolean to indicate if the `useful` column should be reset
 setMethod("useful_inds", "Pedigree", function(obj,
-    informative = "AvAf", keep_infos = FALSE,
-    missid = NA_character_, reset = FALSE
+    informative = "AvAf", keep_infos = FALSE, reset = FALSE
 ) {
-    cols_needed <- c(
-        "avail", "affected", "num_child_tot"
+    new_ped <- useful_inds(ped(obj),
+        informative, keep_infos, reset
     )
-    check_columns(obj$ped, cols_needed, "", "", others_cols = TRUE)
-    useful <- useful_inds(obj$ped$id, obj$ped$dadid, obj$ped$momid,
-        obj$ped$avail, obj$ped$affected, obj$ped$num_child_tot,
-        informative, keep_infos, missid
+
+    obj@ped <- new_ped
+    validObject(obj)
+    obj
+})
+
+#' @docType methods
+#' @aliases useful_inds,Pedigree
+#' @export
+#' @rdname useful_inds
+#' @param reset Boolean to indicate if the `useful` column should be reset
+setMethod("useful_inds", "Ped", function(obj,
+    informative = "AvAf", keep_infos = FALSE, reset = FALSE
+) {
+    useful <- useful_inds(id(obj), dadid(obj), momid(obj),
+        avail(obj), affected(obj), obj@num_child_tot,
+        informative, keep_infos, NA_character_
     )
-    if (!reset) {
-        check_columns(obj$ped, NULL, "useful", NULL, others_cols = TRUE)
+
+    if (!reset & any(!is.na(useful(obj)))) {
+        stop(
+            "The useful slot already has values in the Ped object",
+            " and reset is set to FALSE"
+        )
     }
-    obj$ped$useful <- ifelse(obj$ped$id %in% useful, 1, 0)
+    obj@useful <- ifelse(id(obj) %in% useful, 1, 0)
+    validObject(obj)
     obj
 })
