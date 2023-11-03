@@ -67,6 +67,12 @@ setGeneric("kinship", signature = "obj",
     function(obj, ...) standardGeneric("kinship")
 )
 
+setMethod("kinship", "Ped",
+    function(obj, ...){
+        kinship(id(obj), dadid(obj), momid(obj), sex(obj), ...)
+    }
+)
+
 #' @export
 #' @rdname kinship
 #' @aliases kinship,character

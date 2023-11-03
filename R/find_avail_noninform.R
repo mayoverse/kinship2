@@ -53,3 +53,9 @@ setMethod("find_avail_noninform", "Ped",
         find_unavailable(obj, avail)
     }
 )
+
+setMethod("find_avail_noninform", "Pedigree",
+    function(obj, ...) {
+        find_avail_noninform(ped(obj), ...)
+    }
+)

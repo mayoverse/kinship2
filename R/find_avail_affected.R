@@ -98,3 +98,9 @@ setMethod("find_avail_affected", "Ped",
         )
     }
 )
+
+setMethod("find_avail_affected", "Pedigree",
+    function(obj, ...) {
+        find_avail_affected(ped(obj), ...)
+    }
+)

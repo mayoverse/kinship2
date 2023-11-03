@@ -40,6 +40,12 @@ setGeneric("find_unavailable", signature = "obj",
     function(obj, ...) standardGeneric("find_unavailable")
 )
 
+setMethod("find_unavailable", "Pedigree",
+    function(obj, ...) {
+        find_unavailable(ped(obj), ...)
+    }
+)
+
 setMethod("find_unavailable", "Ped",
     function(obj, avail = NULL) {
         if (is.null(avail)) {
