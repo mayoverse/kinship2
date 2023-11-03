@@ -48,7 +48,9 @@ test_that("make_famid works", {
     dad <- as.character(c(
         0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 3, 3, 0, 3, 0, 3, 8, 8, 10, 13
     ))
-    famid <- c(1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1)
+    famid <- as.character(
+        c(1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1)
+    )
     temp <- make_famid(id, mom, dad)
     expect_equal(temp, famid)
 })

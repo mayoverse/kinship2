@@ -314,7 +314,7 @@
 <text x='300.60' y='526.79' style='font-size: 9.00px; font-family: sans;' textLength='27.02px' lengthAdjust='spacingAndGlyphs'>Border</text>
 <text x='389.13' y='526.79' style='font-size: 9.00px; font-family: sans;' textLength='34.03px' lengthAdjust='spacingAndGlyphs'>affection</text>
 <text x='493.89' y='526.79' style='font-size: 9.00px; font-family: sans;' textLength='18.51px' lengthAdjust='spacingAndGlyphs'>avail</text>
-<text x='598.65' y='526.79' style='font-size: 9.00px; font-family: sans;' textLength='19.52px' lengthAdjust='spacingAndGlyphs'>indId</text>
+<text x='598.65' y='526.79' style='font-size: 9.00px; font-family: sans;' textLength='34.03px' lengthAdjust='spacingAndGlyphs'>val_num</text>
 <text x='233.33' y='533.76' style='font-size: 6.00px; font-family: sans;' textLength='13.01px' lengthAdjust='spacingAndGlyphs'>Male</text>
 <text x='233.33' y='543.06' style='font-size: 6.00px; font-family: sans;' textLength='20.01px' lengthAdjust='spacingAndGlyphs'>Female</text>
 <text x='309.37' y='533.76' style='font-size: 6.00px; font-family: sans;' textLength='37.03px' lengthAdjust='spacingAndGlyphs'>Non Available</text>

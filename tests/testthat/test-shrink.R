@@ -64,7 +64,7 @@ test_that("Pedigree shrink error if missing info", {
     sex(ped(ped2))[c(13, 12)] <- c("unknown", "terminated")
 
     ## set 2nd col of affected to NA
-    expect__no_error(shrink(ped2, max_bits = 32))
+    expect_no_error(shrink(ped2, max_bits = 32))
     avail(ped(ped2))[c(7, 9)] <- NA
     expect_error(shrink(ped2, max_bits = 32))
 })

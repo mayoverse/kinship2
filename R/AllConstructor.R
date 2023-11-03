@@ -59,7 +59,7 @@ setMethod("Ped", "data.frame",
             "famid", "steril", "status", "avail", "affected",
             "kin", "id_inf", "useful"
         )
-        col_used <- c( 
+        col_used <- c(
             "num_child_tot", "num_child_dir", "num_child_ind",
             "elementMetadata"
         )
@@ -460,7 +460,7 @@ setMethod("Pedigree", "character_OR_integer", function(obj, dadid, momid,
         ped_df$available <- avail
     }
     if (any(!is.na(status))) {
-        ped_df$vitalstatus <- status
+        ped_df$vitalStatus <- status
     }
     if (any(!is.na(steril))) {
         ped_df$sterilisation <- steril
@@ -490,7 +490,7 @@ setMethod("Pedigree", "data.frame",  function(
         gender = numeric(),
         family = character(),
         available = numeric(),
-        vitalstatus = numeric(),
+        vitalStatus = numeric(),
         affection = numeric(),
         sterilisation = numeric()
     ),
@@ -509,7 +509,7 @@ setMethod("Pedigree", "data.frame",  function(
         "sterilisation" = "steril",
         "affection" = "affected",
         "available" = "avail",
-        "vitalstatus" = "status"
+        "vitalStatus" = "status"
     ),
     cols_ren_rel = list(
         "id1" = "indId1",

@@ -25,11 +25,7 @@ test_that("Num child", {
         code = c("Spouse", "Spouse", "MZ twin")
     )
 
-    id <- df$id
-    dadid <- df$dadid
-    momid <- df$momid
-
-    df_num <- num_child(id, dadid, momid, relation)
+    df_num <- with(df, num_child(id, dadid, momid, relation, missid = "0"))
 
     expect_equal(df_num$num_child_dir,
         c(5, 4, 4, 4, 0, 0, 1, 0, 2, 0, 0, 0, 0, 0)

@@ -2,8 +2,8 @@ test_that("Class ped work", {
     ped0 <- new("Ped")
     expect_s4_class(ped0, "Ped")
     expect_equal(length(ped0), 0)
-    expect_equal(length(as.list(ped0)), 12)
-    expect_equal(dim(as.data.frame(ped0)), c(0, 12))
+    expect_equal(length(as.list(ped0)), 15)
+    expect_equal(dim(as.data.frame(ped0)), c(0, 15))
 
     ped2 <- Ped(
         obj = c("ID5", "ID4"),
@@ -13,8 +13,8 @@ test_that("Class ped work", {
     )
     expect_s4_class(ped2, "Ped")
     expect_equal(length(ped2), 2)
-    expect_equal(length(as.list(ped2)), 12)
-    expect_equal(dim(as.data.frame(ped2)), c(2, 12))
+    expect_equal(length(as.list(ped2)), 15)
+    expect_equal(dim(as.data.frame(ped2)), c(2, 15))
     expect_snapshot(ped2)
 
     expect_error(Ped(
@@ -72,8 +72,8 @@ test_that("Class ped work", {
     expect_error(mcols(ped3) <- list(
         A = c("test", 1, 3, 6), B = c("test3", 6, 8, 9)
     ))
-    expect_equal(length(as.list(ped3)), 15)
-    expect_equal(dim(as.data.frame(ped3)), c(3, 15))
+    expect_equal(length(as.list(ped3)), 18)
+    expect_equal(dim(as.data.frame(ped3)), c(3, 18))
 
     df <- data.frame(
         id = c("ID1", "ID2", "ID3"),
@@ -89,13 +89,13 @@ test_that("Class ped work", {
     expect_equal(ped3[1]@id, "ID1")
     expect_equal(ped3[1:2]@id, c("ID1", "ID2"))
 
-    expect_equal(dim(as.data.frame(ped3)), c(3, 14))
+    expect_equal(dim(as.data.frame(ped3)), c(3, 17))
     expect_equal(dim(mcols(ped3)), c(3, 2))
 
     expect_error(c(ped3, ped3))
     ped5 <- suppressWarnings(c(ped3, ped2))
 
-    expect_equal(dim(as.data.frame(ped5)), c(5, 14))
+    expect_equal(dim(as.data.frame(ped5)), c(5, 17))
 
     ## Subsetting
     expect_error(subset(ped3, "ID1"))

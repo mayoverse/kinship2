@@ -8,14 +8,14 @@
           <character> <character> <character> <c("ordered", "factor")> <character>
       ID5         ID5        <NA>        <NA>                   female        <NA>
       ID4         ID4        <NA>        <NA>                     male        <NA>
-             steril    status     avail  affected num_child_total num_child_direct
-          <numeric> <numeric> <numeric> <numeric>       <numeric>        <numeric>
-      ID5      <NA>      <NA>      <NA>      <NA>               0                0
-      ID4      <NA>      <NA>      <NA>      <NA>               0                0
-          num_child_indirect
-                   <numeric>
-      ID5                  0
-      ID4                  0
+             steril    status     avail  affected    useful       kin    id_inf
+          <numeric> <numeric> <numeric> <numeric> <numeric> <numeric> <numeric>
+      ID5      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+      ID4      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
+          num_child_tot num_child_dir num_child_ind
+              <numeric>     <numeric>     <numeric>
+      ID5             0             0             0
+      ID4             0             0             0
 
 # Rel class works
 
@@ -46,16 +46,14 @@
 
 # Scales class works
 
-    invalid class "Scales" object: 1: affected column(s) must be logical
-    invalid class "Scales" object: 2: angle column(s) must be numeric
-    invalid class "Scales" object: 3: order column(s) must be numeric
-    invalid class "Scales" object: 4: mods column(s) must be numeric
-    invalid class "Scales" object: 5: column_mods column(s) must be character
+    invalid class "Scales" object: 1: Fill slot affected column(s) must be logical
+    invalid class "Scales" object: 2: Fill slot angle, order, mods column(s) must be numeric
+    invalid class "Scales" object: 3: Fill slot column_mods column(s) must be character
 
 ---
 
-    invalid class "Scales" object: 1: labels column(s) must be character
-    invalid class "Scales" object: 2: mods column(s) must be numeric
+    invalid class "Scales" object: 1: Border slot labels column(s) must be character
+    invalid class "Scales" object: 2: Border slot mods column(s) must be numeric
 
 ---
 

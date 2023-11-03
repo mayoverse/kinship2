@@ -110,11 +110,12 @@ setMethod("num_child", "character_OR_integer", function(obj, dadid, momid,
         df$num_child_dir <- id_child$num_child_dir[match(df$id, id_child$id)]
 
         # Number of total childs per individual
-        rel_child <- spouse_rel %>%
+        spouse_child <- spouse_rel %>%
             left_join(id_child, by = c("idmin" = "id")) %>%
             left_join(id_child, by = c("idmax" = "id"),
                 suffix = c("_min", "_max")
-            ) %>%
+            )
+        rel_child <- spouse_child %>%
             rowwise() %>%
             mutate(childs = list(unique(unlist(
                 list(child_min, child_max)

@@ -56,17 +56,23 @@ test_that("test alignment with inbreeding and relationship matrix", {
         id2 = c(110, 114, 132, 109),
         code = c(1, 4, 4, 4)
     )
-    pedi <- Pedigree(sampleped[-1], rel_df)
-    plist <- align(pedi)
+    ped_withrel <- Pedigree(sampleped[-1], rel_df)
+    plist <- align(ped_withrel)
 
-    ped_sr <- Pedigree(sampleped[-1])
-    plist_sr <- align(ped_sr)
+    ped_norel <- Pedigree(sampleped[-1])
+    plist_sr <- align(ped_norel)
 
     expect_equal(plist$nid[1, ],
         c(5, 6, 7, 8, 35, 36, 42, 43, rep(0, 16))
     )
     expect_equal(plist_sr$nid[1, ],
         c(5, 6, 7, 8, 35, 36, 42, 43, rep(0, 14))
+    )
+    vdiffr::expect_doppelganger("sampleped_withrel",
+        function() plot(ped_withrel)
+    )
+    vdiffr::expect_doppelganger("sampleped_norel",
+        function() plot(ped_norel)
     )
 })
 

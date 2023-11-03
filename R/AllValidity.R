@@ -48,8 +48,8 @@ check_slot_fd <- function(obj, slot = NULL, fields = character()) {
         )
     } else if (any(!fields %in% array_names)) {
         paste0(
-            "`", paste0max(fields[!fields %in% array_names]),
-            "`", " column(s) is not present in slot ", slot, "."
+            paste0max(fields[!fields %in% array_names]),
+            " column(s) is not present in slot ", slot, "."
         )
     }
 }

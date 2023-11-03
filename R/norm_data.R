@@ -92,7 +92,7 @@ norm_ped <- function(
         "error", "affected"
     )
     cols_to_use <- c(
-        "available", "family", "sterilisation", "vitalstatus", "affection"
+        "available", "family", "sterilisation", "vitalStatus", "affection"
     )
     ped_df <- check_columns(
         ped_df, cols_need, cols_used, cols_to_use,
@@ -217,8 +217,8 @@ norm_ped <- function(
             ped_df$avail <- vect_to_binary(ped_df$available)
         }
         #### Status ####
-        if ("vitalstatus" %in% colnames(ped_df)) {
-            ped_df$status <- vect_to_binary(ped_df$vitalstatus)
+        if ("vitalStatus" %in% colnames(ped_df)) {
+            ped_df$status <- vect_to_binary(ped_df$vitalStatus)
         }
         #### Affected ####
         if ("affection" %in% colnames(ped_df)) {
