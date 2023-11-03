@@ -20,9 +20,9 @@ test_that("Pedigree works", {
 test_that("Pedigree old usage compatibility", {
     data(sampleped)
     ped1 <- with(sampleped,
-        Pedigree(id, dadid, momid, sex, famid, avail, affection, missid = "0")
+        Pedigree(id, dadid, momid, sex, famid, avail, affection)
     )
-    expect_equal(ped1, Pedigree(sampleped, missid = "0"))
+    expect_equal(ped1, Pedigree(sampleped))
 
     ped2mat <- matrix(c(
         1, 1, 0, 0, 1,
@@ -70,9 +70,9 @@ test_that("Pedigree from sampleped and affectation", {
         "available" = "avail",
         "affection" = "affected",
         "family" = "famid"
-    ), missid = "0")
+    ))
 
-    expect_equal(dim(as.data.frame(ped(ped1))), c(41, 25))
+    expect_equal(dim(as.data.frame(ped(ped1))), c(41, 26))
     expect_equal(dim(as.data.frame(rel(ped1))), c(0, 4))
 
     expect_error(id(ped(ped1)) <- "1")
@@ -95,11 +95,11 @@ test_that("Pedigree subscripting", {
         "affection" = "cancer"
     ), missid = "0")
     expect_equal(length(minnped), 28081)
-    expect_equal(dim(as.data.frame(ped(minnped))), c(28081, 34))
+    expect_equal(dim(as.data.frame(ped(minnped))), c(28081, 35))
 
     ped8 <- minnped[famid(ped(minnped)) == "8"]
 
-    expect_equal(dim(as.data.frame(ped(ped8))), c(40, 34))
+    expect_equal(dim(as.data.frame(ped(ped8))), c(40, 35))
 
     # Subjects 150, 152, 154, 158 are children,
     # and 143, 162, 149 are parents and a child
@@ -126,15 +126,15 @@ test_that("Pedigree subscripting", {
 
 test_that("Pedigree generic", {
     data("sampleped")
-    pedi <- Pedigree(sampleped, missid = "0")
-    expect_equal(dim(as.data.frame(ped(pedi))), c(55, 25))
+    pedi <- Pedigree(sampleped)
+    expect_equal(dim(as.data.frame(ped(pedi))), c(55, 26))
     expect_equal(names(as.list(pedi)), c("ped", "rel", "scales", "hints"))
     expect_equal(length(pedi), 55)
 })
 
 test_that("Pedigree accessors", {
     data("sampleped")
-    pedi <- Pedigree(sampleped, missid = "0")
+    pedi <- Pedigree(sampleped)
     expect_equal(pedi@ped, ped(pedi))
     expect_equal(pedi@rel, rel(pedi))
     expect_equal(pedi@hints, hints(pedi))

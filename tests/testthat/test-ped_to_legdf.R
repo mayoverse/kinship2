@@ -17,7 +17,7 @@ test_that("Pedigree legend works", {
     data("sampleped")
     sampleped$val_num <- as.numeric(sampleped$id)
     ped <- Pedigree(sampleped)
-    ped <- ped[ped(ped, "famid") == "1", ]
+    ped <- ped[ped(ped, "famid") == "1"]
     ped <- generate_colors(ped, add_to_scale = TRUE, "avail")
     ped <- generate_colors(ped,
         add_to_scale = TRUE, "val_num", threshold = 115,

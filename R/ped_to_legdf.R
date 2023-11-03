@@ -75,9 +75,11 @@ ped_to_legdf <- function(ped,
     )
     plot_df <- rbind.fill(plot_df, titles)
 
+    ## Get ped_df
+    ped_df <- as.data.frame(ped(ped))
     # Sex
     poly1 <- polygons(1)
-    all_sex <- unique(as.numeric(ped(ped, "sex")))
+    all_sex <- unique(as.numeric(ped_df$sex))
     sex <- data.frame(
         x0 = posx[1], y0 = posy[all_sex],
         type = paste(names(poly1)[all_sex], 1, 1, sep = "_"),
@@ -98,15 +100,15 @@ ped_to_legdf <- function(ped,
     plot_df <- rbind.fill(plot_df, sex, sex_label)
 
     # Border
-    border_mods <- unique(ped(ped)[, unique(border(ped, "column"))])
+    border_mods <- unique(ped_df[, unique(border(ped)$column)])
     border <- data.frame(
         x0 = posx[3], y0 = posy[seq_along(border_mods)],
         type = rep("square_1_1", length(border_mods)),
-        border = border(ped, "border")[match(border_mods, border(ped, "mods"))],
+        border = border(ped)$border[match(border_mods, border(ped)$mods)],
         fill = "white",
         id = "border"
     )
-    lab <- border(ped, "labels")[match(border_mods, border(ped, "mods"))]
+    lab <- border(ped)$labels[match(border_mods, border(ped)$mods)]
     lab[is.na(lab)] <- "NA"
     border_label <- data.frame(
         x0 = posx[4] + adjx,
@@ -122,7 +124,7 @@ ped_to_legdf <- function(ped,
     ## Affected
     for (aff in seq_len(n_aff)) {
         aff_df <- all_aff[all_aff$order == aff, ]
-        aff_mods <- unique(ped(ped)[, unique(aff_df[["column_mods"]])])
+        aff_mods <- unique(ped_df[, unique(aff_df[["column_mods"]])])
         aff_bkg <- data.frame(
             x0 = posx[3 + aff * 2], y0 = posy[seq_along(aff_mods)],
             type = rep(paste("square", 1, 1, sep = "_"),

@@ -1,3 +1,14 @@
+chaseup <- function(x, midx, didx) {
+    new <- c(midx[x], didx[x])  # mother and father
+    new <- new[new > 0]
+    while (length(new) > 1) {
+        x <- unique(c(x, new))
+        new <- c(midx[new], didx[new])
+        new <- new[new > 0]
+    }
+    x
+}
+
 #' Compute the depth of each subject in a Pedigree
 #'
 #' @description
@@ -111,17 +122,6 @@ setMethod("kindepth", "character", function(obj, dadid, momid,
 
     ## It may be possible to do better alignment when the Pedigree has loops,
     ## but it is definitely beyond this program, perhaps in auto_hint one day.
-
-    chaseup <- function(x, midx, didx) {
-        new <- c(midx[x], didx[x])  # mother and father
-        new <- new[new > 0]
-        while (length(new) > 1) {
-            x <- unique(c(x, new))
-            new <- c(midx[new], didx[new])
-            new <- new[new > 0]
-        }
-        x
-    }
 
     ## First deal with any parents who are founders They all start with depth 0
     dads <- didx[midx > 0 & didx > 0]  # the father side of all spouse pairs

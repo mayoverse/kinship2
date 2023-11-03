@@ -25,7 +25,7 @@ test_that("Pedigree other test", {
     ped2df$vitalStatus <- c(1, 1, 1, 0, 1, 0, 0, 8, 0, 0)
 
     rel_df <- data.frame(indId1 = 8, indId2 = 9, code = 3, family = 1)
-    ped <- Pedigree(ped2df, rel_df)
+    ped <- Pedigree(ped2df, rel_df, missid = "0")
 
     vdiffr::expect_doppelganger("Ped simple affection",
         function() plot(ped)
