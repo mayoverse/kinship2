@@ -84,7 +84,7 @@ check_values <- function(val, ref, name = NULL, present = TRUE) {
     if (any(val_abs)) {
         paste0(
             val_name, paste0max(unique(val[val_abs])), should,
-            paste0max(ref)
+            paste0max(unique(ref))
         )
     }
 }
