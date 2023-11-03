@@ -41,8 +41,9 @@ test_that("Num child", {
         c(1, 1, 0, 0, 0, 0, 1, 4, 4, 0, 0, 0, 0, 0)
     )
 
-    ped <- Pedigree(df, relation)
-    ped <- num_child(ped)
-    expect_equal(ped(ped)[colnames(df_num)], df_num)
+    ped <- Pedigree(df, relation, missid = "0")
+    ped <- num_child(ped, reset = TRUE)
+    cols <- c("num_child_dir", "num_child_tot", "num_child_ind")
+    rownames(df_num) <- df_num$id
+    expect_equal(as.data.frame(ped(ped))[cols], df_num[cols])
 })
-TRUE

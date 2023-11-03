@@ -20,7 +20,7 @@ test_that("Norm ped", {
     ped_df <- suppressWarnings(norm_ped(
         ped_df, na_strings = c("None", "NA")
     ))
-    expect_equal(dim(ped_df), c(10, 22))
+    expect_equal(dim(ped_df), c(10, 21))
     expect_snapshot(ped_df)
     expect_equal(sum(is.na(ped_df$error)), 4)
 })
@@ -39,11 +39,11 @@ test_that("Norm rel", {
     )
 
     rel_df <- matrix(rel_df, ncol = 4, byrow = TRUE)
-    dimnames(rel_df) <- list(NULL, c("indId1", "indId2", "code", "family"))
+    dimnames(rel_df) <- list(NULL, c("id1", "id2", "code", "family"))
     rel_df <- data.frame(rel_df)
 
     rel_df <- norm_rel(rel_df)
-    expect_equal(dim(rel_df), c(9, 7))
+    expect_equal(dim(rel_df), c(9, 5))
     expect_snapshot(rel_df)
     expect_equal(sum(is.na(rel_df$error)), 6)
 })
@@ -58,11 +58,11 @@ test_that("prefix_famid works", {
 
     family_id <- "1"
     b <- prefix_famid(family_id, ind_id, missid)
-    expect_equal(b, c("1_A", "1_B", "0", NA))
+    expect_equal(b, c("1_A", "1_B", "1_0", NA))
 
     family_id <- c("1", "2", "0", NA)
     c <- prefix_famid(family_id, ind_id, missid)
-    expect_equal(c, c("1_A", "2_B", "0", NA))
+    expect_equal(c, c("1_A", "2_B", "0_0", NA))
 
     family_id <- c("1", "2", "0")
     expect_error(prefix_famid(family_id, ind_id, missid))

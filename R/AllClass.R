@@ -99,11 +99,11 @@ setValidity("Scales", is_valid_scales)
 #' individuals (i.e. `0` = not useful, `1` = useful).
 #' @slot kin A numeric vector with minimal kinship value between the
 #' individuals and the useful individuals.
-#' @slot num_child_total A numeric vector with the total number of children
+#' @slot num_child_tot A numeric vector with the total number of children
 #' of the individuals.
-#' @slot num_child_direct A numeric vector with the number of children
+#' @slot num_child_dir A numeric vector with the number of children
 #' of the individuals.
-#' @slot num_child_indirect A numeric vector with the number of children
+#' @slot num_child_ind A numeric vector with the number of children
 #' of the individuals.
 #'
 #' @return A Ped object.
@@ -124,9 +124,12 @@ setClass("Ped",
         status = "numeric",
         avail = "numeric",
         affected = "numeric",
-        num_child_total = "numeric",
-        num_child_direct = "numeric",
-        num_child_indirect = "numeric"
+        useful = "numeric",
+        kin = "numeric",
+        id_inf = "numeric",
+        num_child_tot = "numeric",
+        num_child_dir = "numeric",
+        num_child_ind = "numeric"
     )
 )
 
@@ -136,7 +139,8 @@ setMethod("parallel_slot_names", "Ped",
         c(
             "id", "momid", "dadid", "sex", "famid",
             "steril", "status", "avail", "affected",
-            "num_child_total", "num_child_direct", "num_child_indirect",
+            "useful", "kin", "id_inf",
+            "num_child_tot", "num_child_dir", "num_child_ind",
             callNextMethod()
         )
     }

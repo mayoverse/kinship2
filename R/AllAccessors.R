@@ -6,6 +6,7 @@ NULL
 
 #### S4 Ped Accessors ####
 
+##### Mcols Accessors #####
 #' Metadata setters of Ped object from a list
 #'
 #' @param x A Ped object.
@@ -32,6 +33,7 @@ setMethod("mcols<-", signature(x = "Ped", value = "data.frame"), function(x, val
     x
 })
 
+##### Famid Accessors #####
 #' Famid getter of Ped object
 #'
 #' @param x A Ped object.
@@ -73,7 +75,6 @@ setMethod("famid<-",
         x
     }
 )
-
 setMethod("famid<-",
     signature(x = "Rel", value = "character_OR_integer"),
     function(x, value) {
@@ -92,6 +93,7 @@ setMethod("famid<-",
     }
 )
 
+##### Id Accessors #####
 #' Id getter of Ped object
 #'
 #' @param x A Ped object.
@@ -128,6 +130,7 @@ setMethod("id<-",
     }
 )
 
+##### Dadid Accessors #####
 #' Dadid getter of Ped object
 #'
 #' @param x A Ped object.
@@ -164,6 +167,7 @@ setMethod("dadid<-",
     }
 )
 
+##### Momid Accessors #####
 #' Momid getter of Ped object
 #'
 #' @param x A Ped object.
@@ -200,6 +204,7 @@ setMethod("momid<-",
     }
 )
 
+##### Sex Accessors #####
 #' Sex getter of Ped object
 #'
 #' @param x A Ped object.
@@ -240,6 +245,7 @@ setMethod("sex<-",
     }
 )
 
+##### Affected Accessors #####
 #' Affected getter of Ped object
 #'
 #' @param x A Ped object.
@@ -280,6 +286,131 @@ setMethod("affected<-",
             }
         }
         x@affected <- vect_to_binary(value)
+        validObject(x)
+        x
+    }
+)
+
+##### Avail Accessors #####
+#' Avail getter of Ped object
+#'
+#' @param x A Ped object.
+#'
+#' @return A numeric vector with the avail of each individual.
+#'
+#' @rdname Ped
+#' @aliases avail,Ped-method
+#' @export
+setGeneric("avail", function(x) {
+    standardGeneric("avail")
+})
+setMethod("avail", signature(x = "Ped"), function(x) {
+    x@avail
+})
+setGeneric("avail<-", function(x, value) {
+    standardGeneric("avail<-")
+})
+setMethod("avail<-",
+    signature(x = "Ped", value = "ANY"),
+    function(x, value) {
+        if (
+            ! is.character(value) &&
+                ! is.integer(value) &&
+                ! is.logical(value) &&
+                ! is.factor(value)
+        ) {
+            stop("avail must be a character or integer vector")
+        }
+        if (length(value) != length(x)) {
+            if (length(value) == 1) {
+                value <- rep(value, length(x))
+            } else {
+                stop(
+                    "The length of the new values for avail should be: ",
+                    "equal to the length of the Ped object"
+                )
+            }
+        }
+        x@avail <- vect_to_binary(value)
+        validObject(x)
+        x
+    }
+)
+
+##### Kin Accessors #####
+#' Kin getter of Ped object
+#'
+#' @param x A Ped object.
+#'
+#' @return A numeric vector with the minimum kinship distance
+#' value of each individual towards the informative
+#' individuals.
+#'
+#' @rdname Ped
+#' @aliases kin,Ped-method
+#' @export
+setGeneric("kin", function(x) {
+    standardGeneric("kin")
+})
+setMethod("kin", signature(x = "Ped"), function(x) {
+    x@kin
+})
+setGeneric("kin<-", function(x, value) {
+    standardGeneric("kin<-")
+})
+setMethod("kin<-",
+    signature(x = "Ped", value = "numeric"),
+    function(x, value) {
+        if (length(value) != length(x)) {
+            if (length(value) == 1) {
+                value <- rep(value, length(x))
+            } else {
+                stop(
+                    "The length of the new values for kin should be: ",
+                    "equal to the length of the Ped object"
+                )
+            }
+        }
+        x@kin <- value
+        validObject(x)
+        x
+    }
+)
+
+##### id_inf Accessors #####
+#' id_inf getter of Ped object
+#'
+#' @param x A Ped object.
+#'
+#' @return A numeric vector with the saying if the individual
+#' is informative or not.
+#'
+#' @rdname Ped
+#' @aliases id_inf,Ped-method
+#' @export
+setGeneric("id_inf", function(x) {
+    standardGeneric("id_inf")
+})
+setMethod("id_inf", signature(x = "Ped"), function(x) {
+    x@id_inf
+})
+setGeneric("id_inf<-", function(x, value) {
+    standardGeneric("id_inf<-")
+})
+setMethod("id_inf<-",
+    signature(x = "Ped", value = "numeric"),
+    function(x, value) {
+        if (length(value) != length(x)) {
+            if (length(value) == 1) {
+                value <- rep(value, length(x))
+            } else {
+                stop(
+                    "The length of the new values for id_inf should be: ",
+                    "equal to the length of the Ped object"
+                )
+            }
+        }
+        x@id_inf <- value
         validObject(x)
         x
     }
@@ -369,8 +500,8 @@ setMethod(
         ped_slots <- c(
             "id", "dadid", "momid", "sex", "famid",
             "steril", "status", "avail", "affected",
-            "kin", "useful", "num_child_total",
-            "num_child_direct", "num_child_indirect"
+            "kin", "useful", "id_inf",
+            "num_child_tot", "num_child_dir", "num_child_ind"
         )
         if (! slot %in% ped_slots) {
             stop("slot selected: ", slot, " is not a Ped slot")

@@ -124,10 +124,10 @@ setMethod("is_informative", "Pedigree", function(
         informative, missid
     )
 
-    if (!reset) {
+    if (!reset & any(!is.na(id_inf(ped(obj))))) {
         check_columns(ped_df, NULL, "id_inf", NULL)
     }
 
-    mcols(obj)$id_inf <- ifelse(ped_df$id %in% id_inf, 1, 0)
+    id_inf(ped(obj)) <- vect_to_binary(ifelse(ped_df$id %in% id_inf, 1, 0))
     obj
 })

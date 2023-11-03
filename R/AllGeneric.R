@@ -118,7 +118,7 @@ setMethod("subset", "Ped", function(x, i, del_parents = FALSE) {
         stop("i must be a character, an integer or a logical vector")
     }
     col_computed <- c(
-        "num_child_total", "num_child_direct", "num_child_indirect"
+        "num_child_tot", "num_child_dir", "num_child_ind"
     )
     ped_df <- as.data.frame(x)[i, ]
     ped_df <- ped_df[, ! colnames(ped_df) %in% col_computed]

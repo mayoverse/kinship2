@@ -82,4 +82,4 @@ generate_aff_inds <- function(values, mods_aff = NULL,
     affected <- as.logical(revalue(labels, aff_to_use, warn_missing = FALSE))
     as.data.frame(list(mods = mods, labels = labels, affected = affected))
 }
-TRUE
+

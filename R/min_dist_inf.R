@@ -79,24 +79,45 @@ setMethod("min_dist_inf", "character", function(obj,
 #' @docType methods
 #' @param reset If TRUE, the `kin` and if `id_inf` columns is reset
 setMethod("min_dist_inf", "Pedigree", function(obj,
-    col_aff = NULL, informative = "AvAf", missid = NA_character_, reset = FALSE, ...
+    col_aff = NULL, informative = "AvAf",
+    missid = NA_character_, reset = FALSE, ...
 ) {
-    ped <- is_informative(obj, col_aff, informative = informative,
+    obj_aff <- is_informative(obj, col_aff, informative = informative,
         missid, reset
     )
 
-    kin <- min_dist_inf(
-        ped(ped, "id"), ped(ped, "dadid"), ped(ped, "momid"), ped(ped, "sex"),
-        ped(ped, "avail"), deriv(ped, "affected"), informative
+    new_ped <- min_dist_inf(
+        ped(obj_aff), col_aff, informative, missid, reset, ...
     )
 
-    if (!reset & deriv(ped, "kin") != NULL) {
+    ped(obj_aff) <- new_ped
+    validObject(obj_aff)
+    obj_aff
+})
+
+#' @export
+#' @rdname min_dist_inf
+#' @aliases min_dist_inf,Ped
+#' @docType methods
+#' @param reset If TRUE, the `kin` and if `id_inf` columns is reset
+setMethod("min_dist_inf", "Ped", function(obj,
+    col_aff = NULL, informative = "AvAf",
+    missid = NA_character_, reset = FALSE, ...
+) {
+
+    kin <- min_dist_inf(
+        id(obj), dadid(obj), momid(obj), sex(obj),
+        avail(obj), affected(obj), informative
+    )
+
+    if (!reset & any(!is.na(kin(obj)))) {
         stop(
-            "The kin column already exists in the Pedigree object",
+            "The kin slot already has values in the Ped object",
             " and reset is set to FALSE"
         )
     }
 
-    deriv(ped, "kin") <- kin
-    ped
+    kin(obj) <- kin
+    validObject(obj)
+    obj
 })

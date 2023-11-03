@@ -6,7 +6,6 @@ test_that("min_dist_inf works", {
     sampleped[c("id", "dadid", "momid")] <- as.data.frame(lapply(
         sampleped[c("id", "dadid", "momid")], as.character
     ), stringsAsFactors = FALSE)
-    summary(sampleped)
 
     res <- with(sampleped, min_dist_inf(id, informative = "AvAf",
         dadid, momid, sex, avail, affected
@@ -28,9 +27,8 @@ test_that("min_dist_inf works with Pedigree", {
     ped <- generate_colors(ped, col_aff = "affection",
         threshold = 0.5, sup_thres_aff = TRUE
     )
-
+    expect_equal(sum(affected(ped(ped)), na.rm = TRUE), 23)
     mxkin <- min_dist_inf(ped, col_aff = "affection_aff", informative = "Av")
     expect_s4_class(mxkin, "Pedigree")
-    expect_equal(sum(mxkin$ped$kin, na.rm = TRUE), 90)
+    expect_equal(sum(kin(ped(mxkin)), na.rm = TRUE), 90)
 })
-TRUE

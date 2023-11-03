@@ -153,7 +153,7 @@ setMethod("num_child", "character_OR_integer", function(obj, dadid, momid,
 #' the `num_child_dir` columns are reset.
 setMethod("num_child", "Pedigree", function(obj, reset = FALSE) {
     df <- num_child(id(ped(obj)), dadid(ped(obj)), momid(ped(obj)),
-        rel_df = rel(obj)
+        rel_df = as.data.frame(rel(obj))
     )
 
     if (!reset) {
@@ -163,10 +163,10 @@ setMethod("num_child", "Pedigree", function(obj, reset = FALSE) {
         )
     }
 
-    ped(obj) <- merge(as.data.frame(ped(obj)),
-        df[c("id", "num_child_tot", "num_child_ind", "num_child_dir")],
-        by = "id", sort = FALSE
-    )
+    obj@ped@num_child_tot <- df$num_child_tot
+    obj@ped@num_child_ind <- df$num_child_ind
+    obj@ped@num_child_dir <- df$num_child_dir
 
+    validObject(obj)
     obj
 })

@@ -55,9 +55,12 @@ setGeneric("Ped", signature = "obj", function(obj, ...) {
 setMethod("Ped", "data.frame",
     function(obj, cols_used_init = FALSE, cols_used_del = FALSE) {
         col_need <- c("id", "sex", "dadid", "momid")
-        col_to_use <- c("famid", "steril", "status", "avail", "affected")
+        col_to_use <- c(
+            "famid", "steril", "status", "avail", "affected"
+        )
         col_used <- c(
-            "num_child_total", "num_child_direct", "num_child_indirect",
+            "kin", "id_inf", "useful",
+            "num_child_tot", "num_child_dir", "num_child_ind",
             "elementMetadata"
         )
         df <- check_columns(
@@ -108,6 +111,10 @@ setMethod("Ped", "character_OR_integer",
         avail <- na_to_length(avail, id, NA_real_)
         affected <- na_to_length(affected, id, NA_real_)
 
+        useful <- na_to_length(NA, id, NA_real_)
+        kin <- na_to_length(NA, id, NA_real_)
+        id_inf <- na_to_length(NA, id, NA_real_)
+
         df_child <- num_child(id, dadid, momid, rel_df = NULL)
 
         new(
@@ -115,9 +122,10 @@ setMethod("Ped", "character_OR_integer",
             id = id, dadid = dadid, momid = momid, famid = famid,
             sex = sex, steril = steril, status = status, avail = avail,
             affected = affected,
-            num_child_total = df_child$num_child_tot,
-            num_child_direct = df_child$num_child_dir,
-            num_child_indirect = df_child$num_child_ind
+            useful = useful, kin = kin, id_inf = id_inf,
+            num_child_tot = df_child$num_child_tot,
+            num_child_dir = df_child$num_child_dir,
+            num_child_ind = df_child$num_child_ind
         )
     }
 )

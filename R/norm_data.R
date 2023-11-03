@@ -89,7 +89,7 @@ norm_ped <- function(
     cols_need <- c("indId", "fatherId", "motherId", "gender")
     cols_used <- c(
         "sex", "steril", "status", "avail", "id", "dadid", "momid", "famid",
-        "error", "affected", "kin", "useful"
+        "error", "affected"
     )
     cols_to_use <- c(
         "available", "family", "sterilisation", "vitalstatus", "affection"
