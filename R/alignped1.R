@@ -1,24 +1,30 @@
 # Automatically generated from all.nw using noweb
 
-#' First routine alignment
+#' Alignment first routine
 #'
 #' @description
 #' First alignment routine which create the subtree founded on a single
 #' subject as though it were the only tree.
 #'
 #' @details
-#' 1. In this routine the **nid** array consists of the final
-#'    `nid array + 1/2` of the final spouse array.
-#'    Note that the **spouselist** matrix will only contain spouse pairs
-#'    that are not yet processed. The logic for anchoring is slightly tricky.
-#'    First, if row 4 of the spouselist matrix is 0, we anchor at the first
+#' In this routine the **nid** array consists of the final
+#' `nid array + 1/2` of the final spouse array.
+#' Note that the **spouselist** matrix will only contain spouse pairs
+#' that are not yet processed. The logic for anchoring is slightly tricky.
+#'
+#' ## 1. Anchoring:
+#'    First, if col 4 of the spouselist matrix is 0, we anchor at the first
 #'    opportunity. Also note that if `spouselist[, 3] == spouselist[, 4]`
 #'    it is the husband who is the anchor (just write out the possibilities).
-#' 2. Create the set of 3 return structures, which will be matrices
+#'
+#' ## 2. Return values initialization:
+#'    Create the set of 3 return structures, which will be matrices
 #'    with `1 + nspouse` columns.
 #'    If there are children then other routines will widen the result.
-#' 3. Create the two complimentary lists **lspouse** and **rspouse**
-#'    to denote those plotted on the left and on the right.
+#'
+#' ## 3. Create **lspouse** and **rspouse**:
+#'    This two complimentary lists denote the spouses plotted on the left
+#'    and on the right.
 #'    For someone with lots of spouses we try to split them evenly.
 #'    If the number of spouses is odd, then men should have more on
 #'    the right than on the left, women more on the right.
@@ -31,11 +37,15 @@
 #'    `length(rspouse) > 1`. This caused `nleft > length(indx)`.
 #'    A fix was to not let **indx** to be indexed beyond its length,
 #'    fix by JPS 5/2013.
-#' 4. For each spouse get the list of children. If there are any we
+#'
+#' ## 4. List the children:
+#'    For each spouse get the list of children. If there are any we
 #'    call [alignped2()] to generate their tree and
 #'    then mark the connection to their parent.
 #'    If multiple marriages have children we need to join the trees.
-#' 5. To finish up we need to splice together the tree made up from
+#'
+#' ## 5. Splice the tree:
+#'    To finish up we need to splice together the tree made up from
 #'    all the kids, which only has data from `lev + 1` down, with the data here.
 #'    There are 3 cases:
 #'
@@ -45,26 +55,28 @@
 #'    3. The tree below is narrower, for instance an only child.
 #'
 #' @param level Vector of the level of each subject
+#' @param spouselist Matrix of spouses with 4 columns:
+#'    - `1`: husband index
+#'    - `2`: wife index
+#'    - `3`: husband anchor
+#'    - `4`: wife anchor
+#' @inheritParams ancestors
 #' @inheritParams Hints
 #' @inheritParams align
-#' @inheritParams ancestors
 #'
 #' @return A list containing the elements to plot the Pedigree.
 #' It contains a set of matrices along with the spouselist matrix.
 #' The latter has marriages removed as they are processed.
-#' - n A vector giving the number of subjects on each horizonal level of the
+#' - `n` : A vector giving the number of subjects on each horizonal level of the
 #'     plot
-#' - nid A matrix with one row for each level, giving the numeric id of
+#' - `nid` : A matrix with one row for each level, giving the numeric id of
 #'       each subject plotted.
 #'       (A value of `17` means the 17th subject in the Pedigree).
-#' - pos A matrix giving the horizontal position of each plot point
-#' - fam A matrix giving the family id of each plot point.
+#' - `pos` : A matrix giving the horizontal position of each plot point
+#' - `fam` : A matrix giving the family id of each plot point.
 #'       A value of `3` would mean that the two subjects in positions 3 and 4,
 #'       in the row above, are this subject's parents.
-#' - spouse A matrix with values
-#'     - `0` = not a spouse
-#'     - `1` = subject plotted to the immediate right is a spouse
-#'     - `2` = subject plotted to the immediate right is an inbred spouse
+#' - `spouselist` : Spouse matrix with anchors informations
 #'
 #' @examples
 #' data(sampleped)
@@ -72,6 +84,7 @@
 #' align(ped)
 #'
 #' @seealso [align()]
+#' @keywords internal, alignment
 #' @export
 alignped1 <- function(idx, dadx, momx, level, horder, packed, spouselist) {
     # Set a few constants

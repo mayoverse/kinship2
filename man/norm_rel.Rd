@@ -27,10 +27,9 @@ by the \code{\link[=rel_code_to_factor]{rel_code_to_factor()}} function.}
 
 \item{na_strings}{Vector of strings to be considered as NA values}
 
-\item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the Pedigree
-(i.e. \code{dadid} and \code{momid} equal to the value of this variable).
-The default for \code{missid} is \code{NA_character_}.}
+\item{missid}{A character vector with the missing values identifiers.
+All the id, dadid and momid corresponding to those values will be set
+to \code{NA_character_}.}
 }
 \value{
 A dataframe with the errors identified

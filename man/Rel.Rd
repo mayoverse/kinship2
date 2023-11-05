@@ -11,6 +11,8 @@
 \alias{Rel,character}
 \alias{Rel,missing-method}
 \alias{Rel,missing}
+\alias{famid,Rel-method}
+\alias{famid<-,Rel,character_OR_integer-method}
 \alias{code}
 \alias{code,Rel-method}
 \alias{id1}
@@ -30,6 +32,10 @@ Rel(obj, ...)
 \S4method{Rel}{character_OR_integer}(obj, id2, code, famid = NA_character_)
 
 \S4method{Rel}{missing}(obj)
+
+\S4method{famid}{Rel}(x)
+
+\S4method{famid}{Rel,character_OR_integer}(x) <- value
 
 code(x)
 
@@ -66,7 +72,8 @@ of without space between the words. The case is not important.
 }}
 
 \item{famid}{A character vector with the family identifiers of the
-individuals.}
+individuals. If provide, will be aggregated to the individuals
+identifiers separated by an underscore.}
 
 \item{x}{A Rel object.}
 

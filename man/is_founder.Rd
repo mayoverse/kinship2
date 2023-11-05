@@ -6,12 +6,6 @@
 \usage{
 is_founder(momid, dadid, missid = NA_character_)
 }
-\arguments{
-\item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the Pedigree
-(i.e. \code{dadid} and \code{momid} equal to the value of this variable).
-The default for \code{missid} is \code{NA_character_}.}
-}
 \value{
 A vector of boolean of the same size as \code{dadid} and \code{momid}
 with TRUE if the individual has no parents (i.e is a founder) and FALSE

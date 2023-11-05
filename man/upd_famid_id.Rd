@@ -10,7 +10,8 @@ upd_famid_id(obj, famid, ...)
 \item{obj}{A character vector of individual ids}
 
 \item{famid}{A character vector with the family identifiers of the
-individuals.}
+individuals. If provide, will be aggregated to the individuals
+identifiers separated by an underscore.}
 }
 \value{
 A character vector of individual ids with family prefix

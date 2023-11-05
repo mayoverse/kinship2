@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{sex_to_factor}
 \alias{sex_to_factor}
-\title{Transform a gender variable to an ordered factor}
+\title{Gender variable to ordered factor}
 \usage{
 sex_to_factor(sex)
 }
@@ -22,7 +22,7 @@ an ordered factor vector containing the transformed variable
 "male" < "female" < "unknown" < "terminated"
 }
 \description{
-Transform a gender variable to an ordered factor
+Gender variable to ordered factor
 }
 \examples{
 sex_to_factor(c(1, 2, 3, 4, "f", "m", "man", "female"))

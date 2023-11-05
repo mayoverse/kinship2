@@ -9,7 +9,7 @@ unrelated(obj, ...)
 \arguments{
 \item{obj}{A Pedigree object}
 
-\item{...}{Additional arguments passed to methods}
+\item{...}{Other arguments to pass to the function}
 }
 \value{
 A vector of the ids of subjects that are unrelated.

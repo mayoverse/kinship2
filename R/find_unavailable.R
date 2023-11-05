@@ -124,10 +124,8 @@ exclude_stray_marryin <- function(id, dadid, momid) {
 #' @description
 #' Exclude from a Pedigree any unavailable founders.
 #'
-#' @param id Vector of subject identifiers
-#' @inheritParams descendants
-#' @inheritParams find_avail_affected
-#' @param missid Character defining the missing ids
+#' @param id A character vector with the identifiers of each individuals
+#' @inheritParams Ped
 #'
 #' @keywords internal
 #'

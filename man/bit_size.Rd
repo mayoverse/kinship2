@@ -23,11 +23,6 @@ bit_size(obj, ...)
 \item{obj}{A Pedigree object or a vector of fathers identifierss}
 
 \item{...}{Additional arguments passed to methods}
-
-\item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the Pedigree
-(i.e. \code{dadid} and \code{momid} equal to the value of this variable).
-The default for \code{missid} is \code{NA_character_}.}
 }
 \value{
 A list with the following components:

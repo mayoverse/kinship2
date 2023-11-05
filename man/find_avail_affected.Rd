@@ -9,7 +9,7 @@ find_avail_affected(obj, ...)
 \arguments{
 \item{obj}{A Pedigree object}
 
-\item{...}{Additional arguments passed to methods}
+\item{...}{Other arguments to pass to the function}
 
 \item{affstatus}{Affection status to search for.}
 }

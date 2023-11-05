@@ -9,7 +9,7 @@ ped_to_plotdf(obj, ...)
 \arguments{
 \item{obj}{A Pedigree object}
 
-\item{...}{other arguments passed to \code{\link[=par]{par()}}}
+\item{...}{Other arguments to pass to the function}
 
 \item{pconnect}{when connecting parent to children the program will try to
 make the connecting line as close to vertical as possible, subject to it

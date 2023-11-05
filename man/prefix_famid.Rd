@@ -8,9 +8,8 @@ prefix_famid(famid, id, missid = NA_character_)
 }
 \arguments{
 \item{famid}{A character vector with the family identifiers of the
-individuals.}
-
-\item{id}{A vector of each subjects identifiers}
+individuals. If provide, will be aggregated to the individuals
+identifiers separated by an underscore.}
 
 \item{missid}{A character vector with the missing values identifiers.
 All the id, dadid and momid corresponding to those values will be set

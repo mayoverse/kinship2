@@ -7,15 +7,7 @@
 is_parent(obj, ...)
 }
 \arguments{
-\item{obj}{A character vector with the id of the individuals or a
-\code{data.frame} with all the informations in corresponding columns.}
-
-\item{id}{A vector of each subjects identifiers}
-
-\item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the Pedigree
-(i.e. \code{dadid} and \code{momid} equal to the value of this variable).
-The default for \code{missid} is \code{NA_character_}.}
+\item{obj}{A vector of each subjects identifiers}
 }
 \value{
 A vector of boolean of the same size as \code{id}

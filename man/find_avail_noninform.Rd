@@ -9,7 +9,7 @@ find_avail_noninform(obj, ...)
 \arguments{
 \item{obj}{A Pedigree object}
 
-\item{...}{Additional arguments passed to methods}
+\item{...}{Other arguments to pass to the function}
 }
 \value{
 Vector of subject ids who can be removed by having lowest

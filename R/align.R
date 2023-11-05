@@ -1,11 +1,9 @@
-## Automatically generated from all.nw using noweb
-
-#' Routine function to get ancestors of a subject
+#' Get ancestors indexes of a subject
 #'
 #' @description Given the index of one or multiple individual(s), this
 #' function iterate through the mom and dad indexes to
 #' list out all the ancestors of the said individual(s).
-#' This function is use in the `align()` function to
+#' This function is use in the [align()] function to
 #' identify which spouse pairs has a common ancestor and
 #' therefore if they need to be connected with a double line
 #' (i.e. inbred).
@@ -14,7 +12,11 @@
 #' @param dadx Indexes of the fathers
 #' @param momx Indexes of the mothers
 #'
+#' @examples
+#' ancestors(c(1), c(3, 4, 5, 6), c(7, 8, 9, 10))
+#' ancestors(c(1, 2), c(3, 4, 5, 6), c(7, 8, 9, 10))
 #' @return A vector of ancestor indexes
+#' @keywords internal
 #' @seealso [align()]
 ancestors <- function(idx, momx, dadx) {
     alist <- idx
@@ -30,7 +32,7 @@ ancestors <- function(idx, momx, dadx) {
 }
 
 
-#' Generate plotting information for a Pedigree
+#' Align a Pedigree object
 #'
 #' @description
 #' Given a Pedigree, this function creates helper matrices that describe the
@@ -38,49 +40,55 @@ ancestors <- function(idx, momx, dadx) {
 #'
 #' @details
 #' This is an internal routine, used almost exclusively by
-#' `ped_to_plotdf()`.  The subservient functions `auto_hint()`,
-#' `alignped1()`, `alignped2()`,
-#' `alignped3()`, and `alignped4()`
+#' [ped_to_plotdf()].
+#'
+#' The subservient functions [auto_hint()],
+#' [alignped1()], [alignped2()],
+#' [alignped3()], and [alignped4()]
 #' contain the bulk of the computation.
-#' If the **hints** are missing the `auto_hint()` routine is called to
+#'
+#' If the **hints** are missing the [auto_hint()] routine is called to
 #' supply an initial guess.
-#' If multiple families are present in the Pedigree, this routine is called
-#' once for each family, and the results are combined in the list returned.
-#' For more information you can read the associated vignette:align
+#'
+#' If multiple families are present in the **obj** Pedigree, this routine
+#' is called once for each family, and the results are combined in the
+#' list returned.
+#'
+#' For more information you can read the associated vignette:
 #' `vignette("alignment_details")`.
 #'
 #' @param obj A Pedigree object
-#' @param packed Should the Pedigree be compressed, i.e., allow diagonal
-#' lines connecting parents to children in order to have a smaller overall
-#' width for the plot.
-#' @param width for a packed output, the minimum width of the plot, in
+#' @param packed Should the Pedigree be compressed.
+#' (i.e. allow diagonal lines connecting parents to children in order
+#' to have a smaller overall width for the plot.)
+#' @param width For a packed output, the minimum width of the plot, in
 #' inches.
-#' @param align for a packed Pedigree, align children under parents `TRUE`,
+#' @param align For a packed Pedigree, align children under parents `TRUE`,
 #' to the extent possible given the page width, or align to to the left
 #' margin `FALSE`.
 #' This argument can be a two element vector, giving the alignment
 #' parameters, or a logical value.
-#' If `TRUE`, the default is `c(1.5, 2)`, or numeric the routine
+#' If `TRUE`, the default is `c(1.5, 2)`, or if numeric the routine
 #' `alignped4()` will be called.
-#' @param hints A Hints object, giving the relative order of the subjects.
-#' See [Hints()] for details.
-#' @inheritParams is_parent
+#' @inheritParams Ped
+#' @inheritParams Pedigree
+#' @param ... Other arguments to pass to the function
 #'
 #' @return A list with components
-#' - n A vector giving the number of subjects on each horizonal level of the
+#' - `n`: A vector giving the number of subjects on each horizonal level of the
 #' plot
-#' - nid A matrix with one row for each level, giving the numeric id of
+#' - `nid`: A matrix with one row for each level, giving the numeric id of
 #' each subject plotted.
 #' (A value of `17` means the 17th subject in the Pedigree).
-#' - pos A matrix giving the horizontal position of each plot point
-#' - fam A matrix giving the family id of each plot point.
+#' - `pos`: A matrix giving the horizontal position of each plot point
+#' - `fam`: A matrix giving the family id of each plot point.
 #' A value of `3` would mean that the two subjects in positions 3 and 4,
 #' in the row above, are this subject's parents.
-#' - spouse A matrix with values
+#' - `spouse`: A matrix with values
 #'     - `0` = not a spouse
 #'     - `1` = subject plotted to the immediate right is a spouse
 #'     - `2` = subject plotted to the immediate right is an inbred spouse
-#' - twins Optional matrix which will only be present if the Pedigree
+#' - `twins`: Optional matrix which will only be present if the Pedigree
 #' contains twins :
 #'     - `0` = not a twin
 #'     - `1` = sibling to the right is a monozygotic twin
@@ -105,11 +113,13 @@ ancestors <- function(idx, momx, dadx) {
 #' @include alignped2.R
 #' @include alignped3.R
 #' @include alignped4.R
+#' @rdname align
 setGeneric("align", signature = "obj",
     function(obj, ...) standardGeneric("align")
 )
 
-
+#' @rdname align
+#' @docType methods
 setMethod("align", "Pedigree",
     function(
         obj, packed = TRUE, width = 10,
@@ -126,7 +136,10 @@ setMethod("align", "Pedigree",
             return(alignment)
         }
         if (!is(hints, "Hints")) {
-            stop("hints must be a Hints object")
+            if (!is.list(hints)) {
+                stop("hints argument should be a Hints object or a list")
+            }
+            hints <- Hints(hints)
         }
         if (length(horder(hints)) == 0) {
             hints <- try({
@@ -177,7 +190,6 @@ setMethod("align", "Pedigree",
             who <- which(is_child)
             spouselist <- rbind(spouselist, cbind(dad[who], mom[who], 0, 0))
         }
-
         hash <- spouselist[, 1] * n + spouselist[, 2]
         spouselist <- spouselist[!duplicated(hash), , drop = FALSE]
         ## Doc: Founders -align

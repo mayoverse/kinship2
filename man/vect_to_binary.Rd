@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{vect_to_binary}
 \alias{vect_to_binary}
-\title{Transform a vector variable to binary vector}
+\title{Vector variable to binary vector}
 \usage{
 vect_to_binary(vect, logical = FALSE)
 }
@@ -23,7 +23,7 @@ All other values will be transformed to NA.
 numeric binary vector of the same size as \code{vect} with 0 and 1
 }
 \description{
-Transform a vector variable to binary vector
+Vector variable to binary vector
 }
 \examples{
 vect_to_binary(

@@ -8,21 +8,7 @@ subregion(plist, subreg)
 }
 \arguments{
 \item{plist}{The alignment structure representing the Pedigree layout.
-For the differents matrices present in the list, each row represents a
-level of the Pedigree and each column a potential subject.
-It contains the following components:
-\itemize{
-\item n Vector of the number of subjects per level
-\item nid Matrix of the subjects indexes
-\item pos Matrix of the subjects positions
-\item fam Matrix of the siblings family identifiers
-\item spouse Matrix of the left spouses
-\itemize{
-\item \code{0} = not spouse
-\item \code{1} = spouse
-\item \code{2} = inbred spouse.
-}
-}}
+See \code{\link[=align]{align()}} for details.}
 
 \item{subreg}{4-element vector for (min x, max x, min depth, max depth),
 used to edit away portions of the plot coordinates returned by

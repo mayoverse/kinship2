@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{anchor_to_factor}
 \alias{anchor_to_factor}
-\title{Transform a anchor variable to an ordered factor}
+\title{Anchor variable to ordered factor}
 \usage{
 anchor_to_factor(anchor)
 }
@@ -19,7 +19,7 @@ an ordered factor vector containing the transformed variable
 "either" < "left" < "right"
 }
 \description{
-Transform a anchor variable to an ordered factor
+Anchor variable to ordered factor
 }
 \examples{
 anchor_to_factor(c(1, 2, 0, "left", "right", "either"))

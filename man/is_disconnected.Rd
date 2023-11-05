@@ -6,9 +6,6 @@
 \usage{
 is_disconnected(id, dadid, momid)
 }
-\arguments{
-\item{id}{A vector of each subjects identifiers}
-}
 \value{
 A vector of boolean of the same size as \code{id}
 with TRUE if the individual is disconnected and FALSE otherwise

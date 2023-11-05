@@ -1,6 +1,6 @@
 # Automatically generated from all.nw using noweb
 
-#' Second routine alignment
+#' Alignment second routine
 #'
 #' @description
 #' Second of the four co-routines which takes a collection of siblings,
@@ -16,7 +16,7 @@
 #' When the first sib is processed by `alignped1` then both partners
 #' (and any children) will be added to the rval structure below.
 #' When the second sib is processed they will come back as a 1 element tree
-#' (the marriage will no longer be on the spouselist), which should be added
+#' (the marriage will no longer be on the **spouselist**), which should be added
 #' onto rval. The rule thus is to not add any 1 element tree whose value
 #' (which must be `idx[i]` is already in the rval structure for this level.
 #'
@@ -26,26 +26,24 @@
 #' @return A list containing the elements to plot the Pedigree.
 #' It contains a set of matrices along with the spouselist matrix.
 #' The latter has marriages removed as they are processed.
-#' - n A vector giving the number of subjects on each horizonal level of the
+#' - `n` : A vector giving the number of subjects on each horizonal level of the
 #'     plot
-#' - nid A matrix with one row for each level, giving the numeric id of
+#' - `nid` : A matrix with one row for each level, giving the numeric id of
 #'       each subject plotted.
 #'       (A value of `17` means the 17th subject in the Pedigree).
-#' - pos A matrix giving the horizontal position of each plot point
-#' - fam A matrix giving the family id of each plot point.
+#' - `pos` : A matrix giving the horizontal position of each plot point
+#' - `fam` : A matrix giving the family id of each plot point.
 #'       A value of `3` would mean that the two subjects in positions 3 and 4,
 #'       in the row above, are this subject's parents.
-#' - spouse A matrix with values
-#'     - `0` = not a spouse
-#'     - `1` = subject plotted to the immediate right is a spouse
-#'     - `2` = subject plotted to the immediate right is an inbred spouse
+#' - `spouselist` : Spouse matrix with anchors informations
 #'
 #' @examples
 #' data(sampleped)
 #' ped <- Pedigree(sampleped)
 #' align(ped)
 #'
-#' @seealso [align()], [alignped1()]
+#' @seealso [align()]
+#' @keywords internal, alignment
 #' @export
 alignped2 <- function(idx, dadx, momx, level, horder, packed, spouselist) {
     idx <- idx[order(horder[idx])]  # Use the hints to order the sibs

@@ -4,7 +4,6 @@
 \docType{class}
 \name{Ped-class}
 \alias{Ped-class}
-\alias{Ped}
 \alias{Ped,data.frame-method}
 \alias{Ped,data.frame}
 \alias{Ped,character_OR_integer-method}
@@ -12,9 +11,11 @@
 \alias{Ped,missing-method}
 \alias{Ped,missing}
 \alias{mcols<-,Ped,list-method}
+\alias{mcols<-,Ped,list}
 \alias{mcols<-,Ped,data.frame-method}
-\alias{famid}
+\alias{mcols<-,Ped,data.frame}
 \alias{famid,Ped-method}
+\alias{famid<-,Ped,character_OR_integer-method}
 \alias{id}
 \alias{id,Ped-method}
 \alias{dadid}
@@ -33,10 +34,8 @@
 \alias{isinf,Ped-method}
 \alias{useful}
 \alias{useful,Ped-method}
-\title{S4 class to represent the identity informations in a Pedigree.}
+\title{Ped S4 class.}
 \usage{
-Ped(obj, ...)
-
 \S4method{Ped}{data.frame}(obj, cols_used_init = FALSE, cols_used_del = FALSE)
 
 \S4method{Ped}{character_OR_integer}(
@@ -58,7 +57,9 @@ Ped(obj, ...)
 
 \S4method{mcols}{Ped,data.frame}(x) <- value
 
-famid(x)
+\S4method{famid}{Ped}(x)
+
+\S4method{famid}{Ped,character_OR_integer}(x) <- value
 
 id(x)
 
@@ -79,68 +80,16 @@ isinf(x)
 useful(x)
 }
 \arguments{
-\item{obj}{A character vector with the id of the individuals or a
-\code{data.frame} with all the informations in corresponding columns.}
-
-\item{cols_used_init}{Boolean defining if the columns that will be used
-should be initialised to NA.}
-
-\item{cols_used_del}{Boolean defining if the columns that will be used
-should be deleted.}
-
-\item{sex}{A character, factor or numeric vector corresponding to
-the gender of the individuals. This will be transformed to an ordered factor
-with the following levels: \code{male} < \code{female} < \code{unknown} < `terminated
-The following values are recognized:
-\itemize{
-\item character() or factor() : "f", "m", "woman", "man", "male", "female",
-"unknown", "terminated"
-\item numeric() : 1 = "male", 2 = "female", 3 = "unknown", 4 = "terminated"
-}}
-
-\item{dadid}{A vector containing for each subject, the identifiers of the
-biologicals fathers.}
-
-\item{momid}{vector containing for each subject, the identifiers of the
-biologicals mothers.}
-
-\item{famid}{A character vector with the family identifiers of the
-individuals.}
-
-\item{steril}{A logical vector with the sterilisation status of the
-individuals
-(i.e. \code{FALSE} = not sterilised, \code{TRUE} = sterilised, \code{NA} = unknown).}
-
-\item{status}{A logical vector with the affection status of the
-individuals
-(i.e. \code{FALSE} = alive, \code{TRUE} = dead, \code{NA} = unknown).}
-
-\item{avail}{A logical vector with the availability status of the
-individuals
-(i.e. \code{FALSE} = not available, \code{TRUE} = available, \code{NA} = unknown).}
-
-\item{affected}{A logical vector with the affection status of the
-individuals
-(i.e. \code{FALSE} = unaffected, \code{TRUE} = affected, \code{NA} = unknown).}
-
-\item{missid}{A character vector with the missing values identifiers.
-All the id, dadid and momid corresponding to those values will be set
-to \code{NA_character_}.}
-
 \item{x}{A Ped object.}
 
-\item{value}{A data.frame with the metadata.}
+\item{value}{A list or a data.frame with the metadata.
+The length of each element in \code{value} need to match the
+length of the Ped object.}
 }
 \value{
 A Ped object.
 
-A Ped object.
-
 A Ped object with the metadata set.
-
-A Ped object with the metadata set.
-
-A character vector with the famid of each individual.
 
 A character vector with the id of each individual.
 
@@ -174,12 +123,6 @@ to the \code{famid} character to ensure the uniqueness of the \code{id}.
 The other slots are used to store recognized informations.
 Additional columns can be added to the Ped object and will be
 stored in the \code{elementMetadata} slot of the Ped object.
-
-Constructor for the Ped class
-You either need to provide a vector of the same size for each slot
-or a \code{data.frame} with the corresponding columns.
-The metadata will correspond to the columns that do not correspond
-to the Ped slots.
 }
 \section{Slots}{
 
@@ -229,6 +172,21 @@ of the individuals.}
 of the individuals.}
 }}
 
+\section{Constructor}{
+
+\code{Ped(obj, ...)}:
+This constructor creates a Ped instance out of the vectors or the data.frame
+provided. See \code{\link[=Ped]{Ped()}} for more informations.
+}
+
+\section{Setters}{
+
+Metadata setters of Ped object from a list
+
+Add the metadata into the \code{elementMetadata} slot of
+a Ped object.
+}
+
 \examples{
 data(sampleped)
 Ped(sampleped)
@@ -242,7 +200,5 @@ Ped(
 Ped()
 }
 \seealso{
-\code{\link[=Pedigree]{Pedigree()}}
-
 \code{\link[=Pedigree]{Pedigree()}}
 }

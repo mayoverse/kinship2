@@ -79,8 +79,6 @@ should be kept or deleted.}
 
 \item{idlist}{A vector of identifiers to subset}
 
-\item{hints}{A Hints object}
-
 \item{from}{A Pedigree object.}
 
 \item{j}{A vector of columns names.}

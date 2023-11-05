@@ -20,6 +20,12 @@ dataframe is given it must contain the columns \code{id}, \code{dadid},
 
 \item{...}{Additional arguments passed to methods}
 
+\item{dadid}{A vector containing for each subject, the identifiers of the
+biologicals fathers.}
+
+\item{momid}{vector containing for each subject, the identifiers of the
+biologicals mothers.}
+
 \item{sex}{A character, factor or numeric vector corresponding to
 the gender of the individuals. This will be transformed to an ordered factor
 with the following levels: \code{male} < \code{female} < \code{unknown} < `terminated
@@ -30,13 +36,13 @@ The following values are recognized:
 \item numeric() : 1 = "male", 2 = "female", 3 = "unknown", 4 = "terminated"
 }}
 
-\item{famid}{Optional famid identification set it to NULL to invalidate.
-If used it will modify the ids of the individuals by pasting it with an _.}
+\item{famid}{A character vector with the family identifiers of the
+individuals. If provide, will be aggregated to the individuals
+identifiers separated by an underscore.}
 
-\item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the Pedigree
-(i.e. \code{dadid} and \code{momid} equal to the value of this variable).
-The default for \code{missid} is \code{NA_character_}.}
+\item{missid}{A character vector with the missing values identifiers.
+All the id, dadid and momid corresponding to those values will be set
+to \code{NA_character_}.}
 
 \item{delete}{Boolean defining if missing parents needs to be:
 \itemize{

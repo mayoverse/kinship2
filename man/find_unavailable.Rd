@@ -9,7 +9,7 @@ find_unavailable(obj, ...)
 \arguments{
 \item{obj}{A Pedigree object}
 
-\item{...}{Additional arguments passed to methods}
+\item{...}{Other arguments to pass to the function}
 }
 \value{
 Returns a vector of subject ids for who can be

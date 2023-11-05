@@ -49,19 +49,19 @@ value of the column given.}
 \item{branch}{defines how much angle is used to connect various levels of
 nuclear families.}
 
-\item{packed}{Should the Pedigree be compressed, i.e., allow diagonal
-lines connecting parents to children in order to have a smaller overall
-width for the plot.}
+\item{packed}{Should the Pedigree be compressed.
+(i.e. allow diagonal lines connecting parents to children in order
+to have a smaller overall width for the plot.)}
 
-\item{align}{for a packed Pedigree, align children under parents \code{TRUE},
+\item{align}{For a packed Pedigree, align children under parents \code{TRUE},
 to the extent possible given the page width, or align to to the left
 margin \code{FALSE}.
 This argument can be a two element vector, giving the alignment
 parameters, or a logical value.
-If \code{TRUE}, the default is \code{c(1.5, 2)}, or numeric the routine
+If \code{TRUE}, the default is \code{c(1.5, 2)}, or if numeric the routine
 \code{alignped4()} will be called.}
 
-\item{width}{for a packed output, the minimum width of the plot, in
+\item{width}{For a packed output, the minimum width of the plot, in
 inches.}
 
 \item{title}{The title of the plot.}

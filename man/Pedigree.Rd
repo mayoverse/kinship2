@@ -9,6 +9,7 @@
 \alias{Pedigree,data.frame}
 \alias{Pedigree,missing-method}
 \alias{Pedigree,missing}
+\alias{famid,Pedigree-method}
 \alias{horder}
 \alias{horder,Pedigree-method}
 \title{Create a Pedigree object}
@@ -51,6 +52,8 @@ Pedigree(obj, ...)
 
 \S4method{Pedigree}{missing}(obj)
 
+\S4method{famid}{Pedigree}(x)
+
 horder(object)
 }
 \arguments{
@@ -76,7 +79,8 @@ The following values are recognized:
 }}
 
 \item{famid}{A character vector with the family identifiers of the
-individuals.}
+individuals. If provide, will be aggregated to the individuals
+identifiers separated by an underscore.}
 
 \item{avail}{A logical vector with the availability status of the
 individuals
@@ -137,8 +141,8 @@ relationship matrix. This is useful if you want to use a dataframe with
 different column names. The names of the list should be the new column
 names and the values should be the old column names.}
 
-\item{hints}{A list with the hints to use for the pedigree plot.
-See \code{\link[=Hints]{Hints()}} for more informations.}
+\item{hints}{A Hints object or a named list containing \code{horder} and
+\code{spouse}.}
 
 \item{object}{A Pedigree object.}
 }

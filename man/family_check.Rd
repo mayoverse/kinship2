@@ -31,7 +31,8 @@ biologicals fathers.}
 biologicals mothers.}
 
 \item{famid}{A character vector with the family identifiers of the
-individuals.}
+individuals. If provide, will be aggregated to the individuals
+identifiers separated by an underscore.}
 
 \item{newfam}{The result of a call to \code{make_famid()}. If this has already
 been computed by the user, adding it as an argument shortens the running

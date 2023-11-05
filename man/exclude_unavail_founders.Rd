@@ -7,9 +7,21 @@
 exclude_unavail_founders(id, dadid, momid, avail, missid = NA_character_)
 }
 \arguments{
-\item{id}{Vector of subject identifiers}
+\item{id}{A character vector with the identifiers of each individuals}
 
-\item{missid}{Character defining the missing ids}
+\item{dadid}{A vector containing for each subject, the identifiers of the
+biologicals fathers.}
+
+\item{momid}{vector containing for each subject, the identifiers of the
+biologicals mothers.}
+
+\item{avail}{A logical vector with the availability status of the
+individuals
+(i.e. \code{FALSE} = not available, \code{TRUE} = available, \code{NA} = unknown).}
+
+\item{missid}{A character vector with the missing values identifiers.
+All the id, dadid and momid corresponding to those values will be set
+to \code{NA_character_}.}
 }
 \value{
 Returns a list with the following components:

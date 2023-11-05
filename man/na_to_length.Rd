@@ -17,6 +17,14 @@ na_to_length(x, temp, value)
 A vector with the same length as temp.
 }
 \description{
-NA to specific length
+Check if all value in a vector is \code{NA}.
+If so set all of them to a new value matching the length
+of the template.
+If not check that the size of the vector is equal to
+the template.
+}
+\examples{
+na_to_length(NA, rep(0, 4), "NewValue")
+na_to_length(c(1, 2, 3, NA), rep(0, 4), "NewValue")
 }
 \keyword{internal}

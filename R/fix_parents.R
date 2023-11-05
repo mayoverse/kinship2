@@ -22,8 +22,7 @@ NULL
 #' in the dataframe then set availability to O for non available parents.
 #' - If FALSE then delete the id of missing parents
 #'
-#' @param famid Optional famid identification set it to NULL to invalidate.
-#' If used it will modify the ids of the individuals by pasting it with an _.
+#' @inheritParams Ped
 #' @inheritParams kinship
 #' @inheritParams is_parent
 #' @inheritParams sex_to_factor

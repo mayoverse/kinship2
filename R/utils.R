@@ -154,11 +154,8 @@ check_num_na <- function(var, na_as_num = TRUE) {
 #'
 #' @description Check which individuals are parents.
 #'
-#' @param id A vector of each subjects identifiers
-#' @param missid The missing identifier value. Founders are the individuals with
-#' no father and no mother in the Pedigree
-#' (i.e. `dadid` and `momid` equal to the value of this variable).
-#' The default for `missid` is `NA_character_`.
+#' @param obj A vector of each subjects identifiers
+#' @inheritParams Ped
 #'
 #' @return A vector of boolean of the same size as `id`
 #' with TRUE if the individual is a parent and FALSE otherwise
@@ -229,7 +226,7 @@ is_disconnected <- function(id, dadid, momid) {
 #' @importFrom plyr revalue
 NULL
 
-#' Transform a gender variable to an ordered factor
+#' Gender variable to ordered factor
 #'
 #' @inheritParams Ped
 #'
@@ -261,7 +258,7 @@ sex_to_factor <- function(sex) {
 #' @importFrom stringr str_remove_all
 NULL
 
-#' Transform a relationship code variable to an ordered factor
+#' Relationship code variable to ordered factor
 #'
 #' @inheritParams Rel
 #'
@@ -292,7 +289,7 @@ rel_code_to_factor <- function(code) {
 }
 TRUE
 
-#' Transform a vector variable to binary vector
+#' Vector variable to binary vector
 #'
 #' @param vect A character, factor, logical or numeric vector corresponding to
 #' a binary variable (i.e. 0 or 1).
@@ -332,7 +329,7 @@ vect_to_binary <- function(vect, logical = FALSE) {
     }
 }
 
-#' Transform a anchor variable to an ordered factor
+#' Anchor variable to ordered factor
 #'
 #' @param anchor A character, factor or numeric vector corresponding to
 #' the anchor of the individuals. The following values are recognized:

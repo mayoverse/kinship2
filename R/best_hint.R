@@ -1,7 +1,24 @@
-# This function generates the permutations one after the other
+#' Generate all possible permutation
+#'
+#' Given a vector of length **n**, generate all possible permutations of
+#' the numbers 1 to **n**.
+#' This is a recursive routine, and is not very efficient.
+#'
+#' @param x A vector of length **n**
+#' @return A matrix with **n** cols and **n!** rows
+#'
+#' @examples
+#' permute(1:3)
+#' permute(1:4)
+#' permute(1:5)
+#' @keywords internal, auto_hint
 permute <- function(x) {
     n <- length(x)
-    if (n == 3) {
+    if (n == 1) {
+        x
+    } else if (n == 2) {
+        rbind(x, x[c(2, 1)])
+    } else if (n == 3) {
         rbind(x[seq_len(3)], x[c(2, 1, 3)], x[c(3, 1, 2)])
     } else {
         temp <- paste(
@@ -13,17 +30,19 @@ permute <- function(x) {
     }
 }
 
-#' Best hint for alignment
+#' Best hint for a Pedigree alignment
 #'
 #' @description
-#' When computer time is cheap, use this routine to get a 'best' Pedigree.
+#' When computer time is cheap, use this routine to get a *best*
+#' Pedigree alignment.
 #' This routine will try all possible founder orders, and return the one
-#' with the least 'stress'.
+#' with the least **stress**.
 #'
 #' @details
-#' The auto_hint routine will rearrange sibling order, but not founder order.
-#' This calls auto_hint with every possible founder order, and finds that
-#' plot with the least 'stress'.
+#' The [auto_hint()] routine will rearrange sibling order, but not
+#' founder order.
+#' This calls [auto_hint()] with every possible founder order, and finds that
+#' plot with the least "stress".
 #' The stress is computed as a weighted sum of three error measures:
 #'
 #' - nbArcs The number of duplicate individuals in the plot
@@ -32,28 +51,30 @@ permute <- function(x) {
 #' - lgParentsChilds The sum of the absolute values of the differences between
 #'   the center of the children and the parents
 #'
-#' \eqn{stress =
-#'      wt[1] \times nbArcs +
-#'      wt[2] \times lgArcs +
-#'      wt[3] \times lgParentsChilds
+#' \deqn{stress =
+#'      wt[1] * nbArcs +
+#'      wt[2] * lgArcs +
+#'      wt[3] * lgParentsChilds
 #'}
 #'
 #' If during the search, a plot is found with a stress level less than
 #' **tolerance**, the search is terminated.
 #'
-#' @param wt A vector of three weights for the three error measures
-#' - The number of duplicate individuals in the plot
-#' - The sum of the absolute values of the differences in the
-#'   positions of duplicate individuals
-#' - The sum of the absolute values of the differences between
-#'   the center of the children and the parents
+#' @param wt A vector of three weights for the three error measures.
 #' Default is `c(1000, 10, 1)`.
-#' @param tolerance The maximum stress level to accept. Default is `0`
+#' 1. The number of duplicate individuals in the plot
+#' 2. The sum of the absolute values of the differences in the
+#'   positions of duplicate individuals
+#' 3. The sum of the absolute values of the differences between
+#'   the center of the children and the parents.
+#'
+#' @param tolerance The maximum stress level to accept.
+#' Default is `0`
 #' @inheritParams align
 #'
-#' @return The best hint object out of all the permutations
+#' @return The best Hints object out of all the permutations
 #'
-#' @seealso [auto_hint()]
+#' @seealso [auto_hint()], [align()]
 #' @export
 #' @examples
 #' data(sampleped)
@@ -61,6 +82,7 @@ permute <- function(x) {
 #' best_hint(ped)
 #' @include auto_hint.R
 #' @include align.R
+#' @keywords alignment, auto_hint
 setGeneric(
     "best_hint", signature = "obj",
     function(obj, ...) {
@@ -68,6 +90,7 @@ setGeneric(
     }
 )
 
+#' @rdname best_hint
 setMethod(
     "best_hint", "Pedigree",
     function(obj, wt = c(1000, 10, 1), tolerance = 0) {

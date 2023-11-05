@@ -1,17 +1,26 @@
 #' NA to specific length
 #'
+#' Check if all value in a vector is `NA`.
+#' If so set all of them to a new value matching the length
+#' of the template.
+#' If not check that the size of the vector is equal to
+#' the template.
+#'
 #' @param x The vector to check.
 #' @param temp A template vector to use to determine the length.
 #' @param value The value to use to fill the vector.
 #'
 #' @return A vector with the same length as temp.
 #' @keywords internal
+#' @examples
+#' na_to_length(NA, rep(0, 4), "NewValue")
+#' na_to_length(c(1, 2, 3, NA), rep(0, 4), "NewValue")
 na_to_length <- function(x, temp, value) {
     if (length(x) == 1 && all(is.na(x))) {
         rep(value, length(temp))
     } else {
         if (length(x) != length(temp)) {
-            stop("The length of the new value should be: ",
+            stop("The length of the vector should be: ",
                 "equal to the length of the template vector"
             )
         }
@@ -20,6 +29,7 @@ na_to_length <- function(x, temp, value) {
 }
 
 #### S4 Ped constructor ####
+
 #' Constructor for the Ped class
 #'
 #' @description Constructor for the Ped class
@@ -35,7 +45,8 @@ na_to_length <- function(x, temp, value) {
 #' @param momid vector containing for each subject, the identifiers of the
 #' biologicals mothers.
 #' @param famid A character vector with the family identifiers of the
-#' individuals.
+#' individuals. If provide, will be aggregated to the individuals
+#' identifiers separated by an underscore.
 #' @param sex A character, factor or numeric vector corresponding to
 #' the gender of the individuals. This will be transformed to an ordered factor
 #' with the following levels: `male` < `female` < `unknown` < `terminated
@@ -61,7 +72,7 @@ na_to_length <- function(x, temp, value) {
 #' @inheritParams check_columns
 #' @return A Ped object.
 #' @seealso [Pedigree()]
-#' @rdname Ped
+#' @rdname Ped-constructor
 #' @export
 #' @include utils.R
 setGeneric("Ped", signature = "obj", function(obj, ...) {
@@ -304,6 +315,41 @@ setGeneric("Hints", function(horder, spouse) {
 
 #' @docType methods
 #' @rdname Hints
+setMethod("Hints",
+    signature(horder = "Hints", spouse = "missing_OR_NULL"),
+    function(horder, spouse) {
+        hints
+    }
+)
+
+#' @docType methods
+#' @rdname Hints
+#' @export
+#' @aliases Hints,list,missing_OR_NULL
+#' @examples
+#' Hints(
+#'   list(
+#'       horder = c("1" = 1, "2" = 2, "3" = 3),
+#'       spouse = data.frame(
+#'           idl = c("1", "2"),
+#'           idr = c("2", "3"),
+#'           anchor = c(1, 2)
+#'   )
+#' )
+setMethod("Hints",
+    signature(horder = "list", spouse = "missing_OR_NULL"),
+    function(horder, spouse) {
+        if (any(!c("horder", "spouse") %in% names(horder))) {
+            stop("hints is a list,",
+                "but doesn't contains either horder or spouse slot"
+            )
+        }
+        Hints(horder$horder, horder$spouse)
+    }
+)
+
+#' @docType methods
+#' @rdname Hints
 #' @export
 #' @aliases Hints,numeric,data.frame
 #' @examples
@@ -411,7 +457,7 @@ setMethod("Hints",
 #' - 'column_values': name of the column containing the raw values in the
 #' Ped object
 #' - 'column_mods': name of the column containing the mods of the transformed
-#' affection in the Ped object
+#' values in the Ped object
 #' - 'mods': all the different mods
 #' - 'labels': the corresponding labels of each mods
 #' - 'affected': a logical value indicating if the mod correspond to an affected
@@ -421,8 +467,10 @@ setMethod("Hints",
 #' - 'angle': the angle of the shading
 #' @param border A data.frame with the informations for the availability status.
 #' The columns needed are:
-#' - 'column': name of the column containing the mods to use in the
+#' - 'column_values': name of the column containing the raw values in the
 #' Ped object
+#' - 'column_mods': name of the column containing the mods of the transformed
+#' values in the Ped object
 #' - 'mods': all the different mods
 #' - 'labels': the corresponding labels of each mods
 #' - 'border': the color to use for this mods
@@ -568,8 +616,8 @@ setMethod("Scales",
 #'
 #' The value relation code recognized by the function are the one defined
 #' by the [rel_code_to_factor()] function.
-#' @param hints A list with the hints to use for the pedigree plot.
-#' See [Hints()] for more informations.
+#' @param hints A Hints object or a named list containing `horder` and
+#' `spouse`.
 #' @param cols_ren_ped A named list with the columns to rename for the
 #' pedigree dataframe. This is useful if you want to use a dataframe with
 #' different column names. The names of the list should be the new column
@@ -596,7 +644,6 @@ setGeneric("Pedigree", signature = "obj",
 #' @rdname Pedigree
 #' @aliases Pedigree,character
 #' @docType methods
-#' @inheritParams Ped
 #' @param affected A logical vector with the affection status of the
 #' individuals
 #' (i.e. `FALSE` = unaffected, `TRUE` = affected, `NA` = unknown).
@@ -829,7 +876,7 @@ setMethod("Pedigree", "data.frame",  function(
 
     ped <- Ped(ped_df)
     rel <- Rel(rel_df)
-    hints <- Hints(hints$horder, hints$spouse)
+    hints <- Hints(hints)
     scales <- Scales()
 
     ## Create the object

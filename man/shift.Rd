@@ -2,7 +2,7 @@
 % Please edit documentation in R/auto_hint.R
 \name{shift}
 \alias{shift}
-\title{Routine to shift set of siblings to the left or right}
+\title{Shift set of siblings to the left or right}
 \usage{
 shift(id, sibs, goleft, hint, twinrel, twinset)
 }
@@ -23,7 +23,7 @@ shift(id, sibs, goleft, hint, twinrel, twinset)
 The updated hint vector
 }
 \description{
-Routine to shift set of siblings to the left or right
+Shift set of siblings to the left or right
 }
 \details{
 This routine is used by \code{auto_hint()}.
@@ -37,4 +37,5 @@ together within the set of twins.
 \seealso{
 \code{\link[=auto_hint]{auto_hint()}}
 }
-\keyword{internal}
+\keyword{auto_hint}
+\keyword{internal,}

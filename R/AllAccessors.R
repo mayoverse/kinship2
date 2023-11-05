@@ -6,57 +6,83 @@ NULL
 
 #### S4 Ped Accessors ####
 ##### Mcols Accessors #####
+#' @section Setters:
 #' Metadata setters of Ped object from a list
 #'
-#' @param x A Ped object.
-#' @param value A list with the metadata.
+#' Add the metadata into the `elementMetadata` slot of
+#' a Ped object.
+#'
+#' @param x A Ped object. See [Ped()] for more information.
+#' @param value A list or a data.frame with the metadata.
+#' The length of each element in `value` need to match the
+#' length of the Ped object.
 #'
 #' @return A Ped object with the metadata set.
 #'
 #' @rdname Ped
-setMethod("mcols<-", signature(x = "Ped", value = "list"), function(x, value) {
-    mcols(x) <- as(value, "DataFrame")
-    x
-})
+#' @aliases mcols<-,Ped,list
+#' @docType methods
+setMethod("mcols<-",
+    signature(x = "Ped", value = "list"),
+    function(x, value) {
+        mcols(x) <- as(value, "DataFrame")
+        x
+    }
+)
 
-#' Metadata setters of Ped object from a data.frame
-#'
-#' @param x A Ped object.
-#' @param value A data.frame with the metadata.
-#'
-#' @return A Ped object with the metadata set.
-#'
+#' @export
 #' @rdname Ped
-setMethod("mcols<-", signature(x = "Ped", value = "data.frame"), function(x, value) {
-    mcols(x) <- as(value, "DataFrame")
-    x
-})
+#' @aliases mcols<-,Ped,data.frame
+#' @docType methods
+setMethod("mcols<-",
+    signature(x = "Ped", value = "data.frame"),
+    function(x, value) {
+        mcols(x) <- as(value, "DataFrame")
+        x
+    }
+)
 
 ##### Famid Accessors #####
-#' Famid getter of Ped object
+#' Famid getter
+#' 
+#' @description Extract the family identifiers out
+#' of a Ped, Rel or Pedigree object.
+#' If use with a Pedigree object the famid slot of
+#' its own Ped object will be given.
 #'
-#' @param x A Ped object.
+#' @param x A Ped, Rel or Pedigree object.
 #'
-#' @return A character vector with the famid of each individual.
-#'
-#' @rdname Ped
-#' @aliases famid,Ped-method
+#' @return A character vector of the family identifiers.
 #' @export
 setGeneric("famid", function(x) {
     standardGeneric("famid")
 })
+
+#' @rdname Ped
 setMethod("famid", signature(x = "Ped"), function(x) {
     x@famid
 })
+#' @rdname Rel
 setMethod("famid", signature(x = "Rel"), function(x) {
     x@famid
 })
+#' @rdname Pedigree
 setMethod("famid", signature(x = "Pedigree"), function(x) {
     famid(ped(x))
 })
+
+#' Famid setter
+#'
+#' @param x A Ped or Rel object.
+#' @param value A character or integer vector that should be use
+#' as the new family id
+#'
+#' @return An updated Ped, Rel object.
+#' @export
 setGeneric("famid<-", function(x, value) {
     standardGeneric("famid<-")
 })
+#' @rdname Ped
 setMethod("famid<-",
     signature(x = "Ped", value = "character_OR_integer"),
     function(x, value) {
@@ -74,6 +100,7 @@ setMethod("famid<-",
         x
     }
 )
+#' @rdname Rel
 setMethod("famid<-",
     signature(x = "Rel", value = "character_OR_integer"),
     function(x, value) {

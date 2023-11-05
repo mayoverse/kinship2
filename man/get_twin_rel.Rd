@@ -2,9 +2,12 @@
 % Please edit documentation in R/auto_hint.R
 \name{get_twin_rel}
 \alias{get_twin_rel}
-\title{Routine to get twin relationships}
+\title{Get twin relationships}
 \usage{
-get_twin_rel(ped)
+get_twin_rel(obj)
+}
+\arguments{
+\item{obj}{A Pedigree object}
 }
 \value{
 A list containing components
@@ -15,7 +18,7 @@ A list containing components
 }
 }
 \description{
-Routine to get twin relationships
+Get twin relationships
 }
 \details{
 This routine function determine the twin relationships
@@ -27,4 +30,5 @@ It is used by \code{auto_hint()}.
 \seealso{
 \code{\link[=auto_hint]{auto_hint()}}
 }
-\keyword{internal}
+\keyword{auto_hint}
+\keyword{internal,}

@@ -288,7 +288,7 @@ setMethod("as.list", "Hints", function(x) {
 #' Hints subscripting
 #' @description Subset the Hints object based on the identifiers
 #' given
-#' @param hints A Hints object
+#' @param x A Hints object
 #' @param idlist A vector of identifiers to subset
 #' @return A list of Hints object subsetted
 #' @rdname extract-methods

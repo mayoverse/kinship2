@@ -3,6 +3,9 @@
 \docType{methods}
 \name{Hints}
 \alias{Hints}
+\alias{Hints,Hints,missing_OR_NULL-method}
+\alias{Hints,list,missing_OR_NULL-method}
+\alias{Hints,list,missing_OR_NULL}
 \alias{Hints,numeric,data.frame-method}
 \alias{Hints,numeric,data.frame}
 \alias{Hints,numeric,missing_OR_NULL-method}
@@ -15,6 +18,10 @@
 \title{Create a Hints object}
 \usage{
 Hints(horder, spouse)
+
+\S4method{Hints}{Hints,missing_OR_NULL}(horder, spouse)
+
+\S4method{Hints}{list,missing_OR_NULL}(horder, spouse)
 
 \S4method{Hints}{numeric,data.frame}(horder, spouse)
 
@@ -59,6 +66,15 @@ independently or together.
 Convert a Hints object to a list
 }
 \examples{
+Hints(
+  list(
+      horder = c("1" = 1, "2" = 2, "3" = 3),
+      spouse = data.frame(
+          idl = c("1", "2"),
+          idr = c("2", "3"),
+          anchor = c(1, 2)
+  )
+)
 Hints(
   horder = c("1" = 1, "2" = 2, "3" = 3),
   spouse = data.frame(

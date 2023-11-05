@@ -2,24 +2,44 @@
 % Please edit documentation in R/auto_hint.R
 \name{auto_hint}
 \alias{auto_hint}
-\title{First initial guess for the alignment of a Pedigree}
+\alias{auto_hint,Pedigree-method}
+\title{Initial hint for a Pedigree alignment}
 \usage{
 auto_hint(obj, ...)
+
+\S4method{auto_hint}{Pedigree}(obj, hints = NULL, packed = TRUE, align = FALSE, reset = FALSE)
 }
 \arguments{
 \item{obj}{A Pedigree object}
 
-\item{reset}{If \code{TRUE}, then even if \code{ped} object has hints, reset
-them to the initial values}
+\item{...}{Other arguments to pass to the function}
+
+\item{hints}{A Hints object or a named list containing \code{horder} and
+\code{spouse}.}
+
+\item{packed}{Should the Pedigree be compressed.
+(i.e. allow diagonal lines connecting parents to children in order
+to have a smaller overall width for the plot.)}
+
+\item{align}{For a packed Pedigree, align children under parents \code{TRUE},
+to the extent possible given the page width, or align to to the left
+margin \code{FALSE}.
+This argument can be a two element vector, giving the alignment
+parameters, or a logical value.
+If \code{TRUE}, the default is \code{c(1.5, 2)}, or if numeric the routine
+\code{alignped4()} will be called.}
+
+\item{reset}{If \code{TRUE}, then even if  the Ped object has Hints, reset
+them to the initial values.}
 }
 \value{
-The \strong{hints} list containing components \code{horder} and \code{spouse}
+The initial \linkS4class{Hints} object.
 }
 \description{
 Compute an initial guess for the alignment of a Pedigree
 }
 \details{
-A Pedigree structure can contain a \code{hints} object which helps to
+A Pedigree structure can contain a \linkS4class{Hints} object which helps to
 reorder the Pedigree (e.g. left-to-right order of children within family) so
 as to plot with minimal distortion. This routine is used to create an
 initial version of the hints. They can then be modified if desired.
@@ -28,13 +48,12 @@ This routine would not normally be called by a user. It moves children
 within families, so that marriages are on the "edge" of a set children,
 closest to the spouse. For pedigrees that have only a single connection
 between two families this simple-minded approach works surprisingly well.
-For more complex structures hand-tuning of the hints matrix may be required.
+For more complex structures hand-tuning of the hints may be required.
 
-The Pedigree in the example below is one where rearranging the founders
-greatly decreases the number of extra connections. When \code{auto_hint()} is
-called with a a vector of numbers as the second argument, the values for the
-founder females are used to order the founder families left to right across
-the plot. The values within a sibship are used as the preliminary order of
+When \code{auto_hint()} is called with a a vector of numbers as the \strong{hints}
+argument, the values for the founder females are used to order the founder
+families left to right across the plot.
+The values within a sibship are used as the preliminary order of
 siblings within a family; this may be changed to move one of them to the
 edge so as to match up with a spouse. The actual values in the vector are
 not important, only their order.
@@ -45,5 +64,8 @@ ped <- Pedigree(sampleped[sampleped$famid == 1, ])
 auto_hint(ped)
 }
 \seealso{
-\code{\link[=align]{align()}}, \code{\link[=best_hint]{best_hint()}}
+\code{\link[=align]{align()}}, \code{\link[=best_hint]{best_hint()}}, \linkS4class{Hints}
 }
+\keyword{alignment,}
+\keyword{auto_hint}
+\keyword{internal,}

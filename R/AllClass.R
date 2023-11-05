@@ -88,9 +88,9 @@ setValidity("Scales", is_valid_scales)
 
 #### Ped Class ####
 
-#' S4 class to represent the identity informations in a Pedigree.
+#' Ped S4 class.
 #'
-#' A Ped object is a list of identity informations
+#' @description A Ped object is a list of identity informations
 #' of the individuals in the pedigree.
 #' It is used to create a Pedigree object.
 #' The minimal needed informations are `id`, `dadid`, `momid` and `sex`.
@@ -99,7 +99,10 @@ setValidity("Scales", is_valid_scales)
 #' The other slots are used to store recognized informations.
 #' Additional columns can be added to the Ped object and will be
 #' stored in the `elementMetadata` slot of the Ped object.
-#'
+#' @section Constructor:
+#' `Ped(obj, ...)`:
+#' This constructor creates a Ped instance out of the vectors or the data.frame
+#' provided. See [Ped()] for more informations.
 #' @slot id A character vector with the id of the individuals.
 #' @slot dadid A character vector with the id of the father of the individuals.
 #' @slot momid A character vector with the id of the mother of the individuals.
