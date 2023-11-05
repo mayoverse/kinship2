@@ -65,7 +65,7 @@ with the individuals informations. See \code{\link[=Ped]{Ped()}} for more inform
 \item{dadid}{A vector containing for each subject, the identifiers of the
 biologicals fathers.}
 
-\item{momid}{vector containing for each subject, the identifiers of the
+\item{momid}{A vector containing for each subject, the identifiers of the
 biologicals mothers.}
 
 \item{sex}{A character, factor or numeric vector corresponding to

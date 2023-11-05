@@ -9,14 +9,13 @@
 #' Given a family id vector, also compute the familial grouping from first
 #' principles using the parenting data, and compare the results.
 #'
-#' The `make_famid` function is used to create a de novo family id from the
+#' The [make_famid()] function is used to create a de novo family id from the
 #' parentage data, and this is compared to the family id given in the data.
 #'
 #' If there are any joins, then an attribute 'join' is attached.
 #' It will be a matrix with family as row labels, new-family-id as the columns,
 #' and the number of subjects as entries.
 #'
-#' @inheritParams kinship
 #' @inheritParams Ped
 #' @param newfam The result of a call to `make_famid()`. If this has already
 #' been computed by the user, adding it as an argument shortens the running
@@ -53,31 +52,16 @@
 #' rep(1, nrow(sampleped))))
 #' fcheck.combined
 #'
-#' # make person 120's father be her son.
-#' sampleped[20, 3] <- 131
-#' fcheck1.bad <- try(
-#'   {
-#'     with(sampleped, family_check(id, father, mother, famid))
-#'   },
-#'   silent = FALSE
-#' )
-#'
-#' ## fcheck1.bad is a try-error
-#'
-#' @seealso [make_famid()], [kinship()]
+#' @seealso [make_famid()]
 #' @include AllClass.R
 #' @keywords internal
-#' @docType methods
 #' @export
 setGeneric("family_check", signature = "obj",
     function(obj, ...) standardGeneric("family_check")
 )
 
 #' @rdname family_check
-#' @include make_famid.R
-#' @aliases family_check,character
-#' @export
-setMethod("family_check", "character",
+setMethod("family_check", "character_OR_integer",
     function(obj, dadid, momid, famid, newfam) {
         id <- obj
         if (is.numeric(famid) && any(is.na(famid))) {
@@ -121,8 +105,6 @@ setMethod("family_check", "character",
 )
 
 #' @rdname family_check
-#' @docType methods
-#' @aliases family_check,Pedigree
 setMethod("family_check", "Pedigree",
     function(obj) {
         family_check(ped(obj))
@@ -130,8 +112,6 @@ setMethod("family_check", "Pedigree",
 )
 
 #' @rdname family_check
-#' @docType methods
-#' @aliases family_check,Ped
 setMethod("family_check", "Ped",
     function(obj) {
         family_check(id(obj), dadid(obj), momid(obj), famid(obj))

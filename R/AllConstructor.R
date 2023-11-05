@@ -42,7 +42,7 @@ na_to_length <- function(x, temp, value) {
 #' `data.frame` with all the informations in corresponding columns.
 #' @param dadid A vector containing for each subject, the identifiers of the
 #' biologicals fathers.
-#' @param momid vector containing for each subject, the identifiers of the
+#' @param momid A vector containing for each subject, the identifiers of the
 #' biologicals mothers.
 #' @param famid A character vector with the family identifiers of the
 #' individuals. If provide, will be aggregated to the individuals

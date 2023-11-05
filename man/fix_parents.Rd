@@ -23,7 +23,7 @@ dataframe is given it must contain the columns \code{id}, \code{dadid},
 \item{dadid}{A vector containing for each subject, the identifiers of the
 biologicals fathers.}
 
-\item{momid}{vector containing for each subject, the identifiers of the
+\item{momid}{A vector containing for each subject, the identifiers of the
 biologicals mothers.}
 
 \item{sex}{A character, factor or numeric vector corresponding to

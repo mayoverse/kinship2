@@ -13,7 +13,7 @@ Ped(obj, ...)
 \item{dadid}{A vector containing for each subject, the identifiers of the
 biologicals fathers.}
 
-\item{momid}{vector containing for each subject, the identifiers of the
+\item{momid}{A vector containing for each subject, the identifiers of the
 biologicals mothers.}
 
 \item{famid}{A character vector with the family identifiers of the

@@ -8,34 +8,31 @@
 A data frame with 28081 observations, one line per subject, on the
 following 14 variables.
 \itemize{
-\item \code{id} subject identifier
-\item \code{proband} if 1, this subject is one of the original
+\item \code{id} : Subject identifier
+\item \code{proband} : If 1, this subject is one of the original
 426 probands
-\item \code{fatherid} identifier of the father, if the father is part of
+\item \code{fatherid} : Identifier of the father, if the father is part of
 the data set; zero otherwise
-\item \code{motherid} identifier of the mother, if the mother is part of
+\item \code{motherid} : Identifier of the mother, if the mother is part of
 the data set; zero otherwise
-\item \code{famid} family identifier
-\item \code{endage} age at last follow-up or incident cancer
-\item \code{cancer} 1= breast cancer (females) or prostate cancer (males),
-0=censored
-\item \code{yob} year of birth
-\item \code{education} amount of education: 1-8 years, 9-12 years, high
-school graduate, vocational education
-beyond high school, some college but did not graduate, college graduate,
-post-graduate education, refused to
-answer on the questionnaire
-\item \code{marstat} marital status: married, living with someone in a
+\item \code{famid} : Family identifier
+\item \code{endage} : Age at last follow-up or incident cancer
+\item \code{cancer} : \code{1} = breast cancer (females) or prostate cancer (males),
+\code{0} = censored
+\item \code{yob} : Year of birth
+\item \code{education} : Amount of education: 1-8 years, 9-12 years, high
+school graduate, vocational education beyond high school,
+some college but did not graduate, college graduate,
+post-graduate education, refused to answer on the questionnaire
+\item \code{marstat} : Marital status: married, living with someone in a
 marriage-like relationship, separated
 or divorced, widowed, never married, refused to answer the questionaire
-\item \code{everpreg} ever pregnant: never pregnant at the time of
-baseline survey, ever pregnant at the time
-of baseline survey
-\item \code{parity} number of births
-\item \code{nbreast} number of breast biopsies
-\item \code{sex} M or F
-\item \code{bcpc} part of one of the families in the breast/prostate
-cancer substudy: 0=no, 1=yes.
+\item \code{everpreg} : Ever pregnant at the time of baseline survey
+\item \code{parity} : Number of births
+\item \code{nbreast} : Number of breast biopsies
+\item \code{sex} : \code{M} or \code{F}
+\item \code{bcpc} : Part of one of the families in the breast / prostate
+cancer substudy: \code{0} = no, \code{1} = yes.
 Note that subjects who were recruited to the overall study after the date of
 the BP substudy are coded as zero.
 }
@@ -46,7 +43,7 @@ data(minnbreast)
 \description{
 Data from the Minnesota Breast Cancer Family Study.
 This contains extended pedigrees from 426 families, each identified by
-a single proband in 1945-52, with follow up for incident breast cancer.
+a single proband in 1945-1952, with follow up for incident breast cancer.
 }
 \details{
 The original study was conducted by Dr. Elving Anderson at the
@@ -56,11 +53,13 @@ University Hospital were enrolled, and information gathered on parents,
 siblings, offspring, aunts / uncles, and grandparents with the goal of
 understanding possible familial aspects of brest cancer. In 1991 the
 study was resurrected by Dr Tom Sellers.
+
 Of the original 544 he excluded 58 prevalent cases, along with another 19
 who had less than 2 living relatives at the time of Dr Anderson's survey.
 Of the remaining 462 families 10 had no living members, 23 could not be
 located and 8 refused, leaving 426 families on whom updated pedigrees
 were obtained.
+
 This gave a study with 13351 males and 12699 females (5183 marry-ins).
 Primary questions were the relationship of early life exposures, breast
 density, and pharmacogenomics on incident breast cancer risk.
@@ -77,10 +76,12 @@ breastped <- Pedigree(minnbreast,
    cols_ren_ped = list(
        "indId" = "id", "fatherId" = "fatherid",
        "motherId" = "motherid", "gender" = "sex", "family" = "famid"
-   )
+   ), missid = "0", col_aff = "cancer"
 )
-print(breastped)
-#plot(breastped)  #plot family 8, proband is solid, slash for cancers
+summary(breastped)
+scales(breastped)
+#plot family 8, proband is solid, slash for cancers
+#plot(breastped[famid(breastped) == "8"])
 }
 \references{
 Epidemiologic and genetic follow-up study of 544 Minnesota breast cancer

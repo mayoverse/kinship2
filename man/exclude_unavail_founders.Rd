@@ -12,7 +12,7 @@ exclude_unavail_founders(id, dadid, momid, avail, missid = NA_character_)
 \item{dadid}{A vector containing for each subject, the identifiers of the
 biologicals fathers.}
 
-\item{momid}{vector containing for each subject, the identifiers of the
+\item{momid}{A vector containing for each subject, the identifiers of the
 biologicals mothers.}
 
 \item{avail}{A logical vector with the availability status of the

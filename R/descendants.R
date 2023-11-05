@@ -1,11 +1,13 @@
-#' Find all the descendants
+#' Find all descendants of list of individuals
 #'
 #' @description
 #' Find all the descendants of a particular list of individuals
-#' given a Pedigree
+#' given a Pedigree object.
 #'
+#' @param obj A Ped or Pedigree object or a vector of the
+#' individuals identifiers.
 #' @inheritParams duporder
-#' @inheritParams kinship
+#' @inheritParams Ped
 #'
 #' @return
 #' Vector of all descendants of the individuals in idlist.
@@ -18,15 +20,13 @@
 #' @include AllClass.R
 #' @export
 #' @keywords internal
-#' @docType methods
 setGeneric("descendants",
     function(idlist, obj, ...) standardGeneric("descendants")
 )
 
 #' @rdname descendants
-#' @docType methods
-#' @aliases descendants,character_OR_integer
-setMethod("descendants", signature(idlist = "character_OR_integer", obj = "character_OR_integer"),
+setMethod("descendants",
+    signature(idlist = "character_OR_integer", obj = "character_OR_integer"),
     function(idlist, obj, dadid, momid) {
         id <- as.character(obj)
         idlist <- as.character(idlist)
@@ -50,18 +50,16 @@ setMethod("descendants", signature(idlist = "character_OR_integer", obj = "chara
 )
 
 #' @rdname descendants
-#' @docType methods
-#' @aliases descendants,Pedigree
-setMethod("descendants", signature(idlist = "character_OR_integer", obj = "Pedigree"),
+setMethod("descendants",
+    signature(idlist = "character_OR_integer", obj = "Pedigree"),
     function(idlist, obj) {
         descendants(idlist, ped(obj))
     }
 )
 
 #' @rdname descendants
-#' @docType methods
-#' @aliases descendants,Ped
-setMethod("descendants", signature(idlist = "character_OR_integer", obj = "Ped"),
+setMethod("descendants",
+    signature(idlist = "character_OR_integer", obj = "Ped"),
     function(idlist, obj) {
         descendants(as.character(idlist), id(obj), dadid(obj), momid(obj))
     }

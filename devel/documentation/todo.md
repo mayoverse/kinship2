@@ -15,10 +15,10 @@
 - [x] alignped4.R
 - [x] auto_hint.R
 - [x] best_hint.R
-- [ ] bit_size.R
-- [ ] data.R
-- [ ] descendants.R
-- [ ] family_check.R
+- [x] bit_size.R
+- [x] data.R
+- [x] descendants.R
+- [x] family_check.R
 - [ ] find_avail_affected.R
 - [ ] find_avail_noninform.R
 - [ ] find_unavailable.R
