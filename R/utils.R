@@ -310,7 +310,7 @@ TRUE
 #'    c(0, 1, 2, 3.6, "TRUE", "FALSE", "0", "1", "NA", "B", TRUE, FALSE, NA)
 #' )
 #' @export
-vect_to_binary <- function(vect) {
+vect_to_binary <- function(vect, logical = FALSE) {
     if (is.factor(vect) || is.numeric(vect) || is.logical(vect)) {
         vect <- as.character(vect)
     }
@@ -325,7 +325,11 @@ vect_to_binary <- function(vect) {
     ), code_equiv, warn_missing = FALSE
     ))
     vect[!vect %in% c(0, 1)] <- NA
-    vect
+    if (logical) {
+        as.logical(vect)
+    } else {
+        vect
+    }
 }
 
 #' Transform a anchor variable to an ordered factor

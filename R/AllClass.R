@@ -4,6 +4,7 @@ NULL
 #### Class integer / character ####
 
 setClassUnion("character_OR_integer", c("character", "integer"))
+setClassUnion("numeric_OR_logical", c("numeric", "logical"))
 setClassUnion("missing_OR_NULL", c("missing", "NULL"))
 
 #### Hints Class ####
@@ -53,7 +54,7 @@ setValidity("Hints", is_valid_hints)
 #' - 'column_values': name of the column containing the raw values in the
 #' Ped object
 #' - 'column_mods': name of the column containing the mods of the transformed
-#' affection in the Ped object
+#' values in the Ped object
 #' - 'mods': all the different mods
 #' - 'labels': the corresponding labels of each mods
 #' - 'affected': a logical value indicating if the mod correspond to an affected
@@ -63,8 +64,10 @@ setValidity("Hints", is_valid_hints)
 #' - 'angle': the angle of the shading
 #' @slot border A data.frame with the informations for the availability status.
 #' The columns needed are:
-#' - 'column':name of the column containing the mods to use in the
+#' - 'column_values': name of the column containing the raw values in the
 #' Ped object
+#' - 'column_mods': name of the column containing the mods of the transformed
+#' values in the Ped object
 #' - 'mods': all the different mods
 #' - 'labels': the corresponding labels of each mods
 #' - 'border': the color to use for this mods
@@ -104,16 +107,21 @@ setValidity("Scales", is_valid_scales)
 #' (i.e. `male` < `female` < `unknown` < `terminated`).
 #' @slot famid A character vector with the family identifiers of the
 #' individuals (optional).
-#' @slot steril A numeric vector with the sterilisation status of the
-#' individuals (i.e. `0` = not sterilised, `1` = sterilised, `NA` = unknown).
-#' @slot status A numeric vector with the affection status of the
-#' individuals (i.e. `0` = alive, `1` = dead, `NA` = unknown).
-#' @slot avail A numeric vector with the availability status of the
-#' individuals (i.e. `0` = not available, `1` = available, `NA` = unknown).
-#' @slot affected A numeric vector with the affection status of the
-#' individuals (i.e. `0` = not affected, `1` = affected, `NA` = unknown).
-#' @slot useful A numeric vector with the usefulness status of the
-#' individuals (i.e. `0` = not useful, `1` = useful).
+#' @slot steril A logical vector with the sterilisation status of the
+#' individuals
+#' (i.e. `FALSE` = not sterilised, `TRUE` = sterilised, `NA` = unknown).
+#' @slot status A logical vector with the affection status of the
+#' individuals
+#' (i.e. `FALSE` = alive, `TRUE` = dead, `NA` = unknown).
+#' @slot avail A logical vector with the availability status of the
+#' individuals
+#' (i.e. `FALSE` = not available, `TRUE` = available, `NA` = unknown).
+#' @slot affected A logical vector with the affection status of the
+#' individuals
+#' (i.e. `FALSE` = not affected, `TRUE` = affected, `NA` = unknown).
+#' @slot useful A logical vector with the usefulness status of the
+#' individuals
+#' (i.e. `FALSE` = not useful, `TRUE` = useful).
 #' @slot kin A numeric vector with minimal kinship value between the
 #' individuals and the useful individuals.
 #' @slot num_child_tot A numeric vector with the total number of children
@@ -137,13 +145,13 @@ setClass("Ped",
         momid = "character",
         sex = "factor",
         famid = "character",
-        steril = "numeric",
-        status = "numeric",
-        avail = "numeric",
-        affected = "numeric",
-        useful = "numeric",
+        steril = "logical",
+        status = "logical",
+        avail = "logical",
+        affected = "logical",
+        useful = "logical",
         kin = "numeric",
-        id_inf = "numeric",
+        isinf = "logical",
         num_child_tot = "numeric",
         num_child_dir = "numeric",
         num_child_ind = "numeric"
@@ -156,7 +164,7 @@ setMethod("parallel_slot_names", "Ped",
         c(
             "id", "dadid", "momid", "sex", "famid",
             "steril", "status", "avail", "affected",
-            "useful", "kin", "id_inf",
+            "useful", "kin", "isinf",
             "num_child_tot", "num_child_dir", "num_child_ind",
             callNextMethod()
         )

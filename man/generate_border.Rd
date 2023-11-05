@@ -2,13 +2,12 @@
 % Please edit documentation in R/generate_colors.R
 \name{generate_border}
 \alias{generate_border}
-\title{Process the colors based on affection and availability}
+\title{Process the colors based on availability}
 \usage{
-generate_border(avail, colors_avail = c("green", "black"))
+generate_border(values, colors_avail = c("green", "black"))
 }
 \arguments{
-\item{avail}{A numeric vector with the availability status of the
-individuals (i.e. \code{0} = not available, \code{1} = available, \code{NA} = unknown).}
+\item{values}{The vector containing the values to process as available.}
 
 \item{colors_avail}{Set of 2 colors to use for the box's border of an
 individual. The first color will be used for available individual (avail
@@ -19,11 +18,13 @@ A dataframe containing the scale to use for the availability
 status.
 }
 \description{
-Process the colors based on affection and availability
+Process the colors based on availability
 }
 \details{
 Perform transformation uppon a column given as the one
 containing the availability status to compute the border color.
+The vector given will be transformed using the \code{\link[=vect_to_binary]{vect_to_binary()}}
+function.
 }
 \examples{
 generate_border(c(1, 0, 1, 0, NA, 1, 0, 1, 0, NA))

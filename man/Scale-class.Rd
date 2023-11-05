@@ -22,7 +22,7 @@ The columns needed are:
 \item 'column_values': name of the column containing the raw values in the
 Ped object
 \item 'column_mods': name of the column containing the mods of the transformed
-affection in the Ped object
+values in the Ped object
 \item 'mods': all the different mods
 \item 'labels': the corresponding labels of each mods
 \item 'affected': a logical value indicating if the mod correspond to an affected
@@ -35,8 +35,10 @@ individuals
 \item{\code{border}}{A data.frame with the informations for the availability status.
 The columns needed are:
 \itemize{
-\item 'column':name of the column containing the mods to use in the
+\item 'column_values': name of the column containing the raw values in the
 Ped object
+\item 'column_mods': name of the column containing the mods of the transformed
+values in the Ped object
 \item 'mods': all the different mods
 \item 'labels': the corresponding labels of each mods
 \item 'border': the color to use for this mods

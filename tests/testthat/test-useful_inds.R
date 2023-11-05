@@ -15,7 +15,7 @@ test_that("useful_inds works", {
     use_id_avaff <- with(df,
         useful_inds(id, dadid, momid, avail, affected, num_child_tot)
     )
-    expect_equal(df$id[!df$id %in% use_id],
+    expect_equal(df$id[!df$id %in% use_id_avaff],
         c("101", "102", "107", "108", "113", "117")
     )
 })

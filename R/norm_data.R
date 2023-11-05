@@ -140,7 +140,7 @@ norm_ped <- function(
 
         ## Add terminated for sterilized individuals that is neither dad nor mom
         if ("sterilisation" %in% colnames(ped_df)) {
-            ped_df$steril <- vect_to_binary(ped_df$sterilisation)
+            ped_df$steril <- vect_to_binary(ped_df$sterilisation, logical = TRUE)
             ped_df$sex[
                 ped_df$steril == 1 & !is.na(ped_df$steril) &
                     !is_father & !is_mother
@@ -213,15 +213,15 @@ norm_ped <- function(
 
         #### Available ####
         if ("available" %in% colnames(ped_df)) {
-            ped_df$avail <- vect_to_binary(ped_df$available)
+            ped_df$avail <- vect_to_binary(ped_df$available, logical = TRUE)
         }
         #### Status ####
         if ("vitalStatus" %in% colnames(ped_df)) {
-            ped_df$status <- vect_to_binary(ped_df$vitalStatus)
+            ped_df$status <- vect_to_binary(ped_df$vitalStatus, logical = TRUE)
         }
         #### Affected ####
         if ("affection" %in% colnames(ped_df)) {
-            ped_df$affected <- vect_to_binary(ped_df$affection)
+            ped_df$affected <- vect_to_binary(ped_df$affection, logical = TRUE)
         }
 
         #### Convert to num ####

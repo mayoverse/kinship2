@@ -8,8 +8,8 @@
           <character> <character> <character> <c("ordered", "factor")> <character>
       ID5         ID5        <NA>        <NA>                   female        <NA>
       ID4         ID4        <NA>        <NA>                     male        <NA>
-             steril    status     avail  affected    useful       kin    id_inf
-          <numeric> <numeric> <numeric> <numeric> <numeric> <numeric> <numeric>
+             steril    status     avail  affected    useful       kin     isinf
+          <logical> <logical> <logical> <logical> <logical> <numeric> <logical>
       ID5      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
       ID4      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>      <NA>
           num_child_tot num_child_dir num_child_ind
@@ -67,8 +67,8 @@
       2     3           ID2         ID2    2    ID2    FALSE  ID2       2    60
       
       Slot "border":
-        column mods labels border
-      1    ID1    1   Lab1    ID1
-      2    ID2    2   Lab2    ID2
+        column_values column_mods mods labels border
+      1           ID1         ID1    1   Lab1    ID1
+      2           ID2         ID2    2   Lab2    ID2
       
 

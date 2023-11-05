@@ -264,16 +264,8 @@ setGeneric("affected<-", function(x, value) {
     standardGeneric("affected<-")
 })
 setMethod("affected<-",
-    signature(x = "Ped", value = "ANY"),
+    signature(x = "Ped", value = "numeric_OR_logical"),
     function(x, value) {
-        if (
-            ! is.character(value) &&
-                ! is.numeric(value) &&
-                ! is.logical(value) &&
-                ! is.factor(value)
-        ) {
-            stop("Affected must be a character or integer vector")
-        }
         if (length(value) != length(x)) {
             if (length(value) == 1) {
                 value <- rep(value, length(x))
@@ -284,7 +276,7 @@ setMethod("affected<-",
                 )
             }
         }
-        x@affected <- vect_to_binary(value)
+        x@affected <- vect_to_binary(value, logical = TRUE)
         validObject(x)
         x
     }
@@ -310,16 +302,8 @@ setGeneric("avail<-", function(x, value) {
     standardGeneric("avail<-")
 })
 setMethod("avail<-",
-    signature(x = "Ped", value = "ANY"),
+    signature(x = "Ped", value = "numeric_OR_logical"),
     function(x, value) {
-        if (
-            ! is.character(value) &&
-                ! is.numeric(value) &&
-                ! is.logical(value) &&
-                ! is.factor(value)
-        ) {
-            stop("avail must be a character or numeric vector")
-        }
         if (length(value) != length(x)) {
             if (length(value) == 1) {
                 value <- rep(value, length(x))
@@ -330,7 +314,7 @@ setMethod("avail<-",
                 )
             }
         }
-        x@avail <- vect_to_binary(value)
+        x@avail <- vect_to_binary(value, logical = TRUE)
         validObject(x)
         x
     }
@@ -376,8 +360,8 @@ setMethod("kin<-",
     }
 )
 
-##### Id_inf Accessors #####
-#' id_inf getter of Ped object
+##### Isinf Accessors #####
+#' isinf getter of Ped object
 #'
 #' @param x A Ped object.
 #'
@@ -385,31 +369,31 @@ setMethod("kin<-",
 #' is informative or not.
 #'
 #' @rdname Ped
-#' @aliases id_inf,Ped-method
+#' @aliases isinf,Ped-method
 #' @export
-setGeneric("id_inf", function(x) {
-    standardGeneric("id_inf")
+setGeneric("isinf", function(x) {
+    standardGeneric("isinf")
 })
-setMethod("id_inf", signature(x = "Ped"), function(x) {
-    x@id_inf
+setMethod("isinf", signature(x = "Ped"), function(x) {
+    x@isinf
 })
-setGeneric("id_inf<-", function(x, value) {
-    standardGeneric("id_inf<-")
+setGeneric("isinf<-", function(x, value) {
+    standardGeneric("isinf<-")
 })
-setMethod("id_inf<-",
-    signature(x = "Ped", value = "numeric"),
+setMethod("isinf<-",
+    signature(x = "Ped", value = "numeric_OR_logical"),
     function(x, value) {
         if (length(value) != length(x)) {
             if (length(value) == 1) {
                 value <- rep(value, length(x))
             } else {
                 stop(
-                    "The length of the new values for id_inf should be: ",
+                    "The length of the new values for isinf should be: ",
                     "equal to the length of the Ped object"
                 )
             }
         }
-        x@id_inf <- value
+        x@isinf <- value
         validObject(x)
         x
     }
@@ -436,7 +420,7 @@ setGeneric("useful<-", function(x, value) {
     standardGeneric("useful<-")
 })
 setMethod("useful<-",
-    signature(x = "Ped", value = "numeric"),
+    signature(x = "Ped", value = "numeric_OR_logical"),
     function(x, value) {
         if (length(value) != length(x)) {
             if (length(value) == 1) {
@@ -448,7 +432,7 @@ setMethod("useful<-",
                 )
             }
         }
-        x@useful <- value
+        x@useful <- vect_to_binary(value, logical = TRUE)
         validObject(x)
         x
     }
@@ -538,7 +522,7 @@ setMethod(
         ped_slots <- c(
             "id", "dadid", "momid", "sex", "famid",
             "steril", "status", "avail", "affected",
-            "kin", "useful", "id_inf",
+            "kin", "useful", "isinf",
             "num_child_tot", "num_child_dir", "num_child_ind"
         )
         if (! slot %in% ped_slots) {
@@ -882,7 +866,7 @@ setGeneric("spouse<-", function(object, value) {
 
 setMethod(
     "spouse<-",
-    signature(object = "Pedigree", value = "ANY"),
+    signature(object = "Pedigree", value = "data.frame"),
     function(object, value) {
         spouse(hints(object)) <- value
         validObject(object)
@@ -892,10 +876,11 @@ setMethod(
 
 setMethod(
     "spouse<-",
-    signature(object = "Hints", value = "ANY"),
+    signature(object = "Hints", value = "data.frame"),
     function(object, value) {
-        # TODO: Check that the spouse matrix is valid
-        object@spouse <- value
+        df <- check_columns(value, c("idl", "idr", "anchor"))
+        df$anchor <- anchor_to_factor(df$anchor)
+        object@spouse <- df
         validObject(object)
         object
     }

@@ -100,7 +100,7 @@ ped_to_legdf <- function(ped,
     plot_df <- rbind.fill(plot_df, sex, sex_label)
 
     # Border
-    border_mods <- unique(ped_df[, unique(border(ped)$column)])
+    border_mods <- unique(ped_df[, unique(border(ped)$column_mods)])
     border <- data.frame(
         x0 = posx[3], y0 = posy[seq_along(border_mods)],
         type = rep("square_1_1", length(border_mods)),

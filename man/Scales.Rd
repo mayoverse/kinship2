@@ -68,7 +68,7 @@ Scales(
    fill = data.frame(
       order = 1,
       column_values = "affected",
-      column_mods = "affected_mod",
+      column_mods = "affected_mods",
       mods = c(0, 1),
       labels = c("unaffected", "affected"),
       affected = c(FALSE, TRUE),
@@ -77,7 +77,8 @@ Scales(
       angle = c(NA, 45)
    ),
    border = data.frame(
-      column = "avail",
+      column_values = "avail",
+      column_mods = "avail_mods",
       mods = c(0, 1),
       labels = c("not available", "available"),
       border = c("black", "blue")

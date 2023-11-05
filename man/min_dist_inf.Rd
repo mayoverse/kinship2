@@ -48,11 +48,13 @@ The following values are recognized:
 \item numeric() : 1 = "male", 2 = "female", 3 = "unknown", 4 = "terminated"
 }}
 
-\item{avail}{A numeric vector with the availability status of the
-individuals (i.e. \code{0} = not available, \code{1} = available, \code{NA} = unknown).}
+\item{avail}{A logical vector with the availability status of the
+individuals
+(i.e. \code{FALSE} = not available, \code{TRUE} = available, \code{NA} = unknown).}
 
-\item{affected}{A numeric vector with the affection status of the
-individuals (i.e. \code{0} = unaffected, \code{1} = affected, \code{NA} = unknown).}
+\item{affected}{A logical vector with the affection status of the
+individuals
+(i.e. \code{FALSE} = unaffected, \code{TRUE} = affected, \code{NA} = unknown).}
 
 \item{informative}{Informative individuals selection can take 5 values:
 \itemize{
@@ -71,7 +73,7 @@ individuals (i.e. \code{0} = unaffected, \code{1} = affected, \code{NA} = unknow
 All the id, dadid and momid corresponding to those values will be set
 to \code{NA_character_}.}
 
-\item{reset}{If TRUE, the \code{kin} and if \code{id_inf} columns is reset}
+\item{reset}{If TRUE, the \code{kin} and if \code{isinf} columns is reset}
 }
 \value{
 \subsection{When obj is a vector}{
@@ -105,7 +107,7 @@ by 2, the minimum distance is increased by 1.
 \examples{
 data(sampleped)
 ped <- Pedigree(sampleped)
-min_dist_inf(ped, col_aff = "affection_aff")$ped
+min_dist_inf(ped, col_aff = "affection_mods")$ped
 
 }
 \seealso{

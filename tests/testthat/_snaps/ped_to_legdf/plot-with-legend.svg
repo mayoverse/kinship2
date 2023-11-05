@@ -286,49 +286,49 @@
 <g clip-path='url(#cpMTg0Ljk0fDcyMC4wMHwzOTMuMTV8NzEzLjg5)'>
 <polygon points='219.09,531.44 219.09,538.70 226.50,538.70 226.50,531.44 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
 <polygon points='226.50,544.36 226.47,544.83 226.38,545.28 226.23,545.73 226.02,546.14 225.76,546.53 225.46,546.89 225.10,547.20 224.71,547.47 224.29,547.68 223.85,547.84 223.39,547.95 222.91,547.99 222.44,547.98 221.97,547.90 221.52,547.77 221.08,547.58 220.68,547.34 220.31,547.05 219.98,546.72 219.69,546.34 219.46,545.94 219.28,545.51 219.16,545.06 219.10,544.60 219.10,544.13 219.16,543.67 219.28,543.22 219.46,542.79 219.69,542.38 219.98,542.01 220.31,541.68 220.68,541.39 221.08,541.14 221.52,540.96 221.97,540.82 222.44,540.75 222.91,540.74 223.39,540.78 223.85,540.88 224.29,541.04 224.71,541.26 225.10,541.53 225.46,541.84 225.76,542.19 226.02,542.58 226.23,543.00 226.38,543.44 226.47,543.90 226.50,544.36 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
-<polygon points='295.14,531.44 295.14,538.70 302.54,538.70 302.54,531.44 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
-<polygon points='295.14,540.73 295.14,547.99 302.54,547.99 302.54,540.73 ' style='stroke-width: 0.75; stroke: #00FF00; fill: #FFFFFF;' />
-<polygon points='383.67,531.44 383.67,538.70 391.08,538.70 391.08,531.44 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
-<polygon points='383.67,540.73 383.67,547.99 391.08,547.99 391.08,540.73 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
-<polygon points='383.67,550.03 383.67,557.29 391.08,557.29 391.08,550.03 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
-<polygon points='387.37,535.07 387.37,531.44 383.67,531.44 383.67,537.16 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
-<polygon points='387.37,544.36 387.37,540.73 383.67,540.73 383.67,546.46 ' style='stroke-width: 0.75; fill: #FF0000;' />
-<polygon points='387.37,553.66 387.37,550.03 383.67,550.03 383.67,555.76 ' style='stroke-width: 0.75; fill: #BEBEBE;' />
-<polygon points='488.43,531.44 488.43,538.70 495.84,538.70 495.84,531.44 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
-<polygon points='488.43,540.73 488.43,547.99 495.84,547.99 495.84,540.73 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
-<polygon points='492.13,535.07 488.43,537.16 488.43,538.70 495.84,538.70 495.84,537.16 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
-<polygon points='492.13,544.36 488.43,546.46 488.43,547.99 495.84,547.99 495.84,546.46 ' style='stroke-width: 0.75; fill: #FF0000;' />
-<polygon points='593.19,531.44 593.19,538.70 600.59,538.70 600.59,531.44 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
-<polygon points='593.19,540.73 593.19,547.99 600.59,547.99 600.59,540.73 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
-<polygon points='593.19,550.03 593.19,557.29 600.59,557.29 600.59,550.03 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
-<polygon points='593.19,559.33 593.19,566.59 600.59,566.59 600.59,559.33 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
-<polygon points='593.19,568.62 593.19,575.88 600.59,575.88 600.59,568.62 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
-<polygon points='593.19,577.92 593.19,585.18 600.59,585.18 600.59,577.92 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
-<polygon points='596.89,535.07 600.59,537.16 600.59,531.44 596.89,531.44 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
-<polygon points='596.89,544.36 600.59,546.46 600.59,540.73 596.89,540.73 ' style='stroke-width: 0.75; fill: #9AB1C4;' />
-<polygon points='596.89,553.66 600.59,555.76 600.59,550.03 596.89,550.03 ' style='stroke-width: 0.75; fill: #36648B;' />
-<polygon points='596.89,562.96 600.59,565.05 600.59,559.33 596.89,559.33 ' style='stroke-width: 0.75; fill: #FFC0CB;' />
-<polygon points='596.89,572.25 600.59,574.35 600.59,568.62 596.89,568.62 ' style='stroke-width: 0.75; fill: #CF70DD;' />
-<polygon points='596.89,581.55 600.59,583.65 600.59,577.92 596.89,577.92 ' style='stroke-width: 0.75; fill: #A020F0;' />
-<text x='224.55' y='526.79' style='font-size: 9.00px; font-family: sans;' textLength='15.51px' lengthAdjust='spacingAndGlyphs'>Sex</text>
-<text x='300.60' y='526.79' style='font-size: 9.00px; font-family: sans;' textLength='27.02px' lengthAdjust='spacingAndGlyphs'>Border</text>
-<text x='389.13' y='526.79' style='font-size: 9.00px; font-family: sans;' textLength='34.03px' lengthAdjust='spacingAndGlyphs'>affection</text>
-<text x='493.89' y='526.79' style='font-size: 9.00px; font-family: sans;' textLength='18.51px' lengthAdjust='spacingAndGlyphs'>avail</text>
-<text x='598.65' y='526.79' style='font-size: 9.00px; font-family: sans;' textLength='34.03px' lengthAdjust='spacingAndGlyphs'>val_num</text>
-<text x='233.33' y='533.76' style='font-size: 6.00px; font-family: sans;' textLength='13.01px' lengthAdjust='spacingAndGlyphs'>Male</text>
-<text x='233.33' y='543.06' style='font-size: 6.00px; font-family: sans;' textLength='20.01px' lengthAdjust='spacingAndGlyphs'>Female</text>
-<text x='309.37' y='533.76' style='font-size: 6.00px; font-family: sans;' textLength='37.03px' lengthAdjust='spacingAndGlyphs'>Non Available</text>
-<text x='309.37' y='543.06' style='font-size: 6.00px; font-family: sans;' textLength='24.35px' lengthAdjust='spacingAndGlyphs'>Available</text>
-<text x='397.91' y='533.76' style='font-size: 6.00px; font-family: sans;' textLength='45.71px' lengthAdjust='spacingAndGlyphs'>Healthy &lt;= to 0.5</text>
-<text x='397.91' y='543.06' style='font-size: 6.00px; font-family: sans;' textLength='43.87px' lengthAdjust='spacingAndGlyphs'>Affected &gt; to 0.5</text>
-<text x='397.91' y='552.35' style='font-size: 6.00px; font-family: sans;' textLength='8.34px' lengthAdjust='spacingAndGlyphs'>NA</text>
-<text x='502.67' y='533.76' style='font-size: 6.00px; font-family: sans;' textLength='45.71px' lengthAdjust='spacingAndGlyphs'>Healthy &lt;= to 0.5</text>
-<text x='502.67' y='543.06' style='font-size: 6.00px; font-family: sans;' textLength='43.87px' lengthAdjust='spacingAndGlyphs'>Affected &gt; to 0.5</text>
-<text x='607.42' y='533.76' style='font-size: 6.00px; font-family: sans;' textLength='77.40px' lengthAdjust='spacingAndGlyphs'>Healthy &lt;= to 115 : [101,106]</text>
-<text x='607.42' y='543.06' style='font-size: 6.00px; font-family: sans;' textLength='77.73px' lengthAdjust='spacingAndGlyphs'>Healthy &lt;= to 115 : (106,110]</text>
-<text x='607.42' y='552.35' style='font-size: 6.00px; font-family: sans;' textLength='77.73px' lengthAdjust='spacingAndGlyphs'>Healthy &lt;= to 115 : (110,115]</text>
-<text x='607.42' y='561.65' style='font-size: 6.00px; font-family: sans;' textLength='75.56px' lengthAdjust='spacingAndGlyphs'>Affected &gt; to 115 : [116,124]</text>
-<text x='607.42' y='570.95' style='font-size: 6.00px; font-family: sans;' textLength='75.90px' lengthAdjust='spacingAndGlyphs'>Affected &gt; to 115 : (124,133]</text>
-<text x='607.42' y='580.24' style='font-size: 6.00px; font-family: sans;' textLength='75.90px' lengthAdjust='spacingAndGlyphs'>Affected &gt; to 115 : (133,141]</text>
+<polygon points='293.65,531.44 293.65,538.70 301.06,538.70 301.06,531.44 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
+<polygon points='293.65,540.73 293.65,547.99 301.06,547.99 301.06,540.73 ' style='stroke-width: 0.75; stroke: #00FF00; fill: #FFFFFF;' />
+<polygon points='380.45,531.44 380.45,538.70 387.86,538.70 387.86,531.44 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
+<polygon points='380.45,540.73 380.45,547.99 387.86,547.99 387.86,540.73 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
+<polygon points='380.45,550.03 380.45,557.29 387.86,557.29 387.86,550.03 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
+<polygon points='384.15,535.07 384.15,531.44 380.45,531.44 380.45,537.16 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
+<polygon points='384.15,544.36 384.15,540.73 380.45,540.73 380.45,546.46 ' style='stroke-width: 0.75; fill: #FF0000;' />
+<polygon points='384.15,553.66 384.15,550.03 380.45,550.03 380.45,555.76 ' style='stroke-width: 0.75; fill: #BEBEBE;' />
+<polygon points='483.16,531.44 483.16,538.70 490.56,538.70 490.56,531.44 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
+<polygon points='483.16,540.73 483.16,547.99 490.56,547.99 490.56,540.73 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
+<polygon points='486.86,535.07 483.16,537.16 483.16,538.70 490.56,538.70 490.56,537.16 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
+<polygon points='486.86,544.36 483.16,546.46 483.16,547.99 490.56,547.99 490.56,546.46 ' style='stroke-width: 0.75; fill: #FF0000;' />
+<polygon points='596.24,531.44 596.24,538.70 603.64,538.70 603.64,531.44 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
+<polygon points='596.24,540.73 596.24,547.99 603.64,547.99 603.64,540.73 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
+<polygon points='596.24,550.03 596.24,557.29 603.64,557.29 603.64,550.03 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
+<polygon points='596.24,559.33 596.24,566.59 603.64,566.59 603.64,559.33 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
+<polygon points='596.24,568.62 596.24,575.88 603.64,575.88 603.64,568.62 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
+<polygon points='596.24,577.92 596.24,585.18 603.64,585.18 603.64,577.92 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
+<polygon points='599.94,535.07 603.64,537.16 603.64,531.44 599.94,531.44 ' style='stroke-width: 0.75; fill: #FFFFFF;' />
+<polygon points='599.94,544.36 603.64,546.46 603.64,540.73 599.94,540.73 ' style='stroke-width: 0.75; fill: #9AB1C4;' />
+<polygon points='599.94,553.66 603.64,555.76 603.64,550.03 599.94,550.03 ' style='stroke-width: 0.75; fill: #36648B;' />
+<polygon points='599.94,562.96 603.64,565.05 603.64,559.33 599.94,559.33 ' style='stroke-width: 0.75; fill: #FFC0CB;' />
+<polygon points='599.94,572.25 603.64,574.35 603.64,568.62 599.94,568.62 ' style='stroke-width: 0.75; fill: #CF70DD;' />
+<polygon points='599.94,581.55 603.64,583.65 603.64,577.92 599.94,577.92 ' style='stroke-width: 0.75; fill: #A020F0;' />
+<text x='224.52' y='526.79' style='font-size: 9.00px; font-family: sans;' textLength='15.51px' lengthAdjust='spacingAndGlyphs'>Sex</text>
+<text x='299.08' y='526.79' style='font-size: 9.00px; font-family: sans;' textLength='27.02px' lengthAdjust='spacingAndGlyphs'>Border</text>
+<text x='385.87' y='526.79' style='font-size: 9.00px; font-family: sans;' textLength='34.03px' lengthAdjust='spacingAndGlyphs'>affection</text>
+<text x='488.58' y='526.79' style='font-size: 9.00px; font-family: sans;' textLength='18.51px' lengthAdjust='spacingAndGlyphs'>avail</text>
+<text x='601.66' y='526.79' style='font-size: 9.00px; font-family: sans;' textLength='34.03px' lengthAdjust='spacingAndGlyphs'>val_num</text>
+<text x='233.12' y='533.76' style='font-size: 6.00px; font-family: sans;' textLength='13.01px' lengthAdjust='spacingAndGlyphs'>Male</text>
+<text x='233.12' y='543.06' style='font-size: 6.00px; font-family: sans;' textLength='20.01px' lengthAdjust='spacingAndGlyphs'>Female</text>
+<text x='307.68' y='533.76' style='font-size: 6.00px; font-family: sans;' textLength='37.03px' lengthAdjust='spacingAndGlyphs'>Non Available</text>
+<text x='307.68' y='543.06' style='font-size: 6.00px; font-family: sans;' textLength='24.35px' lengthAdjust='spacingAndGlyphs'>Available</text>
+<text x='394.48' y='533.76' style='font-size: 6.00px; font-family: sans;' textLength='45.71px' lengthAdjust='spacingAndGlyphs'>Healthy &lt;= to 0.5</text>
+<text x='394.48' y='543.06' style='font-size: 6.00px; font-family: sans;' textLength='43.87px' lengthAdjust='spacingAndGlyphs'>Affected &gt; to 0.5</text>
+<text x='394.48' y='552.35' style='font-size: 6.00px; font-family: sans;' textLength='8.34px' lengthAdjust='spacingAndGlyphs'>NA</text>
+<text x='497.19' y='533.76' style='font-size: 6.00px; font-family: sans;' textLength='51.36px' lengthAdjust='spacingAndGlyphs'>Healthy are FALSE</text>
+<text x='497.19' y='543.06' style='font-size: 6.00px; font-family: sans;' textLength='50.36px' lengthAdjust='spacingAndGlyphs'>Affected are TRUE</text>
+<text x='610.27' y='533.76' style='font-size: 6.00px; font-family: sans;' textLength='77.40px' lengthAdjust='spacingAndGlyphs'>Healthy &lt;= to 115 : [101,106]</text>
+<text x='610.27' y='543.06' style='font-size: 6.00px; font-family: sans;' textLength='77.73px' lengthAdjust='spacingAndGlyphs'>Healthy &lt;= to 115 : (106,110]</text>
+<text x='610.27' y='552.35' style='font-size: 6.00px; font-family: sans;' textLength='77.73px' lengthAdjust='spacingAndGlyphs'>Healthy &lt;= to 115 : (110,115]</text>
+<text x='610.27' y='561.65' style='font-size: 6.00px; font-family: sans;' textLength='75.56px' lengthAdjust='spacingAndGlyphs'>Affected &gt; to 115 : [116,124]</text>
+<text x='610.27' y='570.95' style='font-size: 6.00px; font-family: sans;' textLength='75.90px' lengthAdjust='spacingAndGlyphs'>Affected &gt; to 115 : (124,133]</text>
+<text x='610.27' y='580.24' style='font-size: 6.00px; font-family: sans;' textLength='75.90px' lengthAdjust='spacingAndGlyphs'>Affected &gt; to 115 : (133,141]</text>
 </g>
 </svg>

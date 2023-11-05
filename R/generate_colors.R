@@ -7,7 +7,6 @@ NULL
 #' containing affection status to compute the filling color.
 #'
 #' @param values The vector containing the values to process as affection.
-#' @param affected The vector containing the affection status TRUE/FALSE.
 #' @param labels The vector containing the labels to use for the affection.
 #' @param keep_full_scale Boolean defining if the affection values need to
 #' be set as a scale. If `values` is numeric the filling scale will be
@@ -20,6 +19,7 @@ NULL
 #' affected individuls.
 #' @param colors_unaff Set of increasing colors to use for the filling of the
 #' unaffected individuls.
+#' @inheritParams Ped
 #'
 #' @return A list of two elements
 #' - The processed values column as a numeric factor
@@ -132,21 +132,23 @@ generate_fill <- function(
     fill[is.na(fill)] <- "grey"
     mods <- as.numeric(mods)
 
-    scale <- unique(as.data.frame(
+    sc_fill <- unique(as.data.frame(
         list(
             mods = mods, labels = labels, affected = affected, fill = fill,
             density = rep(NA_integer_, n), angle = rep(NA_integer_, n)
         )
     ))
-    list(mods = mods, affected = affected, fill_scale = scale)
+    list(mods = mods, affected = affected, sc_fill = sc_fill)
 }
 
-#' Process the colors based on affection and availability
+#' Process the colors based on availability
 #'
 #' @details Perform transformation uppon a column given as the one
 #' containing the availability status to compute the border color.
+#' The vector given will be transformed using the [vect_to_binary()]
+#' function.
 #'
-#' @inheritParams Ped
+#' @param values The vector containing the values to process as available.
 #' @param colors_avail Set of 2 colors to use for the box's border of an
 #' individual. The first color will be used for available individual (avail
 #' == 1) and the second for the unavailable individual (avail == 0).
@@ -158,28 +160,23 @@ generate_fill <- function(
 #' generate_border(c(1, 0, 1, 0, NA, 1, 0, 1, 0, NA))
 #'
 #' @export
-generate_border <- function(avail, colors_avail = c("green", "black")) {
-    if (length(avail) > 0) {
-        if (! is.numeric(avail) && ! all(is.na(avail))) {
-            stop("Available variable need to be numeric")
-        }
-
-        if (!all(levels(as.factor(avail)) %in% c("0", "1", "NA"))) {
-            stop("Available variable need to have only 0, 1 or NA")
-        }
-    }
-
+generate_border <- function(values, colors_avail = c("green", "black")) {
     # Set border colors
     if (length(colors_avail) != 2) {
         stop("Variable `colors_avail` need to be a vector of 2 colors")
     }
 
-    as.data.frame(list(
+    mods <- vect_to_binary(values)
+    avail <- vect_to_binary(values, logical = TRUE)
+
+    sc_bord <- data.frame(
         column = "avail",
         mods = c(NA, 1, 0),
         border = c("grey", colors_avail[1], colors_avail[2]),
         labels = c("NA", "Available", "Non Available")
-    ))
+    )
+
+    list(mods = mods, avail = avail, sc_bord = sc_bord)
 }
 
 #' Process the colors based on affection and availability
@@ -234,14 +231,16 @@ setMethod("generate_colors", "character",
         affected <- generate_aff_inds(affected_val,
             mods_aff, threshold, sup_thres_aff
         )
-        border <- generate_border(avail, colors_avail)
-        lst_sc <- generate_fill(
+        lst_bord <- generate_border(avail, colors_avail)
+        lst_aff <- generate_fill(
             affected_val, affected$affected, affected$labels,
             keep_full_scale, breaks, colors_aff, colors_unaff
         )
 
-        lst_sc$border_scale <- border
-        lst_sc
+        list(
+            fill = lst_aff,
+            bord = lst_bord
+        )
     }
 )
 
@@ -261,15 +260,17 @@ setMethod("generate_colors", "numeric",
         affected <- generate_aff_inds(affected_val,
             mods_aff, threshold, sup_thres_aff
         )
-        border <- generate_border(avail, colors_avail)
 
-        lst_sc <- generate_fill(
+        lst_bord <- generate_border(avail, colors_avail)
+        lst_aff <- generate_fill(
             affected_val, affected$affected, affected$labels,
             keep_full_scale, breaks, colors_aff, colors_unaff
         )
 
-        lst_sc$border_scale <- border
-        lst_sc
+        list(
+            fill = lst_aff,
+            bord = lst_bord
+        )
     }
 )
 
@@ -279,7 +280,7 @@ setMethod("generate_colors", "numeric",
 setMethod("generate_colors", "logical",
     function(
         obj, avail,
-        mods_aff = NULL, threshold = 0.5, sup_thres_aff = TRUE,
+        mods_aff = TRUE, threshold = 0.5, sup_thres_aff = TRUE,
         keep_full_scale = FALSE, breaks = 3,
         colors_aff = c("yellow2", "red"),
         colors_unaff = c("white", "steelblue4"),
@@ -289,14 +290,16 @@ setMethod("generate_colors", "logical",
         affected <- generate_aff_inds(affected_val,
             mods_aff, threshold, sup_thres_aff
         )
-        border <- generate_border(avail, colors_avail)
-        lst_sc <- generate_fill(
+        lst_bord <- generate_border(avail, colors_avail)
+        lst_aff <- generate_fill(
             affected_val, affected$affected, affected$labels,
             keep_full_scale, breaks, colors_aff, colors_unaff
         )
 
-        lst_sc$border_scale <- border
-        lst_sc
+        list(
+            fill = lst_aff,
+            bord = lst_bord
+        )
     }
 )
 
@@ -314,7 +317,7 @@ setMethod("generate_colors", "logical",
 setMethod("generate_colors", "Pedigree",
     function(obj,
         col_aff = "affected", add_to_scale = TRUE,
-        col_avail = "available",
+        col_avail = "avail",
         mods_aff = NULL, threshold = 0.5, sup_thres_aff = TRUE,
         keep_full_scale = FALSE, breaks = 3,
         colors_aff = c("yellow2", "red"),
@@ -338,29 +341,50 @@ setMethod("generate_colors", "Pedigree",
             return(obj)
         }
 
-        new_col <- paste0(col_aff, "_aff")
+        new_fill <- paste0(col_aff, "_mods")
+        new_bord <- paste0(col_avail, "_mods")
         df <- check_columns(as.data.frame(ped(obj)), c(col_aff, col_avail),
-            "", new_col, others_cols = TRUE
+            "", c(new_fill, new_bord), others_cols = TRUE
         )
 
-        lst_sc <- generate_colors(df[[col_aff]], df[[col_avail]],
-            mods_aff, threshold, sup_thres_aff,
-            keep_full_scale, breaks,
-            colors_aff, colors_unaff, colors_avail
+        ## Generate affected individuals
+        lst_inds <- generate_aff_inds(df[[col_aff]],
+            mods_aff, threshold, sup_thres_aff
         )
 
-        mcols(obj)[new_col] <- lst_sc$mods
-        affected(ped(obj)) <- lst_sc$affected
-        if (nrow(lst_sc$fill_scale) > 0) {
-            lst_sc$fill_scale$column_mods <- new_col
-            lst_sc$fill_scale$column_values <- col_aff
+        ## Create border and fill scales
+        lst_bord <- generate_border(
+            df[[col_avail]], colors_avail
+        )
+        lst_fill <- generate_fill(
+            df[[col_aff]], lst_inds$affected, lst_inds$labels,
+            keep_full_scale, breaks, colors_aff, colors_unaff
+        )
+
+        lst_sc <- list(
+            fill = lst_fill$sc_fill,
+            border = lst_bord$sc_bord
+        )
+
+        ## Add mods to Pedigree object and update slots
+        mcols(obj)[new_fill] <- lst_fill$mods
+        mcols(obj)[new_bord] <- lst_bord$mods
+
+        affected(ped(obj)) <- lst_fill$affected
+        avail(ped(obj)) <- lst_bord$avail
+
+        ## Update scales with correct names
+        if (nrow(lst_sc$fill) > 0) {
+            lst_sc$fill$column_mods <- new_fill
+            lst_sc$fill$column_values <- col_aff
         }
 
-        scales <- list(
-            fill = lst_sc$fill_scale,
-            border = lst_sc$border_scale
-        )
+        if (nrow(lst_sc$bord) > 0) {
+            lst_sc$border$column_mods <- new_bord
+            lst_sc$border$column_values <- col_avail
+        }
 
+        ## Should the affected scales be added to existing one
         if (add_to_scale) {
             if (col_aff %in% fill(obj)$column_values) {
                 if (!reset) {
@@ -379,12 +403,12 @@ setMethod("generate_colors", "Pedigree",
                     max(fill(obj)$order) + 1, 1
                 )
             }
-            scales$fill$order <- new_order
-            scales$fill <- rbind.fill(fill(obj), scales$fill)
+            lst_sc$fill$order <- new_order
+            lst_sc$fill <- rbind.fill(fill(obj), lst_sc$fill)
         } else {
-            scales$fill$order <- 1
+            lst_sc$fill$order <- 1
         }
-        scales(obj) <- Scales(scales$fill, scales$border)
+        scales(obj) <- Scales(lst_sc$fill, lst_sc$border)
         validObject(obj)
         obj
     }

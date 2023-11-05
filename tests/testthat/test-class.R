@@ -204,7 +204,7 @@ test_that("Scales class works", {
     ## From scratch
     scl0 <- Scales()
     expect_equal(dim(fill(scl0)), c(0, 9))
-    expect_equal(dim(border(scl0)), c(0, 4))
+    expect_equal(dim(border(scl0)), c(0, 5))
 
     expect_error(fill(scl0) <- c("ID1", "ID2"))
     expect_error(border(scl0) <- c("ID1", "ID2"))
@@ -223,7 +223,8 @@ test_that("Scales class works", {
         angle = c("A", 60)
     ))
     expect_snapshot_error(border(scl0) <- data.frame(
-        column = c("ID1", "ID2"),
+        column_values = c("ID1", "ID2"),
+        column_mods = c("ID1", "ID2"),
         mods = c("ID1", "ID2"),
         labels = c(1, 2),
         border = c("ID1", "ID2")
@@ -246,13 +247,14 @@ test_that("Scales class works", {
     expect_equal(fill(scl0)$fill[1], "ID3")
 
     border(scl0) <- data.frame(
-        column = c("ID1", "ID2"),
+        column_values = c("ID1", "ID2"),
+        column_mods = c("ID1", "ID2"),
         mods = c(1, 2),
         labels = c("Lab1", "Lab2"),
         border = c("ID1", "ID2")
     )
 
-    expect_equal(dim(border(scl0)), c(2, 4))
+    expect_equal(dim(border(scl0)), c(2, 5))
     expect_snapshot(scl0)
 
     ## With constructor
@@ -269,7 +271,8 @@ test_that("Scales class works", {
             angle = c(90, 60)
         ),
         border = data.frame(
-            column = c("ID1", "ID2"),
+            column_values = c("ID1", "ID2"),
+            column_mods = c("ID1", "ID2"),
             mods = c(1, 2),
             labels = c("Lab1", "Lab2"),
             border = c("ID1", "ID2")
@@ -289,7 +292,7 @@ test_that("Pedigree class works", {
     expect_equal(horder(pedi), numeric())
     expect_equal(dim(spouse(pedi)), c(0, 3))
     expect_equal(dim(fill(pedi)), c(0, 9))
-    expect_equal(dim(border(pedi)), c(0, 4))
+    expect_equal(dim(border(pedi)), c(0, 5))
     expect_equal(length(ped(pedi)), 0)
     expect_equal(length(rel(pedi)), 0)
 })

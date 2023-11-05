@@ -15,16 +15,16 @@
       9      8        2        0      2         FALSE      <NA>        3      A
       10     9        9        8      3         FALSE        Ab        5      B
                 sex steril status avail id dadid momid famid
-      1  terminated      1     NA    NA  1     3     4  <NA>
-      2        male      0     NA     1  2     0     0  <NA>
-      3        male      0     NA     0  3     8     7  <NA>
-      4      female      0     NA    NA  4     6     5  <NA>
-      5      female      0     NA    NA  5     0     0  <NA>
-      6        male      0     NA     0  6  <NA>     0  <NA>
-      7      female      0     NA    NA  7     0     0  <NA>
-      8      female      0     NA     0  8     0     0  <NA>
-      9      female      0     NA    NA  8     2     0  <NA>
-      10       male      0     NA    NA  9     9     8  <NA>
+      1  terminated   TRUE     NA    NA  1     3     4  <NA>
+      2        male  FALSE     NA  TRUE  2     0     0  <NA>
+      3        male  FALSE     NA FALSE  3     8     7  <NA>
+      4      female  FALSE     NA    NA  4     6     5  <NA>
+      5      female  FALSE     NA    NA  5     0     0  <NA>
+      6        male  FALSE     NA FALSE  6  <NA>     0  <NA>
+      7      female  FALSE     NA    NA  7     0     0  <NA>
+      8      female  FALSE     NA FALSE  8     0     0  <NA>
+      9      female  FALSE     NA    NA  8     2     0  <NA>
+      10       male  FALSE     NA    NA  9     9     8  <NA>
                                                          error affected family
       1                                                   <NA>       NA   <NA>
       2                                    isSterilButIsParent       NA   <NA>

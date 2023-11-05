@@ -18,12 +18,11 @@ test_that("Pedigree legend works", {
     sampleped$val_num <- as.numeric(sampleped$id)
     ped <- Pedigree(sampleped)
     ped <- ped[ped(ped, "famid") == "1"]
-    ped <- generate_colors(ped, add_to_scale = TRUE, "avail")
+    ped <- generate_colors(ped, add_to_scale = TRUE, "avail", mods_aff = TRUE)
     ped <- generate_colors(ped,
         add_to_scale = TRUE, "val_num", threshold = 115,
         colors_aff = c("pink", "purple"), keep_full_scale = TRUE
     )
-
     lst <- ped_to_legdf(ped, boxh = 1, boxw = 1, cex = 0.8)
     expect_snapshot(lst)
 

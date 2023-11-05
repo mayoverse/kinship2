@@ -4,7 +4,7 @@
 \alias{vect_to_binary}
 \title{Transform a vector variable to binary vector}
 \usage{
-vect_to_binary(vect)
+vect_to_binary(vect, logical = FALSE)
 }
 \arguments{
 \item{vect}{A character, factor, logical or numeric vector corresponding to

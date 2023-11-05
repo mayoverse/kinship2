@@ -37,7 +37,7 @@ NULL
 #' @examples
 #' data(sampleped)
 #' ped <- Pedigree(sampleped)
-#' min_dist_inf(ped, col_aff = "affection_aff")$ped
+#' min_dist_inf(ped, col_aff = "affection_mods")$ped
 #'
 #' @seealso [kinship()]
 #' @include is_informative.R
@@ -77,7 +77,7 @@ setMethod("min_dist_inf", "character", function(obj,
 #' @rdname min_dist_inf
 #' @aliases min_dist_inf,Pedigree
 #' @docType methods
-#' @param reset If TRUE, the `kin` and if `id_inf` columns is reset
+#' @param reset If TRUE, the `kin` and if `isinf` columns is reset
 setMethod("min_dist_inf", "Pedigree", function(obj,
     col_aff = NULL, informative = "AvAf",
     missid = NA_character_, reset = FALSE, ...
@@ -99,7 +99,7 @@ setMethod("min_dist_inf", "Pedigree", function(obj,
 #' @rdname min_dist_inf
 #' @aliases min_dist_inf,Ped
 #' @docType methods
-#' @param reset If TRUE, the `kin` and if `id_inf` columns is reset
+#' @param reset If TRUE, the `kin` and if `isinf` columns is reset
 setMethod("min_dist_inf", "Ped", function(obj,
     col_aff = NULL, informative = "AvAf",
     missid = NA_character_, reset = FALSE, ...

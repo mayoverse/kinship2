@@ -29,8 +29,8 @@
 \alias{avail,Ped-method}
 \alias{kin}
 \alias{kin,Ped-method}
-\alias{id_inf}
-\alias{id_inf,Ped-method}
+\alias{isinf}
+\alias{isinf,Ped-method}
 \alias{useful}
 \alias{useful,Ped-method}
 \title{S4 class to represent the identity informations in a Pedigree.}
@@ -74,7 +74,7 @@ avail(x)
 
 kin(x)
 
-id_inf(x)
+isinf(x)
 
 useful(x)
 }
@@ -107,17 +107,21 @@ biologicals mothers.}
 \item{famid}{A character vector with the family identifiers of the
 individuals.}
 
-\item{steril}{A numeric vector with the sterilisation status of the
-individuals (i.e. \code{0} = not sterilised, \code{1} = sterilised, \code{NA} = unknown).}
+\item{steril}{A logical vector with the sterilisation status of the
+individuals
+(i.e. \code{FALSE} = not sterilised, \code{TRUE} = sterilised, \code{NA} = unknown).}
 
-\item{status}{A numeric vector with the affection status of the
-individuals (i.e. \code{0} = alive, \code{1} = dead, \code{NA} = unknown).}
+\item{status}{A logical vector with the affection status of the
+individuals
+(i.e. \code{FALSE} = alive, \code{TRUE} = dead, \code{NA} = unknown).}
 
-\item{avail}{A numeric vector with the availability status of the
-individuals (i.e. \code{0} = not available, \code{1} = available, \code{NA} = unknown).}
+\item{avail}{A logical vector with the availability status of the
+individuals
+(i.e. \code{FALSE} = not available, \code{TRUE} = available, \code{NA} = unknown).}
 
-\item{affected}{A numeric vector with the affection status of the
-individuals (i.e. \code{0} = unaffected, \code{1} = affected, \code{NA} = unknown).}
+\item{affected}{A logical vector with the affection status of the
+individuals
+(i.e. \code{FALSE} = unaffected, \code{TRUE} = affected, \code{NA} = unknown).}
 
 \item{missid}{A character vector with the missing values identifiers.
 All the id, dadid and momid corresponding to those values will be set
@@ -192,20 +196,25 @@ to the Ped slots.
 \item{\code{famid}}{A character vector with the family identifiers of the
 individuals (optional).}
 
-\item{\code{steril}}{A numeric vector with the sterilisation status of the
-individuals (i.e. \code{0} = not sterilised, \code{1} = sterilised, \code{NA} = unknown).}
+\item{\code{steril}}{A logical vector with the sterilisation status of the
+individuals
+(i.e. \code{FALSE} = not sterilised, \code{TRUE} = sterilised, \code{NA} = unknown).}
 
-\item{\code{status}}{A numeric vector with the affection status of the
-individuals (i.e. \code{0} = alive, \code{1} = dead, \code{NA} = unknown).}
+\item{\code{status}}{A logical vector with the affection status of the
+individuals
+(i.e. \code{FALSE} = alive, \code{TRUE} = dead, \code{NA} = unknown).}
 
-\item{\code{avail}}{A numeric vector with the availability status of the
-individuals (i.e. \code{0} = not available, \code{1} = available, \code{NA} = unknown).}
+\item{\code{avail}}{A logical vector with the availability status of the
+individuals
+(i.e. \code{FALSE} = not available, \code{TRUE} = available, \code{NA} = unknown).}
 
-\item{\code{affected}}{A numeric vector with the affection status of the
-individuals (i.e. \code{0} = not affected, \code{1} = affected, \code{NA} = unknown).}
+\item{\code{affected}}{A logical vector with the affection status of the
+individuals
+(i.e. \code{FALSE} = not affected, \code{TRUE} = affected, \code{NA} = unknown).}
 
-\item{\code{useful}}{A numeric vector with the usefulness status of the
-individuals (i.e. \code{0} = not useful, \code{1} = useful).}
+\item{\code{useful}}{A logical vector with the usefulness status of the
+individuals
+(i.e. \code{FALSE} = not useful, \code{TRUE} = useful).}
 
 \item{\code{kin}}{A numeric vector with minimal kinship value between the
 individuals and the useful individuals.}

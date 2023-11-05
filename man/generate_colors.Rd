@@ -44,7 +44,7 @@ generate_colors(obj, ...)
 \S4method{generate_colors}{logical}(
   obj,
   avail,
-  mods_aff = NULL,
+  mods_aff = TRUE,
   threshold = 0.5,
   sup_thres_aff = TRUE,
   keep_full_scale = FALSE,
@@ -58,7 +58,7 @@ generate_colors(obj, ...)
   obj,
   col_aff = "affected",
   add_to_scale = TRUE,
-  col_avail = "available",
+  col_avail = "avail",
   mods_aff = NULL,
   threshold = 0.5,
   sup_thres_aff = TRUE,
@@ -76,8 +76,9 @@ each individuals. The affection status can be numeric, logical or character.}
 
 \item{...}{Other parameters to pass to the \code{generate_colors} function}
 
-\item{avail}{A numeric vector with the availability status of the
-individuals (i.e. \code{0} = not available, \code{1} = available, \code{NA} = unknown).}
+\item{avail}{A logical vector with the availability status of the
+individuals
+(i.e. \code{FALSE} = not available, \code{TRUE} = available, \code{NA} = unknown).}
 
 \item{mods_aff}{Vector of modality to consider as affected in the case
 where the \code{values} is a factor.}

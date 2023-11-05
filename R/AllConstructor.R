@@ -43,14 +43,18 @@ na_to_length <- function(x, temp, value) {
 #' - character() or factor() : "f", "m", "woman", "man", "male", "female",
 #' "unknown", "terminated"
 #' - numeric() : 1 = "male", 2 = "female", 3 = "unknown", 4 = "terminated"
-#' @param steril A numeric vector with the sterilisation status of the
-#' individuals (i.e. `0` = not sterilised, `1` = sterilised, `NA` = unknown).
-#' @param status A numeric vector with the affection status of the
-#' individuals (i.e. `0` = alive, `1` = dead, `NA` = unknown).
-#' @param avail A numeric vector with the availability status of the
-#' individuals (i.e. `0` = not available, `1` = available, `NA` = unknown).
-#' @param affected A numeric vector with the affection status of the
-#' individuals (i.e. `0` = unaffected, `1` = affected, `NA` = unknown).
+#' @param steril A logical vector with the sterilisation status of the
+#' individuals
+#' (i.e. `FALSE` = not sterilised, `TRUE` = sterilised, `NA` = unknown).
+#' @param status A logical vector with the affection status of the
+#' individuals
+#' (i.e. `FALSE` = alive, `TRUE` = dead, `NA` = unknown).
+#' @param avail A logical vector with the availability status of the
+#' individuals
+#' (i.e. `FALSE` = not available, `TRUE` = available, `NA` = unknown).
+#' @param affected A logical vector with the affection status of the
+#' individuals
+#' (i.e. `FALSE` = unaffected, `TRUE` = affected, `NA` = unknown).
 #' @param missid A character vector with the missing values identifiers.
 #' All the id, dadid and momid corresponding to those values will be set
 #' to `NA_character_`.
@@ -75,7 +79,7 @@ setMethod("Ped", "data.frame",
         col_need <- c("id", "sex", "dadid", "momid")
         col_to_use <- c(
             "famid", "steril", "status", "avail", "affected",
-            "kin", "id_inf", "useful"
+            "kin", "isinf", "useful"
         )
         col_used <- c(
             "num_child_tot", "num_child_dir", "num_child_ind",
@@ -86,10 +90,10 @@ setMethod("Ped", "data.frame",
             others_cols = TRUE, cols_to_use_init = TRUE,
             cols_used_init = cols_used_init, cols_used_del = cols_used_del
         )
-        df$steril <- vect_to_binary(df$steril)
-        df$status <- vect_to_binary(df$status)
-        df$avail <- vect_to_binary(df$avail)
-        df$affected <- vect_to_binary(df$affected)
+        df$steril <- vect_to_binary(df$steril, logical = TRUE)
+        df$status <- vect_to_binary(df$status, logical = TRUE)
+        df$avail <- vect_to_binary(df$avail, logical = TRUE)
+        df$affected <- vect_to_binary(df$affected, logical = TRUE)
         myped <- with(df, Ped(
             obj = id, sex = sex, dadid = dadid, momid = momid,
             famid = famid,
@@ -132,14 +136,13 @@ setMethod("Ped", "character_OR_integer",
 
         sex <- sex_to_factor(sex)
 
-        steril <- na_to_length(steril, id, NA_real_)
-        status <- na_to_length(status, id, NA_real_)
-        avail <- na_to_length(avail, id, NA_real_)
-        affected <- na_to_length(affected, id, NA_real_)
-
-        useful <- na_to_length(NA, id, NA_real_)
+        steril <- na_to_length(steril, id, NA)
+        status <- na_to_length(status, id, NA)
+        avail <- na_to_length(avail, id, NA)
+        affected <- na_to_length(affected, id, NA)
+        useful <- na_to_length(NA, id, NA)
+        isinf <- na_to_length(NA, id, NA)
         kin <- na_to_length(NA, id, NA_real_)
-        id_inf <- na_to_length(NA, id, NA_real_)
 
         df_child <- num_child(id, dadid, momid, rel_df = NULL)
 
@@ -148,7 +151,7 @@ setMethod("Ped", "character_OR_integer",
             id = id, dadid = dadid, momid = momid, famid = famid,
             sex = sex, steril = steril, status = status, avail = avail,
             affected = affected,
-            useful = useful, kin = kin, id_inf = id_inf,
+            useful = useful, kin = kin, isinf = isinf,
             num_child_tot = df_child$num_child_tot,
             num_child_dir = df_child$num_child_dir,
             num_child_ind = df_child$num_child_ind
@@ -441,7 +444,7 @@ setGeneric("Scales", function(fill, border) {
 #'    fill = data.frame(
 #'       order = 1,
 #'       column_values = "affected",
-#'       column_mods = "affected_mod",
+#'       column_mods = "affected_mods",
 #'       mods = c(0, 1),
 #'       labels = c("unaffected", "affected"),
 #'       affected = c(FALSE, TRUE),
@@ -450,7 +453,8 @@ setGeneric("Scales", function(fill, border) {
 #'       angle = c(NA, 45)
 #'    ),
 #'    border = data.frame(
-#'       column = "avail",
+#'       column_values = "avail",
+#'       column_mods = "avail_mods",
 #'       mods = c(0, 1),
 #'       labels = c("not available", "available"),
 #'       border = c("black", "blue")
@@ -460,12 +464,14 @@ setMethod("Scales",
     signature(fill = "data.frame", border = "data.frame"),
     function(fill, border) {
         fill <- check_columns(
-            fill, c("column_values", "column_mods", "mods", "labels",
-                "affected", "fill", "density", "angle", "order"
+            fill, c(
+                "order", "column_values", "column_mods", "mods",
+                "labels", "affected", "fill", "density", "angle"
             ), NULL, NULL
         )
         border <- check_columns(
-            border, c("column", "mods", "labels", "border"),
+            border,
+            c("column_values", "column_mods", "mods", "labels", "border"),
             NULL, NULL
         )
         new("Scales", fill = fill, border = border)
@@ -493,7 +499,8 @@ setMethod("Scales",
             angle = numeric()
         )
         border <- data.frame(
-            column = character(),
+            column_values = character(),
+            column_mods = character(),
             mods = numeric(),
             labels = character(),
             border = character()
@@ -590,8 +597,9 @@ setGeneric("Pedigree", signature = "obj",
 #' @aliases Pedigree,character
 #' @docType methods
 #' @inheritParams Ped
-#' @param affected A numeric vector with the affection status of the
-#' individuals (i.e. `0` = unaffected, `1` = affected, `NA` = unknown).
+#' @param affected A logical vector with the affection status of the
+#' individuals
+#' (i.e. `FALSE` = unaffected, `TRUE` = affected, `NA` = unknown).
 #' Can also be a data.frame with the same length as `obj`. If it is a
 #' matrix, it will be converted to a data.frame and the columns will be
 #' named after the `col_aff` argument.
@@ -658,13 +666,16 @@ setMethod("Pedigree", "character_OR_integer", function(obj, dadid, momid,
             col_aff <- colnames(affected)
         } else if (is.matrix(affected)) {
             affected <- as.data.frame(affected)
-            if (length(col_aff) != ncol(affected)) {
-                stop("The length of col_aff should be equal to the number",
-                    "of columns of affected"
-                )
+            if (is.null(colnames(affected))) {
+                if (length(col_aff) != ncol(affected)) {
+                    stop("The length of col_aff should be equal to the number",
+                        "of columns of affected"
+                    )
+                }
+                colnames(affected) <- col_aff
             }
-            colnames(affected) <- col_aff
             ped_df <- cbind(ped_df, affected)
+            col_aff <- colnames(affected)
         } else {
             stop("Affected must be a vector or a data.frame, got:",
                 class(affected)
@@ -749,13 +760,14 @@ setMethod("Pedigree", "data.frame",  function(
     }
 
     if (is.matrix(rel_df)) {
+        rel_mat <- rel_df
         rel_df <- data.frame(
-            id1 = rel_df[, 1],
-            id2 = rel_df[, 2],
-            code = rel_df[, 3]
+            id1 = rel_mat[, 1],
+            id2 = rel_mat[, 2],
+            code = rel_mat[, 3]
         )
-        if (dim(rel_df)[2] > 3) {
-            rel_df$family <- rel_df[, 4]
+        if (dim(rel_mat)[2] > 3) {
+            rel_df$family <- rel_mat[, 4]
         }
     }
 

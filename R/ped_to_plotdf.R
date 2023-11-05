@@ -95,7 +95,7 @@ setMethod("ped_to_plotdf", "Pedigree", function(
 
     ped_df <- as.data.frame(ped(obj))
     # border mods of each box
-    border_mods <- ped_df[id[idx], unique(border(obj)$column)]
+    border_mods <- ped_df[id[idx], unique(border(obj)$column_mods)]
     border_idx <- match(border_mods, border(obj)$mods)
 
     for (aff in seq_len(n_aff)) {

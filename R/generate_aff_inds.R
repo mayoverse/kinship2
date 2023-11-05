@@ -58,7 +58,7 @@ generate_aff_inds <- function(values, mods_aff = NULL,
     } else {
         # Separate for factors by levels
         mods_non_aff <- levels(droplevels(as.factor(
-            values[!values %in% mods_aff]
+            values[!values %in% as.character(mods_aff)]
         )))
         if (length(mods_non_aff) == 0) {
             mods_non_aff <- "None"

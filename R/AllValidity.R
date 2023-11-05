@@ -190,7 +190,9 @@ is_valid_scales <- function(object) {
         "order", "column_values", "column_mods", "mods",
         "labels", "affected", "fill", "density", "angle"
     )
-    border_cols <- c("column", "mods", "labels", "border")
+    border_cols <- c(
+        "column_values", "column_mods", "mods", "labels", "border"
+    )
     errors <- c(errors, check_slot_fd(object, NULL, c("fill", "border")))
     errors <- c(errors, check_slot_fd(object, "fill", fill_cols))
     errors <- c(errors, check_slot_fd(object, "border", border_cols))
@@ -232,7 +234,7 @@ is_valid_scales <- function(object) {
 
     #### Check that the border columns have the right values ####
     ## Check for character columns
-    col_char <- c("column", "labels", "border")
+    col_char <- c("column_values", "column_mods", "labels", "border")
     err_char <- col_char[!unlist(lapply(
         object@border[col_char], is, "character"
     ))]

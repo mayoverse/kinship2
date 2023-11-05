@@ -34,11 +34,13 @@ useful_inds(obj, ...)
 
 \item{...}{Additional arguments passed to methods}
 
-\item{avail}{A numeric vector with the availability status of the
-individuals (i.e. \code{0} = not available, \code{1} = available, \code{NA} = unknown).}
+\item{avail}{A logical vector with the availability status of the
+individuals
+(i.e. \code{FALSE} = not available, \code{TRUE} = available, \code{NA} = unknown).}
 
-\item{affected}{A numeric vector with the affection status of the
-individuals (i.e. \code{0} = unaffected, \code{1} = affected, \code{NA} = unknown).}
+\item{affected}{A logical vector with the affection status of the
+individuals
+(i.e. \code{FALSE} = unaffected, \code{TRUE} = affected, \code{NA} = unknown).}
 
 \item{num_child_tot}{A numeric vector of the number of children of each
 individuals}

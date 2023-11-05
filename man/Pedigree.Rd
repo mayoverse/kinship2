@@ -78,20 +78,24 @@ The following values are recognized:
 \item{famid}{A character vector with the family identifiers of the
 individuals.}
 
-\item{avail}{A numeric vector with the availability status of the
-individuals (i.e. \code{0} = not available, \code{1} = available, \code{NA} = unknown).}
+\item{avail}{A logical vector with the availability status of the
+individuals
+(i.e. \code{FALSE} = not available, \code{TRUE} = available, \code{NA} = unknown).}
 
-\item{affected}{A numeric vector with the affection status of the
-individuals (i.e. \code{0} = unaffected, \code{1} = affected, \code{NA} = unknown).
+\item{affected}{A logical vector with the affection status of the
+individuals
+(i.e. \code{FALSE} = unaffected, \code{TRUE} = affected, \code{NA} = unknown).
 Can also be a data.frame with the same length as \code{obj}. If it is a
 matrix, it will be converted to a data.frame and the columns will be
 named after the \code{col_aff} argument.}
 
-\item{status}{A numeric vector with the affection status of the
-individuals (i.e. \code{0} = alive, \code{1} = dead, \code{NA} = unknown).}
+\item{status}{A logical vector with the affection status of the
+individuals
+(i.e. \code{FALSE} = alive, \code{TRUE} = dead, \code{NA} = unknown).}
 
-\item{steril}{A numeric vector with the sterilisation status of the
-individuals (i.e. \code{0} = not sterilised, \code{1} = sterilised, \code{NA} = unknown).}
+\item{steril}{A logical vector with the sterilisation status of the
+individuals
+(i.e. \code{FALSE} = not sterilised, \code{TRUE} = sterilised, \code{NA} = unknown).}
 
 \item{rel_df}{A data.frame with the special relationships between
 individuals. See \code{\link[=Rel]{Rel()}} for more informations.

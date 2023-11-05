@@ -33,11 +33,13 @@ is_informative(obj, ...)
 
 \item{...}{Additional arguments passed to methods}
 
-\item{avail}{A numeric vector with the availability status of the
-individuals (i.e. \code{0} = not available, \code{1} = available, \code{NA} = unknown).}
+\item{avail}{A logical vector with the availability status of the
+individuals
+(i.e. \code{FALSE} = not available, \code{TRUE} = available, \code{NA} = unknown).}
 
-\item{affected}{A numeric vector with the affection status of the
-individuals (i.e. \code{0} = unaffected, \code{1} = affected, \code{NA} = unknown).}
+\item{affected}{A logical vector with the affection status of the
+individuals
+(i.e. \code{FALSE} = unaffected, \code{TRUE} = affected, \code{NA} = unknown).}
 
 \item{informative}{Informative individuals selection can take 5 values:
 \itemize{
@@ -87,6 +89,6 @@ columns.
 \examples{
 data("sampleped")
 ped <- Pedigree(sampleped)
-is_informative(ped, col_aff = "affection_aff")
+is_informative(ped, col_aff = "affection_mods")
 
 }

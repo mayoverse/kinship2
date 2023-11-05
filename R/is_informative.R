@@ -36,7 +36,7 @@
 #' @examples
 #' data("sampleped")
 #' ped <- Pedigree(sampleped)
-#' is_informative(ped, col_aff = "affection_aff")
+#' is_informative(ped, col_aff = "affection_mods")
 #'
 #' @export
 #' @docType methods
@@ -115,13 +115,15 @@ setMethod("is_informative", "Pedigree", function(
         informative, missid
     )
 
-    if (!reset & any(!is.na(id_inf(ped(obj))))) {
+    if (!reset & any(!is.na(isinf(ped(obj))))) {
         stop(
-            "The id_inf slot already has values in the Ped object",
+            "The isinf slot already has values in the Ped object",
             " and reset is set to FALSE"
         )
     }
 
-    id_inf(ped(obj)) <- vect_to_binary(ifelse(ped_df$id %in% id_inf, 1, 0))
+    isinf(ped(obj)) <- vect_to_binary(
+        ifelse(ped_df$id %in% id_inf, 1, 0), logical = TRUE
+    )
     obj
 })

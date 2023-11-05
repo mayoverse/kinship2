@@ -48,18 +48,18 @@ setMethod("useful_inds", "character",
         id_inf <- is_informative(id, avail, affected,
             informative, missid
         )
-        is_inf <- id %in% id_inf
+        isinf <- id %in% id_inf
 
         # Keep individual affected or available
         if (keep_infos) {
-            is_inf <- is_inf |
+            isinf <- isinf |
                 (!is.na(affected) & affected == 1) |
                 (!is.na(avail) & avail == 1)
         }
 
         # Check if parents participate to the Pedigree structure
         ped_part <- num_child_tot > 1
-        to_kept <- is_inf | ped_part
+        to_kept <- isinf | ped_part
 
         num_ind_old <- 0
         num_ind_new <- length(id[to_kept])
@@ -116,7 +116,9 @@ setMethod("useful_inds", "Ped", function(obj,
             " and reset is set to FALSE"
         )
     }
-    obj@useful <- ifelse(id(obj) %in% useful, 1, 0)
+    obj@useful <- vect_to_binary(
+        ifelse(id(obj) %in% useful, 1, 0), logical = TRUE
+    )
     validObject(obj)
     obj
 })

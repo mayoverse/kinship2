@@ -17,7 +17,9 @@ generate_fill(
 \arguments{
 \item{values}{The vector containing the values to process as affection.}
 
-\item{affected}{The vector containing the affection status TRUE/FALSE.}
+\item{affected}{A logical vector with the affection status of the
+individuals
+(i.e. \code{FALSE} = unaffected, \code{TRUE} = affected, \code{NA} = unknown).}
 
 \item{labels}{The vector containing the labels to use for the affection.}
 
