@@ -19,12 +19,12 @@
 - [x] data.R
 - [x] descendants.R
 - [x] family_check.R
-- [ ] find_avail_affected.R
-- [ ] find_avail_noninform.R
-- [ ] find_unavailable.R
-- [ ] fix_parents.R
-- [ ] generate_aff_inds.R
-- [ ] generate_colors.R
+- [x] find_avail_affected.R
+- [x] find_avail_noninform.R
+- [x] find_unavailable.R
+- [x] fix_parents.R
+- [x] generate_aff_inds.R
+- [x] generate_colors.R
 - [ ] ibd_matrix.R
 - [ ] is_informative.R
 - [ ] kindepth.R

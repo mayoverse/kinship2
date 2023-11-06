@@ -32,7 +32,7 @@ useful_inds(obj, ...)
 \item{obj}{A character vector with the id of the individuals or a
 \code{data.frame} with all the informations in corresponding columns.}
 
-\item{...}{Additional arguments passed to methods}
+\item{...}{Other arguments to pass to the function \code{generate_colors}.}
 
 \item{avail}{A logical vector with the availability status of the
 individuals

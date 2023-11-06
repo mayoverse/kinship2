@@ -1,11 +1,25 @@
 #' @importFrom plyr revalue
 NULL
 
-#' Process the information for affection
+#' Process the affection informations
 #'
-#' @details Perform transformation uppon a column given as the one
-#' containing affection status to get an `affected` column usable for
-#' the rest of the script
+#' @description Perform transformation uppon a vector given as the one
+#' containing the affection status to obtain an `affected` binary state.
+#'
+#' @details This function helps to configure a binary state from a character or
+#' numeric variable.
+#'
+#' ## If the variable is a `character` or a `factor`:
+#'
+#' In this case the affected state will depend on the modality provided as
+#' an affected status. All individuals with a value corresponding to one of the
+#' element in the vector **mods_aff** will be considered as affected.
+#'
+#' ## If the variable is `numeric`:
+#'
+#' In this case the affected state will be `TRUE` if the value of the individual
+#' is above the **threshold** if **sup_thres_aff** is `TRUE` and `FALSE`
+#' otherwise.
 #'
 #' @param values Vector containing the values of the column to process.
 #' @param mods_aff Vector of modality to consider as affected in the case
@@ -28,6 +42,8 @@ NULL
 #' @examples
 #' generate_aff_inds(c(1, 2, 3, 4, 5), threshold = 3, sup_thres_aff = TRUE)
 #' generate_aff_inds(c("A", "B", "C", "A", "V", "B"), mods_aff = c("A", "B"))
+#' @author Louis Le Nézet
+#' @keywords generate_scales
 #' @export
 generate_aff_inds <- function(values, mods_aff = NULL,
     threshold = NULL, sup_thres_aff = NULL
@@ -82,4 +98,3 @@ generate_aff_inds <- function(values, mods_aff = NULL,
     affected <- as.logical(revalue(labels, aff_to_use, warn_missing = FALSE))
     as.data.frame(list(mods = mods, labels = labels, affected = affected))
 }
-

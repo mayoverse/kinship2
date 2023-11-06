@@ -67,7 +67,10 @@ individuals
 \item A boolean
 }}
 
-\item{col_aff}{A string with the column name to use for the affection status.}
+\item{col_aff}{A character vector with the name of the column to be used
+for the affection status.
+If \code{affected} is a data.frame, it will be overwritten by the column
+names of the data.frame.}
 
 \item{missid}{A character vector with the missing values identifiers.
 All the id, dadid and momid corresponding to those values will be set

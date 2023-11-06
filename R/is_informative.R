@@ -11,7 +11,7 @@
 #' columns.
 #'
 #' @inheritParams Ped
-#' @param col_aff A string with the column name to use for the affection status.
+#' @inheritParams Pedigree
 #' @param informative Informative individuals selection can take 5 values:
 #' - 'AvAf' (available and affected),
 #' - 'AvOrAf' (available or affected),

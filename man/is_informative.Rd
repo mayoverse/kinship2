@@ -31,7 +31,7 @@ is_informative(obj, ...)
 \item{obj}{A character vector with the id of the individuals or a
 \code{data.frame} with all the informations in corresponding columns.}
 
-\item{...}{Additional arguments passed to methods}
+\item{...}{Other arguments to pass to the function \code{generate_colors}.}
 
 \item{avail}{A logical vector with the availability status of the
 individuals
@@ -56,7 +56,10 @@ individuals
 All the id, dadid and momid corresponding to those values will be set
 to \code{NA_character_}.}
 
-\item{col_aff}{A string with the column name to use for the affection status.}
+\item{col_aff}{A character vector with the name of the column to be used
+for the affection status.
+If \code{affected} is a data.frame, it will be overwritten by the column
+names of the data.frame.}
 
 \item{reset}{If \code{TRUE}, the \code{id_inf} column is reset}
 }

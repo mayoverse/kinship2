@@ -34,6 +34,10 @@ Returns a list with the following components:
 }
 }
 \description{
-Exclude from a Pedigree any unavailable founders.
+Exclude any unavailable founders.
 }
-\keyword{internal}
+\seealso{
+\code{\link[=shrink]{shrink()}}
+}
+\keyword{internal,}
+\keyword{shrink}

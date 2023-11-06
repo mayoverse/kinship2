@@ -1,10 +1,10 @@
 #' @importFrom stringr str_split_i
 NULL
 
-#' Fix details on the parents for children of the Pedigree
+#' Fix parents relationship and gender
 #'
 #' @description
-#' Fix the sex of parents, add parents that are missing from the Pedigree
+#' Fix the sex of parents, add parents that are missing from the data.
 #' Can be used with a dataframe or a vector of the
 #' different individuals informations.
 #'
@@ -12,23 +12,21 @@ NULL
 #' First look to add parents whose ids are given in momid/dadid. Second, fix
 #' sex of parents. Last look to add second parent for children for whom only
 #' one parent id is given.
-#' If a famid vector is given the famid id will be added to the ids of all
-#' individuals (id, dadid, momid) separated by an underscore befor proceeding.
+#' If a **famid** vector is given the family id will be added to the ids of all
+#' individuals (`id`, `dadid`, `momid`)
+#' separated by an underscore before proceeding.
 #'
 #' ## Special case for dataframe
-#' Check for presence of both parents id in the `id` field.
-#' If not both presence behaviour depend of `delete` parameter
-#' - If TRUE then use fix_parents function and merge back the other fields
+#' Check for presence of both parents id in the **id** field.
+#' If not both presence behaviour depend of **delete** parameter
+#' - If `TRUE` then use fix_parents function and merge back the other fields
 #' in the dataframe then set availability to O for non available parents.
-#' - If FALSE then delete the id of missing parents
+#' - If `FALSE` then delete the id of missing parents
 #'
 #' @inheritParams Ped
-#' @inheritParams kinship
-#' @inheritParams is_parent
-#' @inheritParams sex_to_factor
 #' @param obj A data.frame or a vector of the individuals identifiers. If a
 #' dataframe is given it must contain the columns `id`, `dadid`,
-#' `momid`, `sex` and `famid`. famid is optional.
+#' `momid`, `sex` and `famid` (optional).
 #'
 #' @return A data.frame with id, dadid, momid, sex as columns with the
 #' relationships fixed.
@@ -51,8 +49,7 @@ NULL
 #'   sex,
 #'   missid = NA_character_
 #' ))
-#' newped <- Pedigree(test1newmom)
-#' as.data.frame(newped)
+#' Pedigree(test1newmom)
 #'
 #' @author Jason Sinnwell
 #' @export
@@ -60,9 +57,7 @@ setGeneric("fix_parents", signature = "obj",
     function(obj, ...) standardGeneric("fix_parents")
 )
 
-#' @export
 #' @rdname fix_parents
-#' @aliases fix_parents,character
 setMethod("fix_parents", "character", function(
     obj, dadid, momid, sex, famid = NULL, missid = NA_character_
 ) {
@@ -179,8 +174,6 @@ setMethod("fix_parents", "character", function(
 #' - `FALSE` : be deleted
 #' @param filter Filtering column containing `0` or `1` for the
 #' rows to kept before proceeding.
-#'
-#' @export
 #' @rdname fix_parents
 setMethod("fix_parents", "data.frame", function(
     obj, delete = FALSE, filter = NULL, missid = NA_character_

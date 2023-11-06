@@ -2,25 +2,36 @@
 % Please edit documentation in R/find_unavailable.R
 \name{find_unavailable}
 \alias{find_unavailable}
+\alias{find_unavailable,Pedigree-method}
+\alias{find_unavailable,Ped-method}
 \title{Find unavailable subjects in a Pedigree}
 \usage{
 find_unavailable(obj, ...)
+
+\S4method{find_unavailable}{Pedigree}(obj, ...)
+
+\S4method{find_unavailable}{Ped}(obj, avail = NULL)
 }
 \arguments{
-\item{obj}{A Pedigree object}
+\item{obj}{A Ped or Pedigree object.}
 
-\item{...}{Other arguments to pass to the function}
+\item{avail}{A logical vector with the availability status of the
+individuals
+(i.e. \code{FALSE} = not available, \code{TRUE} = available, \code{NA} = unknown).}
 }
 \value{
 Returns a vector of subject ids for who can be
 removed.
 }
 \description{
-Find the ID of subjects in a Pedigree iteratively, as anyone who is not
-available and does not have an available descendant by successively removing
-unavailable terminal nodes.
+Find the identifiers of subjects in a Pedigree iteratively,
+as anyone who is not available and does not have an available
+descendant by successively removing unavailable terminal nodes.
 }
 \details{
+If \strong{avail} is null, then the function will use the
+corresponding Ped accessor.
+
 Originally written as pedTrim by Steve Iturria, modified by Dan Schaid 2007,
 and now split into the two separate functions:
 \code{find_unavailable()}, and \code{trim()} to do the tasks separately.
@@ -32,9 +43,11 @@ isolated after trimming their unavailable offspring, and
 If the subject ids are character, make sure none of the characters in the
 ids is a colon (":"), which is a special character
 used to concatenate and split subjects within the utility.
+The \code{trim()} functions is now replaced by the \code{subset()} function.
 }
 \section{Side Effects}{
- relation matrix from \code{trim} is trimmed of any
+
+Relation matrix from subsetting is trimmed of any
 special relations that include the subjects to trim.
 }
 
@@ -47,3 +60,5 @@ find_unavailable(ped1)
 \seealso{
 \code{\link[=shrink]{shrink()}}
 }
+\keyword{internal,}
+\keyword{shrink}

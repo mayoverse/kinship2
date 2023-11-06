@@ -1,10 +1,31 @@
 #' @importFrom plyr revalue
 NULL
 
-#' Process the colors based on affection
+#' Process the filling colors based on affection
 #'
-#' @details Perform transformation uppon a column given as the one
+#' @description Perform transformation uppon a column given as the one
 #' containing affection status to compute the filling color.
+#'
+#' @details The colors will be set using the
+#' [grDevices::colorRampPalette()] function
+#' with the colors given as parameters.
+#'
+#' The colors will be set as follow:
+#'
+#' - If **keep_full_scale** is `FALSE`:
+#' Then the affected individuals will get the first color of the
+#' **colors_aff** vector and the unaffected individuals will get the
+#' first color of the **colors_unaff** vector.
+#' - If **keep_full_scale** is `TRUE`:
+#'   - If **values** isn't numeric:
+#'   Each levels of the affected **values** vector will get it's own color from
+#'   the **colors_aff** vector using the [grDevices::colorRampPalette()] and
+#'   the same will be done for the unaffected individuals using the
+#'   **colors_unaff**.
+#'   - If **values** is numeric:
+#'   The mean of the affected individuals will be compared to the mean of the
+#'   unaffected individuals and the colors will be set up such as the color
+#'   gradient follow the direction of the affection.
 #'
 #' @param values The vector containing the values to process as affection.
 #' @param labels The vector containing the labels to use for the affection.
@@ -21,14 +42,18 @@ NULL
 #' unaffected individuls.
 #' @inheritParams Ped
 #'
-#' @return A list of two elements
-#' - The processed values column as a numeric factor
-#' - A dataframe containing the description of each modality of the scale
+#' @return A list of three elements
+#' - `mods` : The processed values column as a numeric factor
+#' - `affected` : A logical vector indicating if the individual is affected
+#' - `sc_fill` : A dataframe containing the description of each modality of the
+#' scale
 #'
 #' @examples
 #' aff <- generate_aff_inds(seq_len(5), threshold = 3, sup_thres_aff = TRUE)
 #' generate_fill(seq_len(5), aff$affected, aff$labels)
 #' generate_fill(seq_len(5), aff$affected, aff$labels, keep_full_scale = TRUE)
+#'
+#' @keywords generate_scales
 #' @export
 generate_fill <- function(
     values, affected, labels,
@@ -141,24 +166,29 @@ generate_fill <- function(
     list(mods = mods, affected = affected, sc_fill = sc_fill)
 }
 
-#' Process the colors based on availability
+#' Process the border colors based on availability
 #'
-#' @details Perform transformation uppon a column given as the one
+#' @description Perform transformation uppon a vector given as the one
 #' containing the availability status to compute the border color.
 #' The vector given will be transformed using the [vect_to_binary()]
 #' function.
 #'
 #' @param values The vector containing the values to process as available.
 #' @param colors_avail Set of 2 colors to use for the box's border of an
-#' individual. The first color will be used for available individual (avail
-#' == 1) and the second for the unavailable individual (avail == 0).
+#' individual. The first color will be used for available individual
+#' (`avail == 1`) and the second for the unavailable individual
+#' (`avail == 0`).
 #'
-#' @return A dataframe containing the scale to use for the availability
-#' status.
+#' @return A list of three elements
+#' - `mods` : The processed values column as a numeric factor
+#' - `avail` : A logical vector indicating if the individual is available
+#' - `sc_bord` : A dataframe containing the description of each modality of the
+#' scale
 #'
 #' @examples
 #' generate_border(c(1, 0, 1, 0, NA, 1, 0, 1, 0, NA))
 #'
+#' @keywords generate_scales
 #' @export
 generate_border <- function(values, colors_avail = c("green", "black")) {
     # Set border colors
@@ -179,62 +209,63 @@ generate_border <- function(values, colors_avail = c("green", "black")) {
     list(mods = mods, avail = avail, sc_bord = sc_bord)
 }
 
-#' Process the colors based on affection and availability
+#' Process the filling and border colors based on affection and availability
 #'
-#' @details Perform transformation uppon a dataframe given to compute
+#' @description Perform transformation uppon a dataframe given to compute
 #' the colors for the filling and the border of the individuals based
 #' on the affection and availability status.
 #'
+#' @details The colors will be set using the [generate_fill()] and the
+#' [generate_border()] functions respectively for the filling and the border.
+#'
 #' @param obj A Pedigree object or a vector containing the affection status for
-#' each individuals. The affection status can be numeric, logical or character.
-#' @param col_avail The name of the column containing the availability status.
-#' @inheritParams is_informative
+#' each individuals. The affection status can be numeric or a character.
 #' @inheritParams generate_fill
 #' @inheritParams generate_border
 #' @inheritParams generate_aff_inds
 #'
 #' @return
 #' ## When used with a vector
-#' A list of three elements
-#' - A vector containing the transformed filling modalities
-#' - A dataframe containing the description of each filling modalities
-#' - A dataframe containing the description of the border modalities
+#'
+#' A list of two elements
+#' - The list containing the filling colors processed and their description
+#' - The list containing the border colors processed and their description
 #'
 #' ## When used with a Pedigree object
+#'
 #' The Pedigree object with the `affected` and `avail` columns
-#' processed accordingly.
+#' processed accordingly as well as the `scales` slot updated.
 #'
-#' The Pedigree scales slots are updated
-#'
-#' @examples
-#' data("sampleped")
-#' ped <- Pedigree(sampleped)
-#' generate_colors(ped, "affected", add_to_scale=FALSE)$scales
+#' @keywords generate_scales
 #' @export
 setGeneric("generate_colors", signature = "obj",
     function(obj, ...) standardGeneric("generate_colors")
 )
 
-#' @export
-#' @aliases generate_colors,character
 #' @rdname generate_colors
+#' @examples
+#' generate_colors(
+#'     c("A", "B", "A", "B", NA, "A", "B", "A", "B", NA),
+#'     c(1, 0, 1, 0, NA, 1, 0, 1, 0, NA),
+#'     mods_aff = "A",
+#' )
 setMethod("generate_colors", "character",
     function(
         obj, avail,
-        mods_aff = NULL, threshold = 0.5, sup_thres_aff = TRUE,
-        keep_full_scale = FALSE, breaks = 3,
+        mods_aff = NULL,
+        keep_full_scale = FALSE,
         colors_aff = c("yellow2", "red"),
         colors_unaff = c("white", "steelblue4"),
         colors_avail = c("green", "black")
     ) {
         affected_val <- obj
         affected <- generate_aff_inds(affected_val,
-            mods_aff, threshold, sup_thres_aff
+            mods_aff = mods_aff
         )
         lst_bord <- generate_border(avail, colors_avail)
         lst_aff <- generate_fill(
             affected_val, affected$affected, affected$labels,
-            keep_full_scale, breaks, colors_aff, colors_unaff
+            keep_full_scale, NULL, colors_aff, colors_unaff
         )
 
         list(
@@ -244,13 +275,16 @@ setMethod("generate_colors", "character",
     }
 )
 
-#' @export
-#' @aliases generate_colors,numeric
 #' @rdname generate_colors
+#' @examples
+#' generate_colors(
+#'     c(10, 0, 5, 7, NA, 6, 2, 1, 3, NA),
+#'     c(1, 0, 1, 0, NA, 1, 0, 1, 0, NA),
+#'     threshold = 3, keep_full_scale = TRUE
+#' )
 setMethod("generate_colors", "numeric",
     function(
-        obj, avail,
-        mods_aff = NULL, threshold = 0.5, sup_thres_aff = TRUE,
+        obj, avail, threshold = 0.5, sup_thres_aff = TRUE,
         keep_full_scale = FALSE, breaks = 3,
         colors_aff = c("yellow2", "red"),
         colors_unaff = c("white", "steelblue4"),
@@ -258,38 +292,9 @@ setMethod("generate_colors", "numeric",
     ) {
         affected_val <- obj
         affected <- generate_aff_inds(affected_val,
-            mods_aff, threshold, sup_thres_aff
+            mods_aff = NULL, threshold, sup_thres_aff
         )
 
-        lst_bord <- generate_border(avail, colors_avail)
-        lst_aff <- generate_fill(
-            affected_val, affected$affected, affected$labels,
-            keep_full_scale, breaks, colors_aff, colors_unaff
-        )
-
-        list(
-            fill = lst_aff,
-            bord = lst_bord
-        )
-    }
-)
-
-#' @export
-#' @aliases generate_colors,logical
-#' @rdname generate_colors
-setMethod("generate_colors", "logical",
-    function(
-        obj, avail,
-        mods_aff = TRUE, threshold = 0.5, sup_thres_aff = TRUE,
-        keep_full_scale = FALSE, breaks = 3,
-        colors_aff = c("yellow2", "red"),
-        colors_unaff = c("white", "steelblue4"),
-        colors_avail = c("green", "black")
-    ) {
-        affected_val <- obj
-        affected <- generate_aff_inds(affected_val,
-            mods_aff, threshold, sup_thres_aff
-        )
         lst_bord <- generate_border(avail, colors_avail)
         lst_aff <- generate_fill(
             affected_val, affected$affected, affected$labels,
@@ -304,16 +309,19 @@ setMethod("generate_colors", "logical",
 )
 
 #' @importFrom plyr rbind.fill
-#' @include AllClass.R
-#' @docType methods
-#' @aliases generate_colors,Pedigree
 #' @param add_to_scale Boolean defining if the scales need to be added to the
 #' existing scales or if they need to replace the existing scales.
 #' @param reset If `TRUE` the scale of the specified column will be reset if
 #' already present.
-#' @param ... Other parameters to pass to the `generate_colors` function
+#' @param col_avail The name of the column containing the availability status.
+#' @inheritParams Pedigree
+#' @examples
+#' data("sampleped")
+#' ped <- Pedigree(sampleped)
+#' ped <- generate_colors(ped, "affected", add_to_scale=FALSE)
+#' scales(ped)
 #' @rdname generate_colors
-#' @export
+#' @include AllClass.R
 setMethod("generate_colors", "Pedigree",
     function(obj,
         col_aff = "affected", add_to_scale = TRUE,

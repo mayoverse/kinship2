@@ -1,26 +1,27 @@
-# Automatically generated from all.nw using noweb
-
-#' Find a single person to trim from a Pedigree whose is available
+#' Find single affected and available individual from a Pedigree
 #'
 #' @description
 #' Finds one subject from among available non-parents with indicated affection
 #' status.
 #'
 #' @details
-#' When used within pedigree.shrink, this function is called with the first
+#' When used within [shrink()], this function is called with the first
 #' affected indicator, if the affected item in the Pedigree is a matrix of
 #' multiple affected indicators.
 #'
+#' If **avail** or **affected** is null, then the function will use the
+#' corresponding Ped accessor.
+#'
 #' @param affstatus Affection status to search for.
-#' @inheritParams align
-#' @inheritParams is_informative
+#' @param obj A Ped or Pedigree object.
+#' @inheritParams Ped
 #'
 #' @return A list is returned with the following components
-#' - ped The new Pedigree object
+#' - ped The new Ped object
 #' - newAvail Vector of availability status of trimmed individuals
 #' - idTrimmed Vector of IDs of trimmed individuals
-#' - isTrimmed logical value indicating whether Pedigree has been trimmed
-#' - bit_size Bit size of the trimmed Pedigree
+#' - isTrimmed logical value indicating whether Ped object has been trimmed
+#' - bit_size Bit size of the trimmed Ped
 #'
 #' @examples
 #' data(sampleped)
@@ -30,11 +31,13 @@
 #' @include bit_size.R
 #' @include utils.R
 #' @include find_unavailable.R
+#' @keywords internal, shrink
 #' @export
 setGeneric("find_avail_affected", signature = "obj",
     function(obj, ...) standardGeneric("find_avail_affected")
 )
 
+#' @rdname find_avail_affected
 setMethod("find_avail_affected", "Ped",
     function(obj, avail = NULL, affected = NULL, affstatus = NA) {
         if (is.null(avail)) {
@@ -99,6 +102,7 @@ setMethod("find_avail_affected", "Ped",
     }
 )
 
+#' @rdname find_avail_affected
 setMethod("find_avail_affected", "Pedigree",
     function(obj, ...) {
         find_avail_affected(ped(obj), ...)

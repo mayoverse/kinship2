@@ -1,13 +1,14 @@
-# Automatically generated from all.nw using noweb
-
 #' Find unavailable subjects in a Pedigree
 #'
 #' @description
-#' Find the ID of subjects in a Pedigree iteratively, as anyone who is not
-#' available and does not have an available descendant by successively removing
-#' unavailable terminal nodes.
+#' Find the identifiers of subjects in a Pedigree iteratively,
+#' as anyone who is not available and does not have an available
+#' descendant by successively removing unavailable terminal nodes.
 #'
 #' @details
+#' If **avail** is null, then the function will use the
+#' corresponding Ped accessor.
+#'
 #' Originally written as pedTrim by Steve Iturria, modified by Dan Schaid 2007,
 #' and now split into the two separate functions:
 #' `find_unavailable()`, and `trim()` to do the tasks separately.
@@ -19,13 +20,15 @@
 #' If the subject ids are character, make sure none of the characters in the
 #' ids is a colon (":"), which is a special character
 #' used to concatenate and split subjects within the utility.
+#' The `trim()` functions is now replaced by the `subset()` function.
 #'
 #' @inheritParams find_avail_affected
 #'
 #' @return Returns a vector of subject ids for who can be
 #' removed.
 #'
-#' @section Side Effects: relation matrix from `trim` is trimmed of any
+#' @section Side Effects:
+#' Relation matrix from subsetting is trimmed of any
 #' special relations that include the subjects to trim.
 #'
 #' @examples
@@ -34,18 +37,21 @@
 #' find_unavailable(ped1)
 #'
 #' @seealso [shrink()]
+#' @keywords internal, shrink
 #' @include utils.R
 #' @export
 setGeneric("find_unavailable", signature = "obj",
     function(obj, ...) standardGeneric("find_unavailable")
 )
 
+#' @rdname find_unavailable
 setMethod("find_unavailable", "Pedigree",
     function(obj, ...) {
         find_unavailable(ped(obj), ...)
     }
 )
 
+#' @rdname find_unavailable
 setMethod("find_unavailable", "Ped",
     function(obj, avail = NULL) {
         if (is.null(avail)) {
@@ -94,16 +100,16 @@ setMethod("find_unavailable", "Ped",
 #' Exclude stray marry-ins
 #'
 #' @description
-#' Exclude from a Pedigree any founders who are not parents.
+#' Exclude any founders who are not parents.
 #'
-#' @param id Vector of subject identifiers
-#' @inheritParams descendants
+#' @inheritParams exclude_unavail_founders
 #'
 #' @return
 #' Returns a data frame of subject identifiers and their parents.
 #' The data frame is trimmed of any founders who are not parents.
 #'
-#' @keywords internal
+#' @keywords internal, shrink
+#' @seealso [shrink()]
 exclude_stray_marryin <- function(id, dadid, momid) {
     # get rid of founders who are not parents (stray available marryins
     # who are isolated after trimming their unavailable offspring)
@@ -122,12 +128,10 @@ exclude_stray_marryin <- function(id, dadid, momid) {
 #' Exclude unavailable founders
 #'
 #' @description
-#' Exclude from a Pedigree any unavailable founders.
+#' Exclude any unavailable founders.
 #'
 #' @param id A character vector with the identifiers of each individuals
 #' @inheritParams Ped
-#'
-#' @keywords internal
 #'
 #' @return
 #' Returns a list with the following components:
@@ -136,6 +140,9 @@ exclude_stray_marryin <- function(id, dadid, momid) {
 #' - id Vector of subject identifiers
 #' - dadid Vector of father identifiers
 #' - momid Vector of mother identifiers
+#'
+#' @keywords internal, shrink
+#' @seealso [shrink()]
 exclude_unavail_founders <- function(
     id, dadid, momid, avail, missid = NA_character_
 ) {

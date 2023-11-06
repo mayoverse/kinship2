@@ -7,7 +7,7 @@
 exclude_stray_marryin(id, dadid, momid)
 }
 \arguments{
-\item{id}{Vector of subject identifiers}
+\item{id}{A character vector with the identifiers of each individuals}
 
 \item{dadid}{A vector containing for each subject, the identifiers of the
 biologicals fathers.}
@@ -20,6 +20,10 @@ Returns a data frame of subject identifiers and their parents.
 The data frame is trimmed of any founders who are not parents.
 }
 \description{
-Exclude from a Pedigree any founders who are not parents.
+Exclude any founders who are not parents.
 }
-\keyword{internal}
+\seealso{
+\code{\link[=shrink]{shrink()}}
+}
+\keyword{internal,}
+\keyword{shrink}
