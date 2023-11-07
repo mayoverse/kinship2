@@ -2,18 +2,18 @@
 #' @importFrom tidyr pivot_longer
 NULL
 
-#' Number of child
+#' Number of childs
 #'
-#' @description Compute the number of child per individual
+#' @description Compute the number of childs per individual
 #'
 #' @details Compute the number of direct child but also the number
 #' of indirect child given by the ones related with the linked spouses.
-#' If a relation ship matrix is given, then even if no children is present
+#' If a relation ship dataframe is given, then even if no children is present
 #' between 2 spouses, the indirect childs will still be added.
 #'
-#' @inheritParams kinship
-#' @inheritParams norm_rel
-#' @inheritParams is_parent
+#' @param ... Additional arguments
+#' @inheritParams Ped
+#' @inheritParams Pedigree
 #'
 #' @return
 #' ## When obj is a vector
@@ -25,21 +25,24 @@ NULL
 #' An updated Pedigree object with the columns `num_child_dir`,
 #' `num_child_ind` and `num_child_tot` added to the
 #' Pedigree `ped` slot.
-#' @examples
-#' data(sampleped)
-#' ped1 <- Pedigree(sampleped[sampleped$famid == "1",])
-#' ped1 <- num_child(ped1)
-#' summary(ped1$ped)
 #' @include AllClass.R
 #' @export
 setGeneric("num_child", signature = "obj",
     function(obj, ...) standardGeneric("num_child")
 )
 
-#' @export
 #' @rdname num_child
-#' @aliases num_child,character_OR_integer
-#' @docType methods
+#' @examples
+#' num_child(
+#'   obj = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"),
+#'   dadid = c("3", "3", "6", "8", "0", "0", "0", "0", "0", "0"),
+#'   momid = c("4", "5", "7", "9", "0", "0", "0", "0", "0", "0"),
+#'   rel_df = data.frame(
+#'       id1 = "10",
+#'       id2 = "3",
+#'       code = "Spouse"
+#'   )
+#' )
 setMethod("num_child", "character_OR_integer", function(obj, dadid, momid,
     rel_df = NULL, missid = NA_character_
 ) {
@@ -81,10 +84,7 @@ setMethod("num_child", "character_OR_integer", function(obj, dadid, momid,
     colnames(spouse_rel) <- c("id1", "id2")
 
     if (!is.null(rel_df)) {
-        cols_needed <- c("id1", "id2", "code")
-        rel_df <- check_columns(rel_df, cols_needed, "", "",
-            others_cols = FALSE
-        )
+        rel_df <- norm_rel(rel_df, missid = missid)
         spouse_rel <- rbind(spouse_rel,
             rel_df[rel_df$code == "Spouse", c("id1", "id2")]
         )
@@ -146,12 +146,14 @@ setMethod("num_child", "character_OR_integer", function(obj, dadid, momid,
     }
 })
 
-#' @export
 #' @rdname num_child
-#' @aliases num_child,Pedigree
-#' @docType methods
 #' @param reset If TRUE, the `num_child_tot`, `num_child_ind` and
 #' the `num_child_dir` columns are reset.
+#' @examples
+#' data(sampleped)
+#' ped1 <- Pedigree(sampleped[sampleped$famid == "1",])
+#' ped1 <- num_child(ped1, reset = TRUE)
+#' summary(ped(ped1))
 setMethod("num_child", "Pedigree", function(obj, reset = FALSE) {
     df <- num_child(id(ped(obj)), dadid(ped(obj)), momid(ped(obj)),
         rel_df = as.data.frame(rel(obj))

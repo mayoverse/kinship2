@@ -54,6 +54,7 @@ object.
 }
 \examples{
 upd_famid_id(c("1", "2", "B_3"), c("A", "B", "A"))
+upd_famid_id(c("1", "B_2", "C_3", "4"), c("A", NA, "A", NA))
 data(sampleped)
 ped1 <- Pedigree(sampleped[,-1])
 id(ped(ped1))

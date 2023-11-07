@@ -2,7 +2,7 @@
 % Please edit documentation in R/norm_data.R
 \name{norm_rel}
 \alias{norm_rel}
-\title{Normalise relationship dataframe}
+\title{Normalise a Rel object dataframe}
 \usage{
 norm_rel(rel_df, na_strings = c("NA", ""), missid = NA_character_)
 }
@@ -25,7 +25,7 @@ The code values are:
 The value relation code recognized by the function are the one defined
 by the \code{\link[=rel_code_to_factor]{rel_code_to_factor()}} function.}
 
-\item{na_strings}{Vector of strings to be considered as NA values}
+\item{na_strings}{Vector of strings to be considered as NA values.}
 
 \item{missid}{A character vector with the missing values identifiers.
 All the id, dadid and momid corresponding to those values will be set
@@ -35,7 +35,29 @@ to \code{NA_character_}.}
 A dataframe with the errors identified
 }
 \description{
-Normalise relationship dataframe for Pedigree object
+Normalise a dataframe and check for columns correspondance
+to be able to use it as an input to create a Ped object.
+}
+\details{
+The \code{famid} column, if provided, will be merged to the \emph{ids} field
+separated by an underscore using the \code{\link[=upd_famid_id]{upd_famid_id()}} function.
+The \code{code} column will be transformed with the \code{\link[=rel_code_to_factor]{rel_code_to_factor()}}.
+Multiple test are done and errors are checked.
+
+A number of checks are done to ensure the dataframe is correct:
+\subsection{On identifiers:}{
+\itemize{
+\item All ids (id1, id2) are not empty (\verb{!= ""})
+\item \code{id1} and \code{id2} are not the same
+}
+}
+
+\subsection{On code}{
+\itemize{
+\item All code are recognised as either "MZ twin", "DZ twin", "UZ twin" or
+"Spouse"
+}
+}
 }
 \examples{
 df <- data.frame(

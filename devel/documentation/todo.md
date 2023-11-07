@@ -31,8 +31,8 @@
 - [x] kinship.R
 - [x] make_famid.R
 - [x] min_dist_inf.R
-- [ ] norm_data.R
-- [ ] num_child.R
+- [x] norm_data.R
+- [x] num_child.R
 - [ ] ped_to_legdf.R
 - [ ] ped_to_plotdf.R
 - [ ] plot.R

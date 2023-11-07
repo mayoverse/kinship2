@@ -40,13 +40,13 @@ setGeneric("useful_inds", signature = "obj",
 #' @aliases useful_inds,character
 setMethod("useful_inds", "character",
     function(obj, dadid, momid, avail, affected, num_child_tot,
-        informative = "AvAf", keep_infos = FALSE, missid = NA_character_
+        informative = "AvAf", keep_infos = FALSE
     ) {
         id <- obj
 
         # Get informative individuals
         id_inf <- is_informative(id, avail, affected,
-            informative, missid
+            informative
         )
         isinf <- id %in% id_inf
 
@@ -107,7 +107,7 @@ setMethod("useful_inds", "Ped", function(obj,
 ) {
     useful <- useful_inds(id(obj), dadid(obj), momid(obj),
         avail(obj), affected(obj), obj@num_child_tot,
-        informative, keep_infos, NA_character_
+        informative, keep_infos
     )
 
     if (!reset & any(!is.na(useful(obj)))) {

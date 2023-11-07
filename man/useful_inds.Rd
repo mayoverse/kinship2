@@ -20,8 +20,7 @@ useful_inds(obj, ...)
   affected,
   num_child_tot,
   informative = "AvAf",
-  keep_infos = FALSE,
-  missid = NA_character_
+  keep_infos = FALSE
 )
 
 \S4method{useful_inds}{Pedigree}(obj, informative = "AvAf", keep_infos = FALSE, reset = FALSE)
@@ -64,10 +63,6 @@ individuals}
 
 \item{keep_infos}{Boolean to indicate if individuals with unknown status
 but available or reverse should be kept}
-
-\item{missid}{A character vector with the missing values identifiers.
-All the id, dadid and momid corresponding to those values will be set
-to \code{NA_character_}.}
 
 \item{reset}{Boolean to indicate if the \code{useful} column should be reset}
 }
