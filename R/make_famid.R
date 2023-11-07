@@ -1,9 +1,7 @@
-# $Id: make_famid.s,v 1.7 2003/01/07 15:47:08 therneau Exp
-
-#' Get family id
+#' Update family id
 #'
 #' @description
-#' Construct a family id from Pedigree information
+#' Construct a family identifier from pedigree information
 #'
 #' @details
 #' Create a vector of length n, giving the family 'tree' number of each
@@ -21,19 +19,18 @@
 #' An updated Pedigree object with the family id added
 #'
 #' @seealso [kinship()]
-#' @examples
-#' data(sampleped)
-#' ped1 <- Pedigree(sampleped[,-1])
-#' make_famid(ped1)
 #' @export
 setGeneric("make_famid", signature = "obj",
     function(obj, ...) standardGeneric("make_famid")
 )
 
-#' @export
 #' @rdname make_famid
-#' @aliases make_famid,character
-#' @docType methods
+#' @examples
+#' make_famid(
+#'      c("A", "B", "C", "D", "E", "F"),
+#'      c("C", "D", "0", "0", "0", "0"),
+#'      c("E", "E", "0", "0", "0", "0")
+#' )
 setMethod("make_famid", "character",
     function(obj, dadid, momid) {
         id <- obj
@@ -93,11 +90,11 @@ setMethod("make_famid", "character",
     }
 )
 
-#' @export
 #' @rdname make_famid
-#' @aliases make_famid,Pedigree
-#' @docType methods
-#' @include AllClass.R
+#' @examples
+#' data(sampleped)
+#' ped1 <- Pedigree(sampleped[,-1])
+#' make_famid(ped1)
 setMethod("make_famid", "Pedigree",
     function(obj) {
         famid <- make_famid(
@@ -123,23 +120,35 @@ setMethod("make_famid", "Pedigree",
 
 #' Update family prefix in individuals id
 #'
-#' @param obj A character vector of individual ids
+#' Update the family prefix in the individuals identifiers.
+#' Individuals identifiers are constructed as follow **famid**_**id**.
+#' Therefore to update their family prefix the ids are split by the
+#' first underscore and the first part is overwritten by **famid**.
+#'
+#' If famid is *missing*, then the `famid()` function will be called on the
+#' object.
+#'
+#' @param obj Ped or Pedigree object or a character vector of individual ids
 #' @inheritParams Ped
 #'
 #' @return A character vector of individual ids with family prefix
+#' updated
 #'
 #' @export
 setGeneric("upd_famid_id",
     function(obj, famid, ...) standardGeneric("upd_famid_id")
 )
 
+#' @rdname upd_famid_id
+#' @examples
+#' upd_famid_id(c("1", "2", "B_3"), c("A", "B", "A"))
 setMethod("upd_famid_id", "character",
     function(obj, famid, missid = NA_character_) {
-        id <- obj[!obj %in% missid]
-        famid <- famid[!obj %in% missid]
-        if (length(id) != length(famid)) {
+        if (length(obj) != length(famid)) {
             stop("id and famid must have the same length")
         }
+        id <- obj[!obj %in% missid]
+        famid <- famid[!obj %in% missid]
         if (any(is.na(famid))) {
             stop("famid cannot contain NA")
         }
@@ -155,6 +164,7 @@ setMethod("upd_famid_id", "character",
     }
 )
 
+#' @rdname upd_famid_id
 setMethod("upd_famid_id",
     signature(obj = "Ped", famid = "character_OR_integer"),
     function(obj, famid) {
@@ -166,6 +176,7 @@ setMethod("upd_famid_id",
     }
 )
 
+#' @rdname upd_famid_id
 setMethod("upd_famid_id",
     signature(obj = "Ped", famid = "missing"),
     function(obj) {
@@ -177,6 +188,7 @@ setMethod("upd_famid_id",
     }
 )
 
+#' @rdname upd_famid_id
 setMethod("upd_famid_id",
     signature(obj = "Rel", famid = "character_OR_integer"),
     function(obj, famid) {
@@ -187,6 +199,7 @@ setMethod("upd_famid_id",
     }
 )
 
+#' @rdname upd_famid_id
 setMethod("upd_famid_id",
     signature(obj = "Rel", famid = "missing"),
     function(obj) {
@@ -197,6 +210,13 @@ setMethod("upd_famid_id",
     }
 )
 
+#' @rdname upd_famid_id
+#' @examples
+#' data(sampleped)
+#' ped1 <- Pedigree(sampleped[,-1])
+#' id(ped(ped1))
+#' new_fam <- make_famid(id(ped(ped1)), dadid(ped(ped1)), momid(ped(ped1)))
+#' id(ped(upd_famid_id(ped1, new_fam)))
 setMethod("upd_famid_id",
     signature(obj = "Pedigree", famid = "character_OR_integer"),
     function(obj, famid) {
@@ -215,6 +235,11 @@ setMethod("upd_famid_id",
     }
 )
 
+#' @rdname upd_famid_id
+#' @examples
+#' data(sampleped)
+#' ped1 <- Pedigree(sampleped[,-1])
+#' make_famid(ped1)
 setMethod("upd_famid_id",
     signature(obj = "Pedigree", famid = "missing"),
     function(obj) {

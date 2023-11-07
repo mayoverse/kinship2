@@ -2,21 +2,21 @@
 #' @importFrom Matrix forceSymmetric bdiag
 NULL
 
-#' Compute a kinship matrix
+#' Kinship matrix
 #'
 #' @description
-#' Compute the kinship matrix for a set of related autosomal subjects.  The
-#' function is generic, and can accept a Pedigree,  vector as
+#' Compute the kinship matrix for a set of related autosomal subjects.
+#' The function is generic, and can accept a Pedigree, a Ped or a vector as
 #' the first argument.
 #'
 #' @details
-#' The function will usually be called with a Pedigree the
-#' third form is provided for backwards compatibility with an earlier release
-#' of the library that was less capable.  The first argument is named `id`
-#' for the same reason.  Note that when using the third form any information on
+#' The function will usually be called with a Pedigree.
+#' The call with a Ped or a vector is provided for backwards compatibility
+#' with an earlier release of the library that was less capable.
+#' Note that when using with a Ped or a vector, any information on
 #' twins is not available to the function.
 #'
-#' When called with a pedigree, the routine
+#' When called with a Pedigree, the routine
 #' will create a block-diagonal-symmetric sparse matrix object of class
 #' `dsCMatrix`.  Since the `[i, j]` value of the result is 0 for any two
 #' unrelated individuals i and j and a `Matrix` utilizes sparse
@@ -37,46 +37,48 @@ NULL
 #' The computation is based on a recursive algorithm described in Lange, which
 #' assumes that the founder alleles are all independent.
 #'
-#' @param obj A pedigree object or a vector of subject identifiers.
+#' @param obj A Pedigree or Ped object or a vector of subject identifiers.
 #' @param chrtype chromosome type.  The currently supported types are
 #' 'autosome' and 'X' or 'x'.
-#' @param ... Additional arguments passed to methods
-#' @inheritParams sex_to_factor
-#' @inheritParams is_parent
+#' @param ... Additional arguments
+#' @inheritParams Ped
 #'
 #' @return
 #' ## When obj is a vector
 #' A matrix of kinship coefficients.
-#' ## When obj is a pedigree
+#' ## When obj is a Pedigree
 #' A matrix of kinship coefficients ordered by families present
-#' in the pedigree.
+#' in the Pedigree object.
 #'
-#' @examples
-#' data(sampleped)
-#' ped <- Pedigree(sampleped)
-#' kinship(ped)
-#'
-#' @section References: K Lange, Mathematical and Statistical Methods for
+#' @section References:
+#' K Lange, Mathematical and Statistical Methods for
 #' Genetic Analysis, Springer-Verlag, New York, 1997.
 #' @seealso [make_famid()], [kindepth()]
 #' @include AllClass.R
 #' @include utils.R
 #' @export
-#' @docType methods
 setGeneric("kinship", signature = "obj",
     function(obj, ...) standardGeneric("kinship")
 )
 
+#' @rdname kinship
 setMethod("kinship", "Ped",
-    function(obj, ...){
-        kinship(id(obj), dadid(obj), momid(obj), sex(obj), ...)
+    function(obj, chrtype = "autosome"){
+        kinship(
+            id(obj), dadid(obj), momid(obj),
+            sex(obj), chrtype = chrtype
+        )
     }
 )
 
-#' @export
 #' @rdname kinship
-#' @aliases kinship,character
-#' @docType methods
+#' @examples
+#' kinship(c("A", "B", "C", "D", "E"), c("C", "D", "0", "0", "0"),
+#'     c("E", "E", "0", "0", "0"), sex = c(1, 2, 1, 2, 1))
+#' kinship(c("A", "B", "C", "D", "E"), c("C", "D", "0", "0", "0"),
+#'     c("E", "E", "0", "0", "0"), sex = c(1, 2, 1, 2, 1),
+#'    chrtype = "x"
+#' )
 setMethod("kinship", "character",
     function(obj, dadid, momid, sex, chrtype = "autosome") {
         id <- obj
@@ -139,10 +141,11 @@ setMethod("kinship", "character",
 )
 
 #' @include kindepth.R
-#' @export
 #' @rdname kinship
-#' @aliases kinship,Pedigree
-#' @docType methods
+#' @examples
+#' data(sampleped)
+#' ped <- Pedigree(sampleped)
+#' kinship(ped)
 setMethod("kinship", "Pedigree",
     function(obj, chrtype = "autosome") {
         famlist <- unique(famid(obj))
@@ -174,7 +177,9 @@ setMethod("kinship", "Pedigree",
                 )
                 # Are there any MZ twins to worry about?
                 have_mz <- FALSE
-                if (length(rel(tped)) > 0 && any(code(rel(tped)) == "MZ twin")) {
+                if (length(rel(tped)) > 0 &&
+                        any(code(rel(tped)) == "MZ twin")
+                ) {
                     have_mz <- TRUE
                     ## Doc: MakeMZIndex
                     temp <- which(code(rel(tped)) == "MZ twin")

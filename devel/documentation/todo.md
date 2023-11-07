@@ -25,12 +25,12 @@
 - [x] fix_parents.R
 - [x] generate_aff_inds.R
 - [x] generate_colors.R
-- [ ] ibd_matrix.R
-- [ ] is_informative.R
-- [ ] kindepth.R
-- [ ] kinship.R
-- [ ] make_famid.R
-- [ ] min_dist_inf.R
+- [x] ibd_matrix.R
+- [x] is_informative.R
+- [x] kindepth.R
+- [x] kinship.R
+- [x] make_famid.R
+- [x] min_dist_inf.R
 - [ ] norm_data.R
 - [ ] num_child.R
 - [ ] ped_to_legdf.R

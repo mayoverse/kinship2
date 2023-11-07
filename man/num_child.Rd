@@ -16,9 +16,15 @@ num_child(obj, ...)
 \S4method{num_child}{Pedigree}(obj, reset = FALSE)
 }
 \arguments{
-\item{obj}{A pedigree object or a vector of subject identifiers.}
+\item{obj}{A Pedigree or Ped object or a vector of subject identifiers.}
 
-\item{...}{Additional arguments passed to methods}
+\item{...}{Additional arguments}
+
+\item{dadid}{A vector containing for each subject, the identifiers of the
+biologicals fathers.}
+
+\item{momid}{A vector containing for each subject, the identifiers of the
+biologicals mothers.}
 
 \item{rel_df}{A data.frame with the special relationships between
 individuals. See \code{\link[=Rel]{Rel()}} for more informations.

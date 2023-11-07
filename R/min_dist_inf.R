@@ -1,7 +1,7 @@
 #' @importFrom dplyr %>%
 NULL
 
-#' @title Minimum distance to the informative individuals
+#' Minimum distance to the informative individuals
 #'
 #' @description Compute the minimum distance between the informative
 #' individuals and all the others.
@@ -18,11 +18,10 @@ NULL
 #' by 2, the minimum distance is increased by 1.
 #'
 #'
-#'
-#' @inheritParams sex_to_factor
-#' @inheritParams kinship
+#' @param ... Additional arguments
+#' @param id_inf An identifiers vector of informative individuals.
+#' @inheritParams Ped
 #' @inheritParams is_informative
-#' @inheritParams is_parent
 #'
 #' @return
 #' ## When obj is a vector
@@ -31,13 +30,9 @@ NULL
 #' `obj` vector.
 #'
 #' ## When obj is a Pedigree
-#' The Pedigree object with a new column named 'kin' containing the kinship
-#' degree.
-#'
-#' @examples
-#' data(sampleped)
-#' ped <- Pedigree(sampleped)
-#' min_dist_inf(ped, col_aff = "affection_mods")$ped
+#' The Pedigree object with a new slot named 'kin' containing the minimum
+#' distance between each individuals and the informative individuals.
+#' The `isinf` slot is also updated with the informative individuals.
 #'
 #' @seealso [kinship()]
 #' @include is_informative.R
@@ -48,17 +43,23 @@ setGeneric("min_dist_inf", signature = "obj",
     function(obj, ...) standardGeneric("min_dist_inf")
 )
 
-#' @export
 #' @rdname min_dist_inf
-#' @aliases min_dist_inf,character
-#' @docType methods
+#' @examples
+#' min_dist_inf(
+#'      c("A", "B", "C", "D", "E"),
+#'      c("C", "D", "0", "0", "0"),
+#'      c("E", "E", "0", "0", "0"),
+#'      sex = c(1, 2, 1, 2, 1),
+#'      avail = c(1, 0, 0, 1, 1),
+#'      affected = c(0, 1, 0, 1, 1),
+#'      informative = "AvAf"
+#' )
 setMethod("min_dist_inf", "character", function(obj,
-    dadid, momid, sex, avail, affected, informative = "AvAf"
+    dadid, momid, sex, id_inf
 ) {
     id <- obj
     # Selection of all informative individuals depending of the informative
     # parameter
-    id_inf <- is_informative(id, avail, affected, informative)
     if (any(is.na(id_inf)) || length(id_inf) == 0) {
         stop("No informative individuals detected")
     }
@@ -73,21 +74,22 @@ setMethod("min_dist_inf", "character", function(obj,
     kin
 })
 
-#' @export
 #' @rdname min_dist_inf
-#' @aliases min_dist_inf,Pedigree
-#' @docType methods
 #' @param reset If TRUE, the `kin` and if `isinf` columns is reset
+#' @examples
+#' data(sampleped)
+#' ped <- Pedigree(sampleped)
+#' kin(ped(min_dist_inf(ped, col_aff = "affection_mods")))
 setMethod("min_dist_inf", "Pedigree", function(obj,
-    col_aff = NULL, informative = "AvAf",
-    missid = NA_character_, reset = FALSE, ...
+    col_aff = NULL, informative = "AvAf", reset = FALSE, ...
 ) {
     obj_aff <- is_informative(obj, col_aff, informative = informative,
-        missid, reset
+        reset = reset
     )
 
     new_ped <- min_dist_inf(
-        ped(obj_aff), col_aff, informative, missid, reset, ...
+        ped(obj_aff),
+        informative = informative, reset = reset
     )
 
     ped(obj_aff) <- new_ped
@@ -95,20 +97,11 @@ setMethod("min_dist_inf", "Pedigree", function(obj,
     obj_aff
 })
 
-#' @export
 #' @rdname min_dist_inf
-#' @aliases min_dist_inf,Ped
-#' @docType methods
 #' @param reset If TRUE, the `kin` and if `isinf` columns is reset
-setMethod("min_dist_inf", "Ped", function(obj,
-    col_aff = NULL, informative = "AvAf",
-    missid = NA_character_, reset = FALSE, ...
+setMethod("min_dist_inf", "Ped", function(
+    obj, informative = "AvAf", reset = FALSE
 ) {
-
-    kin <- min_dist_inf(
-        id(obj), dadid(obj), momid(obj), sex(obj),
-        avail(obj), affected(obj), informative
-    )
 
     if (!reset & any(!is.na(kin(obj)))) {
         stop(
@@ -116,6 +109,11 @@ setMethod("min_dist_inf", "Ped", function(obj,
             " and reset is set to FALSE"
         )
     }
+
+    id_inf <- id(obj)[isinf(obj)]
+    kin <- min_dist_inf(
+        id(obj), dadid(obj), momid(obj), sex(obj), id_inf
+    )
 
     kin(obj) <- kin
     validObject(obj)

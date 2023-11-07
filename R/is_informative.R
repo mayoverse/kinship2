@@ -1,15 +1,17 @@
-#' @title Is informative
+#' Find informative individuals
 #'
 #' @description Select the ids of the informative individuals.
 #'
-#' @details Depending on the informative parameter, the function will extract
-#' the ids of the informative individuals. In the case of a numeric vector,
-#' the function will return the same vector. In the case of a boolean, the
-#' function will return the ids of the individuals if TRUE, NA otherwise.
+#' @details Depending on the **informative** parameter, the function will
+#' extract the ids of the informative individuals. In the case of a
+#' numeric vector, the function will return the same vector.
+#' In the case of a boolean, the function will return the ids of the
+#' individuals if TRUE, NA otherwise.
 #' In the case of a string, the function will return the ids of the
 #' corresponding informative individuals based on the avail and affected
 #' columns.
 #'
+#' @param ... Additional arguments
 #' @inheritParams Ped
 #' @inheritParams Pedigree
 #' @param informative Informative individuals selection can take 5 values:
@@ -25,7 +27,7 @@
 #' @return
 #'
 #' ## When obj is a vector
-#' A vector of individuals informative identifiers
+#' A vector of individuals informative identifiers.
 #'
 #' ## When obj is a Pedigree
 #' A list containing the Pedigree object and the vector of individuals
@@ -33,29 +35,48 @@
 #' The Pedigree object will have a new column named 'id_inf' containing 1 for
 #' informative individuals and 0 otherwise.
 #'
-#' @examples
-#' data("sampleped")
-#' ped <- Pedigree(sampleped)
-#' is_informative(ped, col_aff = "affection_mods")
-#'
 #' @export
 #' @docType methods
 setGeneric("is_informative", signature = "obj",
     function(obj, ...) standardGeneric("is_informative")
 )
 
-#' @export
 #' @rdname is_informative
-#' @aliases is_informative,character
-#' @docType methods
-setMethod("is_informative", "character", function(
-    obj, avail, affected, informative = "AvAf", missid = NA_character_
+#' @examples
+#' is_informative(c("A", "B", "C", "D", "E"), informative = c("A", "B"))
+#' is_informative(c("A", "B", "C", "D", "E"), informative = c(1, 2))
+#' is_informative(c("A", "B", "C", "D", "E"), informative = c("A", "B"))
+#' is_informative(c("A", "B", "C", "D", "E"), avail = c(1, 0, 0, 1, 1),
+#'   affected = c(0, 1, 0, 1, 1), informative = "AvAf")
+#' is_informative(c("A", "B", "C", "D", "E"), avail = c(1, 0, 0, 1, 1),
+#'   affected = c(0, 1, 0, 1, 1), informative = "AvOrAf")
+#' is_informative(c("A", "B", "C", "D", "E"),
+#'      informative = c(TRUE, FALSE, TRUE, FALSE, TRUE))
+setMethod("is_informative", "character_OR_integer", function(
+    obj, avail, affected, informative = "AvAf"
 ) {
     id <- obj
     # Selection of all informative individuals depending of the informative
     # parameter
-    if (is.numeric(informative)) {
-        id_inf <- id[match(id, informative, nomatch = 0) != 0]
+    if (length(informative) > 1) {
+        if (is.character(informative)) {
+            id_inf <- id[match(id, informative, nomatch = 0) != 0]
+        } else if (is.numeric(informative)) {
+            id_inf <- id[informative]
+        } else if (is.logical(informative)) {
+            if (length(informative) != length(id)) {
+                stop("The length of a logical informative parameter must be",
+                    "equal to the length of the id vector"
+                )
+            }
+            id_inf <- id[informative]
+        } else {
+            stop("The informative parameter must be a character, ",
+                "logical or numeric"
+            )
+        }
+    } else if (is.numeric(informative)) {
+        id_inf <- id[informative]
     } else if (is.logical(informative)) {
         id_inf <- ifelse(informative, id, NA)
         id_inf <- id_inf[!is.na(id_inf)]
@@ -81,21 +102,30 @@ setMethod("is_informative", "character", function(
     unique(id_inf)
 })
 
-#' @export
 #' @rdname is_informative
-#' @aliases is_informative,Pedigree
-#' @docType methods
-#' @param reset If `TRUE`, the `id_inf` column is reset
+#' @param reset If `TRUE`, the `isinf` slot is reset
+#' @examples
+#' data("sampleped")
+#' ped <- Pedigree(sampleped)
+#' ped <- is_informative(ped, col_aff = "affection_mods")
+#' isinf(ped(ped))
 setMethod("is_informative", "Pedigree", function(
-    obj, col_aff = NULL, informative = "AvAf",
-    missid = NA_character_, reset = FALSE
+    obj, col_aff = NULL, informative = "AvAf", reset = FALSE
 ) {
+    if (!reset & any(!is.na(isinf(ped(obj))))) {
+        warning(
+            "The isinf slot already has values in the Ped object",
+            " and reset is set to FALSE"
+        )
+        return(obj)
+    }
     affected(ped(obj)) <- NA
     aff_scl <- fill(obj)
     ped_df <- as.data.frame(ped(obj))
     if (is.null(col_aff)) {
         stop("The col_aff argument is required")
     }
+    # TODO use the affected columns
     if (col_aff %in% aff_scl$column_mods) {
         aff <- aff_scl$mods[aff_scl$affected == TRUE &
                 aff_scl$column_mods == col_aff
@@ -112,15 +142,8 @@ setMethod("is_informative", "Pedigree", function(
     cols_needed <- c("id", "avail", "affected")
     check_columns(ped_df, cols_needed, "", "", others_cols = TRUE)
     id_inf <- is_informative(ped_df$id, ped_df$avail, ped_df$affected,
-        informative, missid
+        informative = informative
     )
-
-    if (!reset & any(!is.na(isinf(ped(obj))))) {
-        stop(
-            "The isinf slot already has values in the Ped object",
-            " and reset is set to FALSE"
-        )
-    }
 
     isinf(ped(obj)) <- vect_to_binary(
         ifelse(ped_df$id %in% id_inf, 1, 0), logical = TRUE

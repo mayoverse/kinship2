@@ -32,7 +32,13 @@ useful_inds(obj, ...)
 \item{obj}{A character vector with the id of the individuals or a
 \code{data.frame} with all the informations in corresponding columns.}
 
-\item{...}{Other arguments to pass to the function \code{generate_colors}.}
+\item{...}{Additional arguments}
+
+\item{dadid}{A vector containing for each subject, the identifiers of the
+biologicals fathers.}
+
+\item{momid}{A vector containing for each subject, the identifiers of the
+biologicals mothers.}
 
 \item{avail}{A logical vector with the availability status of the
 individuals

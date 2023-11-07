@@ -4,39 +4,29 @@
 \name{min_dist_inf}
 \alias{min_dist_inf}
 \alias{min_dist_inf,character-method}
-\alias{min_dist_inf,character}
 \alias{min_dist_inf,Pedigree-method}
-\alias{min_dist_inf,Pedigree}
 \alias{min_dist_inf,Ped-method}
-\alias{min_dist_inf,Ped}
 \title{Minimum distance to the informative individuals}
 \usage{
 min_dist_inf(obj, ...)
 
-\S4method{min_dist_inf}{character}(obj, dadid, momid, sex, avail, affected, informative = "AvAf")
+\S4method{min_dist_inf}{character}(obj, dadid, momid, sex, id_inf)
 
-\S4method{min_dist_inf}{Pedigree}(
-  obj,
-  col_aff = NULL,
-  informative = "AvAf",
-  missid = NA_character_,
-  reset = FALSE,
-  ...
-)
+\S4method{min_dist_inf}{Pedigree}(obj, col_aff = NULL, informative = "AvAf", reset = FALSE, ...)
 
-\S4method{min_dist_inf}{Ped}(
-  obj,
-  col_aff = NULL,
-  informative = "AvAf",
-  missid = NA_character_,
-  reset = FALSE,
-  ...
-)
+\S4method{min_dist_inf}{Ped}(obj, informative = "AvAf", reset = FALSE)
 }
 \arguments{
-\item{obj}{A pedigree object or a vector of subject identifiers.}
+\item{obj}{A character vector with the id of the individuals or a
+\code{data.frame} with all the informations in corresponding columns.}
 
-\item{...}{Additional arguments passed to methods}
+\item{...}{Additional arguments}
+
+\item{dadid}{A vector containing for each subject, the identifiers of the
+biologicals fathers.}
+
+\item{momid}{A vector containing for each subject, the identifiers of the
+biologicals mothers.}
 
 \item{sex}{A character, factor or numeric vector corresponding to
 the gender of the individuals. This will be transformed to an ordered factor
@@ -48,13 +38,12 @@ The following values are recognized:
 \item numeric() : 1 = "male", 2 = "female", 3 = "unknown", 4 = "terminated"
 }}
 
-\item{avail}{A logical vector with the availability status of the
-individuals
-(i.e. \code{FALSE} = not available, \code{TRUE} = available, \code{NA} = unknown).}
+\item{id_inf}{An identifiers vector of informative individuals.}
 
-\item{affected}{A logical vector with the affection status of the
-individuals
-(i.e. \code{FALSE} = unaffected, \code{TRUE} = affected, \code{NA} = unknown).}
+\item{col_aff}{A character vector with the name of the column to be used
+for the affection status.
+If \code{affected} is a data.frame, it will be overwritten by the column
+names of the data.frame.}
 
 \item{informative}{Informative individuals selection can take 5 values:
 \itemize{
@@ -66,15 +55,6 @@ individuals
 \item A numeric/character vector of individuals id
 \item A boolean
 }}
-
-\item{col_aff}{A character vector with the name of the column to be used
-for the affection status.
-If \code{affected} is a data.frame, it will be overwritten by the column
-names of the data.frame.}
-
-\item{missid}{A character vector with the missing values identifiers.
-All the id, dadid and momid corresponding to those values will be set
-to \code{NA_character_}.}
 
 \item{reset}{If TRUE, the \code{kin} and if \code{isinf} columns is reset}
 }
@@ -88,8 +68,9 @@ and all the others corresponding to the order of the individuals in the
 
 \subsection{When obj is a Pedigree}{
 
-The Pedigree object with a new column named 'kin' containing the kinship
-degree.
+The Pedigree object with a new slot named 'kin' containing the minimum
+distance between each individuals and the informative individuals.
+The \code{isinf} slot is also updated with the informative individuals.
 }
 }
 \description{
@@ -108,10 +89,18 @@ is 0.5 and the minimum distance is 1. Each time the kinship degree is divided
 by 2, the minimum distance is increased by 1.
 }
 \examples{
+min_dist_inf(
+     c("A", "B", "C", "D", "E"),
+     c("C", "D", "0", "0", "0"),
+     c("E", "E", "0", "0", "0"),
+     sex = c(1, 2, 1, 2, 1),
+     avail = c(1, 0, 0, 1, 1),
+     affected = c(0, 1, 0, 1, 1),
+     informative = "AvAf"
+)
 data(sampleped)
 ped <- Pedigree(sampleped)
-min_dist_inf(ped, col_aff = "affection_mods")$ped
-
+kin(ped(min_dist_inf(ped, col_aff = "affection_mods")))
 }
 \seealso{
 \code{\link[=kinship]{kinship()}}

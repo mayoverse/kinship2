@@ -3,35 +3,21 @@
 \docType{methods}
 \name{is_informative}
 \alias{is_informative}
-\alias{is_informative,character-method}
-\alias{is_informative,character}
+\alias{is_informative,character_OR_integer-method}
 \alias{is_informative,Pedigree-method}
-\alias{is_informative,Pedigree}
-\title{Is informative}
+\title{Find informative individuals}
 \usage{
 is_informative(obj, ...)
 
-\S4method{is_informative}{character}(
-  obj,
-  avail,
-  affected,
-  informative = "AvAf",
-  missid = NA_character_
-)
+\S4method{is_informative}{character_OR_integer}(obj, avail, affected, informative = "AvAf")
 
-\S4method{is_informative}{Pedigree}(
-  obj,
-  col_aff = NULL,
-  informative = "AvAf",
-  missid = NA_character_,
-  reset = FALSE
-)
+\S4method{is_informative}{Pedigree}(obj, col_aff = NULL, informative = "AvAf", reset = FALSE)
 }
 \arguments{
 \item{obj}{A character vector with the id of the individuals or a
 \code{data.frame} with all the informations in corresponding columns.}
 
-\item{...}{Other arguments to pass to the function \code{generate_colors}.}
+\item{...}{Additional arguments}
 
 \item{avail}{A logical vector with the availability status of the
 individuals
@@ -52,21 +38,17 @@ individuals
 \item A boolean
 }}
 
-\item{missid}{A character vector with the missing values identifiers.
-All the id, dadid and momid corresponding to those values will be set
-to \code{NA_character_}.}
-
 \item{col_aff}{A character vector with the name of the column to be used
 for the affection status.
 If \code{affected} is a data.frame, it will be overwritten by the column
 names of the data.frame.}
 
-\item{reset}{If \code{TRUE}, the \code{id_inf} column is reset}
+\item{reset}{If \code{TRUE}, the \code{isinf} slot is reset}
 }
 \value{
 \subsection{When obj is a vector}{
 
-A vector of individuals informative identifiers
+A vector of individuals informative identifiers.
 }
 
 \subsection{When obj is a Pedigree}{
@@ -81,17 +63,27 @@ informative individuals and 0 otherwise.
 Select the ids of the informative individuals.
 }
 \details{
-Depending on the informative parameter, the function will extract
-the ids of the informative individuals. In the case of a numeric vector,
-the function will return the same vector. In the case of a boolean, the
-function will return the ids of the individuals if TRUE, NA otherwise.
+Depending on the \strong{informative} parameter, the function will
+extract the ids of the informative individuals. In the case of a
+numeric vector, the function will return the same vector.
+In the case of a boolean, the function will return the ids of the
+individuals if TRUE, NA otherwise.
 In the case of a string, the function will return the ids of the
 corresponding informative individuals based on the avail and affected
 columns.
 }
 \examples{
+is_informative(c("A", "B", "C", "D", "E"), informative = c("A", "B"))
+is_informative(c("A", "B", "C", "D", "E"), informative = c(1, 2))
+is_informative(c("A", "B", "C", "D", "E"), informative = c("A", "B"))
+is_informative(c("A", "B", "C", "D", "E"), avail = c(1, 0, 0, 1, 1),
+  affected = c(0, 1, 0, 1, 1), informative = "AvAf")
+is_informative(c("A", "B", "C", "D", "E"), avail = c(1, 0, 0, 1, 1),
+  affected = c(0, 1, 0, 1, 1), informative = "AvOrAf")
+is_informative(c("A", "B", "C", "D", "E"),
+     informative = c(TRUE, FALSE, TRUE, FALSE, TRUE))
 data("sampleped")
 ped <- Pedigree(sampleped)
-is_informative(ped, col_aff = "affection_mods")
-
+ped <- is_informative(ped, col_aff = "affection_mods")
+isinf(ped(ped))
 }

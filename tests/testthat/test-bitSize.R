@@ -4,7 +4,7 @@ test_that("bit_size works", {
         "indId" = "id", "fatherId" = "fatherid",
         "motherId" = "motherid", "gender" = "sex", "family" = "famid"
     ), missid = "0")
-    bs_pedi <- bit_size(minnped, missid = NA_character_)
+    bs_pedi <- bit_size(minnped)
     bs_char <- bit_size(
         as.character(minnbreast$fatherid),
         as.character(minnbreast$motherid),

@@ -59,7 +59,7 @@ setMethod("bit_size",
 #' @rdname bit_size
 setMethod("bit_size", "Pedigree",
     function(obj) {
-        bit_size(ped(obj), NA_character_)
+        bit_size(ped(obj))
     }
 )
 

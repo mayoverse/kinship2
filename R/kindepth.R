@@ -1,3 +1,13 @@
+#' Chase up the ancestors of a subject
+#'
+#' @param x a vector of subject ids
+#' @param midx a vector of mother ids
+#' @param didx a vector of father ids
+#' @return a vector of all ancestors subjects connected to x
+#' @keywords internal, kindepth
+#' @examples
+#' chaseup(1, c(3,0,0), c(2,0,0))
+#' chaseup(1, c(3,4,0,0,0), c(2,5,0,0,0))
 chaseup <- function(x, midx, didx) {
     new <- c(midx[x], didx[x])  # mother and father
     new <- new[new > 0]
@@ -9,45 +19,45 @@ chaseup <- function(x, midx, didx) {
     x
 }
 
-#' Compute the depth of each subject in a Pedigree
+#' Individual's depth in a pedigree
 #'
 #' @description
 #' Computes the depth of each subject in the Pedigree.
 #'
 #' @details
-#' Mark each person as to their depth in a Pedigree; 0 for a founder, otherwise
+#' Mark each person as to their depth in a Pedigree; `0` for a founder,
+#' otherwise :
 #'
-#' \eqn{depth = 1 + \max(fatherDepth, motherDepth)}
+#' \deqn{depth = 1 + \max(fatherDepth, motherDepth)}
 #'
-#' In the case of an inbred Pedigree a perfect alignment obeying
-#' `extra=TRUE` may not exist.
+#' In the case of an inbred Pedigree a perfect alignment may not exist.
 #'
-#' @inheritParams kinship
-#' @param align_parents If `align_parents=T`, go one step further and try to
-#' make both parents of each child have the same depth.
+#' @param ... Additional arguments
+#' @inheritParams Ped
+#' @param align_parents If `align_parents = TRUE`, go one step further
+#' and try to make both parents of each child have the same depth.
 #' (This is not always possible).
 #' It helps the drawing program by lining up pedigrees that 'join in the middle'
 #' via a marriage.
 #'
-#' @return an integer vector containing the depth for each subject
+#' @return An integer vector containing the depth for each subject
 #'
 #' @author Terry Therneau
 #' @seealso [align()]
 #' @include AllClass.R
-#' @examples
-#' data(sampleped)
-#' ped1 <- Pedigree(sampleped[sampleped$famid == "1",])
-#' kindepth(ped1)
 #' @export
 setGeneric("kindepth", signature = "obj",
     function(obj, ...) standardGeneric("kindepth")
 )
 
-#' @export
 #' @rdname kindepth
-#' @aliases kindepth,character
-#' @docType methods
-setMethod("kindepth", "character", function(obj, dadid, momid,
+#' @examples
+#' kindepth(
+#'      c("A", "B", "C", "D", "E"),
+#'      c("C", "D", "0", "0", "0"),
+#'      c("E", "E", "0", "0", "0")
+#' )
+setMethod("kindepth", "character_OR_integer", function(obj, dadid, momid,
     align_parents = FALSE
 ) {
     id <- obj
@@ -73,7 +83,6 @@ setMethod("kindepth", "character", function(obj, dadid, momid,
     for (i in seq_len(n)) {
         child <- match(midx, parents, nomatch = 0) +
             match(didx, parents, nomatch = 0)  # Index of parent's childs
-
         ## version 1.8.5 did not have this check with child_old.
         ## Keeping it here because it was not the issue being fixed in 9/2023.
         if (all(child == child_old)) {
@@ -227,20 +236,18 @@ setMethod("kindepth", "character", function(obj, dadid, momid,
 }
 )
 
-#' @export
 #' @rdname kindepth
-#' @aliases kindepth,Pedigree
-#' @docType methods
+#' @examples
+#' data(sampleped)
+#' ped1 <- Pedigree(sampleped[sampleped$famid == "1",])
+#' kindepth(ped1)
 setMethod("kindepth", "Pedigree",
     function(obj, align_parents = FALSE) {
         kindepth(ped(obj), align_parents)
     }
 )
 
-#' @export
 #' @rdname kindepth
-#' @aliases kindepth,Ped
-#' @docType methods
 setMethod("kindepth", "Ped",
     function(obj, align_parents = FALSE) {
         kindepth(id(obj), dadid(obj), momid(obj), align_parents)
