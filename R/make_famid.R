@@ -142,6 +142,7 @@ setGeneric("upd_famid_id",
 #' @rdname upd_famid_id
 #' @examples
 #' upd_famid_id(c("1", "2", "B_3"), c("A", "B", "A"))
+#' upd_famid_id(c("1", "B_2", "C_3", "4"), c("A", NA, "A", NA))
 setMethod("upd_famid_id", "character",
     function(obj, famid, missid = NA_character_) {
         if (length(obj) != length(famid)) {
@@ -149,16 +150,17 @@ setMethod("upd_famid_id", "character",
         }
         id <- obj[!obj %in% missid]
         famid <- famid[!obj %in% missid]
-        if (any(is.na(famid))) {
-            stop("famid cannot contain NA")
-        }
         if (! is.character(id)) {
             stop("id must be a character vector")
         }
         id[!str_detect(id, "_")] <- paste0("_", id[!str_detect(id, "_")])
         ids <- str_split_fixed(id, "_", 2)
-        ids[, 1] <- as.character(famid)
-        new_ids <- paste(ids[, 1], ids[, 2], sep = "_")
+        ids[, 1] <- famid
+        new_ids <- ifelse(
+            ids[, 1] %in% missid,
+            ids[, 2],
+            paste(ids[, 1], ids[, 2], sep = "_")
+        )
         obj[!obj %in% missid] <- new_ids
         obj
     }

@@ -47,23 +47,3 @@ test_that("Norm rel", {
     expect_snapshot(rel_df)
     expect_equal(sum(is.na(rel_df$error)), 6)
 })
-
-test_that("prefix_famid works", {
-    family_id <- NULL
-    ind_id <- c("A", "B", "0", NA)
-    missid <- NA_character_
-
-    a <- prefix_famid(family_id, ind_id, missid)
-    expect_equal(a, ind_id)
-
-    family_id <- "1"
-    b <- prefix_famid(family_id, ind_id, missid)
-    expect_equal(b, c("1_A", "1_B", "1_0", NA))
-
-    family_id <- c("1", "2", "0", NA)
-    c <- prefix_famid(family_id, ind_id, missid)
-    expect_equal(c, c("1_A", "2_B", "0_0", NA))
-
-    family_id <- c("1", "2", "0")
-    expect_error(prefix_famid(family_id, ind_id, missid))
-})

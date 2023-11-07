@@ -126,6 +126,7 @@ test_that("Double wife", {
         sex = c(1, 2, 1, 2, 1, 2, 1)
     )
     pedi <- Pedigree(df, missid = "0")
+    id(ped(pedi))
     expect_equal(sum(kindepth(pedi)), 4)
     vdiffr::expect_doppelganger("double_wife",
         function() plot(pedi)

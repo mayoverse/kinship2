@@ -25,11 +25,18 @@ test_that("is_informative works", {
         23
     )
     expect_equal(
-        is_informative(id, avail, affected, informative = c(1, 110, 150, 214)),
+        is_informative(
+            id, avail, affected,
+            informative = c("1", "110", "150", "214")
+        ),
         c("110", "214")
     )
+    length(id)
     expect_equal(
-        is_informative(id, avail, affected, informative = c(TRUE, FALSE, TRUE)),
+        is_informative(
+            id, avail, affected,
+            informative = c(TRUE, FALSE, TRUE, rep(FALSE, 52))
+        ),
         c("101", "103")
     )
     expect_equal(

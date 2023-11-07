@@ -4,26 +4,6 @@
 #' @importFrom stringr str_remove_all
 NULL
 
-#' Compute id with family id
-#'
-#' @description Compute id with family id if the family id available
-#'
-#' @inheritParams Ped
-#' @inheritParams is_parent
-#' @keywords internal
-#' @return The id with the family id merged
-prefix_famid <- function(famid, id, missid = NA_character_) {
-    if (length(famid) > 1 && length(famid) != length(id)) {
-        stop("famid and id must have the same length.")
-    }
-
-    pre_famid <- ifelse(
-        is.na(famid) | is.null(famid),
-        "", paste0(as.character(famid), "_")
-    )
-    ifelse(id %in% missid, missid, paste0(pre_famid, as.character(id)))
-}
-
 #' Normalise dataframe
 #'
 #' @description Normalise dataframe for Pedigree object
@@ -97,13 +77,16 @@ norm_ped <- function(
         ped_df, cols_need, cols_used, cols_to_use,
         others_cols = TRUE, cols_to_use_init = TRUE, cols_used_init = TRUE
     )
+
+    ped_df$family[is.na(ped_df$family)] <- missid
+
     if (nrow(ped_df) > 0) {
         ped_df <- mutate_if(
-            ped_df, is.character, ~replace(., . %in% na_strings, NA)
+            ped_df, is.character, ~replace(., . %in% na_strings, NA_character_)
         )
 
         #### Id #### Check id type
-        for (id in c("indId", "fatherId", "motherId", "family")) {
+        for (id in c("indId", "fatherId", "motherId")) {
             ped_df[[id]] <- as.character(ped_df[[id]])
         }
         err$idErr <- lapply(
@@ -120,9 +103,9 @@ norm_ped <- function(
         )
         ## Make a new id from the family and subject pair
         ped_df$famid <- ped_df$family
-        ped_df$id <- prefix_famid(ped_df$famid, ped_df$indId, missid)
-        ped_df$dadid <- prefix_famid(ped_df$famid, ped_df$fatherId, missid)
-        ped_df$momid <- prefix_famid(ped_df$famid, ped_df$motherId, missid)
+        ped_df$id <- upd_famid_id(ped_df$indId, ped_df$famid, missid)
+        ped_df$dadid <- upd_famid_id(ped_df$fatherId, ped_df$famid, missid)
+        ped_df$momid <- upd_famid_id(ped_df$motherId, ped_df$famid, missid)
 
         ped_df <- mutate_at(ped_df, c("id", "dadid", "momid"),
             ~replace(., . %in% c(na_strings, missid), NA_character_)
@@ -279,6 +262,7 @@ norm_rel <- function(rel_df, na_strings = c("NA", ""), missid = NA_character_) {
         rel_df, cols_needed, cols_used, cols_to_use,
         others_cols = FALSE, cols_to_use_init = TRUE, cols_used_init = TRUE
     )
+    rel_df$famid[is.na(rel_df$famid)] <- missid
     if (nrow(rel_df) > 0) {
         rel_df <- mutate_if(
             rel_df, is.character,
@@ -302,8 +286,8 @@ norm_rel <- function(rel_df, na_strings = c("NA", ""), missid = NA_character_) {
         err$id2Err[is.na(len2) | len2 %in% missid] <- "indId2length0"
 
         ## Compute id with family id
-        rel_df$id1 <- prefix_famid(rel_df$famid, rel_df$id1, missid)
-        rel_df$id2 <- prefix_famid(rel_df$famid, rel_df$id2, missid)
+        rel_df$id1 <- upd_famid_id(rel_df$id1, rel_df$famid, missid)
+        rel_df$id2 <- upd_famid_id(rel_df$id2, rel_df$famid, missid)
 
         err$sameIdErr[rel_df$id1 == rel_df$id2] <- "SameId"
 

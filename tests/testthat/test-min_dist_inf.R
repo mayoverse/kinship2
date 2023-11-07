@@ -7,17 +7,30 @@ test_that("min_dist_inf works", {
         sampleped[c("id", "dadid", "momid")], as.character
     ), stringsAsFactors = FALSE)
 
-    res <- with(sampleped, min_dist_inf(id, informative = "AvAf",
-        dadid, momid, sex, avail, affected
+    id_inf <- with(sampleped, is_informative(
+        id, avail, affected, informative = "AvAf"
     ))
+
+    res <- with(sampleped,
+        min_dist_inf(id, dadid, momid, sex, id_inf
+        )
+    )
     expect_equal(sum(res, na.rm = TRUE), 97)
-    mxkin <- with(sampleped, min_dist_inf(id, informative = "Av",
-        dadid, momid, sex, avail, affected
+
+    id_inf <- with(sampleped, is_informative(
+        id, avail, affected, informative = "Av"
     ))
+    mxkin <- with(sampleped,
+        min_dist_inf(id, dadid, momid, sex, id_inf)
+    )
     expect_equal(sum(mxkin, na.rm = TRUE), 90)
-    mxkin <- with(sampleped, min_dist_inf(id, informative = "AvOrAf",
-        dadid, momid, sex, avail, affected
+
+    id_inf <- with(sampleped, is_informative(
+        id, avail, affected, informative = "AvOrAf"
     ))
+    mxkin <- with(sampleped,
+        min_dist_inf(id, dadid, momid, sex, id_inf)
+    )
     expect_equal(sum(mxkin, na.rm = TRUE), 76)
 })
 

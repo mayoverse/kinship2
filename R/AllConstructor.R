@@ -101,6 +101,9 @@ setMethod("Ped", "data.frame",
             others_cols = TRUE, cols_to_use_init = TRUE,
             cols_used_init = cols_used_init, cols_used_del = cols_used_del
         )
+
+        df$famid[is.na(df$famid)] <- NA_character_
+
         df$steril <- vect_to_binary(df$steril, logical = TRUE)
         df$status <- vect_to_binary(df$status, logical = TRUE)
         df$avail <- vect_to_binary(df$avail, logical = TRUE)

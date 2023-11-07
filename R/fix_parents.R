@@ -73,6 +73,7 @@ setMethod("fix_parents", "character", function(
     if (length(sex) != n) {
         stop("Mismatched lengths, id and sex")
     }
+
     if (length(famid) != n & length(famid) > 0) {
         stop("Mismatched lengths, id and sex")
     }
@@ -94,9 +95,12 @@ setMethod("fix_parents", "character", function(
         stop("Missing value for the id variable")
     }
 
-    id <- prefix_famid(famid, id, missid)
-    dadid <- prefix_famid(famid, dadid, missid)
-    momid <- prefix_famid(famid, momid, missid)
+    if (!is.null(famid)) {
+        id <- upd_famid_id(id, famid, missid)
+        dadid <- upd_famid_id(dadid, famid, missid)
+        momid <- upd_famid_id(momid, famid, missid)
+    }
+
     addids <- paste("addin", seq_along(id), sep = "-")
     if (length(grep("^ *$", id)) > 0) {
         stop("A blank or empty string is not allowed as the id variable")
@@ -161,7 +165,6 @@ setMethod("fix_parents", "character", function(
     if (is.null(famid)) {
         data.frame(id = id, momid = momid, dadid = dadid, sex = sex)
     } else {
-        famid <- stringr::str_split_i(id, "_", i = 1)
         data.frame(
             id = id, momid = momid, dadid = dadid,
             sex = sex, famid = famid
