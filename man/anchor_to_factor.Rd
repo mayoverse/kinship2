@@ -15,7 +15,7 @@ the anchor of the individuals. The following values are recognized:
 }}
 }
 \value{
-an ordered factor vector containing the transformed variable
+An ordered factor vector containing the transformed variable
 "either" < "left" < "right"
 }
 \description{

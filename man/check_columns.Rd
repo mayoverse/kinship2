@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{check_columns}
 \alias{check_columns}
-\title{Check for columns name usage}
+\title{Check columns presence in a dataframe}
 \usage{
 check_columns(
   df,
@@ -65,8 +65,11 @@ df <- data.frame(ColN1 = c(1, 2), ColN2 = 4,
          ColU1 = 'B', ColU2 = '1',
          ColTU1 = 'A', ColTU2 = 3,
          ColNR1 = 4, ColNR2 = 5)
-tryCatch(check_columns(df, c('ColN1', 'ColN2'), c('ColU1', 'ColU2'),
- c('ColTU1', 'ColTU2')), error = function(e) print(e))
+tryCatch(
+     check_columns(df,
+         c('ColN1', 'ColN2'), c('ColU1', 'ColU2'),
+         c('ColTU1', 'ColTU2')
+), error = function(e) print(e))
 
 }
 \keyword{internal}

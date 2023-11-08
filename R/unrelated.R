@@ -1,10 +1,7 @@
 #' @importFrom stats runif
 NULL
 
-# Automatically generated from all.nw using noweb Authors: Dan Schaid, Shannon
-# McDonnell Updated by Jason Sinnwell
-
-#' Get unrelated subjects
+#' Find Unrelated subjects
 #'
 #' @description
 #' Determine set of maximum number of unrelated available subjects from a
@@ -13,7 +10,8 @@ NULL
 #' @details
 #' Determine set of maximum number of unrelated available subjects from a
 #' Pedigree, given vectors id, father, and mother for a Pedigree structure, and
-#' status vector of T/F for whether each subject is available (e.g. has DNA)
+#' status vector of `TRUE` / `FALSE` for whether each subject is
+#' available (e.g. has DNA).
 #'
 #' This is a greedy algorithm that uses the kinship matrix, sequentially
 #' removing rows/cols that are non-zero for subjects that have the most number
@@ -23,28 +21,26 @@ NULL
 #' zeros for rows, a random choice is made. Hence, running this function
 #' multiple times can return different sets of unrelated subjects.
 #'
-#' @inheritParams align
-#' @inheritParams is_informative
+#' If **avail** is `NULL`, it is extracted with its
+#' corresponding accessor from the Ped object.
+#'
+#' @inheritParams shrink
 #'
 #' @return A vector of the ids of subjects that are unrelated.
 
 #' @examples
 #' data(sampleped)
 #' fam1 <- sampleped[sampleped$famid == 1, ]
-#'
-#'
 #' ped1 <- Pedigree(fam1)
-#'
-#' ## to see plot:
-#' id1 <- unrelated(ped1)
-#'
-#' id1
+#' unrelated(ped1)
 #' ## some possible vectors
 #' ## [1] '110' '113' '133' '109'
 #' ## [1] '113' '118' '141' '109'
 #' ## [1] '113' '118' '140' '109'
 #' ## [1] '110' '113' '116' '109'
 #' ## [1] '113' '133' '141' '109'
+#'
+#' @author Dan Schaid and Shannon McDonnell updated by Jason Sinnwell
 #' @export
 setGeneric("unrelated", signature = "obj",
     function(obj, ...) standardGeneric("unrelated")
@@ -115,7 +111,7 @@ setMethod("unrelated", "Ped",
 
 #' @rdname unrelated
 setMethod("unrelated", "Pedigree",
-    function(obj, ...) {
-        unrelated(ped(obj), ...)
+    function(obj, avail = NULL) {
+        unrelated(ped(obj), avail = avail)
     }
 )

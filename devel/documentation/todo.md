@@ -39,9 +39,9 @@
 - [x] plot_fct.R
 - [x] plot_fromdf.R
 - [x] shrink.R
-- [ ] unrelated.R
-- [ ] useful_inds.R
-- [ ] utils.R
+- [x] unrelated.R
+- [x] useful_inds.R
+- [x] utils.R
 
 ## For all class
 

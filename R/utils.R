@@ -1,7 +1,7 @@
 #' @importFrom dplyr select one_of %>%
 NULL
 
-#' Check for columns name usage
+#' Check columns presence in a dataframe
 #'
 #' @description Check for presence / absence of columns names
 #' depending on their need
@@ -38,8 +38,11 @@ NULL
 #'          ColU1 = 'B', ColU2 = '1',
 #'          ColTU1 = 'A', ColTU2 = 3,
 #'          ColNR1 = 4, ColNR2 = 5)
-#' tryCatch(check_columns(df, c('ColN1', 'ColN2'), c('ColU1', 'ColU2'),
-#'  c('ColTU1', 'ColTU2')), error = function(e) print(e))
+#' tryCatch(
+#'      check_columns(df,
+#'          c('ColN1', 'ColN2'), c('ColU1', 'ColU2'),
+#'          c('ColTU1', 'ColTU2')
+#' ), error = function(e) print(e))
 #'
 #' @keywords internal
 check_columns <- function(
@@ -125,18 +128,18 @@ check_columns <- function(
 #'@importFrom stringr str_detect
 NULL
 
-#' Check is numeric
+#' Is numeric or NA
 #'
 #' @description Check if a variable given is numeric or NA
 #'
-#' @details Check if the values in `var` are numeric or if they are
-#' NA in the case that `na_as_num` is set to TRUE.
+#' @details Check if the values in **var** are numeric or if they are
+#' `NA` in the case that `na_as_num` is set to TRUE.
 #'
 #' @param var Vector of value to test
 #' @param na_as_num Boolean defining if the `NA` string should be
 #' considered as numerical values
 #'
-#' @return A vector of boolean of the same size as `var`
+#' @return A vector of boolean of the same size as **var**
 #' @keywords internal
 check_num_na <- function(var, na_as_num = TRUE) {
     # Should the NA value considered as numeric values
@@ -150,14 +153,14 @@ check_num_na <- function(var, na_as_num = TRUE) {
 }
 
 
-#' Check wich individuals are parents
+#' Are individuals parents
 #'
 #' @description Check which individuals are parents.
 #'
-#' @param obj A vector of each subjects identifiers
+#' @param obj A vector of each subjects identifiers or a Ped object
 #' @inheritParams Ped
 #'
-#' @return A vector of boolean of the same size as `id`
+#' @return A vector of boolean of the same size as **obj**
 #' with TRUE if the individual is a parent and FALSE otherwise
 #' @inheritParams Ped
 #' @keywords internal
@@ -165,6 +168,9 @@ setGeneric("is_parent", signature = "obj",
     function(obj, ...) standardGeneric("is_parent")
 )
 
+#' @rdname is_parent
+#' @examples
+#' is_parent(c("1", "2", "3", "4"), c("3", "3", NA, NA), c("4", "4", NA, NA))
 setMethod("is_parent", "character_OR_integer",
     function(obj, dadid, momid, missid = NA_character_) {
         # determine subjects who are parents assume input of
@@ -180,41 +186,56 @@ setMethod("is_parent", "character_OR_integer",
     }
 )
 
+#' @rdname is_parent
+#' @examples
+#'
+#' data(sampleped)
+#' ped <- Pedigree(sampleped)
+#' is_parent(ped(ped))
 setMethod("is_parent", "Ped",
     function(obj, missid = NA_character_) {
         is_parent(id(obj), dadid(obj), momid(obj), missid)
     }
 )
 
-#' Check wich individuals are founders
+#' Are individuals founders
 #'
 #' @description Check which individuals are founders.
 #'
-#' @inheritParams is_parent
+#' @inheritParams Ped
 #'
-#' @return A vector of boolean of the same size as `dadid` and `momid`
-#' with TRUE if the individual has no parents (i.e is a founder) and FALSE
-#' otherwise.
+#' @return A vector of boolean of the same size as **dadid** and **momid**
+#' with `TRUE` if the individual has no parents (i.e is a founder) and
+#' `FALSE` otherwise.
 #'
+#' @examples
+#' is_founder(c("3", "3", NA, NA), c("4", "4", NA, NA))
 #' @keywords internal
 is_founder <- function(momid, dadid, missid = NA_character_) {
     (dadid %in% missid) & (momid %in% missid)
 }
 
-#' Check wich individuals are disconnected
+#' Are individuals disconnected
 #'
 #' @description Check which individuals are disconnected.
 #'
 #' @details An individuals is considered disconnected if the kinship with
-#' all the other individuals is 0.
+#' all the other individuals is `0`.
 #'
-#' @inheritParams is_parent
+#' @inheritParams Ped
 #'
-#' @return A vector of boolean of the same size as `id`
-#' with TRUE if the individual is disconnected and FALSE otherwise
+#' @return A vector of boolean of the same size as **id**
+#' with `TRUE` if the individual is disconnected and
+#' `FALSE` otherwise
 #'
 #' @include kinship.R
 #' @keywords internal
+#' @examples
+#' is_disconnected(
+#'      c("1", "2", "3", "4", "5"),
+#'      c("3", "3", NA, NA, NA),
+#'      c("4", "4", NA, NA, NA)
+#' )
 is_disconnected <- function(id, dadid, momid) {
     # check to see if any subjects are disconnected in Pedigree by checking for
     # kinship = 0 for all subjects excluding self
@@ -287,21 +308,26 @@ rel_code_to_factor <- function(code) {
     code <- factor(code, codes, ordered = TRUE)
     code
 }
-TRUE
 
 #' Vector variable to binary vector
 #'
+#' @description Transform a vector to a binary vector.
+#' All values that are not `0`, `1`, `TRUE`, `FALSE`, or `NA`
+#' are transformed to `NA`.
+#'
 #' @param vect A character, factor, logical or numeric vector corresponding to
-#' a binary variable (i.e. 0 or 1).
+#' a binary variable (i.e. `0` or `1`).
 #' The following values are recognized:
 #' - character() or factor() : "TRUE", "FALSE", "0", "1", "NA" will be
-#' respectively transformed to 1, 0, 0, 1, NA.
+#' respectively transformed to `1`, `0`, `0`, `1`, `NA`.
 #' Spaces and case are ignored.
 #' All other values will be transformed to NA.
-#' - numeric() : 0 and 1 are kept, all other values are transformed to NA.
-#' - logical() : TRUE and FALSE are tansformed to 1 and 0.
-#'
-#' @return numeric binary vector of the same size as `vect` with 0 and 1
+#' - numeric() : `0` and `1` are kept, all other values are transformed to NA.
+#' - logical() : `TRUE` and `FALSE` are tansformed to `1` and `0`.
+#' @param logical Boolean defining if the output should be a logical vector
+#' instead of a numeric vector (i.e. `0` and `1` becomes `FALSE` and `TRUE).
+#' @return numeric binary vector of the same size as **vect**
+#' with `0` and `1`
 #' @examples
 #' vect_to_binary(
 #'    c(0, 1, 2, 3.6, "TRUE", "FALSE", "0", "1", "NA", "B", TRUE, FALSE, NA)
@@ -336,7 +362,7 @@ vect_to_binary <- function(vect, logical = FALSE) {
 #' - character() or factor() : "0", "1", "2", "left", "right", "either"
 #' - numeric() : 1 = "left", 2 = "right", 0 = "either"
 #'
-#' @return an ordered factor vector containing the transformed variable
+#' @return An ordered factor vector containing the transformed variable
 #' "either" < "left" < "right"
 #' @examples
 #' anchor_to_factor(c(1, 2, 0, "left", "right", "either"))

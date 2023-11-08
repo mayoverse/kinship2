@@ -46,7 +46,7 @@ trimming uninformative subjects. The algorithm is useful for getting a
 Pedigree condensed to a minimally informative size for algorithms or testing
 that are limited by size of the Pedigree.
 
-If \strong{avail} or \strong{affected} are not specified, they are extracted with their
+If \strong{avail} or \strong{affected} are \code{NULL}, they are extracted with their
 corresponding accessors from the Ped object.
 }
 \details{

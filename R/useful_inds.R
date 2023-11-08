@@ -1,43 +1,34 @@
-#' Compute the usefulness of individuals
+#' Usefulness of individuals
 #'
-#' @description Check for usefulness of individuals
+#' @description Compute the usefulness of individuals
 #'
 #' @details Check for the informativeness of the individuals based on the
 #' informative parameter given, the number of children and the usefulness
-#' of their parents. A `useful` column is added to the dataframe with the
+#' of their parents. A `useful` slot is added to the Ped object with the
 #' usefulness of the individual. This boolean is hereditary.
 #'
 #' @param num_child_tot A numeric vector of the number of children of each
 #' individuals
 #' @param keep_infos Boolean to indicate if individuals with unknown status
 #' but available or reverse should be kept
+#' @inheritParams Ped
 #' @inheritParams is_informative
-#' @inheritParams num_child
-#' @inheritParams kinship
-#' @inheritParams is_parent
 #'
 #' @return
 #' ## When obj is a vector
 #' A vector of useful individuals identifiers
 #'
-#' ## When obj is a Pedigree
-#' The Pedigree object with a new column named 'useful' containing 1 for
-#' useful individuals and 0 otherwise.
-#' @examples
-#' data(sampleped)
-#' ped1 <- Pedigree(sampleped[sampleped$famid == "1",])
-#' ped1 <- num_child(ped1)
-#' useful_inds(ped1, informative = "AvAf")$ped
+#' ## When obj is a Pedigree or Ped object
+#' The Pedigree or Ped object with the slot 'useful' containing `TRUE` for
+#' useful individuals and `FALSE` otherwise.
+#' @keywords shrink
 #' @export
 setGeneric("useful_inds", signature = "obj",
     function(obj, ...) standardGeneric("useful_inds")
 )
 
 #' @include is_informative.R
-#' @export
 #' @rdname useful_inds
-#' @docType methods
-#' @aliases useful_inds,character
 setMethod("useful_inds", "character",
     function(obj, dadid, momid, avail, affected, num_child_tot,
         informative = "AvAf", keep_infos = FALSE
@@ -80,11 +71,13 @@ setMethod("useful_inds", "character",
     }
 )
 
-#' @docType methods
-#' @aliases useful_inds,Pedigree
-#' @export
 #' @rdname useful_inds
 #' @param reset Boolean to indicate if the `useful` column should be reset
+#' @examples
+#' data(sampleped)
+#' ped1 <- Pedigree(sampleped[sampleped$famid == "1",])
+#' ped1 <- num_child(ped1)
+#' ped(useful_inds(ped1, informative = "AvAf"))
 setMethod("useful_inds", "Pedigree", function(obj,
     informative = "AvAf", keep_infos = FALSE, reset = FALSE
 ) {
@@ -97,11 +90,7 @@ setMethod("useful_inds", "Pedigree", function(obj,
     obj
 })
 
-#' @docType methods
-#' @aliases useful_inds,Pedigree
-#' @export
 #' @rdname useful_inds
-#' @param reset Boolean to indicate if the `useful` column should be reset
 setMethod("useful_inds", "Ped", function(obj,
     informative = "AvAf", keep_infos = FALSE, reset = FALSE
 ) {
