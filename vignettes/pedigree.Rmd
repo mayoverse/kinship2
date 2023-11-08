@@ -267,7 +267,7 @@ df2 <- sampleped[sampleped$famid == 2, ]
 names(df2)
 df2$status <- c(1, 1, rep(0, 12))
 ped2 <- Pedigree(df2)
-summary(ped2$ped$status)
+summary(status(ped(ped2)))
 plot(ped2)
 ```
 
@@ -280,7 +280,7 @@ As space permits, more lines and characters per line can be made using the
 a {/em \n} character to indicate a new line.
 
 ```{r, labels}
-ped2$ped$Names <- c(
+mcols(ped2)$Names <- c(
     "John\nDalton", "Linda", "Jack", "Rachel", "Joe", "Deb",
     "Lucy", "Ken", "Barb", "Mike", "Matt",
     "Mindy", "Mark", "Marie\nCurie"
@@ -354,14 +354,15 @@ inbred.
 
 ```{r, inbreeding}
 indid <- 195:202
-dadid <- c(0, 0, 0, 196, 196, 0, 197, 199)
-momid <- c(0, 0, 0, 195, 195, 0, 198, 200)
+dadid <- c(NA, NA, NA, 196, 196, NA, 197, 199)
+momid <- c(NA, NA, NA, 195, 195, NA, 198, 200)
 sex <- c(2, 1, 1, 2, 1, 2, 1, 2)
 ped3 <- data.frame(
-    indId = indid, fatherId = dadid,
-    motherId = momid, gender = sex
+    id = indid, dadid = dadid,
+    momid = momid, sex = sex
 )
-ped4df <- rbind.data.frame(ped2$ped[-c(1, 2), 2:5], ped3)
+
+ped4df <- rbind.data.frame(df2[-c(1, 2), 2:5], ped3)
 ped4 <- Pedigree(ped4df)
 plot(ped4)
 ```
@@ -376,10 +377,10 @@ between the individuals $212$ and $211$ we get the following plot.
 ```{r, spouse}
 ## create twin relationships
 rel_df <- data.frame(
-    indId1 = c(210, 212, 211),
-    indId2 = c(211, 213, 212),
+    id1 = c(210, 212, 211),
+    id2 = c(211, 213, 212),
     code = c(1, 3, 4),
-    family = c(2, 2, 2)
+    famid = c(2, 2, 2)
 )
 ped2 <- Pedigree(df2, rel_df)
 plot(ped2)
@@ -403,10 +404,10 @@ in the figure below.
 ```{r, plotped1}
 df1 <- sampleped[sampleped$famid == 1, ]
 relate1 <- data.frame(
-    indId1 = 113,
-    indId2 = 114,
+    id1 = 113,
+    id2 = 114,
     code = 4,
-    family = 1
+    famid = 1
 )
 ped1 <- Pedigree(df1, relate1)
 plot(ped1)
@@ -438,7 +439,7 @@ be used to construct a new Pedigree object. This is possible with the
 $as.data.frame()$ method, as shown below.
 
 ```{r, ped2df, eval = FALSE}
-dfped2 <- as.data.frame(ped2)
+dfped2 <- as.data.frame(ped(ped2))
 dfped2
 ```
 
@@ -454,24 +455,23 @@ identify which subjects to remove.  We show how a subject
 
 ```{r, subset}
 ped2_rm210 <- ped2[-10]
-ped2_rm210$rel
-ped2$rel
+rel(ped2_rm210)
+rel(ped2)
 ```
 
-The steps above only work for subsetting by the index of the 
-Pedigree object vectors, not by the ~id~ of the subjects themselves.  
-We provide *trim()*, which trims subjects from a Pedigree by 
-their $id$.  Below is an example of removing subject 110, as done above, 
+The steps above also works by the ~id~ of the subjects themselves.  
+We provide *subset()*, which trims subjects from a Pedigree by 
+their $id$ or other argument.  Below is an example of removing subject 110, as done above, 
 then we further trim the Pedigree by a vector of subject ids. We check the
 trimming by looking at the $id$ vector and the $relation$ matrix.
 
-```{r, trim}
-ped2_trim210 <- trim(ped2, "2_210")
-ped2_trim210$ped$id
-ped2_trim210$rel
-ped2_trim_more <- trim(ped2_trim210, c("2_212", "2_214"))
-ped2_trim_more$ped$id
-ped2_trim_more$rel
+```{r, subset_more}
+ped2_trim210 <- subset(ped2, "2_210", keep = FALSE)
+id(ped(ped2_trim210))
+rel(ped2_trim210)
+ped2_trim_more <- subset(ped2_trim210, c("2_212", "2_214"), keep = FALSE)
+id(ped(ped2_trim_more))
+rel(ped2_trim_more)
 ```
 
 Shrinking
