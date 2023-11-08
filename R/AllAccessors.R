@@ -464,6 +464,23 @@ setMethod("useful<-",
         x
     }
 )
+##### Status Accessors #####
+#' Status getter of Ped object
+#'
+#' @param x A Ped object.
+#'
+#' @return A boolean vector with the saying if the individual
+#' is dead or not.
+#'
+#' @rdname Ped
+#' @aliases status,Ped-method
+#' @export
+setGeneric("status", function(x) {
+    standardGeneric("status")
+})
+setMethod("status", signature(x = "Ped"), function(x) {
+    x@status
+})
 
 #### S4 Rel Accessors ####
 #' Code accessor of Rel object
