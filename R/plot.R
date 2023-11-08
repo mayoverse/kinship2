@@ -138,7 +138,7 @@ setMethod("plot", c(x = "Pedigree", y = "missing"),
                 c(leg_loc[3], leg_loc[4])
             )
             clip(leg_loc[1] - 1, leg_loc[2] + 1, leg_loc[3] - 1, leg_loc[4] + 1)
-            plot_fromdf(leg$leg_df, add_to_existing = TRUE,
+            plot_fromdf(leg$df, add_to_existing = TRUE,
                 boxw = lst$par_usr$boxw * leg_symbolsize,
                 boxh = lst$par_usr$boxh * leg_symbolsize
             )

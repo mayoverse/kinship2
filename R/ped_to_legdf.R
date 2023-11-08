@@ -60,9 +60,9 @@ setMethod("ped_to_legdf", "Pedigree", function(obj,
         adjy = numeric()
     )
     sex_equiv <- c("Male", "Female", "Terminated", "Unknown")
-    all_lab <- list(sex_equiv, border(ped)$labels)
-    all_aff <- lapply(unique(fill(ped)$order), function(x) {
-        fill(ped)$labels[fill(ped)$order == x]
+    all_lab <- list(sex_equiv, border(obj)$labels)
+    all_aff <- lapply(unique(fill(obj)$order), function(x) {
+        fill(obj)$labels[fill(obj)$order == x]
     })
 
     all_lab <- c(all_lab, all_aff)
@@ -86,7 +86,7 @@ setMethod("ped_to_legdf", "Pedigree", function(obj,
     posy <- cumsum(posy) - boxh
     posy <- posy[seq_along(posy) %% 2 == 0]
 
-    all_aff <- fill(ped)
+    all_aff <- fill(obj)
     n_aff <- length(unique(all_aff$order))
 
     lab_title <- c("Sex", "Border", unique(all_aff$column_values))
@@ -99,7 +99,7 @@ setMethod("ped_to_legdf", "Pedigree", function(obj,
     plot_df <- rbind.fill(plot_df, titles)
 
     ## Get ped_df
-    ped_df <- as.data.frame(ped(ped))
+    ped_df <- as.data.frame(ped(obj))
     # Sex
     poly1 <- polygons(1)
     all_sex <- unique(as.numeric(ped_df$sex))
@@ -123,15 +123,15 @@ setMethod("ped_to_legdf", "Pedigree", function(obj,
     plot_df <- rbind.fill(plot_df, sex, sex_label)
 
     # Border
-    border_mods <- unique(ped_df[, unique(border(ped)$column_mods)])
+    border_mods <- unique(ped_df[, unique(border(obj)$column_mods)])
     border <- data.frame(
         x0 = posx[3], y0 = posy[seq_along(border_mods)],
         type = rep("square_1_1", length(border_mods)),
-        border = border(ped)$border[match(border_mods, border(ped)$mods)],
+        border = border(obj)$border[match(border_mods, border(obj)$mods)],
         fill = "white",
         id = "border"
     )
-    lab <- border(ped)$labels[match(border_mods, border(ped)$mods)]
+    lab <- border(obj)$labels[match(border_mods, border(obj)$mods)]
     lab[is.na(lab)] <- "NA"
     border_label <- data.frame(
         x0 = posx[4] + adjx,

@@ -28,8 +28,8 @@ test_that("Pedigree legend works", {
 
     vdiffr::expect_doppelganger("Legend alone",
         function() {
-            plot_fromdf(lst$leg_df,
-                usr = c(-1, max(lst$leg_df$x0) + 1, -1, max(lst$leg_df$y0) + 1),
+            plot_fromdf(lst$df,
+                usr = c(-1, max(lst$df$x0) + 1, -1, max(lst$df$y0) + 1),
                 add_to_existing = FALSE
             )
         }
