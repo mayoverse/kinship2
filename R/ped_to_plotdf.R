@@ -1,30 +1,58 @@
 #' @importFrom plyr rbind.fill
 NULL
 
-#' Convert a Pedigree to a data frame of element to plot
+#' Create plotting data frame from a Pedigree
+#'
+#' @description
+#' Convert a Pedigree to a data frame with all the elements and their
+#' characteristic for them to be plotted afterwards with [plot_fromdf()].
+#'
+#' @details The data frame contains the following columns:
+#' - `x0`, `y0`, `x1`, `y1`: coordinates of the elements
+#' - `type`: type of the elements
+#' - `fill`: fill color of the elements
+#' - `border`: border color of the elements
+#' - `angle`: angle of the shading of the elements
+#' - `density`: density of the shading of the elements
+#' - `cex`: size of the elements
+#' - `label`: label of the elements
+#' - `tips`: tips of the elements (used for the tooltips)
+#' - `adjx`: horizontal text adjustment of the labels
+#' - `adjy`: vertical text adjustment of the labels
+#'
+#' All those columns are used by [plot_fromdf()] to plot the graph.
 #'
 #' @inheritParams align
-#' @param pconnect when connecting parent to children the program will try to
+#' @param pconnect When connecting parent to children the program will try to
 #' make the connecting line as close to vertical as possible, subject to it
 #' lying inside the endpoints of the line that connects the children by at
 #' least `pconnect` people.  Setting this option to a large number will
 #' force the line to connect at the midpoint of the children.
 #' @param branch defines how much angle is used to connect various levels of
 #' nuclear families.
-#' @param aff_mark if TRUE, add a aff_mark to each box corresponding to the
+#' @param aff_mark If `TRUE`, add a aff_mark to each box corresponding to the
 #' value of the affection column for each filling scale.
-#' @param label if not NULL, add a label to each box corresponding to the
+#' @param label If not `NULL`, add a label to each box corresponding to the
 #' value of the column given.
-#' @inheritParams set_plot_area
+#' @param ... Other arguments passed to [par()]
 #' @inheritParams subregion
+#' @inheritParams set_plot_area
 #'
 #' @return A list containing the data frame and the user coordinates.
+#'
 #' @examples
 #' data(sampleped)
 #' ped1 <- Pedigree(sampleped[sampleped$famid == 1,])
-#' ped_to_plotdf(ped1)
-#' @seealso [plot_fromdf()]
+#' plot_df <- ped_to_plotdf(ped1)
+#' summary(plot_df$df)
+#' plot_fromdf(plot_df$df, usr = plot_df$par_usr$usr,
+#'     boxh = plot_df$par_usr$boxh, boxw = plot_df$par_usr$boxw
+#' )
+#'
+#' @seealso
+#' [plot_fromdf()]
 #' [ped_to_legdf()]
+#' @keywords internal, Pedigree-plot
 #' @export
 setGeneric(
     "ped_to_plotdf", signature = "obj",
@@ -33,9 +61,10 @@ setGeneric(
     }
 )
 
+#' @rdname ped_to_plotdf
 setMethod("ped_to_plotdf", "Pedigree", function(
-    obj, packed = FALSE, width = 10, align = c(1.5, 2),
-    subreg = NULL, cex = 0.5, symbolsize = cex, pconnect = 0.5, branch = 0.6,
+    obj, packed = TRUE, width = 6, align = c(1.5, 2),
+    subreg = NULL, cex = 1, symbolsize = cex, pconnect = 0.5, branch = 0.6,
     aff_mark = TRUE, label = NULL, ...
 ) {
 

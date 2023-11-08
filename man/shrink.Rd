@@ -2,14 +2,28 @@
 % Please edit documentation in R/shrink.R
 \name{shrink}
 \alias{shrink}
+\alias{shrink,Pedigree-method}
+\alias{shrink,Ped-method}
 \title{Shrink Pedigree object}
 \usage{
 shrink(obj, ...)
+
+\S4method{shrink}{Pedigree}(obj, avail = NULL, affected = NULL, max_bits = 16)
+
+\S4method{shrink}{Ped}(obj, avail = NULL, affected = NULL, max_bits = 16)
 }
 \arguments{
-\item{obj}{A Pedigree object}
+\item{obj}{A Pedigree or Ped object.}
 
-\item{...}{Other arguments to pass to the function}
+\item{...}{Additional arguments}
+
+\item{avail}{A logical vector with the availability status of the
+individuals
+(i.e. \code{FALSE} = not available, \code{TRUE} = available, \code{NA} = unknown).}
+
+\item{affected}{A logical vector with the affection status of the
+individuals
+(i.e. \code{FALSE} = unaffected, \code{TRUE} = affected, \code{NA} = unknown).}
 
 \item{max_bits}{Optional, the bit size for which to shrink the Pedigree}
 }
@@ -31,6 +45,9 @@ Shrink Pedigree object to specified bit size with priority placed on
 trimming uninformative subjects. The algorithm is useful for getting a
 Pedigree condensed to a minimally informative size for algorithms or testing
 that are limited by size of the Pedigree.
+
+If \strong{avail} or \strong{affected} are not specified, they are extracted with their
+corresponding accessors from the Ped object.
 }
 \details{
 Iteratively remove subjects from the Pedigree. The random removal of members
@@ -56,5 +73,7 @@ shrink(ped1, max_bits = 12)
 \code{\link[=Pedigree]{Pedigree()}}, \code{\link[=bit_size]{bit_size()}}
 }
 \author{
-Original by Dan Schaid, updated by Jason Sinnwell
+Original by Dan Schaid,
+updated by Jason Sinnwell and Louis Le Nézet
 }
+\keyword{shrink}

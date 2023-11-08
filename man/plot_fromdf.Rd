@@ -46,9 +46,9 @@ Only used for \code{segments} and \code{arc}.
 
 \item{ggplot_gen}{logical, if TRUE add the segments to the ggplot object}
 
-\item{boxw}{Width of the legend boxes}
+\item{boxw}{Width of the polygons elements}
 
-\item{boxh}{Height of the legend boxes}
+\item{boxh}{Height of the polygons elements}
 
 \item{add_to_existing}{If \code{TRUE}, the plot will be added to the current
 plot.}
@@ -57,13 +57,19 @@ plot.}
 an invisible ggplot object and a plot on the current plotting device
 }
 \description{
-This function is used to create a plot from a data.frame. If ggplot_gen is
-set to TRUE, the plot will be generated with ggplot2 and will be returned
-invisibly.
+This function is used to create a plot from a data.frame.
+
+If \code{ggplot_gen = TRUE}, the plot will be generated with ggplot2 and
+will be returned invisibly.
 }
 \examples{
 data(sampleped)
 ped1 <- Pedigree(sampleped[sampleped$famid == 1,])
 lst <- ped_to_plotdf(ped1)
-#plot_fromdf(lst$df, lst$usr)
+#plot_fromdf(lst$df, lst$par_usr$usr,
+#     boxw = lst$par_usr$boxw, boxh = lst$par_usr$boxh
+#)
+
 }
+\keyword{Pedigree-plot}
+\keyword{internal,}

@@ -16,7 +16,8 @@ additional functionality and bug fixes.
 }
 \details{
 The package download, NEWS, and README are available on CRAN:
-\\url{https://cran.r-project.org/package=kinship2}
+\\url{https://cran.r-project.org/package=kinship2} for the
+previous version of the package.
 }
 \section{Functions}{
 
@@ -30,12 +31,14 @@ given identifiers, sex, affection status(es), and special relationships
 probability having an allele sampled from two individuals
 be the same via IBD.
 
-\code{\link[=ped_to_plotdf]{ped_to_plotdf()}} : Method to transform a Pedigree
-object into a dataframe of graphical elements.
-Allows extra information to be included in the id under the plot symbol
-
-\code{\link[=plot_fromdf]{plot_fromdf()}} : Method to plot a Pedigree from a
-dataframe of graphical elements.
+\code{\link[=plot]{plot()}} : Method to transform a Pedigree
+object into a graphical plot.
+Allows extra information to be included in the id under the
+plot symbol.
+This method use the \code{\link[=plot_fromdf]{plot_fromdf()}} function to transform the Pedigree
+object into a data frame of graphical elements, the same is done for the
+legend with the \code{\link[=ped_to_legdf]{ped_to_legdf()}} function.
+When done, the data frames are plotted with the \code{\link[=plot_fromdf]{plot_fromdf()}} function.
 
 \code{\link[=shrink]{shrink()}}: Shrink a Pedigree to a specific bit size,
 removing non-informative members first.
@@ -83,4 +86,3 @@ Other contributors:
 }
 
 }
-\keyword{internal}

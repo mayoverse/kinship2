@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_fct.R
 \name{subregion}
 \alias{subregion}
-\title{Routine to subset a Pedigree}
+\title{Subset a region of a Pedigree}
 \usage{
 subregion(plist, subreg)
 }
@@ -10,15 +10,16 @@ subregion(plist, subreg)
 \item{plist}{The alignment structure representing the Pedigree layout.
 See \code{\link[=align]{align()}} for details.}
 
-\item{subreg}{4-element vector for (min x, max x, min depth, max depth),
+\item{subreg}{A 4-element vector for (min x, max x, min depth, max depth),
 used to edit away portions of the plot coordinates returned by
 \code{\link[=align]{align()}}.
 This is useful for zooming in on a particular region of the Pedigree.}
 }
 \value{
-a Pedigree
+A Pedigree structure with the specified region
 }
 \description{
-Routine to subset a Pedigree
+Subset a region of a Pedigree
 }
-\keyword{internal}
+\keyword{Pedigree-plot}
+\keyword{internal,}

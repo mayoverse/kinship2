@@ -6,6 +6,9 @@
 #' Pedigree condensed to a minimally informative size for algorithms or testing
 #' that are limited by size of the Pedigree.
 #'
+#' If **avail** or **affected** are not specified, they are extracted with their
+#' corresponding accessors from the Ped object.
+#'
 #' @details
 #' Iteratively remove subjects from the Pedigree. The random removal of members
 #' was previously controlled by a seed argument, but we remove this, forcing
@@ -14,11 +17,14 @@
 #' Next, available terminal subjects with unknown phenotype if both parents
 #' available. Last, iteratively shrinks Pedigrees by preferentially removing
 #' individuals (chosen at random if there are multiple of the same status):
+#'
 #' 1. Subjects with unknown affected status
 #' 2. Subjects with unaffected affected status
 #' 3. Affected subjects.
 #'
-#' @inheritParams align
+#' @param ... Additional arguments
+#' @param obj A Pedigree or Ped object.
+#' @inheritParams Ped
 #' @inheritParams is_informative
 #' @param max_bits Optional, the bit size for which to shrink the Pedigree
 #'
@@ -37,13 +43,16 @@
 #' ped1 <- Pedigree(sampleped[sampleped$famid == '1',])
 #' shrink(ped1, max_bits = 12)
 #'
-#' @author Original by Dan Schaid, updated by Jason Sinnwell
+#' @author Original by Dan Schaid,
+#' updated by Jason Sinnwell and Louis Le Nézet
+#' @keywords shrink
 #' @seealso [Pedigree()], [bit_size()]
 #' @export
 setGeneric("shrink", signature = "obj",
     function(obj, ...) standardGeneric("shrink")
 )
 
+#' @rdname shrink
 setMethod("shrink", "Pedigree",
     function(obj, avail = NULL, affected = NULL, max_bits = 16) {
         lst_trim <- shrink(ped(obj),
@@ -59,8 +68,9 @@ setMethod("shrink", "Pedigree",
     }
 )
 
+#' @rdname shrink
 setMethod("shrink", "Ped",
-    function(obj, avail = NULL, affected = NULL, max_bits = 16, ...) {
+    function(obj, avail = NULL, affected = NULL, max_bits = 16) {
         if (is.null(avail)) {
             avail <- avail(obj)
         }
@@ -165,7 +175,8 @@ setMethod("shrink", "Ped",
 
         n_final <- length(ped_trim)
 
-        obj <- list(pedObj = ped_trim, id_trim = id_trim, id_lst = id_lst,
+        obj <- list(
+            pedObj = ped_trim, id_trim = id_trim, id_lst = id_lst,
             bit_size = bitsize_vec, avail = avail, pedSizeOriginal = n_origin,
             pedSizeIntermed = n_inter, pedSizeFinal = n_final
         )

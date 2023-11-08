@@ -2,14 +2,24 @@
 % Please edit documentation in R/unrelated.R
 \name{unrelated}
 \alias{unrelated}
+\alias{unrelated,Ped-method}
+\alias{unrelated,Pedigree-method}
 \title{Get unrelated subjects}
 \usage{
 unrelated(obj, ...)
+
+\S4method{unrelated}{Ped}(obj, avail = NULL)
+
+\S4method{unrelated}{Pedigree}(obj, ...)
 }
 \arguments{
 \item{obj}{A Pedigree object}
 
 \item{...}{Other arguments to pass to the function}
+
+\item{avail}{A logical vector with the availability status of the
+individuals
+(i.e. \code{FALSE} = not available, \code{TRUE} = available, \code{NA} = unknown).}
 }
 \value{
 A vector of the ids of subjects that are unrelated.

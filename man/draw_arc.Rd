@@ -29,4 +29,5 @@ Plot the arcs or add it to a ggplot object
 \description{
 Draw arcs for multiple instances of a subject
 }
-\keyword{internal}
+\keyword{Pedigree-plot}
+\keyword{internal,}

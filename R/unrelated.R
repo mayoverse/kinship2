@@ -50,6 +50,7 @@ setGeneric("unrelated", signature = "obj",
     function(obj, ...) standardGeneric("unrelated")
 )
 
+#' @rdname unrelated
 setMethod("unrelated", "Ped",
     function(obj, avail = NULL) {
         if (is.null(avail)) {
@@ -112,6 +113,7 @@ setMethod("unrelated", "Ped",
     }
 )
 
+#' @rdname unrelated
 setMethod("unrelated", "Pedigree",
     function(obj, ...) {
         unrelated(ped(obj), ...)

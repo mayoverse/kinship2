@@ -24,4 +24,5 @@ label height and leg height
 \description{
 Set plotting area
 }
-\keyword{internal}
+\keyword{Pedigree-plot}
+\keyword{internal,}

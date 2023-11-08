@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_fct.R
 \name{draw_text}
 \alias{draw_text}
-\title{Draw text for a Pedigree}
+\title{Draw texts for a Pedigree}
 \usage{
 draw_text(
   x,
@@ -39,6 +39,7 @@ draw_text(
 Plot the text or add it to a ggplot object
 }
 \description{
-Draw text for a Pedigree
+Draw texts for a Pedigree
 }
-\keyword{internal}
+\keyword{Pedigree-plot}
+\keyword{internal,}

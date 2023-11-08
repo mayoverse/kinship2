@@ -7,7 +7,7 @@
 - [ ] AllAccessors.R
 - [ ] AllGeneric.R
 - [ ] AllValidity.R
-- [ ] Pedixplorer-package.R
+- [x] Pedixplorer-package.R
 - [x] align.R
 - [x] alignped1.R
 - [x] alignped2.R
@@ -33,12 +33,12 @@
 - [x] min_dist_inf.R
 - [x] norm_data.R
 - [x] num_child.R
-- [ ] ped_to_legdf.R
-- [ ] ped_to_plotdf.R
-- [ ] plot.R
-- [ ] plot_fct.R
-- [ ] plot_fromdf.R
-- [ ] shrink.R
+- [x] ped_to_legdf.R
+- [x] ped_to_plotdf.R
+- [x] plot.R
+- [x] plot_fct.R
+- [x] plot_fromdf.R
+- [x] shrink.R
 - [ ] unrelated.R
 - [ ] useful_inds.R
 - [ ] utils.R

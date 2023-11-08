@@ -1,10 +1,25 @@
-#' Convert a Pedigree to a legend data frame of element to plot
+#' Create plotting legend data frame from a Pedigree
 #'
 #' @description
 #' Convert a Pedigree to a legend data frame for it to
-#' be plotted with afterwards with [plot_fromdf()].
+#' be plotted afterwards with [plot_fromdf()].
 #'
-#' @inheritParams align
+#' @details The data frame contains the following columns:
+#' - `x0`, `y0`, `x1`, `y1`: coordinates of the elements
+#' - `type`: type of the elements
+#' - `fill`: fill color of the elements
+#' - `border`: border color of the elements
+#' - `angle`: angle of the shading of the elements
+#' - `density`: density of the shading of the elements
+#' - `cex`: size of the elements
+#' - `label`: label of the elements
+#' - `tips`: tips of the elements (used for the tooltips)
+#' - `adjx`: horizontal text adjustment of the labels
+#' - `adjy`: vertical text adjustment of the labels
+#'
+#' All those columns are used by [plot_fromdf()] to plot the graph.
+#'
+#' @param ... Additional arguments
 #' @inheritParams set_plot_area
 #' @inheritParams plot_fromdf
 #' @param adjx default=0.  Controls the horizontal text adjustment of
@@ -19,11 +34,19 @@
 #' data("sampleped")
 #' ped <- Pedigree(sampleped)
 #' leg_df <- ped_to_legdf(ped)
-#' summary(leg_df$leg_df)
-#' plot_fromdf(leg_df$leg_df)
+#' summary(leg_df$df)
+#' plot_fromdf(leg_df$df, usr = c(-1,15,0,7))
+#' @keywords internal, Pedigree-plot
 #' @export
-#' @docType methods
-ped_to_legdf <- function(ped,
+setGeneric(
+    "ped_to_legdf", signature = "obj",
+    function(obj, ...) {
+        standardGeneric("ped_to_legdf")
+    }
+)
+
+#' @rdname ped_to_legdf
+setMethod("ped_to_legdf", "Pedigree", function(obj,
     boxh = 1, boxw = 1, cex = 1,
     adjx = 0, adjy = 0
 ) {
@@ -174,5 +197,6 @@ ped_to_legdf <- function(ped,
         min(plot_df$x0), max(plot_df$x0),
         min(plot_df$y0), max(plot_df$y0)
     )
-    list(leg_df = plot_df, par_usr = par_usr)
+    list(df = plot_df, par_usr = par_usr)
 }
+)
