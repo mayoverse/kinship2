@@ -342,12 +342,22 @@ setMethod("Hints",
 setMethod("Hints",
     signature(horder = "list", spouse = "missing_OR_NULL"),
     function(horder, spouse) {
-        if (any(!c("horder", "spouse") %in% names(horder))) {
-            stop("hints is a list,",
-                "but doesn't contains either horder or spouse slot"
+        if (all(!c("horder", "spouse") %in% names(horder))) {
+            stop("hints is a list, ",
+                "but doesn't contains horder or spouse slot"
             )
         }
-        Hints(horder$horder, horder$spouse)
+        if ("horder" %in% names(horder)) {
+            horder <- horder$horder
+        } else {
+            horder <- NULL
+        }
+        if ("spouse" %in% names(horder)) {
+            spouse <- horder$spouse
+        } else {
+            spouse <- NULL
+        }
+        Hints(horder, spouse)
     }
 )
 
