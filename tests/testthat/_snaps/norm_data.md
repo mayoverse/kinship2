@@ -64,3 +64,16 @@
       8    9   0  Spouse  <NA>                           <NA>
       9 <NA>   B    <NA>  <NA> indId1length0_CodeNotRecognise
 
+---
+
+    Code
+      norm_rel(rel_df, missid = "0")
+    Output
+            id1   id2    code famid            error
+      1       1     2 MZ twin  <NA>             <NA>
+      2       3     2 DZ twin  <NA>             <NA>
+      3       3     1 DZ twin  <NA>             <NA>
+      4       3     4 MZ twin  <NA>             <NA>
+      5       7 Other    <NA>  <NA> CodeNotRecognise
+      6 spo Use     9    <NA>  <NA> CodeNotRecognise
+

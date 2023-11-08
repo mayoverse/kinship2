@@ -46,4 +46,19 @@ test_that("Norm rel", {
     expect_equal(dim(rel_df), c(9, 5))
     expect_snapshot(rel_df)
     expect_equal(sum(is.na(rel_df$error)), 6)
+
+    rel_df <- c(
+        1, 2, 1,
+        1, 3, 2,
+        2, 3, 3,
+        1, 2, 4,
+        3, 4, "MZ twin",
+        6, 7, "Other",
+        8, "8", "spo Use",
+        9, "0", "4"
+    )
+    rel_df <- matrix(rel_df, ncol = 4, byrow = TRUE)
+    dimnames(rel_df) <- list(NULL, c("id1", "id2", "code", "family"))
+    rel_df <- data.frame(rel_df)
+    expect_snapshot(norm_rel(rel_df, missid = "0"))
 })
