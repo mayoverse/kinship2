@@ -251,13 +251,19 @@ setMethod("as.data.frame", "Rel", function(x) {
 #' @aliases subset,Rel-method
 #' @importFrom S4Vectors subset
 #' @export
-setMethod("subset", "Rel", function(x, idlist) {
+setMethod("subset", "Rel", function(x, idlist, keep = TRUE) {
     if (is.factor(idlist)) {
         idlist <- as.character(idlist)
     }
     if (! is.character(idlist)) {
         stop("idlist must be a character")
     }
+
+    if (! keep) {
+        id_all <- c(id1(x), id2(x))
+        idlist <- setdiff(id_all, idlist)
+    }
+
     rel_df <- as.data.frame(x)
 
     id1 <- rel_df$id1 %in% idlist
@@ -294,7 +300,7 @@ setMethod("as.list", "Hints", function(x) {
 #' @rdname extract-methods
 #' @aliases subset_hints,Hints-method
 #' @keywords internal
-setMethod("subset", "Hints", function(x, idlist) {
+setMethod("subset", "Hints", function(x, idlist, keep = TRUE) {
     horder <- horder(x)
     spouse <- spouse(x)
 
@@ -306,10 +312,17 @@ setMethod("subset", "Hints", function(x, idlist) {
     }
 
     if (length(horder) > 0) {
+        if (! keep) {
+            idlist <- setdiff(names(horder), idlist)
+        }
         horder <- horder[names(horder) %in% idlist]
     }
 
     if (nrow(spouse) > 0) {
+        if (! keep) {
+            id_all <- c(spouse$idl, spouse$idr)
+            idlist <- setdiff(id_all, idlist)
+        }
         spouse <- spouse[spouse$idl %in% idlist & spouse$idr %in% idlist, ]
     }
     new_hints <- Hints(horder = horder, spouse = spouse)
@@ -399,8 +412,8 @@ setMethod("as.list", "Pedigree", function(x) {
 #' @return A Pedigree object subsetted.
 #' @rdname extract-methods
 setMethod("subset", "Pedigree",
-    function(x, i, del_parents = FALSE) {
-        new_ped <- subset(ped(x), i, del_parents = del_parents)
+    function(x, i, del_parents = FALSE, keep = TRUE) {
+        new_ped <- subset(ped(x), i, del_parents = del_parents, keep = keep)
         all_id <- id(new_ped)
         new_rel <- subset(rel(x), all_id)
         new_hints <- subset(hints(x), all_id)
