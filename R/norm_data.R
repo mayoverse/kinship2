@@ -340,6 +340,10 @@ norm_rel <- function(rel_df, na_strings = c("NA", ""), missid = NA_character_) {
         rel_df$id1 <- upd_famid_id(rel_df$id1, rel_df$famid, missid)
         rel_df$id2 <- upd_famid_id(rel_df$id2, rel_df$famid, missid)
 
+        rel_df <- mutate_at(rel_df, c("id1", "id2", "famid"),
+            ~replace(., . %in% c(na_strings, missid), NA_character_)
+        )
+
         err$sameIdErr[rel_df$id1 == rel_df$id2] <- "SameId"
 
         ## Unite all id errors in one column
