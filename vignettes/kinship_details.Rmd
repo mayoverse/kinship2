@@ -105,7 +105,7 @@ a for loop containing operations on single rows/columns.
 
 At one point below we use a vectorized version. It looks like the snippet below
 
-```{r, eval=FALSE}
+```{r, kinship_algo, eval=FALSE}
 for (g in 1:max(depth)) {
     indx <- which(depth == g)
     kmat[indx, ] <- (kmat[mother[indx], ] + kmat[father[indx], ]) / 2
@@ -179,6 +179,12 @@ If all of the subject ids are unique, across all families, the final
 matrix is labeled with the subject id, otherwise it is labeled with
 family/subject.
 
+```{r, kinship}
+data(sampleped)
+ped <- Pedigree(sampleped)
+kinship(ped)
+```
+
 ## MakeKinship
 
 The older $makekinship$ function,
@@ -204,7 +210,7 @@ Consider the following rather difficult example:
 | id1|id2|
 |----|---|
 | 1  | 2 |
-| 1  | 3 |
+| 2  | 3 |
 | 5  | 6 |
 | 3  | 7 |
 | 10 | 9 |
@@ -223,6 +229,24 @@ Next make a matrix that has a row for every possible pair.
 Finally, remove the rows that are identical.
 The result is a set of all pairs of observations in the matrix that
 correspond to monozygotic pairs.
+
+```{r, kinship}
+df <- data.frame(
+    id = c(1, 2, 3, 4, 5, 6, 7, 8),
+    dadid = c(4, 4, 4, NA, 4, 4, 4, NA),
+    momid = c(8, 8, 8, NA, 8, 8, 8, NA),
+    sex = c(1, 1, 1, 1, 2, 2, 1, 2)
+)
+rel <- data.frame(
+    id1 = c(1, 3, 6, 7),
+    id2 = c(2, 2, 5, 3),
+    code = c(1, 1, 1, 1)
+)
+ped <- Pedigree(df, rel)
+plot(ped)
+twins <- c(1, 2, 3, 7, 5, 6)
+kinship(ped)[twins, twins]
+```
 
 Session information
 ===================

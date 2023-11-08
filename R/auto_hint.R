@@ -203,8 +203,7 @@ duporder <- function(idlist, plist, lev, obj) {
 #' Get twin relationships
 #'
 #' @details This routine function determine the twin relationships
-#' in a Pedigree. It complete the missing twin relationships for
-#' triplets, quads, etc. It also determine the order of the twins
+#' in a Pedigree. It determine the order of the twins
 #' in the Pedigree.
 #' It is used by `auto_hint()`.
 #'
@@ -228,10 +227,11 @@ get_twin_rel <- function(obj) {
     twinord <- setNames(rep(1, n), id(ped(obj)))
     twinrel <- NULL
 
-    if (!is.null(relation) && any(relation[, 3] < 4)) {
+    if (!is.null(relation) && any(relation$code < 4)) {
         ## Select only siblings relationships
-        temp <- (relation[, 3] < 4)
-        twinlist <- unique(c(relation[temp, seq_len(2)])) # list of twin id's
+        temp <- (relation$code < 4)
+        ## list of twin id's
+        twinlist <- unique(unlist(c(relation[temp, seq_len(2)])))
         twinrel <- relation[temp, , drop = FALSE]
         for (i in 2:length(twinlist)) {
             # Now, for any pair of twins on a line of twinrel, give both
@@ -246,6 +246,7 @@ get_twin_rel <- function(obj) {
                 twinord[twinrel[, 2]],
                 twinord[twinrel[, 1]] + 1
             )
+            twinrel[, 1] <- twinset[twinrel[, 1]]
         }
     }
     list(twinset = twinset, twinrel = twinrel, twinord = twinord)
