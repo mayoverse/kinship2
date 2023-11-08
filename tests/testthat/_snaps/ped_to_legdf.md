@@ -3,7 +3,7 @@
     Code
       lst
     Output
-      $leg_df
+      $df
                           id       x0   y0 x1 y1       type    fill border angle
       1               titles  0.20000  0.0 NA NA       text   black   <NA>    NA
       2               titles  4.46750  0.0 NA NA       text   black   <NA>    NA

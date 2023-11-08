@@ -131,10 +131,10 @@ setMethod("plot", c(x = "Pedigree", y = "missing"),
                     wh_fr[3] + 0.1, wh_fr[3] + 0.4
                 )
             }
-            leg$leg_df$x0 <- scales::rescale(leg$leg_df$x0,
+            leg$df$x0 <- scales::rescale(leg$df$x0,
                 c(leg_loc[1], leg_loc[2])
             )
-            leg$leg_df$y0 <- scales::rescale(leg$leg_df$y0,
+            leg$df$y0 <- scales::rescale(leg$df$y0,
                 c(leg_loc[3], leg_loc[4])
             )
             clip(leg_loc[1] - 1, leg_loc[2] + 1, leg_loc[3] - 1, leg_loc[4] + 1)
