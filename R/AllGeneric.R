@@ -121,18 +121,14 @@ setMethod("subset", "Ped", function(x, i, del_parents = FALSE, keep = TRUE) {
 })
 
 #### S4 Rel generics ####
-#' Summary function of Rel object
-#'
-#' @description Compute the summary of a Rel object
-#'
-#' @param object A Rel object.
-#'
-#' @return A character vector with the summary of the object.
-#'
+
+#' @section Generics:
+#' - `summary(x)`: Compute the summary of a Rel object
 #' @export
 #' @importFrom S4Vectors classNameForDisplay
 #' @importFrom S4Vectors summary
-#' @rdname Rel
+#' @rdname Rel-class
+#' @usage NULL
 setMethod("summary", "Rel",
     function(object) {
         object_class <- classNameForDisplay(object)
@@ -152,19 +148,14 @@ setMethod("summary", "Rel",
     }
 )
 
-#' Show function of Rel object
-#'
-#' @description Convert the Rel object to a data.frame
+#' @section Generics:
+#' - `show(x)`: Convert the Rel object to a data.frame
 #' and print it with its summary.
-#'
-#' @param object A Rel object.
-#'
-#' @return The Rel object with the relationship informations.
-#'
 #' @export
 #' @importFrom S4Vectors cbind_mcols_for_display
 #' @importFrom S4Vectors makeClassinfoRowForCompactPrinting
-#' @rdname Rel
+#' @rdname Rel-class
+#' @usage NULL
 setMethod("show", signature(object = "Rel"),
     function(object) {
         cat(summary(object), ":\n", sep = "")
@@ -181,14 +172,12 @@ setMethod("show", signature(object = "Rel"),
     }
 )
 
-#' @title Rel object to list
-#' @description Convert a Rel object to a list
-#' @param from A Rel object.
-#' @return A list with the relationship informations.
-#' @rdname Rel
-#' @aliases as.list,Rel-method
-#' @importMethodsFrom S4Vectors as.list
+#' @section Generics:
+#' - `as.list(x)`: Convert a Rel object to a list
+#' @rdname Rel-class
+#' @importFrom S4Vectors as.list
 #' @export
+#' @usage NULL
 setMethod("as.list", "Rel", function(x) {
     to <- list()
     for (slot in slotNames(x)) {
@@ -202,14 +191,12 @@ setMethod("as.list", "Rel", function(x) {
     c(to, as.list(mcols(x)))
 })
 
-#' @title Rel to data.frame
-#' @description Convert a Rel object to a data.frame
-#' @param from A Rel object.
-#' @return A data.frame with the relationship informations.
-#' @rdname Rel
-#' @aliases as.data.frame,Rel-method
+#' @section Generics:
+#' - `as.data.frame(x)`: Convert a Rel object to a data.frame
+#' @rdname Rel-class
 #' @importFrom S4Vectors as.data.frame
 #' @export
+#' @usage NULL
 setMethod("as.data.frame", "Rel", function(x) {
     lst <- as.list(x)
     if (length(unique(lapply(lst, length))) != 1) {
@@ -218,20 +205,16 @@ setMethod("as.data.frame", "Rel", function(x) {
     data.frame(lst)
 })
 
-#' Subset a Rel object
-#'
-#' @description Subset a Rel object based on the individuals
-#' identifiers given.
-#'
-#' @param x A Rel object.
-#' @param idlist A vector of individuals identifiers to keep.
-#'
-#' @return A Rel object subsetted.
-#'
-#' @rdname extract-methods
-#' @aliases subset,Rel-method
+#' @section Generics:
+#' - `subset(x, i, keep = TRUE)`: Subset a Rel object
+#' based on the individuals identifiers given.
+#'      - `i` : A vector of individuals identifiers to keep.
+#'      - `keep` : A logical value indicating if the individuals
+#'      should be kept or deleted.
+#' @rdname Rel-class
 #' @importFrom S4Vectors subset
 #' @export
+#' @usage NULL
 setMethod("subset", "Rel", function(x, idlist, keep = TRUE) {
     if (is.factor(idlist)) {
         idlist <- as.character(idlist)
@@ -256,31 +239,27 @@ setMethod("subset", "Rel", function(x, idlist, keep = TRUE) {
 })
 
 #### S4 Hints generics ####
-#' Set Hints object to list
-#'
-#' @description Convert a Hints object to a list
-#'
-#' @param from A Hints object.
-#'
-#' @return A list with the hints informations.
-#'
-#' @rdname Hints
-#' @aliases as.list,Hints-method
-#' @importMethodsFrom S4Vectors as.list
+
+#' @section Generics:
+#' - `as.list(x)`: Convert a Hints object to a list
+#' @rdname Hint-class
+#' @importFrom S4Vectors as.list
 #' @export
+#' @usage NULL
 setMethod("as.list", "Hints", function(x) {
     list(horder = x@horder, spouse = x@spouse)
 })
 
-#' Hints subscripting
-#' @description Subset the Hints object based on the identifiers
-#' given
-#' @param x A Hints object
-#' @param idlist A vector of identifiers to subset
-#' @return A list of Hints object subsetted
-#' @rdname extract-methods
-#' @aliases subset_hints,Hints-method
-#' @keywords internal
+#' @section Generics:
+#' - `subset(x, i, keep = TRUE)`: Subset a Hints object
+#' based on the individuals identifiers given.
+#'      - `i` : A vector of individuals identifiers to keep.
+#'      - `keep` : A logical value indicating if the individuals
+#'      should be kept or deleted.
+#' @rdname Hints-class
+#' @importFrom S4Vectors subset
+#' @export
+#' @usage NULL
 setMethod("subset", "Hints", function(x, idlist, keep = TRUE) {
     horder <- horder(x)
     spouse <- spouse(x)
@@ -312,70 +291,61 @@ setMethod("subset", "Hints", function(x, idlist, keep = TRUE) {
 })
 
 #### S4 Scales generics ####
-#' Set Scales object to list
-#'
-#' @description Convert a Scales object to a list
-#'
-#' @param from A Scales object.
-#'
-#' @return A list with the hints informations.
-#'
-#' @rdname Scales
-#' @aliases as.list,Scales-method
-#' @importMethodsFrom S4Vectors as.list
+
+#' @section Generics:
+#' - `as.list(x)`: Convert a Scales object to a list
+#' @rdname Scales-class
+#' @importFrom S4Vectors as.list
 #' @export
+#' @usage NULL
 setMethod("as.list", "Scales", function(x) {
     list(fill = x@fill, border = x@border)
 })
 
 #### S4 Pedigree generics ####
 
-#' Compute the length of a Pedigree object
-#' @param x A Pedigree object.
-#' @return The number of individuals in the Pedigree object.
-#' @docType methods
-#' @aliases length,Pedigree-method
+#' @section Generics:
+#' - `length(x)`: Get the length of a Pedigree object.
+#' Wrapper of `length(ped(x))`.
+#' @rdname Pedigree-class
 #' @export
+#' @usage NULL
 setMethod("length", c(x = "Pedigree"),
     function(x) {
         length(ped(x))
     }
 )
-#' @title Pedigree methods
-#' @description Pedigree show method
-#' @param object A Pedigree object.
-#' @return A character vector with the informations about the object.
-#' @rdname extract-methods
-#' @aliases show,Pedigree-method
+
+#' @section Generics:
+#' - `show(x)`: Print the information of the Ped and Rel
+#' object inside the Pedigree object.
+#' @export
+#' @rdname Pedigree-class
+#' @usage NULL
 setMethod("show", signature(object = "Pedigree"), function(object) {
     cat("Pedigree object with: \n")
     print(ped(object))
     print(rel(object))
 })
 
-#' @description Pedigree summary method.
-#' @param object A Pedigree object.
-#' @return A character vector with the summary of the object.
-#' @rdname extract-methods
-#' @aliases summary,Pedigree-method
+#' @section Generics:
+#' - `summary(x)`: Compute the summary of the Ped and Rel object
+#' inside the Pedigree object.
+#' @export
+#' @rdname Pedigree-class
+#' @usage NULL
 setMethod("summary", signature(object = "Pedigree"), function(object) {
     cat("Pedigree object with \n")
     print(summary(ped(object)))
     print(summary(rel(object)))
 })
 
-#' Convert a Pedigree object to a list
-#'
-#' @description Convert a Pedigree object to a list
-#'
-#' @param from A Pedigree object.
-#'
-#' @return A list with the individuals informations.
-#'
-#' @rdname extract-methods
-#' @aliases as.list,Pedigree-method
-#' @importMethodsFrom S4Vectors as.list
+#' @section Generics:
+#' - `as.list(x)`: Convert a Pedigree object to a list
+#' @rdname Pedigree-class
+#' @importFrom S4Vectors as.list
 #' @export
+#' @usage NULL
 setMethod("as.list", "Pedigree", function(x) {
     list(
         ped = as.list(ped(x)),
@@ -385,13 +355,18 @@ setMethod("as.list", "Pedigree", function(x) {
     )
 })
 
-#' @description Extract parts of a Pedigree object
-#' @param x A Pedigree object.
-#' @param i A vector of individuals id or a vector of index.
-#' @param j A vector of columns names.
-#' @param drop A logical value indicating if the dimensions should be dropped.
-#' @return A Pedigree object subsetted.
-#' @rdname extract-methods
+#' @section Generics:
+#' - `subset(x, i, keep = TRUE)`: Subset a Pedigree object
+#' based on the individuals identifiers given.
+#'      - `i` : A vector of individuals identifiers to keep.
+#'      - `del_parents` : A logical value indicating if the parents
+#'      of the individuals should be deleted.
+#'      - `keep` : A logical value indicating if the individuals
+#'      should be kept or deleted.
+#' @rdname Pedigree-class
+#' @importFrom S4Vectors subset
+#' @export
+#' @usage NULL
 setMethod("subset", "Pedigree",
     function(x, i, del_parents = FALSE, keep = TRUE) {
         new_ped <- subset(ped(x), i, del_parents = del_parents, keep = keep)
@@ -408,8 +383,15 @@ setMethod("subset", "Pedigree",
     }
 )
 
+#' @section Generics:
+#' - `x[i, del_parents, keep]`: Subset a Pedigree object
+#' based on the individuals identifiers given.
+#' @rdname Pedigree-class
+#' @importFrom S4Vectors subset
+#' @export
+#' @usage NULL
 setMethod("[", c(x = "Pedigree", i = "ANY", j = "missing"),
-    function(x, i, j, drop = TRUE) {
-        subset(x, i)
+    function(x, i, j, del_parents = FALSE, keep = TRUE, drop = TRUE) {
+        subset(x, i, del_parents, keep)
     }
 )

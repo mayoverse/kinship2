@@ -185,6 +185,7 @@ setMethod("Ped", "missing",
 )
 
 #### S4 Rel constructor ####
+
 #' @description
 #'
 #' ## Constructor :
@@ -273,8 +274,6 @@ setMethod("Rel", "character_OR_integer",
 )
 
 #' @rdname Rel-class
-#' @examples
-#' Rel()
 #' @usage NULL
 setMethod("Rel", "missing",
     function(obj) {
@@ -283,13 +282,13 @@ setMethod("Rel", "missing",
 )
 
 #### S4 Hints constructor ####
-#' Create a Hints object
+
+#' @description
 #'
-#' @description Create a Hints object.
-#' The hints are used to specify the order of the individuals in the pedigree
-#' and to specify the order of the spouses.
-#' You can specify the horder and the spouse in the call to the constructor
-#' independently or together.
+#' ## Constructor :
+#'
+#' You either need to provide **horder** or **spouse** in
+#' the dedicated parameters (together or separately), or inside a list.
 #'
 #' @param horder A named numeric vector with one element per subject in the
 #' Pedigree.  It determines the relative horizontal order of subjects within a
@@ -307,14 +306,14 @@ setMethod("Rel", "missing",
 #'
 #' @return A Hints object.
 #' @seealso [Pedigree()]
-#' @rdname Hints
+#' @rdname Hints-class
 #' @export
 setGeneric("Hints", function(horder, spouse) {
     standardGeneric("Hints")
 })
 
-#' @docType methods
-#' @rdname Hints
+#' @rdname Hints-class
+#' @usage NULL
 setMethod("Hints",
     signature(horder = "Hints", spouse = "missing_OR_NULL"),
     function(horder, spouse) {
@@ -322,11 +321,10 @@ setMethod("Hints",
     }
 )
 
-#' @docType methods
-#' @rdname Hints
+#' @rdname Hints-class
 #' @export
-#' @aliases Hints,list,missing_OR_NULL
 #' @examples
+#'
 #' Hints(
 #'   list(
 #'       horder = c("1" = 1, "2" = 2, "3" = 3),
@@ -358,11 +356,10 @@ setMethod("Hints",
     }
 )
 
-#' @docType methods
-#' @rdname Hints
+#' @rdname Hints-class
 #' @export
-#' @aliases Hints,numeric,data.frame
 #' @examples
+#'
 #' Hints(
 #'   horder = c("1" = 1, "2" = 2, "3" = 3),
 #'   spouse = data.frame(
@@ -388,11 +385,10 @@ setMethod("Hints",
     }
 )
 
-#' @docType methods
-#' @rdname Hints
+#' @rdname Hints-class
 #' @export
-#' @aliases Hints,numeric,missing_OR_NULL
 #' @examples
+#'
 #' Hints(
 #'   horder = c("1" = 1, "2" = 2, "3" = 3)
 #' )
@@ -411,11 +407,10 @@ setMethod("Hints",
     }
 )
 
-#' @docType methods
-#' @rdname Hints
+#' @rdname Hints-class
 #' @export
-#' @aliases Hints,missing_OR_NULL,data.frame
 #' @examples
+#'
 #' Hints(
 #'     spouse = data.frame(
 #'         idl = c("1", "2"),
@@ -435,12 +430,9 @@ setMethod("Hints",
     }
 )
 
-#' @docType methods
-#' @rdname Hints
+#' @rdname Hints-class
 #' @export
-#' @aliases Hints,missing_OR_NULL,missing_OR_NULL
-#' @examples
-#' Hints()
+#' @usage NULL
 setMethod("Hints",
     signature(horder = "missing_OR_NULL", spouse = "missing_OR_NULL"),
     function(horder, spouse) {
@@ -452,14 +444,14 @@ setMethod("Hints",
 )
 
 #### S4 Scales constructor ####
-#' Create a Scales object
+
+#' @description
 #'
-#' @description Create a Scales object from two data.frame.
-#' The first one is used to represent the affection status of the individuals
-#' and therefore the filling of the individuals in the pedigree plot.
-#' The second one is used to represent the availability status of the
-#' individuals and therefore the border color of the individuals in the
-#' pedigree plot.
+#' ## Constructor :
+#'
+#' You need to provide both **fill** and **border** in the dedicated parameters.
+#' However this is usually done using the [generate_colors()] function with a
+#' Pedigree object.
 #'
 #' @param fill A data.frame with the informations for the affection status.
 #' The columns needed are:
@@ -486,18 +478,17 @@ setMethod("Hints",
 #' - 'border': the color to use for this mods
 #'
 #' @return A Scales object.
-#' @seealso [Pedigree()]
-#' @rdname Scales
+#' @seealso [Pedigree()], [generate_colors()]
+#' @rdname Scales-class
 #' @export
 setGeneric("Scales", function(fill, border) {
     standardGeneric("Scales")
 })
 
-#' @docType methods
-#' @rdname Scales
+#' @rdname Scales-class
 #' @export
-#' @aliases Scales,data.frame,data.frame
 #' @examples
+#'
 #' Scales(
 #'    fill = data.frame(
 #'       order = 1,
@@ -536,12 +527,9 @@ setMethod("Scales",
     }
 )
 
-#' @docType methods
-#' @rdname Scales
+#' @rdname Scales-class
 #' @export
-#' @aliases Scales,missing,missing
-#' @examples
-#' Scales()
+#' @usage NULL
 setMethod("Scales",
     signature(fill = "missing", border = "missing"),
     function(fill, border) {
@@ -566,10 +554,14 @@ setMethod("Scales",
         new("Scales", fill = fill, border = border)
     }
 )
+
 #### S4 Pedigree constructor ####
-#' Create a Pedigree object
+
+#' @description
 #'
-#' @description Main constructor of the package.
+#' ## Constructor :
+#'
+#' Main constructor of the package.
 #' This constructor help to create a `Pedigree` object from
 #' different `data.frame` or a set of vectors.
 #'
@@ -600,6 +592,7 @@ setMethod("Scales",
 #' - `fatherId` / `dadid`
 #' - `motherId` / `momid`
 #' - `gender` / `sex`
+#'
 #' The `family` / `famid` column can also be used to specify the family of the
 #' individuals and will be merge to the `indId` / `id` field separated by an
 #' underscore.
@@ -626,6 +619,7 @@ setMethod("Scales",
 #'
 #' The value relation code recognized by the function are the one defined
 #' by the [rel_code_to_factor()] function.
+#'
 #' @param hints A Hints object or a named list containing `horder` and
 #' `spouse`.
 #' @param cols_ren_ped A named list with the columns to rename for the
@@ -641,19 +635,17 @@ setMethod("Scales",
 #' @param ... Other arguments to pass to the function `generate_colors`.
 #' @inheritParams Ped
 #' @inheritParams is_informative
+#'
 #' @return A Pedigree object.
 #' @export
-#' @rdname Pedigree
-#' @aliases Pedigree
+#' @rdname Pedigree-class
 #' @seealso [Pedigree()], [Ped()], [Rel()], [Scales()]
 setGeneric("Pedigree", signature = "obj",
     function(obj, ...) standardGeneric("Pedigree")
 )
 
 #' @export
-#' @rdname Pedigree
-#' @aliases Pedigree,character
-#' @docType methods
+#' @rdname Pedigree-class
 #' @param affected A logical vector with the affection status of the
 #' individuals
 #' (i.e. `FALSE` = unaffected, `TRUE` = affected, `NA` = unknown).
@@ -665,6 +657,7 @@ setGeneric("Pedigree", signature = "obj",
 #' If `affected` is a data.frame, it will be overwritten by the column
 #' names of the data.frame.
 #' @examples
+#'
 #' Pedigree(
 #'    obj = c("1", "2", "3", "4", "5", "6"),
 #'    dadid = c("4", "4", "6", "0", "0", "0"),
@@ -762,10 +755,9 @@ setMethod("Pedigree", "character_OR_integer", function(obj, dadid, momid,
 })
 
 #' @export
-#' @rdname Pedigree
-#' @aliases Pedigree,data.frame
-#' @docType methods
+#' @rdname Pedigree-class
 #' @examples
+#'
 #' data(sampleped)
 #' Pedigree(sampleped)
 setMethod("Pedigree", "data.frame",  function(
@@ -899,11 +891,8 @@ setMethod("Pedigree", "data.frame",  function(
 )
 
 #' @export
-#' @rdname Pedigree
-#' @aliases Pedigree,missing
-#' @docType methods
-#' @examples
-#' Pedigree()
+#' @rdname Pedigree-class
+#' @usage NULL
 setMethod("Pedigree", "missing", function(obj) {
     ped <- new("Pedigree",
         ped = Ped(), rel = Rel(),

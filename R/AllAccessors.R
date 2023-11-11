@@ -600,6 +600,11 @@ setMethod("famid<-",
 #### S4 Pedigree Accessors ####
 
 #' @section Accessors:
+#' For all the following accessors, the `x` parameters is a Pedigree object.
+#' Each getters return a vector of the same length as `x` with the values
+#' of the corresponding slot.
+
+#' @section Accessors:
 #' - `famid(x)` : Get the family identifiers of a Pedigree object. This
 #' function is a wrapper around `famid(ped(x))`.
 #'
@@ -610,18 +615,17 @@ setMethod("famid", signature(x = "Pedigree"), function(x) {
 })
 
 ##### S4 ped Accessors #####
-#' @title Pedigree ped accessors
-#' @param object A Pedigree object.
-#' @param slot A slot in the Ped object of the Pedigree.
-#' @return The slot `ped` present in the Pedigree object.
-#' or one of its slot.
-#' @rdname extract-methods
-#' @aliases ped,Pedigree-method
-#' @export
+
+#' @rdname Pedigree-class
+#' @usage NULL
 setGeneric("ped", function(object, slot) {
     standardGeneric("ped")
 })
 
+#' @section Accessors:
+#' - `ped(x, slot)` : Get the value of a specific slot of the Ped object
+#' @rdname Pedigree-class
+#' @usage NULL
 setMethod(
     "ped",
     signature(object = "Pedigree", slot = "ANY"),
@@ -630,6 +634,10 @@ setMethod(
     }
 )
 
+#' @section Accessors:
+#' - `ped(x)` : Get the Ped object
+#' @rdname Pedigree-class
+#' @usage NULL
 setMethod(
     "ped",
     signature(object = "Pedigree", slot = "missing"),
@@ -638,10 +646,17 @@ setMethod(
     }
 )
 
+#' @rdname Pedigree-class
+#' @usage NULL
 setGeneric("ped<-", function(object, slot, value) {
     standardGeneric("ped<-")
 })
 
+#' @section Accessors:
+#' - `ped(x, slot) <- value` : Set the value of a specific slot of the Ped object
+#' Wrapper of `slot(ped(x)) <- value`
+#' @rdname Pedigree-class
+#' @usage NULL
 setMethod(
     "ped<-",
     signature(object = "Pedigree", slot = "ANY", value = "ANY"),
@@ -667,6 +682,10 @@ setMethod(
     }
 )
 
+#' @section Accessors:
+#' - `ped(x) <- value` : Set the Ped object
+#' @rdname Pedigree-class
+#' @usage NULL
 setMethod(
     "ped<-",
     signature(object = "Pedigree", slot = "missing", value = "Ped"),
@@ -678,12 +697,13 @@ setMethod(
 )
 
 ##### S4 mcols Accessors #####
-#' @title Pedigree metadata accessors
-#' @param object A Pedigree object.
-#' @return The metadata present in the Pedigree object.
-#' @rdname extract-methods
-#' @aliases mcols,Pedigree-method
-#' @export
+
+#' @section Accessors:
+#' - `mcols(x)` : Get the metadata of a Pedigree object.
+#' This function is a wrapper around `mcols(ped(x))`.
+#' @rdname Pedigree-class
+#' @usage NULL
+#' @importFrom S4Vectors 'mcols'
 setMethod(
     "mcols",
     signature(x = "Pedigree"),
@@ -692,6 +712,11 @@ setMethod(
     }
 )
 
+#' @section Accessors:
+#' - `mcols(x) <- value` : Set the metadata of a Pedigree object.
+#' This function is a wrapper around `mcols(ped(x)) <- value`.
+#' @rdname Pedigree-class
+#' @usage NULL
 #' @importFrom S4Vectors 'mcols<-'
 setMethod(
     "mcols<-",
@@ -704,16 +729,16 @@ setMethod(
 
 ##### S4 rel Accessors #####
 
-#' @description Pedigree rel accessors
-#' @param object A Pedigree object.
-#' @return The slot `rel` present in the Pedigree object.
-#' @rdname extract-methods
-#' @aliases rel,Pedigree-method
-#' @export
+#' @rdname Pedigree-class
+#' @usage NULL
 setGeneric("rel", function(object, slot) {
     standardGeneric("rel")
 })
 
+#' @section Accessors:
+#' - `rel(x, slot)` : Get the value of a specific slot of the Rel object
+#' @rdname Pedigree-class
+#' @usage NULL
 setMethod(
     "rel",
     signature(object = "Pedigree", slot = "ANY"),
@@ -722,6 +747,10 @@ setMethod(
     }
 )
 
+#' @section Accessors:
+#' - `rel(x)` : Get the Rel object
+#' @rdname Pedigree-class
+#' @usage NULL
 setMethod(
     "rel",
     signature(object = "Pedigree", slot = "missing"),
@@ -730,10 +759,17 @@ setMethod(
     }
 )
 
+#' @rdname Pedigree-class
+#' @usage NULL
 setGeneric("rel<-", function(object, slot, value) {
     standardGeneric("rel<-")
 })
 
+#' @section Accessors:
+#' - `rel(x, slot) <- value` : Set the value of a specific slot of the Rel object
+#' Wrapper of `slot(rel(x)) <- value`
+#' @rdname Pedigree-class
+#' @usage NULL
 setMethod(
     "rel<-",
     signature(object = "Pedigree", slot = "ANY", value = "ANY"),
@@ -754,6 +790,10 @@ setMethod(
     }
 )
 
+#' @section Accessors:
+#' - `rel(x) <- value` : Set the Rel object
+#' @rdname Pedigree-class
+#' @usage NULL
 setMethod(
     "rel<-",
     signature(object = "Pedigree", slot = "missing", value = "Rel"),
@@ -765,24 +805,31 @@ setMethod(
 )
 
 ##### S4 scales Accessors ####
-#' @description Pedigree scales accessors
-#' @param object A Pedigree object.
-#' @return The slot `scales` present in the Pedigree object.
-#' @rdname extract-methods
-#' @aliases scales,Pedigree-method
-#' @export
+
+#' @rdname Pedigree-class
+#' @usage NULL
 setGeneric("scales", function(object) {
     standardGeneric("scales")
 })
 
+#' @section Accessors:
+#' - `scales(x)` : Get the Scales object
+#' @rdname Pedigree-class
+#' @usage NULL
 setMethod("scales", signature(object = "Pedigree"), function(object) {
     object@scales
 })
 
+#' @rdname Pedigree-class
+#' @usage NULL
 setGeneric("scales<-", function(object, value) {
     standardGeneric("scales<-")
 })
 
+#' @section Accessors:
+#' - `scales(x) <- value` : Set the Scales object
+#' @rdname Pedigree-class
+#' @usage NULL
 setMethod(
     "scales<-", signature(object = "Pedigree", value = "Scales"),
     function(object, value) {
@@ -790,17 +837,19 @@ setMethod(
         object
     }
 )
+
 #### S4 fill Accessors ####
-#' @description Pedigree fill accessors
-#' @param object A Pedigree object.
-#' @return The slot `fill` present in the Pedigree object.
-#' @rdname extract-methods
-#' @aliases fill,Pedigree-method
-#' @export
+
+#' @rdname Scales-class
+#' @usage NULL
 setGeneric("fill", function(object) {
     standardGeneric("fill")
 })
 
+#' @section Accessors:
+#' - `fill(x)` : Get the fill data.frame
+#' @rdname Scales-class
+#' @usage NULL
 setMethod("fill",
     signature(object = "Scales"),
     function(object) {
@@ -808,6 +857,11 @@ setMethod("fill",
     }
 )
 
+#' @section Accessors:
+#' - `fill(x)` : Get the fill data.frame from the Scales object.
+#' Wrapper of `fill(scales(x))`
+#' @rdname Pedigree-class
+#' @usage NULL
 setMethod("fill",
     signature(object = "Pedigree"),
     function(object) {
@@ -815,10 +869,16 @@ setMethod("fill",
     }
 )
 
+#' @rdname Scales-class
+#' @usage NULL
 setGeneric("fill<-", function(object, value) {
     standardGeneric("fill<-")
 })
 
+#' @section Accessors:
+#' - `fill(x) <- value` : Set the fill data.frame
+#' @rdname Scales-class
+#' @usage NULL
 setMethod(
     "fill<-",
     signature(object = "Scales", value = "data.frame"),
@@ -829,6 +889,11 @@ setMethod(
     }
 )
 
+#' @section Accessors:
+#' - `fill(x) <- value` : Set the fill data.frame from the Scales object.
+#' Wrapper of `fill(scales(x)) <- value`
+#' @rdname Pedigree-class
+#' @usage NULL
 setMethod(
     "fill<-",
     signature(object = "Pedigree", value = "data.frame"),
@@ -840,16 +905,17 @@ setMethod(
 )
 
 #### S4 border Accessors ####
-#' @description Pedigree border accessors
-#' @param object A Pedigree object.
-#' @return The slot `border` present in the Pedigree object.
-#' @rdname extract-methods
-#' @aliases border,Pedigree-method
-#' @export
+
+#' @rdname Scales-class
+#' @usage NULL
 setGeneric("border", function(object) {
     standardGeneric("border")
 })
 
+#' @section Accessors:
+#' - `border(x)` : Get the border data.frame
+#' @rdname Scales-class
+#' @usage NULL
 setMethod("border",
     signature(object = "Scales"),
     function(object) {
@@ -857,6 +923,11 @@ setMethod("border",
     }
 )
 
+#' @section Accessors:
+#' - `border(x)` : Get the border data.frame from the Scales object.
+#' Wrapper of `border(scales(x))`
+#' @rdname Pedigree-class
+#' @usage NULL
 setMethod("border",
     signature(object = "Pedigree"),
     function(object) {
@@ -864,10 +935,16 @@ setMethod("border",
     }
 )
 
+#' @rdname Scales-class
+#' @usage NULL
 setGeneric("border<-", function(object, value) {
     standardGeneric("border<-")
 })
 
+#' @section Accessors:
+#' - `border(x) <- value` : Set the border data.frame
+#' @rdname Scales-class
+#' @usage NULL
 setMethod(
     "border<-",
     signature(object = "Scales", value = "data.frame"),
@@ -878,6 +955,11 @@ setMethod(
     }
 )
 
+#' @section Accessors:
+#' - `border(x) <- value` : Set the border data.frame from the Scales object.
+#' Wrapper of `border(scales(x)) <- value`
+#' @rdname Pedigree-class
+#' @usage NULL
 setMethod(
     "border<-",
     signature(object = "Pedigree", value = "data.frame"),
@@ -889,23 +971,31 @@ setMethod(
 )
 
 #### S4 hints Accessors ####
-#' @description Pedigree hints accessors
-#' @param object A Pedigree object.
-#' @return The slot `hints` present in the Pedigree object.
-#' @rdname extract-methods
-#' @aliases hints,Pedigree-method
-#' @export
+
+#' @rdname Pedigree-class
+#' @usage NULL
 setGeneric("hints", function(object) {
     standardGeneric("hints")
 })
 
+#' @section Accessors:
+#' - `hints(x)` : Get the Hints object
+#' @rdname Pedigree-class
+#' @usage NULL
 setMethod("hints", signature(object = "Pedigree"), function(object) {
     object@hints
 })
+
+#' @rdname Pedigree-class
+#' @usage NULL
 setGeneric("hints<-", function(object, value) {
     standardGeneric("hints<-")
 })
 
+#' @section Accessors:
+#' - `hints(x) <- value` : Set the Hints object
+#' @rdname Pedigree-class
+#' @usage NULL
 setMethod("hints<-", signature(object = "Pedigree", value = "Hints"), function(
     object, value
 ) {
@@ -915,30 +1005,58 @@ setMethod("hints<-", signature(object = "Pedigree", value = "Hints"), function(
 })
 
 #### S4 horder Accessors ####
-#' @title Pedigree horder accessors
-#' @description Pedigree horder accessors
-#' @param object A Pedigree object.
-#' @return The slot `horder` present in the `Hints` slot of
-#' a Pedigree object.
-#' @rdname Pedigree
-#' @aliases horder,Pedigree-method
-#' @export
+
+#' @rdname Hints-class
+#' @usage NULL
 setGeneric("horder", function(object) {
     standardGeneric("horder")
 })
 
-setMethod("horder", "Pedigree", function(object) {
-    horder(hints(object))
-})
-
+#' @section Accessors:
+#' - `horder(x)` : Get the horder vector
+#' @rdname Hints-class
+#' @usage NULL
 setMethod("horder", "Hints", function(object) {
     object@horder
 })
 
+#' @section Accessors:
+#' - `horder(x)` : Get the horder vector from the Hints object.
+#' Wrapper of `horder(hints(x))`
+#' @rdname Pedigree-class
+#' @usage NULL
+setMethod("horder", "Pedigree", function(object) {
+    horder(hints(object))
+})
+
+#' @rdname Hints-class
+#' @usage NULL
 setGeneric("horder<-", function(object, value) {
     standardGeneric("horder<-")
 })
 
+#' @section Accessors:
+#' - `horder(x) <- value` : Set the horder vector
+#' @rdname Hints-class
+#' @usage NULL
+setMethod(
+    "horder<-",
+    signature(object = "Hints", value = "ANY"),
+    function(object, value) {
+        if (length(value) > 0 && is.null(names(value))) {
+            stop("horder must be named")
+        }
+        object@horder <- value
+        validObject(object)
+        object
+    }
+)
+
+#' @section Accessors:
+#' - `horder(x) <- value` : Set the horder vector from the Hints object.
+#' Wrapper of `horder(hints(x)) <- value`
+#' @rdname Hints-class
+#' @usage NULL
 setMethod(
     "horder<-",
     signature(object = "Pedigree", value = "ANY"),
@@ -955,52 +1073,41 @@ setMethod(
     }
 )
 
-setMethod(
-    "horder<-",
-    signature(object = "Hints", value = "ANY"),
-    function(object, value) {
-        if (length(value) > 0 && is.null(names(value))) {
-            stop("horder must be named")
-        }
-        object@horder <- value
-        validObject(object)
-        object
-    }
-)
 #### S4 spouse Accessors ####
-#' @description Pedigree spouse accessors
-#' @param object A Pedigree object.
-#' @return The slot `spouse` present in the `Hints` slot of
-#' a Pedigree object.
-#' @rdname extract-methods
-#' @aliases spouse,Pedigree-method
-#' @export
+
+#' @rdname Hints-class
+#' @usage NULL
 setGeneric("spouse", function(object) {
     standardGeneric("spouse")
 })
 
-setMethod("spouse", signature(object = "Pedigree"), function(object) {
-    spouse(hints(object))
-})
-
+#' @section Accessors:
+#' - `spouse(x)` : Get the spouse data.frame
+#' @rdname Hints-class
+#' @usage NULL
 setMethod("spouse", signature(object = "Hints"), function(object) {
     object@spouse
 })
 
+#' @section Accessors:
+#' - `spouse(x)` : Get the spouse data.frame from the Hints object.
+#' Wrapper of `spouse(hints(x))`.
+#' @rdname Pedigree-class
+#' @usage NULL
+setMethod("spouse", signature(object = "Pedigree"), function(object) {
+    spouse(hints(object))
+})
+
+#' @rdname Pedigree-class
+#' @usage NULL
 setGeneric("spouse<-", function(object, value) {
     standardGeneric("spouse<-")
 })
 
-setMethod(
-    "spouse<-",
-    signature(object = "Pedigree", value = "data.frame"),
-    function(object, value) {
-        spouse(hints(object)) <- value
-        validObject(object)
-        object
-    }
-)
-
+#' @section Accessors:
+#' - `spouse(x) <- value` : Set the spouse data.frame
+#' @rdname Hints-class
+#' @usage NULL
 setMethod(
     "spouse<-",
     signature(object = "Hints", value = "data.frame"),
@@ -1008,6 +1115,21 @@ setMethod(
         df <- check_columns(value, c("idl", "idr", "anchor"))
         df$anchor <- anchor_to_factor(df$anchor)
         object@spouse <- df
+        validObject(object)
+        object
+    }
+)
+
+#' @section Accessors:
+#' - `spouse(x) <- value` : Set the spouse data.frame from the Hints object.
+#' Wrapper of `spouse(hints(x)) <- value`.
+#' @rdname Pedigree-class
+#' @usage NULL
+setMethod(
+    "spouse<-",
+    signature(object = "Pedigree", value = "data.frame"),
+    function(object, value) {
+        spouse(hints(object)) <- value
         validObject(object)
         object
     }

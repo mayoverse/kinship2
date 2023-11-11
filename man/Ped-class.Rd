@@ -325,10 +325,6 @@ Ped(
 )
 
 Ped()
-summary(ped)
-show(ped)
-as.list(ped)
-subset(ped, c("1", "2"))
 }
 \seealso{
 \code{\link[=Pedigree]{Pedigree()}}
