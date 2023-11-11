@@ -1,16 +1,12 @@
 #### S4 Ped generics ####
 
-#' Summary function of Ped object
-#'
-#' @description Compute the summary of a Ped object
-#'
-#' @param object A Ped object.
-#'
-#' @return A character vector with the summary of the object.
-#'
+#' @section Generics:
+#' - `summary(x)`: Compute the summary of a Ped object
 #' @export
 #' @importFrom S4Vectors classNameForDisplay
 #' @importFrom S4Vectors summary
+#' @rdname Ped-class
+#' @usage NULL
 setMethod("summary", "Ped",
     function(object) {
         object_class <- classNameForDisplay(object)
@@ -25,18 +21,14 @@ setMethod("summary", "Ped",
     }
 )
 
-#' Show function of Ped object
-#'
-#' @description Convert the Ped object to a data.frame
+#' @section Generics:
+#' - `show(x)`: Convert the Ped object to a data.frame
 #' and print it with its summary.
-#'
-#' @param object A Ped object.
-#'
-#' @return The Ped object with the individuals informations.
-#'
 #' @export
 #' @importFrom S4Vectors cbind_mcols_for_display
 #' @importFrom S4Vectors makeClassinfoRowForCompactPrinting
+#' @rdname Ped-class
+#' @usage NULL
 setMethod("show", "Ped",
     function(object) {
         cat(summary(object), ":\n", sep = "")
@@ -53,15 +45,13 @@ setMethod("show", "Ped",
     }
 )
 
-#' @title Ped object to list
-#' @description Convert a Ped object to a list
-#' @param from A Ped object.
-#' @return A list with the individuals informations.
-#' The metadata are put at the end.
-#' @rdname extract-methods
-#' @aliases as.list,Ped-method
+#' @section Generics:
+#' - `as.list(x)`: Convert a Ped object to a list with
+#' the metadata columns at the end.
+#' @rdname Ped-class
 #' @importFrom S4Vectors as.list
 #' @export
+#' @usage NULL
 setMethod("as.list", "Ped", function(x) {
     to <- list()
     for (slot in slotNames(x)) {
@@ -75,13 +65,10 @@ setMethod("as.list", "Ped", function(x) {
     c(to, as.list(mcols(x)))
 })
 
-#' @title Ped object to data.frame
-#' @description Convert a Ped object to a data.frame
-#' @param from A Ped object.
-#' @return A data.frame with the individuals informations.
-#' The metadata are put at the end.
-#' @rdname extract-methods
-#' @aliases as.data.frame,Ped-method
+#' @section Generics:
+#' - `as.data.frame(x)`: Convert a Ped object to a data.frame with
+#' the metadata columns at the end.
+#' @rdname Ped-class
 #' @importFrom S4Vectors as.data.frame
 #' @export
 setMethod("as.data.frame", "Ped", function(x) {
@@ -94,24 +81,18 @@ setMethod("as.data.frame", "Ped", function(x) {
     ped_df
 })
 
-#' Subset a Ped object
-#'
-#' @description Subset a Ped object based on the individuals
-#' identifiers given.
-#'
-#' @param x A Ped object.
-#' @param i A vector of individuals identifiers to keep.
-#' @param del_parents A logical value indicating if the parents
-#' of the individuals should be deleted.
-#' @param keep A logical value indicating if the individuals
-#' should be kept or deleted.
-#'
-#' @return A Ped object subsetted.
-#'
-#' @rdname extract-methods
-#' @aliases subset,Ped-method
+#' @section Generics:
+#' - `subset(x, i, del_parents = FALSE, keep = TRUE)`: Subset a Ped object
+#' based on the individuals identifiers given.
+#'      - `i` : A vector of individuals identifiers to keep.
+#'      - `del_parents` : A logical value indicating if the parents
+#'      of the individuals should be deleted.
+#'      - `keep` : A logical value indicating if the individuals
+#'      should be kept or deleted.
+#' @rdname Ped-class
 #' @importFrom S4Vectors subset
 #' @export
+#' @usage NULL
 setMethod("subset", "Ped", function(x, i, del_parents = FALSE, keep = TRUE) {
     if (is.factor(i)) {
         i <- as.character(i)

@@ -46,9 +46,9 @@
 ## For all class
 
 - [ ] Ped object
+  - [ ] Class
   - [ ] Constructor
   - [ ] Getters
   - [ ] Setters
-  - [ ] Coercion
   - [ ] General methods
   - [ ] See also

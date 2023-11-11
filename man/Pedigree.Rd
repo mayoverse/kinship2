@@ -9,7 +9,6 @@
 \alias{Pedigree,data.frame}
 \alias{Pedigree,missing-method}
 \alias{Pedigree,missing}
-\alias{famid,Pedigree-method}
 \alias{horder}
 \alias{horder,Pedigree-method}
 \title{Create a Pedigree object}
@@ -51,8 +50,6 @@ Pedigree(obj, ...)
 )
 
 \S4method{Pedigree}{missing}(obj)
-
-\S4method{famid}{Pedigree}(x)
 
 horder(object)
 }

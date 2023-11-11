@@ -22,8 +22,7 @@ Get twin relationships
 }
 \details{
 This routine function determine the twin relationships
-in a Pedigree. It complete the missing twin relationships for
-triplets, quads, etc. It also determine the order of the twins
+in a Pedigree. It determine the order of the twins
 in the Pedigree.
 It is used by \code{auto_hint()}.
 }

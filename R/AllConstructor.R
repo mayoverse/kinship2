@@ -30,11 +30,13 @@ na_to_length <- function(x, temp, value) {
 
 #### S4 Ped constructor ####
 
-#' Constructor for the Ped class
+#' @description
 #'
-#' @description Constructor for the Ped class
+#' ## Constructor :
+#'
 #' You either need to provide a vector of the same size for each slot
 #' or a `data.frame` with the corresponding columns.
+#'
 #' The metadata will correspond to the columns that do not correspond
 #' to the Ped slots.
 #'
@@ -71,18 +73,17 @@ na_to_length <- function(x, temp, value) {
 #' to `NA_character_`.
 #' @inheritParams check_columns
 #' @return A Ped object.
-#' @seealso [Pedigree()]
-#' @rdname Ped-constructor
+#' @rdname Ped-class
 #' @export
 #' @include utils.R
+#' @usage NULL
 setGeneric("Ped", signature = "obj", function(obj, ...) {
     standardGeneric("Ped")
 })
 
-#' @docType methods
-#' @aliases Ped,data.frame
-#' @rdname Ped
+#' @rdname Ped-class
 #' @examples
+#'
 #' data(sampleped)
 #' Ped(sampleped)
 setMethod("Ped", "data.frame",
@@ -122,10 +123,9 @@ setMethod("Ped", "data.frame",
     }
 )
 
-#' @docType methods
-#' @aliases Ped,character_OR_integer
-#' @rdname Ped
+#' @rdname Ped-class
 #' @examples
+#'
 #' Ped(
 #'     obj = c("1", "2", "3", "4", "5", "6"),
 #'     dadid = c("4", "4", "6", "0", "0", "0"),
@@ -173,11 +173,11 @@ setMethod("Ped", "character_OR_integer",
     }
 )
 
-#' @docType methods
-#' @aliases Ped,missing
-#' @rdname Ped
+#' @rdname Ped-class
 #' @examples
+#'
 #' Ped()
+#' @usage NULL
 setMethod("Ped", "missing",
     function(obj) {
         new("Ped")
@@ -185,9 +185,10 @@ setMethod("Ped", "missing",
 )
 
 #### S4 Rel constructor ####
-#' Constructor for the Rel class
+#' @description
 #'
-#' @description Constructor for the Rel class.
+#' ## Constructor :
+#'
 #' You either need to provide a vector of the same size for each slot
 #' or a `data.frame` with the corresponding columns.
 #'
@@ -206,17 +207,16 @@ setMethod("Ped", "missing",
 #' of without space between the words. The case is not important.
 #' - numeric() : 1 = "MZ twin", 2 = "DZ twin", 3 = "UZ twin", 4 = "Spouse"
 #' @inheritParams Ped
+#'
 #' @return A Rel object.
-#' @seealso [Pedigree()]
-#' @rdname Rel
+#' @rdname Rel-class
 #' @export
+#' @usage NULL
 setGeneric("Rel", signature = "obj", function(obj, ...) {
     standardGeneric("Rel")
 })
 
-#' @docType methods
-#' @aliases Rel,data.frame
-#' @rdname Rel
+#' @rdname Rel-class
 #' @export
 #' @examples
 #' rel_df <- data.frame(
@@ -240,9 +240,7 @@ setMethod("Rel", "data.frame",
     }
 )
 
-#' @docType methods
-#' @aliases Rel,character
-#' @rdname Rel
+#' @rdname Rel-class
 #' @export
 #' @examples
 #' Rel(
@@ -274,11 +272,10 @@ setMethod("Rel", "character_OR_integer",
     }
 )
 
-#' @docType methods
-#' @aliases Rel,missing
-#' @rdname Rel
+#' @rdname Rel-class
 #' @examples
 #' Rel()
+#' @usage NULL
 setMethod("Rel", "missing",
     function(obj) {
         new("Rel")

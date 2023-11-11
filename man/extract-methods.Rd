@@ -16,9 +16,6 @@
 \alias{hints,Pedigree-method}
 \alias{spouse}
 \alias{spouse,Pedigree-method}
-\alias{as.list,Ped-method}
-\alias{as.data.frame,Ped-method}
-\alias{subset,Ped-method}
 \alias{subset,Rel-method}
 \alias{subset,Hints-method}
 \alias{subset_hints,Hints-method}
@@ -44,15 +41,9 @@ hints(object)
 
 spouse(object)
 
-\S4method{as.list}{Ped}(x)
+\S4method{subset}{Rel}(x, idlist, keep = TRUE)
 
-\S4method{as.data.frame}{Ped}(x)
-
-\S4method{subset}{Ped}(x, i, del_parents = FALSE, keep = TRUE)
-
-\S4method{subset}{Rel}(x, idlist)
-
-\S4method{subset}{Hints}(x, idlist)
+\S4method{subset}{Hints}(x, idlist, keep = TRUE)
 
 \S4method{show}{Pedigree}(object)
 
@@ -60,7 +51,7 @@ spouse(object)
 
 \S4method{as.list}{Pedigree}(x)
 
-\S4method{subset}{Pedigree}(x, i, del_parents = FALSE)
+\S4method{subset}{Pedigree}(x, i, del_parents = FALSE, keep = TRUE)
 }
 \arguments{
 \item{object}{A Pedigree object.}
@@ -69,15 +60,9 @@ spouse(object)
 
 \item{x}{A Pedigree object.}
 
-\item{i}{A vector of individuals id or a vector of index.}
-
-\item{del_parents}{A logical value indicating if the parents
-of the individuals should be deleted.}
-
-\item{keep}{A logical value indicating if the individuals
-should be kept or deleted.}
-
 \item{idlist}{A vector of identifiers to subset}
+
+\item{i}{A vector of individuals id or a vector of index.}
 
 \item{from}{A Pedigree object.}
 
@@ -104,14 +89,6 @@ The slot \code{hints} present in the Pedigree object.
 The slot \code{spouse} present in the \code{Hints} slot of
 a Pedigree object.
 
-A list with the individuals informations.
-The metadata are put at the end.
-
-A data.frame with the individuals informations.
-The metadata are put at the end.
-
-A Ped object subsetted.
-
 A Rel object subsetted.
 
 A list of Hints object subsetted
@@ -136,13 +113,6 @@ Pedigree border accessors
 Pedigree hints accessors
 
 Pedigree spouse accessors
-
-Convert a Ped object to a list
-
-Convert a Ped object to a data.frame
-
-Subset a Ped object based on the individuals
-identifiers given.
 
 Subset a Rel object based on the individuals
 identifiers given.

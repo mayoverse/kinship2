@@ -5,139 +5,40 @@
 NULL
 
 #### S4 Ped Accessors ####
-##### Mcols Accessors #####
-#' @section Setters:
-#' Metadata setters of Ped object from a list
-#'
-#' Add the metadata into the `elementMetadata` slot of
-#' a Ped object.
-#'
-#' @param x A Ped object. See [Ped()] for more information.
-#' @param value A list or a data.frame with the metadata.
-#' The length of each element in `value` need to match the
-#' length of the Ped object.
-#'
-#' @return A Ped object with the metadata set.
-#'
-#' @rdname Ped
-#' @aliases mcols<-,Ped,list
-#' @docType methods
-setMethod("mcols<-",
-    signature(x = "Ped", value = "list"),
-    function(x, value) {
-        mcols(x) <- as(value, "DataFrame")
-        x
-    }
-)
 
-#' @export
-#' @rdname Ped
-#' @aliases mcols<-,Ped,data.frame
-#' @docType methods
-setMethod("mcols<-",
-    signature(x = "Ped", value = "data.frame"),
-    function(x, value) {
-        mcols(x) <- as(value, "DataFrame")
-        x
-    }
-)
-
-##### Famid Accessors #####
-#' Famid getter
-#' 
-#' @description Extract the family identifiers out
-#' of a Ped, Rel or Pedigree object.
-#' If use with a Pedigree object the famid slot of
-#' its own Ped object will be given.
-#'
-#' @param x A Ped, Rel or Pedigree object.
-#'
-#' @return A character vector of the family identifiers.
-#' @export
-setGeneric("famid", function(x) {
-    standardGeneric("famid")
-})
-
-#' @rdname Ped
-setMethod("famid", signature(x = "Ped"), function(x) {
-    x@famid
-})
-#' @rdname Rel
-setMethod("famid", signature(x = "Rel"), function(x) {
-    x@famid
-})
-#' @rdname Pedigree
-setMethod("famid", signature(x = "Pedigree"), function(x) {
-    famid(ped(x))
-})
-
-#' Famid setter
-#'
-#' @param x A Ped or Rel object.
-#' @param value A character or integer vector that should be use
-#' as the new family id
-#'
-#' @return An updated Ped, Rel object.
-#' @export
-setGeneric("famid<-", function(x, value) {
-    standardGeneric("famid<-")
-})
-#' @rdname Ped
-setMethod("famid<-",
-    signature(x = "Ped", value = "character_OR_integer"),
-    function(x, value) {
-        if (! is.character(value) && ! is.integer(value)) {
-            stop("famid must be a character or integer vector")
-        }
-        if (length(value) != length(x)) {
-            stop(
-                "The length of the new values for famid should be: ",
-                "equal to the length of the Ped object"
-            )
-        }
-        x@famid <- as.character(value)
-        validObject(x)
-        x
-    }
-)
-#' @rdname Rel
-setMethod("famid<-",
-    signature(x = "Rel", value = "character_OR_integer"),
-    function(x, value) {
-        if (! is.character(value) && ! is.integer(value)) {
-            stop("famid must be a character or integer vector")
-        }
-        if (length(value) != length(x)) {
-            stop(
-                "The length of the new values for famid should be: ",
-                "equal to the length of the Ped object"
-            )
-        }
-        x@famid <- as.character(value)
-        validObject(x)
-        x
-    }
-)
+#' @section Accessors:
+#' For all the following accessors, the `x` parameters is a Ped object.
+#' Each getters return a vector of the same length as `x` with the values
+#' of the corresponding slot. For each getter, you have a setter with the
+#' same name, to be use as `slot(x) <- value`.
+#' The `value` parameter is a vector of the same length as `x`, except
+#' for the `mcols()` accessors where `value` is a list or a data.frame with
+#' each elements with the same length as `x`.
 
 ##### Id Accessors #####
-#' Id getter of Ped object
-#'
-#' @param x A Ped object.
-#'
-#' @return A character vector with the id of each individual.
-#'
-#' @rdname Ped
-#' @aliases id,Ped-method
-#' @export
+
+#' @rdname Ped-class
+#' @usage NULL
 setGeneric("id", function(x) {
     standardGeneric("id")
 })
+
+#' @section Accessors:
+#' - `id(x)` : Individuals identifiers
+#' @rdname Ped-class
+#' @usage NULL
 setMethod("id", signature(x = "Ped"), function(x) {
     x@id
 })
+
+#' @rdname Ped-class
+#' @usage NULL
 setGeneric("id<-", function(x, value) {
     standardGeneric("id<-")
 })
+
+#' @rdname Ped-class
+#' @usage NULL
 setMethod("id<-",
     signature(x = "Ped", value = "character_OR_integer"),
     function(x, value) {
@@ -157,24 +58,28 @@ setMethod("id<-",
 )
 
 ##### Dadid Accessors #####
-#' Dadid getter of Ped object
-#'
-#' @param x A Ped object.
-#'
-#' @return A character vector with the dadid of each individual.
-#'
-#' @rdname Ped
-#' @aliases dadid,Ped-method
-#' @export
+#' @rdname Ped-class
+#' @usage NULL
 setGeneric("dadid", function(x) {
     standardGeneric("dadid")
 })
+
+#' @section Accessors:
+#' - `dadid(x)` : Individuals' father identifiers
+#' @rdname Ped-class
+#' @usage NULL
 setMethod("dadid", signature(x = "Ped"), function(x) {
     x@dadid
 })
+
+#' @rdname Ped-class
+#' @usage NULL
 setGeneric("dadid<-", function(x, value) {
     standardGeneric("dadid<-")
 })
+
+#' @rdname Ped-class
+#' @usage NULL
 setMethod("dadid<-",
     signature(x = "Ped", value = "character_OR_integer"),
     function(x, value) {
@@ -194,24 +99,29 @@ setMethod("dadid<-",
 )
 
 ##### Momid Accessors #####
-#' Momid getter of Ped object
-#'
-#' @param x A Ped object.
-#'
-#' @return A character vector with the momid of each individual.
-#'
-#' @rdname Ped
-#' @aliases momid,Ped-method
-#' @export
+
+#' @rdname Ped-class
+#' @usage NULL
 setGeneric("momid", function(x) {
     standardGeneric("momid")
 })
+
+#' @section Accessors:
+#' - `momid(x)` : Individuals' mother identifiers
+#' @rdname Ped-class
+#' @usage NULL
 setMethod("momid", signature(x = "Ped"), function(x) {
     x@momid
 })
+
+#' @rdname Ped-class
+#' @usage NULL
 setGeneric("momid<-", function(x, value) {
     standardGeneric("momid<-")
 })
+
+#' @rdname Ped-class
+#' @usage NULL
 setMethod("momid<-",
     signature(x = "Ped", value = "character_OR_integer"),
     function(x, value) {
@@ -230,25 +140,72 @@ setMethod("momid<-",
     }
 )
 
+##### Famid Accessors #####
+
+#' @rdname Ped-class
+#' @usage NULL
+setGeneric("famid", function(x) {
+    standardGeneric("famid")
+})
+
+#' @section Accessors:
+#' - `famid(x)` : Individuals' family identifiers
+#' @rdname Ped-class
+#' @usage NULL
+setMethod("famid", signature(x = "Ped"), function(x) {
+    x@famid
+})
+
+#' @rdname Ped-class
+#' @usage NULL
+setGeneric("famid<-", function(x, value) {
+    standardGeneric("famid<-")
+})
+
+#' @rdname Ped-class
+#' @usage NULL
+setMethod("famid<-",
+    signature(x = "Ped", value = "character_OR_integer"),
+    function(x, value) {
+        if (! is.character(value) && ! is.integer(value)) {
+            stop("famid must be a character or integer vector")
+        }
+        if (length(value) != length(x)) {
+            stop(
+                "The length of the new values for famid should be: ",
+                "equal to the length of the Ped object"
+            )
+        }
+        x@famid <- as.character(value)
+        validObject(x)
+        x
+    }
+)
+
 ##### Sex Accessors #####
-#' Sex getter of Ped object
-#'
-#' @param x A Ped object.
-#'
-#' @return A character vector with the sex of each individual.
-#'
-#' @rdname Ped
-#' @aliases sex,Ped-method
-#' @export
+
+#' @rdname Ped-class
+#' @usage NULL
 setGeneric("sex", function(x) {
     standardGeneric("sex")
 })
+
+#' @section Accessors:
+#' - `sex(x)` : Individuals' gender
+#' @rdname Ped-class
+#' @usage NULL
 setMethod("sex", signature(x = "Ped"), function(x) {
     x@sex
 })
+
+#' @rdname Ped-class
+#' @usage NULL
 setGeneric("sex<-", function(x, value) {
     standardGeneric("sex<-")
 })
+
+#' @rdname Ped-class
+#' @usage NULL
 setMethod("sex<-",
     signature(x = "Ped", value = "character_OR_integer"),
     function(x, value) {
@@ -272,24 +229,29 @@ setMethod("sex<-",
 )
 
 ##### Affected Accessors #####
-#' Affected getter of Ped object
-#'
-#' @param x A Ped object.
-#'
-#' @return A numeric vector with the affected of each individual.
-#'
-#' @rdname Ped
-#' @aliases affected,Ped-method
-#' @export
+
+#' @rdname Ped-class
+#' @usage NULL
 setGeneric("affected", function(x) {
     standardGeneric("affected")
 })
+
+#' @section Accessors:
+#' - `affected(x)` : Individuals' affection status
+#' @rdname Ped-class
+#' @usage NULL
 setMethod("affected", signature(x = "Ped"), function(x) {
     x@affected
 })
+
+#' @rdname Ped-class
+#' @usage NULL
 setGeneric("affected<-", function(x, value) {
     standardGeneric("affected<-")
 })
+
+#' @rdname Ped-class
+#' @usage NULL
 setMethod("affected<-",
     signature(x = "Ped", value = "numeric_OR_logical"),
     function(x, value) {
@@ -310,24 +272,29 @@ setMethod("affected<-",
 )
 
 ##### Avail Accessors #####
-#' Avail getter of Ped object
-#'
-#' @param x A Ped object.
-#'
-#' @return A numeric vector with the avail of each individual.
-#'
-#' @rdname Ped
-#' @aliases avail,Ped-method
-#' @export
+
+#' @rdname Ped-class
+#' @usage NULL
 setGeneric("avail", function(x) {
     standardGeneric("avail")
 })
+
+#' @section Accessors:
+#' - `avail(x)` : Individuals' availability status
+#' @rdname Ped-class
+#' @usage NULL
 setMethod("avail", signature(x = "Ped"), function(x) {
     x@avail
 })
+
+#' @rdname Ped-class
+#' @usage NULL
 setGeneric("avail<-", function(x, value) {
     standardGeneric("avail<-")
 })
+
+#' @rdname Ped-class
+#' @usage NULL
 setMethod("avail<-",
     signature(x = "Ped", value = "numeric_OR_logical"),
     function(x, value) {
@@ -347,66 +314,73 @@ setMethod("avail<-",
     }
 )
 
-##### Kin Accessors #####
-#' Kin getter of Ped object
-#'
-#' @param x A Ped object.
-#'
-#' @return A numeric vector with the minimum kinship distance
-#' value of each individual towards the informative
-#' individuals.
-#'
-#' @rdname Ped
-#' @aliases kin,Ped-method
-#' @export
-setGeneric("kin", function(x) {
-    standardGeneric("kin")
+##### Status Accessors #####
+
+#' @rdname Ped-class
+#' @usage NULL
+setGeneric("status", function(x) {
+    standardGeneric("status")
 })
-setMethod("kin", signature(x = "Ped"), function(x) {
-    x@kin
+
+#' @section Accessors:
+#' - `status(x)` : Individuals' death status
+#' @rdname Ped-class
+#' @usage NULL
+setMethod("status", signature(x = "Ped"), function(x) {
+    x@status
 })
-setGeneric("kin<-", function(x, value) {
-    standardGeneric("kin<-")
+
+#' @rdname Ped-class
+#' @usage NULL
+setGeneric("status<-", function(x, value) {
+    standardGeneric("status<-")
 })
-setMethod("kin<-",
-    signature(x = "Ped", value = "numeric"),
+
+#' @rdname Ped-class
+#' @usage NULL
+setMethod("status<-",
+    signature(x = "Ped", value = "numeric_OR_logical"),
     function(x, value) {
         if (length(value) != length(x)) {
             if (length(value) == 1) {
                 value <- rep(value, length(x))
             } else {
                 stop(
-                    "The length of the new values for kin should be: ",
+                    "The length of the new values for avail should be: ",
                     "equal to the length of the Ped object"
                 )
             }
         }
-        x@kin <- value
+        x@status <- vect_to_binary(value, logical = TRUE)
         validObject(x)
         x
     }
 )
 
 ##### Isinf Accessors #####
-#' isinf getter of Ped object
-#'
-#' @param x A Ped object.
-#'
-#' @return A numeric vector with the saying if the individual
-#' is informative or not.
-#'
-#' @rdname Ped
-#' @aliases isinf,Ped-method
-#' @export
+
+#' @rdname Ped-class
+#' @usage NULL
 setGeneric("isinf", function(x) {
     standardGeneric("isinf")
 })
+
+#' @section Accessors:
+#' - `isinf(x)` : Individuals' informativeness status
+#' @rdname Ped-class
+#' @usage NULL
 setMethod("isinf", signature(x = "Ped"), function(x) {
     x@isinf
 })
+
+#' @rdname Ped-class
+#' @usage NULL
 setGeneric("isinf<-", function(x, value) {
     standardGeneric("isinf<-")
 })
+
+#' @rdname Ped-class
+#' @usage NULL
 setMethod("isinf<-",
     signature(x = "Ped", value = "numeric_OR_logical"),
     function(x, value) {
@@ -426,26 +400,74 @@ setMethod("isinf<-",
     }
 )
 
+##### Kin Accessors #####
+
+#' @rdname Ped-class
+#' @usage NULL
+setGeneric("kin", function(x) {
+    standardGeneric("kin")
+})
+
+#' @section Accessors:
+#' - `kin(x)` : Individuals' kinship distance to the
+#' informative individuals
+#' @rdname Ped-class
+#' @usage NULL
+setMethod("kin", signature(x = "Ped"), function(x) {
+    x@kin
+})
+
+#' @rdname Ped-class
+#' @usage NULL
+setGeneric("kin<-", function(x, value) {
+    standardGeneric("kin<-")
+})
+
+#' @rdname Ped-class
+#' @usage NULL
+setMethod("kin<-",
+    signature(x = "Ped", value = "numeric"),
+    function(x, value) {
+        if (length(value) != length(x)) {
+            if (length(value) == 1) {
+                value <- rep(value, length(x))
+            } else {
+                stop(
+                    "The length of the new values for kin should be: ",
+                    "equal to the length of the Ped object"
+                )
+            }
+        }
+        x@kin <- value
+        validObject(x)
+        x
+    }
+)
+
 ##### Useful Accessors #####
-#' useful getter of Ped object
-#'
-#' @param x A Ped object.
-#'
-#' @return A numeric vector with the saying if the individual
-#' is informative or not.
-#'
-#' @rdname Ped
-#' @aliases useful,Ped-method
-#' @export
+
+#' @rdname Ped-class
+#' @usage NULL
 setGeneric("useful", function(x) {
     standardGeneric("useful")
 })
+
+#' @section Accessors:
+#' - `useful(x)` : Individuals' usefullness status
+#' @rdname Ped-class
+#' @usage NULL
 setMethod("useful", signature(x = "Ped"), function(x) {
     x@useful
 })
+
+#' @rdname Ped-class
+#' @usage NULL
 setGeneric("useful<-", function(x, value) {
     standardGeneric("useful<-")
 })
+
+#' @rdname Ped-class
+#' @usage NULL
 setMethod("useful<-",
     signature(x = "Ped", value = "numeric_OR_logical"),
     function(x, value) {
@@ -464,68 +486,129 @@ setMethod("useful<-",
         x
     }
 )
-##### Status Accessors #####
-#' Status getter of Ped object
-#'
-#' @param x A Ped object.
-#'
-#' @return A boolean vector with the saying if the individual
-#' is dead or not.
-#'
-#' @rdname Ped
-#' @aliases status,Ped-method
-#' @export
-setGeneric("status", function(x) {
-    standardGeneric("status")
-})
-setMethod("status", signature(x = "Ped"), function(x) {
-    x@status
-})
+
+##### Mcols Accessors #####
+
+#' @section Accessors:
+#' - `mcols(x)` : Individuals' metadata
+#' @rdname Ped-class
+#' @usage NULL
+setMethod("mcols<-",
+    signature(x = "Ped", value = "list"),
+    function(x, value) {
+        mcols(x) <- as(value, "DataFrame")
+        x
+    }
+)
+
+#' @rdname Ped-class
+#' @usage NULL
+setMethod("mcols<-",
+    signature(x = "Ped", value = "data.frame"),
+    function(x, value) {
+        mcols(x) <- as(value, "DataFrame")
+        x
+    }
+)
 
 #### S4 Rel Accessors ####
-#' Code accessor of Rel object
-#'
-#' @param x A Rel object.
-#'
-#' @return A character vector with the code of each relationship.
-#'
-#' @rdname Rel
-#' @aliases code,Rel-method
-#' @export
+
+#' @section Accessors:
+#' For all the following accessors, the `x` parameters is a Rel object.
+#' Each getters return a vector of the same length as `x` with the values
+#' of the corresponding slot.
+
+##### Code Accessors #####
+#' @rdname Rel-class
+#' @usage NULL
 setGeneric("code", function(x) {
     standardGeneric("code")
 })
+
+#' @section Accessors:
+#' - `code(x)` : Relationships' code
+#' @rdname Rel-class
+#' @usage NULL
 setMethod("code", signature(x = "Rel"), function(x) {
     x@code
 })
 
-#' Id1 accessor of Rel object
-#' @param x A Rel object.
-#' @return A character vector with the id1 of each relationship.
-#' @rdname Rel
-#' @aliases id1,Rel-method
-#' @export
+##### Id1 Accessors #####
+#' @rdname Rel-class
+#' @usage NULL
 setGeneric("id1", function(x) {
     standardGeneric("id1")
 })
+
+#' @section Accessors:
+#' - `id1(x)` : Relationships' first individuals' identifier
+#' @rdname Rel-class
+#' @usage NULL
 setMethod("id1", signature(x = "Rel"), function(x) {
     x@id1
 })
 
-#' Id2 accessor of Rel object
-#' @param x A Rel object.
-#' @return A character vector with the id2 of each relationship.
-#' @rdname Rel
-#' @aliases id2,Rel-method
-#' @export
+##### Id2 Accessors #####
+
+#' @rdname Rel-class
+#' @usage NULL
 setGeneric("id2", function(x) {
     standardGeneric("id2")
 })
+
+#' @section Accessors:
+#' - `id2(x)` : Relationships' second individuals' identifier
+#' @rdname Rel-class
+#' @usage NULL
 setMethod("id2", signature(x = "Rel"), function(x) {
     x@id2
 })
 
+#' @section Accessors:
+#' - `famid(x)` : Relationships' individuals' family identifier
+#' @rdname Rel-class
+#' @usage NULL
+setMethod("famid", signature(x = "Rel"), function(x) {
+    x@famid
+})
+
+#' @section Accessors:
+#' - `famid(x) <- value` : Set the relationships' individuals' family
+#' identifier
+#'    - `value` : A character or integer vector of the same length as x
+#'      with the family identifiers
+#' @rdname Rel-class
+#' @usage NULL
+setMethod("famid<-",
+    signature(x = "Rel", value = "character_OR_integer"),
+    function(x, value) {
+        if (! is.character(value) && ! is.integer(value)) {
+            stop("famid must be a character or integer vector")
+        }
+        if (length(value) != length(x)) {
+            stop(
+                "The length of the new values for famid should be: ",
+                "equal to the length of the Ped object"
+            )
+        }
+        x@famid <- as.character(value)
+        validObject(x)
+        x
+    }
+)
+
 #### S4 Pedigree Accessors ####
+
+#' @section Accessors:
+#' - `famid(x)` : Get the family identifiers of a Pedigree object. This
+#' function is a wrapper around `famid(ped(x))`.
+#'
+#' @rdname Pedigree-class
+#' @usage NULL
+setMethod("famid", signature(x = "Pedigree"), function(x) {
+    famid(ped(x))
+})
+
 ##### S4 ped Accessors #####
 #' @title Pedigree ped accessors
 #' @param object A Pedigree object.

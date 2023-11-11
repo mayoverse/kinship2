@@ -88,21 +88,16 @@ setValidity("Scales", is_valid_scales)
 
 #### Ped Class ####
 
-#' Ped S4 class.
+#' Ped object
 #'
-#' @description A Ped object is a list of identity informations
-#' of the individuals in the pedigree.
-#' It is used to create a Pedigree object.
+#' S4 class to represent the identity informations of the individuals
+#' in a pedigree.
+#'
 #' The minimal needed informations are `id`, `dadid`, `momid` and `sex`.
-#' If a `famid` is provided, the individuals `id` will be aggregated
-#' to the `famid` character to ensure the uniqueness of the `id`.
 #' The other slots are used to store recognized informations.
 #' Additional columns can be added to the Ped object and will be
 #' stored in the `elementMetadata` slot of the Ped object.
-#' @section Constructor:
-#' `Ped(obj, ...)`:
-#' This constructor creates a Ped instance out of the vectors or the data.frame
-#' provided. See [Ped()] for more informations.
+#'
 #' @slot id A character vector with the id of the individuals.
 #' @slot dadid A character vector with the id of the father of the individuals.
 #' @slot momid A character vector with the id of the mother of the individuals.
@@ -133,12 +128,11 @@ setValidity("Scales", is_valid_scales)
 #' of the individuals.
 #' @slot num_child_ind A numeric vector with the number of children
 #' of the individuals.
+#' @slot elementMetadata A DataFrame with the additional metadata columns
+#' of the Ped object.
 #'
-#' @return A Ped object.
 #' @seealso [Pedigree()]
-#' @docType class
 #' @name Ped-class
-#' @rdname Ped
 #' @export
 setClass("Ped",
     contains = "Vector",
@@ -177,6 +171,9 @@ setMethod("parallel_slot_names", "Ped",
 setValidity("Ped", is_valid_ped)
 
 #### Rel Class ####
+
+#' Rel object
+#'
 #' S4 class to represent the special relationships in a Pedigree.
 #'
 #' A Rel object is a list of special relationships
@@ -192,11 +189,8 @@ setValidity("Ped", is_valid_ped)
 #' relationship. (i.e. `MZ twin` < `DZ twin` < `UZ twin` < `Spouse`).
 #' @slot famid A character vector with the famid of the individuals.
 #'
-#' @return A Rel object.
 #' @seealso [Pedigree()]
-#' @docType class
 #' @name Rel-class
-#' @rdname Rel
 #' @export
 setClass("Rel",
     contains = "Vector",
