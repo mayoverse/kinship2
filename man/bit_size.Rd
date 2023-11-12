@@ -5,7 +5,7 @@
 \alias{bit_size,character_OR_integer-method}
 \alias{bit_size,Pedigree-method}
 \alias{bit_size,Ped-method}
-\title{Compute bit size of a Pedigree}
+\title{Bit size of a Pedigree}
 \usage{
 bit_size(obj, ...)
 

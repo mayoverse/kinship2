@@ -36,6 +36,7 @@
 \alias{hints<-}
 \alias{hints<-,Pedigree,Hints-method}
 \alias{horder,Pedigree-method}
+\alias{horder<-,Pedigree-method}
 \alias{spouse,Pedigree-method}
 \alias{spouse<-}
 \alias{spouse<-,Pedigree,data.frame-method}
@@ -363,6 +364,12 @@ Wrapper of \code{horder(hints(x))}
 
 
 \itemize{
+\item \code{horder(x) <- value} : Set the horder vector from the Hints object.
+Wrapper of \code{horder(hints(x)) <- value}
+}
+
+
+\itemize{
 \item \code{spouse(x)} : Get the spouse data.frame from the Hints object.
 Wrapper of \code{spouse(hints(x))}.
 }
@@ -443,5 +450,5 @@ Pedigree(sampleped)
 \seealso{
 \code{\link[=Pedigree]{Pedigree()}}, \code{\link[=Ped]{Ped()}}, \code{\link[=Rel]{Rel()}}, \code{\link[=Scales]{Scales()}}, \code{\link[=Hints]{Hints()}}
 
-\code{\link[=Pedigree]{Pedigree()}}, \code{\link[=Ped]{Ped()}}, \code{\link[=Rel]{Rel()}}, \code{\link[=Scales]{Scales()}}
+\code{\link[=Ped]{Ped()}}, \code{\link[=Rel]{Rel()}}, \code{\link[=Scales]{Scales()}}
 }

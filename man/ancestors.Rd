@@ -2,7 +2,7 @@
 % Please edit documentation in R/align.R
 \name{ancestors}
 \alias{ancestors}
-\title{Get ancestors indexes of a subject}
+\title{Ancestors indexes of a subject}
 \usage{
 ancestors(idx, momx, dadx)
 }

@@ -1055,7 +1055,7 @@ setMethod(
 #' @section Accessors:
 #' - `horder(x) <- value` : Set the horder vector from the Hints object.
 #' Wrapper of `horder(hints(x)) <- value`
-#' @rdname Hints-class
+#' @rdname Pedigree-class
 #' @usage NULL
 setMethod(
     "horder<-",

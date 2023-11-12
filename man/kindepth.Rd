@@ -5,7 +5,8 @@
 \alias{kindepth,character_OR_integer-method}
 \alias{kindepth,Pedigree-method}
 \alias{kindepth,Ped-method}
-\title{Individual's depth in a pedigree}
+\title{Chase up the ancestors of a subject
+Individual's depth in a pedigree}
 \usage{
 kindepth(obj, ...)
 

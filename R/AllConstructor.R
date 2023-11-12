@@ -305,7 +305,6 @@ setMethod("Rel", "missing",
 #' Children will preferentially appear under the parents of the anchored spouse.
 #'
 #' @return A Hints object.
-#' @seealso [Pedigree()]
 #' @rdname Hints-class
 #' @export
 setGeneric("Hints", function(horder, spouse) {
@@ -478,7 +477,7 @@ setMethod("Hints",
 #' - 'border': the color to use for this mods
 #'
 #' @return A Scales object.
-#' @seealso [Pedigree()], [generate_colors()]
+#' @seealso [generate_colors()]
 #' @rdname Scales-class
 #' @export
 setGeneric("Scales", function(fill, border) {
@@ -639,7 +638,7 @@ setMethod("Scales",
 #' @return A Pedigree object.
 #' @export
 #' @rdname Pedigree-class
-#' @seealso [Pedigree()], [Ped()], [Rel()], [Scales()]
+#' @seealso [Ped()], [Rel()], [Scales()]
 setGeneric("Pedigree", signature = "obj",
     function(obj, ...) standardGeneric("Pedigree")
 )

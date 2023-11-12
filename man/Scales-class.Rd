@@ -158,5 +158,5 @@ Scales(
 \seealso{
 \code{\link[=Pedigree]{Pedigree()}}
 
-\code{\link[=Pedigree]{Pedigree()}}, \code{\link[=generate_colors]{generate_colors()}}
+\code{\link[=generate_colors]{generate_colors()}}
 }

@@ -15,10 +15,10 @@
 \alias{horder,Hints-method}
 \alias{horder<-}
 \alias{horder<-,Hints-method}
-\alias{horder<-,Pedigree-method}
 \alias{spouse}
 \alias{spouse,Hints-method}
 \alias{spouse<-,Hints,data.frame-method}
+\alias{as.list,Hints-method}
 \alias{subset,Hints-method}
 \title{Hints object}
 \usage{
@@ -90,12 +90,6 @@ and the anchor (i.e : \code{1} = left, \code{2} = right, \code{0} = either).}
 
 
 \itemize{
-\item \code{horder(x) <- value} : Set the horder vector from the Hints object.
-Wrapper of \code{horder(hints(x)) <- value}
-}
-
-
-\itemize{
 \item \code{spouse(x)} : Get the spouse data.frame
 }
 
@@ -106,6 +100,11 @@ Wrapper of \code{horder(hints(x)) <- value}
 }
 
 \section{Generics}{
+
+\itemize{
+\item \code{as.list(x)}: Convert a Hints object to a list
+}
+
 
 \itemize{
 \item \code{subset(x, i, keep = TRUE)}: Subset a Hints object
@@ -152,7 +151,5 @@ Hints(
 )
 }
 \seealso{
-\code{\link[=Pedigree]{Pedigree()}}
-
 \code{\link[=Pedigree]{Pedigree()}}
 }

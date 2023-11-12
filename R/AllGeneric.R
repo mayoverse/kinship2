@@ -242,7 +242,7 @@ setMethod("subset", "Rel", function(x, idlist, keep = TRUE) {
 
 #' @section Generics:
 #' - `as.list(x)`: Convert a Hints object to a list
-#' @rdname Hint-class
+#' @rdname Hints-class
 #' @importFrom S4Vectors as.list
 #' @export
 #' @usage NULL
