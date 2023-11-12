@@ -1,4 +1,4 @@
-#' Get ancestors indexes of a subject
+#' Ancestors indexes of a subject
 #'
 #' @description Given the index of one or multiple individual(s), this
 #' function iterate through the mom and dad indexes to
@@ -28,7 +28,7 @@ ancestors <- function(idx, momx, dadx) {
         }
         alist <- newlist
     }
-    alist[alist != idx]
+    alist[!alist %in% idx]
 }
 
 

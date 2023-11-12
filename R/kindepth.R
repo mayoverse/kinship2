@@ -1,24 +1,4 @@
 #' Chase up the ancestors of a subject
-#'
-#' @param x a vector of subject ids
-#' @param midx a vector of mother ids
-#' @param didx a vector of father ids
-#' @return a vector of all ancestors subjects connected to x
-#' @keywords internal, kindepth
-#' @examples
-#' chaseup(1, c(3,0,0), c(2,0,0))
-#' chaseup(1, c(3,4,0,0,0), c(2,5,0,0,0))
-chaseup <- function(x, midx, didx) {
-    new <- c(midx[x], didx[x])  # mother and father
-    new <- new[new > 0]
-    while (length(new) > 1) {
-        x <- unique(c(x, new))
-        new <- c(midx[new], didx[new])
-        new <- new[new > 0]
-    }
-    x
-}
-
 #' Individual's depth in a pedigree
 #'
 #' @description
@@ -178,12 +158,13 @@ setMethod("kindepth", "character_OR_integer", function(obj, dadid, momid,
             good <- dads[who]
             bad <- moms[who]
         }
-        abad <- chaseup(bad, midx, didx)
+        abad <- c(bad, ancestors(bad, midx, didx))
         if (length(abad) == 1 && sum(c(dads, moms) == bad) == 1) {
             # simple case, a solitary marry-in
             depth[bad] <- depth[good]
         } else {
-            agood <- chaseup(good, midx, didx)  # ancestors of the 'good' side
+            ## ancestors of the 'good' side
+            agood <- c(good, ancestors(good, midx, didx))
             ## For spouse chasing, I need to exclude the given pair
             tdad <- dads[-who]
             tmom <- moms[-who]
@@ -193,7 +174,8 @@ setMethod("kindepth", "character_OR_integer", function(obj, dadid, momid,
                     tdad[!is.na(match(tmom, agood))]
                 )
                 temp <- unique(c(agood, spouse))
-                temp <- unique(chaseup(temp, midx, didx))  # parents
+                ## parents
+                temp <- unique(c(temp, ancestors(temp, midx, didx)))
                 kids <- (!is.na(match(midx, temp)) | !is.na(match(didx, temp)))
                 temp <- unique(c(temp, (seq_len(n))[
                     kids & depth <= depth[good]
