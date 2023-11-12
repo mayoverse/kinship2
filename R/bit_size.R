@@ -1,4 +1,4 @@
-#' Compute bit size of a Pedigree
+#' Bit size of a Pedigree
 #'
 #' Utility function used in the `shrink()` function
 #' to calculate the bit size of a Pedigree.

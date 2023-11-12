@@ -52,3 +52,7 @@
   - [ ] Setters
   - [ ] General methods
   - [ ] See also
+
+## Other
+
+- [ ] Take out addition of ind in ancestors compute Kindepth.
