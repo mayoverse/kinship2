@@ -82,9 +82,14 @@ test_that("besthint works", {
     expect_error(best_hint(pedi))  #this fixes up marriages and such
 
     ped1 <- Pedigree(sampleped[-1])
-    newhint1 <- best_hint(ped1)
+    hints(ped1) <- best_hint(ped1)
+
+    vdiffr::expect_doppelganger("Best hint",
+        function() plot(ped1)
+    )
+
     plist <- align(ped1, packed = TRUE,
-        align = TRUE, width = 8, hints = newhint1
+        align = TRUE, width = 8
     )
     expect_snapshot(plist)
 })
@@ -126,8 +131,8 @@ test_that("Double wife", {
         sex = c(1, 2, 1, 2, 1, 2, 1)
     )
     pedi <- Pedigree(df, missid = "0")
-    id(ped(pedi))
-    expect_equal(sum(kindepth(pedi)), 4)
+    expect_equal(kindepth(pedi, align_parents = TRUE), c(0, 0, 1, 1, 2, 1, 2))
+    expect_equal(kindepth(pedi), c(0, 0, 0, 1, 2, 0, 1))
     vdiffr::expect_doppelganger("double_wife",
         function() plot(pedi)
     )

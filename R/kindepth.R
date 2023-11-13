@@ -145,12 +145,15 @@ setMethod("kindepth", "character_OR_integer", function(obj, dadid, momid,
     npair <- length(dads)
     done <- rep(FALSE, npair)  # couples that are taken care of
     while (TRUE) {
+        ## Select parents pairs to fix
         pairs.to.fix <- which((depth[dads] != depth[moms]) & !done)
         if (length(pairs.to.fix) == 0) {
             break
         }
+        ## Get max depth of all pairs
         temp <- pmax(depth[dads], depth[moms])[pairs.to.fix]
-        who <- min(pairs.to.fix[temp == min(temp)])  # the chosen couple
+        ## Select the couple to fix
+        who <- min(pairs.to.fix[temp == min(temp)])
 
         good <- moms[who]
         bad <- dads[who]
@@ -158,6 +161,7 @@ setMethod("kindepth", "character_OR_integer", function(obj, dadid, momid,
             good <- dads[who]
             bad <- moms[who]
         }
+        ## All id linked to bad
         abad <- c(bad, ancestors(bad, midx, didx))
         if (length(abad) == 1 && sum(c(dads, moms) == bad) == 1) {
             # simple case, a solitary marry-in

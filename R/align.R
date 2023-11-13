@@ -154,7 +154,7 @@ setMethod("align", "Pedigree",
         ## Doc: Setup-align
         n <- length(obj)
 
-        level <- 1 + kindepth(obj, align = TRUE)
+        level <- 1 + kindepth(obj, align_parents = TRUE)
         ## relative order of siblings within a family
         horder <- horder(hints)
 
