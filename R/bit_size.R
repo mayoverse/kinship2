@@ -32,6 +32,7 @@
 #' bit_size(ped)
 #' @export
 #' @keywords internal, shrink
+#' @usage NULL
 setGeneric("bit_size", signature = "obj",
     function(obj, ...) standardGeneric("bit_size")
 )

@@ -191,7 +191,9 @@ different \code{data.frame} or a set of vectors.
 If any errors are found in the data, the function will return
 the data.frame with the errors of the Ped object and the
 Rel object.
-
+}
+}
+\details{
 If the normalization is set to \code{TRUE}, then the data will be
 standardized using the function \code{norm_ped()} and \code{norm_rel()}.
 
@@ -228,7 +230,6 @@ will be transformed with the \code{\link[=vect_to_binary]{vect_to_binary()}} fun
 normalisation is selected.
 If you do not use the normalisation, the columns will be checked to
 be \code{0} or \code{1}.
-}
 }
 \section{Slots}{
 
@@ -270,7 +271,8 @@ function is a wrapper around \code{famid(ped(x))}.
 
 
 \itemize{
-\item \code{ped(x, slot) <- value} : Set the value of a specific slot of the Ped object
+\item \code{ped(x, slot) <- value} : Set the value of a specific slot of
+the Ped object
 Wrapper of \code{slot(ped(x)) <- value}
 }
 
@@ -303,7 +305,8 @@ This function is a wrapper around \code{mcols(ped(x)) <- value}.
 
 
 \itemize{
-\item \code{rel(x, slot) <- value} : Set the value of a specific slot of the Rel object
+\item \code{rel(x, slot) <- value} : Set the value of a specific slot of the
+Rel object
 Wrapper of \code{slot(rel(x)) <- value}
 }
 

@@ -290,6 +290,7 @@ get_twin_rel <- function(obj) {
 #' auto_hint(ped)
 #' @export
 #' @keywords internal, alignment, auto_hint
+#' @usage NULL
 setGeneric("auto_hint", signature = "obj",
     function(obj, ...) standardGeneric("auto_hint")
 )

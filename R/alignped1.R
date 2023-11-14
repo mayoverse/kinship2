@@ -85,7 +85,6 @@
 #'
 #' @seealso [align()]
 #' @keywords internal, alignment
-#' @export
 alignped1 <- function(idx, dadx, momx, level, horder, packed, spouselist) {
     # Set a few constants
     maxlev <- max(level)

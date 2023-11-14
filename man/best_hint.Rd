@@ -5,8 +5,6 @@
 \alias{best_hint,Pedigree-method}
 \title{Best hint for a Pedigree alignment}
 \usage{
-best_hint(obj, ...)
-
 \S4method{best_hint}{Pedigree}(obj, wt = c(1000, 10, 1), tolerance = 0)
 }
 \arguments{

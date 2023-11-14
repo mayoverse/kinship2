@@ -57,11 +57,13 @@ NULL
 #' @include AllClass.R
 #' @include utils.R
 #' @export
+#' @usage NULL
 setGeneric("kinship", signature = "obj",
     function(obj, ...) standardGeneric("kinship")
 )
 
 #' @rdname kinship
+#' @export
 setMethod("kinship", "Ped",
     function(obj, chrtype = "autosome"){
         kinship(
@@ -73,12 +75,14 @@ setMethod("kinship", "Ped",
 
 #' @rdname kinship
 #' @examples
+#'
 #' kinship(c("A", "B", "C", "D", "E"), c("C", "D", "0", "0", "0"),
 #'     c("E", "E", "0", "0", "0"), sex = c(1, 2, 1, 2, 1))
 #' kinship(c("A", "B", "C", "D", "E"), c("C", "D", "0", "0", "0"),
 #'     c("E", "E", "0", "0", "0"), sex = c(1, 2, 1, 2, 1),
 #'    chrtype = "x"
 #' )
+#' @export
 setMethod("kinship", "character",
     function(obj, dadid, momid, sex, chrtype = "autosome") {
         id <- obj
@@ -143,9 +147,11 @@ setMethod("kinship", "character",
 #' @include kindepth.R
 #' @rdname kinship
 #' @examples
+#'
 #' data(sampleped)
 #' ped <- Pedigree(sampleped)
 #' kinship(ped)
+#' @export
 setMethod("kinship", "Pedigree",
     function(obj, chrtype = "autosome") {
         famlist <- unique(famid(obj))

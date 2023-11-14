@@ -7,8 +7,6 @@
 \alias{is_informative,Pedigree-method}
 \title{Find informative individuals}
 \usage{
-is_informative(obj, ...)
-
 \S4method{is_informative}{character_OR_integer}(obj, avail, affected, informative = "AvAf")
 
 \S4method{is_informative}{Pedigree}(obj, col_aff = NULL, informative = "AvAf", reset = FALSE)
@@ -53,10 +51,7 @@ A vector of individuals informative identifiers.
 
 \subsection{When obj is a Pedigree}{
 
-A list containing the Pedigree object and the vector of individuals
-identifiers.
-The Pedigree object will have a new column named 'id_inf' containing 1 for
-informative individuals and 0 otherwise.
+The Pedigree object with its \code{isinf} slot updated.
 }
 }
 \description{
@@ -73,6 +68,7 @@ corresponding informative individuals based on the avail and affected
 columns.
 }
 \examples{
+
 is_informative(c("A", "B", "C", "D", "E"), informative = c("A", "B"))
 is_informative(c("A", "B", "C", "D", "E"), informative = c(1, 2))
 is_informative(c("A", "B", "C", "D", "E"), informative = c("A", "B"))
@@ -82,6 +78,7 @@ is_informative(c("A", "B", "C", "D", "E"), avail = c(1, 0, 0, 1, 1),
   affected = c(0, 1, 0, 1, 1), informative = "AvOrAf")
 is_informative(c("A", "B", "C", "D", "E"),
      informative = c(TRUE, FALSE, TRUE, FALSE, TRUE))
+
 data("sampleped")
 ped <- Pedigree(sampleped)
 ped <- is_informative(ped, col_aff = "affection_mods")

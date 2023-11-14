@@ -56,11 +56,13 @@
 #' @include AllClass.R
 #' @keywords internal
 #' @export
+#' @usage NULL
 setGeneric("family_check", signature = "obj",
     function(obj, ...) standardGeneric("family_check")
 )
 
 #' @rdname family_check
+#' @export
 setMethod("family_check", "character_OR_integer",
     function(obj, dadid, momid, famid, newfam) {
         id <- obj
@@ -105,6 +107,7 @@ setMethod("family_check", "character_OR_integer",
 )
 
 #' @rdname family_check
+#' @export
 setMethod("family_check", "Pedigree",
     function(obj) {
         family_check(ped(obj))
@@ -112,6 +115,7 @@ setMethod("family_check", "Pedigree",
 )
 
 #' @rdname family_check
+#' @export
 setMethod("family_check", "Ped",
     function(obj) {
         family_check(id(obj), dadid(obj), momid(obj), famid(obj))

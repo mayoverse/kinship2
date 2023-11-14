@@ -5,8 +5,6 @@
 \alias{ped_to_plotdf,Pedigree-method}
 \title{Create plotting data frame from a Pedigree}
 \usage{
-ped_to_plotdf(obj, ...)
-
 \S4method{ped_to_plotdf}{Pedigree}(
   obj,
   packed = TRUE,
@@ -47,9 +45,9 @@ used to edit away portions of the plot coordinates returned by
 \code{\link[=align]{align()}}.
 This is useful for zooming in on a particular region of the Pedigree.}
 
-\item{cex}{character expansion of the text}
+\item{cex}{Character expansion of the text}
 
-\item{symbolsize}{size of the symbols}
+\item{symbolsize}{Size of the symbols}
 
 \item{pconnect}{When connecting parent to children the program will try to
 make the connecting line as close to vertical as possible, subject to it
@@ -92,6 +90,7 @@ The data frame contains the following columns:
 All those columns are used by \code{\link[=plot_fromdf]{plot_fromdf()}} to plot the graph.
 }
 \examples{
+
 data(sampleped)
 ped1 <- Pedigree(sampleped[sampleped$famid == 1,])
 plot_df <- ped_to_plotdf(ped1)

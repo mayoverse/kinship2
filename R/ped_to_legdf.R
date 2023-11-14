@@ -38,6 +38,7 @@
 #' plot_fromdf(leg_df$df, usr = c(-1,15,0,7))
 #' @keywords internal, Pedigree-plot
 #' @export
+#' @usage NULL
 setGeneric(
     "ped_to_legdf", signature = "obj",
     function(obj, ...) {
@@ -46,6 +47,7 @@ setGeneric(
 )
 
 #' @rdname ped_to_legdf
+#' @export
 setMethod("ped_to_legdf", "Pedigree", function(obj,
     boxh = 1, boxw = 1, cex = 1,
     adjx = 0, adjy = 0

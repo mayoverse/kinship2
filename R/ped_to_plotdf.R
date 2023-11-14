@@ -41,6 +41,7 @@ NULL
 #' @return A list containing the data frame and the user coordinates.
 #'
 #' @examples
+#'
 #' data(sampleped)
 #' ped1 <- Pedigree(sampleped[sampleped$famid == 1,])
 #' plot_df <- ped_to_plotdf(ped1)
@@ -54,6 +55,7 @@ NULL
 #' [ped_to_legdf()]
 #' @keywords internal, Pedigree-plot
 #' @export
+#' @usage NULL
 setGeneric(
     "ped_to_plotdf", signature = "obj",
     function(obj, ...) {
@@ -62,6 +64,7 @@ setGeneric(
 )
 
 #' @rdname ped_to_plotdf
+#' @export
 setMethod("ped_to_plotdf", "Pedigree", function(
     obj, packed = TRUE, width = 6, align = c(1.5, 2),
     subreg = NULL, cex = 1, symbolsize = cex, pconnect = 0.5, branch = 0.6,

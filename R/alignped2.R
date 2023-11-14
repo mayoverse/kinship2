@@ -44,7 +44,6 @@
 #'
 #' @seealso [align()]
 #' @keywords internal, alignment
-#' @export
 alignped2 <- function(idx, dadx, momx, level, horder, packed, spouselist) {
     idx <- idx[order(horder[idx])]  # Use the hints to order the sibs
     rval <- alignped1(idx[1], dadx, momx, level, horder, packed, spouselist)

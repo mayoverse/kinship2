@@ -24,11 +24,13 @@
 #' @seealso [shrink()]
 #' @keywords internal, shrink
 #' @export
+#' @usage NULL
 setGeneric("find_avail_noninform", signature = "obj",
     function(obj, ...) standardGeneric("find_avail_noninform")
 )
 
 #' @rdname find_avail_noninform
+#' @export
 setMethod("find_avail_noninform", "Ped",
     function(obj, avail = NULL, affected = NULL) {
         if (is.null(avail)) {
@@ -61,6 +63,7 @@ setMethod("find_avail_noninform", "Ped",
 )
 
 #' @rdname find_avail_noninform
+#' @export
 setMethod("find_avail_noninform", "Pedigree",
     function(obj, ...) {
         find_avail_noninform(ped(obj), ...)

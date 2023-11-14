@@ -7,7 +7,7 @@
 polyfun(nslice, coor)
 }
 \arguments{
-\item{nslice}{number of slices in the polygon}
+\item{nslice}{Number of slices in the polygon}
 
 \item{coor}{Element form which to generate the polygon
 containing x and y coordinates and theta}

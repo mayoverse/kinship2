@@ -40,11 +40,13 @@
 #' @keywords internal, shrink
 #' @include utils.R
 #' @export
+#' @usage NULL
 setGeneric("find_unavailable", signature = "obj",
     function(obj, ...) standardGeneric("find_unavailable")
 )
 
 #' @rdname find_unavailable
+#' @export
 setMethod("find_unavailable", "Pedigree",
     function(obj, ...) {
         find_unavailable(ped(obj), ...)
@@ -52,6 +54,7 @@ setMethod("find_unavailable", "Pedigree",
 )
 
 #' @rdname find_unavailable
+#' @export
 setMethod("find_unavailable", "Ped",
     function(obj, avail = NULL) {
         if (is.null(avail)) {

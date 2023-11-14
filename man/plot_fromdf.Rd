@@ -44,7 +44,7 @@ Only used for \code{segments} and \code{arc}.
 
 \item{title}{The title of the plot.}
 
-\item{ggplot_gen}{logical, if TRUE add the segments to the ggplot object}
+\item{ggplot_gen}{If TRUE add the segments to the ggplot object}
 
 \item{boxw}{Width of the polygons elements}
 

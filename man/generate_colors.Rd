@@ -7,8 +7,6 @@
 \alias{generate_colors,Pedigree-method}
 \title{Process the filling and border colors based on affection and availability}
 \usage{
-generate_colors(obj, ...)
-
 \S4method{generate_colors}{character}(
   obj,
   avail,
@@ -129,11 +127,13 @@ The colors will be set using the \code{\link[=generate_fill]{generate_fill()}} a
 \code{\link[=generate_border]{generate_border()}} functions respectively for the filling and the border.
 }
 \examples{
+
 generate_colors(
     c("A", "B", "A", "B", NA, "A", "B", "A", "B", NA),
     c(1, 0, 1, 0, NA, 1, 0, 1, 0, NA),
     mods_aff = "A",
 )
+
 generate_colors(
     c(10, 0, 5, 7, NA, 6, 2, 1, 3, NA),
     c(1, 0, 1, 0, NA, 1, 0, 1, 0, NA),

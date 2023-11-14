@@ -40,11 +40,11 @@ value of the affection column for each filling scale.}
 \item{label}{If not \code{NULL}, add a label to each box corresponding to the
 value of the column given.}
 
-\item{ggplot_gen}{logical, if TRUE add the segments to the ggplot object}
+\item{ggplot_gen}{If TRUE add the segments to the ggplot object}
 
-\item{cex}{character expansion of the text}
+\item{cex}{Character expansion of the text}
 
-\item{symbolsize}{size of the symbols}
+\item{symbolsize}{Size of the symbols}
 
 \item{branch}{defines how much angle is used to connect various levels of
 nuclear families.}

@@ -19,6 +19,7 @@ NULL
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setGeneric("id", function(x) {
     standardGeneric("id")
 })
@@ -27,18 +28,21 @@ setGeneric("id", function(x) {
 #' - `id(x)` : Individuals identifiers
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setMethod("id", signature(x = "Ped"), function(x) {
     x@id
 })
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setGeneric("id<-", function(x, value) {
     standardGeneric("id<-")
 })
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setMethod("id<-",
     signature(x = "Ped", value = "character_OR_integer"),
     function(x, value) {
@@ -60,6 +64,7 @@ setMethod("id<-",
 ##### Dadid Accessors #####
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setGeneric("dadid", function(x) {
     standardGeneric("dadid")
 })
@@ -68,18 +73,21 @@ setGeneric("dadid", function(x) {
 #' - `dadid(x)` : Individuals' father identifiers
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setMethod("dadid", signature(x = "Ped"), function(x) {
     x@dadid
 })
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setGeneric("dadid<-", function(x, value) {
     standardGeneric("dadid<-")
 })
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setMethod("dadid<-",
     signature(x = "Ped", value = "character_OR_integer"),
     function(x, value) {
@@ -102,6 +110,7 @@ setMethod("dadid<-",
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setGeneric("momid", function(x) {
     standardGeneric("momid")
 })
@@ -110,18 +119,21 @@ setGeneric("momid", function(x) {
 #' - `momid(x)` : Individuals' mother identifiers
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setMethod("momid", signature(x = "Ped"), function(x) {
     x@momid
 })
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setGeneric("momid<-", function(x, value) {
     standardGeneric("momid<-")
 })
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setMethod("momid<-",
     signature(x = "Ped", value = "character_OR_integer"),
     function(x, value) {
@@ -144,6 +156,7 @@ setMethod("momid<-",
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setGeneric("famid", function(x) {
     standardGeneric("famid")
 })
@@ -152,18 +165,21 @@ setGeneric("famid", function(x) {
 #' - `famid(x)` : Individuals' family identifiers
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setMethod("famid", signature(x = "Ped"), function(x) {
     x@famid
 })
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setGeneric("famid<-", function(x, value) {
     standardGeneric("famid<-")
 })
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setMethod("famid<-",
     signature(x = "Ped", value = "character_OR_integer"),
     function(x, value) {
@@ -186,6 +202,7 @@ setMethod("famid<-",
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setGeneric("sex", function(x) {
     standardGeneric("sex")
 })
@@ -194,18 +211,21 @@ setGeneric("sex", function(x) {
 #' - `sex(x)` : Individuals' gender
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setMethod("sex", signature(x = "Ped"), function(x) {
     x@sex
 })
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setGeneric("sex<-", function(x, value) {
     standardGeneric("sex<-")
 })
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setMethod("sex<-",
     signature(x = "Ped", value = "character_OR_integer"),
     function(x, value) {
@@ -232,6 +252,7 @@ setMethod("sex<-",
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setGeneric("affected", function(x) {
     standardGeneric("affected")
 })
@@ -240,18 +261,21 @@ setGeneric("affected", function(x) {
 #' - `affected(x)` : Individuals' affection status
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setMethod("affected", signature(x = "Ped"), function(x) {
     x@affected
 })
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setGeneric("affected<-", function(x, value) {
     standardGeneric("affected<-")
 })
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setMethod("affected<-",
     signature(x = "Ped", value = "numeric_OR_logical"),
     function(x, value) {
@@ -275,6 +299,7 @@ setMethod("affected<-",
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setGeneric("avail", function(x) {
     standardGeneric("avail")
 })
@@ -283,18 +308,21 @@ setGeneric("avail", function(x) {
 #' - `avail(x)` : Individuals' availability status
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setMethod("avail", signature(x = "Ped"), function(x) {
     x@avail
 })
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setGeneric("avail<-", function(x, value) {
     standardGeneric("avail<-")
 })
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setMethod("avail<-",
     signature(x = "Ped", value = "numeric_OR_logical"),
     function(x, value) {
@@ -318,6 +346,7 @@ setMethod("avail<-",
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setGeneric("status", function(x) {
     standardGeneric("status")
 })
@@ -326,18 +355,21 @@ setGeneric("status", function(x) {
 #' - `status(x)` : Individuals' death status
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setMethod("status", signature(x = "Ped"), function(x) {
     x@status
 })
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setGeneric("status<-", function(x, value) {
     standardGeneric("status<-")
 })
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setMethod("status<-",
     signature(x = "Ped", value = "numeric_OR_logical"),
     function(x, value) {
@@ -361,6 +393,7 @@ setMethod("status<-",
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setGeneric("isinf", function(x) {
     standardGeneric("isinf")
 })
@@ -369,18 +402,21 @@ setGeneric("isinf", function(x) {
 #' - `isinf(x)` : Individuals' informativeness status
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setMethod("isinf", signature(x = "Ped"), function(x) {
     x@isinf
 })
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setGeneric("isinf<-", function(x, value) {
     standardGeneric("isinf<-")
 })
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setMethod("isinf<-",
     signature(x = "Ped", value = "numeric_OR_logical"),
     function(x, value) {
@@ -404,6 +440,7 @@ setMethod("isinf<-",
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setGeneric("kin", function(x) {
     standardGeneric("kin")
 })
@@ -413,18 +450,21 @@ setGeneric("kin", function(x) {
 #' informative individuals
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setMethod("kin", signature(x = "Ped"), function(x) {
     x@kin
 })
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setGeneric("kin<-", function(x, value) {
     standardGeneric("kin<-")
 })
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setMethod("kin<-",
     signature(x = "Ped", value = "numeric"),
     function(x, value) {
@@ -448,6 +488,7 @@ setMethod("kin<-",
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setGeneric("useful", function(x) {
     standardGeneric("useful")
 })
@@ -456,18 +497,21 @@ setGeneric("useful", function(x) {
 #' - `useful(x)` : Individuals' usefullness status
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setMethod("useful", signature(x = "Ped"), function(x) {
     x@useful
 })
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setGeneric("useful<-", function(x, value) {
     standardGeneric("useful<-")
 })
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setMethod("useful<-",
     signature(x = "Ped", value = "numeric_OR_logical"),
     function(x, value) {
@@ -493,6 +537,7 @@ setMethod("useful<-",
 #' - `mcols(x)` : Individuals' metadata
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setMethod("mcols<-",
     signature(x = "Ped", value = "list"),
     function(x, value) {
@@ -503,6 +548,7 @@ setMethod("mcols<-",
 
 #' @rdname Ped-class
 #' @usage NULL
+#' @export
 setMethod("mcols<-",
     signature(x = "Ped", value = "data.frame"),
     function(x, value) {
@@ -521,6 +567,7 @@ setMethod("mcols<-",
 ##### Code Accessors #####
 #' @rdname Rel-class
 #' @usage NULL
+#' @export
 setGeneric("code", function(x) {
     standardGeneric("code")
 })
@@ -529,6 +576,7 @@ setGeneric("code", function(x) {
 #' - `code(x)` : Relationships' code
 #' @rdname Rel-class
 #' @usage NULL
+#' @export
 setMethod("code", signature(x = "Rel"), function(x) {
     x@code
 })
@@ -536,6 +584,7 @@ setMethod("code", signature(x = "Rel"), function(x) {
 ##### Id1 Accessors #####
 #' @rdname Rel-class
 #' @usage NULL
+#' @export
 setGeneric("id1", function(x) {
     standardGeneric("id1")
 })
@@ -544,6 +593,7 @@ setGeneric("id1", function(x) {
 #' - `id1(x)` : Relationships' first individuals' identifier
 #' @rdname Rel-class
 #' @usage NULL
+#' @export
 setMethod("id1", signature(x = "Rel"), function(x) {
     x@id1
 })
@@ -552,6 +602,7 @@ setMethod("id1", signature(x = "Rel"), function(x) {
 
 #' @rdname Rel-class
 #' @usage NULL
+#' @export
 setGeneric("id2", function(x) {
     standardGeneric("id2")
 })
@@ -560,6 +611,7 @@ setGeneric("id2", function(x) {
 #' - `id2(x)` : Relationships' second individuals' identifier
 #' @rdname Rel-class
 #' @usage NULL
+#' @export
 setMethod("id2", signature(x = "Rel"), function(x) {
     x@id2
 })
@@ -568,6 +620,7 @@ setMethod("id2", signature(x = "Rel"), function(x) {
 #' - `famid(x)` : Relationships' individuals' family identifier
 #' @rdname Rel-class
 #' @usage NULL
+#' @export
 setMethod("famid", signature(x = "Rel"), function(x) {
     x@famid
 })
@@ -579,6 +632,7 @@ setMethod("famid", signature(x = "Rel"), function(x) {
 #'      with the family identifiers
 #' @rdname Rel-class
 #' @usage NULL
+#' @export
 setMethod("famid<-",
     signature(x = "Rel", value = "character_OR_integer"),
     function(x, value) {
@@ -610,6 +664,7 @@ setMethod("famid<-",
 #'
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setMethod("famid", signature(x = "Pedigree"), function(x) {
     famid(ped(x))
 })
@@ -618,6 +673,7 @@ setMethod("famid", signature(x = "Pedigree"), function(x) {
 
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setGeneric("ped", function(object, slot) {
     standardGeneric("ped")
 })
@@ -626,6 +682,7 @@ setGeneric("ped", function(object, slot) {
 #' - `ped(x, slot)` : Get the value of a specific slot of the Ped object
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setMethod(
     "ped",
     signature(object = "Pedigree", slot = "ANY"),
@@ -638,6 +695,7 @@ setMethod(
 #' - `ped(x)` : Get the Ped object
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setMethod(
     "ped",
     signature(object = "Pedigree", slot = "missing"),
@@ -648,15 +706,18 @@ setMethod(
 
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setGeneric("ped<-", function(object, slot, value) {
     standardGeneric("ped<-")
 })
 
 #' @section Accessors:
-#' - `ped(x, slot) <- value` : Set the value of a specific slot of the Ped object
+#' - `ped(x, slot) <- value` : Set the value of a specific slot of
+#' the Ped object
 #' Wrapper of `slot(ped(x)) <- value`
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setMethod(
     "ped<-",
     signature(object = "Pedigree", slot = "ANY", value = "ANY"),
@@ -686,6 +747,7 @@ setMethod(
 #' - `ped(x) <- value` : Set the Ped object
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setMethod(
     "ped<-",
     signature(object = "Pedigree", slot = "missing", value = "Ped"),
@@ -704,6 +766,7 @@ setMethod(
 #' @rdname Pedigree-class
 #' @usage NULL
 #' @importFrom S4Vectors 'mcols'
+#' @export
 setMethod(
     "mcols",
     signature(x = "Pedigree"),
@@ -718,6 +781,7 @@ setMethod(
 #' @rdname Pedigree-class
 #' @usage NULL
 #' @importFrom S4Vectors 'mcols<-'
+#' @export
 setMethod(
     "mcols<-",
     signature(x = "Pedigree", value = "ANY"),
@@ -731,6 +795,7 @@ setMethod(
 
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setGeneric("rel", function(object, slot) {
     standardGeneric("rel")
 })
@@ -739,6 +804,7 @@ setGeneric("rel", function(object, slot) {
 #' - `rel(x, slot)` : Get the value of a specific slot of the Rel object
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setMethod(
     "rel",
     signature(object = "Pedigree", slot = "ANY"),
@@ -751,6 +817,7 @@ setMethod(
 #' - `rel(x)` : Get the Rel object
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setMethod(
     "rel",
     signature(object = "Pedigree", slot = "missing"),
@@ -761,15 +828,18 @@ setMethod(
 
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setGeneric("rel<-", function(object, slot, value) {
     standardGeneric("rel<-")
 })
 
 #' @section Accessors:
-#' - `rel(x, slot) <- value` : Set the value of a specific slot of the Rel object
+#' - `rel(x, slot) <- value` : Set the value of a specific slot of the
+#' Rel object
 #' Wrapper of `slot(rel(x)) <- value`
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setMethod(
     "rel<-",
     signature(object = "Pedigree", slot = "ANY", value = "ANY"),
@@ -794,6 +864,7 @@ setMethod(
 #' - `rel(x) <- value` : Set the Rel object
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setMethod(
     "rel<-",
     signature(object = "Pedigree", slot = "missing", value = "Rel"),
@@ -808,6 +879,7 @@ setMethod(
 
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setGeneric("scales", function(object) {
     standardGeneric("scales")
 })
@@ -816,12 +888,14 @@ setGeneric("scales", function(object) {
 #' - `scales(x)` : Get the Scales object
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setMethod("scales", signature(object = "Pedigree"), function(object) {
     object@scales
 })
 
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setGeneric("scales<-", function(object, value) {
     standardGeneric("scales<-")
 })
@@ -830,6 +904,7 @@ setGeneric("scales<-", function(object, value) {
 #' - `scales(x) <- value` : Set the Scales object
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setMethod(
     "scales<-", signature(object = "Pedigree", value = "Scales"),
     function(object, value) {
@@ -842,6 +917,7 @@ setMethod(
 
 #' @rdname Scales-class
 #' @usage NULL
+#' @export
 setGeneric("fill", function(object) {
     standardGeneric("fill")
 })
@@ -850,6 +926,7 @@ setGeneric("fill", function(object) {
 #' - `fill(x)` : Get the fill data.frame
 #' @rdname Scales-class
 #' @usage NULL
+#' @export
 setMethod("fill",
     signature(object = "Scales"),
     function(object) {
@@ -862,6 +939,7 @@ setMethod("fill",
 #' Wrapper of `fill(scales(x))`
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setMethod("fill",
     signature(object = "Pedigree"),
     function(object) {
@@ -871,6 +949,7 @@ setMethod("fill",
 
 #' @rdname Scales-class
 #' @usage NULL
+#' @export
 setGeneric("fill<-", function(object, value) {
     standardGeneric("fill<-")
 })
@@ -879,6 +958,7 @@ setGeneric("fill<-", function(object, value) {
 #' - `fill(x) <- value` : Set the fill data.frame
 #' @rdname Scales-class
 #' @usage NULL
+#' @export
 setMethod(
     "fill<-",
     signature(object = "Scales", value = "data.frame"),
@@ -894,6 +974,7 @@ setMethod(
 #' Wrapper of `fill(scales(x)) <- value`
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setMethod(
     "fill<-",
     signature(object = "Pedigree", value = "data.frame"),
@@ -908,6 +989,7 @@ setMethod(
 
 #' @rdname Scales-class
 #' @usage NULL
+#' @export
 setGeneric("border", function(object) {
     standardGeneric("border")
 })
@@ -916,6 +998,7 @@ setGeneric("border", function(object) {
 #' - `border(x)` : Get the border data.frame
 #' @rdname Scales-class
 #' @usage NULL
+#' @export
 setMethod("border",
     signature(object = "Scales"),
     function(object) {
@@ -928,6 +1011,7 @@ setMethod("border",
 #' Wrapper of `border(scales(x))`
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setMethod("border",
     signature(object = "Pedigree"),
     function(object) {
@@ -937,6 +1021,7 @@ setMethod("border",
 
 #' @rdname Scales-class
 #' @usage NULL
+#' @export
 setGeneric("border<-", function(object, value) {
     standardGeneric("border<-")
 })
@@ -945,6 +1030,7 @@ setGeneric("border<-", function(object, value) {
 #' - `border(x) <- value` : Set the border data.frame
 #' @rdname Scales-class
 #' @usage NULL
+#' @export
 setMethod(
     "border<-",
     signature(object = "Scales", value = "data.frame"),
@@ -960,6 +1046,7 @@ setMethod(
 #' Wrapper of `border(scales(x)) <- value`
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setMethod(
     "border<-",
     signature(object = "Pedigree", value = "data.frame"),
@@ -974,6 +1061,7 @@ setMethod(
 
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setGeneric("hints", function(object) {
     standardGeneric("hints")
 })
@@ -982,12 +1070,14 @@ setGeneric("hints", function(object) {
 #' - `hints(x)` : Get the Hints object
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setMethod("hints", signature(object = "Pedigree"), function(object) {
     object@hints
 })
 
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setGeneric("hints<-", function(object, value) {
     standardGeneric("hints<-")
 })
@@ -996,6 +1086,7 @@ setGeneric("hints<-", function(object, value) {
 #' - `hints(x) <- value` : Set the Hints object
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setMethod("hints<-", signature(object = "Pedigree", value = "Hints"), function(
     object, value
 ) {
@@ -1008,6 +1099,7 @@ setMethod("hints<-", signature(object = "Pedigree", value = "Hints"), function(
 
 #' @rdname Hints-class
 #' @usage NULL
+#' @export
 setGeneric("horder", function(object) {
     standardGeneric("horder")
 })
@@ -1016,6 +1108,7 @@ setGeneric("horder", function(object) {
 #' - `horder(x)` : Get the horder vector
 #' @rdname Hints-class
 #' @usage NULL
+#' @export
 setMethod("horder", "Hints", function(object) {
     object@horder
 })
@@ -1025,12 +1118,14 @@ setMethod("horder", "Hints", function(object) {
 #' Wrapper of `horder(hints(x))`
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setMethod("horder", "Pedigree", function(object) {
     horder(hints(object))
 })
 
 #' @rdname Hints-class
 #' @usage NULL
+#' @export
 setGeneric("horder<-", function(object, value) {
     standardGeneric("horder<-")
 })
@@ -1039,6 +1134,7 @@ setGeneric("horder<-", function(object, value) {
 #' - `horder(x) <- value` : Set the horder vector
 #' @rdname Hints-class
 #' @usage NULL
+#' @export
 setMethod(
     "horder<-",
     signature(object = "Hints", value = "ANY"),
@@ -1057,6 +1153,7 @@ setMethod(
 #' Wrapper of `horder(hints(x)) <- value`
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setMethod(
     "horder<-",
     signature(object = "Pedigree", value = "ANY"),
@@ -1077,6 +1174,7 @@ setMethod(
 
 #' @rdname Hints-class
 #' @usage NULL
+#' @export
 setGeneric("spouse", function(object) {
     standardGeneric("spouse")
 })
@@ -1085,6 +1183,7 @@ setGeneric("spouse", function(object) {
 #' - `spouse(x)` : Get the spouse data.frame
 #' @rdname Hints-class
 #' @usage NULL
+#' @export
 setMethod("spouse", signature(object = "Hints"), function(object) {
     object@spouse
 })
@@ -1094,12 +1193,14 @@ setMethod("spouse", signature(object = "Hints"), function(object) {
 #' Wrapper of `spouse(hints(x))`.
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setMethod("spouse", signature(object = "Pedigree"), function(object) {
     spouse(hints(object))
 })
 
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setGeneric("spouse<-", function(object, value) {
     standardGeneric("spouse<-")
 })
@@ -1108,6 +1209,7 @@ setGeneric("spouse<-", function(object, value) {
 #' - `spouse(x) <- value` : Set the spouse data.frame
 #' @rdname Hints-class
 #' @usage NULL
+#' @export
 setMethod(
     "spouse<-",
     signature(object = "Hints", value = "data.frame"),
@@ -1125,6 +1227,7 @@ setMethod(
 #' Wrapper of `spouse(hints(x)) <- value`.
 #' @rdname Pedigree-class
 #' @usage NULL
+#' @export
 setMethod(
     "spouse<-",
     signature(object = "Pedigree", value = "data.frame"),

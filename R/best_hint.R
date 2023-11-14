@@ -83,6 +83,7 @@ permute <- function(x) {
 #' @include auto_hint.R
 #' @include align.R
 #' @keywords alignment, auto_hint
+#' @usage NULL
 setGeneric(
     "best_hint", signature = "obj",
     function(obj, ...) {

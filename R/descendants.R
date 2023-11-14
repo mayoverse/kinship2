@@ -1,4 +1,4 @@
-#' Find all descendants of list of individuals
+#' Descendants of individuals
 #'
 #' @description
 #' Find all the descendants of a particular list of individuals
@@ -20,6 +20,7 @@
 #' @include AllClass.R
 #' @export
 #' @keywords internal
+#' @usage NULL
 setGeneric("descendants",
     function(idlist, obj, ...) standardGeneric("descendants")
 )

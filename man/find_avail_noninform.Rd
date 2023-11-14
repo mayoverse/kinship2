@@ -6,8 +6,6 @@
 \alias{find_avail_noninform,Pedigree-method}
 \title{Find uninformative but available subject}
 \usage{
-find_avail_noninform(obj, ...)
-
 \S4method{find_avail_noninform}{Ped}(obj, avail = NULL, affected = NULL)
 
 \S4method{find_avail_noninform}{Pedigree}(obj, ...)

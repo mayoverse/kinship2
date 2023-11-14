@@ -2,7 +2,7 @@
 % Please edit documentation in R/ibd_matrix.R
 \name{ibd_matrix}
 \alias{ibd_matrix}
-\title{Create an IBD matrix}
+\title{IBD matrix}
 \usage{
 ibd_matrix(id1, id2, ibd, idmap, diagonal)
 }

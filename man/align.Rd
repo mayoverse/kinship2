@@ -6,8 +6,6 @@
 \alias{align,Pedigree-method}
 \title{Align a Pedigree object}
 \usage{
-align(obj, ...)
-
 \S4method{align}{Pedigree}(
   obj,
   packed = TRUE,

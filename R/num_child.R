@@ -27,12 +27,14 @@ NULL
 #' Pedigree `ped` slot.
 #' @include AllClass.R
 #' @export
+#' @usage NULL
 setGeneric("num_child", signature = "obj",
     function(obj, ...) standardGeneric("num_child")
 )
 
 #' @rdname num_child
 #' @examples
+#'
 #' num_child(
 #'   obj = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"),
 #'   dadid = c("3", "3", "6", "8", "0", "0", "0", "0", "0", "0"),
@@ -43,6 +45,7 @@ setGeneric("num_child", signature = "obj",
 #'       code = "Spouse"
 #'   )
 #' )
+#' @export
 setMethod("num_child", "character_OR_integer", function(obj, dadid, momid,
     rel_df = NULL, missid = NA_character_
 ) {
@@ -150,10 +153,12 @@ setMethod("num_child", "character_OR_integer", function(obj, dadid, momid,
 #' @param reset If TRUE, the `num_child_tot`, `num_child_ind` and
 #' the `num_child_dir` columns are reset.
 #' @examples
+#'
 #' data(sampleped)
 #' ped1 <- Pedigree(sampleped[sampleped$famid == "1",])
 #' ped1 <- num_child(ped1, reset = TRUE)
 #' summary(ped(ped1))
+#' @export
 setMethod("num_child", "Pedigree", function(obj, reset = FALSE) {
     df <- num_child(id(ped(obj)), dadid(ped(obj)), momid(ped(obj)),
         rel_df = as.data.frame(rel(obj))

@@ -6,8 +6,6 @@
 \alias{find_avail_affected,Pedigree-method}
 \title{Find single affected and available individual from a Pedigree}
 \usage{
-find_avail_affected(obj, ...)
-
 \S4method{find_avail_affected}{Ped}(obj, avail = NULL, affected = NULL, affstatus = NA)
 
 \S4method{find_avail_affected}{Pedigree}(obj, ...)

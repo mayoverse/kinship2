@@ -4,10 +4,8 @@
 \alias{make_famid}
 \alias{make_famid,character-method}
 \alias{make_famid,Pedigree-method}
-\title{Update family id}
+\title{Compute family id}
 \usage{
-make_famid(obj, ...)
-
 \S4method{make_famid}{character}(obj, dadid, momid)
 
 \S4method{make_famid}{Pedigree}(obj)
@@ -32,6 +30,7 @@ An integer vector giving family groupings
 \subsection{When used with a Pedigree object}{
 
 An updated Pedigree object with the family id added
+and with all ids updated
 }
 }
 \description{
@@ -44,11 +43,13 @@ tree 1, otherwise the tree numbers represent the disconnected subfamilies.
 Singleton subjects give a zero for family number.
 }
 \examples{
+
 make_famid(
      c("A", "B", "C", "D", "E", "F"),
      c("C", "D", "0", "0", "0", "0"),
      c("E", "E", "0", "0", "0", "0")
 )
+
 data(sampleped)
 ped1 <- Pedigree(sampleped[,-1])
 make_famid(ped1)

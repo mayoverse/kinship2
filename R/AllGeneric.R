@@ -26,6 +26,7 @@ setMethod("summary", "Ped",
 #' and print it with its summary.
 #' @export
 #' @importFrom S4Vectors cbind_mcols_for_display
+#' @importFrom methods show
 #' @importFrom S4Vectors makeClassinfoRowForCompactPrinting
 #' @rdname Ped-class
 #' @usage NULL
@@ -49,6 +50,7 @@ setMethod("show", "Ped",
 #' - `as.list(x)`: Convert a Ped object to a list with
 #' the metadata columns at the end.
 #' @rdname Ped-class
+#' @importFrom methods slotNames
 #' @importFrom S4Vectors as.list
 #' @export
 #' @usage NULL
@@ -71,6 +73,7 @@ setMethod("as.list", "Ped", function(x) {
 #' @rdname Ped-class
 #' @importFrom S4Vectors as.data.frame
 #' @export
+#' @usage NULL
 setMethod("as.data.frame", "Ped", function(x) {
     lst <- as.list(x)
     if (length(unique(lapply(lst, length))) != 1) {
@@ -154,6 +157,7 @@ setMethod("summary", "Rel",
 #' @export
 #' @importFrom S4Vectors cbind_mcols_for_display
 #' @importFrom S4Vectors makeClassinfoRowForCompactPrinting
+#' @importFrom methods show
 #' @rdname Rel-class
 #' @usage NULL
 setMethod("show", signature(object = "Rel"),
@@ -320,6 +324,7 @@ setMethod("length", c(x = "Pedigree"),
 #' - `show(x)`: Print the information of the Ped and Rel
 #' object inside the Pedigree object.
 #' @export
+#' @importFrom methods show
 #' @rdname Pedigree-class
 #' @usage NULL
 setMethod("show", signature(object = "Pedigree"), function(object) {

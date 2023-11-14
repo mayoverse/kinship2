@@ -7,8 +7,6 @@
 \alias{useful_inds,Ped-method}
 \title{Usefulness of individuals}
 \usage{
-useful_inds(obj, ...)
-
 \S4method{useful_inds}{character}(
   obj,
   dadid,
@@ -85,6 +83,7 @@ of their parents. A \code{useful} slot is added to the Ped object with the
 usefulness of the individual. This boolean is hereditary.
 }
 \examples{
+
 data(sampleped)
 ped1 <- Pedigree(sampleped[sampleped$famid == "1",])
 ped1 <- num_child(ped1)

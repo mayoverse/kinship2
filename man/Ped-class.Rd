@@ -75,8 +75,6 @@
   affected = NA,
   missid = NA_character_
 )
-
-\S4method{as.data.frame}{Ped}(x)
 }
 \arguments{
 \item{obj}{A character vector with the id of the individuals or a
@@ -323,8 +321,6 @@ Ped(
     sex = c(1, 2, 3, 1, 2, 1),
     missid = "0"
 )
-
-Ped()
 }
 \seealso{
 \code{\link[=Pedigree]{Pedigree()}}

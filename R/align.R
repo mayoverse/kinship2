@@ -114,6 +114,7 @@ ancestors <- function(idx, momx, dadx) {
 #' @include alignped3.R
 #' @include alignped4.R
 #' @rdname align
+#' @usage NULL
 setGeneric("align", signature = "obj",
     function(obj, ...) standardGeneric("align")
 )

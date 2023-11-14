@@ -5,8 +5,6 @@
 \alias{ped_to_legdf,Pedigree-method}
 \title{Create plotting legend data frame from a Pedigree}
 \usage{
-ped_to_legdf(obj, ...)
-
 \S4method{ped_to_legdf}{Pedigree}(obj, boxh = 1, boxw = 1, cex = 1, adjx = 0, adjy = 0)
 }
 \arguments{
@@ -16,7 +14,7 @@ ped_to_legdf(obj, ...)
 
 \item{boxw}{Width of the polygons elements}
 
-\item{cex}{character expansion of the text}
+\item{cex}{Character expansion of the text}
 
 \item{adjx}{default=0.  Controls the horizontal text adjustment of
 the labels in the legend.}

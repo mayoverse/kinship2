@@ -23,12 +23,14 @@
 #' useful individuals and `FALSE` otherwise.
 #' @keywords shrink
 #' @export
+#' @usage NULL
 setGeneric("useful_inds", signature = "obj",
     function(obj, ...) standardGeneric("useful_inds")
 )
 
 #' @include is_informative.R
 #' @rdname useful_inds
+#' @export
 setMethod("useful_inds", "character",
     function(obj, dadid, momid, avail, affected, num_child_tot,
         informative = "AvAf", keep_infos = FALSE
@@ -74,10 +76,12 @@ setMethod("useful_inds", "character",
 #' @rdname useful_inds
 #' @param reset Boolean to indicate if the `useful` column should be reset
 #' @examples
+#'
 #' data(sampleped)
 #' ped1 <- Pedigree(sampleped[sampleped$famid == "1",])
 #' ped1 <- num_child(ped1)
 #' ped(useful_inds(ped1, informative = "AvAf"))
+#' @export
 setMethod("useful_inds", "Pedigree", function(obj,
     informative = "AvAf", keep_infos = FALSE, reset = FALSE
 ) {
@@ -91,6 +95,7 @@ setMethod("useful_inds", "Pedigree", function(obj,
 })
 
 #' @rdname useful_inds
+#' @export
 setMethod("useful_inds", "Ped", function(obj,
     informative = "AvAf", keep_infos = FALSE, reset = FALSE
 ) {

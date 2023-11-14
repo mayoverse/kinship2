@@ -2,7 +2,7 @@
 #' @importFrom Matrix sparseMatrix
 NULL
 
-#' Create an IBD matrix
+#' IBD matrix
 #'
 #' @description
 #' Transform identity by descent (IBD) matrix data from the form produced by
@@ -135,4 +135,3 @@ ibd_matrix <- function(id1, id2, ibd, idmap, diagonal) {
         dimnames = list(dimid, dimid)
     )
 }
-TRUE

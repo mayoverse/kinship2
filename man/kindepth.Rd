@@ -5,8 +5,7 @@
 \alias{kindepth,character_OR_integer-method}
 \alias{kindepth,Pedigree-method}
 \alias{kindepth,Ped-method}
-\title{Chase up the ancestors of a subject
-Individual's depth in a pedigree}
+\title{Individual's depth in a pedigree}
 \usage{
 kindepth(obj, ...)
 
@@ -31,8 +30,8 @@ biologicals mothers.}
 \item{align_parents}{If \code{align_parents = TRUE}, go one step further
 and try to make both parents of each child have the same depth.
 (This is not always possible).
-It helps the drawing program by lining up pedigrees that 'join in the middle'
-via a marriage.}
+It helps the drawing program by lining up pedigrees that
+'join in the middle' via a marriage.}
 }
 \value{
 An integer vector containing the depth for each subject
@@ -62,5 +61,5 @@ kindepth(ped1)
 \code{\link[=align]{align()}}
 }
 \author{
-Terry Therneau
+Terry Therneau, updated by Louis Le Nézet
 }

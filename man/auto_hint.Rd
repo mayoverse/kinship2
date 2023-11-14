@@ -5,8 +5,6 @@
 \alias{auto_hint,Pedigree-method}
 \title{Initial hint for a Pedigree alignment}
 \usage{
-auto_hint(obj, ...)
-
 \S4method{auto_hint}{Pedigree}(obj, hints = NULL, packed = TRUE, align = FALSE, reset = FALSE)
 }
 \arguments{

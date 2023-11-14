@@ -6,8 +6,6 @@
 \alias{is_parent,Ped-method}
 \title{Are individuals parents}
 \usage{
-is_parent(obj, ...)
-
 \S4method{is_parent}{character_OR_integer}(obj, dadid, momid, missid = NA_character_)
 
 \S4method{is_parent}{Ped}(obj, missid = NA_character_)
@@ -33,6 +31,7 @@ with TRUE if the individual is a parent and FALSE otherwise
 Check which individuals are parents.
 }
 \examples{
+
 is_parent(c("1", "2", "3", "4"), c("3", "3", NA, NA), c("4", "4", NA, NA))
 
 data(sampleped)

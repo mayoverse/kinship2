@@ -7,8 +7,6 @@
 \alias{bit_size,Ped-method}
 \title{Bit size of a Pedigree}
 \usage{
-bit_size(obj, ...)
-
 \S4method{bit_size}{character_OR_integer}(obj, momid, missid = NA_character_)
 
 \S4method{bit_size}{Pedigree}(obj)

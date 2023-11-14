@@ -52,7 +52,6 @@
 #'
 #' @seealso [align()]
 #' @keywords internal, alignment
-#' @export
 alignped3 <- function(alt1, alt2, packed, space = 1) {
     maxcol <- max(alt1$n + alt2$n)
     maxlev <- length(alt1$n)

@@ -238,17 +238,20 @@ generate_border <- function(values, colors_avail = c("green", "black")) {
 #'
 #' @keywords generate_scales
 #' @export
+#' @usage NULL
 setGeneric("generate_colors", signature = "obj",
     function(obj, ...) standardGeneric("generate_colors")
 )
 
 #' @rdname generate_colors
 #' @examples
+#'
 #' generate_colors(
 #'     c("A", "B", "A", "B", NA, "A", "B", "A", "B", NA),
 #'     c(1, 0, 1, 0, NA, 1, 0, 1, 0, NA),
 #'     mods_aff = "A",
 #' )
+#' @export
 setMethod("generate_colors", "character",
     function(
         obj, avail,
@@ -277,11 +280,13 @@ setMethod("generate_colors", "character",
 
 #' @rdname generate_colors
 #' @examples
+#'
 #' generate_colors(
 #'     c(10, 0, 5, 7, NA, 6, 2, 1, 3, NA),
 #'     c(1, 0, 1, 0, NA, 1, 0, 1, 0, NA),
 #'     threshold = 3, keep_full_scale = TRUE
 #' )
+#' @export
 setMethod("generate_colors", "numeric",
     function(
         obj, avail, threshold = 0.5, sup_thres_aff = TRUE,
@@ -322,6 +327,7 @@ setMethod("generate_colors", "numeric",
 #' scales(ped)
 #' @rdname generate_colors
 #' @include AllClass.R
+#' @export
 setMethod("generate_colors", "Pedigree",
     function(obj,
         col_aff = "affected", add_to_scale = TRUE,

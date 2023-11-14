@@ -53,11 +53,13 @@ NULL
 #'
 #' @author Jason Sinnwell
 #' @export
+#' @usage NULL
 setGeneric("fix_parents", signature = "obj",
     function(obj, ...) standardGeneric("fix_parents")
 )
 
 #' @rdname fix_parents
+#' @export
 setMethod("fix_parents", "character", function(
     obj, dadid, momid, sex, famid = NULL, missid = NA_character_
 ) {
@@ -179,6 +181,7 @@ setMethod("fix_parents", "character", function(
 #' @param filter Filtering column containing `0` or `1` for the
 #' rows to kept before proceeding.
 #' @rdname fix_parents
+#' @export
 setMethod("fix_parents", "data.frame", function(
     obj, delete = FALSE, filter = NULL, missid = NA_character_
 ) {

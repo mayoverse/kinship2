@@ -164,13 +164,16 @@ check_num_na <- function(var, na_as_num = TRUE) {
 #' with TRUE if the individual is a parent and FALSE otherwise
 #' @inheritParams Ped
 #' @keywords internal
+#' @usage NULL
 setGeneric("is_parent", signature = "obj",
     function(obj, ...) standardGeneric("is_parent")
 )
 
 #' @rdname is_parent
 #' @examples
+#'
 #' is_parent(c("1", "2", "3", "4"), c("3", "3", NA, NA), c("4", "4", NA, NA))
+#' @export
 setMethod("is_parent", "character_OR_integer",
     function(obj, dadid, momid, missid = NA_character_) {
         # determine subjects who are parents assume input of
@@ -192,6 +195,7 @@ setMethod("is_parent", "character_OR_integer",
 #' data(sampleped)
 #' ped <- Pedigree(sampleped)
 #' is_parent(ped(ped))
+#' @export
 setMethod("is_parent", "Ped",
     function(obj, missid = NA_character_) {
         is_parent(id(obj), dadid(obj), momid(obj), missid)

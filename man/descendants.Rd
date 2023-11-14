@@ -5,10 +5,8 @@
 \alias{descendants,character_OR_integer,character_OR_integer-method}
 \alias{descendants,character_OR_integer,Pedigree-method}
 \alias{descendants,character_OR_integer,Ped-method}
-\title{Find all descendants of list of individuals}
+\title{Descendants of individuals}
 \usage{
-descendants(idlist, obj, ...)
-
 \S4method{descendants}{character_OR_integer,character_OR_integer}(idlist, obj, dadid, momid)
 
 \S4method{descendants}{character_OR_integer,Pedigree}(idlist, obj)

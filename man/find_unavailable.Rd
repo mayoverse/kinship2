@@ -6,8 +6,6 @@
 \alias{find_unavailable,Ped-method}
 \title{Find unavailable subjects in a Pedigree}
 \usage{
-find_unavailable(obj, ...)
-
 \S4method{find_unavailable}{Pedigree}(obj, ...)
 
 \S4method{find_unavailable}{Ped}(obj, avail = NULL)

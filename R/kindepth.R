@@ -1,4 +1,3 @@
-#' Chase up the ancestors of a subject
 #' Individual's depth in a pedigree
 #'
 #' @description
@@ -17,12 +16,12 @@
 #' @param align_parents If `align_parents = TRUE`, go one step further
 #' and try to make both parents of each child have the same depth.
 #' (This is not always possible).
-#' It helps the drawing program by lining up pedigrees that 'join in the middle'
-#' via a marriage.
+#' It helps the drawing program by lining up pedigrees that
+#' 'join in the middle' via a marriage.
 #'
 #' @return An integer vector containing the depth for each subject
 #'
-#' @author Terry Therneau
+#' @author Terry Therneau, updated by Louis Le Nézet
 #' @seealso [align()]
 #' @include AllClass.R
 #' @export

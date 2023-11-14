@@ -7,7 +7,7 @@
 polygons(nslice = 1)
 }
 \arguments{
-\item{nslice}{number of slices in each element
+\item{nslice}{Number of slices in each element
 If nslice > 1, the elements are created with \code{\link[=polyfun]{polyfun()}}.}
 }
 \value{

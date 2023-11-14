@@ -7,8 +7,6 @@
 \alias{kinship,Pedigree-method}
 \title{Kinship matrix}
 \usage{
-kinship(obj, ...)
-
 \S4method{kinship}{Ped}(obj, chrtype = "autosome")
 
 \S4method{kinship}{character}(obj, dadid, momid, sex, chrtype = "autosome")
@@ -91,12 +89,14 @@ Genetic Analysis, Springer-Verlag, New York, 1997.
 }
 
 \examples{
+
 kinship(c("A", "B", "C", "D", "E"), c("C", "D", "0", "0", "0"),
     c("E", "E", "0", "0", "0"), sex = c(1, 2, 1, 2, 1))
 kinship(c("A", "B", "C", "D", "E"), c("C", "D", "0", "0", "0"),
     c("E", "E", "0", "0", "0"), sex = c(1, 2, 1, 2, 1),
    chrtype = "x"
 )
+
 data(sampleped)
 ped <- Pedigree(sampleped)
 kinship(ped)

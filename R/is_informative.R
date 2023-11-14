@@ -30,19 +30,18 @@
 #' A vector of individuals informative identifiers.
 #'
 #' ## When obj is a Pedigree
-#' A list containing the Pedigree object and the vector of individuals
-#' identifiers.
-#' The Pedigree object will have a new column named 'id_inf' containing 1 for
-#' informative individuals and 0 otherwise.
+#' The Pedigree object with its `isinf` slot updated.
 #'
 #' @export
 #' @docType methods
+#' @usage NULL
 setGeneric("is_informative", signature = "obj",
     function(obj, ...) standardGeneric("is_informative")
 )
 
 #' @rdname is_informative
 #' @examples
+#'
 #' is_informative(c("A", "B", "C", "D", "E"), informative = c("A", "B"))
 #' is_informative(c("A", "B", "C", "D", "E"), informative = c(1, 2))
 #' is_informative(c("A", "B", "C", "D", "E"), informative = c("A", "B"))
@@ -52,6 +51,7 @@ setGeneric("is_informative", signature = "obj",
 #'   affected = c(0, 1, 0, 1, 1), informative = "AvOrAf")
 #' is_informative(c("A", "B", "C", "D", "E"),
 #'      informative = c(TRUE, FALSE, TRUE, FALSE, TRUE))
+#' @export
 setMethod("is_informative", "character_OR_integer", function(
     obj, avail, affected, informative = "AvAf"
 ) {
@@ -105,10 +105,12 @@ setMethod("is_informative", "character_OR_integer", function(
 #' @rdname is_informative
 #' @param reset If `TRUE`, the `isinf` slot is reset
 #' @examples
+#'
 #' data("sampleped")
 #' ped <- Pedigree(sampleped)
 #' ped <- is_informative(ped, col_aff = "affection_mods")
 #' isinf(ped(ped))
+#' @export
 setMethod("is_informative", "Pedigree", function(
     obj, col_aff = NULL, informative = "AvAf", reset = FALSE
 ) {

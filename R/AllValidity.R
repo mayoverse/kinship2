@@ -89,11 +89,16 @@ check_values <- function(val, ref, name = NULL, present = TRUE) {
     }
 }
 
-#' Check if the Hints are valid
+#' Check if a Hints object is valid
 #'
-#' Check if horder and spouse slots are valid (i.e. horder is numeric and
-#' spouse is a matrix with 3 columns).
-#' Check if the spouse matrix is valid (i.e. only numeric values).
+#' Check if horder and spouse slots are valid:
+#' - horder is named numeric vector
+#' - spouse is a data.frame
+#'      - Has the three `idr`, `idl`, `anchor` columns
+#'      - `idr` and `idl` are different and doesn't contains `NA`
+#'      - `idr` and `idl` couple are unique
+#'      - `anchor` column only have `right`, `left`, `either` values
+#' - all ids in spouse needs to be in the names of the horder vector
 #' @param object A Hints object.
 #'
 #' @return A character vector with the errors or `TRUE` if no errors.
@@ -169,13 +174,28 @@ is_valid_hints <- function(object) {
         }
     }
 
-    return(errors)
+    if (length(errors) == 0) {
+        TRUE
+    } else {
+        errors
+    }
 }
 
-#' Check if the Scales are valid
+#' Check if a Scales object is valid
 #'
-#' Check if the fill and border slots are valid (i.e. they have the right
-#' columns).
+#' Check if the fill and border slots are valid:
+#' - fill slot is a data.frame with "order", "column_values",
+#' "column_mods", "mods", "labels", "affected", "fill",
+#' "density", "angle" columns.
+#'      - "affected" is logical.
+#'      - "density", "angle", "order", "mods" are numeric.
+#'      - "column_values", "column_mods", "labels", "fill" are
+#'      character.
+#' - border slot is a data.frame with "column_values",
+#' "column_mods", "mods", "labels", "border" columns.
+#'      - "column_values", "column_mods", "labels", "border" are
+#'      character.
+#'      - "mods" is numeric.
 #'
 #' @param object A Scales object.
 #'
@@ -200,7 +220,7 @@ is_valid_scales <- function(object) {
     #### Check that the fill columns have the right values ####
     ## Check for logical columns
     col_log <- c("affected")
-    err_log <- col_log[!unlist(lapply(object@fill[col_log], is, "logical"))]
+    err_log <- col_log[!unlist(lapply(object@fill[col_log], is.logical))]
     if (length(err_log) > 0) {
         errors <- c(errors, paste("Fill slot ",
             paste(err_log, collapse = ", "),
@@ -210,7 +230,7 @@ is_valid_scales <- function(object) {
 
     ## Check for numeric columns
     col_num <- c("density", "angle", "order", "mods")
-    err_num <- col_num[!unlist(lapply(object@fill[col_num], is, "numeric"))]
+    err_num <- col_num[!unlist(lapply(object@fill[col_num], is.numeric))]
     if (length(err_num) > 0) {
         errors <- c(errors, paste("Fill slot ",
             paste(err_num, collapse = ", "),
@@ -223,7 +243,7 @@ is_valid_scales <- function(object) {
         "column_values", "column_mods", "labels", "fill"
     )
     err_char <- col_char[!unlist(lapply(
-        object@fill[col_char], is, "character"
+        object@fill[col_char], is.character
     ))]
     if (length(err_char) > 0) {
         errors <- c(errors, paste("Fill slot ",
@@ -236,7 +256,7 @@ is_valid_scales <- function(object) {
     ## Check for character columns
     col_char <- c("column_values", "column_mods", "labels", "border")
     err_char <- col_char[!unlist(lapply(
-        object@border[col_char], is, "character"
+        object@border[col_char], is.character
     ))]
     if (length(err_char) > 0) {
         errors <- c(errors, paste("Border slot ",
@@ -248,7 +268,7 @@ is_valid_scales <- function(object) {
     ## Check for numeric columns
     col_num <- c("mods")
     err_num <- col_num[!unlist(lapply(
-        object@border[col_num], is, "numeric"
+        object@border[col_num], is.numeric
     ))]
     if (length(err_num) > 0) {
         errors <- c(errors, paste("Border slot ",
@@ -262,11 +282,9 @@ is_valid_scales <- function(object) {
     } else {
         errors
     }
-
-    return(errors)
 }
 
-#' Check if the Ped is valid
+#' Check if a Ped object is valid
 #'
 #' Multiple checks are done here
 #'
@@ -350,6 +368,22 @@ is_valid_ped <- function(object) {
     return(errors)
 }
 
+#' Check if a Rel object is valid
+#'
+#' Multiple checks are done here
+#'
+#' 1. Check that the "id1", "id2", "code", "famid" slots exist
+#' 2. Check that the "code" slots have the right values
+#' (i.e. "MZ twin", "DZ twin", "UZ twin", "Spouse")
+#' 3. Check that all "id1" are different to "id2"
+#' 4. Check that all "id1" are smaller than "id2"
+#' 5. Check that no duplicate relation are present
+#'
+#' @param object A Ped object.
+#'
+#' @return A character vector with the errors or `TRUE` if no errors.
+#'
+#' @keywords internal
 is_valid_rel <- function(object) {
     errors <- c()
 
@@ -398,14 +432,29 @@ is_valid_rel <- function(object) {
     } else {
         errors
     }
-    return(errors)
 }
 
+#' Check if a Pedigree object is valid
+#'
+#' Multiple checks are done here
+#'
+#' 1. Check that the all Rel id are in the Ped object
+#' 2. Check that twins have same parents
+#' 3. Check that MZ twins have same sex
+#' 4. Check that all columns used in scales are in the Ped object
+#' 5. Check that all fill & border modalities are in the Ped object column
+#' 6. Check that all id used in Hints object are in the Ped object
+#' 7. Check that all spouse in Hints object are male / female
+#'
+#' @param object A Ped object.
+#'
+#' @return A character vector with the errors or `TRUE` if no errors.
+#'
+#' @keywords internal
 is_valid_pedigree <- function(object) {
     errors <- c()
 
-    #### Check that the famid id and individual id present in the rel slot ####
-    #### are present in the ped slot ####
+    #### Check Rel Id in Ped Id ####
     errors <- c(errors, check_values(
         object@rel@famid, c(object@ped@famid, NA), "Rel famid"
     ))
@@ -481,16 +530,27 @@ is_valid_pedigree <- function(object) {
             "Length for horder component should be equal to Pedigree length"
         )
     }
+    idh <- names(horder(object))
+    idh_abs <- idh[!idh %in% id(ped(object))]
+    if (length(idh_abs) > 0) {
+        errors <- c(errors,
+            paste(
+                "Hints horder id",
+                paste(idh_abs, sep = ","),
+                "not present in the Ped object"
+            )
+        )
+    }
 
     idl <- spouse(object)$idl
     idr <- spouse(object)$idr
 
     ## Check for presence of spouses in Ped object
-    idabs <- c(idl, idr)[!c(idl, idr) %in% id(ped(object))]
-    if (length(idabs) > 0) {
+    ids_abs <- c(idl, idr)[!c(idl, idr) %in% id(ped(object))]
+    if (length(ids_abs) > 0) {
         errors <- c(errors, paste(
             "Hints spouse(s)",
-            paste(idabs, sep = ","),
+            paste(ids_abs, sep = ","),
             "not present in the Ped object"
         ))
     }
@@ -507,11 +567,11 @@ is_valid_pedigree <- function(object) {
             "not female, male"
         ))
     }
+
+    #### Errors ####
     if (length(errors) == 0) {
         TRUE
     } else {
         errors
     }
-
-    return(errors)
 }

@@ -33,11 +33,13 @@
 #' @include find_unavailable.R
 #' @keywords internal, shrink
 #' @export
+#' @usage NULL
 setGeneric("find_avail_affected", signature = "obj",
     function(obj, ...) standardGeneric("find_avail_affected")
 )
 
 #' @rdname find_avail_affected
+#' @export
 setMethod("find_avail_affected", "Ped",
     function(obj, avail = NULL, affected = NULL, affstatus = NA) {
         if (is.null(avail)) {
@@ -103,6 +105,7 @@ setMethod("find_avail_affected", "Ped",
 )
 
 #' @rdname find_avail_affected
+#' @export
 setMethod("find_avail_affected", "Pedigree",
     function(obj, ...) {
         find_avail_affected(ped(obj), ...)

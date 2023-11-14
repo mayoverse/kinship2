@@ -11,8 +11,6 @@
 \alias{upd_famid_id,Pedigree,missing-method}
 \title{Update family prefix in individuals id}
 \usage{
-upd_famid_id(obj, famid, ...)
-
 \S4method{upd_famid_id}{character,ANY}(obj, famid, missid = NA_character_)
 
 \S4method{upd_famid_id}{Ped,character_OR_integer}(obj, famid)
@@ -53,13 +51,16 @@ If famid is \emph{missing}, then the \code{famid()} function will be called on t
 object.
 }
 \examples{
+
 upd_famid_id(c("1", "2", "B_3"), c("A", "B", "A"))
 upd_famid_id(c("1", "B_2", "C_3", "4"), c("A", NA, "A", NA))
+
 data(sampleped)
 ped1 <- Pedigree(sampleped[,-1])
 id(ped(ped1))
 new_fam <- make_famid(id(ped(ped1)), dadid(ped(ped1)), momid(ped(ped1)))
 id(ped(upd_famid_id(ped1, new_fam)))
+
 data(sampleped)
 ped1 <- Pedigree(sampleped[,-1])
 make_famid(ped1)

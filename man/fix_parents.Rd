@@ -6,8 +6,6 @@
 \alias{fix_parents,data.frame-method}
 \title{Fix parents relationship and gender}
 \usage{
-fix_parents(obj, ...)
-
 \S4method{fix_parents}{character}(obj, dadid, momid, sex, famid = NULL, missid = NA_character_)
 
 \S4method{fix_parents}{data.frame}(obj, delete = FALSE, filter = NULL, missid = NA_character_)

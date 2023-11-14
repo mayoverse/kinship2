@@ -48,11 +48,13 @@
 #' @keywords shrink
 #' @seealso [Pedigree()], [bit_size()]
 #' @export
+#' @usage NULL
 setGeneric("shrink", signature = "obj",
     function(obj, ...) standardGeneric("shrink")
 )
 
 #' @rdname shrink
+#' @export
 setMethod("shrink", "Pedigree",
     function(obj, avail = NULL, affected = NULL, max_bits = 16) {
         lst_trim <- shrink(ped(obj),
@@ -69,6 +71,7 @@ setMethod("shrink", "Pedigree",
 )
 
 #' @rdname shrink
+#' @export
 setMethod("shrink", "Ped",
     function(obj, avail = NULL, affected = NULL, max_bits = 16) {
         if (is.null(avail)) {

@@ -7,8 +7,6 @@
 \alias{family_check,Ped-method}
 \title{Check family}
 \usage{
-family_check(obj, ...)
-
 \S4method{family_check}{character_OR_integer}(obj, dadid, momid, famid, newfam)
 
 \S4method{family_check}{Pedigree}(obj)

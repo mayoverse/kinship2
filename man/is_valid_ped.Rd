@@ -2,7 +2,7 @@
 % Please edit documentation in R/AllValidity.R
 \name{is_valid_ped}
 \alias{is_valid_ped}
-\title{Check if the Ped is valid}
+\title{Check if a Ped object is valid}
 \usage{
 is_valid_ped(object)
 }

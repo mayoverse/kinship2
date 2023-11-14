@@ -78,7 +78,6 @@ NULL
 #'
 #' @seealso [align()]
 #' @keywords internal, alignment
-#' @export
 alignped4 <- function(rval, spouse, level, width, align) {
     ## Doc: alignped4 -part1, spacing across page
     if (is.logical(align))

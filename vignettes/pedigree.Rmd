@@ -39,10 +39,14 @@ various criteria, and kinship for the X chromosome.
 
 Suplementary vignettes are available to explain:
 
-- The [Pedigree() constructor]("pedigree_constructor.html") used to create a Pedigree object `vignette("Pedigree() constructor", package = "Pedixplorer")`
-- The [alignment algorithm]("alignment_details.html") used create the Pedigree structure `vignette("Pedigree alignment details", package = "Pedixplorer")`
-- The [kinship() algorithm]("kinship_details.html") `vignette("Pedigree kinship() details", package = "Pedixplorer")`
-- The [plotting algorithm]("pedigree_plot_details.html") used to plot the Pedigree `vignette("Pedigree plotting details", package = "Pedixplorer")`
+- The [Pedigree() constructor]("pedigree_constructor.html") used to create a
+Pedigree object `vignette("Pedigree() constructor", package = "Pedixplorer")`
+- The [alignment algorithm]("alignment_details.html") used create the Pedigree
+structure `vignette("Pedigree alignment details", package = "Pedixplorer")`
+- The [kinship() algorithm]("kinship_details.html")
+`vignette("Pedigree kinship() details", package = "Pedixplorer")`
+- The [plotting algorithm]("pedigree_plot_details.html") used to plot the
+Pedigree `vignette("Pedigree plotting details", package = "Pedixplorer")`
 
 
 
@@ -70,11 +74,11 @@ The Pedigree S4 object
 The Pedigree object is a list of dataframes that describe the family structure.
 It contains the following components:
 
-- ped: a dataframe with the Pedigree information
-- rel: a dataframe with the relationship information
-- scales: a list of 2 dataframe with the filling and borders
+- ped: a Ped object with the Pedigree information
+- rel: a Rel object with the relationship information
+- scales: a Scales object of 2 dataframe with the filling and borders
 informations for the plot
-- hints: a list of 2 elements indicating the horder and the spouse to
+- hints: a Hints objects with 2 slots indicating the horder and the spouse to
 organise the Pedigree structure
 
 Basic Usage
@@ -119,7 +123,8 @@ The summary method prints a more detailed summary of the Pedigree.
 Finally the plot method displays the Pedigree.
 
 ```{r, ped1}
-ped1 <- ped[ped(ped, "famid") == "1", ]
+print(famid(ped))
+ped1 <- ped[famid(ped) == "1"]
 print(ped1)
 summary(ped1)
 plot(ped1)

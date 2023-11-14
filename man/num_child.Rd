@@ -6,8 +6,6 @@
 \alias{num_child,Pedigree-method}
 \title{Number of childs}
 \usage{
-num_child(obj, ...)
-
 \S4method{num_child}{character_OR_integer}(obj, dadid, momid, rel_df = NULL, missid = NA_character_)
 
 \S4method{num_child}{Pedigree}(obj, reset = FALSE)
@@ -74,6 +72,7 @@ If a relation ship dataframe is given, then even if no children is present
 between 2 spouses, the indirect childs will still be added.
 }
 \examples{
+
 num_child(
   obj = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"),
   dadid = c("3", "3", "6", "8", "0", "0", "0", "0", "0", "0"),
@@ -84,6 +83,7 @@ num_child(
       code = "Spouse"
   )
 )
+
 data(sampleped)
 ped1 <- Pedigree(sampleped[sampleped$famid == "1",])
 ped1 <- num_child(ped1, reset = TRUE)

@@ -86,6 +86,7 @@ setGeneric("Ped", signature = "obj", function(obj, ...) {
 #'
 #' data(sampleped)
 #' Ped(sampleped)
+#' @export
 setMethod("Ped", "data.frame",
     function(obj, cols_used_init = FALSE, cols_used_del = FALSE) {
         col_need <- c("id", "sex", "dadid", "momid")
@@ -133,6 +134,7 @@ setMethod("Ped", "data.frame",
 #'     sex = c(1, 2, 3, 1, 2, 1),
 #'     missid = "0"
 #' )
+#' @export
 setMethod("Ped", "character_OR_integer",
     function(
         obj, sex, dadid, momid, famid = NA,
@@ -174,10 +176,8 @@ setMethod("Ped", "character_OR_integer",
 )
 
 #' @rdname Ped-class
-#' @examples
-#'
-#' Ped()
 #' @usage NULL
+#' @export
 setMethod("Ped", "missing",
     function(obj) {
         new("Ped")
@@ -313,6 +313,7 @@ setGeneric("Hints", function(horder, spouse) {
 
 #' @rdname Hints-class
 #' @usage NULL
+#' @export
 setMethod("Hints",
     signature(horder = "Hints", spouse = "missing_OR_NULL"),
     function(horder, spouse) {
@@ -568,6 +569,7 @@ setMethod("Scales",
 #' the data.frame with the errors of the Ped object and the
 #' Rel object.
 #'
+#' @details
 #' If the normalization is set to `TRUE`, then the data will be
 #' standardized using the function `norm_ped()` and `norm_rel()`.
 #'

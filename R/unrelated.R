@@ -29,6 +29,7 @@ NULL
 #' @return A vector of the ids of subjects that are unrelated.
 
 #' @examples
+#'
 #' data(sampleped)
 #' fam1 <- sampleped[sampleped$famid == 1, ]
 #' ped1 <- Pedigree(fam1)
@@ -42,11 +43,13 @@ NULL
 #'
 #' @author Dan Schaid and Shannon McDonnell updated by Jason Sinnwell
 #' @export
+#' @usage NULL
 setGeneric("unrelated", signature = "obj",
     function(obj, ...) standardGeneric("unrelated")
 )
 
 #' @rdname unrelated
+#' @export
 setMethod("unrelated", "Ped",
     function(obj, avail = NULL) {
         if (is.null(avail)) {
@@ -110,6 +113,7 @@ setMethod("unrelated", "Ped",
 )
 
 #' @rdname unrelated
+#' @export
 setMethod("unrelated", "Pedigree",
     function(obj, avail = NULL) {
         unrelated(ped(obj), avail = avail)

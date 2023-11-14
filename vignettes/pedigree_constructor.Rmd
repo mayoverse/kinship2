@@ -181,15 +181,10 @@ With this new S4 object comes multiple methods to ease the use of it:
 - print()
 - show()
 - as.data.frame()
+- as.list()
 - setAs()
-- [
-- [<-
-- [[
-- [[<-
-- $
-- $<-
+- `[`
 - shrink()
-- trim()
 - generate_colors()
 - is_informative()
 - kindepth()

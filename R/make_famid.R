@@ -1,4 +1,4 @@
-#' Update family id
+#' Compute family id
 #'
 #' @description
 #' Construct a family identifier from pedigree information
@@ -17,15 +17,18 @@
 #'
 #' ## When used with a Pedigree object
 #' An updated Pedigree object with the family id added
+#' and with all ids updated
 #'
 #' @seealso [kinship()]
 #' @export
+#' @usage NULL
 setGeneric("make_famid", signature = "obj",
     function(obj, ...) standardGeneric("make_famid")
 )
 
 #' @rdname make_famid
 #' @examples
+#'
 #' make_famid(
 #'      c("A", "B", "C", "D", "E", "F"),
 #'      c("C", "D", "0", "0", "0", "0"),
@@ -92,6 +95,7 @@ setMethod("make_famid", "character",
 
 #' @rdname make_famid
 #' @examples
+#'
 #' data(sampleped)
 #' ped1 <- Pedigree(sampleped[,-1])
 #' make_famid(ped1)
@@ -135,14 +139,17 @@ setMethod("make_famid", "Pedigree",
 #' updated
 #'
 #' @export
+#' @usage NULL
 setGeneric("upd_famid_id",
     function(obj, famid, ...) standardGeneric("upd_famid_id")
 )
 
 #' @rdname upd_famid_id
 #' @examples
+#'
 #' upd_famid_id(c("1", "2", "B_3"), c("A", "B", "A"))
 #' upd_famid_id(c("1", "B_2", "C_3", "4"), c("A", NA, "A", NA))
+#' @export
 setMethod("upd_famid_id", "character",
     function(obj, famid, missid = NA_character_) {
         if (length(obj) != length(famid)) {
@@ -167,6 +174,7 @@ setMethod("upd_famid_id", "character",
 )
 
 #' @rdname upd_famid_id
+#' @export
 setMethod("upd_famid_id",
     signature(obj = "Ped", famid = "character_OR_integer"),
     function(obj, famid) {
@@ -214,6 +222,7 @@ setMethod("upd_famid_id",
 
 #' @rdname upd_famid_id
 #' @examples
+#'
 #' data(sampleped)
 #' ped1 <- Pedigree(sampleped[,-1])
 #' id(ped(ped1))
@@ -239,6 +248,7 @@ setMethod("upd_famid_id",
 
 #' @rdname upd_famid_id
 #' @examples
+#'
 #' data(sampleped)
 #' ped1 <- Pedigree(sampleped[,-1])
 #' make_famid(ped1)

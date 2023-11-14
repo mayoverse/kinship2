@@ -6,8 +6,6 @@
 \alias{unrelated,Pedigree-method}
 \title{Find Unrelated subjects}
 \usage{
-unrelated(obj, ...)
-
 \S4method{unrelated}{Ped}(obj, avail = NULL)
 
 \S4method{unrelated}{Pedigree}(obj, avail = NULL)
@@ -46,6 +44,7 @@ If \strong{avail} is \code{NULL}, it is extracted with its
 corresponding accessor from the Ped object.
 }
 \examples{
+
 data(sampleped)
 fam1 <- sampleped[sampleped$famid == 1, ]
 ped1 <- Pedigree(fam1)

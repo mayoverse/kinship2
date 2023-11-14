@@ -37,14 +37,15 @@ NULL
 #' @seealso [kinship()]
 #' @include is_informative.R
 #' @include kinship.R
-#' @docType methods
 #' @export
+#' @usage NULL
 setGeneric("min_dist_inf", signature = "obj",
     function(obj, ...) standardGeneric("min_dist_inf")
 )
 
 #' @rdname min_dist_inf
 #' @examples
+#'
 #' min_dist_inf(
 #'      c("A", "B", "C", "D", "E"),
 #'      c("C", "D", "0", "0", "0"),
@@ -54,6 +55,7 @@ setGeneric("min_dist_inf", signature = "obj",
 #'      affected = c(0, 1, 0, 1, 1),
 #'      informative = "AvAf"
 #' )
+#' @export
 setMethod("min_dist_inf", "character", function(obj,
     dadid, momid, sex, id_inf
 ) {
@@ -75,11 +77,12 @@ setMethod("min_dist_inf", "character", function(obj,
 })
 
 #' @rdname min_dist_inf
-#' @param reset If TRUE, the `kin` and if `isinf` columns is reset
 #' @examples
+#'
 #' data(sampleped)
 #' ped <- Pedigree(sampleped)
 #' kin(ped(min_dist_inf(ped, col_aff = "affection_mods")))
+#' @export
 setMethod("min_dist_inf", "Pedigree", function(obj,
     col_aff = NULL, informative = "AvAf", reset = FALSE, ...
 ) {
@@ -99,6 +102,7 @@ setMethod("min_dist_inf", "Pedigree", function(obj,
 
 #' @rdname min_dist_inf
 #' @param reset If TRUE, the `kin` and if `isinf` columns is reset
+#' @export
 setMethod("min_dist_inf", "Ped", function(
     obj, informative = "AvAf", reset = FALSE
 ) {

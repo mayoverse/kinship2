@@ -2,7 +2,7 @@
 % Please edit documentation in R/AllValidity.R
 \name{is_valid_scales}
 \alias{is_valid_scales}
-\title{Check if the Scales are valid}
+\title{Check if a Scales object is valid}
 \usage{
 is_valid_scales(object)
 }
@@ -13,7 +13,24 @@ is_valid_scales(object)
 A character vector with the errors or \code{TRUE} if no errors.
 }
 \description{
-Check if the fill and border slots are valid (i.e. they have the right
-columns).
+Check if the fill and border slots are valid:
+\itemize{
+\item fill slot is a data.frame with "order", "column_values",
+"column_mods", "mods", "labels", "affected", "fill",
+"density", "angle" columns.
+\itemize{
+\item "affected" is logical.
+\item "density", "angle", "order", "mods" are numeric.
+\item "column_values", "column_mods", "labels", "fill" are
+character.
+}
+\item border slot is a data.frame with "column_values",
+"column_mods", "mods", "labels", "border" columns.
+\itemize{
+\item "column_values", "column_mods", "labels", "border" are
+character.
+\item "mods" is numeric.
+}
+}
 }
 \keyword{internal}

@@ -6,8 +6,6 @@
 \alias{shrink,Ped-method}
 \title{Shrink Pedigree object}
 \usage{
-shrink(obj, ...)
-
 \S4method{shrink}{Pedigree}(obj, avail = NULL, affected = NULL, max_bits = 16)
 
 \S4method{shrink}{Ped}(obj, avail = NULL, affected = NULL, max_bits = 16)

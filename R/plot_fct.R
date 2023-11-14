@@ -104,7 +104,7 @@ circfun <- function(nslice, n = 50) {
 #' with a given number of slices and a list of coordinates
 #' for the polygon.
 #'
-#' @param nslice number of slices in the polygon
+#' @param nslice Number of slices in the polygon
 #' @param coor Element form which to generate the polygon
 #' containing x and y coordinates and theta
 #'
@@ -164,7 +164,7 @@ polyfun <- function(nslice, coor) {
 #' and theta for the square, circle, diamond and triangle.
 #' The number of slices in each element can be specified.
 #'
-#' @param nslice number of slices in each element
+#' @param nslice Number of slices in each element
 #' If nslice > 1, the elements are created with [polyfun()].
 #'
 #' @return a list of polygonal elements with x, y coordinates
@@ -221,19 +221,20 @@ polygons <- function(nslice = 1) {
 #'@importFrom ggplot2 geom_polygon aes annotate
 NULL
 
-#' Draw segments for a Pedigree
+#' Draw segments
 #'
 #' @param x0 x coordinate of the first point
 #' @param y0 y coordinate of the first point
 #' @param x1 x coordinate of the second point
 #' @param y1 y coordinate of the second point
 #' @param p ggplot object
-#' @param ggplot_gen logical, if TRUE add the segments to the ggplot object
-#' @param col line color
-#' @param lwd line width
-#' @param lty line type
+#' @param ggplot_gen If TRUE add the segments to the ggplot object
+#' @param col Line color
+#' @param lwd Line width
+#' @param lty Line type
 #'
-#' @return Plot the segments or add it to a ggplot object
+#' @return Plot the segments to the current device
+#' or add it to a ggplot object
 #' @keywords internal, Pedigree-plot
 draw_segment <- function(
     x0, y0, x1, y1,
@@ -249,42 +250,50 @@ draw_segment <- function(
     p
 }
 
-#' Draw a polygon for a Pedigree
+#' Draw a polygon
 #'
 #' @param x x coordinates
 #' @param y y coordinates
-#' @param fill fill color
-#' @param border border color
-#' @param density density of shading
-#' @param angle angle of shading
+#' @param fill Fill color
+#' @param border Border color
+#' @param density Density of shading
+#' @param angle Angle of shading
 #' @inheritParams draw_segment
 #'
-#' @return Plot the polygon or add it to a ggplot object
+#' @return Plot the polygon  to the current device
+#' or add it to a ggplot object
 #' @keywords internal, Pedigree-plot
 draw_polygon <- function(
     x, y, p, ggplot_gen = FALSE,
     fill = "grey", border = NULL, density = NULL, angle = 45
 ) {
-    polygon(x, y, col = fill, border = border, density = density, angle = angle)
+    polygon(
+        x, y, col = fill, border = border,
+        density = density, angle = angle
+    )
     if (ggplot_gen) {
-        p <- p + geom_polygon(aes(x = x, y = y), fill = fill, color = border)
+        p <- p +
+            geom_polygon(
+                aes(x = x, y = y), fill = fill, color = border
+            )
         # To add pattern stripes use ggpattern::geom_polygon_pattern
         # pattern_density = density[i], pattern_angle = angle[i]))
     }
     p
 }
 
-#' Draw texts for a Pedigree
+#' Draw texts
 #'
-#' @param label text to be displayed
-#' @param cex character expansion of the text
-#' @param col text color
+#' @param label Text to be displayed
+#' @param cex Character expansion of the text
+#' @param col Text color
 #' @param adjx x adjustment
 #' @param adjy y adjustment
 #' @inheritParams draw_segment
 #' @inheritParams draw_polygon
 #'
-#' @return Plot the text or add it to a ggplot object
+#' @return Plot the text to the current device
+#' or add it to a ggplot object
 #' @keywords internal, Pedigree-plot
 draw_text <- function(x, y, label, p, ggplot_gen = FALSE,
     cex = 1, col = NULL, adjx = 0, adjy = 0
@@ -292,17 +301,19 @@ draw_text <- function(x, y, label, p, ggplot_gen = FALSE,
     text(x, y, label, cex = cex, col = col, adj = c(adjx, adjy))
     if (ggplot_gen) {
         p <- p + annotate(
-            "text", x = x, y = y, label = label, size = cex / 0.3, color = col
+            "text", x = x, y = y, label = label,
+            size = cex / 0.3, color = col
         )
     }
     p
 }
 
-#' Draw arcs for multiple instances of a subject
+#' Draw arcs
 #'
 #' @inheritParams draw_segment
 #'
-#' @return Plot the arcs or add it to a ggplot object
+#' @return Plot the arcs to the current device
+#' or add it to a ggplot object
 #' @keywords internal, Pedigree-plot
 draw_arc <- function(x0, y0, x1, y1, p, ggplot_gen = FALSE, lwd = 1,
     col = "black"
@@ -318,14 +329,14 @@ draw_arc <- function(x0, y0, x1, y1, p, ggplot_gen = FALSE, lwd = 1,
 
 #' Set plotting area
 #'
-#' @param cex character expansion of the text
-#' @param maxlev maximum level
-#' @param xrange range of x values
-#' @param symbolsize size of the symbols
-#' @param ... other arguments passed to [par()]
+#' @param cex Character expansion of the text
+#' @param maxlev Maximum level
+#' @param xrange Range of x values
+#' @param symbolsize Size of the symbols
+#' @param ... Other arguments passed to [par()]
 #' @inheritParams is_parent
 #'
-#' @return a list of user coordinates, old par, box width, box height,
+#' @return List of user coordinates, old par, box width, box height,
 #' label height and leg height
 #'
 #' @keywords internal, Pedigree-plot
