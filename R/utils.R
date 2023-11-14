@@ -215,6 +215,7 @@ setMethod("is_parent", "Ped",
 #' @examples
 #' is_founder(c("3", "3", NA, NA), c("4", "4", NA, NA))
 #' @keywords internal
+#' @export
 is_founder <- function(momid, dadid, missid = NA_character_) {
     (dadid %in% missid) & (momid %in% missid)
 }
@@ -240,6 +241,7 @@ is_founder <- function(momid, dadid, missid = NA_character_) {
 #'      c("3", "3", NA, NA, NA),
 #'      c("4", "4", NA, NA, NA)
 #' )
+#' @export
 is_disconnected <- function(id, dadid, momid) {
     # check to see if any subjects are disconnected in Pedigree by checking for
     # kinship = 0 for all subjects excluding self

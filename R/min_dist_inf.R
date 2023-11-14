@@ -51,9 +51,7 @@ setGeneric("min_dist_inf", signature = "obj",
 #'      c("C", "D", "0", "0", "0"),
 #'      c("E", "E", "0", "0", "0"),
 #'      sex = c(1, 2, 1, 2, 1),
-#'      avail = c(1, 0, 0, 1, 1),
-#'      affected = c(0, 1, 0, 1, 1),
-#'      informative = "AvAf"
+#'      id_inf = c("D", "E")
 #' )
 #' @export
 setMethod("min_dist_inf", "character", function(obj,

@@ -11,9 +11,7 @@
 #' corresponding informative individuals based on the avail and affected
 #' columns.
 #'
-#' @param ... Additional arguments
 #' @inheritParams Ped
-#' @inheritParams Pedigree
 #' @param informative Informative individuals selection can take 5 values:
 #' - 'AvAf' (available and affected),
 #' - 'AvOrAf' (available or affected),
@@ -22,8 +20,7 @@
 #' - 'All' (all individuals)
 #' - A numeric/character vector of individuals id
 #' - A boolean
-#' @inheritParams kinship
-#' @inheritParams is_parent
+#' @inheritParams generate_colors
 #' @return
 #'
 #' ## When obj is a vector

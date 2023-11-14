@@ -11,14 +11,12 @@
   packed = TRUE,
   width = 10,
   align = TRUE,
-  hints = obj@hints,
+  hints = NULL,
   missid = "NA_character_"
 )
 }
 \arguments{
 \item{obj}{A Pedigree object}
-
-\item{...}{Other arguments to pass to the function}
 
 \item{packed}{Should the Pedigree be compressed.
 (i.e. allow diagonal lines connecting parents to children in order
@@ -36,7 +34,7 @@ If \code{TRUE}, the default is \code{c(1.5, 2)}, or if numeric the routine
 \code{alignped4()} will be called.}
 
 \item{hints}{A Hints object or a named list containing \code{horder} and
-\code{spouse}.}
+\code{spouse}. If \code{NULL} then the Hints stored in \strong{obj} will be used.}
 
 \item{missid}{A character vector with the missing values identifiers.
 All the id, dadid and momid corresponding to those values will be set

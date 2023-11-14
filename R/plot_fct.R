@@ -80,9 +80,11 @@ subregion <- function(plist, subreg) {
 #' @return A list of x and y coordinates per slice.
 #' @keywords internal, Pedigree-plot
 #' @examples
+#'
 #' circfun(1)
 #' circfun(1, 10)
 #' circfun(4, 50)
+#' @export
 circfun <- function(nslice, n = 50) {
     nseg <- ceiling(n / nslice)  # segments of arc per slice
 
@@ -114,8 +116,9 @@ circfun <- function(nslice, n = 50) {
 #' polyfun(2, list(
 #'      x = c(-0.5, -0.5, 0.5, 0.5),
 #'      y = c(-0.5, 0.5, 0.5, -0.5),
-#'      theta = -c(3, 5, 7, 9) * pi / 4)
+#'      theta = -c(3, 5, 7, 9) * pi / 4
 #' ))
+#' @export
 polyfun <- function(nslice, coor) {
     # make the indirect segments view
     zmat <- matrix(0, ncol = 4, nrow = length(coor$x))
@@ -173,6 +176,7 @@ polyfun <- function(nslice, coor) {
 #' @examples
 #' polygons()
 #' polygons(4)
+#' @export
 polygons <- function(nslice = 1) {
     if (nslice == 1) {
         polylist <- list(

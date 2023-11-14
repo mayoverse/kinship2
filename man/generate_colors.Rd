@@ -49,8 +49,6 @@
 \item{obj}{A Pedigree object or a vector containing the affection status for
 each individuals. The affection status can be numeric or a character.}
 
-\item{...}{Other arguments to pass to the function \code{generate_colors}.}
-
 \item{avail}{A logical vector with the availability status of the
 individuals
 (i.e. \code{FALSE} = not available, \code{TRUE} = available, \code{NA} = unknown).}
@@ -89,14 +87,13 @@ values. The same number of breaks will be done for values from affected
 individuals and unaffected individuals.}
 
 \item{col_aff}{A character vector with the name of the column to be used
-for the affection status.
-If \code{affected} is a data.frame, it will be overwritten by the column
-names of the data.frame.}
+for the affection status.}
 
 \item{add_to_scale}{Boolean defining if the scales need to be added to the
 existing scales or if they need to replace the existing scales.}
 
-\item{col_avail}{The name of the column containing the availability status.}
+\item{col_avail}{A character vector with the name of the column to be used
+for the availability status.}
 
 \item{reset}{If \code{TRUE} the scale of the specified column will be reset if
 already present.}

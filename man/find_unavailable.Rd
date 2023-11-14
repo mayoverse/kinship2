@@ -2,13 +2,13 @@
 % Please edit documentation in R/find_unavailable.R
 \name{find_unavailable}
 \alias{find_unavailable}
-\alias{find_unavailable,Pedigree-method}
 \alias{find_unavailable,Ped-method}
+\alias{find_unavailable,Pedigree-method}
 \title{Find unavailable subjects in a Pedigree}
 \usage{
-\S4method{find_unavailable}{Pedigree}(obj, ...)
-
 \S4method{find_unavailable}{Ped}(obj, avail = NULL)
+
+\S4method{find_unavailable}{Pedigree}(obj, avail = NULL)
 }
 \arguments{
 \item{obj}{A Ped or Pedigree object.}

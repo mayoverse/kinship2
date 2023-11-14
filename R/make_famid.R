@@ -9,7 +9,7 @@
 #' tree 1, otherwise the tree numbers represent the disconnected subfamilies.
 #' Singleton subjects give a zero for family number.
 #'
-#' @inheritParams kinship
+#' @inheritParams Ped
 #'
 #' @return
 #' ## When used with a character vector

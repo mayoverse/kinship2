@@ -38,9 +38,7 @@ The following values are recognized:
 \item{id_inf}{An identifiers vector of informative individuals.}
 
 \item{col_aff}{A character vector with the name of the column to be used
-for the affection status.
-If \code{affected} is a data.frame, it will be overwritten by the column
-names of the data.frame.}
+for the affection status.}
 
 \item{informative}{Informative individuals selection can take 5 values:
 \itemize{
@@ -92,9 +90,7 @@ min_dist_inf(
      c("C", "D", "0", "0", "0"),
      c("E", "E", "0", "0", "0"),
      sex = c(1, 2, 1, 2, 1),
-     avail = c(1, 0, 0, 1, 1),
-     affected = c(0, 1, 0, 1, 1),
-     informative = "AvAf"
+     id_inf = c("D", "E")
 )
 
 data(sampleped)

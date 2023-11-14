@@ -10,8 +10,6 @@
 \arguments{
 \item{obj}{A Pedigree object}
 
-\item{...}{Additional arguments}
-
 \item{boxh}{Height of the polygons elements}
 
 \item{boxw}{Width of the polygons elements}

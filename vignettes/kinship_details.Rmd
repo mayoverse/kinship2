@@ -180,6 +180,7 @@ matrix is labeled with the subject id, otherwise it is labeled with
 family/subject.
 
 ```{r, kinship}
+library(Pedixplorer)
 data(sampleped)
 ped <- Pedigree(sampleped)
 kinship(ped)

@@ -40,7 +40,6 @@ NULL
 #' @param obj A Pedigree or Ped object or a vector of subject identifiers.
 #' @param chrtype chromosome type.  The currently supported types are
 #' 'autosome' and 'X' or 'x'.
-#' @param ... Additional arguments
 #' @inheritParams Ped
 #'
 #' @return

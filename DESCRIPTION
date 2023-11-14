@@ -45,7 +45,8 @@ Suggests:
     rmarkdown,
     BiocStyle,
     knitr,
-    withr
+    withr,
+    magick
 Config/testthat/edition: 3
 biocViews: Software, DataRepresentation, Genetics, Alignment
 BugReports: https://github.com/LouisLeLezet/Pedixplorer/issues

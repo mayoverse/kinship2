@@ -18,6 +18,7 @@
 #' @return A vector of ancestor indexes
 #' @keywords internal
 #' @seealso [align()]
+#' @export
 ancestors <- function(idx, momx, dadx) {
     alist <- idx
     repeat {
@@ -70,9 +71,9 @@ ancestors <- function(idx, momx, dadx) {
 #' parameters, or a logical value.
 #' If `TRUE`, the default is `c(1.5, 2)`, or if numeric the routine
 #' `alignped4()` will be called.
+#' @param hints A Hints object or a named list containing `horder` and
+#' `spouse`. If `NULL` then the Hints stored in **obj** will be used.
 #' @inheritParams Ped
-#' @inheritParams Pedigree
-#' @param ... Other arguments to pass to the function
 #'
 #' @return A list with components
 #' - `n`: A vector giving the number of subjects on each horizonal level of the
@@ -124,7 +125,7 @@ setGeneric("align", signature = "obj",
 setMethod("align", "Pedigree",
     function(
         obj, packed = TRUE, width = 10,
-        align = TRUE, hints = obj@hints, missid = "NA_character_"
+        align = TRUE, hints = NULL, missid = "NA_character_"
     ) {
         famlist <- unique(famid(obj))
         if (length(famlist) > 1) {
@@ -135,6 +136,9 @@ setMethod("align", "Pedigree",
                 alignment[[i_fam]] <- align(ped_fam, packed, width, align)
             }
             return(alignment)
+        }
+        if (is.null(hints)) {
+            hints <- hints(obj)
         }
         if (!is(hints, "Hints")) {
             if (!is.list(hints)) {

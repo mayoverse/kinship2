@@ -13,8 +13,6 @@
 \arguments{
 \item{obj}{A Pedigree or Ped object.}
 
-\item{...}{Additional arguments}
-
 \item{avail}{A logical vector with the availability status of the
 individuals
 (i.e. \code{FALSE} = not available, \code{TRUE} = available, \code{NA} = unknown).}

@@ -11,9 +11,8 @@
 \S4method{make_famid}{Pedigree}(obj)
 }
 \arguments{
-\item{obj}{A Pedigree or Ped object or a vector of subject identifiers.}
-
-\item{...}{Additional arguments}
+\item{obj}{A character vector with the id of the individuals or a
+\code{data.frame} with all the informations in corresponding columns.}
 
 \item{dadid}{A vector containing for each subject, the identifiers of the
 biologicals fathers.}

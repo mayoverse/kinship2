@@ -10,10 +10,8 @@
 \arguments{
 \item{obj}{A Pedigree object}
 
-\item{...}{Other arguments to pass to the function}
-
 \item{hints}{A Hints object or a named list containing \code{horder} and
-\code{spouse}.}
+\code{spouse}. If \code{NULL} then the Hints stored in \strong{obj} will be used.}
 
 \item{packed}{Should the Pedigree be compressed.
 (i.e. allow diagonal lines connecting parents to children in order

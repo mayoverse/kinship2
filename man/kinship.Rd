@@ -16,8 +16,6 @@
 \arguments{
 \item{obj}{A Pedigree or Ped object or a vector of subject identifiers.}
 
-\item{...}{Additional arguments}
-
 \item{chrtype}{chromosome type.  The currently supported types are
 'autosome' and 'X' or 'x'.}
 

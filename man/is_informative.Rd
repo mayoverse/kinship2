@@ -15,8 +15,6 @@
 \item{obj}{A character vector with the id of the individuals or a
 \code{data.frame} with all the informations in corresponding columns.}
 
-\item{...}{Additional arguments}
-
 \item{avail}{A logical vector with the availability status of the
 individuals
 (i.e. \code{FALSE} = not available, \code{TRUE} = available, \code{NA} = unknown).}
@@ -37,9 +35,7 @@ individuals
 }}
 
 \item{col_aff}{A character vector with the name of the column to be used
-for the affection status.
-If \code{affected} is a data.frame, it will be overwritten by the column
-names of the data.frame.}
+for the affection status.}
 
 \item{reset}{If \code{TRUE}, the \code{isinf} slot is reset}
 }

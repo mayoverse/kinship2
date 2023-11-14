@@ -18,10 +18,8 @@
 #' - `adjy`: vertical text adjustment of the labels
 #'
 #' All those columns are used by [plot_fromdf()] to plot the graph.
-#'
 #' @param obj A Pedigree object
-#' @param ... Additional arguments
-#' @inheritParams set_plot_area
+#' @param cex Character expansion of the text
 #' @inheritParams plot_fromdf
 #' @param adjx default=0.  Controls the horizontal text adjustment of
 #' the labels in the legend.

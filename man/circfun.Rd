@@ -19,6 +19,7 @@ Create a list of x and y coordinates for a circle
 with a given number of slices.
 }
 \examples{
+
 circfun(1)
 circfun(1, 10)
 circfun(4, 50)

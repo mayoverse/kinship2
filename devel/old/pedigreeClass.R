@@ -132,7 +132,8 @@ setMethod("$<-", c(x = "Pedigree"),
 )
 
 #' @description Subset the hints list based on the index given
-#' @param hints A list of hints
+#' @param hints A Hints object or a named list containing `horder` and
+#' `spouse`.
 #' @param index A vector of index
 #' @return A list of hints subsetted
 #' @rdname extract-methods

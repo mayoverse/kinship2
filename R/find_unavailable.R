@@ -47,14 +47,6 @@ setGeneric("find_unavailable", signature = "obj",
 
 #' @rdname find_unavailable
 #' @export
-setMethod("find_unavailable", "Pedigree",
-    function(obj, ...) {
-        find_unavailable(ped(obj), ...)
-    }
-)
-
-#' @rdname find_unavailable
-#' @export
 setMethod("find_unavailable", "Ped",
     function(obj, avail = NULL) {
         if (is.null(avail)) {
@@ -97,6 +89,14 @@ setMethod("find_unavailable", "Ped",
         )
 
         id(obj)[is.na(match(id(obj), tmp_ped$id))]
+    }
+)
+
+#' @rdname find_unavailable
+#' @export
+setMethod("find_unavailable", "Pedigree",
+    function(obj, avail = NULL) {
+        find_unavailable(ped(obj), avail)
     }
 )
 

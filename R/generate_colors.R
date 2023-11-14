@@ -223,6 +223,7 @@ generate_border <- function(values, colors_avail = c("green", "black")) {
 #' @inheritParams generate_fill
 #' @inheritParams generate_border
 #' @inheritParams generate_aff_inds
+#' @inheritParams Ped
 #'
 #' @return
 #' ## When used with a vector
@@ -318,8 +319,10 @@ setMethod("generate_colors", "numeric",
 #' existing scales or if they need to replace the existing scales.
 #' @param reset If `TRUE` the scale of the specified column will be reset if
 #' already present.
-#' @param col_avail The name of the column containing the availability status.
-#' @inheritParams Pedigree
+#' @param col_avail A character vector with the name of the column to be used
+#' for the availability status.
+#' @param col_aff A character vector with the name of the column to be used
+#' for the affection status.
 #' @examples
 #' data("sampleped")
 #' ped <- Pedigree(sampleped)

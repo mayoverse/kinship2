@@ -22,7 +22,6 @@
 #' 2. Subjects with unaffected affected status
 #' 3. Affected subjects.
 #'
-#' @param ... Additional arguments
 #' @param obj A Pedigree or Ped object.
 #' @inheritParams Ped
 #' @inheritParams is_informative

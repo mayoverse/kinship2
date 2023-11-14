@@ -8,7 +8,7 @@
 \usage{
 \S4method{find_avail_affected}{Ped}(obj, avail = NULL, affected = NULL, affstatus = NA)
 
-\S4method{find_avail_affected}{Pedigree}(obj, ...)
+\S4method{find_avail_affected}{Pedigree}(obj, avail = NULL, affected = NULL, affstatus = NA)
 }
 \arguments{
 \item{obj}{A Ped or Pedigree object.}

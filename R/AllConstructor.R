@@ -1,3 +1,6 @@
+#' @importFrom methods callNextMethod is new 'slot<-' validObject
+NULL
+
 #' NA to specific length
 #'
 #' Check if all value in a vector is `NA`.
@@ -16,6 +19,7 @@
 #'
 #' na_to_length(NA, rep(0, 4), "NewValue")
 #' na_to_length(c(1, 2, 3, NA), rep(0, 4), "NewValue")
+#' @export
 na_to_length <- function(x, temp, value) {
     if (length(x) == 1 && all(is.na(x))) {
         rep(value, length(temp))
@@ -336,6 +340,7 @@ setMethod("Hints",
 #'           idl = c("1", "2"),
 #'           idr = c("2", "3"),
 #'           anchor = c(1, 2)
+#'      )
 #'   )
 #' )
 setMethod("Hints",
@@ -408,29 +413,6 @@ setMethod("Hints",
             "anchor" = factor()
         )
         new("Hints", horder = horder, spouse = dfe)
-    }
-)
-
-#' @rdname Hints-class
-#' @export
-#' @examples
-#'
-#' Hints(
-#'     spouse = data.frame(
-#'         idl = c("1", "2"),
-#'         idr = c("2", "3"),
-#'         anchor = c(1, 2)
-#'     )
-#' )
-setMethod("Hints",
-    signature(horder = "missing_OR_NULL", spouse = "data.frame"),
-    function(horder, spouse) {
-        spouse <- check_columns(
-            spouse, c("idl", "idr", "anchor"), NULL, NULL,
-            cols_to_use_init = TRUE
-        )
-        spouse$anchor <- anchor_to_factor(spouse$anchor)
-        new("Hints", horder = numeric(), spouse = spouse)
     }
 )
 
@@ -637,7 +619,7 @@ setMethod("Scales",
 #' different column names. The names of the list should be the new column
 #' names and the values should be the old column names.
 #' @param normalize A logical to know if the data should be normalised.
-#' @param ... Other arguments to pass to the function `generate_colors`.
+#' @inheritDotParams generate_colors
 #' @inheritParams Ped
 #' @inheritParams is_informative
 #'
@@ -657,10 +639,10 @@ setGeneric("Pedigree", signature = "obj",
 #' Can also be a data.frame with the same length as `obj`. If it is a
 #' matrix, it will be converted to a data.frame and the columns will be
 #' named after the `col_aff` argument.
-#' @param col_aff A character vector with the name of the column to be used
-#' for the affection status.
-#' If `affected` is a data.frame, it will be overwritten by the column
+#' @details
+#' If `affected` is a data.frame, **col_aff** will be overwritten by the column
 #' names of the data.frame.
+#' @inheritParams generate_colors
 #' @examples
 #'
 #' Pedigree(

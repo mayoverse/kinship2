@@ -88,7 +88,11 @@ Pedigree(obj, ...)
 \item{obj}{A vector of the individuals identifiers or a data.frame
 with the individuals informations. See \code{\link[=Ped]{Ped()}} for more informations.}
 
-\item{...}{Other arguments to pass to the function \code{generate_colors}.}
+\item{...}{
+  Arguments passed on to \code{\link[=generate_colors]{generate_colors}}
+  \describe{
+    \item{\code{}}{}
+  }}
 
 \item{dadid}{A vector containing for each subject, the identifiers of the
 biologicals fathers.}
@@ -152,9 +156,7 @@ All the id, dadid and momid corresponding to those values will be set
 to \code{NA_character_}.}
 
 \item{col_aff}{A character vector with the name of the column to be used
-for the affection status.
-If \code{affected} is a data.frame, it will be overwritten by the column
-names of the data.frame.}
+for the affection status.}
 
 \item{normalize}{A logical to know if the data should be normalised.}
 
@@ -230,6 +232,9 @@ will be transformed with the \code{\link[=vect_to_binary]{vect_to_binary()}} fun
 normalisation is selected.
 If you do not use the normalisation, the columns will be checked to
 be \code{0} or \code{1}.
+
+If \code{affected} is a data.frame, \strong{col_aff} will be overwritten by the column
+names of the data.frame.
 }
 \section{Slots}{
 

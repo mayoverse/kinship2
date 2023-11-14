@@ -107,7 +107,7 @@ setMethod("find_avail_affected", "Ped",
 #' @rdname find_avail_affected
 #' @export
 setMethod("find_avail_affected", "Pedigree",
-    function(obj, ...) {
-        find_avail_affected(ped(obj), ...)
+    function(obj, avail = NULL, affected = NULL, affstatus = NA) {
+        find_avail_affected(ped(obj), avail, affected, affstatus)
     }
 )

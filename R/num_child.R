@@ -11,7 +11,6 @@ NULL
 #' If a relation ship dataframe is given, then even if no children is present
 #' between 2 spouses, the indirect childs will still be added.
 #'
-#' @param ... Additional arguments
 #' @inheritParams Ped
 #' @inheritParams Pedigree
 #'

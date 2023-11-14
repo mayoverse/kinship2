@@ -9,7 +9,6 @@
 \alias{Hints,list,missing_OR_NULL-method}
 \alias{Hints,numeric,data.frame-method}
 \alias{Hints,numeric,missing_OR_NULL-method}
-\alias{Hints,missing_OR_NULL,data.frame-method}
 \alias{Hints,missing_OR_NULL,missing_OR_NULL-method}
 \alias{horder}
 \alias{horder,Hints-method}
@@ -29,8 +28,6 @@ Hints(horder, spouse)
 \S4method{Hints}{numeric,data.frame}(horder, spouse)
 
 \S4method{Hints}{numeric,missing_OR_NULL}(horder, spouse)
-
-\S4method{Hints}{missing_OR_NULL,data.frame}(horder, spouse)
 }
 \arguments{
 \item{horder}{A named numeric vector with one element per subject in the
@@ -126,6 +123,7 @@ Hints(
           idl = c("1", "2"),
           idr = c("2", "3"),
           anchor = c(1, 2)
+     )
   )
 )
 
@@ -140,14 +138,6 @@ Hints(
 
 Hints(
   horder = c("1" = 1, "2" = 2, "3" = 3)
-)
-
-Hints(
-    spouse = data.frame(
-        idl = c("1", "2"),
-        idr = c("2", "3"),
-        anchor = c(1, 2)
-    )
 )
 }
 \seealso{

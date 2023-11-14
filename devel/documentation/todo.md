@@ -2,11 +2,11 @@
 
 ## Documentations of functions
 
-- [ ] AllClass.R
-- [ ] AllConstructor.R
-- [ ] AllAccessors.R
-- [ ] AllGeneric.R
-- [ ] AllValidity.R
+- [x] AllClass.R
+- [x] AllConstructor.R
+- [x] AllAccessors.R
+- [x] AllGeneric.R
+- [x] AllValidity.R
 - [x] Pedixplorer-package.R
 - [x] align.R
 - [x] alignped1.R
@@ -45,14 +45,14 @@
 
 ## For all class
 
-- [ ] Ped object
-  - [ ] Class
-  - [ ] Constructor
-  - [ ] Getters
-  - [ ] Setters
-  - [ ] General methods
-  - [ ] See also
+- [x] General
+  - [x] Class
+  - [x] Constructor
+  - [x] Getters
+  - [x] Setters
+  - [x] General methods
+  - [x] See also
 
 ## Other
 
-- [ ] Take out addition of ind in ancestors compute Kindepth.
+- [x] Take out addition of ind in ancestors compute Kindepth.

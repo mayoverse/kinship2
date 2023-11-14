@@ -65,7 +65,7 @@ setMethod("find_avail_noninform", "Ped",
 #' @rdname find_avail_noninform
 #' @export
 setMethod("find_avail_noninform", "Pedigree",
-    function(obj, ...) {
-        find_avail_noninform(ped(obj), ...)
+    function(obj, avail = NULL, affected = NULL) {
+        find_avail_noninform(ped(obj), avail, affected)
     }
 )

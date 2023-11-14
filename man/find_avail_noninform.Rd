@@ -8,7 +8,7 @@
 \usage{
 \S4method{find_avail_noninform}{Ped}(obj, avail = NULL, affected = NULL)
 
-\S4method{find_avail_noninform}{Pedigree}(obj, ...)
+\S4method{find_avail_noninform}{Pedigree}(obj, avail = NULL, affected = NULL)
 }
 \arguments{
 \item{obj}{A Ped or Pedigree object.}
