@@ -275,6 +275,7 @@ setMethod("Rel", "character_OR_integer",
 
 #' @rdname Rel-class
 #' @usage NULL
+#' @export
 setMethod("Rel", "missing",
     function(obj) {
         new("Rel")
