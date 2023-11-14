@@ -13,6 +13,7 @@
 #' @return A vector with the same length as temp.
 #' @keywords internal
 #' @examples
+#'
 #' na_to_length(NA, rep(0, 4), "NewValue")
 #' na_to_length(c(1, 2, 3, NA), rep(0, 4), "NewValue")
 na_to_length <- function(x, temp, value) {
@@ -220,6 +221,7 @@ setGeneric("Rel", signature = "obj", function(obj, ...) {
 #' @rdname Rel-class
 #' @export
 #' @examples
+#'
 #' rel_df <- data.frame(
 #'    id1 = c("1", "2", "3"),
 #'    id2 = c("2", "3", "4"),
@@ -244,6 +246,7 @@ setMethod("Rel", "data.frame",
 #' @rdname Rel-class
 #' @export
 #' @examples
+#'
 #' Rel(
 #'    obj = c("1", "2", "3"),
 #'    id2 = c("2", "3", "4"),

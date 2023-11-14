@@ -8,6 +8,8 @@
 \S4method{ped_to_legdf}{Pedigree}(obj, boxh = 1, boxw = 1, cex = 1, adjx = 0, adjy = 0)
 }
 \arguments{
+\item{obj}{A Pedigree object}
+
 \item{...}{Additional arguments}
 
 \item{boxh}{Height of the polygons elements}

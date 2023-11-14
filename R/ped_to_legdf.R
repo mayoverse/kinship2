@@ -19,6 +19,7 @@
 #'
 #' All those columns are used by [plot_fromdf()] to plot the graph.
 #'
+#' @param obj A Pedigree object
 #' @param ... Additional arguments
 #' @inheritParams set_plot_area
 #' @inheritParams plot_fromdf

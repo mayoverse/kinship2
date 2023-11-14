@@ -329,12 +329,12 @@ draw_arc <- function(x0, y0, x1, y1, p, ggplot_gen = FALSE, lwd = 1,
 
 #' Set plotting area
 #'
+#' @param id A character vector with the identifiers of each individuals
 #' @param cex Character expansion of the text
 #' @param maxlev Maximum level
 #' @param xrange Range of x values
 #' @param symbolsize Size of the symbols
 #' @param ... Other arguments passed to [par()]
-#' @inheritParams is_parent
 #'
 #' @return List of user coordinates, old par, box width, box height,
 #' label height and leg height

@@ -9,6 +9,8 @@ set_plot_area(cex, id, maxlev, xrange, symbolsize, ...)
 \arguments{
 \item{cex}{Character expansion of the text}
 
+\item{id}{A character vector with the identifiers of each individuals}
+
 \item{maxlev}{Maximum level}
 
 \item{xrange}{Range of x values}

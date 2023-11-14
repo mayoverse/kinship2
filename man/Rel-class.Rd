@@ -159,12 +159,14 @@ should be kept or deleted.
 }
 
 \examples{
+
 rel_df <- data.frame(
    id1 = c("1", "2", "3"),
    id2 = c("2", "3", "4"),
    code = c(1, 2, 3)
 )
 Rel(rel_df)
+
 Rel(
    obj = c("1", "2", "3"),
    id2 = c("2", "3", "4"),

@@ -41,6 +41,9 @@ setClassUnion("missing_OR_NULL", c("missing", "NULL"))
 #' @slot useful A logical vector with the usefulness status of the
 #' individuals
 #' (i.e. `FALSE` = not useful, `TRUE` = useful).
+#' @slot isinf A logical vector indicating if the individual is informative
+#' or not
+#' (i.e. `FALSE` = not informative, `TRUE` = informative).
 #' @slot kin A numeric vector with minimal kinship value between the
 #' individuals and the useful individuals.
 #' @slot num_child_tot A numeric vector with the total number of children
@@ -51,6 +54,7 @@ setClassUnion("missing_OR_NULL", c("missing", "NULL"))
 #' of the individuals.
 #' @slot elementMetadata A DataFrame with the additional metadata columns
 #' of the Ped object.
+#' @slot metadata Meta informations about the pedigree.
 #'
 #' @seealso [Pedigree()]
 #' @name Ped-class

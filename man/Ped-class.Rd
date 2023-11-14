@@ -183,6 +183,10 @@ individuals
 individuals
 (i.e. \code{FALSE} = not useful, \code{TRUE} = useful).}
 
+\item{\code{isinf}}{A logical vector indicating if the individual is informative
+or not
+(i.e. \code{FALSE} = not informative, \code{TRUE} = informative).}
+
 \item{\code{kin}}{A numeric vector with minimal kinship value between the
 individuals and the useful individuals.}
 
@@ -197,6 +201,8 @@ of the individuals.}
 
 \item{\code{elementMetadata}}{A DataFrame with the additional metadata columns
 of the Ped object.}
+
+\item{\code{metadata}}{Meta informations about the pedigree.}
 }}
 
 \section{Accessors}{
