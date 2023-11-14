@@ -3,10 +3,9 @@ test_that("align works", {
     pedi <- Pedigree(sampleped)
     ped1 <- pedi[famid(pedi) == "1"]
     plist1 <- align(ped1)
-    expect_equal(plist1$n, c(6, 12, 17, 8))
+    expect_equal(plist1$n, c(2, 10, 16, 14))
 
     ped2 <- pedi[famid(pedi) == 2]
-    withr::local_options(width = 180)
     plist2 <- align(ped2)
     expect_equal(plist2$n, c(2, 7, 5))
 
@@ -38,14 +37,18 @@ test_that("test auto_hint works", {
     newhint <- auto_hint(pedi)
     expect_equal(horder(newhint),
         setNames(c(
-            1, 2, 3, 4, 1, 2, 3, 4, 1, 1, 3, 2, 5, 4, 5,
-            6, 7, 8, 9, 10, 1, 2, 3, 4, 5, 6, 7, 8, 6, 7,
-            8, 9, 10, 11, 6, 7, 11, 12, 12, 13, 14, 8, 9, 13, 14,
-            15, 16, 17, 18, 19, 15, 16, 17, 18, 19
+            1, 2, 3, 4, 5, 6, 7, 8, 1, 1, 3, 2, 1, 4, 1,
+            3, 9, 2, 4, 10, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+            11, 12, 13, 14, 2, 3, 10, 11, 11, 12, 13, 4,
+            5, 12, 13, 14, 15, 16, 17, 18, 14, 15, 16, 17, 18
         ), id(ped(pedi)))
     )
-    expect_equal(unlist(spouse(newhint)),
-        c("idl" = "109", "idr" = "110", "anchor" = "2")
+    expect_equal(as.data.frame(spouse(newhint)),
+        data.frame(
+            idl = c("112", "114", "109"),
+            idr = c("118", "115", "110"),
+            anchor = anchor_to_factor(c("right", "right", "left"))
+        )
     )
 })
 
@@ -63,10 +66,10 @@ test_that("test alignment with inbreeding and relationship matrix", {
     plist_sr <- align(ped_norel)
 
     expect_equal(plist$nid[1, ],
-        c(5, 6, 7, 8, 35, 36, 42, 43, rep(0, 16))
+        c(35, 36, 42, 43, rep(0, 19))
     )
     expect_equal(plist_sr$nid[1, ],
-        c(5, 6, 7, 8, 35, 36, 42, 43, rep(0, 14))
+        c(35, 36, 42, 43, rep(0, 17))
     )
     vdiffr::expect_doppelganger("sampleped_withrel",
         function() plot(ped_withrel)
@@ -105,35 +108,20 @@ test_that("Alignement with spouse", {
     )
     ped1 <- Pedigree(df1, relate1)
     hints <- auto_hint(ped1)
-    expect_equal(spouse(hints), data.frame(
-        idl = "1_109", idr = "1_110",
-        anchor = anchor_to_factor("right")
-    ))
+    expect_equal(spouse(hints),
+        data.frame(
+            idl = c("1_112", "1_114", "1_109"),
+            idr = c("1_118", "1_115", "1_110"),
+            anchor = anchor_to_factor(c("right", "right", "left"))
+        )
+    )
     expect_equal(horder(hints),
         setNames(c(
-            1, 2, 3, 4, 1, 2, 3, 4, 1, 1,
-            2, 3, 5, 4, 5, 6, 7, 8, 9, 10,
-            1, 2, 3, 4, 5, 6, 7, 8, 6, 7,
-            8, 9, 10, 11, 6, 7, 11, 12, 12,
-            13, 14
+            1, 2, 3, 4, 5, 6, 7, 8, 1, 1,
+            2, 3, 1, 4, 1, 3, 9, 2, 4, 10,
+            1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+            11, 12, 13, 14, 2, 3, 10, 11, 11,
+            12, 13
         ), id(ped(ped1)))
-    )
-})
-
-test_that("Double wife", {
-    ## reported on github in 2023
-    ## version 1.9.6 failed to plot subject 3 second marriage and kids
-    ## fix in 9/2023 to revert to some version 1.8.5 version of kindepth
-    df <- data.frame(
-        id = 1:7,
-        dadid = c(0, 0, 0, 1, 3, 0, 3),
-        momid = c(0, 0, 0, 2, 4, 0, 6),
-        sex = c(1, 2, 1, 2, 1, 2, 1)
-    )
-    pedi <- Pedigree(df, missid = "0")
-    expect_equal(kindepth(pedi, align_parents = TRUE), c(0, 0, 1, 1, 2, 1, 2))
-    expect_equal(kindepth(pedi), c(0, 0, 0, 1, 2, 0, 1))
-    vdiffr::expect_doppelganger("double_wife",
-        function() plot(pedi)
     )
 })

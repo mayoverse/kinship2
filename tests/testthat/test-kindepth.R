@@ -31,14 +31,35 @@ test_that("Kindepth works", {
     expect_equal(kindepth(pedi, align_parents = TRUE), c(0, 0, 1, 1, 2, 1, 2))
     expect_equal(kindepth(pedi), c(0, 0, 0, 1, 2, 0, 1))
 
-
+    ## Uncle / Niece spouse
     df <- data.frame(
-        id = 1:9,
-        dadid = c(0, 0, 0, 1, 1, 1, 3, 7, 5),
-        momid = c(0, 0, 0, 2, 2, 2, 2, 6, 8),
-        sex = c(1, 2, 1, 2, 1, 2, 1, 2, 1)
+        id = 1:7,
+        dadid = c(0, 0, 0, 1, 1, 3, 5),
+        momid = c(0, 0, 0, 2, 2, 4, 6),
+        sex = c(1, 2, 1, 2, 1, 2, 1)
     )
     pedi <- Pedigree(df, missid = "0")
-    kindepth(pedi, align_parents = TRUE)
-    plot(pedi)
+    expect_equal(kindepth(pedi, align_parents = TRUE), c(0, 0, 1, 1, 1, 2, 3))
+    vdiffr::expect_doppelganger("Niece Uncle spouse",
+        function() plot(pedi)
+    )
+
+    ## Double marriage
+    ## reported on github in 2023
+    ## version 1.9.6 failed to plot subject 3 second marriage and kids
+    ## fix in 9/2023 to revert to some version 1.8.5 version of kindepth
+    df <- data.frame(
+        id = 1:12,
+        dadid = c(0, 0, 1, 0, 0, 0, 3, 3, 5, 5, 7, 10),
+        momid = c(0, 0, 2, 0, 0, 0, 4, 4, 6, 6, 9, 8),
+        sex = c(1, 2, 1, 2, 1, 2, 1, 2, 2, 1, 1, 2)
+    )
+    pedi <- Pedigree(df, missid = "0")
+    expect_equal(
+        kindepth(pedi, align_parents = TRUE),
+        c(0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3)
+    )
+    vdiffr::expect_doppelganger("Double marriage",
+        function() plot(pedi)
+    )
 })
