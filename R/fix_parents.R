@@ -165,6 +165,7 @@ setMethod("fix_parents", "character", function(
     if (is.null(famid)) {
         data.frame(id = id, momid = momid, dadid = dadid, sex = sex)
     } else {
+        famid <- make_famid(id, dadid, momid)
         data.frame(
             id = id, momid = momid, dadid = dadid,
             sex = sex, famid = famid

@@ -10,3 +10,7 @@
 
     invalid class "Ped" object: dadid values '2_209' should be in '2_201', '2_202', '2_203', '2_204', '2_205'...
 
+# fix_parents works with famid
+
+    invalid class "Ped" object: dadid values '2_209' should be in '1_101', '1_102', '1_103', '1_104', '1_105'...
+
