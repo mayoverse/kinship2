@@ -513,7 +513,7 @@ plot it.
 ```{r, shrink1}
 set.seed(200)
 shrink1_b30 <- shrink(ped1, max_bits = 30)
-print(shrink1_b30)
+print(shrink1_b30[c(2:8)])
 plot(shrink1_b30$pedObj)
 ```
 
@@ -525,7 +525,7 @@ setting, the method removes subjects $140$ then $141$.
 ```{r, shrink2}
 set.seed(10)
 shrink1_b25 <- shrink(ped1, max_bits = 25)
-shrink1_b25
+print(shrink1_b25[c(2:8)])
 plot(shrink1_b25$pedObj)
 ```
 
