@@ -1,6 +1,6 @@
 ---
 title: Pedigree() constructor
-author: Terry Therneau, Elizabeth Atkinson
+author: Terry Therneau, Elizabeth Atkinson, Louis Le Nézet
 date: '`r format(Sys.time(),"%d %B, %Y")`'
 output:
   rmarkdown::html_vignette:
@@ -72,8 +72,6 @@ It accepts the following input
 **ped_df** dataframe
 - **cols_ren_rel** Optional, a named list for the renaming of the
 **rel_df** dataframe
-- **scales** Optional, a list of two dataframe with the scales to use for the
-    affection status and the other one for the border color (e.g availability).
 - **normalize** Optional, a logical to know if the data should be normalised.
 - **hints** Optional, a list containing the horder in which to plot the
 individuals and the matrix of the spouse.
@@ -107,6 +105,29 @@ Status follows the pattern of the survival routines and remains an integer.
 Based on the dataframe given for **ped_df** and **rel_df** and their
 corresponding named list, the columns are renamed for them to be used
 correctly.
+The renaming is done as follow
+
+```{r, column renaming}
+rel_df <- data.frame(
+    indId1 = c("110", "204"),
+    indId2 = c("112", "205"),
+    code = c(1, 2),
+    family = c("1", "2")
+)
+cols_ren_rel <- list(
+    id1 = "indId1",
+    id2 = "indId2",
+    famid = "family"
+)
+
+## Rename columns rel
+old_cols <- as.vector(unlist(cols_ren_rel))
+new_cols <- names(cols_ren_rel)
+cols_to_ren <- match(old_cols, names(rel_df))
+names(rel_df)[cols_to_ren[!is.na(cols_to_ren)]] <-
+    new_cols[!is.na(cols_to_ren)]
+print(rel_df)
+```
 
 ## Normalisation
 
@@ -117,11 +138,25 @@ right way. If a $famid$ column is present in the dataframe, then it will
 be aggregated to the id of each individual and separated by an ''_'' to
 ensure the uniqueness of the individuals identifiers.
 
+```{r, normalisation}
+data(sampleped)
+cols <- c("sex", "id", "avail")
+summary(sampleped[cols])
+ped <- Pedigree(sampleped, rel_df)
+summary(as.data.frame(ped(ped))[cols])
+```
+
 ### Errors present after the normalisation process
 
 If any error is detected after the normalisation process, then the normalised
 dataframe is gave back to the user with errors column added describing the
 encountered problems.
+
+```{r, rel_df errors}
+rel_df$code[2] <- "A"
+df <- Pedigree(sampleped, rel_df)
+print(df)
+```
 
 ## Validation
 
@@ -137,8 +172,10 @@ This validation step will check up for many errors such as:
 - $steril$, $status$, $available$, $affected$ only contains 0, 1 or NA values
 - Father are males and Mother are females
 - Twins have same parents and MZ twins have same sex
+- Hints object is valid and ids contained is in the Ped object
+- ...
 
-Pedigree S4 slots
+Pedigree Class
 ========================
 
 After validation an $S4$ object is generated.
@@ -146,30 +183,85 @@ This new concept make it possible to easily setup methods for this new
 type of object.
 The controls of the parameters is also more precise.
 
-The $Pedigree$ object contains 4 slots:
+The $Pedigree$ object contains 4 slots, each of them contains a different
+$S4$ object containing a specific type of information used for the Pedigree
+construction.
 
-- $ped$ the Pedigree information as a dataframe with at least the
-following columns:
+- $ped$ a Ped object for the Pedigree information with at least the following slots:
     - $id$ the identifiers of the individuals
     - $dadid$ the identifiers of the fathers
     - $momid$ the identifiers of the mothers
     - $sex$ the gender of each individuals
-- $rel$ the relationship dataframe describing all special relationship
-beetween individuals that can't be descibed in the $ped$ slot.
-The minimal columns needed are :
+- $rel$ a Rel object describing all special relationship beetween individuals
+that can't be descibed in the $ped$ slot.
+The minimal slots needed are :
     - $id1$ the identifiers of the 1st individuals
     - $id2$ the identifiers of the 2nd individuals
     - $code$ factor describing the type of relationship
     ("MZ twin", "DZ twin", "UZ twin", "Spouse")
-- $scales$ a list of two elements
+- $scales$ a Scales object with two slots :
     - $fill$ a dataframe describing which modalities in which columns
     correspond to an affected individuals.
     Plotting information such as colour, angle and density are also provided
     - $border$ a dataframe describing which modalities in which columns to
     use to plot the border of the plot elements.
-- $hints$ a list of two elements
+- $hints$ a Hints object with two slots :
     - $horder$ numeric vector for the ordering of the individuals plotting
     - $spouse$ a matrix of the spouses
+
+For more information on each object:
+- `help(Ped)`
+- `help(Rel)`
+- `help(Scales)`
+- `help(Hints)`
+
+Pedigree accessors
+========================
+
+As the Pedigree object is now an $S4$ class, we have made available a number
+of accessors.
+Most of them can be used as a getter or as a setter to modify a value in the
+correponding slot of the object
+
+## For the Pedigree object
+
+- Get/Set slots : ped(), rel(), scales(), hints()
+- Wrapper to the Ped object: famid(), mcols()
+- Wrapper of the Scales object: fill(), border()
+- Wrapper of the Hints object: horder(), spouse()
+
+## For the Ped object
+
+- Given in input: id(), dadid(), momid(), famid(), sex()
+- Other infos used : affected(), avail(), status()
+- Computed : isinf(), kin(), useful()
+- Metadata : mcols()
+
+## For the Rel object
+
+- id1(), id2(), code(), famid()
+
+## For the Scales object
+
+- fill(), border()
+
+## For the Hints object
+
+- horder(), spouse()
+
+## Focus on mcols()
+
+The mcols() accessors is the one you should use to add more
+informations to your individuals.
+
+```{r, mcols}
+mcols(ped)
+## Add new columns as a threshold if identifiers of individuals superior
+## to a given threshold for example
+mcols(ped)$idth <- ifelse(as.numeric(mcols(ped)$indId) < 200, "A", "B")
+mcols(ped)$idth
+```
+
 
 Pedigree methods
 ========================
@@ -180,9 +272,7 @@ With this new S4 object comes multiple methods to ease the use of it:
 - summary()
 - print()
 - show()
-- as.data.frame()
 - as.list()
-- setAs()
 - `[`
 - shrink()
 - generate_colors()
@@ -190,9 +280,38 @@ With this new S4 object comes multiple methods to ease the use of it:
 - kindepth()
 - kinship()
 - make_famid()
+- upd_famid_id()
 - num_child()
 - unrelated()
 - useful_inds()
+
+```{r, pedigree methods}
+## We can change the family name based on an other column
+ped <- upd_famid_id(ped, mcols(ped)$idth)
+
+## We can substract a given family
+pedA <- ped[famid(ped) == "A"]
+
+## Plot it
+plot(pedA, cex = 0.5)
+
+## Do a summary
+summary(pedA)
+
+## Coerce it to a list
+as.list(pedA)
+
+## Shrink it to keep only the necessary information
+lst1_s <- shrink(pedA, max_bits = 10)
+plot(lst1_s$pedObj, cex = 0.5)
+
+## Compute the kinship individuals matrix
+kinship(pedA)
+
+## Get the useful individuals
+pedA <- useful_inds(pedA, informative = "AvAf")
+as.data.frame(ped(pedA))["useful"]
+```
 
 Session information
 ===================

@@ -48,8 +48,6 @@ structure `vignette("Pedigree alignment details", package = "Pedixplorer")`
 - The [plotting algorithm]("pedigree_plot_details.html") used to plot the
 Pedigree `vignette("Pedigree plotting details", package = "Pedixplorer")`
 
-
-
 Installation
 ===============
 The `Pedixplorer` package is available on Bioconductor and can be installed
@@ -74,12 +72,12 @@ The Pedigree S4 object
 The Pedigree object is a list of dataframes that describe the family structure.
 It contains the following components:
 
-- ped: a Ped object with the Pedigree information
-- rel: a Rel object with the relationship information
+- ped: a Ped object with the Pedigree information `help(Ped)`.
+- rel: a Rel object with the relationship information `help(Rel)`.
 - scales: a Scales object of 2 dataframe with the filling and borders
-informations for the plot
+informations for the plot `help(Scales)`.
 - hints: a Hints objects with 2 slots indicating the horder and the spouse to
-organise the Pedigree structure
+organise the Pedigree structure `help(Hints)`.
 
 Basic Usage
 =============
@@ -108,8 +106,8 @@ underscore to create a unique id for each individual in the Pedigree object.
 
 ```{r, Pedigree_creation}
 data("sampleped")
-sampleped[1:10, ]
-ped <- Pedigree(sampleped)
+print(sampleped[1:10, ])
+ped <- Pedigree(sampleped[c(3, 4, 10, 35, 36), ])
 print(ped)
 ```
 
@@ -118,14 +116,14 @@ For more information on the *Pedigree()* function, see `help(Pedigree)`.
 The Pedigree object can be subset to individual pedigrees 
 by their family id.  The Pedigree object has a print, summary and plot method,
 which we show below.
-The print method prints a short summary of the Pedigree.
-The summary method prints a more detailed summary of the Pedigree.
+The print method prints the Ped and Rel object of the Pedigree.
+The summary method prints a short summary of the Pedigree.
 Finally the plot method displays the Pedigree.
 
 ```{r, ped1}
+ped <- Pedigree(sampleped)
 print(famid(ped))
 ped1 <- ped[famid(ped) == "1"]
-print(ped1)
 summary(ped1)
 plot(ped1)
 ```
