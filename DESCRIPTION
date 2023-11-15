@@ -1,6 +1,6 @@
 Package: Pedixplorer
-Version: 0.99.2
-Date: 2023-09-19
+Version: 0.99.3
+Date: 2023-11-15
 Title: Pedigree Functions
 Authors@R: c(
     person("Louis", "Le Nézet", email="louislenezet@gmail.com",
@@ -50,7 +50,7 @@ Suggests:
 Config/testthat/edition: 3
 biocViews: Software, DataRepresentation, Genetics, Alignment
 BugReports: https://github.com/LouisLeLezet/Pedixplorer/issues
-url: https://github.com/LouisLeNezet/Pedixplorer
+URL: https://github.com/LouisLeNezet/Pedixplorer
 BiocType: Software
 Collate: 
     'AllValidity.R'
@@ -93,4 +93,4 @@ Collate:
     'shrink.R'
     'unrelated.R'
     'useful_inds.R'
-LazyData: true
+LazyData: false

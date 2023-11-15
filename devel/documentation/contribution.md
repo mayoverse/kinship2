@@ -77,14 +77,15 @@ If you have `R.exe` in your path you can run:
 ```powershell
 set R_CHECK_ENVIRON=./documentation/check.Renviron
 R.exe CMD build .
-R.exe CMD check kinship2_1.99.0.tar.gz
+R.exe CMD check Pedixplorer_0.99.2.tar.gz
 ```
 
 ## Submit to BioConductor
 
 ```R
+BiocManager::install("BiocCheck")
 BiocCheck::BiocCheckGitClone()
-BiocCheck::BiocCheck('kinship2'=TRUE)
+BiocCheck::BiocCheck("Pedixplorer"=TRUE)
 ```
 
 ## To check up

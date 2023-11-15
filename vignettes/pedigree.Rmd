@@ -39,8 +39,7 @@ various criteria, and kinship for the X chromosome.
 
 Suplementary vignettes are available to explain:
 
-- The [Pedigree() constructor]("pedigree_constructor.html") used to create a
-Pedigree object `vignette("Pedigree() constructor", package = "Pedixplorer")`
+- The [Pedigree object]("pedigree_object.html") `vignette("Pedigree object", package = "Pedixplorer")`
 - The [alignment algorithm]("alignment_details.html") used create the Pedigree
 structure `vignette("Pedigree alignment details", package = "Pedixplorer")`
 - The [kinship() algorithm]("kinship_details.html")
@@ -304,8 +303,7 @@ The plot shapes for each subject is therefore divided into two equal parts and
 shaded differently to indicate the two affected indicators.
 
 ```{r, two_affection}
-df2$bald <- as.factor(c(0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1))
-ped2 <- Pedigree(df2)
+mcols(ped2)$bald <- as.factor(c(0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1))
 ped2 <- generate_colors(ped2, col_aff = "bald", add_to_scale = TRUE)
 plot(ped2, legend = TRUE)
 ```
@@ -330,12 +328,12 @@ a question mark to indicate unknown zygosity.
 ```{r, twins}
 ## create twin relationships
 rel_df <- data.frame(
-    indId1 = c(210, 212),
-    indId2 = c(211, 213),
+    indId1 = c("210", "212"),
+    indId2 = c("211", "213"),
     code = c(1, 3),
-    family = c(2, 2)
+    family = c("2", "2")
 )
-ped2 <- Pedigree(df2, rel_df)
+rel(ped2) <- upd_famid_id(with(rel_df, Rel(indId1, indId2, code, family)))
 plot(ped2)
 ```
 
@@ -379,13 +377,14 @@ between the individuals $212$ and $211$ we get the following plot.
 
 ```{r, spouse}
 ## create twin relationships
-rel_df <- data.frame(
-    id1 = c(210, 212, 211),
-    id2 = c(211, 213, 212),
-    code = c(1, 3, 4),
-    famid = c(2, 2, 2)
+rel_df2 <- data.frame(
+    id1 = "211",
+    id2 = "212",
+    code = 4,
+    famid = "2"
 )
-ped2 <- Pedigree(df2, rel_df)
+new_rel <- c(rel(ped2), with(rel_df2, Rel(id1, id2, code, famid)))
+rel(ped2) <- upd_famid_id(new_rel)
 plot(ped2)
 ```
 
@@ -428,6 +427,22 @@ subjects, as Figure~\ref{reordPed1} no longer has subject $110$ duplicated.
 df1reord <- df1[c(35:41, 1:34), ]
 ped1reord <- Pedigree(df1reord, relate1)
 plot(ped1reord)
+```
+
+## Modify the scales
+
+You can modify the colors of each modality used for the filling as well as
+for the bordering by modifying the Scales data.frame.
+
+To do so you can do as follow:
+
+```{r, scales modif}
+scales(ped1)
+fill(ped1)$fill <- c("green", "blue", "purple")
+fill(ped1)$density <- c(30, 15, NA)
+fill(ped1)$angle <- c(45, 0, NA)
+border(ped1)$border <- c("red", "black", "orange")
+plot(ped1, legend = TRUE)
 ```
 
 Pedigree Utility Functions

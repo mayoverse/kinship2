@@ -1,5 +1,5 @@
 ---
-title: Pedigree() constructor
+title: Pedigree object
 author: Terry Therneau, Elizabeth Atkinson, Louis Le Nézet
 date: '`r format(Sys.time(),"%d %B, %Y")`'
 output:
@@ -8,7 +8,7 @@ output:
     toc_depth: 2
 header-includes: \usepackage{tabularx}
 vignette: |
-  %\VignetteIndexEntry{Pedigree() constructor}
+  %\VignetteIndexEntry{Pedigree object}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 ---
@@ -139,10 +139,11 @@ be aggregated to the id of each individual and separated by an ''_'' to
 ensure the uniqueness of the individuals identifiers.
 
 ```{r, normalisation}
-data(sampleped)
+library(Pedixplorer)
+data("sampleped")
 cols <- c("sex", "id", "avail")
 summary(sampleped[cols])
-ped <- Pedigree(sampleped, rel_df)
+ped <- Pedigree(sampleped)
 summary(as.data.frame(ped(ped))[cols])
 ```
 
@@ -153,8 +154,9 @@ dataframe is gave back to the user with errors column added describing the
 encountered problems.
 
 ```{r, rel_df errors}
-rel_df$code[2] <- "A"
-df <- Pedigree(sampleped, rel_df)
+rel_wrong <- rel_df
+rel_wrong$code[2] <- "A"
+df <- Pedigree(sampleped, rel_wrong)
 print(df)
 ```
 
@@ -255,6 +257,7 @@ The mcols() accessors is the one you should use to add more
 informations to your individuals.
 
 ```{r, mcols}
+ped <- Pedigree(sampleped)
 mcols(ped)
 ## Add new columns as a threshold if identifiers of individuals superior
 ## to a given threshold for example

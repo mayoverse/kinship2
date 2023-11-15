@@ -128,8 +128,10 @@ The second is \code{align}, a vector of 2 alignment parameters \code{a} and
 \code{b}.
 For each set of siblings at a set of locations \code{x} and with parents at
 \code{p=c(p1,p2)} the alignment penalty is
+
 \deqn{(1/k^a)\sum{i=1}{k} [(x_i - (p1+p2)/2)]^2}
-\deqn{\sum(x- \mean(p))^2/(k^a)}
+
+\deqn{\sum(x- \overline(p))^2/(k^a)}
 
 Where k is the number of siblings in the set.
 
