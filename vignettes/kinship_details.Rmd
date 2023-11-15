@@ -3,8 +3,8 @@ title: Pedigree kinship() details
 author: TM Therneau
 date: '`r format(Sys.time(),"%d %B, %Y")`'
 output:
-  rmarkdown::html_vignette:
-    toc: yes
+  BiocStyle::html_document:
+    toc: true
     toc_depth: 2
 header-includes: \usepackage{tabularx}
 vignette: |
@@ -133,7 +133,7 @@ for backwards compatability with an older version of the routine.
 We give founders a fake parent of subject $n+1$ who is not related to
 anybody (even themself); it avoids some if-then-else constructions.
 
-## Pedigree Object
+## With a Pedigree object
 
 The method for a Pedigree object is an almost trivial modification. Since the
 mother and father are already indexed into the id list it has 
@@ -183,7 +183,7 @@ family/subject.
 library(Pedixplorer)
 data(sampleped)
 ped <- Pedigree(sampleped)
-kinship(ped)
+kinship(ped)[35:48, 35:48]
 ```
 
 ## MakeKinship
