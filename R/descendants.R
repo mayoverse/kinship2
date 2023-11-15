@@ -31,6 +31,14 @@ setMethod("descendants",
     function(idlist, obj, dadid, momid) {
         id <- as.character(obj)
         idlist <- as.character(idlist)
+
+        if (any(!idlist %in% id)) {
+            stop(
+                "All individuals in idlist should be in id ",
+                idlist[!idlist %in% id]
+            )
+        }
+
         dadid <- as.character(dadid)
         momid <- as.character(momid)
         child <- id[!(
