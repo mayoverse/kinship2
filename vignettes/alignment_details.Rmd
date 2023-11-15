@@ -3,8 +3,8 @@ title: Pedigree alignment details
 author: TM Therneau
 date: '`r format(Sys.time(),"%d %B, %Y")`'
 output:
-  rmarkdown::html_vignette:
-    toc: yes
+  BiocStyle::html_document:
+    toc: true
     toc_depth: 2
 header-includes: \usepackage{tabularx}
 vignette: |
