@@ -848,16 +848,16 @@ setMethod("Pedigree", "data.frame",  function(
         )
     }
     if (any(!is.na(ped_df$error))) {
-        warning("The Pedigree informations are not valid.",
-            "Here is the normalised Pedigree informations",
+        warning("The Pedigree informations are not valid. ",
+            "Here is the normalised Pedigree informations ",
             "with the identified problems"
         )
         return(ped_df)
     }
 
     if (any(!is.na(rel_df$error))) {
-        warning("The relationship informations are not valid.",
-            "Here is the normalised relationship informations",
+        warning("The relationship informations are not valid. ",
+            "Here is the normalised relationship informations ",
             "with the identified problems"
         )
         return(rel_df)

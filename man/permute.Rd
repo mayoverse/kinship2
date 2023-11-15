@@ -17,10 +17,5 @@ Given a vector of length \strong{n}, generate all possible permutations of
 the numbers 1 to \strong{n}.
 This is a recursive routine, and is not very efficient.
 }
-\examples{
-permute(1:3)
-permute(1:4)
-permute(1:5)
-}
 \keyword{auto_hint}
 \keyword{internal,}

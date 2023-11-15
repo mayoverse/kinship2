@@ -77,7 +77,10 @@ NULL
 #'     vitalStatus = c("TRUE", "FALSE", TRUE, FALSE, 1, 0, 1, 0, 1, 0),
 #'     affection = c("TRUE", "FALSE", TRUE, FALSE, 1, 0, 1, 0, 1, 0)
 #' )
-#' norm_ped(df)
+#' tryCatch(
+#'      norm_ped(df),
+#'      error = function(e) print(e)
+#' )
 #'
 #' @seealso [Ped()], [Ped-class], [Pedigree()]
 #' @export

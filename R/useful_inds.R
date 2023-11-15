@@ -79,7 +79,6 @@ setMethod("useful_inds", "character",
 #'
 #' data(sampleped)
 #' ped1 <- Pedigree(sampleped[sampleped$famid == "1",])
-#' ped1 <- num_child(ped1)
 #' ped(useful_inds(ped1, informative = "AvAf"))
 #' @export
 setMethod("useful_inds", "Pedigree", function(obj,

@@ -84,7 +84,6 @@ usefulness of the individual. This boolean is hereditary.
 
 data(sampleped)
 ped1 <- Pedigree(sampleped[sampleped$famid == "1",])
-ped1 <- num_child(ped1)
 ped(useful_inds(ped1, informative = "AvAf"))
 }
 \keyword{shrink}

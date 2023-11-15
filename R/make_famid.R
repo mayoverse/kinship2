@@ -181,6 +181,7 @@ setMethod("upd_famid_id",
         obj@id <- upd_famid_id(id(obj), famid)
         obj@dadid <- upd_famid_id(dadid(obj), famid)
         obj@momid <- upd_famid_id(momid(obj), famid)
+        obj@famid <- famid
         validObject(obj)
         obj
     }
@@ -204,6 +205,7 @@ setMethod("upd_famid_id",
     function(obj, famid) {
         obj@id1 <- upd_famid_id(id1(obj), famid)
         obj@id2 <- upd_famid_id(id2(obj), famid)
+        obj@famid <- famid
         validObject(obj)
         obj
     }

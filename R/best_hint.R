@@ -6,11 +6,6 @@
 #'
 #' @param x A vector of length **n**
 #' @return A matrix with **n** cols and **n!** rows
-#'
-#' @examples
-#' permute(1:3)
-#' permute(1:4)
-#' permute(1:5)
 #' @keywords internal, auto_hint
 permute <- function(x) {
     n <- length(x)
