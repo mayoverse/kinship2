@@ -97,7 +97,7 @@ test_that("besthint works", {
     expect_snapshot(plist)
 })
 
-test_that("Alignement with spouse", {
+test_that("Alignment with spouse", {
     data(sampleped)
     df1 <- sampleped[sampleped$famid == 1, ]
     relate1 <- data.frame(

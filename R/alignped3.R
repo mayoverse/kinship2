@@ -26,8 +26,8 @@
 #'
 #' Now merge the two trees. Start at the top level and work down.
 #'
-#' @param alt1 Alignement of the first tree
-#' @param alt2 Alignement of the second tree
+#' @param alt1 Alignment of the first tree
+#' @param alt2 Alignment of the second tree
 #' @param space Space between two subjects
 #' @inheritParams align
 #'

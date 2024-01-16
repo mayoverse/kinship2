@@ -45,10 +45,10 @@ Supplementary vignettes are available to explain:
 
 -   The **$Pedigree$ object** `vignette("pedigree_object", package = "Pedixplorer")`
 -   The **alignment algorithm** used create the Pedigree structure
-    `vignette("alignment_details", package = "Pedixplorer")`
--   The **kinship algorithm** `vignette("kinship_details", package = "Pedixplorer")`
+    `vignette("pedigree_alignment", package = "Pedixplorer")`
+-   The **kinship algorithm** `vignette("pedigree_kinship", package = "Pedixplorer")`
 -   The **plotting algorithm** used to plot the Pedigree
-    `vignette("pedigree_plot_details", package = "Pedixplorer")`
+    `vignette("pedigree_plot", package = "Pedixplorer")`
 
 # Installation
 

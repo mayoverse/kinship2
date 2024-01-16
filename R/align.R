@@ -56,7 +56,7 @@ ancestors <- function(idx, momx, dadx) {
 #' list returned.
 #'
 #' For more information you can read the associated vignette:
-#' `vignette("alignment_details")`.
+#' `vignette("pedigree_alignment")`.
 #'
 #' @param obj A Pedigree object
 #' @param packed Should the Pedigree be compressed.
