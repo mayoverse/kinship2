@@ -1,5 +1,5 @@
 ---
-title: "Pedixplorer Pedigree"
+title: "Pedixplorer tutorial"
 author: "Louis Le Nézet"
 date: "31/08/2023"
 url: "https://github.com/LouisLeNezet/Pedixplorer"
