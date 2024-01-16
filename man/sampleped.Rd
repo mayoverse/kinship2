@@ -3,27 +3,27 @@
 \docType{data}
 \name{sampleped}
 \alias{sampleped}
-\title{samplepedigree data}
+\title{Sampleped data}
 \format{
 A data frame with 55 observations, one line per subject, on the
 following 7 variables.
 \itemize{
-\item \code{family} family identifier
-\item \code{id} subject identifier
-\item \code{dadid} identifier of the father, if the father is part of the
+\item \code{famid} : Family identifier
+\item \code{id} : Subject identifier
+\item \code{dadid} : Identifier of the father, if the father is part of the
 data set; zero otherwise
-\item \code{momid} identifier of the mother, if the mother is part of the
+\item \code{momid} : Identifier of the mother, if the mother is part of the
 data set; zero otherwise
-\item \code{sex} 1 for male or 2 for F
-\item \code{affected} 1 or 0
-\item \code{available} 1 or 0
+\item \code{sex} : \code{1} for male or \code{2} for female
+\item \code{affected} : \code{1} or \code{0}
+\item \code{avail} : \code{1} or \code{0}
 }
 }
 \usage{
 data("sampleped")
 }
 \description{
-Small sample pedigree data set.
+Small sample pedigree data set for testing purposes.
 }
 \details{
 This is a small fictive pedigree data set, with 55

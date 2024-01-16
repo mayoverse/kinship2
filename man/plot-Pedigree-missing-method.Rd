@@ -34,44 +34,44 @@
 \arguments{
 \item{x}{A Pedigree object.}
 
-\item{aff_mark}{if TRUE, add a aff_mark to each box corresponding to the
+\item{aff_mark}{If \code{TRUE}, add a aff_mark to each box corresponding to the
 value of the affection column for each filling scale.}
 
-\item{label}{if not NULL, add a label to each box corresponding to the
+\item{label}{If not \code{NULL}, add a label to each box corresponding to the
 value of the column given.}
 
-\item{ggplot_gen}{logical, if TRUE add the segments to the ggplot object}
+\item{ggplot_gen}{If TRUE add the segments to the ggplot object}
 
-\item{cex}{character expansion of the text}
+\item{cex}{Character expansion of the text}
 
-\item{symbolsize}{size of the symbols}
+\item{symbolsize}{Size of the symbols}
 
 \item{branch}{defines how much angle is used to connect various levels of
 nuclear families.}
 
-\item{packed}{Should the Pedigree be compressed, i.e., allow diagonal
-lines connecting parents to children in order to have a smaller overall
-width for the plot.}
+\item{packed}{Should the Pedigree be compressed.
+(i.e. allow diagonal lines connecting parents to children in order
+to have a smaller overall width for the plot.)}
 
-\item{align}{for a packed Pedigree, align children under parents \code{TRUE},
+\item{align}{For a packed Pedigree, align children under parents \code{TRUE},
 to the extent possible given the page width, or align to to the left
 margin \code{FALSE}.
 This argument can be a two element vector, giving the alignment
 parameters, or a logical value.
-If \code{TRUE}, the default is \code{c(1.5, 2)}, or numeric the routine
+If \code{TRUE}, the default is \code{c(1.5, 2)}, or if numeric the routine
 \code{alignped4()} will be called.}
 
-\item{width}{for a packed output, the minimum width of the plot, in
+\item{width}{For a packed output, the minimum width of the plot, in
 inches.}
 
 \item{title}{The title of the plot.}
 
-\item{subreg}{4-element vector for (min x, max x, min depth, max depth),
+\item{subreg}{A 4-element vector for (min x, max x, min depth, max depth),
 used to edit away portions of the plot coordinates returned by
 \code{\link[=align]{align()}}.
 This is useful for zooming in on a particular region of the Pedigree.}
 
-\item{pconnect}{when connecting parent to children the program will try to
+\item{pconnect}{When connecting parent to children the program will try to
 make the connecting line as close to vertical as possible, subject to it
 lying inside the endpoints of the line that connects the children by at
 least \code{pconnect} people.  Setting this option to a large number will
@@ -80,7 +80,7 @@ force the line to connect at the midpoint of the children.}
 \item{fam_to_plot}{default=1.  If the Pedigree contains multiple families,
 this parameter can be used to select which family to plot.
 It can be a numeric value or a character value. If numeric, it is the
-index of the family to plot returned by \code{unique(x$ped$family)}.
+index of the family to plot returned by \code{unique(x$ped$famid)}.
 If character, it is the family id to plot.}
 
 \item{legend}{default=FALSE.  If TRUE, a legend will be added to the plot.}
@@ -110,33 +110,43 @@ an invisible list containing
 }
 }
 \description{
-plot objects created with the Pedigree function
+This function is used to plot a Pedigree object.
+
+It is a wrapper for \code{\link[=plot_fromdf]{plot_fromdf()}} and \code{\link[=ped_to_plotdf]{ped_to_plotdf()}} as well as
+\code{\link[=ped_to_legdf]{ped_to_legdf()}} if \code{legend = TRUE}.
 }
 \details{
 Two important parameters control the looks of the result.  One is the user
 specified maximum width.  The smallest possible width is the maximum number
 of subjects on a line, if the user's suggestion is too low it is
-increased to 1 + that amount (to give just a little wiggle room). To make a
-Pedigree where all children are centered under parents simply make the width
-large enough, however, the symbols may get very small.
+increased to 1 + that amount (to give just a little wiggle room).
+
+To make a Pedigree where all children are centered under parents simply
+make the width large enough, however, the symbols may get very small.
 
 The second is \code{align}, a vector of 2 alignment parameters \code{a} and
 \code{b}.
 For each set of siblings at a set of locations \code{x} and with parents at
-\code{p=c(p1,p2)} the alignment penalty is \deqn{(1/k^a)\sum{i=1}{k} [(x_i -
-(p1+p2)/2)]^2} sum(x- mean(p))^2/(k^a) where k is the number of siblings in
-the set.
+\code{p=c(p1,p2)} the alignment penalty is
+
+\deqn{(1/k^a)\sum{i=1}{k} [(x_i - (p1+p2)/2)]^2}
+
+\deqn{\sum(x- \overline(p))^2/(k^a)}
+
+Where k is the number of siblings in the set.
+
 When \code{a = 1} moving a sibship with \code{k} sibs one unit to the
 left or right of optimal will incur the same cost as moving one with
 only 1 or two sibs out of place.
-If \code{a=0} then large sibships are harder to move than small ones,
+
+If \code{a = 0} then large sibships are harder to move than small ones,
 with the default value \code{a = 1.5} they are slightly easier to move
 than small ones.  The rationale for the default is as long as the parents
 are somewhere between the first and last siblings the result looks fairly
-good, so we are more flexible with the spacing of a large family. By
-tethering all the sibs to a single spot they are kept close to each other.
+good, so we are more flexible with the spacing of a large family.
+By tethering all the sibs to a single spot they are kept close to each other.
 The alignment penalty for spouses is \eqn{b(x_1 - x_2)^2}{b *(x1-x2)^2},
-which tends to keep them together.  The size of \code{b} controls the relative
+which tends to keep them together. The size of \code{b} controls the relative
 importance of sib-parent and spouse-spouse closeness.
 }
 \section{Side Effects}{
@@ -152,3 +162,4 @@ pedAll <- Pedigree(sampleped)
 \seealso{
 \code{\link[=Pedigree]{Pedigree()}}
 }
+\keyword{Pedigree-plot}

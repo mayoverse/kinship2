@@ -1,10 +1,10 @@
 #' @importFrom stringr str_split_i
 NULL
 
-#' Fix details on the parents for children of the Pedigree
+#' Fix parents relationship and gender
 #'
 #' @description
-#' Fix the sex of parents, add parents that are missing from the Pedigree
+#' Fix the sex of parents, add parents that are missing from the data.
 #' Can be used with a dataframe or a vector of the
 #' different individuals informations.
 #'
@@ -12,24 +12,21 @@ NULL
 #' First look to add parents whose ids are given in momid/dadid. Second, fix
 #' sex of parents. Last look to add second parent for children for whom only
 #' one parent id is given.
-#' If a family vector is given the family id will be added to the ids of all
-#' individuals (id, dadid, momid) separated by an underscore befor proceeding.
+#' If a **famid** vector is given the family id will be added to the ids of all
+#' individuals (`id`, `dadid`, `momid`)
+#' separated by an underscore before proceeding.
 #'
 #' ## Special case for dataframe
-#' Check for presence of both parents id in the `id` field.
-#' If not both presence behaviour depend of `delete` parameter
-#' - If TRUE then use fix_parents function and merge back the other fields
+#' Check for presence of both parents id in the **id** field.
+#' If not both presence behaviour depend of **delete** parameter
+#' - If `TRUE` then use fix_parents function and merge back the other fields
 #' in the dataframe then set availability to O for non available parents.
-#' - If FALSE then delete the id of missing parents
+#' - If `FALSE` then delete the id of missing parents
 #'
-#' @param family Optional family identification set it to NULL to invalidate.
-#' If used it will modify the ids of the individuals by pasting it with an _.
-#' @inheritParams kinship
-#' @inheritParams is_parent
-#' @inheritParams sex_to_factor
+#' @inheritParams Ped
 #' @param obj A data.frame or a vector of the individuals identifiers. If a
 #' dataframe is given it must contain the columns `id`, `dadid`,
-#' `momid`, `sex` and `family`. Family is optional.
+#' `momid`, `sex` and `famid` (optional).
 #'
 #' @return A data.frame with id, dadid, momid, sex as columns with the
 #' relationships fixed.
@@ -50,22 +47,21 @@ NULL
 #' )
 #' test1newmom <- with(test1char, fix_parents(id, father, mother,
 #'   sex,
-#'   missid = '0'
+#'   missid = NA_character_
 #' ))
-#' newped <- Pedigree(test1newmom)
-#' as.data.frame(newped)
+#' Pedigree(test1newmom)
 #'
 #' @author Jason Sinnwell
 #' @export
+#' @usage NULL
 setGeneric("fix_parents", signature = "obj",
     function(obj, ...) standardGeneric("fix_parents")
 )
 
-#' @export
 #' @rdname fix_parents
-#' @aliases fix_parents,character
+#' @export
 setMethod("fix_parents", "character", function(
-    obj, dadid, momid, sex, family = NULL, missid = "0"
+    obj, dadid, momid, sex, famid = NULL, missid = NA_character_
 ) {
     ## fix sex of parents add parents that are missing
     n <- length(obj)
@@ -79,7 +75,8 @@ setMethod("fix_parents", "character", function(
     if (length(sex) != n) {
         stop("Mismatched lengths, id and sex")
     }
-    if (length(family) != n & length(family) > 0) {
+
+    if (length(famid) != n & length(famid) > 0) {
         stop("Mismatched lengths, id and sex")
     }
 
@@ -96,20 +93,23 @@ setMethod("fix_parents", "character", function(
     } else if (mean(sex == 3) > 0.25) {
         warning("More than 25% of the gender values are 'unknown'")
     }
-    if (any(is.na(id) | id == missid)) {
+    if (any(is.na(id) | id %in% missid)) {
         stop("Missing value for the id variable")
     }
 
-    id <- prefix_famid(family, id, missid)
-    dadid <- prefix_famid(family, dadid, missid)
-    momid <- prefix_famid(family, momid, missid)
+    if (!is.null(famid)) {
+        id <- upd_famid_id(id, famid, missid)
+        dadid <- upd_famid_id(dadid, famid, missid)
+        momid <- upd_famid_id(momid, famid, missid)
+    }
+
     addids <- paste("addin", seq_along(id), sep = "-")
     if (length(grep("^ *$", id)) > 0) {
         stop("A blank or empty string is not allowed as the id variable")
     }
 
-    nofather <- (is.na(dadid) | dadid == missid)
-    nomother <- (is.na(momid) | momid == missid)
+    nofather <- (is.na(dadid) | dadid %in% missid)
+    nomother <- (is.na(momid) | momid %in% missid)
     if (any(duplicated(id))) {
         duplist <- id[duplicated(id)]
         msg_nb <- min(length(duplist), 6)
@@ -117,20 +117,21 @@ setMethod("fix_parents", "character", function(
     }
     findex <- match(dadid, id, nomatch = 0)
     mindex <- match(momid, id, nomatch = 0)
+
     ## dadid given, not found id, so add
     if (any(findex == 0 & !nofather)) {
         dadnotfound <- unique(dadid[which(findex == 0 & !nofather)])
         id <- c(id, dadnotfound)
         sex <- c(sex, rep(1, length(dadnotfound)))
-        dadid <- c(dadid, rep(0, length(dadnotfound)))
-        momid <- c(momid, rep(0, length(dadnotfound)))
+        dadid <- c(dadid, rep(missid, length(dadnotfound)))
+        momid <- c(momid, rep(missid, length(dadnotfound)))
     }
     if (any(mindex == 0 & !nomother)) {
         momnotfound <- unique(momid[which(mindex == 0 & !nomother)])
         id <- c(id, momnotfound)
         sex <- c(sex, rep(2, length(momnotfound)))
-        dadid <- c(dadid, rep(0, length(momnotfound)))
-        momid <- c(momid, rep(0, length(momnotfound)))
+        dadid <- c(dadid, rep(missid, length(momnotfound)))
+        momid <- c(momid, rep(missid, length(momnotfound)))
     }
     if (any(sex[mindex] != 1)) {
         dadnotmale <- unique((id[findex])[sex[findex] != 1])
@@ -150,8 +151,8 @@ setMethod("fix_parents", "character", function(
         dadid[nodad_idx] <- addids[seq_along(nodad_idx)]
         id <- c(id, addids[seq_along(nodad_idx)])
         sex <- c(sex, rep(1, length(nodad_idx)))
-        dadid <- c(dadid, rep(0, length(nodad_idx)))
-        momid <- c(momid, rep(0, length(nodad_idx)))
+        dadid <- c(dadid, rep(missid, length(nodad_idx)))
+        momid <- c(momid, rep(missid, length(nodad_idx)))
     }
     ## children with dad in ped, mom missing
     addids <- addids[!(addids %in% id)]
@@ -160,16 +161,16 @@ setMethod("fix_parents", "character", function(
         momid[nodad_idx] <- addids[seq_along(nodad_idx)]
         id <- c(id, addids[seq_along(nodad_idx)])
         sex <- c(sex, rep(2, length(nodad_idx)))
-        dadid <- c(dadid, rep(0, length(nodad_idx)))
-        momid <- c(momid, rep(0, length(nodad_idx)))
+        dadid <- c(dadid, rep(missid, length(nodad_idx)))
+        momid <- c(momid, rep(missid, length(nodad_idx)))
     }
-    if (is.null(family)) {
+    if (is.null(famid)) {
         data.frame(id = id, momid = momid, dadid = dadid, sex = sex)
     } else {
-        family <- stringr::str_split_i(id, "_", i = 1)
+        famid <- make_famid(id, dadid, momid)
         data.frame(
             id = id, momid = momid, dadid = dadid,
-            sex = sex, family = family
+            sex = sex, famid = famid
         )
     }
 })
@@ -179,14 +180,13 @@ setMethod("fix_parents", "character", function(
 #' - `FALSE` : be deleted
 #' @param filter Filtering column containing `0` or `1` for the
 #' rows to kept before proceeding.
-#'
-#' @export
 #' @rdname fix_parents
+#' @export
 setMethod("fix_parents", "data.frame", function(
-    obj, delete = FALSE, filter = NULL, missid = "0"
+    obj, delete = FALSE, filter = NULL, missid = NA_character_
 ) {
     cols_needed <- c("id", "dadid", "momid", "sex", filter)
-    df <- check_columns(obj, cols_needed, NULL, "family", others_cols = TRUE,
+    df <- check_columns(obj, cols_needed, NULL, "famid", others_cols = TRUE,
         cols_to_use_init = TRUE
     )
     df_old <- df
@@ -202,18 +202,18 @@ setMethod("fix_parents", "data.frame", function(
             # One of the parents doesn't not have a line in id
             dad_present <- match(df$dadid, df$id, nomatch = missid)
             mom_present <- match(df$momid, df$id, nomatch = missid)
-            df[dad_present == missid |
-                    mom_present == missid, c("momid", "dadid")
+            df[dad_present %in% missid |
+                    mom_present %in% missid, c("momid", "dadid")
             ] <- missid
         }
         df_fix <- fix_parents(
             df$id, df$dadid, df$momid,
-            df$sex, missid = missid, family = df$family
+            df$sex, missid = missid, famid = df$famid
         )
         col_used <- which(names(df_old) == "momid" |
                 names(df_old) == "dadid" |
                 names(df_old) == "sex" |
-                names(df_old) == "family"
+                names(df_old) == "famid"
         )
         df <- merge(df_old[, -col_used], df_fix, by = "id",
             all.y = TRUE, all.x = FALSE

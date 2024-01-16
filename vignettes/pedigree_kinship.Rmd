@@ -3,8 +3,8 @@ title: Pedigree kinship() details
 author: TM Therneau
 date: '`r format(Sys.time(),"%d %B, %Y")`'
 output:
-  rmarkdown::html_vignette:
-    toc: yes
+  BiocStyle::html_document:
+    toc: true
     toc_depth: 2
 header-includes: \usepackage{tabularx}
 vignette: |
@@ -105,7 +105,7 @@ a for loop containing operations on single rows/columns.
 
 At one point below we use a vectorized version. It looks like the snippet below
 
-```{r, eval=FALSE}
+```{r, kinship_algo, eval=FALSE}
 for (g in 1:max(depth)) {
     indx <- which(depth == g)
     kmat[indx, ] <- (kmat[mother[indx], ] + kmat[father[indx], ]) / 2
@@ -133,7 +133,7 @@ for backwards compatability with an older version of the routine.
 We give founders a fake parent of subject $n+1$ who is not related to
 anybody (even themself); it avoids some if-then-else constructions.
 
-## Pedigree Object
+## With a Pedigree object
 
 The method for a Pedigree object is an almost trivial modification. Since the
 mother and father are already indexed into the id list it has 
@@ -179,6 +179,13 @@ If all of the subject ids are unique, across all families, the final
 matrix is labeled with the subject id, otherwise it is labeled with
 family/subject.
 
+```{r, kinship}
+library(Pedixplorer)
+data(sampleped)
+ped <- Pedigree(sampleped)
+kinship(ped)[35:48, 35:48]
+```
+
 ## MakeKinship
 
 The older $makekinship$ function,
@@ -204,7 +211,7 @@ Consider the following rather difficult example:
 | id1|id2|
 |----|---|
 | 1  | 2 |
-| 1  | 3 |
+| 2  | 3 |
 | 5  | 6 |
 | 3  | 7 |
 | 10 | 9 |
@@ -223,6 +230,24 @@ Next make a matrix that has a row for every possible pair.
 Finally, remove the rows that are identical.
 The result is a set of all pairs of observations in the matrix that
 correspond to monozygotic pairs.
+
+```{r, kinship twins}
+df <- data.frame(
+    id = c(1, 2, 3, 4, 5, 6, 7, 8),
+    dadid = c(4, 4, 4, NA, 4, 4, 4, NA),
+    momid = c(8, 8, 8, NA, 8, 8, 8, NA),
+    sex = c(1, 1, 1, 1, 2, 2, 1, 2)
+)
+rel <- data.frame(
+    id1 = c(1, 3, 6, 7),
+    id2 = c(2, 2, 5, 3),
+    code = c(1, 1, 1, 1)
+)
+ped <- Pedigree(df, rel)
+plot(ped)
+twins <- c(1, 2, 3, 7, 5, 6)
+kinship(ped)[twins, twins]
+```
 
 Session information
 ===================

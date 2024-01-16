@@ -6,10 +6,10 @@ test_that("Pedigree shrink works", {
     ped_mb <- Pedigree(minnbreast,
         cols_ren_ped = list(fatherId = "fatherid", motherId = "motherid",
             indId = "id", gender = "sex", family = "famid"
-        )
+        ), missid = "0"
     )
     ped_mb <- generate_colors(ped_mb, col_aff = "cancer", add_to_scale = FALSE)
-    mn2 <- ped_mb[ped_mb$ped$family == "5", ]
+    mn2 <- ped_mb[famid(ped_mb) == "5"]
 
 
     ## this Pedigree as one person with cancer. The Pedigree is not informative
@@ -22,9 +22,10 @@ test_that("Pedigree shrink works", {
     )
 
     ## breaks in trim
-    avail <- ifelse(is.na(mn2$ped$cancer), 0, mn2$ped$cancer)
+    avail(ped(mn2)) <- ifelse(is.na(mcols(mn2)$cancer), 0, mcols(mn2)$cancer)
 
-    mn2_s <- shrink(mn2, avail)
+    find_unavailable(ped(mn2))
+    mn2_s <- shrink(mn2)
 
     expect_equal(mn2_s$id_lst$unavail,
         paste("5", c(
@@ -35,12 +36,12 @@ test_that("Pedigree shrink works", {
         ), sep = "_")
     )
 
-    mn8 <- ped_mb[ped_mb$ped$family == "8", ]
+    mn8 <- ped_mb[famid(ped_mb) == "8"]
     vdiffr::expect_doppelganger("Pedigree shrink 2",
         function() plot(mn8)
     )
 
-    avail <- ifelse(is.na(mn8$ped$cancer), 0, mn8$ped$cancer)
+    avail <- ifelse(is.na(mcols(mn8)$cancer), 0, mcols(mn8)$cancer)
 
     mn8_s <- shrink(mn8, avail)
 
@@ -59,25 +60,26 @@ test_that("Pedigree shrink error if missing info", {
     ## use sampleped from the package
     data("sampleped")
     ped <- Pedigree(sampleped)
-    ped2 <- ped[ped(ped)$family == "2", ]
-    ped2$ped$sex[c(13, 12)] <- c("unknown", "terminated")
+    ped2 <- ped[famid(ped) == "2"]
+    sex(ped(ped2))[c(13, 12)] <- c("unknown", "terminated")
 
     ## set 2nd col of affected to NA
-    ped2$ped$affected[c(7, 9)] <- NA
-    expect_error(shrink(ped = ped2, avail = ped2$ped$affected, max_bits = 32))
+    expect_no_error(shrink(ped2, max_bits = 32))
+    avail(ped(ped2))[c(7, 9)] <- NA
+    expect_error(shrink(ped2, max_bits = 32))
 })
 
 test_that("Pedigree shrink avail test", {
     ## use sampleped from the package
     data("sampleped")
     ped <- Pedigree(sampleped)
-    ped1 <- ped[ped(ped)$family == "1", ]
+    ped1 <- ped[famid(ped) == "1"]
 
     set.seed(10)
-    ped1_s_av_32 <- shrink(ped = ped1, max_bits = 32)
+    ped1_s_av_32 <- shrink(ped1, max_bits = 32)
 
     set.seed(10)
-    ped1_s_av_25 <- shrink(ped = ped1, max_bits = 25)
+    ped1_s_av_25 <- shrink(ped1, max_bits = 25)
 
     expect_equal(ped1_s_av_32$id_trim,
         paste("1", c(
@@ -97,12 +99,12 @@ test_that("Pedigree shrink avail test", {
 test_that("Pedigree shrink with character", {
     ## use sampleped from the package
     data("sampleped")
-    sampleped$family[sampleped$family == 1] <- "A"
+    sampleped$famid[sampleped$famid == 1] <- "A"
     ped <- Pedigree(sampleped)
-    ped1 <- ped[ped(ped)$family == "A", ]
+    ped1 <- ped[famid(ped) == "A"]
 
     set.seed(100)
-    ped1_s_av_32 <- shrink(ped = ped1, max_bits = 32)
+    ped1_s_av_32 <- shrink(ped1, max_bits = 32)
     expect_equal(ped1_s_av_32$id_trim, c(
         "A_101", "A_102", "A_107", "A_108",
         "A_111", "A_113", "A_121", "A_122",
@@ -110,7 +112,7 @@ test_that("Pedigree shrink with character", {
     ))
 
     set.seed(100)
-    ped1_s_av_25 <- shrink(ped = ped1, max_bits = 25)
+    ped1_s_av_25 <- shrink(ped1, max_bits = 25)
     expect_equal(ped1_s_av_25$id_trim, c(
         "A_101", "A_102", "A_107", "A_108",
         "A_111", "A_113", "A_121", "A_122",
@@ -122,7 +124,7 @@ test_that("Pedigree shrink with character", {
 test_that("Shrink works", {
     data("sampleped")
     ped <- Pedigree(sampleped)
-    ped2 <- ped[ped(ped)$family == "2", ]
+    ped2 <- ped[famid(ped) == "2"]
     ped2_s <- shrink(ped2)
 
     vdiffr::expect_doppelganger("Whole ped",
@@ -132,4 +134,3 @@ test_that("Shrink works", {
         function() plot(ped2_s$pedObj, title = "Shrinked ped")
     )
 })
-TRUE

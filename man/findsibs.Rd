@@ -2,7 +2,7 @@
 % Please edit documentation in R/auto_hint.R
 \name{findsibs}
 \alias{findsibs}
-\title{Routine to find the siblings of a subject}
+\title{Find the siblings of a subject}
 \usage{
 findsibs(idpos, plist, lev)
 }
@@ -10,21 +10,7 @@ findsibs(idpos, plist, lev)
 \item{idpos}{The position of the subject}
 
 \item{plist}{The alignment structure representing the Pedigree layout.
-For the differents matrices present in the list, each row represents a
-level of the Pedigree and each column a potential subject.
-It contains the following components:
-\itemize{
-\item n Vector of the number of subjects per level
-\item nid Matrix of the subjects indexes
-\item pos Matrix of the subjects positions
-\item fam Matrix of the siblings family identifiers
-\item spouse Matrix of the left spouses
-\itemize{
-\item \code{0} = not spouse
-\item \code{1} = spouse
-\item \code{2} = inbred spouse.
-}
-}}
+See \code{\link[=align]{align()}} for details.}
 
 \item{lev}{The generation level of the subject}
 }
@@ -32,7 +18,7 @@ It contains the following components:
 The positions of the siblings
 }
 \description{
-Routine to find the siblings of a subject
+Find the siblings of a subject
 }
 \details{
 This routine is used by \code{auto_hint()}.
@@ -41,4 +27,5 @@ It finds the siblings of a subject.
 \seealso{
 \code{\link[=auto_hint]{auto_hint()}}
 }
-\keyword{internal}
+\keyword{auto_hint}
+\keyword{internal,}

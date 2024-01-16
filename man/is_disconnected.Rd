@@ -2,28 +2,34 @@
 % Please edit documentation in R/utils.R
 \name{is_disconnected}
 \alias{is_disconnected}
-\title{Check wich individuals are disconnected}
+\title{Are individuals disconnected}
 \usage{
 is_disconnected(id, dadid, momid)
 }
 \arguments{
-\item{id}{A vector of each subjects identifiers}
-
 \item{dadid}{A vector containing for each subject, the identifiers of the
 biologicals fathers.}
 
-\item{momid}{vector containing for each subject, the identifiers of the
+\item{momid}{A vector containing for each subject, the identifiers of the
 biologicals mothers.}
 }
 \value{
-A vector of boolean of the same size as \code{id}
-with TRUE if the individual is disconnected and FALSE otherwise
+A vector of boolean of the same size as \strong{id}
+with \code{TRUE} if the individual is disconnected and
+\code{FALSE} otherwise
 }
 \description{
 Check which individuals are disconnected.
 }
 \details{
 An individuals is considered disconnected if the kinship with
-all the other individuals is 0.
+all the other individuals is \code{0}.
+}
+\examples{
+is_disconnected(
+     c("1", "2", "3", "4", "5"),
+     c("3", "3", NA, NA, NA),
+     c("4", "4", NA, NA, NA)
+)
 }
 \keyword{internal}

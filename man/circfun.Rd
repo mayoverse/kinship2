@@ -2,19 +2,27 @@
 % Please edit documentation in R/plot_fct.R
 \name{circfun}
 \alias{circfun}
-\title{Generate a circular element}
+\title{Circular element}
 \usage{
 circfun(nslice, n = 50)
 }
 \arguments{
-\item{nslice}{number of slices in the circle}
+\item{nslice}{Number of slices in the circle}
 
 \item{n}{Total number of points in the circle}
 }
 \value{
-a list of x and y coordinates
+A list of x and y coordinates per slice.
 }
 \description{
-Generate a circular element
+Create a list of x and y coordinates for a circle
+with a given number of slices.
 }
-\keyword{internal}
+\examples{
+
+circfun(1)
+circfun(1, 10)
+circfun(4, 50)
+}
+\keyword{Pedigree-plot}
+\keyword{internal,}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_fct.R
 \name{draw_polygon}
 \alias{draw_polygon}
-\title{Draw a polygon for a Pedigree}
+\title{Draw a polygon}
 \usage{
 draw_polygon(
   x,
@@ -22,20 +22,22 @@ draw_polygon(
 
 \item{p}{ggplot object}
 
-\item{ggplot_gen}{logical, if TRUE add the segments to the ggplot object}
+\item{ggplot_gen}{If TRUE add the segments to the ggplot object}
 
-\item{fill}{fill color}
+\item{fill}{Fill color}
 
-\item{border}{border color}
+\item{border}{Border color}
 
-\item{density}{density of shading}
+\item{density}{Density of shading}
 
-\item{angle}{angle of shading}
+\item{angle}{Angle of shading}
 }
 \value{
-Plot the polygon or add it to a ggplot object
+Plot the polygon  to the current device
+or add it to a ggplot object
 }
 \description{
-Draw a polygon for a Pedigree
+Draw a polygon
 }
-\keyword{internal}
+\keyword{Pedigree-plot}
+\keyword{internal,}

@@ -1,65 +1,58 @@
-#' Compute the usefulness of individuals
+#' Usefulness of individuals
 #'
-#' @description Check for usefulness of individuals
+#' @description Compute the usefulness of individuals
 #'
 #' @details Check for the informativeness of the individuals based on the
 #' informative parameter given, the number of children and the usefulness
-#' of their parents. A `useful` column is added to the dataframe with the
+#' of their parents. A `useful` slot is added to the Ped object with the
 #' usefulness of the individual. This boolean is hereditary.
 #'
 #' @param num_child_tot A numeric vector of the number of children of each
 #' individuals
 #' @param keep_infos Boolean to indicate if individuals with unknown status
 #' but available or reverse should be kept
+#' @inheritParams Ped
 #' @inheritParams is_informative
-#' @inheritParams num_child
-#' @inheritParams kinship
-#' @inheritParams is_parent
 #'
 #' @return
 #' ## When obj is a vector
 #' A vector of useful individuals identifiers
 #'
-#' ## When obj is a Pedigree
-#' The Pedigree object with a new column named 'useful' containing 1 for
-#' useful individuals and 0 otherwise.
-#' @examples
-#' data(sampleped)
-#' ped1 <- Pedigree(sampleped[sampleped$family == "1",])
-#' ped1 <- num_child(ped1)
-#' useful_inds(ped1, informative = "AvAf")$ped
+#' ## When obj is a Pedigree or Ped object
+#' The Pedigree or Ped object with the slot 'useful' containing `TRUE` for
+#' useful individuals and `FALSE` otherwise.
+#' @keywords shrink
 #' @export
+#' @usage NULL
 setGeneric("useful_inds", signature = "obj",
     function(obj, ...) standardGeneric("useful_inds")
 )
 
 #' @include is_informative.R
-#' @export
 #' @rdname useful_inds
-#' @docType methods
-#' @aliases useful_inds,character
+#' @export
 setMethod("useful_inds", "character",
     function(obj, dadid, momid, avail, affected, num_child_tot,
-        informative = "AvAf", keep_infos = FALSE, missid = "0"
+        informative = "AvAf", keep_infos = FALSE
     ) {
         id <- obj
 
         # Get informative individuals
         id_inf <- is_informative(id, avail, affected,
-            informative, missid
+            informative
         )
-        is_inf <- id %in% id_inf
+        isinf <- id %in% id_inf
 
         # Keep individual affected or available
         if (keep_infos) {
-            is_inf <- is_inf |
+            isinf <- isinf |
                 (!is.na(affected) & affected == 1) |
                 (!is.na(avail) & avail == 1)
         }
 
         # Check if parents participate to the Pedigree structure
         ped_part <- num_child_tot > 1
-        to_kept <- is_inf | ped_part
+        to_kept <- isinf | ped_part
 
         num_ind_old <- 0
         num_ind_new <- length(id[to_kept])
@@ -80,26 +73,45 @@ setMethod("useful_inds", "character",
     }
 )
 
-#' @docType methods
-#' @aliases useful_inds,Pedigree
-#' @export
 #' @rdname useful_inds
 #' @param reset Boolean to indicate if the `useful` column should be reset
+#' @examples
+#'
+#' data(sampleped)
+#' ped1 <- Pedigree(sampleped[sampleped$famid == "1",])
+#' ped(useful_inds(ped1, informative = "AvAf"))
+#' @export
 setMethod("useful_inds", "Pedigree", function(obj,
-    informative = "AvAf", keep_infos = FALSE,
-    missid = "0", reset = FALSE
+    informative = "AvAf", keep_infos = FALSE, reset = FALSE
 ) {
-    cols_needed <- c(
-        "avail", "affected", "num_child_tot"
+    new_ped <- useful_inds(ped(obj),
+        informative, keep_infos, reset
     )
-    check_columns(obj$ped, cols_needed, "", "", others_cols = TRUE)
-    useful <- useful_inds(obj$ped$id, obj$ped$dadid, obj$ped$momid,
-        obj$ped$avail, obj$ped$affected, obj$ped$num_child_tot,
-        informative, keep_infos, missid
+
+    obj@ped <- new_ped
+    validObject(obj)
+    obj
+})
+
+#' @rdname useful_inds
+#' @export
+setMethod("useful_inds", "Ped", function(obj,
+    informative = "AvAf", keep_infos = FALSE, reset = FALSE
+) {
+    useful <- useful_inds(id(obj), dadid(obj), momid(obj),
+        avail(obj), affected(obj), obj@num_child_tot,
+        informative, keep_infos
     )
-    if (!reset) {
-        check_columns(obj$ped, NULL, "useful", NULL, others_cols = TRUE)
+
+    if (!reset & any(!is.na(useful(obj)))) {
+        stop(
+            "The useful slot already has values in the Ped object",
+            " and reset is set to FALSE"
+        )
     }
-    obj$ped$useful <- ifelse(obj$ped$id %in% useful, 1, 0)
+    obj@useful <- vect_to_binary(
+        ifelse(id(obj) %in% useful, 1, 0), logical = TRUE
+    )
+    validObject(obj)
     obj
 })

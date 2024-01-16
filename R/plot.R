@@ -8,33 +8,43 @@ NULL
 #' Plot Pedigrees
 #'
 #' @description
-#' plot objects created with the Pedigree function
+#' This function is used to plot a Pedigree object.
+#'
+#' It is a wrapper for [plot_fromdf()] and [ped_to_plotdf()] as well as
+#' [ped_to_legdf()] if `legend = TRUE`.
 #'
 #' @details
 #' Two important parameters control the looks of the result.  One is the user
 #' specified maximum width.  The smallest possible width is the maximum number
 #' of subjects on a line, if the user's suggestion is too low it is
-#' increased to 1 + that amount (to give just a little wiggle room). To make a
-#' Pedigree where all children are centered under parents simply make the width
-#' large enough, however, the symbols may get very small.
+#' increased to 1 + that amount (to give just a little wiggle room).
+#'
+#' To make a Pedigree where all children are centered under parents simply
+#' make the width large enough, however, the symbols may get very small.
 #'
 #' The second is `align`, a vector of 2 alignment parameters `a` and
 #' `b`.
 #' For each set of siblings at a set of locations `x` and with parents at
-#' `p=c(p1,p2)` the alignment penalty is \deqn{(1/k^a)\sum{i=1}{k} [(x_i -
-#' (p1+p2)/2)]^2} sum(x- mean(p))^2/(k^a) where k is the number of siblings in
-#' the set.
+#' `p=c(p1,p2)` the alignment penalty is
+#'
+#' \deqn{(1/k^a)\sum{i=1}{k} [(x_i - (p1+p2)/2)]^2}
+#'
+#' \deqn{\sum(x- \overline(p))^2/(k^a)}
+#'
+#' Where k is the number of siblings in the set.
+#'
 #' When `a = 1` moving a sibship with `k` sibs one unit to the
 #' left or right of optimal will incur the same cost as moving one with
 #' only 1 or two sibs out of place.
-#' If `a=0` then large sibships are harder to move than small ones,
+#'
+#' If `a = 0` then large sibships are harder to move than small ones,
 #' with the default value `a = 1.5` they are slightly easier to move
 #' than small ones.  The rationale for the default is as long as the parents
 #' are somewhere between the first and last siblings the result looks fairly
-#' good, so we are more flexible with the spacing of a large family. By
-#' tethering all the sibs to a single spot they are kept close to each other.
+#' good, so we are more flexible with the spacing of a large family.
+#' By tethering all the sibs to a single spot they are kept close to each other.
 #' The alignment penalty for spouses is \eqn{b(x_1 - x_2)^2}{b *(x1-x2)^2},
-#' which tends to keep them together.  The size of `b` controls the relative
+#' which tends to keep them together. The size of `b` controls the relative
 #' importance of sib-parent and spouse-spouse closeness.
 #'
 #' @param x A Pedigree object.
@@ -46,7 +56,7 @@ NULL
 #' @param fam_to_plot default=1.  If the Pedigree contains multiple families,
 #' this parameter can be used to select which family to plot.
 #' It can be a numeric value or a character value. If numeric, it is the
-#' index of the family to plot returned by `unique(x$ped$family)`.
+#' index of the family to plot returned by `unique(x$ped$famid)`.
 #' If character, it is the family id to plot.
 #' @param legend default=FALSE.  If TRUE, a legend will be added to the plot.
 #' @param leg_cex default=0.8.  Controls the size of the legend text.
@@ -79,6 +89,7 @@ NULL
 #' @include plot_fromdf.R
 #' @aliases plot.Pedigree
 #' @aliases plot,Pedigree
+#' @keywords Pedigree-plot
 #' @export
 #' @docType methods
 setMethod("plot", c(x = "Pedigree", y = "missing"),
@@ -89,10 +100,7 @@ setMethod("plot", c(x = "Pedigree", y = "missing"),
         legend = FALSE, leg_cex = 0.8, leg_symbolsize = 0.5,
         leg_loc = NULL, leg_adjx = 0, leg_adjy = 0, ...
     ) {
-        lst <- ped_to_plotdf(x, packed, width, align, subreg,
-            cex, symbolsize, pconnect, branch, aff_mark, label, ...
-        )
-        famlist <- unique(x$ped$family)
+        famlist <- unique(famid(x))
         if (length(famlist) > 1) {
             message("Multiple families present, only plotting family ",
                 fam_to_plot
@@ -100,8 +108,12 @@ setMethod("plot", c(x = "Pedigree", y = "missing"),
             if (is.numeric(fam_to_plot)) {
                 fam_to_plot <- famlist[fam_to_plot]
             }
-            lst <- lst[[fam_to_plot]]
+            x <- x[famid(x) == fam_to_plot]
         }
+
+        lst <- ped_to_plotdf(x, packed, width, align, subreg,
+            cex, symbolsize, pconnect, branch, aff_mark, label, ...
+        )
 
         p <- plot_fromdf(lst$df, usr = lst$par_usr$usr,
             title = title, ggplot_gen = ggplot_gen,
@@ -121,14 +133,14 @@ setMethod("plot", c(x = "Pedigree", y = "missing"),
                     wh_fr[3] + 0.1, wh_fr[3] + 0.4
                 )
             }
-            leg$leg_df$x0 <- scales::rescale(leg$leg_df$x0,
+            leg$df$x0 <- scales::rescale(leg$df$x0,
                 c(leg_loc[1], leg_loc[2])
             )
-            leg$leg_df$y0 <- scales::rescale(leg$leg_df$y0,
+            leg$df$y0 <- scales::rescale(leg$df$y0,
                 c(leg_loc[3], leg_loc[4])
             )
             clip(leg_loc[1] - 1, leg_loc[2] + 1, leg_loc[3] - 1, leg_loc[4] + 1)
-            plot_fromdf(leg$leg_df, add_to_existing = TRUE,
+            plot_fromdf(leg$df, add_to_existing = TRUE,
                 boxw = lst$par_usr$boxw * leg_symbolsize,
                 boxh = lst$par_usr$boxh * leg_symbolsize
             )

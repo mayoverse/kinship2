@@ -7,23 +7,24 @@
 set_plot_area(cex, id, maxlev, xrange, symbolsize, ...)
 }
 \arguments{
-\item{cex}{character expansion of the text}
+\item{cex}{Character expansion of the text}
 
-\item{id}{A vector of each subjects identifiers}
+\item{id}{A character vector with the identifiers of each individuals}
 
-\item{maxlev}{maximum level}
+\item{maxlev}{Maximum level}
 
-\item{xrange}{range of x values}
+\item{xrange}{Range of x values}
 
-\item{symbolsize}{size of the symbols}
+\item{symbolsize}{Size of the symbols}
 
-\item{...}{other arguments passed to \code{\link[=par]{par()}}}
+\item{...}{Other arguments passed to \code{\link[=par]{par()}}}
 }
 \value{
-a list of user coordinates, old par, box width, box height,
+List of user coordinates, old par, box width, box height,
 label height and leg height
 }
 \description{
 Set plotting area
 }
-\keyword{internal}
+\keyword{Pedigree-plot}
+\keyword{internal,}

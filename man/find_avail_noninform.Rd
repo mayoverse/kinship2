@@ -2,39 +2,40 @@
 % Please edit documentation in R/find_avail_noninform.R
 \name{find_avail_noninform}
 \alias{find_avail_noninform}
+\alias{find_avail_noninform,Ped-method}
+\alias{find_avail_noninform,Pedigree-method}
 \title{Find uninformative but available subject}
 \usage{
-find_avail_noninform(ped, avail = ped(ped)$avail, missid = "0")
+\S4method{find_avail_noninform}{Ped}(obj, avail = NULL, affected = NULL)
+
+\S4method{find_avail_noninform}{Pedigree}(obj, avail = NULL, affected = NULL)
 }
 \arguments{
-\item{ped}{A Pedigree object}
+\item{obj}{A Ped or Pedigree object.}
 
-\item{avail}{A numeric vector of availability status of each individual
-(e.g., genotyped). The values are:
-\itemize{
-\item \code{0}  : unavailable
-\item \code{1}  : available
-\item \code{NA} : availability not known
-}}
+\item{avail}{A logical vector with the availability status of the
+individuals
+(i.e. \code{FALSE} = not available, \code{TRUE} = available, \code{NA} = unknown).}
 
-\item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the Pedigree
-(i.e. \code{dadid} and \code{momid} equal to the value of this variable).
-The default for \code{missid} is \code{"0"}.}
+\item{affected}{A logical vector with the affection status of the
+individuals
+(i.e. \code{FALSE} = unaffected, \code{TRUE} = affected, \code{NA} = unknown).}
 }
 \value{
 Vector of subject ids who can be removed by having lowest
 informativeness.
 }
 \description{
-Find uninformative but available subject
+Finds subjects from among available non-parents with all affection
+equal to \code{0}.
 }
 \details{
-Find subjects from a Pedigree who are available and uninformative
-
 Identify subjects to remove from a Pedigree who are available but
-non-informative.  This is the second step to remove subjects in
-pedigree.shrink if the Pedigree does not meet the desired bit size.
+non-informative (unaffected).  This is the second step to remove subjects in
+\code{\link[=shrink]{shrink()}} if the Pedigree does not meet the desired bit size.
+
+If \strong{avail} or \strong{affected} is null, then the function will use the
+corresponding Ped accessor.
 }
 \examples{
 data(sampleped)
@@ -45,3 +46,5 @@ find_avail_noninform(ped)
 \seealso{
 \code{\link[=shrink]{shrink()}}
 }
+\keyword{internal,}
+\keyword{shrink}

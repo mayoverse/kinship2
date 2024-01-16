@@ -2,7 +2,7 @@
 % Please edit documentation in R/generate_aff_inds.R
 \name{generate_aff_inds}
 \alias{generate_aff_inds}
-\title{Process the information for affection}
+\title{Process the affection informations}
 \usage{
 generate_aff_inds(
   values,
@@ -37,14 +37,31 @@ The different columns are:
 }
 }
 \description{
-Process the information for affection
+Perform transformation uppon a vector given as the one
+containing the affection status to obtain an \code{affected} binary state.
 }
 \details{
-Perform transformation uppon a column given as the one
-containing affection status to get an \code{affected} column usable for
-the rest of the script
+This function helps to configure a binary state from a character or
+numeric variable.
+\subsection{If the variable is a \code{character} or a \code{factor}:}{
+
+In this case the affected state will depend on the modality provided as
+an affected status. All individuals with a value corresponding to one of the
+element in the vector \strong{mods_aff} will be considered as affected.
+}
+
+\subsection{If the variable is \code{numeric}:}{
+
+In this case the affected state will be \code{TRUE} if the value of the individual
+is above the \strong{threshold} if \strong{sup_thres_aff} is \code{TRUE} and \code{FALSE}
+otherwise.
+}
 }
 \examples{
 generate_aff_inds(c(1, 2, 3, 4, 5), threshold = 3, sup_thres_aff = TRUE)
 generate_aff_inds(c("A", "B", "C", "A", "V", "B"), mods_aff = c("A", "B"))
 }
+\author{
+Louis Le Nézet
+}
+\keyword{generate_scales}

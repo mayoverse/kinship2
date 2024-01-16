@@ -2,7 +2,7 @@
 % Please edit documentation in R/align.R
 \name{ancestors}
 \alias{ancestors}
-\title{Routine function to get ancestors of a subject}
+\title{Ancestors indexes of a subject}
 \usage{
 ancestors(idx, momx, dadx)
 }
@@ -20,11 +20,16 @@ A vector of ancestor indexes
 Given the index of one or multiple individual(s), this
 function iterate through the mom and dad indexes to
 list out all the ancestors of the said individual(s).
-This function is use in the \code{align()} function to
+This function is use in the \code{\link[=align]{align()}} function to
 identify which spouse pairs has a common ancestor and
 therefore if they need to be connected with a double line
 (i.e. inbred).
 }
+\examples{
+ancestors(c(1), c(3, 4, 5, 6), c(7, 8, 9, 10))
+ancestors(c(1, 2), c(3, 4, 5, 6), c(7, 8, 9, 10))
+}
 \seealso{
 \code{\link[=align]{align()}}
 }
+\keyword{internal}

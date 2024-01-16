@@ -2,7 +2,7 @@
 #' @importFrom quadprog solve.QP
 NULL
 
-#' Fourth and last routine alignment
+#' Alignment fourth routine
 #'
 #' @description
 #' Last routines which attempts to line up children under parents and put
@@ -23,13 +23,13 @@ NULL
 #'    For each set of siblings `x` with parents at `p_1` and `p_2`
 #'    the alignment penalty is :
 #'
-#'    \eqn{(1/k^a)\sum{i=1}{k} (x_i - (p_1 + p_2)^2}
+#'    \deqn{(1/k^a)\sum{i=1}{k} (x_i - (p_1 + p_2)^2}
 #'
 #'    where `k` is the number of siblings in the set.
 #'
-#' Using the fact that when `a = 1` :
+#'Using the fact that when `a = 1` :
 #'
-#' \eqn{\sum(x_i-c)^2 = \sum(x_i-\mu)^2 + k(c-\mu)^2}
+#' \deqn{\sum(x_i-c)^2 = \sum(x_i-\mu)^2 + k(c-\mu)^2}
 #'
 #' then moving a sibship with `k` sibs one unit to the left or
 #' right of optimal will incur the same cost as moving one with only 1 or
@@ -77,7 +77,7 @@ NULL
 #' align(ped)
 #'
 #' @seealso [align()]
-#' @export
+#' @keywords internal, alignment
 alignped4 <- function(rval, spouse, level, width, align) {
     ## Doc: alignped4 -part1, spacing across page
     if (is.logical(align))

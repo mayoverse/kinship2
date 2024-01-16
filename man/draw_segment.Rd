@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_fct.R
 \name{draw_segment}
 \alias{draw_segment}
-\title{Draw segments for a Pedigree}
+\title{Draw segments}
 \usage{
 draw_segment(
   x0,
@@ -27,18 +27,20 @@ draw_segment(
 
 \item{p}{ggplot object}
 
-\item{ggplot_gen}{logical, if TRUE add the segments to the ggplot object}
+\item{ggplot_gen}{If TRUE add the segments to the ggplot object}
 
-\item{col}{line color}
+\item{col}{Line color}
 
-\item{lwd}{line width}
+\item{lwd}{Line width}
 
-\item{lty}{line type}
+\item{lty}{Line type}
 }
 \value{
-Plot the segments or add it to a ggplot object
+Plot the segments to the current device
+or add it to a ggplot object
 }
 \description{
-Draw segments for a Pedigree
+Draw segments
 }
-\keyword{internal}
+\keyword{Pedigree-plot}
+\keyword{internal,}

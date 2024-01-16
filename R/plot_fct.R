@@ -2,16 +2,16 @@
 #' @importFrom graphics polygon frame segments
 NULL
 
-#' Routine to subset a Pedigree
+#' Subset a region of a Pedigree
 #'
-#' @param subreg 4-element vector for (min x, max x, min depth, max depth),
+#' @param subreg A 4-element vector for (min x, max x, min depth, max depth),
 #' used to edit away portions of the plot coordinates returned by
 #' [align()].
 #' This is useful for zooming in on a particular region of the Pedigree.
 #' @inheritParams findspouse
 #'
-#' @return a Pedigree
-#' @keywords internal
+#' @return A Pedigree structure with the specified region
+#' @keywords internal, Pedigree-plot
 subregion <- function(plist, subreg) {
     if (subreg[3] < 1 || subreg[4] > length(plist$n)) {
         stop("Invalid depth indices in subreg")
@@ -55,7 +55,9 @@ subregion <- function(plist, subreg) {
     }
 
     n <- max(n2)
-    out <- list(n = n2[seq_len(n)], nid = nid2[, seq_len(n), drop = FALSE],
+    out <- list(
+        n = n2[seq_len(n)],
+        nid = nid2[, seq_len(n), drop = FALSE],
         pos = pos2[, seq_len(n), drop = FALSE],
         spouse = spouse2[, seq_len(n), drop = FALSE],
         fam = fam2[, seq_len(n), drop = FALSE]
@@ -66,14 +68,23 @@ subregion <- function(plist, subreg) {
     out
 }  # end subregion()
 
-## Plotting function
-#' Generate a circular element
+
+#' Circular element
 #'
-#' @param nslice number of slices in the circle
+#' Create a list of x and y coordinates for a circle
+#' with a given number of slices.
+#'
+#' @param nslice Number of slices in the circle
 #' @param n Total number of points in the circle
 #'
-#' @return a list of x and y coordinates
-#' @keywords internal
+#' @return A list of x and y coordinates per slice.
+#' @keywords internal, Pedigree-plot
+#' @examples
+#'
+#' circfun(1)
+#' circfun(1, 10)
+#' circfun(4, 50)
+#' @export
 circfun <- function(nslice, n = 50) {
     nseg <- ceiling(n / nslice)  # segments of arc per slice
 
@@ -89,15 +100,25 @@ circfun <- function(nslice, n = 50) {
 }
 
 
-## Doc: polyfun
-#' Generate a polygonal element
+#' Polygonal element
 #'
-#' @param nslice number of slices in the polygon
+#' Create a list of x and y coordinates for a polygon
+#' with a given number of slices and a list of coordinates
+#' for the polygon.
+#'
+#' @param nslice Number of slices in the polygon
 #' @param coor Element form which to generate the polygon
 #' containing x and y coordinates and theta
 #'
 #' @return a list of x and y coordinates
-#' @keywords internal
+#' @keywords internal, Pedigree-plot
+#' @examples
+#' polyfun(2, list(
+#'      x = c(-0.5, -0.5, 0.5, 0.5),
+#'      y = c(-0.5, 0.5, 0.5, -0.5),
+#'      theta = -c(3, 5, 7, 9) * pi / 4
+#' ))
+#' @export
 polyfun <- function(nslice, coor) {
     # make the indirect segments view
     zmat <- matrix(0, ncol = 4, nrow = length(coor$x))
@@ -140,13 +161,22 @@ polyfun <- function(nslice, coor) {
     out
 }
 
-#' Create a list of the different polygonal elements
+#' List of polygonal elements
 #'
-#' @param nslice number of slices in each element
+#' Create a list of polygonal elements with x, y coordinates
+#' and theta for the square, circle, diamond and triangle.
+#' The number of slices in each element can be specified.
+#'
+#' @param nslice Number of slices in each element
+#' If nslice > 1, the elements are created with [polyfun()].
 #'
 #' @return a list of polygonal elements with x, y coordinates
-#' and theta
-#' @keywords internal
+#' and theta by slice.
+#' @keywords internal, Pedigree-plot
+#' @examples
+#' polygons()
+#' polygons(4)
+#' @export
 polygons <- function(nslice = 1) {
     if (nslice == 1) {
         polylist <- list(
@@ -195,20 +225,21 @@ polygons <- function(nslice = 1) {
 #'@importFrom ggplot2 geom_polygon aes annotate
 NULL
 
-#' Draw segments for a Pedigree
+#' Draw segments
 #'
 #' @param x0 x coordinate of the first point
 #' @param y0 y coordinate of the first point
 #' @param x1 x coordinate of the second point
 #' @param y1 y coordinate of the second point
 #' @param p ggplot object
-#' @param ggplot_gen logical, if TRUE add the segments to the ggplot object
-#' @param col line color
-#' @param lwd line width
-#' @param lty line type
+#' @param ggplot_gen If TRUE add the segments to the ggplot object
+#' @param col Line color
+#' @param lwd Line width
+#' @param lty Line type
 #'
-#' @return Plot the segments or add it to a ggplot object
-#' @keywords internal
+#' @return Plot the segments to the current device
+#' or add it to a ggplot object
+#' @keywords internal, Pedigree-plot
 draw_segment <- function(
     x0, y0, x1, y1,
     p, ggplot_gen,
@@ -223,62 +254,71 @@ draw_segment <- function(
     p
 }
 
-#' Draw a polygon for a Pedigree
+#' Draw a polygon
 #'
 #' @param x x coordinates
 #' @param y y coordinates
-#' @param fill fill color
-#' @param border border color
-#' @param density density of shading
-#' @param angle angle of shading
+#' @param fill Fill color
+#' @param border Border color
+#' @param density Density of shading
+#' @param angle Angle of shading
 #' @inheritParams draw_segment
 #'
-#' @return Plot the polygon or add it to a ggplot object
-#' @keywords internal
+#' @return Plot the polygon  to the current device
+#' or add it to a ggplot object
+#' @keywords internal, Pedigree-plot
 draw_polygon <- function(
     x, y, p, ggplot_gen = FALSE,
     fill = "grey", border = NULL, density = NULL, angle = 45
 ) {
-    polygon(x, y, col = fill, border = border, density = density, angle = angle)
+    polygon(
+        x, y, col = fill, border = border,
+        density = density, angle = angle
+    )
     if (ggplot_gen) {
-        p <- p + geom_polygon(aes(x = x, y = y), fill = fill, color = border)
+        p <- p +
+            geom_polygon(
+                aes(x = x, y = y), fill = fill, color = border
+            )
         # To add pattern stripes use ggpattern::geom_polygon_pattern
         # pattern_density = density[i], pattern_angle = angle[i]))
     }
     p
 }
 
-#' Draw text for a Pedigree
+#' Draw texts
 #'
-#' @param label text to be displayed
-#' @param cex character expansion of the text
-#' @param col text color
+#' @param label Text to be displayed
+#' @param cex Character expansion of the text
+#' @param col Text color
 #' @param adjx x adjustment
 #' @param adjy y adjustment
 #' @inheritParams draw_segment
 #' @inheritParams draw_polygon
 #'
-#' @return Plot the text or add it to a ggplot object
-#' @keywords internal
+#' @return Plot the text to the current device
+#' or add it to a ggplot object
+#' @keywords internal, Pedigree-plot
 draw_text <- function(x, y, label, p, ggplot_gen = FALSE,
     cex = 1, col = NULL, adjx = 0, adjy = 0
 ) {
     text(x, y, label, cex = cex, col = col, adj = c(adjx, adjy))
     if (ggplot_gen) {
         p <- p + annotate(
-            "text", x = x, y = y, label = label, size = cex / 0.3, color = col
+            "text", x = x, y = y, label = label,
+            size = cex / 0.3, color = col
         )
     }
     p
 }
 
-## Doc: 4 arcs for multiple instances of subj
-#' Draw arcs for multiple instances of a subject
+#' Draw arcs
 #'
 #' @inheritParams draw_segment
 #'
-#' @return Plot the arcs or add it to a ggplot object
-#' @keywords internal
+#' @return Plot the arcs to the current device
+#' or add it to a ggplot object
+#' @keywords internal, Pedigree-plot
 draw_arc <- function(x0, y0, x1, y1, p, ggplot_gen = FALSE, lwd = 1,
     col = "black"
 ) {
@@ -293,16 +333,17 @@ draw_arc <- function(x0, y0, x1, y1, p, ggplot_gen = FALSE, lwd = 1,
 
 #' Set plotting area
 #'
-#' @param cex character expansion of the text
-#' @param maxlev maximum level
-#' @param xrange range of x values
-#' @param symbolsize size of the symbols
-#' @param ... other arguments passed to [par()]
-#' @inheritParams is_parent
+#' @param id A character vector with the identifiers of each individuals
+#' @param cex Character expansion of the text
+#' @param maxlev Maximum level
+#' @param xrange Range of x values
+#' @param symbolsize Size of the symbols
+#' @param ... Other arguments passed to [par()]
 #'
-#' @return a list of user coordinates, old par, box width, box height,
+#' @return List of user coordinates, old par, box width, box height,
 #' label height and leg height
-#' @keywords internal
+#'
+#' @keywords internal, Pedigree-plot
 set_plot_area <- function(cex, id, maxlev, xrange, symbolsize, ...) {
     old_par <- par(xpd = TRUE, ...)  ## took out mar=mar
     psize <- par("pin")  # plot region in inches

@@ -2,9 +2,9 @@ test_that("fix_parents works with number", {
     materdf <- data.frame(id = 1:5, momid = c(0, 1, 1, 2, 2), sex = "female")
     materdf$dadid <- materdf$momid * 100
     materdf <- as.data.frame(lapply(materdf, as.character))
-    expect_error(Pedigree(materdf))
+    expect_snapshot_error(Pedigree(materdf, missid = "0"))
     peddf <- with(materdf, fix_parents(id, dadid, momid, sex, missid = "0"))
-    expect_no_error(Pedigree(peddf))
+    expect_no_error(Pedigree(peddf, missid = "0"))
 })
 
 test_that("fix_parents works with character", {
@@ -17,51 +17,41 @@ test_that("fix_parents works with character", {
             "fam107", "fam107", "fam107", "fam112"
         )
     )
-    expect_error(Pedigree(test1char))
+    expect_snapshot_error(Pedigree(test1char, missid = "0"))
     test1newmom <- with(test1char,
         fix_parents(id, dadid, momid, sex, missid = "0")
     )
-    expect_no_error(Pedigree(test1newmom))
+    expect_no_error(Pedigree(test1newmom, missid = "0"))
 })
 
 test_that("fix_parents works with sex errors", {
     data("sampleped")
-    datped2 <- sampleped[sampleped$family %in% 2, ]
+    datped2 <- sampleped[sampleped$famid %in% 2, ]
     datped2[datped2$id %in% 203, "sex"] <- 2
     datped2 <- datped2[-which(datped2$id %in% 209), ]
 
     ## this gets an error
-    expect_warning(Pedigree(datped2))
+    expect_snapshot_error(Pedigree(datped2))
 
-    ## This fix the error
-    datped2[, c("id", "momid", "dadid")] <- as.data.frame(lapply(
-        datped2[, c("id", "momid", "dadid")], as.character
-    ))
-    fixped2 <- with(datped2, fix_parents(id, dadid, momid, sex, missid = "0"))
+    ## This fix the error and keep the dataframe dimensions
+    fixped2 <- with(datped2,
+        fix_parents(id, dadid, momid, sex, missid = NA_character_)
+    )
+    expect_equal(fixped2$sex[fixped2$id == 203], 1)
+    expect_contains(fixped2$id, "209")
     expect_no_error(Pedigree(fixped2))
 })
 
-
-test_that("fix_parents_df works with sex errors and with family", {
+test_that("fix_parents works with famid", {
     data("sampleped")
-    datped2 <- sampleped[sampleped$family %in% 2, ]
-    # Set individual 203 as female
-    datped2[datped2$id %in% 203, "sex"] <- 2
-    # Delete individual 209 from id
-    datped2 <- datped2[-which(datped2$id %in% 209), ]
+    datped <- sampleped[-which(sampleped$id %in% 209), ]
 
     ## this gets an error
-    expect_warning(Pedigree(datped2))
+    expect_snapshot_error(Pedigree(datped))
+    fixped <- fix_parents(datped)
 
-    ## This fix the error and keep the dataframe dimensions
-    datped2[, c("id", "momid", "dadid")] <- as.data.frame(lapply(
-        datped2[, c("id", "momid", "dadid")], as.character
-    ))
-    fixped2 <- fix_parents(datped2, delete = TRUE)
-    expect_no_error(Pedigree(fixped2))
-    expect_equal(dim(fixped2), c(13, 7))
-
-    fixped2 <- fix_parents(datped2, delete = FALSE)
-    expect_no_error(Pedigree(fixped2))
-    expect_equal(dim(fixped2), c(14, 7))
+    expect_contains(fixped$id, "2_209")
+    expect_equal(fixped$sex[fixped$id == "2_209"], 1)
+    expect_equal(fixped$famid[fixped$id == "2_209"], "2")
+    expect_no_error(Pedigree(fixped))
 })

@@ -2,7 +2,7 @@
 % Please edit documentation in R/generate_colors.R
 \name{generate_fill}
 \alias{generate_fill}
-\title{Process the colors based on affection}
+\title{Process the filling colors based on affection}
 \usage{
 generate_fill(
   values,
@@ -17,7 +17,9 @@ generate_fill(
 \arguments{
 \item{values}{The vector containing the values to process as affection.}
 
-\item{affected}{The vector containing the affection status TRUE/FALSE.}
+\item{affected}{A logical vector with the affection status of the
+individuals
+(i.e. \code{FALSE} = unaffected, \code{TRUE} = affected, \code{NA} = unknown).}
 
 \item{labels}{The vector containing the labels to use for the affection.}
 
@@ -37,21 +39,47 @@ affected individuls.}
 unaffected individuls.}
 }
 \value{
-A list of two elements
+A list of three elements
 \itemize{
-\item The processed values column as a numeric factor
-\item A dataframe containing the description of each modality of the scale
+\item \code{mods} : The processed values column as a numeric factor
+\item \code{affected} : A logical vector indicating if the individual is affected
+\item \code{sc_fill} : A dataframe containing the description of each modality of the
+scale
 }
 }
 \description{
-Process the colors based on affection
-}
-\details{
 Perform transformation uppon a column given as the one
 containing affection status to compute the filling color.
+}
+\details{
+The colors will be set using the
+\code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}} function
+with the colors given as parameters.
+
+The colors will be set as follow:
+\itemize{
+\item If \strong{keep_full_scale} is \code{FALSE}:
+Then the affected individuals will get the first color of the
+\strong{colors_aff} vector and the unaffected individuals will get the
+first color of the \strong{colors_unaff} vector.
+\item If \strong{keep_full_scale} is \code{TRUE}:
+\itemize{
+\item If \strong{values} isn't numeric:
+Each levels of the affected \strong{values} vector will get it's own color from
+the \strong{colors_aff} vector using the \code{\link[grDevices:colorRamp]{grDevices::colorRampPalette()}} and
+the same will be done for the unaffected individuals using the
+\strong{colors_unaff}.
+\item If \strong{values} is numeric:
+The mean of the affected individuals will be compared to the mean of the
+unaffected individuals and the colors will be set up such as the color
+gradient follow the direction of the affection.
+}
+}
 }
 \examples{
 aff <- generate_aff_inds(seq_len(5), threshold = 3, sup_thres_aff = TRUE)
 generate_fill(seq_len(5), aff$affected, aff$labels)
 generate_fill(seq_len(5), aff$affected, aff$labels, keep_full_scale = TRUE)
+
 }
+\keyword{generate_scales}

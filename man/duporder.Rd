@@ -2,39 +2,25 @@
 % Please edit documentation in R/auto_hint.R
 \name{duporder}
 \alias{duporder}
-\title{Routine to find the duplicate pairs of a subject}
+\title{Find the duplicate pairs of a subject}
 \usage{
-duporder(idlist, plist, lev, ped)
+duporder(idlist, plist, lev, obj)
 }
 \arguments{
 \item{idlist}{List of individuals identifiers to be considered}
 
 \item{plist}{The alignment structure representing the Pedigree layout.
-For the differents matrices present in the list, each row represents a
-level of the Pedigree and each column a potential subject.
-It contains the following components:
-\itemize{
-\item n Vector of the number of subjects per level
-\item nid Matrix of the subjects indexes
-\item pos Matrix of the subjects positions
-\item fam Matrix of the siblings family identifiers
-\item spouse Matrix of the left spouses
-\itemize{
-\item \code{0} = not spouse
-\item \code{1} = spouse
-\item \code{2} = inbred spouse.
-}
-}}
+See \code{\link[=align]{align()}} for details.}
 
 \item{lev}{The generation level of the subject}
 
-\item{ped}{A Pedigree object}
+\item{obj}{A Pedigree object}
 }
 \value{
 A matrix of duplicate pairs
 }
 \description{
-Routine to find the duplicate pairs of a subject
+Find the duplicate pairs of a subject
 }
 \details{
 This routine is used by \code{auto_hint()}.
@@ -44,4 +30,5 @@ the order they should be plotted.
 \seealso{
 \code{\link[=auto_hint]{auto_hint()}}
 }
-\keyword{internal}
+\keyword{auto_hint}
+\keyword{internal,}

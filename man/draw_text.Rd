@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_fct.R
 \name{draw_text}
 \alias{draw_text}
-\title{Draw text for a Pedigree}
+\title{Draw texts}
 \usage{
 draw_text(
   x,
@@ -21,24 +21,26 @@ draw_text(
 
 \item{y}{y coordinates}
 
-\item{label}{text to be displayed}
+\item{label}{Text to be displayed}
 
 \item{p}{ggplot object}
 
-\item{ggplot_gen}{logical, if TRUE add the segments to the ggplot object}
+\item{ggplot_gen}{If TRUE add the segments to the ggplot object}
 
-\item{cex}{character expansion of the text}
+\item{cex}{Character expansion of the text}
 
-\item{col}{text color}
+\item{col}{Text color}
 
 \item{adjx}{x adjustment}
 
 \item{adjy}{y adjustment}
 }
 \value{
-Plot the text or add it to a ggplot object
+Plot the text to the current device
+or add it to a ggplot object
 }
 \description{
-Draw text for a Pedigree
+Draw texts
 }
-\keyword{internal}
+\keyword{Pedigree-plot}
+\keyword{internal,}

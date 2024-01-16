@@ -2,28 +2,30 @@
 % Please edit documentation in R/utils.R
 \name{is_founder}
 \alias{is_founder}
-\title{Check wich individuals are founders}
+\title{Are individuals founders}
 \usage{
-is_founder(momid, dadid, missid = "0")
+is_founder(momid, dadid, missid = NA_character_)
 }
 \arguments{
-\item{momid}{vector containing for each subject, the identifiers of the
+\item{momid}{A vector containing for each subject, the identifiers of the
 biologicals mothers.}
 
 \item{dadid}{A vector containing for each subject, the identifiers of the
 biologicals fathers.}
 
-\item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the Pedigree
-(i.e. \code{dadid} and \code{momid} equal to the value of this variable).
-The default for \code{missid} is \code{"0"}.}
+\item{missid}{A character vector with the missing values identifiers.
+All the id, dadid and momid corresponding to those values will be set
+to \code{NA_character_}.}
 }
 \value{
-A vector of boolean of the same size as \code{dadid} and \code{momid}
-with TRUE if the individual has no parents (i.e is a founder) and FALSE
-otherwise.
+A vector of boolean of the same size as \strong{dadid} and \strong{momid}
+with \code{TRUE} if the individual has no parents (i.e is a founder) and
+\code{FALSE} otherwise.
 }
 \description{
 Check which individuals are founders.
+}
+\examples{
+is_founder(c("3", "3", NA, NA), c("4", "4", NA, NA))
 }
 \keyword{internal}

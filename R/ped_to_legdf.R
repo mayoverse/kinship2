@@ -1,11 +1,25 @@
-#' Convert a Pedigree to a legend data frame of element to plot
+#' Create plotting legend data frame from a Pedigree
 #'
 #' @description
 #' Convert a Pedigree to a legend data frame for it to
-#' be plotted with afterwards with [plot_fromdf()].
+#' be plotted afterwards with [plot_fromdf()].
 #'
-#' @inheritParams align
-#' @inheritParams set_plot_area
+#' @details The data frame contains the following columns:
+#' - `x0`, `y0`, `x1`, `y1`: coordinates of the elements
+#' - `type`: type of the elements
+#' - `fill`: fill color of the elements
+#' - `border`: border color of the elements
+#' - `angle`: angle of the shading of the elements
+#' - `density`: density of the shading of the elements
+#' - `cex`: size of the elements
+#' - `label`: label of the elements
+#' - `tips`: tips of the elements (used for the tooltips)
+#' - `adjx`: horizontal text adjustment of the labels
+#' - `adjy`: vertical text adjustment of the labels
+#'
+#' All those columns are used by [plot_fromdf()] to plot the graph.
+#' @param obj A Pedigree object
+#' @param cex Character expansion of the text
 #' @inheritParams plot_fromdf
 #' @param adjx default=0.  Controls the horizontal text adjustment of
 #' the labels in the legend.
@@ -19,11 +33,21 @@
 #' data("sampleped")
 #' ped <- Pedigree(sampleped)
 #' leg_df <- ped_to_legdf(ped)
-#' summary(leg_df$leg_df)
-#' plot_fromdf(leg_df$leg_df)
+#' summary(leg_df$df)
+#' plot_fromdf(leg_df$df, usr = c(-1,15,0,7))
+#' @keywords internal, Pedigree-plot
 #' @export
-#' @docType methods
-ped_to_legdf <- function(ped,
+#' @usage NULL
+setGeneric(
+    "ped_to_legdf", signature = "obj",
+    function(obj, ...) {
+        standardGeneric("ped_to_legdf")
+    }
+)
+
+#' @rdname ped_to_legdf
+#' @export
+setMethod("ped_to_legdf", "Pedigree", function(obj,
     boxh = 1, boxw = 1, cex = 1,
     adjx = 0, adjy = 0
 ) {
@@ -37,9 +61,9 @@ ped_to_legdf <- function(ped,
         adjy = numeric()
     )
     sex_equiv <- c("Male", "Female", "Terminated", "Unknown")
-    all_lab <- list(sex_equiv, scales(ped)$border$labels)
-    all_aff <- lapply(unique(scales(ped)$fill$order), function(x) {
-        scales(ped)$fill$labels[scales(ped)$fill$order == x]
+    all_lab <- list(sex_equiv, border(obj)$labels)
+    all_aff <- lapply(unique(fill(obj)$order), function(x) {
+        fill(obj)$labels[fill(obj)$order == x]
     })
 
     all_lab <- c(all_lab, all_aff)
@@ -63,7 +87,7 @@ ped_to_legdf <- function(ped,
     posy <- cumsum(posy) - boxh
     posy <- posy[seq_along(posy) %% 2 == 0]
 
-    all_aff <- scales(ped)$fill
+    all_aff <- fill(obj)
     n_aff <- length(unique(all_aff$order))
 
     lab_title <- c("Sex", "Border", unique(all_aff$column_values))
@@ -75,9 +99,11 @@ ped_to_legdf <- function(ped,
     )
     plot_df <- rbind.fill(plot_df, titles)
 
+    ## Get ped_df
+    ped_df <- as.data.frame(ped(obj))
     # Sex
     poly1 <- polygons(1)
-    all_sex <- unique(as.numeric(ped(ped)$sex))
+    all_sex <- unique(as.numeric(ped_df$sex))
     sex <- data.frame(
         x0 = posx[1], y0 = posy[all_sex],
         type = paste(names(poly1)[all_sex], 1, 1, sep = "_"),
@@ -98,16 +124,15 @@ ped_to_legdf <- function(ped,
     plot_df <- rbind.fill(plot_df, sex, sex_label)
 
     # Border
-    bord_df <- scales(ped)$border
-    border_mods <- unique(ped(ped)[, unique(bord_df[["column"]])])
+    border_mods <- unique(ped_df[, unique(border(obj)$column_mods)])
     border <- data.frame(
         x0 = posx[3], y0 = posy[seq_along(border_mods)],
         type = rep("square_1_1", length(border_mods)),
-        border = bord_df$border[match(border_mods, bord_df$mods)],
+        border = border(obj)$border[match(border_mods, border(obj)$mods)],
         fill = "white",
         id = "border"
     )
-    lab <- bord_df$labels[match(border_mods, bord_df$mods)]
+    lab <- border(obj)$labels[match(border_mods, border(obj)$mods)]
     lab[is.na(lab)] <- "NA"
     border_label <- data.frame(
         x0 = posx[4] + adjx,
@@ -123,7 +148,7 @@ ped_to_legdf <- function(ped,
     ## Affected
     for (aff in seq_len(n_aff)) {
         aff_df <- all_aff[all_aff$order == aff, ]
-        aff_mods <- unique(ped(ped)[, unique(aff_df[["column_mods"]])])
+        aff_mods <- unique(ped_df[, unique(aff_df[["column_mods"]])])
         aff_bkg <- data.frame(
             x0 = posx[3 + aff * 2], y0 = posy[seq_along(aff_mods)],
             type = rep(paste("square", 1, 1, sep = "_"),
@@ -173,5 +198,6 @@ ped_to_legdf <- function(ped,
         min(plot_df$x0), max(plot_df$x0),
         min(plot_df$y0), max(plot_df$y0)
     )
-    list(leg_df = plot_df, par_usr = par_usr)
+    list(df = plot_df, par_usr = par_usr)
 }
+)

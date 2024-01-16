@@ -2,18 +2,26 @@
 % Please edit documentation in R/plot_fct.R
 \name{polygons}
 \alias{polygons}
-\title{Create a list of the different polygonal elements}
+\title{List of polygonal elements}
 \usage{
 polygons(nslice = 1)
 }
 \arguments{
-\item{nslice}{number of slices in each element}
+\item{nslice}{Number of slices in each element
+If nslice > 1, the elements are created with \code{\link[=polyfun]{polyfun()}}.}
 }
 \value{
 a list of polygonal elements with x, y coordinates
-and theta
+and theta by slice.
 }
 \description{
-Create a list of the different polygonal elements
+Create a list of polygonal elements with x, y coordinates
+and theta for the square, circle, diamond and triangle.
+The number of slices in each element can be specified.
 }
-\keyword{internal}
+\examples{
+polygons()
+polygons(4)
+}
+\keyword{Pedigree-plot}
+\keyword{internal,}

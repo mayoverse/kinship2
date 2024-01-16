@@ -1,43 +1,82 @@
 #' @importFrom plyr rbind.fill
 NULL
 
-#' Convert a Pedigree to a data frame of element to plot
+#' Create plotting data frame from a Pedigree
+#'
+#' @description
+#' Convert a Pedigree to a data frame with all the elements and their
+#' characteristic for them to be plotted afterwards with [plot_fromdf()].
+#'
+#' @details The data frame contains the following columns:
+#' - `x0`, `y0`, `x1`, `y1`: coordinates of the elements
+#' - `type`: type of the elements
+#' - `fill`: fill color of the elements
+#' - `border`: border color of the elements
+#' - `angle`: angle of the shading of the elements
+#' - `density`: density of the shading of the elements
+#' - `cex`: size of the elements
+#' - `label`: label of the elements
+#' - `tips`: tips of the elements (used for the tooltips)
+#' - `adjx`: horizontal text adjustment of the labels
+#' - `adjy`: vertical text adjustment of the labels
+#'
+#' All those columns are used by [plot_fromdf()] to plot the graph.
 #'
 #' @inheritParams align
-#' @param pconnect when connecting parent to children the program will try to
+#' @param pconnect When connecting parent to children the program will try to
 #' make the connecting line as close to vertical as possible, subject to it
 #' lying inside the endpoints of the line that connects the children by at
 #' least `pconnect` people.  Setting this option to a large number will
 #' force the line to connect at the midpoint of the children.
 #' @param branch defines how much angle is used to connect various levels of
 #' nuclear families.
-#' @param aff_mark if TRUE, add a aff_mark to each box corresponding to the
+#' @param aff_mark If `TRUE`, add a aff_mark to each box corresponding to the
 #' value of the affection column for each filling scale.
-#' @param label if not NULL, add a label to each box corresponding to the
+#' @param label If not `NULL`, add a label to each box corresponding to the
 #' value of the column given.
-#' @inheritParams set_plot_area
+#' @param ... Other arguments passed to [par()]
 #' @inheritParams subregion
+#' @inheritParams set_plot_area
 #'
 #' @return A list containing the data frame and the user coordinates.
+#'
 #' @examples
+#'
 #' data(sampleped)
-#' ped1 <- Pedigree(sampleped[sampleped$family == 1,])
-#' ped_to_plotdf(ped1)
-#' @seealso [plot_fromdf()]
+#' ped1 <- Pedigree(sampleped[sampleped$famid == 1,])
+#' plot_df <- ped_to_plotdf(ped1)
+#' summary(plot_df$df)
+#' plot_fromdf(plot_df$df, usr = plot_df$par_usr$usr,
+#'     boxh = plot_df$par_usr$boxh, boxw = plot_df$par_usr$boxw
+#' )
+#'
+#' @seealso
+#' [plot_fromdf()]
 #' [ped_to_legdf()]
+#' @keywords internal, Pedigree-plot
 #' @export
-ped_to_plotdf <- function(
-    ped, packed = FALSE, width = 10, align = c(1.5, 2),
-    subreg = NULL, cex = 0.5, symbolsize = cex, pconnect = 0.5, branch = 0.6,
+#' @usage NULL
+setGeneric(
+    "ped_to_plotdf", signature = "obj",
+    function(obj, ...) {
+        standardGeneric("ped_to_plotdf")
+    }
+)
+
+#' @rdname ped_to_plotdf
+#' @export
+setMethod("ped_to_plotdf", "Pedigree", function(
+    obj, packed = TRUE, width = 6, align = c(1.5, 2),
+    subreg = NULL, cex = 1, symbolsize = cex, pconnect = 0.5, branch = 0.6,
     aff_mark = TRUE, label = NULL, ...
 ) {
 
-    famlist <- unique(ped(ped)$family)
+    famlist <- unique(famid(obj))
     if (length(famlist) > 1) {
         nfam <- length(famlist)
         all_df <- vector("list", nfam)
         for (i_fam in famlist) {
-            ped_fam <- ped[ped(ped)$family == i_fam]
+            ped_fam <- obj[famid(obj) == i_fam]
             all_df[[i_fam]] <- ped_to_plotdf(ped_fam, packed, width, align,
                 subreg, cex, symbolsize, ...
             )
@@ -53,7 +92,7 @@ ped_to_plotdf <- function(
         label = character(), tips = character(),
         adjx = numeric(), adjy = numeric()
     )
-    plist <- align(ped, packed = packed, width = width, align = align)
+    plist <- align(obj, packed = packed, width = width, align = align)
 
     if (!is.null(subreg)) {
         plist <- subregion(plist, subreg)
@@ -62,7 +101,7 @@ ped_to_plotdf <- function(
     maxlev <- nrow(plist$pos)
 
     params_plot <- set_plot_area(
-        cex, ped(ped)$id, maxlev, xrange, symbolsize, ...
+        cex, id(ped(obj)), maxlev, xrange, symbolsize, ...
     )
 
     boxw <- params_plot$boxw
@@ -80,20 +119,20 @@ ped_to_plotdf <- function(
     # y position
     i <- (seq_len(length(plist$nid)) - 1) %% length(plist$n) + 1
     # sex of each box
-    sex <- as.numeric(ped(ped)$sex)[id[idx]]
+    sex <- as.numeric(sex(ped(obj)))[id[idx]]
 
-    all_aff <- scales(ped)$fill
-    bord_df <- scales(ped)$border
-    n_aff <- length(unique(all_aff$order))
+    all_aff <- fill(obj)
+    n_aff <- length(unique(fill(obj)$order))
     polylist <- polygons(max(1, n_aff))
 
+    ped_df <- as.data.frame(ped(obj))
     # border mods of each box
-    border_mods <- ped(ped)[id[idx], unique(bord_df[["column"]])]
-    border_idx <- match(border_mods, bord_df[["mods"]])
+    border_mods <- ped_df[id[idx], unique(border(obj)$column_mods)]
+    border_idx <- match(border_mods, border(obj)$mods)
 
     for (aff in seq_len(n_aff)) {
         aff_df <- all_aff[all_aff$order == aff, ]
-        aff_mods <- ped(ped)[id[idx], unique(aff_df[["column_mods"]])]
+        aff_mods <- ped_df[id[idx], unique(aff_df[["column_mods"]])]
         aff_idx <- match(aff_mods, aff_df[["mods"]])
 
 
@@ -116,7 +155,7 @@ ped_to_plotdf <- function(
             fill = aff_df[aff_idx, "fill"],
             density = aff_df[aff_idx, "density"],
             angle = aff_df[aff_idx, "angle"],
-            border = bord_df[border_idx, "border"],
+            border = border(obj)$border[border_idx],
             id = "polygon"
         )
         plot_df <- rbind.fill(plot_df, ind)
@@ -124,7 +163,7 @@ ped_to_plotdf <- function(
             aff_mark_df <- data.frame(
                 x0 = pos[idx] + poly_aff_x_mr[sex],
                 y0 = i[idx] + boxh / 2,
-                label = ped(ped)[id[idx], unique(aff_df[["column_values"]])],
+                label = ped_df[id[idx], unique(aff_df[["column_values"]])],
                 fill = "black",
                 type = "text", cex = cex,
                 id = "aff_mark"
@@ -134,7 +173,7 @@ ped_to_plotdf <- function(
     }
 
     ## Add status
-    status <- ped(ped)[id[idx], "status"]
+    status <- ped_df[id[idx], "status"]
     idx_dead <- idx[status == 1 & !is.na(status)]
 
     if (length(idx_dead) > 0) {
@@ -151,7 +190,7 @@ ped_to_plotdf <- function(
     ## Add ids
     id_df <- data.frame(
         x0 = pos[idx], y0 = i[idx] + boxh + labh * 1.2,
-        label = ped(ped)[id[idx], "id"], fill = "black",
+        label = ped_df[id[idx], "id"], fill = "black",
         type = "text", cex = cex,
         id = "id"
     )
@@ -160,10 +199,10 @@ ped_to_plotdf <- function(
 
     ## Add a label if given
     if (!is.null(label)) {
-        check_columns(ped(ped), label)
+        check_columns(ped_df, label)
         label <- data.frame(
             x0 = pos[idx], y0 = i[idx] + boxh + labh * 2.8,
-            label = ped(ped)[id[idx], label],
+            label = ped_df[id[idx], label],
             fill = "black",
             type = "text", cex = cex,
             id = "label"
@@ -333,4 +372,4 @@ ped_to_plotdf <- function(
         }
     }
     list(df = plot_df, par_usr = params_plot)
-}
+})

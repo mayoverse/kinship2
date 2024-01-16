@@ -2,30 +2,35 @@
 % Please edit documentation in R/generate_colors.R
 \name{generate_border}
 \alias{generate_border}
-\title{Process the colors based on affection and availability}
+\title{Process the border colors based on availability}
 \usage{
-generate_border(avail, colors_avail = c("green", "black"))
+generate_border(values, colors_avail = c("green", "black"))
 }
 \arguments{
-\item{avail}{The vector containing the availability status.
-The values need to be numeric and can only be 0, 1 or NA.}
+\item{values}{The vector containing the values to process as available.}
 
 \item{colors_avail}{Set of 2 colors to use for the box's border of an
-individual. The first color will be used for available individual (avail
-== 1) and the second for the unavailable individual (avail == 0).}
+individual. The first color will be used for available individual
+(\code{avail == 1}) and the second for the unavailable individual
+(\code{avail == 0}).}
 }
 \value{
-A dataframe containing the scale to use for the availability
-status.
+A list of three elements
+\itemize{
+\item \code{mods} : The processed values column as a numeric factor
+\item \code{avail} : A logical vector indicating if the individual is available
+\item \code{sc_bord} : A dataframe containing the description of each modality of the
+scale
+}
 }
 \description{
-Process the colors based on affection and availability
-}
-\details{
-Perform transformation uppon a column given as the one
+Perform transformation uppon a vector given as the one
 containing the availability status to compute the border color.
+The vector given will be transformed using the \code{\link[=vect_to_binary]{vect_to_binary()}}
+function.
 }
 \examples{
 generate_border(c(1, 0, 1, 0, NA, 1, 0, 1, 0, NA))
 
 }
+\keyword{generate_scales}

@@ -1,6 +1,6 @@
 Package: Pedixplorer
-Version: 0.99.2
-Date: 2023-09-19
+Version: 0.99.5
+Date: 2023-11-15
 Title: Pedigree Functions
 Authors@R: c(
     person("Louis", "Le Nézet", email="louislenezet@gmail.com",
@@ -24,7 +24,9 @@ Imports:
     dplyr,
     tidyr,
     quadprog,
-    Matrix
+    Matrix,
+    S4Vectors,
+    testthat
 Description: Routines to handle family data with a Pedigree object. The initial purpose
     was to create correlation structures that describe family relationships such 
     as kinship and identity-by-descent, which can be used to model family data 
@@ -38,39 +40,39 @@ RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
 Suggests: 
-    testthat (>= 3.0.0),
     diffviewer,
-	vdiffr,
-	rmarkdown,
+    vdiffr,
+    rmarkdown,
     BiocStyle,
     knitr,
-    withr
+    withr,
+    magick
 Config/testthat/edition: 3
 biocViews: Software, DataRepresentation, Genetics, Alignment
 BugReports: https://github.com/LouisLeLezet/Pedixplorer/issues
-url: https://github.com/LouisLeNezet/Pedixplorer
+URL: https://github.com/LouisLeNezet/Pedixplorer
 BiocType: Software
 Collate: 
-    'Pedigree.R'
+    'AllValidity.R'
+    'AllClass.R'
+    'kindepth.R'
+    'kinship.R'
+    'utils.R'
+    'AllConstructor.R'
+    'AllAccessors.R'
+    'AllGeneric.R'
     'Pedixplorer-package.R'
     'alignped4.R'
     'alignped3.R'
     'alignped2.R'
     'alignped1.R'
-    'validity.R'
-    'pedigreeClass.R'
-    'check_hints.R'
-    'kindepth.R'
     'auto_hint.R'
     'align.R'
     'best_hint.R'
     'bit_size.R'
     'data.R'
     'descendants.R'
-    'make_famid.R'
     'family_check.R'
-    'kinship.R'
-    'utils.R'
     'find_unavailable.R'
     'find_avail_affected.R'
     'find_avail_noninform.R'
@@ -79,6 +81,7 @@ Collate:
     'generate_colors.R'
     'ibd_matrix.R'
     'is_informative.R'
+    'make_famid.R'
     'min_dist_inf.R'
     'norm_data.R'
     'num_child.R'
@@ -88,6 +91,6 @@ Collate:
     'plot_fromdf.R'
     'plot.R'
     'shrink.R'
-    'trim.R'
     'unrelated.R'
     'useful_inds.R'
+LazyData: false

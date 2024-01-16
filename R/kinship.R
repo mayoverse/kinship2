@@ -2,21 +2,21 @@
 #' @importFrom Matrix forceSymmetric bdiag
 NULL
 
-#' Compute a kinship matrix
+#' Kinship matrix
 #'
 #' @description
-#' Compute the kinship matrix for a set of related autosomal subjects.  The
-#' function is generic, and can accept a Pedigree,  vector as
+#' Compute the kinship matrix for a set of related autosomal subjects.
+#' The function is generic, and can accept a Pedigree, a Ped or a vector as
 #' the first argument.
 #'
 #' @details
-#' The function will usually be called with a Pedigree the
-#' third form is provided for backwards compatibility with an earlier release
-#' of the library that was less capable.  The first argument is named `id`
-#' for the same reason.  Note that when using the third form any information on
+#' The function will usually be called with a Pedigree.
+#' The call with a Ped or a vector is provided for backwards compatibility
+#' with an earlier release of the library that was less capable.
+#' Note that when using with a Ped or a vector, any information on
 #' twins is not available to the function.
 #'
-#' When called with a pedigree, the routine
+#' When called with a Pedigree, the routine
 #' will create a block-diagonal-symmetric sparse matrix object of class
 #' `dsCMatrix`.  Since the `[i, j]` value of the result is 0 for any two
 #' unrelated individuals i and j and a `Matrix` utilizes sparse
@@ -37,40 +37,51 @@ NULL
 #' The computation is based on a recursive algorithm described in Lange, which
 #' assumes that the founder alleles are all independent.
 #'
-#' @param obj A pedigree object or a vector of subject identifiers.
+#' @param obj A Pedigree or Ped object or a vector of subject identifiers.
 #' @param chrtype chromosome type.  The currently supported types are
 #' 'autosome' and 'X' or 'x'.
-#' @param ... Additional arguments passed to methods
-#' @inheritParams sex_to_factor
-#' @inheritParams is_parent
+#' @inheritParams Ped
 #'
 #' @return
 #' ## When obj is a vector
 #' A matrix of kinship coefficients.
-#' ## When obj is a pedigree
+#' ## When obj is a Pedigree
 #' A matrix of kinship coefficients ordered by families present
-#' in the pedigree.
+#' in the Pedigree object.
 #'
-#' @examples
-#' data(sampleped)
-#' ped <- Pedigree(sampleped)
-#' kinship(ped)
-#'
-#' @section References: K Lange, Mathematical and Statistical Methods for
+#' @section References:
+#' K Lange, Mathematical and Statistical Methods for
 #' Genetic Analysis, Springer-Verlag, New York, 1997.
 #' @seealso [make_famid()], [kindepth()]
-#' @include pedigreeClass.R
+#' @include AllClass.R
 #' @include utils.R
 #' @export
-#' @docType methods
+#' @usage NULL
 setGeneric("kinship", signature = "obj",
     function(obj, ...) standardGeneric("kinship")
 )
 
-#' @export
 #' @rdname kinship
-#' @aliases kinship,character
-#' @docType methods
+#' @export
+setMethod("kinship", "Ped",
+    function(obj, chrtype = "autosome"){
+        kinship(
+            id(obj), dadid(obj), momid(obj),
+            sex(obj), chrtype = chrtype
+        )
+    }
+)
+
+#' @rdname kinship
+#' @examples
+#'
+#' kinship(c("A", "B", "C", "D", "E"), c("C", "D", "0", "0", "0"),
+#'     c("E", "E", "0", "0", "0"), sex = c(1, 2, 1, 2, 1))
+#' kinship(c("A", "B", "C", "D", "E"), c("C", "D", "0", "0", "0"),
+#'     c("E", "E", "0", "0", "0"), sex = c(1, 2, 1, 2, 1),
+#'    chrtype = "x"
+#' )
+#' @export
 setMethod("kinship", "character",
     function(obj, dadid, momid, sex, chrtype = "autosome") {
         id <- obj
@@ -133,13 +144,16 @@ setMethod("kinship", "character",
 )
 
 #' @include kindepth.R
-#' @export
 #' @rdname kinship
-#' @aliases kinship,Pedigree
-#' @docType methods
+#' @examples
+#'
+#' data(sampleped)
+#' ped <- Pedigree(sampleped)
+#' kinship(ped)
+#' @export
 setMethod("kinship", "Pedigree",
     function(obj, chrtype = "autosome") {
-        famlist <- unique(obj$ped$family)
+        famlist <- unique(famid(obj))
         nfam <- length(famlist)
         matlist <- vector("list", nfam)
         ## The possibly reorderd list of id values
@@ -147,26 +161,44 @@ setMethod("kinship", "Pedigree",
 
         for (i_fam in seq_along(famlist)) {
             if (is.na(famlist[i_fam])) { # If no family provided
-                tped <- obj[is.na(obj$ped$family)]
+                tped <- obj[is.na(famid(obj))]
             } else {
                 ## Pedigree for this family
-                tped <- obj[obj$ped$family == famlist[i_fam]]
+                tped <- obj[famid(obj) == famlist[i_fam]]
             }
             temp <- try({
                 chrtype <- match.arg(casefold(chrtype), c("autosome", "x"))
-                n <- length(ped(tped)$id)
+                n <- length(id(ped(tped)))
                 pdepth <- kindepth(tped)
-                mom_row <- match(ped(tped)$momid, ped(tped)$id, nomatch = n + 1)
-                dad_row <- match(ped(tped)$dadid, ped(tped)$id, nomatch = n + 1)
+                mom_row <- match(
+                    momid(ped(tped)),
+                    id(ped(tped)),
+                    nomatch = n + 1
+                )
+                dad_row <- match(
+                    dadid(ped(tped)),
+                    id(ped(tped)),
+                    nomatch = n + 1
+                )
                 # Are there any MZ twins to worry about?
                 have_mz <- FALSE
-                if (!is.null(rel(tped)) && any(rel(tped)$code == "MZ twin")) {
+                if (length(rel(tped)) > 0 &&
+                        any(code(rel(tped)) == "MZ twin")
+                ) {
                     have_mz <- TRUE
                     ## Doc: MakeMZIndex
-                    temp <- which(rel(tped)$code == "MZ twin")
+                    temp <- which(code(rel(tped)) == "MZ twin")
                     ## drop=FALSE added in case only one MZ twin set
-                    id1x <- match(rel(tped)$id1, ped(tped)$id, nomatch = NA)
-                    id2x <- match(rel(tped)$id2, ped(tped)$id, nomatch = NA)
+                    id1x <- match(
+                        id1(rel(tped)),
+                        id(ped(tped)),
+                        nomatch = NA
+                    )
+                    id2x <- match(
+                        id2(rel(tped)),
+                        id(ped(tped)),
+                        nomatch = NA
+                    )
                     if (any(is.na(id1x)) | any(is.na(id2x))) {
                         stop("All individuals in relationship matrix",
                             "should be present in the pedigree informations"
@@ -209,7 +241,7 @@ setMethod("kinship", "Pedigree",
                 if (chrtype == "autosome") {
                     if (n == 1) {
                         kmat <- matrix(0.5, 1, 1,
-                            dimnames = list(ped(tped)$id, ped(tped)$id)
+                            dimnames = list(id(ped(tped)), id(ped(tped)))
                         )
                     } else {
                         kmat <- diag(c(rep(0.5, n), 0))  # founders
@@ -232,10 +264,10 @@ setMethod("kinship", "Pedigree",
                         }
                     }
                 } else if (chrtype == "x") {
-                    sex <- as.numeric(ped(tped)$sex)  # 1=female, 2=male
+                    sex <- as.numeric(sex(ped(tped)))  # 1=female, 2=male
                     if (n == 1) {
                         kmat <- matrix(sex / 2, 1, 1,
-                            dimnames = list(ped(tped)$id, ped(tped)$id)
+                            dimnames = list(id(ped(tped)), id(ped(tped)))
                         )
                     } else {
                         ## 1 for males, 1/2 for females
@@ -265,7 +297,7 @@ setMethod("kinship", "Pedigree",
                 }
                 if (n > 1) {
                     kmat <- kmat[seq_len(n), seq_len(n)]
-                    dimnames(kmat) <- list(ped(tped)$id, ped(tped)$id)
+                    dimnames(kmat) <- list(id(ped(tped)), id(ped(tped)))
                 }
                 kmat
             }, silent = TRUE)
@@ -275,7 +307,7 @@ setMethod("kinship", "Pedigree",
                 matlist[[i_fam]] <- temp
             }
             ## deprecated in Matrix: as(forceSymmetric(temp), 'dsCMatrix')
-            idlist[[i_fam]] <- ped(tped)$id
+            idlist[[i_fam]] <- id(ped(tped))
         }
         if (length(famlist) == 1) {
             as(matlist[[1]],

@@ -2,33 +2,24 @@
 % Please edit documentation in R/shrink.R
 \name{shrink}
 \alias{shrink}
+\alias{shrink,Pedigree-method}
+\alias{shrink,Ped-method}
 \title{Shrink Pedigree object}
 \usage{
-shrink(
-  ped,
-  avail = ped(ped)$avail,
-  affected = ped(ped)$affected,
-  max_bits = 16
-)
+\S4method{shrink}{Pedigree}(obj, avail = NULL, affected = NULL, max_bits = 16)
+
+\S4method{shrink}{Ped}(obj, avail = NULL, affected = NULL, max_bits = 16)
 }
 \arguments{
-\item{ped}{A Pedigree object}
+\item{obj}{A Pedigree or Ped object.}
 
-\item{avail}{A numeric vector of availability status of each individual
-(e.g., genotyped). The values are:
-\itemize{
-\item \code{0}  : unavailable
-\item \code{1}  : available
-\item \code{NA} : availability not known
-}}
+\item{avail}{A logical vector with the availability status of the
+individuals
+(i.e. \code{FALSE} = not available, \code{TRUE} = available, \code{NA} = unknown).}
 
-\item{affected}{A numeric vector of affection status of each individual
-(e.g., genotyped). The values are:
-\itemize{
-\item \code{0}  : unaffected
-\item \code{1}  : affected
-\item \code{NA} : affection status not known
-}}
+\item{affected}{A logical vector with the affection status of the
+individuals
+(i.e. \code{FALSE} = unaffected, \code{TRUE} = affected, \code{NA} = unknown).}
 
 \item{max_bits}{Optional, the bit size for which to shrink the Pedigree}
 }
@@ -50,6 +41,9 @@ Shrink Pedigree object to specified bit size with priority placed on
 trimming uninformative subjects. The algorithm is useful for getting a
 Pedigree condensed to a minimally informative size for algorithms or testing
 that are limited by size of the Pedigree.
+
+If \strong{avail} or \strong{affected} are \code{NULL}, they are extracted with their
+corresponding accessors from the Ped object.
 }
 \details{
 Iteratively remove subjects from the Pedigree. The random removal of members
@@ -67,7 +61,7 @@ individuals (chosen at random if there are multiple of the same status):
 }
 \examples{
 data(sampleped)
-ped1 <- Pedigree(sampleped[sampleped$family == '1',])
+ped1 <- Pedigree(sampleped[sampleped$famid == '1',])
 shrink(ped1, max_bits = 12)
 
 }
@@ -75,5 +69,7 @@ shrink(ped1, max_bits = 12)
 \code{\link[=Pedigree]{Pedigree()}}, \code{\link[=bit_size]{bit_size()}}
 }
 \author{
-Original by Dan Schaid, updated by Jason Sinnwell
+Original by Dan Schaid,
+updated by Jason Sinnwell and Louis Le Nézet
 }
+\keyword{shrink}

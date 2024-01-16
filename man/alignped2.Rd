@@ -2,7 +2,7 @@
 % Please edit documentation in R/alignped2.R
 \name{alignped2}
 \alias{alignped2}
-\title{Second routine alignement}
+\title{Alignment second routine}
 \usage{
 alignped2(idx, dadx, momx, level, horder, packed, spouselist)
 }
@@ -15,38 +15,40 @@ alignped2(idx, dadx, momx, level, horder, packed, spouselist)
 
 \item{level}{Vector of the level of each subject}
 
-\item{horder}{Vector of the horizontal order of each subject}
+\item{horder}{A named numeric vector with one element per subject in the
+Pedigree.  It determines the relative horizontal order of subjects within a
+sibship, as well as the relative order of processing for the founder couples.
+(For this latter, the female founders are ordered as though
+they were sisters).
+The names of the vector should be the individual identifiers.}
 
-\item{packed}{Should the Pedigree be compressed, i.e., allow diagonal
-lines connecting parents to children in order to have a smaller overall
-width for the plot.}
+\item{packed}{Should the Pedigree be compressed.
+(i.e. allow diagonal lines connecting parents to children in order
+to have a smaller overall width for the plot.)}
 
-\item{spouselist}{Matrix of the spouses with one row per hinted marriage,
-usually only a few marriages in a pedigree will need an added hint, for
-instance reverse the plot order of a husband/wife pair.
-Each row contains the index of the left spouse, the right hand spouse
-and the anchor (i.e : \code{1} = left, \code{2} = right, \code{0} = either).}
+\item{spouselist}{Matrix of spouses with 4 columns:
+\itemize{
+\item \code{1}: husband index
+\item \code{2}: wife index
+\item \code{3}: husband anchor
+\item \code{4}: wife anchor
+}}
 }
 \value{
 A list containing the elements to plot the Pedigree.
 It contains a set of matrices along with the spouselist matrix.
 The latter has marriages removed as they are processed.
 \itemize{
-\item n A vector giving the number of subjects on each horizonal level of the
+\item \code{n} : A vector giving the number of subjects on each horizonal level of the
 plot
-\item nid A matrix with one row for each level, giving the numeric id of
+\item \code{nid} : A matrix with one row for each level, giving the numeric id of
 each subject plotted.
 (A value of \code{17} means the 17th subject in the Pedigree).
-\item pos A matrix giving the horizontal position of each plot point
-\item fam A matrix giving the family id of each plot point.
+\item \code{pos} : A matrix giving the horizontal position of each plot point
+\item \code{fam} : A matrix giving the family id of each plot point.
 A value of \code{3} would mean that the two subjects in positions 3 and 4,
 in the row above, are this subject's parents.
-\item spouse A matrix with values
-\itemize{
-\item \code{0} = not a spouse
-\item \code{1} = subject plotted to the immediate right is a spouse
-\item \code{2} = subject plotted to the immediate right is an inbred spouse
-}
+\item \code{spouselist} : Spouse matrix with anchors informations
 }
 }
 \description{
@@ -63,7 +65,7 @@ The code below has one non-obvious special case. Suppose that two sibs marry.
 When the first sib is processed by \code{alignped1} then both partners
 (and any children) will be added to the rval structure below.
 When the second sib is processed they will come back as a 1 element tree
-(the marriage will no longer be on the spouselist), which should be added
+(the marriage will no longer be on the \strong{spouselist}), which should be added
 onto rval. The rule thus is to not add any 1 element tree whose value
 (which must be \code{idx[i]} is already in the rval structure for this level.
 }
@@ -74,5 +76,7 @@ align(ped)
 
 }
 \seealso{
-\code{\link[=align]{align()}}, \code{\link[=alignped1]{alignped1()}}
+\code{\link[=align]{align()}}
 }
+\keyword{alignment}
+\keyword{internal,}

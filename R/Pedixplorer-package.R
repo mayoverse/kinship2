@@ -11,7 +11,8 @@
 #' additional functionality and bug fixes.
 #'
 #' The package download, NEWS, and README are available on CRAN:
-#' \\url{https://cran.r-project.org/package=kinship2}
+#' \\url{https://cran.r-project.org/package=kinship2} for the
+#' previous version of the package.
 #'
 #' @section Functions:
 #' Below are listed some of the most widely used functions available
@@ -24,12 +25,14 @@
 #' probability having an allele sampled from two individuals
 #' be the same via IBD.
 #'
-#' [ped_to_plotdf()] : Method to transform a Pedigree
-#' object into a dataframe of graphical elements.
-#' Allows extra information to be included in the id under the plot symbol
-#'
-#' [plot_fromdf()] : Method to plot a Pedigree from a
-#' dataframe of graphical elements.
+#' [Pedixplorer::plot()] : Method to transform a Pedigree
+#' object into a graphical plot.
+#' Allows extra information to be included in the id under the
+#' plot symbol.
+#' This method use the [plot_fromdf()] function to transform the Pedigree
+#' object into a data frame of graphical elements, the same is done for the
+#' legend with the [ped_to_legdf()] function.
+#' When done, the data frames are plotted with the [plot_fromdf()] function.
 #'
 #' [shrink()]: Shrink a Pedigree to a specific bit size,
 #' removing non-informative members first.
@@ -49,5 +52,4 @@
 #'
 #' @docType package
 #' @rdname Pedixplorer_package
-#' @keywords internal
 "_PACKAGE"

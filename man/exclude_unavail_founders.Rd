@@ -4,26 +4,24 @@
 \alias{exclude_unavail_founders}
 \title{Exclude unavailable founders}
 \usage{
-exclude_unavail_founders(id, dadid, momid, avail, missid = "0")
+exclude_unavail_founders(id, dadid, momid, avail, missid = NA_character_)
 }
 \arguments{
-\item{id}{Vector of subject identifiers}
+\item{id}{A character vector with the identifiers of each individuals}
 
 \item{dadid}{A vector containing for each subject, the identifiers of the
 biologicals fathers.}
 
-\item{momid}{vector containing for each subject, the identifiers of the
+\item{momid}{A vector containing for each subject, the identifiers of the
 biologicals mothers.}
 
-\item{avail}{A numeric vector of availability status of each individual
-(e.g., genotyped). The values are:
-\itemize{
-\item \code{0}  : unavailable
-\item \code{1}  : available
-\item \code{NA} : availability not known
-}}
+\item{avail}{A logical vector with the availability status of the
+individuals
+(i.e. \code{FALSE} = not available, \code{TRUE} = available, \code{NA} = unknown).}
 
-\item{missid}{Character defining the missing ids}
+\item{missid}{A character vector with the missing values identifiers.
+All the id, dadid and momid corresponding to those values will be set
+to \code{NA_character_}.}
 }
 \value{
 Returns a list with the following components:
@@ -36,6 +34,10 @@ Returns a list with the following components:
 }
 }
 \description{
-Exclude from a Pedigree any unavailable founders.
+Exclude any unavailable founders.
 }
-\keyword{internal}
+\seealso{
+\code{\link[=shrink]{shrink()}}
+}
+\keyword{internal,}
+\keyword{shrink}

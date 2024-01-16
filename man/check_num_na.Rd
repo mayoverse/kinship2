@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{check_num_na}
 \alias{check_num_na}
-\title{Check is numeric}
+\title{Is numeric or NA}
 \usage{
 check_num_na(var, na_as_num = TRUE)
 }
@@ -13,13 +13,13 @@ check_num_na(var, na_as_num = TRUE)
 considered as numerical values}
 }
 \value{
-A vector of boolean of the same size as \code{var}
+A vector of boolean of the same size as \strong{var}
 }
 \description{
 Check if a variable given is numeric or NA
 }
 \details{
-Check if the values in \code{var} are numeric or if they are
-NA in the case that \code{na_as_num} is set to TRUE.
+Check if the values in \strong{var} are numeric or if they are
+\code{NA} in the case that \code{na_as_num} is set to TRUE.
 }
 \keyword{internal}

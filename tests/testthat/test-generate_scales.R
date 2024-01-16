@@ -37,10 +37,15 @@ test_that("generate aff inds works", {
 })
 
 test_that("generate border works", {
+    vect_to_binary(ped_df$avail)
     border <- generate_border(ped_df$avail)
-    expect_equal(border$mods, c(NA, 1, 0))
-    expect_equal(border$border, c("grey", "green", "black"))
-    expect_equal(border$labels, c("NA", "Available", "Non Available"))
+    expect_equal(border$mods, c(0, 1, NA, NA, NA, 0, NA, NA, 0, NA))
+    expect_equal(border$avail,
+        c(FALSE, TRUE, NA, NA, NA, FALSE, NA, NA, FALSE, NA)
+    )
+    expect_equal(border$sc_bord$mods, c(NA, 1, 0))
+    expect_equal(border$sc_bord$border, c("grey", "green", "black"))
+    expect_equal(border$sc_bord$labels, c("NA", "Available", "Non Available"))
 })
 
 test_that("generate fill full scale off", {
@@ -51,9 +56,9 @@ test_that("generate fill full scale off", {
         aff_fact$labels, keep_full_scale = FALSE
     )
     expect_equal(list_num$mods, aff_num$mods)
-    expect_equal(list_num$fill_scale$fill, c("white", "red", "grey"))
+    expect_equal(list_num$sc_fill$fill, c("white", "red", "grey"))
     expect_equal(list_fact$mods, aff_fact$mods)
-    expect_equal(list_fact$fill_scale$fill, c("grey", "white", "red"))
+    expect_equal(list_fact$sc_fill$fill, c("grey", "white", "red"))
 })
 
 test_that("generate fill full scale on", {
@@ -65,12 +70,12 @@ test_that("generate fill full scale on", {
     )
 
     expect_equal(
-        list_num$fill_scale$fill, c("#FFFFFF", "#9AB1C4", "#36648B",
+        list_num$sc_fill$fill, c("#FFFFFF", "#9AB1C4", "#36648B",
             "#FF0000", "grey", "#F67700", "#EEEE00"
         )
     )
     expect_equal(
-        list_fact$fill_scale$fill,
+        list_fact$sc_fill$fill,
         c("grey", "#FFFFFF", "#FF0000", "#EEEE00", "#36648B")
     )
 
@@ -80,7 +85,7 @@ test_that("generate fill full scale on", {
     list_num_rev <- generate_fill(ped_df$NumOther, aff_num_notsup$affected,
         aff_num_notsup$labels, keep_full_scale = TRUE
     )
-    expect_equal(list_num_rev$fill_scale$fill, c(
+    expect_equal(list_num_rev$sc_fill$fill, c(
         "#FF0000", "#F67700", "#EEEE00", "#FFFFFF",
         "grey", "#9AB1C4", "#36648B"
     ))
@@ -88,31 +93,32 @@ test_that("generate fill full scale on", {
 
 test_that("generate colors works on Pedigree object", {
     data("sampleped")
-    ped <- Pedigree(sampleped[sampleped$family == "1", -1])
-    ped(ped)$id <- as.numeric(ped(ped)$id)
-    ped_aff <- generate_colors(ped, col_aff = "id",
+    ped <- Pedigree(sampleped[sampleped$famid == "1", -1])
+    mcols(ped)$"id_num" <- as.numeric(id(ped(ped)))
+    ped_aff <- generate_colors(ped, col_aff = "id_num",
         threshold = 120, sup_thres_aff = TRUE, add_to_scale = FALSE
     )
-    expect_equal(ped_aff$ped$id_aff, c(rep(0, 20), rep(1, 21)))
-    expect_equal(ped_aff$scales$fill$fill, c("white", "red"))
-    expect_equal(ped_aff$scales$fill$labels,
+    expect_equal(mcols(ped_aff)$id_num_mods, c(rep(0, 20), rep(1, 21)))
+    expect_equal(sum(mcols(ped_aff)$avail_mods), 16)
+    expect_equal(fill(ped_aff)$fill, c("white", "red"))
+    expect_equal(fill(ped_aff)$labels,
         c("Healthy <= to 120", "Affected > to 120")
     )
-    expect_equal(ped_aff$scales$fill$mods,  c(0, 1))
-    expect_equal(ped_aff$scales$fill$affected,  c("FALSE", "TRUE"))
+    expect_equal(fill(ped_aff)$mods,  c(0, 1))
+    expect_equal(fill(ped_aff)$affected,  c(FALSE, TRUE))
 })
 
 test_that("generate with full scale", {
     data("sampleped")
+    sampleped$val_num <- as.numeric(sampleped$id)
     ped <- Pedigree(sampleped)
-    ped <- ped[ped(ped)$family == "1", ]
-    ped(ped)$indId <- as.numeric(ped(ped)$indId)
-    ped <- generate_colors(ped, add_to_scale = FALSE, "indId", threshold = 115,
+    ped <- ped[famid(ped) == "1"]
+    ped <- generate_colors(
+        ped, add_to_scale = FALSE, "val_num", threshold = 115,
         colors_aff = c("pink", "purple"), keep_full_scale = TRUE
     )
-    expect_equal(scales(ped)$fill$labels[c(1, 4)],
+    expect_equal(fill(ped)$labels[c(1, 4)],
         c("Healthy <= to 115 : [101,106]", "Affected > to 115 : [116,124]")
     )
-    expect(nrow(scales(ped)$fill), 6)
+    expect(nrow(fill(ped)), 6)
 })
-TRUE

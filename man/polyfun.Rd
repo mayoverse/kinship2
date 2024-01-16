@@ -2,12 +2,12 @@
 % Please edit documentation in R/plot_fct.R
 \name{polyfun}
 \alias{polyfun}
-\title{Generate a polygonal element}
+\title{Polygonal element}
 \usage{
 polyfun(nslice, coor)
 }
 \arguments{
-\item{nslice}{number of slices in the polygon}
+\item{nslice}{Number of slices in the polygon}
 
 \item{coor}{Element form which to generate the polygon
 containing x and y coordinates and theta}
@@ -16,6 +16,16 @@ containing x and y coordinates and theta}
 a list of x and y coordinates
 }
 \description{
-Generate a polygonal element
+Create a list of x and y coordinates for a polygon
+with a given number of slices and a list of coordinates
+for the polygon.
 }
-\keyword{internal}
+\examples{
+polyfun(2, list(
+     x = c(-0.5, -0.5, 0.5, 0.5),
+     y = c(-0.5, 0.5, 0.5, -0.5),
+     theta = -c(3, 5, 7, 9) * pi / 4
+))
+}
+\keyword{Pedigree-plot}
+\keyword{internal,}

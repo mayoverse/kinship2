@@ -15,22 +15,21 @@ new_par <- list(
 
 test_that("Pedigree legend works", {
     data("sampleped")
+    sampleped$val_num <- as.numeric(sampleped$id)
     ped <- Pedigree(sampleped)
-    ped <- ped[ped(ped)$family == "1", ]
-    ped <- generate_colors(ped, add_to_scale = TRUE, "avail")
-    ped(ped)$indId <- as.numeric(ped(ped)$indId)
+    ped <- ped[ped(ped, "famid") == "1"]
+    ped <- generate_colors(ped, add_to_scale = TRUE, "avail", mods_aff = TRUE)
     ped <- generate_colors(ped,
-        add_to_scale = TRUE, "indId", threshold = 115,
+        add_to_scale = TRUE, "val_num", threshold = 115,
         colors_aff = c("pink", "purple"), keep_full_scale = TRUE
     )
-
     lst <- ped_to_legdf(ped, boxh = 1, boxw = 1, cex = 0.8)
     expect_snapshot(lst)
 
     vdiffr::expect_doppelganger("Legend alone",
         function() {
-            plot_fromdf(lst$leg_df,
-                usr = c(-1, max(lst$leg_df$x0) + 1, -1, max(lst$leg_df$y0) + 1),
+            plot_fromdf(lst$df,
+                usr = c(-1, max(lst$df$x0) + 1, -1, max(lst$df$y0) + 1),
                 add_to_existing = FALSE
             )
         }

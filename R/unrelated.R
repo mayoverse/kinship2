@@ -1,10 +1,7 @@
 #' @importFrom stats runif
 NULL
 
-# Automatically generated from all.nw using noweb Authors: Dan Schaid, Shannon
-# McDonnell Updated by Jason Sinnwell
-
-#' Get unrelated subjects
+#' Find Unrelated subjects
 #'
 #' @description
 #' Determine set of maximum number of unrelated available subjects from a
@@ -13,7 +10,8 @@ NULL
 #' @details
 #' Determine set of maximum number of unrelated available subjects from a
 #' Pedigree, given vectors id, father, and mother for a Pedigree structure, and
-#' status vector of T/F for whether each subject is available (e.g. has DNA)
+#' status vector of `TRUE` / `FALSE` for whether each subject is
+#' available (e.g. has DNA).
 #'
 #' This is a greedy algorithm that uses the kinship matrix, sequentially
 #' removing rows/cols that are non-zero for subjects that have the most number
@@ -23,79 +21,101 @@ NULL
 #' zeros for rows, a random choice is made. Hence, running this function
 #' multiple times can return different sets of unrelated subjects.
 #'
-#' @inheritParams align
-#' @inheritParams is_informative
+#' If **avail** is `NULL`, it is extracted with its
+#' corresponding accessor from the Ped object.
+#'
+#' @inheritParams shrink
 #'
 #' @return A vector of the ids of subjects that are unrelated.
 
 #' @examples
+#'
 #' data(sampleped)
-#' fam1 <- sampleped[sampleped$family == 1, ]
-#'
-#'
+#' fam1 <- sampleped[sampleped$famid == 1, ]
 #' ped1 <- Pedigree(fam1)
-#'
-#' ## to see plot:
-#' id1 <- unrelated(ped1)
-#'
-#' id1
+#' unrelated(ped1)
 #' ## some possible vectors
 #' ## [1] '110' '113' '133' '109'
 #' ## [1] '113' '118' '141' '109'
 #' ## [1] '113' '118' '140' '109'
 #' ## [1] '110' '113' '116' '109'
 #' ## [1] '113' '133' '141' '109'
+#'
+#' @author Dan Schaid and Shannon McDonnell updated by Jason Sinnwell
 #' @export
-unrelated <- function(ped, avail = ped(ped)$avail) {
-    # Requires: kinship function
+#' @usage NULL
+setGeneric("unrelated", signature = "obj",
+    function(obj, ...) standardGeneric("unrelated")
+)
 
-    # Given vectors id, father, and mother for a Pedigree structure, and avail
-    # = vector of T/F or 1/0 for whether each subject (corresponding to id
-    # vector) is available (e.g., has DNA available), determine set of maximum
-    # number of unrelated available subjects from a Pedigree.
+#' @rdname unrelated
+#' @export
+setMethod("unrelated", "Ped",
+    function(obj, avail = NULL) {
+        if (is.null(avail)) {
+            avail <- avail(obj)
+        }
+        # Requires: kinship function
 
-    # This is a greedy algorithm that uses the kinship matrix, sequentially
-    # removing rows/cols that are non-zero for subjects that have the most
-    # number of zero kinship coefficients (greedy by choosing a row of kinship
-    # matrix that has the most number of zeros, and then remove any cols and
-    # their corresponding rows that are non-zero.  To account for ties of the
-    # count of zeros for rows, a random choice is made. Hence, running this
-    # function multiple times can return different sets of unrelated subjects.
+        # Given vectors id, father, and mother for a Pedigree structure,
+        # and avail = vector of T/F or 1/0 for whether each subject
+        # (corresponding to id vector) is available
+        # (e.g., has DNA available), determine set of maximum
+        # number of unrelated available subjects from a Pedigree.
 
-    id <- ped(ped)$id
+        # This is a greedy algorithm that uses the kinship matrix, sequentially
+        # removing rows/cols that are non-zero for subjects that have the most
+        # number of zero kinship coefficients
+        # (greedy by choosing a row of kinship matrix that has the most number
+        # of zeros, and then remove any cols and their corresponding rows that
+        # are non-zero).
+        # To account for ties of the count of zeros for rows, a random choice
+        # is made.
+        # Hence, running this function multiple times can return different
+        # sets of unrelated subjects.
 
-    kin <- kinship(ped)
+        id <- id(obj)
 
-    ord <- order(id)
-    id <- id[ord]
-    avail <- as.logical(avail[ord])
-    kin <- kin[ord, ][, ord]
+        kin <- kinship(obj)
 
-    rord <- order(runif(nrow(kin)))
+        ord <- order(id)
+        id <- id[ord]
+        avail <- as.logical(avail[ord])
+        kin <- kin[ord, ][, ord]
 
-    id <- id[rord]
-    avail <- avail[rord]
-    kin <- kin[rord, ][, rord]
+        rord <- order(runif(nrow(kin)))
 
-    kin_avail <- kin[avail, , drop = FALSE][, avail, drop = FALSE]
+        id <- id[rord]
+        avail <- avail[rord]
+        kin <- kin[rord, ][, rord]
 
-    diag(kin_avail) <- 0
+        kin_avail <- kin[avail, , drop = FALSE][, avail, drop = FALSE]
 
-    while (any(kin_avail > 0)) {
-        nr <- nrow(kin_avail)
-        indx <- seq_len(nrow(kin_avail))
-        zero_count <- apply(kin_avail == 0, 1, sum)
+        diag(kin_avail) <- 0
 
-        mx <- max(zero_count[zero_count < nr])
-        zero_mx <- indx[zero_count == mx][1]
+        while (any(kin_avail > 0)) {
+            nr <- nrow(kin_avail)
+            indx <- seq_len(nrow(kin_avail))
+            zero_count <- apply(kin_avail == 0, 1, sum)
 
-        exclude <- indx[kin_avail[, zero_mx] > 0]
+            mx <- max(zero_count[zero_count < nr])
+            zero_mx <- indx[zero_count == mx][1]
 
-        kin_avail <- kin_avail[-exclude, , drop = FALSE][
-            , -exclude, drop = FALSE
-        ]
+            exclude <- indx[kin_avail[, zero_mx] > 0]
+
+            kin_avail <- kin_avail[-exclude, , drop = FALSE][
+                , -exclude, drop = FALSE
+            ]
+        }
+
+        sort(dimnames(kin_avail)[[1]])
     }
+)
 
-    sort(dimnames(kin_avail)[[1]])
-}
-TRUE
+#' @rdname unrelated
+#' @export
+setMethod("unrelated", "Pedigree",
+    function(obj, avail = NULL) {
+        unrelated(ped(obj), avail = avail)
+    }
+)

@@ -1,4 +1,4 @@
-test_that("Pedigree other test", {
+test_that("Pedigree plotting test", {
     ped2mat <- matrix(
         c(
             1, 1, 0, 0, 1, 1, 0,
@@ -13,7 +13,6 @@ test_that("Pedigree other test", {
             1, 10, 8, 7, 2, 0, 0
         ), ncol = 7, byrow = TRUE
     )
-    withr::local_options(width = 50)
     ped2df <- as.data.frame(ped2mat)
     names(ped2df) <- c("family", "indId", "fatherId", "motherId",
         "gender", "affection", "available"
@@ -25,8 +24,8 @@ test_that("Pedigree other test", {
     ped2df$vitalStatus <- c(1, 1, 1, 0, 1, 0, 0, 8, 0, 0)
 
     rel_df <- data.frame(indId1 = 8, indId2 = 9, code = 3, family = 1)
-    ped <- Pedigree(ped2df, rel_df)
-
+    ped <- Pedigree(ped2df, rel_df, missid = "0")
+    ped
     vdiffr::expect_doppelganger("Ped simple affection",
         function() plot(ped)
     )
@@ -42,7 +41,7 @@ test_that("Pedigree other test", {
 
     lst <- ped_to_plotdf(ped)
     expect_equal(length(lst), 2)
-    expect_equal(dim(lst$df), c(88, 15))
+    expect_equal(dim(lst$df), c(82, 15))
     expect_snapshot(lst)
     p <- plot(ped, title = "Pedigree", ggplot_gen = TRUE)
     vdiffr::expect_doppelganger("Ped 2 affections ggplot",
@@ -53,7 +52,7 @@ test_that("Pedigree other test", {
 test_that("Pedigree fails to line up", {
     # Here is a case where the levels fail to line up properly
     data(sampleped)
-    df1 <- sampleped[sampleped$family == "1", ]
+    df1 <- sampleped[sampleped$famid == "1", ]
     ped1 <- Pedigree(df1)
     vdiffr::expect_doppelganger("ped1",
         function() plot(ped1)

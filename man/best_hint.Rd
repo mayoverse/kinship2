@@ -2,37 +2,41 @@
 % Please edit documentation in R/best_hint.R
 \name{best_hint}
 \alias{best_hint}
-\title{Best hint for alignement}
+\alias{best_hint,Pedigree-method}
+\title{Best hint for a Pedigree alignment}
 \usage{
-best_hint(ped, wt = c(1000, 10, 1), tolerance = 0)
+\S4method{best_hint}{Pedigree}(obj, wt = c(1000, 10, 1), tolerance = 0)
 }
 \arguments{
-\item{ped}{A Pedigree object}
+\item{obj}{A Pedigree object}
 
-\item{wt}{A vector of three weights for the three error measures
-\itemize{
+\item{wt}{A vector of three weights for the three error measures.
+Default is \code{c(1000, 10, 1)}.
+\enumerate{
 \item The number of duplicate individuals in the plot
 \item The sum of the absolute values of the differences in the
 positions of duplicate individuals
 \item The sum of the absolute values of the differences between
-the center of the children and the parents
-Default is \code{c(1000, 10, 1)}.
+the center of the children and the parents.
 }}
 
-\item{tolerance}{The maximum stress level to accept. Default is \code{0}}
+\item{tolerance}{The maximum stress level to accept.
+Default is \code{0}}
 }
 \value{
-The best hint object out of all the permutations
+The best Hints object out of all the permutations
 }
 \description{
-When computer time is cheap, use this routine to get a 'best' Pedigree.
+When computer time is cheap, use this routine to get a \emph{best}
+Pedigree alignment.
 This routine will try all possible founder orders, and return the one
-with the least 'stress'.
+with the least \strong{stress}.
 }
 \details{
-The auto_hint routine will rearrange sibling order, but not founder order.
-This calls auto_hint with every possible founder order, and finds that
-plot with the least 'stress'.
+The \code{\link[=auto_hint]{auto_hint()}} routine will rearrange sibling order, but not
+founder order.
+This calls \code{\link[=auto_hint]{auto_hint()}} with every possible founder order, and finds that
+plot with the least "stress".
 The stress is computed as a weighted sum of three error measures:
 \itemize{
 \item nbArcs The number of duplicate individuals in the plot
@@ -42,10 +46,10 @@ positions of duplicate individuals
 the center of the children and the parents
 }
 
-\eqn{stress =
-     wt[1] \times nbArcs +
-     wt[2] \times lgArcs +
-     wt[3] \times lgParentsChilds
+\deqn{stress =
+     wt[1] * nbArcs +
+     wt[2] * lgArcs +
+     wt[3] * lgParentsChilds
 }
 
 If during the search, a plot is found with a stress level less than
@@ -53,9 +57,11 @@ If during the search, a plot is found with a stress level less than
 }
 \examples{
 data(sampleped)
-ped <- Pedigree(sampleped[sampleped$family == 1,])
+ped <- Pedigree(sampleped[sampleped$famid == 1,])
 best_hint(ped)
 }
 \seealso{
-\code{\link[=auto_hint]{auto_hint()}}
+\code{\link[=auto_hint]{auto_hint()}}, \code{\link[=align]{align()}}
 }
+\keyword{alignment,}
+\keyword{auto_hint}

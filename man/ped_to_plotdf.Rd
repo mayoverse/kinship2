@@ -2,15 +2,16 @@
 % Please edit documentation in R/ped_to_plotdf.R
 \name{ped_to_plotdf}
 \alias{ped_to_plotdf}
-\title{Convert a Pedigree to a data frame of element to plot}
+\alias{ped_to_plotdf,Pedigree-method}
+\title{Create plotting data frame from a Pedigree}
 \usage{
-ped_to_plotdf(
-  ped,
-  packed = FALSE,
-  width = 10,
+\S4method{ped_to_plotdf}{Pedigree}(
+  obj,
+  packed = TRUE,
+  width = 6,
   align = c(1.5, 2),
   subreg = NULL,
-  cex = 0.5,
+  cex = 1,
   symbolsize = cex,
   pconnect = 0.5,
   branch = 0.6,
@@ -20,33 +21,35 @@ ped_to_plotdf(
 )
 }
 \arguments{
-\item{ped}{A Pedigree object}
+\item{obj}{A Pedigree object}
 
-\item{packed}{Should the Pedigree be compressed, i.e., allow diagonal
-lines connecting parents to children in order to have a smaller overall
-width for the plot.}
+\item{...}{Other arguments passed to \code{\link[=par]{par()}}}
 
-\item{width}{for a packed output, the minimum width of the plot, in
+\item{packed}{Should the Pedigree be compressed.
+(i.e. allow diagonal lines connecting parents to children in order
+to have a smaller overall width for the plot.)}
+
+\item{width}{For a packed output, the minimum width of the plot, in
 inches.}
 
-\item{align}{for a packed Pedigree, align children under parents \code{TRUE},
+\item{align}{For a packed Pedigree, align children under parents \code{TRUE},
 to the extent possible given the page width, or align to to the left
 margin \code{FALSE}.
 This argument can be a two element vector, giving the alignment
 parameters, or a logical value.
-If \code{TRUE}, the default is \code{c(1.5, 2)}, or numeric the routine
+If \code{TRUE}, the default is \code{c(1.5, 2)}, or if numeric the routine
 \code{alignped4()} will be called.}
 
-\item{subreg}{4-element vector for (min x, max x, min depth, max depth),
+\item{subreg}{A 4-element vector for (min x, max x, min depth, max depth),
 used to edit away portions of the plot coordinates returned by
 \code{\link[=align]{align()}}.
 This is useful for zooming in on a particular region of the Pedigree.}
 
-\item{cex}{character expansion of the text}
+\item{cex}{Character expansion of the text}
 
-\item{symbolsize}{size of the symbols}
+\item{symbolsize}{Size of the symbols}
 
-\item{pconnect}{when connecting parent to children the program will try to
+\item{pconnect}{When connecting parent to children the program will try to
 make the connecting line as close to vertical as possible, subject to it
 lying inside the endpoints of the line that connects the children by at
 least \code{pconnect} people.  Setting this option to a large number will
@@ -55,26 +58,51 @@ force the line to connect at the midpoint of the children.}
 \item{branch}{defines how much angle is used to connect various levels of
 nuclear families.}
 
-\item{aff_mark}{if TRUE, add a aff_mark to each box corresponding to the
+\item{aff_mark}{If \code{TRUE}, add a aff_mark to each box corresponding to the
 value of the affection column for each filling scale.}
 
-\item{label}{if not NULL, add a label to each box corresponding to the
+\item{label}{If not \code{NULL}, add a label to each box corresponding to the
 value of the column given.}
-
-\item{...}{other arguments passed to \code{\link[=par]{par()}}}
 }
 \value{
 A list containing the data frame and the user coordinates.
 }
 \description{
-Convert a Pedigree to a data frame of element to plot
+Convert a Pedigree to a data frame with all the elements and their
+characteristic for them to be plotted afterwards with \code{\link[=plot_fromdf]{plot_fromdf()}}.
+}
+\details{
+The data frame contains the following columns:
+\itemize{
+\item \code{x0}, \code{y0}, \code{x1}, \code{y1}: coordinates of the elements
+\item \code{type}: type of the elements
+\item \code{fill}: fill color of the elements
+\item \code{border}: border color of the elements
+\item \code{angle}: angle of the shading of the elements
+\item \code{density}: density of the shading of the elements
+\item \code{cex}: size of the elements
+\item \code{label}: label of the elements
+\item \code{tips}: tips of the elements (used for the tooltips)
+\item \code{adjx}: horizontal text adjustment of the labels
+\item \code{adjy}: vertical text adjustment of the labels
+}
+
+All those columns are used by \code{\link[=plot_fromdf]{plot_fromdf()}} to plot the graph.
 }
 \examples{
+
 data(sampleped)
-ped1 <- Pedigree(sampleped[sampleped$family == 1,])
-ped_to_plotdf(ped1)
+ped1 <- Pedigree(sampleped[sampleped$famid == 1,])
+plot_df <- ped_to_plotdf(ped1)
+summary(plot_df$df)
+plot_fromdf(plot_df$df, usr = plot_df$par_usr$usr,
+    boxh = plot_df$par_usr$boxh, boxw = plot_df$par_usr$boxw
+)
+
 }
 \seealso{
 \code{\link[=plot_fromdf]{plot_fromdf()}}
 \code{\link[=ped_to_legdf]{ped_to_legdf()}}
 }
+\keyword{Pedigree-plot}
+\keyword{internal,}

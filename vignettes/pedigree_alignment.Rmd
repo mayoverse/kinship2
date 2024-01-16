@@ -3,8 +3,8 @@ title: Pedigree alignment details
 author: TM Therneau
 date: '`r format(Sys.time(),"%d %B, %Y")`'
 output:
-  rmarkdown::html_vignette:
-    toc: yes
+  BiocStyle::html_document:
+    toc: true
     toc_depth: 2
 header-includes: \usepackage{tabularx}
 vignette: |
@@ -90,7 +90,7 @@ to figure that out.
 
 The first thing to be done is to check on twins. They increase the complexity,
 since twins need to move together.
-The `rel(ped)$code` object is a factor, so first turn that into numeric.
+The `rel(ped, "code")` object is a factor, so first turn that into numeric.
 We create 3 vectors:
 
 - $twinrel$ is a matrix containing pairs of twins and
@@ -147,10 +147,13 @@ test1 <- data.frame(id = 1:11,
     dadid = c(0, 0, 1, 1, 1, 0, 0, 6, 6, 6, 9),
     momid = c(0, 0, 2, 2, 2, 0, 0, 7, 7, 7, 4)
 )
-ped1 <- Pedigree(test1)
+ped1 <- Pedigree(test1, missid = "0")
 
-temp2 <- Pedigree(test1, hints = list(
-    order = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11)
+temp2 <- Pedigree(test1, missid = "0", hints = list(
+    horder = setNames(
+        c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11),
+        1:11
+    )
 ))
 
 par(mfrow = c(1, 2))
@@ -196,7 +199,7 @@ We'll look at more complex cases below when looking at the $duporder$ (order
 the duplicates) function, which returns a matrix with columns 1 and 2 being a
 pair of duplicates, and 3 a direction. Note that in the following code
 $idlist$ refers to the row numbers of each subject in the Pedigree, not to
-their label `ped(ped)$id`.
+their label `ped(ped, "id")`.
 
 ## duporder
 
@@ -232,9 +235,9 @@ test2 <- data.frame(id = c(1:13, 21:41),
         1, 2, 1, 1, 2
     )
 )
-ped2 <- Pedigree(test2)
-ped2a <- Pedigree(test2, hints = list(
-    order = seq_along(test2$id)
+ped2 <- Pedigree(test2, missid = "0")
+ped2a <- Pedigree(test2, missid = "0", hints = list(
+    horder = setNames(seq_along(test2$id), test2$id)
 ))
 par(mfrow = c(1, 2))
 plot(ped2a, title = "Before auto_hint")
@@ -312,8 +315,8 @@ test3 <- data.frame(id = 1:14,
     momid = c(0, 7, 1, 1, 1, 0, 0, 12, 0, 1, 7, 0, 7, 12),
     affected = c(0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0)
 )
-ped3 <- Pedigree(test3, hints = list(
-    order = 1:14
+ped3 <- Pedigree(test3, missid = "0", hints = list(
+    horder = setNames(1:14, 1:14)
 ))
 
 test4 <- data.frame(id = 1:17,
@@ -328,8 +331,8 @@ test4 <- data.frame(id = 1:17,
     )
 )
 
-ped4 <- Pedigree(test4, hints = list(
-    order = 1:17
+ped4 <- Pedigree(test4, missid = "0", hints = list(
+    horder = setNames(1:17, 1:17)
 ))
 
 par(mfrow = c(1, 2))

@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_fct.R
 \name{draw_arc}
 \alias{draw_arc}
-\title{Draw arcs for multiple instances of a subject}
+\title{Draw arcs}
 \usage{
 draw_arc(x0, y0, x1, y1, p, ggplot_gen = FALSE, lwd = 1, col = "black")
 }
@@ -17,16 +17,18 @@ draw_arc(x0, y0, x1, y1, p, ggplot_gen = FALSE, lwd = 1, col = "black")
 
 \item{p}{ggplot object}
 
-\item{ggplot_gen}{logical, if TRUE add the segments to the ggplot object}
+\item{ggplot_gen}{If TRUE add the segments to the ggplot object}
 
-\item{lwd}{line width}
+\item{lwd}{Line width}
 
-\item{col}{line color}
+\item{col}{Line color}
 }
 \value{
-Plot the arcs or add it to a ggplot object
+Plot the arcs to the current device
+or add it to a ggplot object
 }
 \description{
-Draw arcs for multiple instances of a subject
+Draw arcs
 }
-\keyword{internal}
+\keyword{Pedigree-plot}
+\keyword{internal,}

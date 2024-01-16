@@ -2,7 +2,7 @@
 % Please edit documentation in R/alignped4.R
 \name{alignped4}
 \alias{alignped4}
-\title{Fourth and last routine alignement}
+\title{Alignment fourth routine}
 \usage{
 alignped4(rval, spouse, level, width, align)
 }
@@ -15,15 +15,15 @@ the subject is a spouse or not.}
 
 \item{level}{Vector of the level of each subject}
 
-\item{width}{for a packed output, the minimum width of the plot, in
+\item{width}{For a packed output, the minimum width of the plot, in
 inches.}
 
-\item{align}{for a packed Pedigree, align children under parents \code{TRUE},
+\item{align}{For a packed Pedigree, align children under parents \code{TRUE},
 to the extent possible given the page width, or align to to the left
 margin \code{FALSE}.
 This argument can be a two element vector, giving the alignment
 parameters, or a logical value.
-If \code{TRUE}, the default is \code{c(1.5, 2)}, or numeric the routine
+If \code{TRUE}, the default is \code{c(1.5, 2)}, or if numeric the routine
 \code{alignped4()} will be called.}
 }
 \value{
@@ -49,14 +49,14 @@ line, if the user suggestion is too low it is increased to that
 For each set of siblings \code{x} with parents at \code{p_1} and \code{p_2}
 the alignment penalty is :
 
-\eqn{(1/k^a)\sum{i=1}{k} (x_i - (p_1 + p_2)^2}
+\deqn{(1/k^a)\sum{i=1}{k} (x_i - (p_1 + p_2)^2}
 
 where \code{k} is the number of siblings in the set.
 }
 
 Using the fact that when \code{a = 1} :
 
-\eqn{\sum(x_i-c)^2 = \sum(x_i-\mu)^2 + k(c-\mu)^2}
+\deqn{\sum(x_i-c)^2 = \sum(x_i-\mu)^2 + k(c-\mu)^2}
 
 then moving a sibship with \code{k} sibs one unit to the left or
 right of optimal will incur the same cost as moving one with only 1 or
@@ -99,3 +99,5 @@ align(ped)
 \seealso{
 \code{\link[=align]{align()}}
 }
+\keyword{alignment}
+\keyword{internal,}

@@ -1,42 +1,42 @@
-#' Compute the depth of each subject in a Pedigree
+#' Individual's depth in a pedigree
 #'
 #' @description
 #' Computes the depth of each subject in the Pedigree.
 #'
 #' @details
-#' Mark each person as to their depth in a Pedigree; 0 for a founder, otherwise
+#' Mark each person as to their depth in a Pedigree; `0` for a founder,
+#' otherwise :
 #'
-#' \eqn{depth = 1 + \max(fatherDepth, motherDepth)}
+#' \deqn{depth = 1 + \max(fatherDepth, motherDepth)}
 #'
-#' In the case of an inbred Pedigree a perfect alignment obeying
-#' `extra=TRUE` may not exist.
+#' In the case of an inbred Pedigree a perfect alignment may not exist.
 #'
-#' @inheritParams kinship
-#' @param align_parents If `align_parents=T`, go one step further and try to
-#' make both parents of each child have the same depth.
+#' @param ... Additional arguments
+#' @inheritParams Ped
+#' @param align_parents If `align_parents = TRUE`, go one step further
+#' and try to make both parents of each child have the same depth.
 #' (This is not always possible).
-#' It helps the drawing program by lining up pedigrees that 'join in the middle'
-#' via a marriage.
+#' It helps the drawing program by lining up pedigrees that
+#' 'join in the middle' via a marriage.
 #'
-#' @return an integer vector containing the depth for each subject
+#' @return An integer vector containing the depth for each subject
 #'
-#' @author Terry Therneau
+#' @author Terry Therneau, updated by Louis Le Nézet
 #' @seealso [align()]
-#' @include pedigreeClass.R
-#' @examples
-#' data(sampleped)
-#' ped1 <- Pedigree(sampleped[sampleped$family == "1",])
-#' kindepth(ped1)
+#' @include AllClass.R
 #' @export
 setGeneric("kindepth", signature = "obj",
     function(obj, ...) standardGeneric("kindepth")
 )
 
-#' @export
 #' @rdname kindepth
-#' @aliases kindepth,character
-#' @docType methods
-setMethod("kindepth", "character", function(obj, dadid, momid,
+#' @examples
+#' kindepth(
+#'      c("A", "B", "C", "D", "E"),
+#'      c("C", "D", "0", "0", "0"),
+#'      c("E", "E", "0", "0", "0")
+#' )
+setMethod("kindepth", "character_OR_integer", function(obj, dadid, momid,
     align_parents = FALSE
 ) {
     id <- obj
@@ -62,7 +62,6 @@ setMethod("kindepth", "character", function(obj, dadid, momid,
     for (i in seq_len(n)) {
         child <- match(midx, parents, nomatch = 0) +
             match(didx, parents, nomatch = 0)  # Index of parent's childs
-
         ## version 1.8.5 did not have this check with child_old.
         ## Keeping it here because it was not the issue being fixed in 9/2023.
         if (all(child == child_old)) {
@@ -112,17 +111,6 @@ setMethod("kindepth", "character", function(obj, dadid, momid,
     ## It may be possible to do better alignment when the Pedigree has loops,
     ## but it is definitely beyond this program, perhaps in auto_hint one day.
 
-    chaseup <- function(x, midx, didx) {
-        new <- c(midx[x], didx[x])  # mother and father
-        new <- new[new > 0]
-        while (length(new) > 1) {
-            x <- unique(c(x, new))
-            new <- c(midx[new], didx[new])
-            new <- new[new > 0]
-        }
-        x
-    }
-
     ## First deal with any parents who are founders They all start with depth 0
     dads <- didx[midx > 0 & didx > 0]  # the father side of all spouse pairs
     moms <- midx[midx > 0 & didx > 0]
@@ -156,46 +144,74 @@ setMethod("kindepth", "character", function(obj, dadid, momid,
     npair <- length(dads)
     done <- rep(FALSE, npair)  # couples that are taken care of
     while (TRUE) {
-        pairs.to.fix <- which((depth[dads] != depth[moms]) & !done)
-        if (length(pairs.to.fix) == 0) {
+        ## Select parents pairs to fix
+        pairs_to_fix <- which((depth[dads] != depth[moms]) & !done)
+
+        if (length(pairs_to_fix) == 0) {
             break
         }
-        temp <- pmax(depth[dads], depth[moms])[pairs.to.fix]
-        who <- min(pairs.to.fix[temp == min(temp)])  # the chosen couple
+        ## Get max depth of all pairs to fix
+        temp <- pmax(depth[dads], depth[moms])[pairs_to_fix]
 
+        ## Select the couple to fix
+        ## that have the minimal depth
+        who <- min(pairs_to_fix[temp == min(temp)])
+
+        ## Good is the individuals with the higher depth
         good <- moms[who]
         bad <- dads[who]
         if (depth[dads[who]] > depth[moms[who]]) {
             good <- dads[who]
             bad <- moms[who]
         }
-        abad <- chaseup(bad, midx, didx)
+
+        ## Move depth of all bad individuals
+        ## All id linked to bad
+        abad <- c(bad, ancestors(bad, midx, didx))
+
         if (length(abad) == 1 && sum(c(dads, moms) == bad) == 1) {
-            # simple case, a solitary marry-in
+            ## Simple case, a solitary marry-in
+            ## Only one in ancestry and is dad or mom of only one
             depth[bad] <- depth[good]
         } else {
-            agood <- chaseup(good, midx, didx)  # ancestors of the 'good' side
+            ## Ancestors of the 'good' side
+            agood <- c(good, ancestors(good, midx, didx))
+
+            ## If individual already in agood not bad
+            abad1 <- abad[!abad %in% agood]
+
             ## For spouse chasing, I need to exclude the given pair
             tdad <- dads[-who]
             tmom <- moms[-who]
-            while (1) {
-                ## spouses of any on agood list
+            ## Get all individuals affiliated to agood
+            while (TRUE) {
+                ## Add spouse
                 spouse <- c(tmom[!is.na(match(tdad, agood))],
                     tdad[!is.na(match(tmom, agood))]
                 )
                 temp <- unique(c(agood, spouse))
-                temp <- unique(chaseup(temp, midx, didx))  # parents
+
+                ## Add ancestors
+                temp <- unique(c(temp, ancestors(temp, midx, didx)))
+
+                ## Add kids
                 kids <- (!is.na(match(midx, temp)) | !is.na(match(didx, temp)))
                 temp <- unique(c(temp, (seq_len(n))[
                     kids & depth <= depth[good]
                 ]))
+
                 if (length(temp) == length(agood)) {
+                    ## If no addition to good ancestors break
                     break
                 } else {
+                    ## Else do other iteration
                     agood <- temp
                 }
             }
+            ## Update agood but only if not in abad1
+            agood <- agood[!agood %in% abad1]
 
+            ## Change all depth
             if (all(match(abad, agood, nomatch = 0) == 0)) {
                 ## shift it down
                 depth[abad] <- depth[abad] + (depth[good] - depth[bad])
@@ -218,21 +234,31 @@ setMethod("kindepth", "character", function(obj, dadid, momid,
         done[who] <- TRUE
         ##  This snunk into version 1.9.6, which was part of
         ## bug: done[dads == bad | moms == bad] <- TRUE
-
-    }  ## while(TRUE)
+    }
     if (all(depth > 0)) {
-        stop("You found a bug in kindepth's alignment code!")
+        stop(
+            "You found a bug in kindepth's alignment code!",
+            "Depth found:", depth
+        )
     }
     depth
 }
 )
 
-#' @export
 #' @rdname kindepth
-#' @aliases kindepth,Pedigree
-#' @docType methods
+#' @examples
+#' data(sampleped)
+#' ped1 <- Pedigree(sampleped[sampleped$famid == "1",])
+#' kindepth(ped1)
 setMethod("kindepth", "Pedigree",
     function(obj, align_parents = FALSE) {
-        kindepth(obj$ped$id, obj$ped$dadid, obj$ped$momid, align_parents)
+        kindepth(ped(obj), align_parents)
+    }
+)
+
+#' @rdname kindepth
+setMethod("kindepth", "Ped",
+    function(obj, align_parents = FALSE) {
+        kindepth(id(obj), dadid(obj), momid(obj), align_parents)
     }
 )

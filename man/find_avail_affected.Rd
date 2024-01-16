@@ -2,31 +2,35 @@
 % Please edit documentation in R/find_avail_affected.R
 \name{find_avail_affected}
 \alias{find_avail_affected}
-\title{Find a single person to trim from a Pedigree whose is available}
+\alias{find_avail_affected,Ped-method}
+\alias{find_avail_affected,Pedigree-method}
+\title{Find single affected and available individual from a Pedigree}
 \usage{
-find_avail_affected(ped, avail = ped(ped)$avail, affstatus = NA)
+\S4method{find_avail_affected}{Ped}(obj, avail = NULL, affected = NULL, affstatus = NA)
+
+\S4method{find_avail_affected}{Pedigree}(obj, avail = NULL, affected = NULL, affstatus = NA)
 }
 \arguments{
-\item{ped}{A Pedigree object}
+\item{obj}{A Ped or Pedigree object.}
 
-\item{avail}{A numeric vector of availability status of each individual
-(e.g., genotyped). The values are:
-\itemize{
-\item \code{0}  : unavailable
-\item \code{1}  : available
-\item \code{NA} : availability not known
-}}
+\item{avail}{A logical vector with the availability status of the
+individuals
+(i.e. \code{FALSE} = not available, \code{TRUE} = available, \code{NA} = unknown).}
+
+\item{affected}{A logical vector with the affection status of the
+individuals
+(i.e. \code{FALSE} = unaffected, \code{TRUE} = affected, \code{NA} = unknown).}
 
 \item{affstatus}{Affection status to search for.}
 }
 \value{
 A list is returned with the following components
 \itemize{
-\item ped The new Pedigree object
+\item ped The new Ped object
 \item newAvail Vector of availability status of trimmed individuals
 \item idTrimmed Vector of IDs of trimmed individuals
-\item isTrimmed logical value indicating whether Pedigree has been trimmed
-\item bit_size Bit size of the trimmed Pedigree
+\item isTrimmed logical value indicating whether Ped object has been trimmed
+\item bit_size Bit size of the trimmed Ped
 }
 }
 \description{
@@ -34,9 +38,12 @@ Finds one subject from among available non-parents with indicated affection
 status.
 }
 \details{
-When used within pedigree.shrink, this function is called with the first
+When used within \code{\link[=shrink]{shrink()}}, this function is called with the first
 affected indicator, if the affected item in the Pedigree is a matrix of
 multiple affected indicators.
+
+If \strong{avail} or \strong{affected} is null, then the function will use the
+corresponding Ped accessor.
 }
 \examples{
 data(sampleped)
@@ -46,3 +53,5 @@ find_avail_affected(ped, affstatus = 1)
 \seealso{
 \code{\link[=shrink]{shrink()}}
 }
+\keyword{internal,}
+\keyword{shrink}

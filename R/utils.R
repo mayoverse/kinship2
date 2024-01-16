@@ -1,7 +1,7 @@
 #' @importFrom dplyr select one_of %>%
 NULL
 
-#' Check for columns name usage
+#' Check columns presence in a dataframe
 #'
 #' @description Check for presence / absence of columns names
 #' depending on their need
@@ -38,8 +38,11 @@ NULL
 #'          ColU1 = 'B', ColU2 = '1',
 #'          ColTU1 = 'A', ColTU2 = 3,
 #'          ColNR1 = 4, ColNR2 = 5)
-#' tryCatch(check_columns(df, c('ColN1', 'ColN2'), c('ColU1', 'ColU2'),
-#'  c('ColTU1', 'ColTU2')), error = function(e) print(e))
+#' tryCatch(
+#'      check_columns(df,
+#'          c('ColN1', 'ColN2'), c('ColU1', 'ColU2'),
+#'          c('ColTU1', 'ColTU2')
+#' ), error = function(e) print(e))
 #'
 #' @keywords internal
 check_columns <- function(
@@ -125,18 +128,18 @@ check_columns <- function(
 #'@importFrom stringr str_detect
 NULL
 
-#' Check is numeric
+#' Is numeric or NA
 #'
 #' @description Check if a variable given is numeric or NA
 #'
-#' @details Check if the values in `var` are numeric or if they are
-#' NA in the case that `na_as_num` is set to TRUE.
+#' @details Check if the values in **var** are numeric or if they are
+#' `NA` in the case that `na_as_num` is set to TRUE.
 #'
 #' @param var Vector of value to test
 #' @param na_as_num Boolean defining if the `NA` string should be
 #' considered as numerical values
 #'
-#' @return A vector of boolean of the same size as `var`
+#' @return A vector of boolean of the same size as **var**
 #' @keywords internal
 check_num_na <- function(var, na_as_num = TRUE) {
     # Should the NA value considered as numeric values
@@ -150,66 +153,95 @@ check_num_na <- function(var, na_as_num = TRUE) {
 }
 
 
-#' Check wich individuals are parents
+#' Are individuals parents
 #'
 #' @description Check which individuals are parents.
 #'
-#' @param id A vector of each subjects identifiers
-#' @param dadid A vector containing for each subject, the identifiers of the
-#' biologicals fathers.
-#' @param momid  vector containing for each subject, the identifiers of the
-#' biologicals mothers.
-#' @param missid The missing identifier value. Founders are the individuals with
-#' no father and no mother in the Pedigree
-#' (i.e. `dadid` and `momid` equal to the value of this variable).
-#' The default for `missid` is `"0"`.
+#' @param obj A vector of each subjects identifiers or a Ped object
+#' @inheritParams Ped
 #'
-#' @return A vector of boolean of the same size as `id`
+#' @return A vector of boolean of the same size as **obj**
 #' with TRUE if the individual is a parent and FALSE otherwise
-#'
+#' @inheritParams Ped
 #' @keywords internal
-is_parent <- function(id, dadid, momid, missid = "0") {
-    # determine subjects who are parents assume input of dadid/momid indices,
-    # not ids
+#' @usage NULL
+setGeneric("is_parent", signature = "obj",
+    function(obj, ...) standardGeneric("is_parent")
+)
 
-    if (length(id) != length(dadid) | length(id) != length(momid)) {
-        stop("The length of the vectors are not the same")
+#' @rdname is_parent
+#' @examples
+#'
+#' is_parent(c("1", "2", "3", "4"), c("3", "3", NA, NA), c("4", "4", NA, NA))
+#' @export
+setMethod("is_parent", "character_OR_integer",
+    function(obj, dadid, momid, missid = NA_character_) {
+        # determine subjects who are parents assume input of
+        # dadid/momid indices, not ids
+
+        if (length(obj) != length(dadid) | length(obj) != length(momid)) {
+            stop("The length of the vectors are not the same")
+        }
+
+        is_father <- !is.na(match(obj, unique(dadid[!dadid %in% missid])))
+        is_mother <- !is.na(match(obj, unique(momid[!momid %in% missid])))
+        is_father | is_mother
     }
+)
 
-    is_father <- !is.na(match(id, unique(dadid[dadid != missid])))
-    is_mother <- !is.na(match(id, unique(momid[momid != missid])))
-    is_father | is_mother
-}
+#' @rdname is_parent
+#' @examples
+#'
+#' data(sampleped)
+#' ped <- Pedigree(sampleped)
+#' is_parent(ped(ped))
+#' @export
+setMethod("is_parent", "Ped",
+    function(obj, missid = NA_character_) {
+        is_parent(id(obj), dadid(obj), momid(obj), missid)
+    }
+)
 
-#' Check wich individuals are founders
+#' Are individuals founders
 #'
 #' @description Check which individuals are founders.
 #'
-#' @inheritParams is_parent
+#' @inheritParams Ped
 #'
-#' @return A vector of boolean of the same size as `dadid` and `momid`
-#' with TRUE if the individual has no parents (i.e is a founder) and FALSE
-#' otherwise.
+#' @return A vector of boolean of the same size as **dadid** and **momid**
+#' with `TRUE` if the individual has no parents (i.e is a founder) and
+#' `FALSE` otherwise.
 #'
+#' @examples
+#' is_founder(c("3", "3", NA, NA), c("4", "4", NA, NA))
 #' @keywords internal
-is_founder <- function(momid, dadid, missid = "0") {
-    (dadid == missid) & (momid == missid)
+#' @export
+is_founder <- function(momid, dadid, missid = NA_character_) {
+    (dadid %in% missid) & (momid %in% missid)
 }
 
-#' Check wich individuals are disconnected
+#' Are individuals disconnected
 #'
 #' @description Check which individuals are disconnected.
 #'
 #' @details An individuals is considered disconnected if the kinship with
-#' all the other individuals is 0.
+#' all the other individuals is `0`.
 #'
-#' @inheritParams is_parent
+#' @inheritParams Ped
 #'
-#' @return A vector of boolean of the same size as `id`
-#' with TRUE if the individual is disconnected and FALSE otherwise
+#' @return A vector of boolean of the same size as **id**
+#' with `TRUE` if the individual is disconnected and
+#' `FALSE` otherwise
 #'
 #' @include kinship.R
 #' @keywords internal
+#' @examples
+#' is_disconnected(
+#'      c("1", "2", "3", "4", "5"),
+#'      c("3", "3", NA, NA, NA),
+#'      c("4", "4", NA, NA, NA)
+#' )
+#' @export
 is_disconnected <- function(id, dadid, momid) {
     # check to see if any subjects are disconnected in Pedigree by checking for
     # kinship = 0 for all subjects excluding self
@@ -221,13 +253,9 @@ is_disconnected <- function(id, dadid, momid) {
 #' @importFrom plyr revalue
 NULL
 
-#' Transform a gender variable to an ordered factor
+#' Gender variable to ordered factor
 #'
-#' @param sex A character, factor or numeric vector corresponding to
-#' the gender of the individuals. The following values are recognized:
-#' - character() or factor() : "f", "m", "woman", "man", "male", "female",
-#' "unknown", "terminated"
-#' - numeric() : 1 = "male", 2 = "female", 3 = "unknown", 4 = "terminated"
+#' @inheritParams Ped
 #'
 #' @return an ordered factor vector containing the transformed variable
 #' "male" < "female" < "unknown" < "terminated"
@@ -257,65 +285,61 @@ sex_to_factor <- function(sex) {
 #' @importFrom stringr str_remove_all
 NULL
 
-#' Transform a relationship code variable to an ordered factor
+#' Relationship code variable to ordered factor
 #'
-#' @param rel_code A character, factor or numeric vector corresponding to
-#' the relation code of the individuals:
-#' - MZ twin = Monozygotic twin
-#' - DZ twin = Dizygotic twin
-#' - UZ twin = twin of unknown zygosity
-#' - Spouse = Spouse
-#' The following values are recognized:
-#' - character() or factor() : "MZ twin", "DZ twin", "UZ twin", "Spouse" with
-#' of without space between the words. The case is not important.
-#' - numeric() : 1 = "MZ twin", 2 = "DZ twin", 3 = "UZ twin", 4 = "Spouse"
+#' @inheritParams Rel
 #'
 #' @return an ordered factor vector containing the transformed variable
 #' "MZ twin" < "DZ twin" < "UZ twin" < "Spouse"
 #' @examples
 #' rel_code_to_factor(c(1, 2, 3, 4, "MZ twin", "DZ twin", "UZ twin", "Spouse"))
 #' @export
-rel_code_to_factor <- function(rel_code) {
-    if (is.factor(rel_code) || is.numeric(rel_code)) {
-        rel_code <- as.character(rel_code)
+rel_code_to_factor <- function(code) {
+    if (is.factor(code) || is.numeric(code)) {
+        code <- as.character(code)
     }
     ## Normalized difference notations for code
     code_equiv <- c(
         mztwin = "MZ twin", dztwin = "DZ twin", uztwin = "UZ twin",
         spouse = "Spouse",
-        `1` = "MZ twin", `2` = "DZ twin", `3` = "UZ twin", `4` = "Spouse"
+        "1" = "MZ twin", "2" = "DZ twin", "3" = "UZ twin", "4" = "Spouse"
     )
     codes <- c("MZ twin", "DZ twin", "UZ twin", "Spouse")
-    rel_code <- as.character(revalue(as.factor(
+    code <- as.character(revalue(as.factor(
         str_remove_all(
-            casefold(as.character(rel_code), upper = FALSE),
+            casefold(as.character(code), upper = FALSE),
             " "
         )
     ), code_equiv, warn_missing = FALSE))
-    rel_code <- factor(rel_code, codes, ordered = TRUE)
-    rel_code
+    code <- factor(code, codes, ordered = TRUE)
+    code
 }
-TRUE
 
-#' Transform a vector variable to binary vector
+#' Vector variable to binary vector
+#'
+#' @description Transform a vector to a binary vector.
+#' All values that are not `0`, `1`, `TRUE`, `FALSE`, or `NA`
+#' are transformed to `NA`.
 #'
 #' @param vect A character, factor, logical or numeric vector corresponding to
-#' a binary variable (i.e. 0 or 1).
+#' a binary variable (i.e. `0` or `1`).
 #' The following values are recognized:
 #' - character() or factor() : "TRUE", "FALSE", "0", "1", "NA" will be
-#' respectively transformed to 1, 0, 0, 1, NA.
+#' respectively transformed to `1`, `0`, `0`, `1`, `NA`.
 #' Spaces and case are ignored.
 #' All other values will be transformed to NA.
-#' - numeric() : 0 and 1 are kept, all other values are transformed to NA.
-#' - logical() : TRUE and FALSE are tansformed to 1 and 0.
-#'
-#' @return numeric binary vector of the same size as `vect` with 0 and 1
+#' - numeric() : `0` and `1` are kept, all other values are transformed to NA.
+#' - logical() : `TRUE` and `FALSE` are tansformed to `1` and `0`.
+#' @param logical Boolean defining if the output should be a logical vector
+#' instead of a numeric vector (i.e. `0` and `1` becomes `FALSE` and `TRUE).
+#' @return numeric binary vector of the same size as **vect**
+#' with `0` and `1`
 #' @examples
 #' vect_to_binary(
 #'    c(0, 1, 2, 3.6, "TRUE", "FALSE", "0", "1", "NA", "B", TRUE, FALSE, NA)
 #' )
 #' @export
-vect_to_binary <- function(vect) {
+vect_to_binary <- function(vect, logical = FALSE) {
     if (is.factor(vect) || is.numeric(vect) || is.logical(vect)) {
         vect <- as.character(vect)
     }
@@ -330,6 +354,45 @@ vect_to_binary <- function(vect) {
     ), code_equiv, warn_missing = FALSE
     ))
     vect[!vect %in% c(0, 1)] <- NA
-    vect
+    if (logical) {
+        as.logical(vect)
+    } else {
+        vect
+    }
 }
-TRUE
+
+#' Anchor variable to ordered factor
+#'
+#' @param anchor A character, factor or numeric vector corresponding to
+#' the anchor of the individuals. The following values are recognized:
+#' - character() or factor() : "0", "1", "2", "left", "right", "either"
+#' - numeric() : 1 = "left", 2 = "right", 0 = "either"
+#'
+#' @return An ordered factor vector containing the transformed variable
+#' "either" < "left" < "right"
+#' @examples
+#' anchor_to_factor(c(1, 2, 0, "left", "right", "either"))
+#' @export
+anchor_to_factor <- function(anchor) {
+    if (is.factor(anchor) || is.numeric(anchor)) {
+        anchor <- as.character(anchor)
+    }
+    ## Normalized difference notations for anchor
+    anchor_equiv <- c(
+        "0" = "either", "1" = "left", "2" = "right",
+        "left" = "left", "right" = "right", "either" = "either"
+    )
+    anchor <- as.character(revalue(as.factor(
+        casefold(anchor, upper = FALSE)
+    ), anchor_equiv, warn_missing = FALSE))
+    anchor_codes <- c("left", "right", "either")
+    if (any(!anchor %in% anchor_codes)) {
+        stop(paste(
+            "The following values are not recognized :",
+            paste0(unique(anchor[!anchor %in% anchor_codes]), collapse = ", "),
+            ".\n"
+        ))
+    }
+
+    factor(anchor, anchor_codes, ordered = TRUE)
+}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/alignped3.R
 \name{alignped3}
 \alias{alignped3}
-\title{Third routine alignement}
+\title{Alignment third routine}
 \usage{
 alignped3(alt1, alt2, packed, space = 1)
 }
@@ -11,9 +11,9 @@ alignped3(alt1, alt2, packed, space = 1)
 
 \item{alt2}{Alignement of the second tree}
 
-\item{packed}{Should the Pedigree be compressed, i.e., allow diagonal
-lines connecting parents to children in order to have a smaller overall
-width for the plot.}
+\item{packed}{Should the Pedigree be compressed.
+(i.e. allow diagonal lines connecting parents to children in order
+to have a smaller overall width for the plot.)}
 
 \item{space}{Space between two subjects}
 }
@@ -22,21 +22,16 @@ A list containing the elements to plot the Pedigree.
 It contains a set of matrices along with the spouselist matrix.
 The latter has marriages removed as they are processed.
 \itemize{
-\item n A vector giving the number of subjects on each horizonal level of the
+\item \code{n} : A vector giving the number of subjects on each horizonal level of the
 plot
-\item nid A matrix with one row for each level, giving the numeric id of
+\item \code{nid} : A matrix with one row for each level, giving the numeric id of
 each subject plotted.
 (A value of \code{17} means the 17th subject in the Pedigree).
-\item pos A matrix giving the horizontal position of each plot point
-\item fam A matrix giving the family id of each plot point.
+\item \code{pos} : A matrix giving the horizontal position of each plot point
+\item \code{fam} : A matrix giving the family id of each plot point.
 A value of \code{3} would mean that the two subjects in positions 3 and 4,
 in the row above, are this subject's parents.
-\item spouse A matrix with values
-\itemize{
-\item \code{0} = not a spouse
-\item \code{1} = subject plotted to the immediate right is a spouse
-\item \code{2} = subject plotted to the immediate right is an inbred spouse
-}
+\item \code{spouselist} : Spouse matrix with anchors informations
 }
 }
 \description{
@@ -49,8 +44,8 @@ the left tree is the same as the leftmost person in the right tree; we
 need not plot two copies of the same person side by side.
 (When initializing the output structures do not worry about this,
 there is no harm if they are a column bigger than finally needed.)
-Beyond that the work is simple bookkeeping.
-\subsection{Slide}{
+Beyond that the work is simple book keeping.
+\subsection{1. Slide:}{
 
 For the unpacked case, which is the traditional way to draw
 a Pedigree when we can assume the paper is infinitely wide, all parents are
@@ -59,7 +54,7 @@ merged as solid blocks. On input they both have a left margin of 0.
 Compute how far over we have to slide the right tree.
 }
 
-\subsection{Merge}{
+\subsection{2. Merge:}{
 
 Now merge the two trees. Start at the top level and work down.
 }
@@ -73,3 +68,5 @@ align(ped)
 \seealso{
 \code{\link[=align]{align()}}
 }
+\keyword{alignment}
+\keyword{internal,}

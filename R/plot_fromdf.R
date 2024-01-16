@@ -6,9 +6,10 @@ NULL
 #' Create a plot from a data.frame
 #'
 #' @description
-#' This function is used to create a plot from a data.frame. If ggplot_gen is
-#' set to TRUE, the plot will be generated with ggplot2 and will be returned
-#' invisibly.
+#' This function is used to create a plot from a data.frame.
+#'
+#' If `ggplot_gen = TRUE`, the plot will be generated with ggplot2 and 
+#' will be returned invisibly.
 #'
 #' @param df A data.frame with the following columns:
 #' - `type`: The type of element to plot. Can be `text`,
@@ -36,17 +37,22 @@ NULL
 #' @param title The title of the plot.
 #' @param add_to_existing If `TRUE`, the plot will be added to the current
 #' plot.
-#' @param boxh Height of the legend boxes
-#' @param boxw Width of the legend boxes
+#' @param boxh Height of the polygons elements
+#' @param boxw Width of the polygons elements
 #' @inheritParams draw_segment
 #' @inheritParams ped_to_plotdf
 #' @include plot_fct.R
+#'
 #' @examples
 #' data(sampleped)
-#' ped1 <- Pedigree(sampleped[sampleped$family == 1,])
+#' ped1 <- Pedigree(sampleped[sampleped$famid == 1,])
 #' lst <- ped_to_plotdf(ped1)
-#' #plot_fromdf(lst$df, lst$usr)
+#' #plot_fromdf(lst$df, lst$par_usr$usr,
+#' #     boxw = lst$par_usr$boxw, boxh = lst$par_usr$boxh
+#' #)
+#'
 #' @return an invisible ggplot object and a plot on the current plotting device
+#' @keywords internal, Pedigree-plot
 #' @export
 plot_fromdf <- function(
     df, usr = NULL, title = NULL, ggplot_gen = FALSE, boxw = 1,

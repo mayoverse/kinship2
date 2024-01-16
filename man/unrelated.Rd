@@ -2,20 +2,20 @@
 % Please edit documentation in R/unrelated.R
 \name{unrelated}
 \alias{unrelated}
-\title{Get unrelated subjects}
+\alias{unrelated,Ped-method}
+\alias{unrelated,Pedigree-method}
+\title{Find Unrelated subjects}
 \usage{
-unrelated(ped, avail = ped(ped)$avail)
+\S4method{unrelated}{Ped}(obj, avail = NULL)
+
+\S4method{unrelated}{Pedigree}(obj, avail = NULL)
 }
 \arguments{
-\item{ped}{A Pedigree object}
+\item{obj}{A Pedigree or Ped object.}
 
-\item{avail}{A numeric vector of availability status of each individual
-(e.g., genotyped). The values are:
-\itemize{
-\item \code{0}  : unavailable
-\item \code{1}  : available
-\item \code{NA} : availability not known
-}}
+\item{avail}{A logical vector with the availability status of the
+individuals
+(i.e. \code{FALSE} = not available, \code{TRUE} = available, \code{NA} = unknown).}
 }
 \value{
 A vector of the ids of subjects that are unrelated.
@@ -27,7 +27,8 @@ Pedigree.
 \details{
 Determine set of maximum number of unrelated available subjects from a
 Pedigree, given vectors id, father, and mother for a Pedigree structure, and
-status vector of T/F for whether each subject is available (e.g. has DNA)
+status vector of \code{TRUE} / \code{FALSE} for whether each subject is
+available (e.g. has DNA).
 
 This is a greedy algorithm that uses the kinship matrix, sequentially
 removing rows/cols that are non-zero for subjects that have the most number
@@ -36,22 +37,24 @@ that has the most number of zeros, and then remove any cols and their
 corresponding rows that are non-zero. To account for ties of the count of
 zeros for rows, a random choice is made. Hence, running this function
 multiple times can return different sets of unrelated subjects.
+
+If \strong{avail} is \code{NULL}, it is extracted with its
+corresponding accessor from the Ped object.
 }
 \examples{
+
 data(sampleped)
-fam1 <- sampleped[sampleped$family == 1, ]
-
-
+fam1 <- sampleped[sampleped$famid == 1, ]
 ped1 <- Pedigree(fam1)
-
-## to see plot:
-id1 <- unrelated(ped1)
-
-id1
+unrelated(ped1)
 ## some possible vectors
 ## [1] '110' '113' '133' '109'
 ## [1] '113' '118' '141' '109'
 ## [1] '113' '118' '140' '109'
 ## [1] '110' '113' '116' '109'
 ## [1] '113' '133' '141' '109'
+
+}
+\author{
+Dan Schaid and Shannon McDonnell updated by Jason Sinnwell
 }

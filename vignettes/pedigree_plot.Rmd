@@ -1,12 +1,11 @@
-
 ---
 title: Pedigree plotting details
-author: TM Therneau, JP Sinnwell
+author: TM Therneau, JP Sinnwell, Louis Le Nézet
 date: '`r format(Sys.time(),"%d %B, %Y")`'
 output:
-  rmarkdown::html_vignette:
-    toc: yes
-    toc_depth: 3
+  BiocStyle::html_document:
+    toc: true
+    toc_depth: 2
 header-includes: \usepackage{tabularx}
 vignette: |
   %\VignetteIndexEntry{Pedigree plotting details}
@@ -19,14 +18,14 @@ Introduction
 
 The plotting function for Pedigrees has 5 tasks
 
-    1. Gather information and check the data. An important step is the call
-        to align.
-    2. Set up the plot region and size the symbols. The program wants to plot
-        circles and squares, so needs to understand the geometry of the paper,
-        Pedigree size, and text size to get the right shape and size symbols.
-    3. Set up the plot and add the symbols for each subject
-    4. Add connecting lines between spouses, and children with parents
-    5. Create an invisible return value containing the locations.
+1. Gather information and check the data. An important step is the call
+    to align.
+2. Set up the plot region and size the symbols. The program wants to plot
+    circles and squares, so needs to understand the geometry of the paper,
+    Pedigree size, and text size to get the right shape and size symbols.
+3. Set up the plot and add the symbols for each subject
+4. Add connecting lines between spouses, and children with parents
+5. Create an invisible return value containing the locations.
 
 Another task, not yet completely understood, and certainly not implemented,
 is how we might break a plot across multiple pages.
@@ -36,10 +35,10 @@ Setup
 
 The new version of the plotting Pedigree function works in two step.
 
-    - **ped_to_plotdf()** create a dataframe from a Pedigree given containing
-    all the necessary information to plot all the elements of the Pedigree:
-    "polygons", "text", "segments", "arcs"
-    - **plot_from_df()** use a given dataframe and plot all the element given
+- **ped_to_plotdf()** create a dataframe from a Pedigree given containing
+all the necessary information to plot all the elements of the Pedigree:
+"polygons", "text", "segments", "arcs"
+- **plot_from_df()** use a given dataframe and plot all the element given
 
 The advantage of this two step method, is that all the plotting can be
 parralelised, each element can be customised by the user if necessary and
@@ -50,10 +49,8 @@ family will be produced and the first one will be plotted.
 
 For more informations about those two functions, see the help page.
 
-```{r, help}
-help(ped_to_plotdf)
-help(plot_fromdf)
-```
+- `help(ped_to_plotdf)`
+- `help(plot_fromdf)`
 
 Sizing
 ===============
@@ -78,16 +75,16 @@ We should have at least 1/2 of `stemp2` space above and `stemp2` space below.
 The `stemp3` variable is the height of labels: users may use multi-line ones.
 Our constraints then are
 
-    1. $(box height + label height) \times maxlev \le height$ : the boxes and
-        labels have to fit vertically
-    2. $(box height) \times (maxlev + (maxlev-1)/2) \le height$ : at least 1/2
-        a box of space between each row of boxes
-    3. $(box width) \le stemp1$ in inches 
-    4. $(box width) \le 0.8$ unit in user coordinates, otherwise they appear 
-        to touch
-    5. User coordinates go from $min(xrange)- 1/2 box width$ to 
-        $max(xrange) + 1/2 box width$.
-    6. the box is square (in inches)
+1. $(box height + label height) \times maxlev \le height$ : the boxes and
+    labels have to fit vertically
+2. $(box height) \times (maxlev + (maxlev-1)/2) \le height$ : at least 1/2
+    a box of space between each row of boxes
+3. $(box width) \le stemp1$ in inches 
+4. $(box width) \le 0.8$ unit in user coordinates, otherwise they appear 
+    to touch
+5. User coordinates go from $min(xrange)- 1/2 box width$ to 
+    $max(xrange) + 1/2 box width$.
+6. the box is square (in inches)
 
 The first 3 of these are easy. The fourth comes into play only for very packed
 pedigrees. Assume that the box were the maximum size of .8 units, i.e., minimal
@@ -141,7 +138,8 @@ Each polygon is named based on its shape ("square", "circle","diamond",
 "triangle"), the total number of division of the whole shape, and the
 position of the division to plot.
 
-```{r, polygons, eval = FALSE}
+```{r, polygons}
+library(Pedixplorer)
 types <- c(
     "square_1_1", # Whole square
     "circle_2_1", # Semi circle first division
@@ -205,7 +203,7 @@ will make up the symbol.  These are then used again and again.
 The collection is kept as a list with the four elements square, circle,
 diamond and triangle.
 
-Each of these is in turn a list with `max(scales(ped)$fill$order)` elements,
+Each of these is in turn a list with `max(fill(ped, "order"))` elements,
 and each of those in turn a list of x and y coordinates.
 
 ### Circfun

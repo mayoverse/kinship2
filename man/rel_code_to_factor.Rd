@@ -2,12 +2,12 @@
 % Please edit documentation in R/utils.R
 \name{rel_code_to_factor}
 \alias{rel_code_to_factor}
-\title{Transform a relationship code variable to an ordered factor}
+\title{Relationship code variable to ordered factor}
 \usage{
-rel_code_to_factor(rel_code)
+rel_code_to_factor(code)
 }
 \arguments{
-\item{rel_code}{A character, factor or numeric vector corresponding to
+\item{code}{A character, factor or numeric vector corresponding to
 the relation code of the individuals:
 \itemize{
 \item MZ twin = Monozygotic twin
@@ -25,7 +25,7 @@ an ordered factor vector containing the transformed variable
 "MZ twin" < "DZ twin" < "UZ twin" < "Spouse"
 }
 \description{
-Transform a relationship code variable to an ordered factor
+Relationship code variable to ordered factor
 }
 \examples{
 rel_code_to_factor(c(1, 2, 3, 4, "MZ twin", "DZ twin", "UZ twin", "Spouse"))

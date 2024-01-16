@@ -2,7 +2,7 @@
 #'
 #' @description Data from the Minnesota Breast Cancer Family Study.
 #' This contains extended pedigrees from 426 families, each identified by
-#' a single proband in 1945-52, with follow up for incident breast cancer.
+#' a single proband in 1945-1952, with follow up for incident breast cancer.
 #'
 #' @details The original study was conducted by Dr. Elving Anderson at the
 #' Dight Institute for Human Genetics at the University of Minnesota.
@@ -11,11 +11,13 @@
 #' siblings, offspring, aunts / uncles, and grandparents with the goal of
 #' understanding possible familial aspects of brest cancer. In 1991 the
 #' study was resurrected by Dr Tom Sellers.
+#'
 #' Of the original 544 he excluded 58 prevalent cases, along with another 19
 #' who had less than 2 living relatives at the time of Dr Anderson's survey.
 #' Of the remaining 462 families 10 had no living members, 23 could not be
 #' located and 8 refused, leaving 426 families on whom updated pedigrees
 #' were obtained.
+#'
 #' This gave a study with 13351 males and 12699 females (5183 marry-ins).
 #' Primary questions were the relationship of early life exposures, breast
 #' density, and pharmacogenomics on incident breast cancer risk.
@@ -29,34 +31,31 @@
 #' @format A data frame with 28081 observations, one line per subject, on the
 #' following 14 variables.
 #'
-#' - `id` subject identifier
-#' - `proband` if 1, this subject is one of the original
+#' - `id` : Subject identifier
+#' - `proband` : If 1, this subject is one of the original
 #' 426 probands
-#' - `fatherid` identifier of the father, if the father is part of
+#' - `fatherid` : Identifier of the father, if the father is part of
 #' the data set; zero otherwise
-#' - `motherid` identifier of the mother, if the mother is part of
+#' - `motherid` : Identifier of the mother, if the mother is part of
 #' the data set; zero otherwise
-#' - `famid` family identifier
-#' - `endage` age at last follow-up or incident cancer
-#' - `cancer` 1= breast cancer (females) or prostate cancer (males),
-#' 0=censored
-#' - `yob` year of birth
-#' - `education` amount of education: 1-8 years, 9-12 years, high
-#' school graduate, vocational education
-#' beyond high school, some college but did not graduate, college graduate,
-#' post-graduate education, refused to
-#' answer on the questionnaire
-#' - `marstat` marital status: married, living with someone in a
+#' - `famid` : Family identifier
+#' - `endage` : Age at last follow-up or incident cancer
+#' - `cancer` : `1` = breast cancer (females) or prostate cancer (males),
+#' `0` = censored
+#' - `yob` : Year of birth
+#' - `education` : Amount of education: 1-8 years, 9-12 years, high
+#' school graduate, vocational education beyond high school,
+#' some college but did not graduate, college graduate,
+#' post-graduate education, refused to answer on the questionnaire
+#' - `marstat` : Marital status: married, living with someone in a
 #' marriage-like relationship, separated
 #' or divorced, widowed, never married, refused to answer the questionaire
-#' - `everpreg` ever pregnant: never pregnant at the time of
-#' baseline survey, ever pregnant at the time
-#' of baseline survey
-#' - `parity` number of births
-#' - `nbreast` number of breast biopsies
-#' - `sex` M or F
-#' - `bcpc` part of one of the families in the breast/prostate
-#' cancer substudy: 0=no, 1=yes.
+#' - `everpreg` : Ever pregnant at the time of baseline survey
+#' - `parity` : Number of births
+#' - `nbreast` : Number of breast biopsies
+#' - `sex` : `M` or `F`
+#' - `bcpc` : Part of one of the families in the breast / prostate
+#' cancer substudy: `0` = no, `1` = yes.
 #' Note that subjects who were recruited to the overall study after the date of
 #' the BP substudy are coded as zero.
 #'
@@ -89,15 +88,17 @@
 #'    cols_ren_ped = list(
 #'        "indId" = "id", "fatherId" = "fatherid",
 #'        "motherId" = "motherid", "gender" = "sex", "family" = "famid"
-#'    )
+#'    ), missid = "0", col_aff = "cancer"
 #' )
-#' print(breastped)
-#' #plot(breastped)  #plot family 8, proband is solid, slash for cancers
+#' summary(breastped)
+#' scales(breastped)
+#' #plot family 8, proband is solid, slash for cancers
+#' #plot(breastped[famid(breastped) == "8"])
 "minnbreast"
 
-#' samplepedigree data
+#' Sampleped data
 #'
-#' @description Small sample pedigree data set.
+#' @description Small sample pedigree data set for testing purposes.
 #'
 #' @details This is a small fictive pedigree data set, with 55
 #' individuals in 2 families.
@@ -105,15 +106,15 @@
 #'
 #' @format A data frame with 55 observations, one line per subject, on the
 #' following 7 variables.
-#' - `family` family identifier
-#' - `id` subject identifier
-#' - `dadid` identifier of the father, if the father is part of the
+#' - `famid` : Family identifier
+#' - `id` : Subject identifier
+#' - `dadid` : Identifier of the father, if the father is part of the
 #' data set; zero otherwise
-#' - `momid` identifier of the mother, if the mother is part of the
+#' - `momid` : Identifier of the mother, if the mother is part of the
 #' data set; zero otherwise
-#' - `sex` 1 for male or 2 for F
-#' - `affected` 1 or 0
-#' - `available` 1 or 0
+#' - `sex` : `1` for male or `2` for female
+#' - `affected` : `1` or `0`
+#' - `avail` : `1` or `0`
 #'
 #' @usage
 #' data("sampleped")

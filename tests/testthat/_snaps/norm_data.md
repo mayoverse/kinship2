@@ -14,53 +14,66 @@
       8      8        0        0      1         FALSE         0        3      D
       9      8        2        0      2         FALSE      <NA>        3      A
       10     9        9        8      3         FALSE        Ab        5      B
-                sex steril avail id dadid momid
-      1  terminated      1    NA  1     3     4
-      2        male      0     1  2     0     0
-      3        male      0     0  3     8     7
-      4      female      0    NA  4     6     5
-      5      female      0    NA  5     0     0
-      6        male      0     0  6  <NA>     0
-      7        male      0    NA  7     0     0
-      8        male      0     0  8     0     0
-      9      female      0    NA  8     2     0
-      10    unknown      0    NA  9     9     8
-                                                                          error
-      1                                                                    <NA>
-      2                                                     isSterilButIsParent
-      3                                                      fatherIdDuplicated
-      4                                                                    <NA>
-      5                                                                    <NA>
-      6                                                     isSterilButIsParent
-      7                                                    isMotherButNotFemale
-      8                 selfIdDuplicated_isMotherAndFather_isMotherButNotFemale
-      9  selfIdDuplicated_oneParentMissing_isMotherAndFather_isFatherButNotMale
-      10                   motherIdDuplicated_isItsOwnParent_isFatherButNotMale
-         affected status family vitalStatus affection
-      1        NA     NA   <NA>          NA        NA
-      2        NA     NA   <NA>          NA        NA
-      3        NA     NA   <NA>          NA        NA
-      4        NA     NA   <NA>          NA        NA
-      5        NA     NA   <NA>          NA        NA
-      6        NA     NA   <NA>          NA        NA
-      7        NA     NA   <NA>          NA        NA
-      8        NA     NA   <NA>          NA        NA
-      9        NA     NA   <NA>          NA        NA
-      10       NA     NA   <NA>          NA        NA
+                sex steril status avail id dadid momid famid
+      1  terminated   TRUE     NA    NA  1     3     4  <NA>
+      2        male  FALSE     NA  TRUE  2     0     0  <NA>
+      3        male  FALSE     NA FALSE  3     8     7  <NA>
+      4      female  FALSE     NA    NA  4     6     5  <NA>
+      5      female  FALSE     NA    NA  5     0     0  <NA>
+      6        male  FALSE     NA FALSE  6  <NA>     0  <NA>
+      7      female  FALSE     NA    NA  7     0     0  <NA>
+      8      female  FALSE     NA FALSE  8     0     0  <NA>
+      9      female  FALSE     NA    NA  8     2     0  <NA>
+      10       male  FALSE     NA    NA  9     9     8  <NA>
+                                                         error affected family
+      1                                                   <NA>       NA   <NA>
+      2                                    isSterilButIsParent       NA   <NA>
+      3                                     fatherIdDuplicated       NA   <NA>
+      4                                                   <NA>       NA   <NA>
+      5                                                   <NA>       NA   <NA>
+      6                   oneParentMissing_isSterilButIsParent       NA   <NA>
+      7                                                   <NA>       NA   <NA>
+      8  selfIdDuplicated_isMotherAndFather_isFatherButNotMale       NA   <NA>
+      9  selfIdDuplicated_isMotherAndFather_isFatherButNotMale       NA   <NA>
+      10                     motherIdDuplicated_isItsOwnParent       NA   <NA>
+         vitalStatus affection
+      1           NA        NA
+      2           NA        NA
+      3           NA        NA
+      4           NA        NA
+      5           NA        NA
+      6           NA        NA
+      7           NA        NA
+      8           NA        NA
+      9           NA        NA
+      10          NA        NA
 
 # Norm rel
 
     Code
       rel_df
     Output
-        indId1 indId2    code family  id1 id2                          error
-      1      1      2 MZ twin      1  1_1 1_2                           <NA>
-      2      1      3 DZ twin      1  1_1 1_3                           <NA>
-      3      2      3 UZ twin      1  1_2 1_3                           <NA>
-      4      1      2  Spouse      2  2_1 2_2                           <NA>
-      5      3      4 MZ twin      2  2_3 2_4                           <NA>
-      6      6      7    <NA>      2  2_6 2_7               CodeNotRecognise
-      7      8      8  Spouse      2  2_8 2_8                         SameId
-      8      9      0  Spouse      1  1_9   0                           <NA>
-      9   <NA>      B    <NA>      1 <NA> 1_B indId1length0_CodeNotRecognise
+         id1 id2    code famid                          error
+      1    1   2 MZ twin  <NA>                           <NA>
+      2    1   3 DZ twin  <NA>                           <NA>
+      3    2   3 UZ twin  <NA>                           <NA>
+      4    1   2  Spouse  <NA>                           <NA>
+      5    3   4 MZ twin  <NA>                           <NA>
+      6    6   7    <NA>  <NA>               CodeNotRecognise
+      7    8   8  Spouse  <NA>                         SameId
+      8    9   0  Spouse  <NA>                           <NA>
+      9 <NA>   B    <NA>  <NA> indId1length0_CodeNotRecognise
+
+---
+
+    Code
+      norm_rel(rel_df, missid = "0")
+    Output
+            id1   id2    code famid            error
+      1       1     2 MZ twin  <NA>             <NA>
+      2       3     2 DZ twin  <NA>             <NA>
+      3       3     1 DZ twin  <NA>             <NA>
+      4       3     4 MZ twin  <NA>             <NA>
+      5       7 Other    <NA>  <NA> CodeNotRecognise
+      6 spo Use     9    <NA>  <NA> CodeNotRecognise
 

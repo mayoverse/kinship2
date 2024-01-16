@@ -9,23 +9,22 @@
 #' Given a family id vector, also compute the familial grouping from first
 #' principles using the parenting data, and compare the results.
 #'
-#' The `make_famid` function is used to create a de novo family id from the
+#' The [make_famid()] function is used to create a de novo family id from the
 #' parentage data, and this is compared to the family id given in the data.
 #'
 #' If there are any joins, then an attribute 'join' is attached.
 #' It will be a matrix with family as row labels, new-family-id as the columns,
 #' and the number of subjects as entries.
 #'
-#' @inheritParams kinship
-#' @param family A vector of family identifiers
+#' @inheritParams Ped
 #' @param newfam The result of a call to `make_famid()`. If this has already
 #' been computed by the user, adding it as an argument shortens the running
 #' time somewhat.
 #'
 #' @return a data frame with one row for each unique family id in the
-#' `family` argument or the one detected in the Pedigree object.
+#' `famid` argument or the one detected in the Pedigree object.
 #' Components of the output are:
-#' - `family` : The family id, as entered into the data set
+#' - `famid` : The family id, as entered into the data set
 #' - `n` : Number of subjects in the family
 #' - `unrelated` : Number of them that appear to be unrelated to
 #' anyone else in the entire Pedigree.  This is usually marry-ins with no
@@ -53,45 +52,32 @@
 #' rep(1, nrow(sampleped))))
 #' fcheck.combined
 #'
-#' # make person 120's father be her son.
-#' sampleped[20, 3] <- 131
-#' fcheck1.bad <- try(
-#'   {
-#'     with(sampleped, family_check(id, father, mother, family))
-#'   },
-#'   silent = FALSE
-#' )
-#'
-#' ## fcheck1.bad is a try-error
-#'
-#' @seealso [make_famid()], [kinship()]
-#' @include pedigreeClass.R
+#' @seealso [make_famid()]
+#' @include AllClass.R
 #' @keywords internal
-#' @docType methods
 #' @export
+#' @usage NULL
 setGeneric("family_check", signature = "obj",
     function(obj, ...) standardGeneric("family_check")
 )
 
 #' @rdname family_check
-#' @include make_famid.R
-#' @aliases family_check,character
 #' @export
-setMethod("family_check", "character",
-    function(obj, dadid, momid, family, newfam) {
+setMethod("family_check", "character_OR_integer",
+    function(obj, dadid, momid, famid, newfam) {
         id <- obj
-        if (is.numeric(family) && any(is.na(family))) {
+        if (is.numeric(famid) && any(is.na(famid))) {
             stop("Family id of missing not allowed")
         }
-        nfam <- length(unique(family))
+        nfam <- length(unique(famid))
 
         if (missing(newfam)) {
             newfam <- make_famid(id, dadid, momid)
-        } else if (length(newfam) != length(family)) {
+        } else if (length(newfam) != length(famid)) {
             stop("Invalid length for newfam")
         }
 
-        xtab <- table(family, newfam)
+        xtab <- table(famid, newfam)
         if (any(newfam == 0)) {
             unrelated <- xtab[, 1]
             xtab <- xtab[, -1, drop = FALSE]
@@ -105,8 +91,8 @@ setMethod("family_check", "character",
 
         temp <- apply((xtab > 0) * outer(rep(1, nfam), joins - 1), 1, sum)
 
-        out <- data.frame(family = dimnames(xtab)[[1]],
-            n = as.vector(table(family)), unrelated = as.vector(unrelated),
+        out <- data.frame(famid = dimnames(xtab)[[1]],
+            n = as.vector(table(famid)), unrelated = as.vector(unrelated),
             split = as.vector(splits), join = temp, row.names = seq_len(nfam)
         )
         if (any(joins > 1)) {
@@ -121,10 +107,17 @@ setMethod("family_check", "character",
 )
 
 #' @rdname family_check
-#' @docType methods
-#' @aliases family_check,Pedigree
+#' @export
 setMethod("family_check", "Pedigree",
     function(obj) {
-        family_check(obj$ped$id, obj$ped$dadid, obj$ped$momid, obj$ped$family)
+        family_check(ped(obj))
+    }
+)
+
+#' @rdname family_check
+#' @export
+setMethod("family_check", "Ped",
+    function(obj) {
+        family_check(id(obj), dadid(obj), momid(obj), famid(obj))
     }
 )

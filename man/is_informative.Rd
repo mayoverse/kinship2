@@ -3,44 +3,25 @@
 \docType{methods}
 \name{is_informative}
 \alias{is_informative}
-\alias{is_informative,character-method}
-\alias{is_informative,character}
+\alias{is_informative,character_OR_integer-method}
 \alias{is_informative,Pedigree-method}
-\alias{is_informative,Pedigree}
-\title{Is informative}
+\title{Find informative individuals}
 \usage{
-is_informative(obj, ...)
+\S4method{is_informative}{character_OR_integer}(obj, avail, affected, informative = "AvAf")
 
-\S4method{is_informative}{character}(obj, avail, affected, informative = "AvAf", missid = "0")
-
-\S4method{is_informative}{Pedigree}(
-  obj,
-  col_aff = NULL,
-  informative = "AvAf",
-  missid = "0",
-  reset = FALSE
-)
+\S4method{is_informative}{Pedigree}(obj, col_aff = NULL, informative = "AvAf", reset = FALSE)
 }
 \arguments{
-\item{obj}{A pedigree object or a vector of subject identifiers.}
+\item{obj}{A character vector with the id of the individuals or a
+\code{data.frame} with all the informations in corresponding columns.}
 
-\item{...}{Additional arguments passed to methods}
+\item{avail}{A logical vector with the availability status of the
+individuals
+(i.e. \code{FALSE} = not available, \code{TRUE} = available, \code{NA} = unknown).}
 
-\item{avail}{A numeric vector of availability status of each individual
-(e.g., genotyped). The values are:
-\itemize{
-\item \code{0}  : unavailable
-\item \code{1}  : available
-\item \code{NA} : availability not known
-}}
-
-\item{affected}{A numeric vector of affection status of each individual
-(e.g., genotyped). The values are:
-\itemize{
-\item \code{0}  : unaffected
-\item \code{1}  : affected
-\item \code{NA} : affection status not known
-}}
+\item{affected}{A logical vector with the affection status of the
+individuals
+(i.e. \code{FALSE} = unaffected, \code{TRUE} = affected, \code{NA} = unknown).}
 
 \item{informative}{Informative individuals selection can take 5 values:
 \itemize{
@@ -53,44 +34,49 @@ is_informative(obj, ...)
 \item A boolean
 }}
 
-\item{missid}{The missing identifier value. Founders are the individuals with
-no father and no mother in the Pedigree
-(i.e. \code{dadid} and \code{momid} equal to the value of this variable).
-The default for \code{missid} is \code{"0"}.}
+\item{col_aff}{A character vector with the name of the column to be used
+for the affection status.}
 
-\item{col_aff}{A string with the column name to use for the affection status.}
-
-\item{reset}{If \code{TRUE}, the \code{id_inf} column is reset}
+\item{reset}{If \code{TRUE}, the \code{isinf} slot is reset}
 }
 \value{
 \subsection{When obj is a vector}{
 
-A vector of individuals informative identifiers
+A vector of individuals informative identifiers.
 }
 
 \subsection{When obj is a Pedigree}{
 
-A list containing the Pedigree object and the vector of individuals
-identifiers.
-The Pedigree object will have a new column named 'id_inf' containing 1 for
-informative individuals and 0 otherwise.
+The Pedigree object with its \code{isinf} slot updated.
 }
 }
 \description{
 Select the ids of the informative individuals.
 }
 \details{
-Depending on the informative parameter, the function will extract
-the ids of the informative individuals. In the case of a numeric vector,
-the function will return the same vector. In the case of a boolean, the
-function will return the ids of the individuals if TRUE, NA otherwise.
+Depending on the \strong{informative} parameter, the function will
+extract the ids of the informative individuals. In the case of a
+numeric vector, the function will return the same vector.
+In the case of a boolean, the function will return the ids of the
+individuals if TRUE, NA otherwise.
 In the case of a string, the function will return the ids of the
 corresponding informative individuals based on the avail and affected
 columns.
 }
 \examples{
+
+is_informative(c("A", "B", "C", "D", "E"), informative = c("A", "B"))
+is_informative(c("A", "B", "C", "D", "E"), informative = c(1, 2))
+is_informative(c("A", "B", "C", "D", "E"), informative = c("A", "B"))
+is_informative(c("A", "B", "C", "D", "E"), avail = c(1, 0, 0, 1, 1),
+  affected = c(0, 1, 0, 1, 1), informative = "AvAf")
+is_informative(c("A", "B", "C", "D", "E"), avail = c(1, 0, 0, 1, 1),
+  affected = c(0, 1, 0, 1, 1), informative = "AvOrAf")
+is_informative(c("A", "B", "C", "D", "E"),
+     informative = c(TRUE, FALSE, TRUE, FALSE, TRUE))
+
 data("sampleped")
 ped <- Pedigree(sampleped)
-is_informative(ped, col_aff = "affection_aff")
-
+ped <- is_informative(ped, col_aff = "affection_mods")
+isinf(ped(ped))
 }
