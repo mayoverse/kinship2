@@ -7,9 +7,9 @@
 alignped3(alt1, alt2, packed, space = 1)
 }
 \arguments{
-\item{alt1}{Alignement of the first tree}
+\item{alt1}{Alignment of the first tree}
 
-\item{alt2}{Alignement of the second tree}
+\item{alt2}{Alignment of the second tree}
 
 \item{packed}{Should the Pedigree be compressed.
 (i.e. allow diagonal lines connecting parents to children in order

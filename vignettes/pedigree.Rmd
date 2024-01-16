@@ -43,10 +43,12 @@ object with various criteria, and kinship for the X chromosome.
 
 Supplementary vignettes are available to explain:
 
--   The **$Pedigree$ object** `vignette("pedigree_object", package = "Pedixplorer")`
+-   The **$Pedigree$ object**
+    `vignette("pedigree_object", package = "Pedixplorer")`
 -   The **alignment algorithm** used create the Pedigree structure
     `vignette("pedigree_alignment", package = "Pedixplorer")`
--   The **kinship algorithm** `vignette("pedigree_kinship", package = "Pedixplorer")`
+-   The **kinship algorithm**
+    `vignette("pedigree_kinship", package = "Pedixplorer")`
 -   The **plotting algorithm** used to plot the Pedigree
     `vignette("pedigree_plot", package = "Pedixplorer")`
 

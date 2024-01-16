@@ -89,7 +89,7 @@ is called once for each family, and the results are combined in the
 list returned.
 
 For more information you can read the associated vignette:
-\code{vignette("alignment_details")}.
+\code{vignette("pedigree_alignment")}.
 }
 \examples{
 data(sampleped)
