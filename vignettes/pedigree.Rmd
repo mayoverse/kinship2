@@ -9,7 +9,7 @@ output:
     toc_depth: 2
 header-includes: \usepackage{tabularx}
 vignette: |
-  %\VignetteIndexEntry{Pedixplorer Pedigree}
+  %\VignetteIndexEntry{Pedixplorer tutorial}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
