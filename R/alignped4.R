@@ -136,12 +136,12 @@ alignped4 <- function(rval, spouse, level, width, align) {
         solve.QP(pp, rep(0., n), t(cmat), dvec)
       },
       warning = function(w) {
-        message(Solve QP ended with a warning)
-        message()(w)
+        message("Solve QP ended with a warning")
+        message(w)
         return(NA)
       },
       error = function(e) {
-        message(Solve QP ended with an error)
+        message("Solve QP ended with an error")
         message(w)
         return(NA)
       }
