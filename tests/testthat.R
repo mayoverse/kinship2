@@ -6,8 +6,11 @@
 # * https://r-pkgs.org/tests.html
 # * https://testthat.r-lib.org/reference/test_package.html#special-files
 
+library(withr)
 library(testthat)
-library(kinship2)
+library(Pedixplorer)
 library(vdiffr)
 
-test_check("kinship2")
+withr::local_options(width = 150)
+test_check("Pedixplorer")
+TRUE

@@ -2,46 +2,71 @@
 % Please edit documentation in R/alignped3.R
 \name{alignped3}
 \alias{alignped3}
-\title{Third routine alignement}
+\title{Alignment third routine}
 \usage{
-alignped3(x1, x2, packed, space = 1)
+alignped3(alt1, alt2, packed, space = 1)
 }
 \arguments{
-\item{space}{}
+\item{alt1}{Alignment of the first tree}
+
+\item{alt2}{Alignment of the second tree}
+
+\item{packed}{Should the Pedigree be compressed.
+(i.e. allow diagonal lines connecting parents to children in order
+to have a smaller overall width for the plot.)}
+
+\item{space}{Space between two subjects}
 }
 \value{
-A list of element containing:
-\item{n}{}
-\item{nid}{}
-\item{pos}{}
-\item{fam}{}
+A list containing the elements to plot the Pedigree.
+It contains a set of matrices along with the spouselist matrix.
+The latter has marriages removed as they are processed.
+\itemize{
+\item \code{n} : A vector giving the number of subjects on each horizonal level of the
+plot
+\item \code{nid} : A matrix with one row for each level, giving the numeric id of
+each subject plotted.
+(A value of \code{17} means the 17th subject in the Pedigree).
+\item \code{pos} : A matrix giving the horizontal position of each plot point
+\item \code{fam} : A matrix giving the family id of each plot point.
+A value of \code{3} would mean that the two subjects in positions 3 and 4,
+in the row above, are this subject's parents.
+\item \code{spouselist} : Spouse matrix with anchors informations
+}
 }
 \description{
-This is the third of the four co-routines.
+Third of the four co-routines to merges two pedigree trees which
+are side by side into a single object.
 }
 \details{
-This co-routine merges two pedigree trees which are side by side into a
-single object. The primary special case is when the rightmost person in
+The primary special case is when the rightmost person in
 the left tree is the same as the leftmost person in the right tree; we
 need not plot two copies of the same person side by side.
 (When initializing the output structures do not worry about this,
 there is no harm if they are a column bigger than finally needed.)
-Beyond that the work is simple bookkeeping.
+Beyond that the work is simple book keeping.
+\subsection{1. Slide:}{
 
-\item{Slide}{ For the unpacked case, which is the traditional way to draw
-a pedigree when we can assume the paper is infinitely wide, all parents are
+For the unpacked case, which is the traditional way to draw
+a Pedigree when we can assume the paper is infinitely wide, all parents are
 centered over their children. In this case we think if the two trees to be
 merged as solid blocks. On input they both have a left margin of 0.
-Compute how far over we have to slide the right tree.}
-\item{Merge}{ Now merge the two trees. Start at the top level and work down.}
+Compute how far over we have to slide the right tree.
+}
+
+\subsection{2. Merge:}{
+
+Now merge the two trees. Start at the top level and work down.
+}
 }
 \examples{
-data(sample.ped)
-ped <- with(sample.ped,pedigree(id, father, mother, sex, affected))
-align.pedigree(ped)
+data(sampleped)
+ped <- Pedigree(sampleped)
+align(ped)
 
 }
 \seealso{
-\code{\link{plot.pedigree}}, \code{\link{autohint}}
+\code{\link[=align]{align()}}
 }
-\keyword{dplot}
+\keyword{alignment}
+\keyword{internal,}

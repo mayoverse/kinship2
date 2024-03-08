@@ -1,0 +1,257 @@
+---
+title: Pedigree kinship() details
+author: TM Therneau
+date: '`r format(Sys.time(),"%d %B, %Y")`'
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_depth: 2
+header-includes: \usepackage{tabularx}
+vignette: |
+  %\VignetteIndexEntry{Pedigree kinship() details}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+
+Introduction
+=====================
+The kinship matrix is foundational for random effects models with family data.
+For $n$ subjects it is an $n \times n$ matrix whose $i$, $j$ elements contains
+the expected fraction of alleles that would be identical by descent
+if we sampled one from subject $i$ and another from subject $j$.
+Note that the diagonal elements of the matrix will be 0.5 not 1: when we
+randomly sample twice from the same subject (with replacement) 
+we will get two copies of the gene inherited from the father 1/4 of the
+time, the maternal copy twice (1/4) or one of each 1/2 the time.
+The formal definition is $K(i,i) = 1/4 + 1/4 + 1/2 K(m,f)$ where
+$m$ and $f$ are the father and mother of subject $i$.
+
+The algorithm used is found in K Lange, 
+*Mathematical and Statistical  Methods for Genetic Analysis*, 
+Springer 1997, page 71--72.
+
+The key idea of the recursive algorithm for $K(i,j)$ is to condition on
+the gene selection for the first index $i$.
+Let $m(i)$ and $f(i)$ be the indices of the mother and father of subject $i$
+and $g$ be the allele randomly sampled from subject $i$,
+which may of either maternal or paternal origin.
+
+$$
+\begin{align}
+    K(i,j) &= P(\mbox{$g$ maternal}) * K(m(i), j) + 
+                P(\mbox{$g$ paternal}) * K(f(i), j) \label{recur0} \\
+            &= 1/2 K(m(i), j) + 1/2 K(f(i), j)   \label{recur1} \\
+    K(i,i) &= 1/2(1 + K(m(i), f(i))) \label{self} 
+\end{align}
+$$
+
+The key step in equation $K(i,j)$ is if $g$ has a maternal origin, then
+it is a random selection from the two maternal genes, and its IBD state with
+respect to subject $j$ is that of a random selection from $m(i)$ to a random
+selection from $j$.  This is precisely the definition of $K(m(i), j)$.
+The recursion does not work for $K(i,i)$ since once 
+we select a maternal gene the second choice from $j$ cannot use a 
+different maternal gene.
+
+
+For the recurrence algorithm to work properly we need to compute the
+values of $K$ for any parent before the calculations for their children.
+Pedigree founders (those with no parents) are assumed to be unassociated,
+so for these subjects we have
+
+$$
+\begin{align*}
+    K(i,i) &= 1/2 \\
+    K(i,j) &= 0 \ ; i\ne j
+\end{align*}
+$$
+
+The final formula slightly different for the $X$ chromosome. 
+Equation $K(i,j)$ still holds, but for males the probability
+that a selected $X$ chromosome is maternal is 1, so when $i$ a male
+the recurrence formula becomes $K(i,j) = K(m(i),j)$.  
+For females it is unchanged.
+All males will have $K(i,i) = 1$ for the $X$ chromosome.
+
+In order to have already-defined terms on the right hand side of the
+recurrence formula for each element, subjects need to be processed
+in the following order
+
+- Generation 0 (founders)
+- $K(i,j)$ where $i$ is from generation 1 and $j$ from generation 0.
+- $K(i,j)$ with $i$ and $j$ from generation 1
+- $K(i,j)$ with $i$ from generation 2 and $j$ from generation 0 or 1
+- $K(i,j)$ with $i$ and $j$ from generation 2.
+- ...
+
+
+The kindepth routine assigns a plotting depth to each subject in such
+a way that parents are always above children.  
+For each depth we need to do the compuations of formula $K(i,j)$
+twice. The first time it will get the relationship between each subject
+and prior generations correct, the second will correctly compute the
+values between subjects on the same level.
+The computations within any stage of the above list can be vectorized,
+but not those between stages.
+
+Let $indx$ be the index of the
+rows for the generation currently being processed, say generation $g$.  
+We add correct computations to the matrix one row at a time;
+all of the calculations depend only on the prior rows with the
+exception of the $i,i$ element.
+This approach leads to
+a for loop containing operations on single rows/columns.  
+
+At one point below we use a vectorized version. It looks like the snippet below
+
+```{r, kinship_algo, eval=FALSE}
+for (g in 1:max(depth)) {
+    indx <- which(depth == g)
+    kmat[indx, ] <- (kmat[mother[indx], ] + kmat[father[indx], ]) / 2
+    kmat[, indx] <- (kmat[, mother[indx]] + kmat[, father[indx], ]) / 2
+    for (j in indx) kmat[j, j] <- (1 + kmat[mother[j], father[j]]) / 2
+}
+```
+
+The first line computes all the values for a horizontal stripe of the
+matrix. It will be correct for columns in generations $<g$, unreliable
+for generation $g$ with itself because of incomplete parental relationships,
+and zero for higher generations.
+The second line does the vertical stripe, and because of the line before it
+does have the data it needs and so gets all the stripe correct.
+Except of course for the diagonal elements, for which formula $K(i,j)$
+does not hold.  We fill those in last.
+We know that vectorized calculations are always faster in R and I was excited
+to figure this out.  The unfortunate truth is that for this code
+it hardly makes a difference, and for the X chromosome calculation leads to
+impenetrable if-then-else logic.
+
+The program can be called with a Pedigree, or
+raw data.  The first argument is $id$ instead of the more generic $x$
+for backwards compatability with an older version of the routine.
+We give founders a fake parent of subject $n+1$ who is not related to
+anybody (even themself); it avoids some if-then-else constructions.
+
+## With a Pedigree object
+
+The method for a Pedigree object is an almost trivial modification. Since the
+mother and father are already indexed into the id list it has 
+two lines that are different, those that create mrow and drow.
+The other change is that now we potentially have information available
+on monozygotic twins.  If there are any such, then when the second
+twin of a pair is added to the matrix, we need to ensure that the
+pairs kinship coefficient is set to the self-self value.
+This can be done after each level is complete, but before children
+for that level are computed.
+If there are monozygotic triples, quadruplets, etc. this computation gets 
+more involved.
+
+The total number of monozygotic twins is always small, so it is efficient to
+fix up all the monzygotic twins at each generation.
+A variable $havemz$ is set to `TRUE` if there are any, and an index array
+$mzindex$ is created for matrix subscripting.
+
+
+## With multiple families
+
+For the Minnesota Family Cancer Study there are 461 families and 29114
+subjects. The raw kinship matrix would be 29114 by 29114 which is over
+5 terabytes of memory, something that clearly will not work within S.       
+The solution is to store the overall matrix as a sparse Matrix object.
+Each family forms a single block. For this study we have
+`n <- table(minnbreast$famid); sum(n*(n+1)/2)` or 1.07 million entries;
+assuming that only the lower half of each matrix is stored.
+The actual size is actually smaller than this, since each family
+matrix will have zeros in it --- founders for instance are not related ---
+and those zeros are also not stored.
+
+The result of each per-family call to kinship will be a symmetric matrix.
+We first turn each of these into a dsCMatrix object, a sparse symmetric
+form. 
+The $bdiag$ function is then used to paste all of these individual
+sparse matrices into a single large matrix.
+
+Why do we note use `(i in famlist)` below?  A numeric subscript of `[[9]]` %
+selects the ninth family, not the family labeled as 9, so a numeric
+family id would not act as we wished.
+If all of the subject ids are unique, across all families, the final
+matrix is labeled with the subject id, otherwise it is labeled with
+family/subject.
+
+```{r, kinship}
+library(Pedixplorer)
+data(sampleped)
+ped <- Pedigree(sampleped)
+kinship(ped)[35:48, 35:48]
+```
+
+## MakeKinship
+
+The older $makekinship$ function,
+from before the creation of PedigreeList objects,
+accepts the raw identifier data, along with a special family code
+for unrelated subjects, as produced by the `make_famid()` function.
+All the unrelated subjects are put at the front of the kinship matrix
+in this case rather than within the family.
+Because unrelateds get put into a fake family, we cannot create a
+rational family/subject identifier; the id must be unique across
+families.
+
+We include a copy of the routine for backwards compatability, but
+do not anticipate any new usage of it.
+Like most routines, this starts out with a collection of error checks.
+
+## Monozygotic twins, for Pedigree object
+
+Return now to the question of monzygotic sets, used specifically in the
+kinship for Pedigree objects.
+Consider the following rather difficult example:
+
+| id1|id2|
+|----|---|
+| 1  | 2 |
+| 2  | 3 |
+| 5  | 6 |
+| 3  | 7 |
+| 10 | 9 |
+
+Subjects 1, 2, 3, and 7 form a monozygotic quadruple, 5/6 and 9/10 are
+monzygotic pairs.  
+First create a vector `mzgrp` which contains for each subject the
+lowest index of a monozygotic twin for that subject.  
+For non-twins it can have any value.  
+For this example that vector is set to 1 for subjects 1, 2, 3, and 7,
+to 5 for 5 and 6, and to 9 for 9 and 10.
+Creating this requires a short while loop.
+Once this is in hand we can identify the sets.
+
+Next make a matrix that has a row for every possible pair.
+Finally, remove the rows that are identical.
+The result is a set of all pairs of observations in the matrix that
+correspond to monozygotic pairs.
+
+```{r, kinship twins}
+df <- data.frame(
+    id = c(1, 2, 3, 4, 5, 6, 7, 8),
+    dadid = c(4, 4, 4, NA, 4, 4, 4, NA),
+    momid = c(8, 8, 8, NA, 8, 8, 8, NA),
+    sex = c(1, 1, 1, 1, 2, 2, 1, 2)
+)
+rel <- data.frame(
+    id1 = c(1, 3, 6, 7),
+    id2 = c(2, 2, 5, 3),
+    code = c(1, 1, 1, 1)
+)
+ped <- Pedigree(df, rel)
+plot(ped)
+twins <- c(1, 2, 3, 7, 5, 6)
+kinship(ped)[twins, twins]
+```
+
+Session information
+===================
+
+```{r}
+sessionInfo()
+```

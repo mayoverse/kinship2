@@ -2,43 +2,81 @@
 % Please edit documentation in R/alignped2.R
 \name{alignped2}
 \alias{alignped2}
-\title{Second routine alignement}
+\title{Alignment second routine}
 \usage{
-alignped2(x, dad, mom, level, horder, packed, spouselist)
+alignped2(idx, dadx, momx, level, horder, packed, spouselist)
 }
 \arguments{
-\item{spouselist}{}
+\item{idx}{Indexes of the subjects}
+
+\item{dadx}{Indexes of the fathers}
+
+\item{momx}{Indexes of the mothers}
+
+\item{level}{Vector of the level of each subject}
+
+\item{horder}{A named numeric vector with one element per subject in the
+Pedigree.  It determines the relative horizontal order of subjects within a
+sibship, as well as the relative order of processing for the founder couples.
+(For this latter, the female founders are ordered as though
+they were sisters).
+The names of the vector should be the individual identifiers.}
+
+\item{packed}{Should the Pedigree be compressed.
+(i.e. allow diagonal lines connecting parents to children in order
+to have a smaller overall width for the plot.)}
+
+\item{spouselist}{Matrix of spouses with 4 columns:
+\itemize{
+\item \code{1}: husband index
+\item \code{2}: wife index
+\item \code{3}: husband anchor
+\item \code{4}: wife anchor
+}}
 }
 \value{
-A set of matrices along with the spouselist matrix.
+A list containing the elements to plot the Pedigree.
+It contains a set of matrices along with the spouselist matrix.
 The latter has marriages removed as they are processed.
+\itemize{
+\item \code{n} : A vector giving the number of subjects on each horizonal level of the
+plot
+\item \code{nid} : A matrix with one row for each level, giving the numeric id of
+each subject plotted.
+(A value of \code{17} means the 17th subject in the Pedigree).
+\item \code{pos} : A matrix giving the horizontal position of each plot point
+\item \code{fam} : A matrix giving the family id of each plot point.
+A value of \code{3} would mean that the two subjects in positions 3 and 4,
+in the row above, are this subject's parents.
+\item \code{spouselist} : Spouse matrix with anchors informations
+}
 }
 \description{
-This is the second of the four co-routines.
+Second of the four co-routines which takes a collection of siblings,
+grows the tree for each, and appends them side by side into a single tree.
 }
 \details{
-This routine takes a collection of siblings, grows the tree for each,
-and appends them side by side into a single tree.
-The input arguments are the same as those to \code{alignped1} with the
-exception that \code{[[x]]} will be a vector. This routine does nothing
+The input arguments are the same as those to \code{alignped1()} with the
+exception that \strong{idx} will be a vector. This routine does nothing
 to the spouselist matrix, but needs to pass it down the tree and back
-since one of the routines called by \code{alignped2} might change the matrix.
+since one of the routines called by \code{alignped2()} might change the matrix.
 
 The code below has one non-obvious special case. Suppose that two sibs marry.
 When the first sib is processed by \code{alignped1} then both partners
 (and any children) will be added to the rval structure below.
 When the second sib is processed they will come back as a 1 element tree
-(the marriage will no longer be on the spouselist), which should be added
+(the marriage will no longer be on the \strong{spouselist}), which should be added
 onto rval. The rule thus is to not add any 1 element tree whose value
-(which must be \code{x[i]}) is already in the rval structure for this level.
+(which must be \code{idx[i]} is already in the rval structure for this level.
 }
 \examples{
-data(sample.ped)
-ped <- with(sample.ped,pedigree(id, father, mother, sex, affected))
-align.pedigree(ped)
+data(sampleped)
+ped <- Pedigree(sampleped)
+align(ped)
 
 }
 \seealso{
-\code{\link{plot.pedigree}}, \code{\link{autohint}}
+\code{\link[=align]{align()}}
 }
-\keyword{dplot}
+\keyword{alignment}
+\keyword{internal,}

@@ -1,72 +1,70 @@
 # Automatically generated from all.nw using noweb
 
-# TODO add params and example
-
-#' Second routine alignement
+#' Alignment second routine
 #'
 #' @description
-#' This is the second of the four co-routines.
+#' Second of the four co-routines which takes a collection of siblings,
+#' grows the tree for each, and appends them side by side into a single tree.
 #'
 #' @details
-#' This routine takes a collection of siblings, grows the tree for each,
-#' and appends them side by side into a single tree.
-#' The input arguments are the same as those to \code{alignped1} with the
-#' exception that \code{[[x]]} will be a vector. This routine does nothing
+#' The input arguments are the same as those to `alignped1()` with the
+#' exception that **idx** will be a vector. This routine does nothing
 #' to the spouselist matrix, but needs to pass it down the tree and back
-#' since one of the routines called by \code{alignped2} might change the matrix.
+#' since one of the routines called by `alignped2()` might change the matrix.
 #'
 #' The code below has one non-obvious special case. Suppose that two sibs marry.
-#' When the first sib is processed by \code{alignped1} then both partners
+#' When the first sib is processed by `alignped1` then both partners
 #' (and any children) will be added to the rval structure below.
 #' When the second sib is processed they will come back as a 1 element tree
-#' (the marriage will no longer be on the spouselist), which should be added
+#' (the marriage will no longer be on the **spouselist**), which should be added
 #' onto rval. The rule thus is to not add any 1 element tree whose value
-#' (which must be \code{x[i]}) is already in the rval structure for this level.
+#' (which must be `idx[i]` is already in the rval structure for this level.
 #'
-#' @param x
-#' @param dad
-#' @param mom
-#' @param level
-#' @param horder
-#' @param packed
-#' @param spouselist
+#' @inheritParams align
+#' @inheritParams alignped1
 #'
-#' @return A set of matrices along with the spouselist matrix.
+#' @return A list containing the elements to plot the Pedigree.
+#' It contains a set of matrices along with the spouselist matrix.
 #' The latter has marriages removed as they are processed.
+#' - `n` : A vector giving the number of subjects on each horizonal level of the
+#'     plot
+#' - `nid` : A matrix with one row for each level, giving the numeric id of
+#'       each subject plotted.
+#'       (A value of `17` means the 17th subject in the Pedigree).
+#' - `pos` : A matrix giving the horizontal position of each plot point
+#' - `fam` : A matrix giving the family id of each plot point.
+#'       A value of `3` would mean that the two subjects in positions 3 and 4,
+#'       in the row above, are this subject's parents.
+#' - `spouselist` : Spouse matrix with anchors informations
 #'
 #' @examples
-#' data(sample.ped)
-#' ped <- with(sample.ped, pedigree(id, father, mother, sex, affected))
-#' align.pedigree(ped)
+#' data(sampleped)
+#' ped <- Pedigree(sampleped)
+#' align(ped)
 #'
-#' @seealso \code{\link{plot.pedigree}}, \code{\link{autohint}}
-#' @keywords dplot
-#' @export alignped2
-alignped2 <- function(x, dad, mom, level, horder, packed,
-                      spouselist) {
-  x <- x[order(horder[x])] # Use the hints to order the sibs
-  rval <- alignped1(
-    x[1], dad, mom, level, horder, packed,
-    spouselist
-  )
-  spouselist <- rval$spouselist
+#' @seealso [align()]
+#' @keywords internal, alignment
+alignped2 <- function(idx, dadx, momx, level, horder, packed, spouselist) {
+    idx <- idx[order(horder[idx])]  # Use the hints to order the sibs
+    rval <- alignped1(idx[1], dadx, momx, level, horder, packed, spouselist)
+    spouselist <- rval$spouselist
 
-  if (length(x) > 1) {
-    mylev <- level[x[1]]
-    for (i in 2:length(x)) {
-      rval2 <- alignped1(
-        x[i], dad, mom, level,
-        horder, packed, spouselist
-      )
-      spouselist <- rval2$spouselist
+    if (length(idx) > 1) {
+        mylev <- level[idx[1]]
+        for (i in 2:length(idx)) {
+            rval2 <- alignped1(idx[i], dadx, momx,
+                level, horder, packed, spouselist
+            )
+            spouselist <- rval2$spouselist
 
-      # Deal with the unusual special case:
-      if ((rval2$n[mylev] > 1) ||
-        (is.na(match(x[i], floor(rval$nid[mylev, ]))))) {
-        rval <- alignped3(rval, rval2, packed)
-      }
+            # Deal with the unusual special case:
+            if ((rval2$n[mylev] > 1) ||
+                    (is.na(match(idx[i], floor(rval$nid[mylev, ]))))
+            ) {
+                rval <- alignped3(rval, rval2, packed)
+            }
+        }
+        rval$spouselist <- spouselist
     }
-    rval$spouselist <- spouselist
-  }
-  rval
+    rval
 }

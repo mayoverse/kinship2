@@ -1,52 +1,64 @@
-df <- c(
-    1, 3, 4, 2, FALSE, NA, "1", "None",
-    2, 0, 0, 1, TRUE, 1, 2, "A",
-    3, 8, 7, "man", FALSE, NA, "2", "E",
-    4, 6, 5, "woman", TRUE, "A", 3, "A",
-    5, 0, 0, "f", FALSE, NA, 7, "E",
-    6, "None", 0, "m", FALSE, NA, "NA", "D",
-    7, 0, "0", 1, FALSE, "NA", 6, "A",
-    8, 0, 0, 1, TRUE, "None", "3", "D",
-    8, 0, 0, 2, TRUE, "None", "3", "A",
-    9, 9, 1, 3, FALSE, "Ab", "5", "B"
-)
-df <- matrix(df, ncol = 8, byrow = TRUE)
-dimnames(df) <- list(NULL, c("IndID", "FatherID", "MotherID",
-    "Gender", "Sterilisation", "Availability", "NumOther", "AffMod"))
-df <- data.frame(df)
-list_get <- norm_data(df, na_strings = c("None", "0", "NA"))
-
-df_aff_num <- generate_aff_inds(list_get$norm, "NumOther",
-    threshold = 4, sup_thres_aff = TRUE)
-df_aff_fact <- generate_aff_inds(list_get$norm, "AffMod",
-    mods_aff = c("D", "E"))
-
-testthat("Norm data", {
-    expect_equal(dim(list_get$norm), c(4, 15))
-    expect_equal(dim(list_get$errors), c(6, 15))
-    expect_equal(list_get$norm$IndID, c("1", "2", "5", "6"))
-    expect_equal(list_get$errors$IndID, c("3", "4", "7", "8", "8", "9"))
+test_that("Norm ped", {
+    ped_df <- c(
+        1, 3, 4, 2, TRUE, NA, "1", "None",
+        2, 0, 0, 1, TRUE, 1, 2, "A",
+        3, 8, 7, "man", FALSE, 0, "2", "E",
+        4, 6, 5, "woman", FALSE, "A", 3, "A",
+        5, 0, 0, "f", FALSE, NA, 7, "E",
+        6, "None", 0, "m", TRUE, 0, "NA", "D",
+        7, 0, "0", 1, FALSE, "NA", 6, "A",
+        8, 0, 0, 1, FALSE, "0", "3", "D",
+        8, 2, 0, 2, FALSE, "None", "3", "A",
+        9, 9, 8, 3, FALSE, "Ab", "5", "B"
+    )
+    ped_df <- matrix(ped_df, ncol = 8, byrow = TRUE)
+    dimnames(ped_df) <- list(NULL, c(
+        "indId", "fatherId", "motherId", "gender",
+        "sterilisation", "available", "NumOther", "AffMod"
+    ))
+    ped_df <- data.frame(ped_df)
+    ped_df <- suppressWarnings(norm_ped(
+        ped_df, na_strings = c("None", "NA")
+    ))
+    expect_equal(dim(ped_df), c(10, 21))
+    expect_snapshot(ped_df)
+    expect_equal(sum(is.na(ped_df$error)), 4)
 })
 
-testthat("generate aff inds", {
-    expect_equal(as.character(df_aff_num$affected), c("0", "0", "1", NA))
-    expect_equal(as.character(df_aff_fact$affected), c(NA, "0", "1", "1"))
-})
+test_that("Norm rel", {
+    rel_df <- c(
+        1, 2, 1, 1,
+        1, 3, 2, 1,
+        2, 3, 3, 1,
+        1, 2, 4, 2,
+        3, 4, "MZ twin", 2,
+        6, 7, "Other", 2,
+        8, "8", "spo Use", 2,
+        9, "0", "4", 1,
+        NA, "B", NA, 1
+    )
 
-test_that("generate colors full scale off", {
-    list_num <- generate_colors(df_aff_num, "NumOther", keep_full_scale = FALSE)
-    list_fact <- generate_colors(df_aff_fact, "AffMod", keep_full_scale = FALSE)
-    expect_equal(list_num$df$border, c("black", "green", "black", "black"))
-    expect_equal(list_num$df$fill, c("white", "white", "red", "grey"))
-    expect_equal(list_fact$df$border, c("black", "green", "black", "black"))
-    expect_equal(list_fact$df$fill, c("grey", "white", "red", "red"))
-})
+    rel_df <- matrix(rel_df, ncol = 4, byrow = TRUE)
+    dimnames(rel_df) <- list(NULL, c("id1", "id2", "code", "family"))
+    rel_df <- data.frame(rel_df)
 
-test_that("generate colors full scale on", {
-    list_num <- generate_colors(df_aff_num, "NumOther", keep_full_scale = TRUE)
-    list_fact <- generate_colors(df_aff_fact, "AffMod", keep_full_scale = TRUE)
-    expect_equal(list_num$df$border, c("black", "green", "black", "black"))
-    expect_equal(list_num$df$fill, c("#FFFFFF", "#36648B", "#F67700", "grey"))
-    expect_equal(list_fact$df$border, c("black", "green", "black", "black"))
-    expect_equal(list_fact$df$fill, c("grey", "#FFFFFF", "#FF0000", "#EEEE00"))
+    rel_df <- norm_rel(rel_df)
+    expect_equal(dim(rel_df), c(9, 5))
+    expect_snapshot(rel_df)
+    expect_equal(sum(is.na(rel_df$error)), 6)
+
+    rel_df <- c(
+        1, 2, 1,
+        1, 3, 2,
+        2, 3, 3,
+        1, 2, 4,
+        3, 4, "MZ twin",
+        6, 7, "Other",
+        8, "8", "spo Use",
+        9, "0", "4"
+    )
+    rel_df <- matrix(rel_df, ncol = 4, byrow = TRUE)
+    dimnames(rel_df) <- list(NULL, c("id1", "id2", "code", "family"))
+    rel_df <- data.frame(rel_df)
+    expect_snapshot(norm_rel(rel_df, missid = "0"))
 })
